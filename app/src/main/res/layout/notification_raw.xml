@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#282727"
+    android:orientation="vertical"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="5dp">
+    <TextView
+        android:id="@+id/tvNotificationTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:text="Test"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:layout_marginLeft="10dp"/>
+    <TextView
+        android:id="@+id/tvNotificationBody"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/backcolor"
+        android:text="Test"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"/>
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:text="22 august 2018"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"/>
+
+
+
+</LinearLayout>
