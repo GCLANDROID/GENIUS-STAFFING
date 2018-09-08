@@ -33,8 +33,8 @@ import io.cordova.myapp00d753.utility.Pref;
 
 public class NotificationActivity extends AppCompatActivity {
     RecyclerView rvNotification;
-    ArrayList<NotificationModule>nottificationList=new ArrayList<>();
-    ImageView imgBack,imgHome;
+    ArrayList<NotificationModule> nottificationList = new ArrayList<>();
+    ImageView imgBack, imgHome;
     ProgressBar progressBar;
     int pastVisiblesItems, visibleItemCount, totalItemCount;
     public static int mPageCount = 0;
@@ -46,34 +46,37 @@ public class NotificationActivity extends AppCompatActivity {
     LinearLayout llMain;
     Pref pref;
     NetworkConnectionCheck connectionCheck;
+    LinearLayout llNodata;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
-        mPageCount=1;
+        mPageCount = 1;
         initialize();
-        if (connectionCheck.isNetworkAvailable()){
+        if (connectionCheck.isNetworkAvailable()) {
             getNotificationList();
-        }else {
+        } else {
             connectionCheck.getNetworkActiveAlert().show();
         }
 
 
         onClick();
     }
-    private void initialize(){
-        pref=new Pref(NotificationActivity.this);
-        connectionCheck=new NetworkConnectionCheck(NotificationActivity.this);
-        rvNotification=(RecyclerView)findViewById(R.id.rvNotification);
-         layoutManager
+
+    private void initialize() {
+        pref = new Pref(NotificationActivity.this);
+        connectionCheck = new NetworkConnectionCheck(NotificationActivity.this);
+        rvNotification = (RecyclerView) findViewById(R.id.rvNotification);
+        layoutManager
                 = new LinearLayoutManager(NotificationActivity.this, LinearLayoutManager.VERTICAL, false);
         rvNotification.setLayoutManager(layoutManager);
-        imgHome=(ImageView)findViewById(R.id.imgHome);
-        imgBack=(ImageView)findViewById(R.id.imgBack);
-        llLoder=(LinearLayout)findViewById(R.id.llWLLoader);
-        llMain=(LinearLayout)findViewById(R.id.llMain);
-        progressBar=(ProgressBar)findViewById(R.id.WLpagination_loader);
+        imgHome = (ImageView) findViewById(R.id.imgHome);
+        imgBack = (ImageView) findViewById(R.id.imgBack);
+        llLoder = (LinearLayout) findViewById(R.id.llWLLoader);
+        llMain = (LinearLayout) findViewById(R.id.llMain);
+        llNodata=(LinearLayout)findViewById(R.id.llNodata);
+        progressBar = (ProgressBar) findViewById(R.id.WLpagination_loader);
         rvNotification.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -88,7 +91,7 @@ public class NotificationActivity extends AppCompatActivity {
 
                             progressBar.setVisibility(View.VISIBLE);
                             if (!mIsEndReached) {
-                                mPageCount=mPageCount+1;
+                                mPageCount = mPageCount + 1;
                                 getNotificationList();
                             }
 
@@ -100,12 +103,13 @@ public class NotificationActivity extends AppCompatActivity {
         setAdapter();
     }
 
-    private void  getNotificationList(){
+    private void getNotificationList() {
         Log.d("Arpan", "arpan");
         llLoder.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
+        llNodata.setVisibility(View.GONE);
 
-        String surl = "http://111.93.182.174/GeniusiOSApi/api/gcl_Notification?MsgMasterId=0&AEMClientID=" + pref.getEmpClintId() + "&AEMEmployeeID=" + pref.getEmpId() + "&StartDate=null&EndDate=null&Tagline=null&Description=null&CurrentPage="+mPageCount+"&ApprovalStatus=0&Operation=1&SecurityCode="+pref.getSecurityCode();
+        String surl = "http://111.93.182.174/GeniusiOSApi/api/gcl_Notification?MsgMasterId=0&AEMClientID=" + pref.getEmpClintId() + "&AEMEmployeeID=" + pref.getEmpId() + "&StartDate=null&EndDate=null&Tagline=null&Description=null&CurrentPage=" + mPageCount + "&ApprovalStatus=0&Operation=1&SecurityCode=" + pref.getSecurityCode();
         Log.d("input", surl);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
@@ -127,24 +131,26 @@ public class NotificationActivity extends AppCompatActivity {
                                 JSONArray responseData = job1.optJSONArray("responseData");
                                 for (int i = 0; i < responseData.length(); i++) {
                                     JSONObject obj = responseData.getJSONObject(i);
-                                    String StartDate=obj.optString("StartDate");
-                                    String Tagline=obj.optString("Tagline");
-                                    String Description=obj.optString("Description");
+                                    String StartDate = obj.optString("StartDate");
+                                    String Tagline = obj.optString("Tagline");
+                                    String Description = obj.optString("Description");
 
-                                  NotificationModule nmodule=new NotificationModule(Tagline,Description,StartDate);
-                                  nottificationList.add(nmodule);
+                                    NotificationModule nmodule = new NotificationModule(Tagline, Description, StartDate);
+                                    nottificationList.add(nmodule);
 
 
                                 }
                                 notificationAdapter.notifyDataSetChanged();
                                 llLoder.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
+                                llNodata.setVisibility(View.GONE);
 
 
                             } else {
                                 notificationAdapter.notifyDataSetChanged();
                                 llLoder.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
+                                llNodata.setVisibility(View.VISIBLE);
 
                                 Toast.makeText(getApplicationContext(), "No data found", Toast.LENGTH_LONG).show();
 
@@ -171,12 +177,12 @@ public class NotificationActivity extends AppCompatActivity {
 
     }
 
-    private  void setAdapter(){
-         notificationAdapter=new NotificationAdapter(nottificationList);
+    private void setAdapter() {
+        notificationAdapter = new NotificationAdapter(nottificationList);
         rvNotification.setAdapter(notificationAdapter);
     }
 
-    private  void onClick(){
+    private void onClick() {
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -187,7 +193,7 @@ public class NotificationActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(NotificationActivity.this,DashBoardActivity.class);
+                Intent intent = new Intent(NotificationActivity.this, DashBoardActivity.class);
                 startActivity(intent);
                 finish();
             }

@@ -33,6 +33,7 @@ public class AboutUsActivity extends AppCompatActivity {
      LinearLayout llLoader,llMain;
      RecyclerView rvAbout;
      ArrayList<MenuModule>menuList=new ArrayList<>();
+    MenuAdapter menuAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,7 +109,7 @@ public class AboutUsActivity extends AppCompatActivity {
                                 }
                                 llLoader.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
-                                MenuAdapter menuAdapter=new MenuAdapter(menuList);
+                                menuAdapter=new MenuAdapter(menuList,AboutUsActivity.this);
                                 rvAbout.setAdapter(menuAdapter);
                             }
                             else {
@@ -138,6 +139,12 @@ public class AboutUsActivity extends AppCompatActivity {
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
 
+    }
+
+
+    public void updateAttendanceStatus(int position, boolean status) {
+        menuList.get(position).setSelected(status);
+        menuAdapter.notifyDataSetChanged();
     }
 
 

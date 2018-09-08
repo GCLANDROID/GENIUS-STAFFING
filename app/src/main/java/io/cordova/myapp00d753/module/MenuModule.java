@@ -2,12 +2,12 @@ package io.cordova.myapp00d753.module;
 
 public class MenuModule {
     String menuName,menuDetails;
-    boolean check;
+    public boolean isSelected = false;
 
-    public MenuModule(String menuName, String menuDetails, boolean check) {
+    public MenuModule(String menuName, String menuDetails, boolean isSelected) {
         this.menuName = menuName;
         this.menuDetails = menuDetails;
-        this.check = check;
+        this.isSelected = isSelected;
     }
 
     public String getMenuName() {
@@ -26,11 +26,11 @@ public class MenuModule {
         this.menuDetails = menuDetails;
     }
 
-    public boolean isCheck() {
-        return check;
+    public boolean isSelected() {
+        return isSelected;
     }
 
-    public void setCheck(boolean check) {
-        this.check = check;
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }

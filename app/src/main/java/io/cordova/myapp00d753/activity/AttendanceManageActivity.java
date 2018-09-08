@@ -514,9 +514,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
-      /*  Intent openGalleryIntent = new Intent(Intent.ACTION_PICK);
-        openGalleryIntent.setType("image/*");
-        startActivityForResult(openGalleryIntent, REQUEST_GALLERY_CODE);*/
+
     }
 
 
@@ -595,7 +593,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
         MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", file.getName(), mFile);
         RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), file.getName());
 
-        Call<UploadObject> fileUpload = uploadService.uploadSingleFile(fileToUpload, pref.getEmpId(),address,longt,lat,security);
+        Call<UploadObject> fileUpload = uploadService.uploadSingleFile(fileToUpload, pref.getEmpId(),address,longt,lat,pref.getSecurityCode());
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, Response<UploadObject> response) {
@@ -630,7 +628,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
         progressBar.setCancelable(true);//you can cancel it by pressing back button
         progressBar.setMessage("uploading...");
         progressBar.show();
-        Call<AttendanceManageModule> datumCall= ApiClient.getService().getDatas(empId,address,longt,lat,security);
+        Call<AttendanceManageModule> datumCall= ApiClient.getService().getDatas(empId,address,longt,lat,pref.getSecurityCode());
         datumCall.enqueue(new Callback<AttendanceManageModule>() {
             @Override
             public void onResponse(Call<AttendanceManageModule> call, Response<AttendanceManageModule> response) {

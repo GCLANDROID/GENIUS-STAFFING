@@ -133,6 +133,7 @@ public class FeedBackActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        feedbackList.clear();
 
                         Log.d("responseAttendance", response);
                         loading = false;
@@ -165,7 +166,7 @@ public class FeedBackActivity extends AppCompatActivity {
 
                                 Toast.makeText(getApplicationContext(), "No data found", Toast.LENGTH_LONG).show();
                                 llLoader.setVisibility(View.GONE);
-                                llMain.setVisibility(View.GONE);
+                                llMain.setVisibility(View.VISIBLE);
 
 
                             }

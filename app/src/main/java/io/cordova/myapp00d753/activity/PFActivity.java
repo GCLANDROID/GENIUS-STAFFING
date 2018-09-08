@@ -89,6 +89,7 @@ public class PFActivity extends AppCompatActivity implements RecyclerItemClickLi
         String surl ="http://111.93.182.174/GeniusiOSApi/api/get_PfFinYear?AEMEmployeeID="+pref.getEmpId()+"&SecurityCode="+pref.getSecurityCode();
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
+        Log.d("ctcinput",surl);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
@@ -119,8 +120,9 @@ public class PFActivity extends AppCompatActivity implements RecyclerItemClickLi
                                 setAdapter();
                             }
                             else {
-
-
+                                llLoader.setVisibility(View.GONE);
+                                llMain.setVisibility(View.VISIBLE);
+                                Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
                             }
 
                             // boolean _status = job1.getBoolean("status");

@@ -38,11 +38,11 @@ import io.cordova.myapp00d753.utility.Pref;
 public class BackDatedAttendanceActivity extends AppCompatActivity {
     LinearLayout llDate;
     TextView tvDate;
-    ImageView imgBack,imgHome;
+    ImageView imgBack, imgHome;
     LinearLayout llSubmit;
     Pref pref;
     String newdate;
-    private android.support.v7.app.AlertDialog alertDialog,alerDialog1;
+    private android.support.v7.app.AlertDialog alertDialog, alerDialog1;
     String responseText;
     NetworkConnectionCheck connectionCheck;
     TextView tvMan;
@@ -55,18 +55,18 @@ public class BackDatedAttendanceActivity extends AppCompatActivity {
         onclick();
     }
 
-    private  void initialize(){
-        pref=new Pref(getApplicationContext());
+    private void initialize() {
+        pref = new Pref(getApplicationContext());
         connectionCheck = new NetworkConnectionCheck(this);
-        llDate=(LinearLayout)findViewById(R.id.llDate);
-        tvDate=(TextView)findViewById(R.id.tvDate);
-        imgBack=(ImageView)findViewById(R.id.imgBack);
-        imgHome=(ImageView)findViewById(R.id.imgHome);
-        llSubmit=(LinearLayout) findViewById(R.id.llSubmit);
-        tvMan=(TextView)findViewById(R.id.tvMan);
+        llDate = (LinearLayout) findViewById(R.id.llDate);
+        tvDate = (TextView) findViewById(R.id.tvDate);
+        imgBack = (ImageView) findViewById(R.id.imgBack);
+        imgHome = (ImageView) findViewById(R.id.imgHome);
+        llSubmit = (LinearLayout) findViewById(R.id.llSubmit);
+        tvMan = (TextView) findViewById(R.id.tvMan);
     }
 
-    private  void  onclick(){
+    private void onclick() {
         llDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,7 +81,7 @@ public class BackDatedAttendanceActivity extends AppCompatActivity {
                     @Override
                     public void onDateSet(DatePicker datePicker, int y, int m, int d) {
 
-                        newdate=(m+1)+"/"+d+"/"+y;
+                        newdate = (m + 1) + "/" + d + "/" + y;
 
                         tvDate.setVisibility(View.VISIBLE);
                         tvDate.setText(newdate);
@@ -103,7 +103,7 @@ public class BackDatedAttendanceActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(BackDatedAttendanceActivity.this,DashBoardActivity.class);
+                Intent intent = new Intent(BackDatedAttendanceActivity.this, DashBoardActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -112,16 +112,16 @@ public class BackDatedAttendanceActivity extends AppCompatActivity {
         llSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (newdate!=null){
-                    if (connectionCheck.isNetworkAvailable()){
+                if (newdate != null) {
+                    if (connectionCheck.isNetworkAvailable()) {
                         backDatedAttendance();
                         tvMan.setVisibility(View.GONE);
-                    }else {
+                    } else {
                         connectionCheck.getNetworkActiveAlert().show();
                     }
 
-                }else {
-                      Toast.makeText(BackDatedAttendanceActivity.this,"please select date",Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(BackDatedAttendanceActivity.this, "please select date", Toast.LENGTH_LONG).show();
                 }
 
 
@@ -132,10 +132,10 @@ public class BackDatedAttendanceActivity extends AppCompatActivity {
 
 
     public void backDatedAttendance() {
-        String surl ="http://111.93.182.174/GeniusiOSApi/api/get_GCLSelfAttendanceWoLeave?AEMEmployeeID="+pref.getEmpId()+"&Adate="+newdate+"&DbOperation=5&SecurityCode="+pref.getSecurityCode();
+        String surl = "http://111.93.182.174/GeniusiOSApi/api/get_GCLSelfAttendanceWoLeave?AEMEmployeeID=" + pref.getEmpId() + "&Adate=" + newdate + "&DbOperation=5&SecurityCode=" + pref.getSecurityCode();
         final ProgressDialog progressBar = new ProgressDialog(this);
         progressBar.setCancelable(true);//you can cancel it by pressing back button
-        progressBar.setMessage("Authenticating...");
+        progressBar.setMessage("Submating...");
         progressBar.show();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, surl,
                 new Response.Listener<String>() {
@@ -146,21 +146,17 @@ public class BackDatedAttendanceActivity extends AppCompatActivity {
                         try {
                             JSONObject job1 = new JSONObject(response);
                             Log.e("response12", "@@@@@@" + job1);
-                             responseText=job1.optString("responseText");
-                            boolean responseStatus=job1.optBoolean("responseStatus");
-                            if (responseStatus){
-                                Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
+                            responseText = job1.optString("responseText");
+                            boolean responseStatus = job1.optBoolean("responseStatus");
+                            if (responseStatus) {
+                                Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
                                 successAlert();
 
 
-
-                            }
-                            else {
+                            } else {
                                 showAlertforFalse();
 
                             }
-
-                            // boolean _status = job1.getBoolean("status");
 
 
                         } catch (JSONException e) {
@@ -173,8 +169,8 @@ public class BackDatedAttendanceActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progressBar.dismiss();
-                Toast.makeText(BackDatedAttendanceActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
-                Log.e("ert",error.toString());
+                Toast.makeText(BackDatedAttendanceActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
+                Log.e("ert", error.toString());
             }
         }) {
 
@@ -183,18 +179,18 @@ public class BackDatedAttendanceActivity extends AppCompatActivity {
 
     }
 
-    private void showAlertforFalse(){
+    private void showAlertforFalse() {
         android.support.v7.app.AlertDialog.Builder dialogBuilder = new android.support.v7.app.AlertDialog.Builder(BackDatedAttendanceActivity.this, R.style.CustomDialogNew);
-        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_invaliddate, null);
         dialogBuilder.setView(dialogView);
-        TextView tvInvalidDate=(TextView)dialogView.findViewById(R.id.tvInvalidDialog);
-        if (responseText.equals("")){
+        TextView tvInvalidDate = (TextView) dialogView.findViewById(R.id.tvInvalidDialog);
+        if (responseText.equals("")) {
             tvInvalidDate.setText("only back dated attendance allow");
-        }else {
+        } else {
             tvInvalidDate.setText(responseText);
         }
-        Button btnOk=(Button)dialogView.findViewById(R.id.btnOk);
+        Button btnOk = (Button) dialogView.findViewById(R.id.btnOk);
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -212,14 +208,14 @@ public class BackDatedAttendanceActivity extends AppCompatActivity {
     }
 
 
-    private void successAlert(){
+    private void successAlert() {
         android.support.v7.app.AlertDialog.Builder dialogBuilder = new android.support.v7.app.AlertDialog.Builder(BackDatedAttendanceActivity.this, R.style.CustomDialogNew);
-        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_success, null);
         dialogBuilder.setView(dialogView);
-        TextView tvSuccess=(TextView)dialogView.findViewById(R.id.tvSuccess);
+        TextView tvSuccess = (TextView) dialogView.findViewById(R.id.tvSuccess);
         tvSuccess.setText(responseText);
-        Button btnOk=(Button)dialogView.findViewById(R.id.btnOk);
+        Button btnOk = (Button) dialogView.findViewById(R.id.btnOk);
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

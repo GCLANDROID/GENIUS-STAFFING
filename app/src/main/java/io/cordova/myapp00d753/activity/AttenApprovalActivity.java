@@ -71,6 +71,7 @@ public class AttenApprovalActivity extends AppCompatActivity {
     String attId;
     NetworkConnectionCheck connectionCheck;
     LinearLayout llReply;
+    LinearLayout llNodata;
 
 
     @Override
@@ -99,6 +100,7 @@ public class AttenApprovalActivity extends AppCompatActivity {
         llSearch = (LinearLayout) findViewById(R.id.llSearch);
         llLoder = (LinearLayout) findViewById(R.id.llWLLoader);
         llMain = (LinearLayout) findViewById(R.id.llMain);
+        llNodata=(LinearLayout)findViewById(R.id.llNodata);
 
         progressBar = (ProgressBar) findViewById(R.id.WLpagination_loader);
         rvAttenApproval.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -173,6 +175,7 @@ public class AttenApprovalActivity extends AppCompatActivity {
         Log.d("Arpan", "arpan");
         llLoder.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
+        llNodata.setVisibility(View.GONE);
 
         String surl = "http://111.93.182.174/GeniusiOSApi/api/get_GCLSelfAttendanceWoLeave?AEMConsultantID=" + pref.getEmpConId() + "&AEMClientID=" + pref.getEmpClintId() + "&AEMClientOfficeID=" + pref.getEmpClintOffId() + "&AEMEmployeeID=" + pref.getEmpId() + "&CurrentPage=" + mPageCount + "&AID=0&ApproverStatus=0&YearVal=" + year + "&MonthName=" + month + "&WorkingStatus=1&SecurityCode="+pref.getSecurityCode()+"&DbOperation=8&AttIds=null";
         Log.d("input", surl);
@@ -213,12 +216,14 @@ public class AttenApprovalActivity extends AppCompatActivity {
                                 attendanceAdapter.notifyDataSetChanged();
                                 llLoder.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
+                                llNodata.setVisibility(View.GONE);
 
 
                             } else {
                                 attendanceAdapter.notifyDataSetChanged();
                                 llLoder.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
+                                llNodata.setVisibility(View.VISIBLE);
 
                                 Toast.makeText(getApplicationContext(), "No data found", Toast.LENGTH_LONG).show();
 
@@ -331,11 +336,6 @@ public class AttenApprovalActivity extends AppCompatActivity {
                         alertDialog.dismiss();
                     }
                 });
-
-
-
-
-
 
                 alertDialog = dialogBuilder.create();
                 alertDialog.setCancelable(true);

@@ -34,13 +34,14 @@ import io.cordova.myapp00d753.utility.RecyclerItemClickListener;
 
 public class DocumentReportActivity extends AppCompatActivity implements RecyclerItemClickListener.OnItemClickListener {
     RecyclerView rvDocument;
-    ArrayList<DocumentManageModule>documentList=new ArrayList<>();
+    ArrayList<DocumentManageModule> documentList = new ArrayList<>();
     DocumentAdapter documentAdapter;
-    LinearLayout llLoader,llMain;
-    ImageView imgBack,imgHome;
+    LinearLayout llLoader, llMain;
+    ImageView imgBack, imgHome;
     Pref pref;
     String dLink;
     NetworkConnectionCheck connectionCheck;
+    LinearLayout llNoadata;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,7 @@ public class DocumentReportActivity extends AppCompatActivity implements Recycle
         initialize();
         if (connectionCheck.isNetworkAvailable()) {
             getDocList();
-        }else {
+        } else {
             connectionCheck.getNetworkActiveAlert().show();
         }
         onClick();
@@ -57,21 +58,22 @@ public class DocumentReportActivity extends AppCompatActivity implements Recycle
     }
 
     private void initialize() {
-        connectionCheck=new NetworkConnectionCheck(DocumentReportActivity.this);
-        pref=new Pref(this);
-        rvDocument=(RecyclerView)findViewById(R.id.rvDocument);
+        connectionCheck = new NetworkConnectionCheck(DocumentReportActivity.this);
+        pref = new Pref(this);
+        rvDocument = (RecyclerView) findViewById(R.id.rvDocument);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(DocumentReportActivity.this, LinearLayoutManager.VERTICAL, false);
         rvDocument.setLayoutManager(layoutManager);
         rvDocument.addOnItemTouchListener(new RecyclerItemClickListener(DocumentReportActivity.this, DocumentReportActivity.this));
-         llLoader=(LinearLayout)findViewById(R.id.llLoader);
-         llMain=(LinearLayout)findViewById(R.id.llMain);
-         imgBack=(ImageView)findViewById(R.id.imgBack);
-         imgHome=(ImageView)findViewById(R.id.imgHome);
+        llLoader = (LinearLayout) findViewById(R.id.llLoader);
+        llMain = (LinearLayout) findViewById(R.id.llMain);
+        imgBack = (ImageView) findViewById(R.id.imgBack);
+        imgHome = (ImageView) findViewById(R.id.imgHome);
+        llNoadata = (LinearLayout) findViewById(R.id.llNodata);
 
     }
 
-    private void onClick(){
+    private void onClick() {
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,17 +84,19 @@ public class DocumentReportActivity extends AppCompatActivity implements Recycle
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(DocumentReportActivity.this,DashBoardActivity.class);
+                Intent intent = new Intent(DocumentReportActivity.this, DashBoardActivity.class);
                 startActivity(intent);
                 finish();
             }
         });
     }
 
-    private void getDocList(){
-        String surl ="http://111.93.182.174/GeniusiOSApi/api/gcl_DigitalDocument?AEMEmployeeID="+pref.getEmpId()+"&FileName=null&FileType=0&DocumentID=0&ReferenceNo=0&DbOperation=1&SecurityCode="+pref.getSecurityCode();
+    private void getDocList() {
+        String surl = "http://111.93.182.174/GeniusiOSApi/api/gcl_DigitalDocument?AEMEmployeeID=" + pref.getEmpId() + "&FileName=null&FileType=0&DocumentID=0&ReferenceNo=0&DbOperation=1&SecurityCode=" + pref.getSecurityCode();
+        Log.d("manageinput",surl);
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
+        llNoadata.setVisibility(View.GONE);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
@@ -104,37 +108,37 @@ public class DocumentReportActivity extends AppCompatActivity implements Recycle
                         try {
                             JSONObject job1 = new JSONObject(response);
                             Log.e("response12", "@@@@@@" + job1);
-                            String responseText=job1.optString("responseText");
-                            boolean responseStatus=job1.optBoolean("responseStatus");
-                            if (responseStatus){
-                                 Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
-                                JSONArray responseData=job1.optJSONArray("responseData");
-                                for (int i = 0; i < responseData.length(); i++){
-                                    JSONObject obj=responseData.getJSONObject(i);
-                                    String DocumentName=obj.optString("DocumentName");
-                                    String DocumentType=obj.optString("DocumentType");
-                                    String AEMStatusName=obj.optString("AEMStatusName");
-                                    String CreatedOn=obj.optString("CreatedOn");
-                                    String ApprovalRemarks=obj.optString("ApprovalRemarks");
-                                    String DocLink=obj.optString("DocLink");
-                                    DocumentManageModule dmodule=new DocumentManageModule(DocumentName,DocumentType,ApprovalRemarks,CreatedOn,AEMStatusName,DocLink);
+                            String responseText = job1.optString("responseText");
+                            boolean responseStatus = job1.optBoolean("responseStatus");
+                            if (responseStatus) {
+                                Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
+                                JSONArray responseData = job1.optJSONArray("responseData");
+                                for (int i = 0; i < responseData.length(); i++) {
+                                    JSONObject obj = responseData.getJSONObject(i);
+                                    String DocumentName = obj.optString("DocumentName");
+                                    String DocumentType = obj.optString("DocumentType");
+                                    String AEMStatusName = obj.optString("AEMStatusName");
+                                    String CreatedOn = obj.optString("CreatedOn");
+                                    String ApprovalRemarks = obj.optString("ApprovalRemarks");
+                                    String DocLink = obj.optString("DocLink");
+                                    DocumentManageModule dmodule = new DocumentManageModule(DocumentName, DocumentType, ApprovalRemarks, CreatedOn, AEMStatusName, DocLink);
                                     documentList.add(dmodule);
-
 
 
                                 }
 
 
-                                    llLoader.setVisibility(View.GONE);
-                                    llMain.setVisibility(View.VISIBLE);
-                                    documentAdapter=new DocumentAdapter(documentList);
-                                    rvDocument.setAdapter(documentAdapter);
+                                llLoader.setVisibility(View.GONE);
+                                llMain.setVisibility(View.VISIBLE);
+                                llNoadata.setVisibility(View.GONE);
+                                documentAdapter = new DocumentAdapter(documentList);
+                                rvDocument.setAdapter(documentAdapter);
 
 
-
-                            }
-                            else {
-
+                            } else {
+                                llLoader.setVisibility(View.GONE);
+                                llMain.setVisibility(View.VISIBLE);
+                                llNoadata.setVisibility(View.VISIBLE);
 
                             }
 
@@ -155,9 +159,9 @@ public class DocumentReportActivity extends AppCompatActivity implements Recycle
                 llLoader.setVisibility(View.VISIBLE);
                 llMain.setVisibility(View.GONE);
 
-                Toast.makeText(DocumentReportActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(DocumentReportActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
 
-                Log.e("ert",error.toString());
+                Log.e("ert", error.toString());
             }
         }) {
 
@@ -169,7 +173,7 @@ public class DocumentReportActivity extends AppCompatActivity implements Recycle
 
     @Override
     public void onItemClick(View childView, int position) {
-        dLink=documentList.get(position).getDocLink();
+        dLink = documentList.get(position).getDocLink();
         operBrowser();
 
     }
@@ -179,12 +183,12 @@ public class DocumentReportActivity extends AppCompatActivity implements Recycle
 
     }
 
-    private void operBrowser(){
+    private void operBrowser() {
         Uri uri = Uri.parse(dLink); // missing 'http://' will cause crashed
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        if (!dLink.equals("")&&dLink!=null) {
+        if (!dLink.equals("") && dLink != null) {
             startActivity(intent);
-        }else {
+        } else {
 
         }
     }

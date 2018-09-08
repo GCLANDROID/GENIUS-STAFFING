@@ -128,6 +128,7 @@ public class SupProfileActivity extends AppCompatActivity {
         rvProfile.setVisibility(View.GONE);
 
         String surl ="http://111.93.182.174/GeniusiOSApi/api/gcl_KYC?AEMConsultantID="+pref.getEmpConId()+"&AEMClientID="+pref.getEmpClintId()+"&AEMClientOfficeID="+pref.getEmpClintOffId()+"&AEMEmployeeID="+pref.getEmpId()+"&SecurityCode="+pref.getSecurityCode()+"&WorkingStatus=1&CurrentPage="+mPageCount;
+        Log.d("inputpr",surl);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {

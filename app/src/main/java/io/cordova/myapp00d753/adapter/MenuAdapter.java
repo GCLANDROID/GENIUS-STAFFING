@@ -1,5 +1,6 @@
 package io.cordova.myapp00d753.adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,10 +15,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.AboutUsActivity;
+import io.cordova.myapp00d753.activity.AttenApprovalActivity;
 import io.cordova.myapp00d753.module.MenuModule;
 
 public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MyViewHolder> {
     ArrayList<MenuModule>menuList=new ArrayList<>();
+    Context context;
     @NonNull
     @Override
     public MenuAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -37,28 +41,30 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MyViewHolder> 
         myViewHolder.llMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                menuList.get(i).setCheck(true);
+
 
                 if (myViewHolder.imgMenuPlus.getVisibility()==View.VISIBLE){
                     myViewHolder.imgMenuPlus.setVisibility(View.GONE);
                     myViewHolder.imgMenuMins.setVisibility(View.VISIBLE);
                     myViewHolder.llMenu.setVisibility(View.VISIBLE);
                     myViewHolder.llMenuDetails.setVisibility(View.VISIBLE);
-
+                    menuList.get(i).setSelected(true);
 
                 }else {
                     myViewHolder.imgMenuPlus.setVisibility(View.VISIBLE);
                     myViewHolder.imgMenuMins.setVisibility(View.GONE);
                     myViewHolder.llMenu.setVisibility(View.VISIBLE);
                     myViewHolder.llMenuDetails.setVisibility(View.GONE);
+                    menuList.get(i).setSelected(false);
+
                 }
             }
         });
-
-
-
-
-
+        if (menuList.get(i).isSelected()){
+            myViewHolder.llMenuDetails.setVisibility(View.VISIBLE);
+        }else {
+            myViewHolder.llMenuDetails.setVisibility(View.GONE);
+        }
 
     }
 
@@ -85,7 +91,8 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MyViewHolder> 
         }
     }
 
-    public MenuAdapter(ArrayList<MenuModule> menuList) {
+    public MenuAdapter(ArrayList<MenuModule> menuList, Context context) {
         this.menuList = menuList;
+        this.context = context;
     }
 }

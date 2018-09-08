@@ -67,6 +67,7 @@ public class SupSalaryActivity extends AppCompatActivity implements RecyclerItem
     Pref pref;
     SupSalaryAdapter sAdapter;
     NetworkConnectionCheck connectionCheck;
+    LinearLayout llNodata;
 
 
     @Override
@@ -157,13 +158,16 @@ public class SupSalaryActivity extends AppCompatActivity implements RecyclerItem
         else if (m==12){
             month="December";
         }
+        llNodata=(LinearLayout)findViewById(R.id.llNodata);
     }
 
 
     private void getSalaryList(){
       String  surl = "http://111.93.182.174/GeniusiOSApi/api/get_Salary?AEMConsultantID="+pref.getEmpConId()+"&AEMClientID="+pref.getEmpClintId()+"&MasterID="+pref.getEmpId()+"&AEMEmployeeID="+pref.getEmpId()+"&SalYear="+year+"&SalMonth="+month+"&WorkingStatus=1&CurrentPage="+mPageCount+"&SecurityCode="+pref.getSecurityCode();
+      Log.d("supsal",surl);
         llLoder.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
+        llNodata.setVisibility(View.GONE);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
@@ -179,7 +183,7 @@ public class SupSalaryActivity extends AppCompatActivity implements RecyclerItem
                             String responseText = job1.optString("responseText");
                             boolean responseStatus = job1.optBoolean("responseStatus");
                             if (responseStatus) {
-                                Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
+                              //  Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
                                 JSONArray responseData = job1.optJSONArray("responseData");
                                 for (int i = 0; i < responseData.length(); i++) {
                                     JSONObject obj = responseData.getJSONObject(i);
@@ -198,6 +202,7 @@ public class SupSalaryActivity extends AppCompatActivity implements RecyclerItem
                                     sAdapter.notifyDataSetChanged();
                                     llLoder.setVisibility(View.GONE);
                                     llMain.setVisibility(View.VISIBLE);
+                                    llNodata.setVisibility(View.GONE);
 
 
 
@@ -206,6 +211,7 @@ public class SupSalaryActivity extends AppCompatActivity implements RecyclerItem
                                 sAdapter.notifyDataSetChanged();
                                 llLoder.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
+                                llNodata.setVisibility(View.VISIBLE);
 
                                 Toast.makeText(getApplicationContext(),"No data found",Toast.LENGTH_LONG).show();
 

@@ -115,7 +115,7 @@ public class ContactUsActivity extends AppCompatActivity {
                                 }
                                 llLoader.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
-                                MenuAdapter menuAdapter=new MenuAdapter(menuList);
+                                MenuAdapter menuAdapter=new MenuAdapter(menuList,ContactUsActivity.this);
                                 rvContactus.setAdapter(menuAdapter);
                             }
                             else {

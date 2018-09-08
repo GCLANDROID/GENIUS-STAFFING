@@ -58,6 +58,7 @@ public class SalaryActivity extends AppCompatActivity implements RecyclerItemCli
     Pref pref;
     String surl;
     NetworkConnectionCheck connectionCheck;
+    LinearLayout llNodata;
 
 
     @Override
@@ -95,14 +96,17 @@ public class SalaryActivity extends AppCompatActivity implements RecyclerItemCli
         tvYear.setText(year);
         llLoader = (LinearLayout) findViewById(R.id.llLoader);
         llMain = (LinearLayout) findViewById(R.id.llMain);
+        llNodata=(LinearLayout)findViewById(R.id.llNodata);
 
 
     }
 
     private void getSalaryList() {
         surl = "http://111.93.182.174/GeniusiOSApi/api/get_Salary?AEMConsultantID=0&AEMClientID=null&MasterID=" + pref.getMasterId() + "&AEMEmployeeID=" + pref.getEmpId() + "&SalYear=" + year + "&SalMonth=jan&WorkingStatus=3&CurrentPage=1&SecurityCode="+pref.getSecurityCode();
+        Log.d("salaryinput",surl);
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
+        llNodata.setVisibility(View.GONE);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
@@ -134,13 +138,18 @@ public class SalaryActivity extends AppCompatActivity implements RecyclerItemCli
                                 if (salaryList.size() > 0) {
                                     llLoader.setVisibility(View.GONE);
                                     llMain.setVisibility(View.VISIBLE);
+                                    llNodata.setVisibility(View.GONE);
                                     setAdapter();
                                 } else {
                                     llLoader.setVisibility(View.GONE);
                                     llMain.setVisibility(View.GONE);
+                                    llNodata.setVisibility(View.GONE);
                                 }
                             } else {
                                 Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
+                                llLoader.setVisibility(View.GONE);
+                                llMain.setVisibility(View.VISIBLE);
+                                llNodata.setVisibility(View.VISIBLE);
 
                             }
 
@@ -196,7 +205,7 @@ public class SalaryActivity extends AppCompatActivity implements RecyclerItemCli
         llSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showYearDialog();
+                    showYearDialog();
             }
         });
     }

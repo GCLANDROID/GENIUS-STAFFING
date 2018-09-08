@@ -62,6 +62,7 @@ public class SupFeedBackActivity extends AppCompatActivity  {
      Button btnReply;
     String feedId;
     ArrayList<String>item=new ArrayList<>();
+    LinearLayout llNodata;
 
 
     @Override
@@ -94,6 +95,7 @@ public class SupFeedBackActivity extends AppCompatActivity  {
         llMain = (LinearLayout) findViewById(R.id.llMain);
         imgBack=(ImageView)findViewById(R.id.imgBack);
         imgHome=(ImageView)findViewById(R.id.imgHome);
+        llNodata=(LinearLayout)findViewById(R.id.llNodata);
 
         progressBar = (ProgressBar) findViewById(R.id.WLpagination_loader);
         rvFeedBack.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -139,6 +141,7 @@ public class SupFeedBackActivity extends AppCompatActivity  {
     private void getFeedbackList(){
         llLoder.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
+        llNodata.setVisibility(View.GONE);
 
         String surl = "http://111.93.182.174/GeniusiOSApi/api/gcl_Feedback?FeedBackID=0&AEMClientID="+pref.getEmpClintId()+"&AEMEmployeeID="+pref.getEmpId()+"&Query=null&RepliedDetails=null&RepliedBy=null&ReplyStatus=0&IssueID=0&WorkingStatus=1&CurrentPage="+mPageCount+"&Operation=1&SecurityCode="+pref.getSecurityCode();
         Log.d("input", surl);
@@ -178,12 +181,14 @@ public class SupFeedBackActivity extends AppCompatActivity  {
                                 supAdapter.notifyDataSetChanged();
                                 llLoder.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
+                                llNodata.setVisibility(View.GONE);
 
 
                             } else {
                                 supAdapter.notifyDataSetChanged();
                                 llLoder.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
+                                llNodata.setVisibility(View.VISIBLE);
 
                                 Toast.makeText(getApplicationContext(), "No data found", Toast.LENGTH_LONG).show();
 

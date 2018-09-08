@@ -161,7 +161,7 @@ public class EmployeeDashBoardActivity extends AppCompatActivity {
                 llNotification.setVisibility(View.GONE);
             } else if (s1.equals("8")) {
                 llLeaveApplication.setVisibility(View.GONE);
-            } else if (s1.equals("9")) {
+            } else if (s1.equals("10")) {
                 llDocument.setVisibility(View.GONE);
             }
 
@@ -182,7 +182,7 @@ public class EmployeeDashBoardActivity extends AppCompatActivity {
                 llNotification.setVisibility(View.GONE);
             } else if (s2.equals("8")) {
                 llLeaveApplication.setVisibility(View.GONE);
-            } else if (s2.equals("9")) {
+            } else if (s2.equals("10")) {
                 llDocument.setVisibility(View.GONE);
             }
 
@@ -209,7 +209,7 @@ public class EmployeeDashBoardActivity extends AppCompatActivity {
                 llNotification.setVisibility(View.GONE);
             } else if (s1.equals("8")) {
                 llLeaveApplication.setVisibility(View.GONE);
-            } else if (s1.equals("9")) {
+            } else if (s1.equals("10")) {
                 llDocument.setVisibility(View.GONE);
             }
 
@@ -230,7 +230,7 @@ public class EmployeeDashBoardActivity extends AppCompatActivity {
                 llNotification.setVisibility(View.GONE);
             } else if (s2.equals("8")) {
                 llLeaveApplication.setVisibility(View.GONE);
-            } else if (s2.equals("9")) {
+            } else if (s2.equals("10")) {
                 llDocument.setVisibility(View.GONE);
             }
 
@@ -250,7 +250,7 @@ public class EmployeeDashBoardActivity extends AppCompatActivity {
                 llNotification.setVisibility(View.GONE);
             } else if (s3.equals("8")) {
                 llLeaveApplication.setVisibility(View.GONE);
-            } else if (s3.equals("9")) {
+            } else if (s3.equals("10")) {
                 llDocument.setVisibility(View.GONE);
             }
 
@@ -277,7 +277,7 @@ public class EmployeeDashBoardActivity extends AppCompatActivity {
                 llNotification.setVisibility(View.GONE);
             } else if (s1.equals("8")) {
                 llLeaveApplication.setVisibility(View.GONE);
-            } else if (s1.equals("9")) {
+            } else if (s1.equals("10")) {
                 llDocument.setVisibility(View.GONE);
             }
 
@@ -298,7 +298,7 @@ public class EmployeeDashBoardActivity extends AppCompatActivity {
                 llNotification.setVisibility(View.GONE);
             } else if (s2.equals("8")) {
                 llLeaveApplication.setVisibility(View.GONE);
-            } else if (s2.equals("9")) {
+            } else if (s2.equals("10")) {
                 llDocument.setVisibility(View.GONE);
             }
 
@@ -318,7 +318,7 @@ public class EmployeeDashBoardActivity extends AppCompatActivity {
                 llNotification.setVisibility(View.GONE);
             } else if (s3.equals("8")) {
                 llLeaveApplication.setVisibility(View.GONE);
-            } else if (s3.equals("9")) {
+            } else if (s3.equals("10")) {
                 llDocument.setVisibility(View.GONE);
             }
 
@@ -339,7 +339,7 @@ public class EmployeeDashBoardActivity extends AppCompatActivity {
                 llNotification.setVisibility(View.GONE);
             } else if (s4.equals("8")) {
                 llLeaveApplication.setVisibility(View.GONE);
-            } else if (s4.equals("9")) {
+            } else if (s4.equals("10")) {
                 llDocument.setVisibility(View.GONE);
             }
 
@@ -368,7 +368,7 @@ public class EmployeeDashBoardActivity extends AppCompatActivity {
                 llNotification.setVisibility(View.GONE);
             } else if (s1.equals("8")) {
                 llLeaveApplication.setVisibility(View.GONE);
-            } else if (s1.equals("9")) {
+            } else if (s1.equals("10")) {
                 llDocument.setVisibility(View.GONE);
             }
 
@@ -389,7 +389,7 @@ public class EmployeeDashBoardActivity extends AppCompatActivity {
                 llNotification.setVisibility(View.GONE);
             } else if (s2.equals("8")) {
                 llLeaveApplication.setVisibility(View.GONE);
-            } else if (s2.equals("9")) {
+            } else if (s2.equals("10")) {
                 llDocument.setVisibility(View.GONE);
             }
 
@@ -409,7 +409,7 @@ public class EmployeeDashBoardActivity extends AppCompatActivity {
                 llNotification.setVisibility(View.GONE);
             } else if (s3.equals("8")) {
                 llLeaveApplication.setVisibility(View.GONE);
-            } else if (s3.equals("9")) {
+            } else if (s3.equals("10")) {
                 llDocument.setVisibility(View.GONE);
             }
 
@@ -430,7 +430,7 @@ public class EmployeeDashBoardActivity extends AppCompatActivity {
                 llNotification.setVisibility(View.GONE);
             } else if (s4.equals("8")) {
                 llLeaveApplication.setVisibility(View.GONE);
-            } else if (s4.equals("9")) {
+            } else if (s4.equals("10")) {
                 llDocument.setVisibility(View.GONE);
             }
 
@@ -450,17 +450,12 @@ public class EmployeeDashBoardActivity extends AppCompatActivity {
                 llNotification.setVisibility(View.GONE);
             } else if (s5.equals("8")) {
                 llLeaveApplication.setVisibility(View.GONE);
-            } else if (s5.equals("9")) {
+            } else if (s5.equals("10")) {
                 llDocument.setVisibility(View.GONE);
             }
 
-        }else if (separated.length==6){
+        }else if (separated.length==1){
             s1 = separated[0];
-            s2= separated[1];
-            s3=separated[2];
-            s4=separated[3];
-            s5=separated[4];
-            s6=separated[5];
             if (s1.equals("1")) {
                 llProfile.setVisibility(View.GONE);
             } else if (s1.equals("2")) {
@@ -477,7 +472,32 @@ public class EmployeeDashBoardActivity extends AppCompatActivity {
                 llNotification.setVisibility(View.GONE);
             } else if (s1.equals("8")) {
                 llLeaveApplication.setVisibility(View.GONE);
-            } else if (s1.equals("9")) {
+            } else if (s1.equals("10")) {
+                llDocument.setVisibility(View.GONE);
+            }
+        }else if (separated.length==6){
+            s1 = separated[0];
+            s2= separated[1];
+            s3=separated[2];
+            s4=separated[3];
+            s5=separated[4];
+            if (s1.equals("1")) {
+                llProfile.setVisibility(View.GONE);
+            } else if (s1.equals("2")) {
+                llAttandence.setVisibility(View.GONE);
+            } else if (s1.equals("3")) {
+                llSales.setVisibility(View.GONE);
+            } else if (s1.equals("4")) {
+                llPayroll.setVisibility(View.GONE);
+            } else if (s1.equals("5")) {
+                llPf.setVisibility(View.GONE);
+            } else if (s1.equals("6")) {
+                llFeedBack.setVisibility(View.GONE);
+            } else if (s1.equals("7")) {
+                llNotification.setVisibility(View.GONE);
+            } else if (s1.equals("8")) {
+                llLeaveApplication.setVisibility(View.GONE);
+            } else if (s1.equals("10")) {
                 llDocument.setVisibility(View.GONE);
             }
 
@@ -498,7 +518,7 @@ public class EmployeeDashBoardActivity extends AppCompatActivity {
                 llNotification.setVisibility(View.GONE);
             } else if (s2.equals("8")) {
                 llLeaveApplication.setVisibility(View.GONE);
-            } else if (s2.equals("9")) {
+            } else if (s2.equals("10")) {
                 llDocument.setVisibility(View.GONE);
             }
 
@@ -518,7 +538,7 @@ public class EmployeeDashBoardActivity extends AppCompatActivity {
                 llNotification.setVisibility(View.GONE);
             } else if (s3.equals("8")) {
                 llLeaveApplication.setVisibility(View.GONE);
-            } else if (s3.equals("9")) {
+            } else if (s3.equals("10")) {
                 llDocument.setVisibility(View.GONE);
             }
 
@@ -539,7 +559,7 @@ public class EmployeeDashBoardActivity extends AppCompatActivity {
                 llNotification.setVisibility(View.GONE);
             } else if (s4.equals("8")) {
                 llLeaveApplication.setVisibility(View.GONE);
-            } else if (s4.equals("9")) {
+            } else if (s4.equals("10")) {
                 llDocument.setVisibility(View.GONE);
             }
 
@@ -559,10 +579,9 @@ public class EmployeeDashBoardActivity extends AppCompatActivity {
                 llNotification.setVisibility(View.GONE);
             } else if (s5.equals("8")) {
                 llLeaveApplication.setVisibility(View.GONE);
-            } else if (s5.equals("9")) {
+            } else if (s5.equals("10")) {
                 llDocument.setVisibility(View.GONE);
             }
-
 
             if (s6.equals("1")) {
                 llProfile.setVisibility(View.GONE);
@@ -580,7 +599,7 @@ public class EmployeeDashBoardActivity extends AppCompatActivity {
                 llNotification.setVisibility(View.GONE);
             } else if (s6.equals("8")) {
                 llLeaveApplication.setVisibility(View.GONE);
-            } else if (s6.equals("9")) {
+            } else if (s6.equals("10")) {
                 llDocument.setVisibility(View.GONE);
             }
         }
