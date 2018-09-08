@@ -59,6 +59,7 @@ public class SalaryActivity extends AppCompatActivity implements RecyclerItemCli
     String surl;
     NetworkConnectionCheck connectionCheck;
     LinearLayout llNodata;
+    LinearLayout lln;
 
 
     @Override
