@@ -5,21 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="io.cordova.myapp00d753.activity.DocumentActivity"
-    android:background="@color/backcolor"
+    android:background="@android:color/white"
     android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@android:color/white"
-        android:orientation="horizontal">
+        android:layout_height="?android:actionBarSize"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary">
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             >
             <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:src="@drawable/backimg"
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
@@ -33,9 +33,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:text="Digital Document"/>
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/toolbartextsize"
+                android:text="KYC Document"
+               />
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
@@ -43,8 +44,8 @@
             android:layout_weight="0.5"
             android:gravity="right">
             <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@drawable/homeimg"
                 android:layout_gravity="center"
                 android:layout_marginRight="15dp"
@@ -53,63 +54,92 @@
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_marginTop="50dp">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/lldesign"
+        android:layout_marginBottom="10dp"
+        android:padding="10dp">
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:id="@+id/llManage">
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:background="#DDDBDB"
+            >
             <LinearLayout
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:background="@drawable/lldesign1"
+                android:layout_marginLeft="2dp"
+                android:id="@+id/llManage"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:gravity="center"
-                android:layout_gravity="center">
-                <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:src="@drawable/documentmanageicon"/>
+                android:orientation="vertical"
+                android:background="@android:color/white">
+                <LinearLayout
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:background="@drawable/lldesign9"
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="@dimen/imagesize"
+                        android:layout_height="@dimen/imagesize"
+                        android:src="@drawable/serviceicon"/>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Manage"
+                    android:textSize="@dimen/toolbartextsize"
+                    android:textColor="@color/colorPrimary" />
             </LinearLayout>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                android:textAppearance="?android:textAppearanceSmall"
-                android:text="Manage"
-                android:textAllCaps="false"
-                android:layout_marginTop="5dp"
-                android:layout_gravity="center"/>
+            <LinearLayout
+                android:id="@+id/llReport"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="visible"
+                android:background="@android:color/white"
+                >
+                <LinearLayout
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:background="@drawable/lldesign9"
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="@dimen/imagesize"
+                        android:layout_height="@dimen/imagesize"
+                        android:src="@drawable/attenreporticon"/>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Report"
+                    android:textSize="@dimen/toolbartextsize"
+                    android:textColor="@color/colorPrimary" />
+            </LinearLayout>
         </LinearLayout>
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:id="@+id/llReport">
-            <LinearLayout
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:background="@drawable/lldesign1"
-                android:gravity="center"
-                android:layout_gravity="center">
-                <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:src="@drawable/reporticon"/>
-            </LinearLayout>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                android:textAppearance="?android:textAppearanceSmall"
-                android:text="Report"
-                android:textAllCaps="false"
-                android:layout_marginTop="5dp"
-                android:layout_gravity="center"/>
-        </LinearLayout>
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"></LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"></LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"></LinearLayout>
+
     </LinearLayout>
 
 

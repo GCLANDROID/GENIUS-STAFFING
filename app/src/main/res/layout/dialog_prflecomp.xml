@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="320dp"
+    android:layout_height="350dp"
+    xmlns:scatter="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:background="@drawable/lldesign7">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:text="KYC completion Summary"/>
+            <LinearLayout
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="10dp"
+                android:padding="10dp">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Necessary"
+                        android:textColor="@android:color/black"
+                        android:textAppearance="?android:textAppearanceSmall"/>
+                    <com.intrusoft.scatter.PieChart
+                        android:layout_marginBottom="5dp"
+                        android:id="@+id/pie_chart"
+                        scatter:aboutChart="Necessary"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        scatter:aboutTextColor="#d90606"
+                        scatter:centerColor="#f2c7bb06"
+                        scatter:chartColor="@color/nessecarycolor"
+                        scatter:equalPartition="false"
+                        scatter:textColor="@color/colorAccent" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Contact"
+                        android:textColor="@android:color/black"
+                        android:textAppearance="?android:textAppearanceSmall"/>
+                    <com.intrusoft.scatter.PieChart
+                        android:layout_marginBottom="5dp"
+                        android:id="@+id/pie_chart_contact"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        scatter:aboutChart="Contact"
+                        scatter:aboutTextColor="@android:color/white"
+                        scatter:centerColor="#f2736c06"
+                        scatter:chartColor="@color/contactcolor"
+                        scatter:equalPartition="false"
+                        scatter:textColor="@color/colorAccent" />
+
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="10dp"
+                android:padding="10dp">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Family"
+                        android:textColor="@android:color/black"
+                        android:textAppearance="?android:textAppearanceSmall"/>
+                    <com.intrusoft.scatter.PieChart
+                        android:layout_marginBottom="5dp"
+                        android:id="@+id/pie_chart_nominee"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center"
+                        scatter:aboutChart="Family"
+                        android:layout_marginTop="10dp"
+                        scatter:aboutTextColor="@android:color/black"
+                        scatter:centerColor="#f2466b8e"
+                        scatter:chartColor="@color/familycolor"
+                        scatter:equalPartition="false"
+                        scatter:textColor="@color/colorAccent" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Document"
+                        android:textColor="@android:color/black"
+                        android:textAppearance="?android:textAppearanceSmall"/>
+                    <com.intrusoft.scatter.PieChart
+                        android:layout_marginBottom="5dp"
+                        android:id="@+id/pie_chart_Doc"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center"
+                        scatter:aboutChart="Document"
+                        android:layout_marginTop="10dp"
+                        scatter:aboutTextColor="@color/colorPrimary"
+                        scatter:centerColor="#f204417b"
+                        scatter:chartColor="@color/doccolor"
+                        scatter:equalPartition="false"
+                        scatter:textColor="@android:color/white" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+
+
+            <LinearLayout
+                android:layout_width="350dp"
+                android:layout_height="40dp"
+                android:background="@color/familycolor"
+                android:gravity="center"
+                android:visibility="visible"
+                android:id="@+id/llOk">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:text="OK"
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:textStyle="bold"
+                    android:id="@+id/tvOk"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+
+
+</LinearLayout>

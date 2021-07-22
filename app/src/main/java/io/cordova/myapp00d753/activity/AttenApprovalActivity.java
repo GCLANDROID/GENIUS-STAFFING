@@ -4,10 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -20,6 +17,11 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -38,6 +40,7 @@ import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.adapter.AttendanceApprovalAdapter;
 import io.cordova.myapp00d753.module.AttendanceApprovalModule;
 import io.cordova.myapp00d753.utility.AppController;
+import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
 
@@ -72,6 +75,15 @@ public class AttenApprovalActivity extends AppCompatActivity {
     NetworkConnectionCheck connectionCheck;
     LinearLayout llReply;
     LinearLayout llNodata;
+    LinearLayout llAgain;
+    ImageView imgAgain;
+    int flag=0;
+    ImageView imgSearch;
+    LinearLayout llClick,llSelect;
+    int allclick=0;
+    ArrayList<String>item1=new ArrayList<>();
+    AlertDialog alerDialog1;
+
 
 
     @Override
@@ -115,10 +127,12 @@ public class AttenApprovalActivity extends AppCompatActivity {
                         if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                             loading = true;
 
-                            progressBar.setVisibility(View.VISIBLE);
+
+                           progressBar.setVisibility(View.VISIBLE);
                             if (!mIsEndReached) {
                                 mPageCount = mPageCount + 1;
                                 if (connectionCheck.isNetworkAvailable()) {
+
                                     getAttendanceList();
                                 }else {
                                     connectionCheck.getNetworkActiveAlert().show();
@@ -168,21 +182,46 @@ public class AttenApprovalActivity extends AppCompatActivity {
         btnApprove=(Button)findViewById(R.id.btnApprove);
         btnReject=(Button)findViewById(R.id.btnReject);
         llReply=(LinearLayout)findViewById(R.id.llReply);
+        llAgain=(LinearLayout)findViewById(R.id.llAgain);
+        imgAgain=(ImageView)findViewById(R.id.imgAgain);
+        imgAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getAttendanceList();
+            }
+        });
+        imgSearch=(ImageView)findViewById(R.id.imgSearch);
+        llClick=(LinearLayout)findViewById(R.id.llClick);
+        llSelect=(LinearLayout)findViewById(R.id.llSelect);
 
     }
 
     private void getAttendanceList() {
         Log.d("Arpan", "arpan");
-        llLoder.setVisibility(View.VISIBLE);
-        llMain.setVisibility(View.GONE);
-        llNodata.setVisibility(View.GONE);
 
-        String surl = "http://111.93.182.174/GeniusiOSApi/api/get_GCLSelfAttendanceWoLeave?AEMConsultantID=" + pref.getEmpConId() + "&AEMClientID=" + pref.getEmpClintId() + "&AEMClientOfficeID=" + pref.getEmpClintOffId() + "&AEMEmployeeID=" + pref.getEmpId() + "&CurrentPage=" + mPageCount + "&AID=0&ApproverStatus=0&YearVal=" + year + "&MonthName=" + month + "&WorkingStatus=1&SecurityCode="+pref.getSecurityCode()+"&DbOperation=8&AttIds=null";
+        if (flag==1) {
+            llLoder.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+            llMain.setVisibility(View.VISIBLE);
+            flag=0;
+
+        }else if (flag==0){
+            llLoder.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
+            llMain.setVisibility(View.GONE);
+            flag=1;
+        }
+
+        llNodata.setVisibility(View.GONE);
+        llAgain.setVisibility(View.GONE);
+
+        String surl = AppData.url+"get_GCLSelfAttendanceWoLeave?AEMConsultantID=" + pref.getEmpConId() + "&AEMClientID=" + pref.getEmpClintId() + "&AEMClientOfficeID=" + pref.getEmpClintOffId() + "&AEMEmployeeID=" + pref.getEmpId() + "&CurrentPage=" + mPageCount + "&AID=0&ApproverStatus=0&YearVal=" + year + "&MonthName=" + month + "&WorkingStatus=1&SecurityCode="+pref.getSecurityCode()+"&DbOperation=8&AttIds=null";
         Log.d("input", surl);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                     //   attendabceInfiList.clear();
 
                         Log.d("responseAttendance", response);
                         loading = false;
@@ -195,7 +234,7 @@ public class AttenApprovalActivity extends AppCompatActivity {
 
                             boolean responseStatus = job1.optBoolean("responseStatus");
                             if (responseStatus) {
-                                Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
+                               // Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
                                 JSONArray responseData = job1.optJSONArray("responseData");
                                 for (int i = 0; i < responseData.length(); i++) {
                                     JSONObject obj = responseData.getJSONObject(i);
@@ -208,6 +247,7 @@ public class AttenApprovalActivity extends AppCompatActivity {
                                     String AttendanceType = obj.optString("AttendanceType");
                                     String Name = obj.optString("Name");
                                     String AEMEmployeeID = obj.optString("AEMEmployeeID");
+                                    item1.add(AttendanceID);
                                     AttendanceApprovalModule obj2 = new AttendanceApprovalModule(AttendanceDate, AttendanceInDateTime, AttendanceOutDateTime, Address, ApproverStatus, AttendanceType, AttendanceID, Name, AEMEmployeeID);
                                     attendabceInfiList.add(obj2);
 
@@ -217,15 +257,20 @@ public class AttenApprovalActivity extends AppCompatActivity {
                                 llLoder.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
                                 llNodata.setVisibility(View.GONE);
+                                llAgain.setVisibility(View.GONE);
+
 
 
                             } else {
                                 attendanceAdapter.notifyDataSetChanged();
                                 llLoder.setVisibility(View.GONE);
-                                llMain.setVisibility(View.VISIBLE);
+                                llMain.setVisibility(View.GONE);
                                 llNodata.setVisibility(View.VISIBLE);
+                                llAgain.setVisibility(View.GONE);
+                                progressBar.setVisibility(View.GONE);
 
-                                Toast.makeText(getApplicationContext(), "No data found", Toast.LENGTH_LONG).show();
+
+                                //Toast.makeText(getApplicationContext(), "No data found", Toast.LENGTH_LONG).show();
 
                             }
 
@@ -239,8 +284,12 @@ public class AttenApprovalActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                llLoder.setVisibility(View.GONE);
+                llMain.setVisibility(View.GONE);
+                llNodata.setVisibility(View.GONE);
+                llAgain.setVisibility(View.VISIBLE);
 
-                Toast.makeText(AttenApprovalActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
+               // Toast.makeText(AttenApprovalActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
                 Log.e("ert", error.toString());
             }
         }) {
@@ -255,17 +304,12 @@ public class AttenApprovalActivity extends AppCompatActivity {
     }
 
     public void updateAttendanceStatus(int position, boolean status) {
+        item1.clear();
         attendabceInfiList.get(position).setSelected(status);
-        item.add(attendabceInfiList.get(position).getAttId());
-        Log.d("arpan", item.toString());
-        String i = item.toString();
-        String d = i.replace("[", "").replace("]", "");
-        attId = d.replaceAll("\\s+", "");
-        Log.d("commas", attId);
-        if(item.size()>0){
-            llReply.setVisibility(View.VISIBLE);
+        if (attendabceInfiList.get(position).isSelected()==true) {
+            item.add(attendabceInfiList.get(position).getAttId());
         }else {
-            llReply.setVisibility(View.GONE);
+            item.clear();
         }
 
 
@@ -284,13 +328,13 @@ public class AttenApprovalActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(AttenApprovalActivity.this,DashBoardActivity.class);
+                Intent intent=new Intent(AttenApprovalActivity.this,SuperVisiorDashBoardActivity.class);
                 startActivity(intent);
                 finish();
             }
         });
 
-        llSearch.setOnClickListener(new View.OnClickListener() {
+        imgSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(AttenApprovalActivity.this, R.style.CustomDialogNew);
@@ -326,6 +370,9 @@ public class AttenApprovalActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         mPageCount=1;
                         attendabceInfiList.clear();
+                        flag=0;
+                        llLoder.setVisibility(View.VISIBLE);
+                        llMain.setVisibility(View.GONE);
                         getAttendanceList();
                         alertDialog.dismiss();
                     }
@@ -351,24 +398,51 @@ public class AttenApprovalActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (connectionCheck.isNetworkAvailable()){
-                    acceptAttendance();
+                    if (item.size()>0||allclick==1) {
+                        acceptAttendance();
+
+
+
+                    }else {
+                        Toast.makeText(AttenApprovalActivity.this,"Please select atleast one value",Toast.LENGTH_LONG).show();
+                    }
                 }else {
                     connectionCheck.getNetworkActiveAlert().show();
                 }
 
-                mPageCount=1;
-                attendabceInfiList.clear();
-                getAttendanceList();
+
             }
         });
 
         btnReject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                rejectAttendance();
-                mPageCount=1;
-                attendabceInfiList.clear();
-                getAttendanceList();
+                if (item.size()>0||allclick==1) {
+                    rejectAttendance();
+
+
+                }else {
+                    Toast.makeText(AttenApprovalActivity.this,"Please select atleast one value",Toast.LENGTH_LONG).show();
+
+                }
+
+
+            }
+        });
+
+        llClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (llSelect.getVisibility()==View.GONE){
+                    llSelect.setVisibility(View.VISIBLE);
+                    allclick=1;
+                    attendanceAdapter.selectAll();
+                }else {
+                    llSelect.setVisibility(View.GONE);
+                    attendanceAdapter.unselectall();
+                    allclick=0;
+                    item1.clear();
+                }
             }
         });
 
@@ -599,10 +673,17 @@ public class AttenApprovalActivity extends AppCompatActivity {
     }
 
     private void  acceptAttendance(){
-        String surl ="http://111.93.182.174/GeniusiOSApi/api/get_GCLSelfAttendanceWoLeave?AEMConsultantID="+pref.getEmpConId()+"&AEMClientID="+pref.getEmpClintId()+"&AEMClientOfficeID=0&AEMEmployeeID="+pref.getEmpId()+"&CurrentPage=1&AID=0&ApproverStatus=1&YearVal="+year+"&MonthName="+month+"&WorkingStatus=1&SecurityCode="+pref.getSecurityCode()+"&DbOperation=4&AttIds="+attId;
+
+        if (allclick==1){
+            attId=item1.toString().replace("[","").replace("]","").replaceAll("\\s+", "");
+        }else {
+            attId = item.toString().replace("[","").replace("]","").replaceAll("\\s+", "");
+        }
+        String surl =AppData.url+"get_GCLSelfAttendanceWoLeave?AEMConsultantID="+pref.getEmpConId()+"&AEMClientID="+pref.getEmpClintId()+"&AEMClientOfficeID=0&AEMEmployeeID="+pref.getEmpId()+"&CurrentPage=1&AID=0&ApproverStatus=1&YearVal="+year+"&MonthName="+month+"&WorkingStatus=1&SecurityCode="+pref.getSecurityCode()+"&DbOperation=4&AttIds="+attId;
+        Log.d("accept",surl);
         final ProgressDialog progressBar = new ProgressDialog(this);
         progressBar.setCancelable(true);//you can cancel it by pressing back button
-        progressBar.setMessage("Submating...");
+        progressBar.setMessage("Loading...");
         progressBar.show();
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
@@ -617,6 +698,8 @@ public class AttenApprovalActivity extends AppCompatActivity {
                             boolean responseStatus=job1.optBoolean("responseStatus");
                             if (responseStatus){
                                  Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
+                                item.clear();
+                                successAlert("Attendance has been Approved Successfully");
                                // successAlert();
 
                             }
@@ -648,10 +731,15 @@ public class AttenApprovalActivity extends AppCompatActivity {
 
 
     private void rejectAttendance(){
-        String surl ="http://111.93.182.174/GeniusiOSApi/api/get_GCLSelfAttendanceWoLeave?AEMConsultantID="+pref.getEmpConId()+"&AEMClientID="+pref.getEmpClintId()+"&AEMClientOfficeID=0&AEMEmployeeID="+pref.getEmpId()+"&CurrentPage=1&AID=0&ApproverStatus=2&YearVal="+year+"&MonthName="+month+"&WorkingStatus=1&SecurityCode=0000&DbOperation=4&AttIds="+attId;
+        if (allclick==1){
+            attId=item1.toString().replace("[","").replace("]","").replaceAll("\\s+", "");
+        }else {
+            attId = item.toString().replace("[","").replace("]","").replaceAll("\\s+", "");
+        }
+        String surl =AppData.url+"get_GCLSelfAttendanceWoLeave?AEMConsultantID="+pref.getEmpConId()+"&AEMClientID="+pref.getEmpClintId()+"&AEMClientOfficeID=0&AEMEmployeeID="+pref.getEmpId()+"&CurrentPage=1&AID=0&ApproverStatus=2&YearVal="+year+"&MonthName="+month+"&WorkingStatus=1&SecurityCode=0000&DbOperation=4&AttIds="+attId;
         final ProgressDialog progressBar = new ProgressDialog(this);
         progressBar.setCancelable(true);//you can cancel it by pressing back button
-        progressBar.setMessage("Submating...");
+        progressBar.setMessage("Loading...");
         progressBar.show();
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
@@ -666,6 +754,8 @@ public class AttenApprovalActivity extends AppCompatActivity {
                             boolean responseStatus=job1.optBoolean("responseStatus");
                             if (responseStatus){
                                 Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
+                                item.clear();
+                                successAlert("Attendance has been Rejected Successfully");
                                 // successAlert();
 
                             }
@@ -693,6 +783,39 @@ public class AttenApprovalActivity extends AppCompatActivity {
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
 
+    }
+
+    private void successAlert(String text) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(AttenApprovalActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.dialog_success, null);
+        dialogBuilder.setView(dialogView);
+        TextView tvInvalidDate = (TextView) dialogView.findViewById(R.id.tvSuccess);
+        tvInvalidDate.setText(text);
+
+        Button btnOk = (Button) dialogView.findViewById(R.id.btnOk);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alerDialog1.dismiss();
+
+
+                Intent intent=new Intent(AttenApprovalActivity.this,SupAttendanceActivity.class);
+                startActivity(intent);
+                finish();
+                llSelect.setVisibility(View.GONE);
+
+
+
+            }
+        });
+
+        alerDialog1 = dialogBuilder.create();
+        alerDialog1.setCancelable(false);
+        Window window = alerDialog1.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        alerDialog1.show();
     }
 
 

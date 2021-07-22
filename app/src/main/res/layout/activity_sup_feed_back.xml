@@ -6,20 +6,20 @@
     android:layout_height="match_parent"
     tools:context="io.cordova.myapp00d753.activity.SupFeedBackActivity"
     android:orientation="vertical"
-    android:background="@color/backcolor">
+    android:background="@android:color/white">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@android:color/white"
-        android:orientation="horizontal">
+        android:layout_height="?android:actionBarSize"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary">
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             >
             <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@drawable/backimg"
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
@@ -33,9 +33,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:text="Feedback"/>
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/toolbartextsize"
+                android:text="Feedback"
+                />
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
@@ -43,29 +44,26 @@
             android:layout_weight="0.5"
             android:gravity="right">
             <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@drawable/homeimg"
                 android:layout_gravity="center"
                 android:layout_marginRight="15dp"
                 android:id="@+id/imgHome"/>
         </LinearLayout>
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#bdbdbd"></LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@android:color/white"
         android:gravity="center"
         android:id="@+id/llReply"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:layout_marginTop="40dp">
         <Button
             android:layout_width="70dp"
             android:layout_height="30dp"
-            android:background="@drawable/buttondesign2"
+            android:background="@drawable/lldesign14"
             android:textColor="@android:color/white"
             android:textAppearance="?android:textAppearanceSmall"
             android:text="Reply"
@@ -89,18 +87,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@color/designcolor"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
+        android:background="@drawable/lldesign"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:orientation="vertical"
         android:id="@+id/llMain"
         android:visibility="gone">
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/rvFeedBack"
-            ></android.support.v7.widget.RecyclerView>
+            android:layout_margin="5dp"></androidx.recyclerview.widget.RecyclerView>
         <ProgressBar
             android:layout_width="match_parent"
             android:layout_height="40dp"

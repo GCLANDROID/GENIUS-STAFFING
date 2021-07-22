@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.cordova.myapp00d753">
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -10,15 +15,42 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name=".utility.AppController"
         android:allowBackup="true"
-        android:icon="@drawable/geniuslogo"
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/gelogo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:requestLegacyExternalStorage="true"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".activity.SPRDashboardActivity"></activity>
+        <activity android:name=".activity.SupSaleDialog1Activity" />
+        <activity android:name=".activity.CounterVisitReportActivity" />
+        <activity android:name=".activity.CounterVisitDashboardActivity" />
+        <activity android:name=".activity.CollapsingActivity" />
+        <activity android:name=".activity.SaleApprovalDashboardActivity" />
+        <activity android:name=".activity.SaleArpprovalReportActivity" />
+        <activity android:name=".activity.CounetVisitActivity" />
+        <activity android:name=".activity.SaleDashboardActivity" />
+        <activity android:name=".activity.SupSaleDashboardActivity" />
+        <activity android:name=".activity.SupEmpSaleActivity" />
+        <activity android:name=".activity.PFDashBoardActivity" />
+        <activity android:name=".activity.DocumentNumberActivity" />
+
+        <activity
+            android:name=".activity.OffAttenDanceActivity"
+            android:screenOrientation="userPortrait" />
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
         <activity android:name=".SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,80 +58,109 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.AboutUsActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.AttenApprovalActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.AttenConsolidateActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.AttendanceActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.AttendanceManageActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.AttendanceReportActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.BackDatedAttendanceActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.ContactUsActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.DashBoardActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.DocumentActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.DocumentManageActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.DocumentReportActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.EmployeeDashBoardActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.FeedBackActivity"
-            android:screenOrientation="userPortrait"
-            ></activity>
-        <activity android:name=".activity.LoginActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.NotificationActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.NotificationManageActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.PayrollActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.PFActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.ProfileActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.SalaryActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.ServicesActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.SupAttendanceActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.SupAttenManageActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.SupAttenReportActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.SupCTCActivity"
-            android:screenOrientation="userPortrait"></activity>
+        <activity
+            android:name=".activity.AboutUsActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.AttenApprovalActivity"
+            android:screenOrientation="userPortrait" />
 
-        <activity android:name=".activity.SuperVisiorDashBoardActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.SupFeedBackActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.SupNotificationActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.SupProfileActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.SupPyrollActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.SupSalaryActivity"
-            android:screenOrientation="userPortrait"></activity>
+        <activity
+            android:name=".activity.AttendanceActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.AttendanceManageActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.AttendanceReportActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.BackDatedAttendanceActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.ContactUsActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.DashBoardActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.DocumentActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.DocumentManageActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.DocumentReportActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.EmployeeDashBoardActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.FeedBackActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.LoginActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.NotificationActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.NotificationManageActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.PayrollActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.PFActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.ProfileActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.SalaryActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.ServicesActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.SupAttendanceActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.SupAttenManageActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.SupAttenReportActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.SupCTCActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.SuperVisiorDashBoardActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.SupFeedBackActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.SupNotificationActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.SupProfileActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.SupPyrollActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.SupSalaryActivity"
+            android:screenOrientation="userPortrait" />
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-        <service android:name=".FCM.MyFirebaseInstanceIDService"
-            >
+
+        <service android:name=".FCM.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
@@ -109,6 +170,196 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <activity
+            android:name=".activity.TempDashBoardActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.TempProfileActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.HRMSDashBoardActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.KYCDashBoardActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.KYCManageActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.KYCOfficialFormActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.KYCPersonalActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.KYCContactActivity"
+            android:screenOrientation="userPortrait" />
+        <activity android:name=".activity.KYCMisActivity" />
+        <activity android:name=".activity.KYCFamilyActivity" />
+        <activity
+            android:name=".activity.ProfileDashBoardActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.ProfileUpdatectivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.RemDashBoardActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.RemManageDashBoardActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.NewClaimActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.ClaimDeletActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.ClaimReportActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.TempPanActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.TempBankActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.RecktitRemActivity"
+            android:screenOrientation="userPortrait" />
+
+        <receiver android:name=".reciver.NetworkStateChecker">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".activity.OfflineAttenReportActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.DailyDashBoardActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.VisitLocationActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.NumberTourActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.DailyLogManageActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.OfflineDailyLogReportActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.TourViewReportActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.APiHitActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.MapReportActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.FencingDashBoardActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.GeoFenceManageDashBoardActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.FenceNumberActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.EmpMapiingDashBoardActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.ConfigReportActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.ReportActivityActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.GeoFenceActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.EmpMappingActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.EmpMapingReportActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.FenceConfigActivity"
+            android:screenOrientation="userPortrait" />
+
+        <service
+            android:name=".utility.LocationUpdaterService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".utility.LocationAlertIntentService"
+            android:allowBackup="true" />
+
+        <activity
+            android:name=".activity.ConfigNumberActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.MulFenceConfigActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.MapPointActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.MultipleConfigReportActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.PdfViewActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.AcceptanceDialogActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".activity.FRDashboard"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.FaceRecognitation"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.AddPerson"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.PreviewActivity"
+            android:screenOrientation="userPortrait" />
+        <activity android:name="com.google.android.cameraview.LongImageCameraActivity" />
+        <activity android:name="com.google.android.cameraview.PreviewLongImageActivity" />
+        <activity
+            android:name=".activity.SalesManagementDashboardActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.SalesManageActivity"
+            android:screenOrientation="userPortrait" />
+        <activity android:name=".activity.SaleDialogActivity" />
+        <activity android:name=".activity.SaleReportActivity" />
+        <activity android:name=".activity.ChangePasswordActivity" />
+        <activity android:name=".activity.SaleTarget" />
+        <activity android:name=".activity.SupSaleReportActivity" />
+        <activity android:name=".activity.SupSalesManagementDashboardActivity" />
+        <activity android:name=".activity.SupEmpTargetActivity" />
+        <activity android:name=".activity.SupSaleTargetActivity" />
+        <activity android:name=".activity.SaleApprovalActivity" />
+        <activity android:name=".activity.SupCounterVisitReportActivity" />
+        <activity android:name=".activity.SupEmpVistActivity" />
+        <activity android:name=".activity.SupSaleDialogActivity" />
+        <activity android:name=".activity.ZoneSaleReportActivity" />
+        <activity android:name=".activity.BranchSaleReportActivity"></activity>
+        <activity android:name=".activity.TopPerformerActivity"></activity>
+        <activity android:name=".activity.CustomerReportActivity"></activity>
+        <activity android:name=".activity.CounterVisitEntryActivity"></activity>
+        <activity android:name=".activity.TeamSalesActivity"></activity>
+        <activity android:name=".activity.AllIndiaSaleReportActivity"></activity>
+        <activity android:name=".activity.ConApprovalActivity"></activity>
+        <activity android:name=".activity.TotalSaleActivity"></activity>
+
     </application>
 
 </manifest>

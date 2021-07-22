@@ -1,6 +1,8 @@
 package io.cordova.myapp00d753.utility;
 
 import io.cordova.myapp00d753.module.AttendanceManageModule;
+import io.cordova.myapp00d753.module.UploadObject;
+import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Multipart;
@@ -32,9 +34,14 @@ public class ApiClient {
         @Multipart
         @POST("gcl_post_attedance")
         //Call<AttendanceManageModule> getDatas(@Part("AEMEmployeeID") String AEMEmployeeID, @Part("Address") String Address, @Part("Longitude") String Longitude, @Part("Latitude")String Latitude, @Part("SecurityCode") String SecurityCode, @Part("Image1")String Image1 );
-        retrofit2.Call<AttendanceManageModule> getDatas(@Part("AEMEmployeeID") String AEMEmployeeID, @Part("Address") String Address, @Part("Longitude") String Longitude, @Part("Latitude") String Latitude, @Part("SecurityCode") String SecurityCode);
+        Call<AttendanceManageModule> getDatas(@Part("AEMEmployeeID") String AEMEmployeeID, @Part("Address") String Address, @Part("Longitude") String Longitude, @Part("Latitude") String Latitude, @Part("SecurityCode") String SecurityCode);
+        @Multipart
+        @POST("gcl_post_OfflineAttedance")
+        Call<UploadObject> offlineAttn(@Part("AEMEmployeeID") String AEMEmployeeID, @Part("Address") String Address, @Part("Longitude") String Longitude, @Part("Latitude") String Latitude, @Part("SecurityCode") String SecurityCode, @Part("Attendance") String Attendance);
 
     }
+
+
 
    
 }

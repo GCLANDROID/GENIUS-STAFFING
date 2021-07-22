@@ -1,13 +1,14 @@
 package io.cordova.myapp00d753.adapter;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
@@ -18,14 +19,14 @@ public class CTCAdapter extends RecyclerView.Adapter<CTCAdapter.MyViewHolder> {
     ArrayList<CTCModule>ctcList=new ArrayList<>();
     @NonNull
     @Override
-    public CTCAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.ctc_raw,viewGroup,false);
 
-        return new CTCAdapter.MyViewHolder(itemView);
+        return new MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CTCAdapter.MyViewHolder myViewHolder, int i) {
+    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
 
         myViewHolder.tvEmpId.setText(ctcList.get(i).getEmpId());
         myViewHolder.tvEmpName.setText(ctcList.get(i).getEmpName());

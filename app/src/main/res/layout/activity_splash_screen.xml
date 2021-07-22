@@ -4,15 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="io.cordova.myapp00d753.activity.SplashScreenActivity"
+    tools:context=".SplashScreenActivity"
     android:orientation="vertical"
-    >
+    android:background="@drawable/spimg"
+    android:gravity="center">
 
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/splashimg"
-        android:scaleType="fitXY"/>
 
 </LinearLayout>

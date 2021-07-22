@@ -2,14 +2,16 @@ package io.cordova.myapp00d753.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -24,9 +26,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.adapter.ContactMenuAdapter;
 import io.cordova.myapp00d753.adapter.MenuAdapter;
 import io.cordova.myapp00d753.module.MenuModule;
 import io.cordova.myapp00d753.utility.AppController;
+import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 
 public class ContactUsActivity extends AppCompatActivity {
@@ -35,6 +39,9 @@ public class ContactUsActivity extends AppCompatActivity {
     RecyclerView rvContactus;
     ArrayList<MenuModule>menuList=new ArrayList<>();
     NetworkConnectionCheck connectionCheck;
+    ContactMenuAdapter menuAdapter;
+    LinearLayout llAgain;
+    ImageView imgAgain;
 
 
     @Override
@@ -51,6 +58,8 @@ public class ContactUsActivity extends AppCompatActivity {
     }
     private void initialize(){
         connectionCheck=new NetworkConnectionCheck(ContactUsActivity.this);
+        llAgain=(LinearLayout)findViewById(R.id.llAgain);
+        imgAgain=(ImageView)findViewById(R.id.imgAgain);
 
 
         imgBack=(ImageView)findViewById(R.id.imgBack);
@@ -81,12 +90,20 @@ public class ContactUsActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        imgAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getContactInformation();
+            }
+        });
     }
 
     private void getContactInformation(){
-        String surl ="http://111.93.182.174/GeniusiOSApi/api/gcl_HomeScreen?MenuId=7&SecurityCode=0000";
+        String surl = AppData.url+"gcl_HomeScreen?MenuId=7&SecurityCode=0000";
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
+        llAgain.setVisibility(View.GONE);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
@@ -100,7 +117,7 @@ public class ContactUsActivity extends AppCompatActivity {
                             String responseText=job1.optString("responseText");
                             boolean responseStatus=job1.optBoolean("responseStatus");
                             if (responseStatus){
-                                Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
+                              //  Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
 
                                 JSONArray responseData=job1.optJSONArray("responseData");
                                 for (int i = 0; i < responseData.length(); i++){
@@ -115,7 +132,8 @@ public class ContactUsActivity extends AppCompatActivity {
                                 }
                                 llLoader.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
-                                MenuAdapter menuAdapter=new MenuAdapter(menuList,ContactUsActivity.this);
+                                llAgain.setVisibility(View.GONE);
+                                 menuAdapter=new ContactMenuAdapter(menuList,ContactUsActivity.this);
                                 rvContactus.setAdapter(menuAdapter);
                             }
                             else {
@@ -128,7 +146,10 @@ public class ContactUsActivity extends AppCompatActivity {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(ContactUsActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
+                            llLoader.setVisibility(View.GONE);
+                            llMain.setVisibility(View.GONE);
+                            llAgain.setVisibility(View.VISIBLE);
+                           // Toast.makeText(ContactUsActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
                         }
 
                     }
@@ -145,5 +166,22 @@ public class ContactUsActivity extends AppCompatActivity {
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
 
+    }
+
+
+    public void updateStatus(int position,boolean status)
+    {
+        for (int i =0 ;i<menuList.size();i++)
+        {
+            if (i==position)
+            {
+                menuList.get(i).setExpanded(status);
+            }
+            else
+            {
+                menuList.get(i).setExpanded(false);
+            }
+        }
+        menuAdapter.notifyDataSetChanged();
     }
 }

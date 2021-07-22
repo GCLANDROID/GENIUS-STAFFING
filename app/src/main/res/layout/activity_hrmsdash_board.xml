@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.HRMSDashBoardActivity"
+    android:background="@drawable/bgimg1"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="left">
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/companylogo"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/designcolor"
+                android:textSize="@dimen/toolbartextsize"
+                android:text="DashBoard"
+                android:textAllCaps="true"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:id="@+id/llLogout">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/logoutimg"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/notificationimg"
+                    android:visibility="gone"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="25dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"
+            android:orientation="vertical"
+
+            android:visibility="visible"
+            android:layout_marginLeft="20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@android:color/white"
+                android:text="Good Morning"
+                android:textStyle="bold"
+                android:id="@+id/tvGreeting"
+                android:layout_marginTop="5dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/white"
+                    android:text="Demo"
+                    android:id="@+id/tvEmployeeName"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:text="9 august 2018"
+                    android:textColor="@android:color/white"
+                    android:id="@+id/tvLoginDateTime"
+                    android:layout_marginRight="20dp"/>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+
+            android:background="@drawable/lldesign"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
+            android:padding="10dp">
+
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="0dp"
+              android:layout_weight="1"
+              android:weightSum="2"
+              android:orientation="horizontal"
+              android:layout_marginTop="10dp">
+              <LinearLayout
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  android:orientation="vertical"
+                  android:id="@+id/llKYC"
+                  android:gravity="center">
+                  <LinearLayout
+                      android:layout_width="60dp"
+                      android:layout_height="60dp"
+                      android:background="@drawable/btndesign"
+                      android:gravity="center"
+                      android:id="@+id/llKYCD">
+
+                      <ImageView
+                          android:layout_width="30dp"
+                          android:layout_height="30dp"
+                          android:src="@drawable/kyc" />
+                  </LinearLayout>
+                  <LinearLayout
+                      android:layout_width="60dp"
+                      android:layout_height="60dp"
+                      android:background="@drawable/lldesign1"
+                      android:gravity="center"
+                      android:id="@+id/llKYCD1"
+                      android:visibility="gone">
+
+                      <ImageView
+                          android:layout_width="30dp"
+                          android:layout_height="30dp"
+                          android:src="@drawable/kyc1" />
+                  </LinearLayout>
+                  <TextView
+                      android:layout_marginTop="5dp"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:textColor="@android:color/black"
+                      android:text="KYC"
+                      android:textAppearance="?android:textAppearanceSmall"/>
+              </LinearLayout>
+              <LinearLayout
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  android:orientation="vertical"
+                  android:id="@+id/llDOC"
+                  android:gravity="center">
+                  <LinearLayout
+                      android:layout_width="60dp"
+                      android:layout_height="60dp"
+                      android:background="@drawable/btndesign"
+                      android:gravity="center"
+                      android:id="@+id/llDOCD">
+
+                      <ImageView
+                          android:layout_width="30dp"
+                          android:layout_height="30dp"
+                          android:src="@drawable/document" />
+                  </LinearLayout>
+                  <LinearLayout
+                      android:layout_width="60dp"
+                      android:layout_height="60dp"
+                      android:background="@drawable/lldesign1"
+                      android:gravity="center"
+                      android:id="@+id/llDOCD1"
+                      android:visibility="gone">
+
+                      <ImageView
+                          android:layout_width="30dp"
+                          android:layout_height="30dp"
+                          android:src="@drawable/document1" />
+                  </LinearLayout>
+                  <TextView
+                      android:layout_marginTop="5dp"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:textColor="@android:color/black"
+                      android:text="DOCUMENT"
+                      android:textAppearance="?android:textAppearanceSmall"/>
+              </LinearLayout>
+
+          </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -53,6 +53,8 @@
             android:layout_height="match_parent"
             android:layout_weight="0.6">
             <TextView
+                android:id="@+id/tvSYear"
+                android:textSize="11sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -65,24 +67,27 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
+
             <LinearLayout
+                android:id="@+id/llYear"
                 android:layout_width="150dp"
                 android:layout_height="30dp"
-                android:background="@drawable/lldesign4"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:gravity="center"
-                android:id="@+id/llYear">
+                android:background="@drawable/lldesign4"
+                android:gravity="center">
+
                 <TextView
+                    android:id="@+id/tvYear"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/black"
-                    android:text="none"
-                    android:id="@+id/tvYear"/>
+                    android:text="please select"
+                    android:textColor="@android:color/black" />
+
                 <Spinner
+                    android:id="@+id/spYear"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/spYear"
                     android:visibility="gone"></Spinner>
             </LinearLayout>
         </LinearLayout>
@@ -100,6 +105,8 @@
             android:layout_height="match_parent"
             android:layout_weight="0.6">
             <TextView
+                android:id="@+id/tvSMonth"
+                android:textSize="11sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -125,7 +132,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/black"
-                    android:text="none"
+                    android:text="please select"
                     android:id="@+id/tvMonth"/>
                 <Spinner
                     android:layout_width="match_parent"
@@ -148,9 +155,10 @@
             android:layout_height="40dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:background="@drawable/lldesign6"
-            android:textAllCaps="true"
-            android:textAppearance="?android:textAppearanceMedium"
+            android:background="@drawable/gradientdesign1"
+            android:textAllCaps="false"
+           android:textSize="14sp"
+            android:fontFamily="serif"
             android:textColor="@android:color/white"
             android:text="Search"/>
     </LinearLayout>

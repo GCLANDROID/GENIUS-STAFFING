@@ -6,12 +6,12 @@
     android:layout_height="match_parent"
     tools:context="io.cordova.myapp00d753.activity.NotificationManageActivity"
     android:orientation="vertical"
-    android:background="@color/backcolor">
+    android:background="@android:color/white">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@android:color/white"
-        android:orientation="horizontal">
+        android:layout_height="?android:actionBarSize"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary">
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -33,9 +33,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:text="Manage"/>
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/toolbartextsize"
+                android:text="Manage Notification"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
@@ -53,7 +53,11 @@
     </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/lldesign">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -68,7 +72,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
+                android:textColor="@color/colorPrimary"
                 android:text="Start Date"
                 android:textAppearance="?android:textAppearanceMedium"/>
             <LinearLayout
@@ -76,7 +80,7 @@
                 android:layout_height="30dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
-                android:background="@drawable/lldesign"
+                android:background="@drawable/lldesign9"
                 android:id="@+id/llSDate"
                 android:orientation="vertical">
                 <TextView
@@ -97,7 +101,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
+                android:textColor="@color/colorPrimary"
                 android:text="End Date"
                 android:textAppearance="?android:textAppearanceMedium"/>
             <LinearLayout
@@ -105,7 +109,7 @@
                 android:layout_height="30dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="19dp"
-                android:background="@drawable/lldesign"
+                android:background="@drawable/lldesign9"
                 android:id="@+id/llEDate"
                 android:orientation="vertical">
                 <TextView
@@ -122,7 +126,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:background="@drawable/lldesign"
+            android:background="@drawable/lldesign9"
             android:layout_marginTop="10dp">
             <EditText
                 android:layout_width="match_parent"
@@ -139,7 +143,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:background="@drawable/lldesign"
+            android:background="@drawable/lldesign9"
             android:layout_marginTop="10dp">
             <EditText
                 android:layout_width="match_parent"
@@ -155,12 +159,14 @@
                 />
         </LinearLayout>
         <Button
+            android:textAllCaps="false"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="55dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/buttondesign"
+            android:background="@drawable/gradientdesign2"
             android:textColor="@android:color/white"
-            android:text="send"
+            android:text="Send"
+            android:textSize="16sp"
             android:id="@+id/btnsend"/>
     </LinearLayout>
     </ScrollView>

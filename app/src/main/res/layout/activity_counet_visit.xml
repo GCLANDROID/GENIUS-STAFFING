@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.CounetVisitActivity"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?android:actionBarSize"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            >
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/backimg"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center"
+                android:id="@+id/imgBack"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/toolbartextsize"
+                android:text="Manage Daily Visit"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="right">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/homeimg"
+                android:layout_gravity="center"
+                android:layout_marginRight="15dp"
+                android:id="@+id/imgHome"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/llMain"
+        android:visibility="visible"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/lldesign">
+        <TextView
+            android:textColor="@color/colorPrimary"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="14sp"
+            android:text="Please Select Store:"></TextView>
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/lldesign9">
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:id="@+id/spCounter"></Spinner>
+
+        </LinearLayout>
+        <TextView
+            android:layout_marginTop="10dp"
+            android:textColor="@color/colorPrimary"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="14sp"
+            android:text="Please Enter Remarks:"></TextView>
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:background="@drawable/lldesign9">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:paddingLeft="5dp"
+                android:id="@+id/etRemark"></EditText>
+
+
+        </LinearLayout>
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="14sp"
+            android:text="Upload Counter Image:"></TextView>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <LinearLayout
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:background="@drawable/lldesign9"
+                android:padding="2dp">
+                <ImageView
+                    android:id="@+id/imgPhoto"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:src="@drawable/noimage"
+                    android:scaleType="centerCrop"></ImageView>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/imgCamera"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/photo"></ImageView>
+            </LinearLayout>
+
+
+        </FrameLayout>
+
+        <TextView
+            android:fontFamily="serif"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="right"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="12sp"
+            android:id="@+id/tvTime"/>
+
+
+
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:textColor="@color/colorPrimary"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="14sp"
+            android:text="You are here:"></TextView>
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            android:id="@+id/tvAddress"/>
+
+        <Button
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="10dp"
+            android:id="@+id/btnSubmit"
+            android:layout_height="40dp"
+            android:layout_width="200dp"
+            android:layout_gravity="center"
+            android:background="@drawable/gradientdesign1"
+            android:text="Submit"></Button>
+
+
+
+
+
+
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="320dp"
+    android:layout_height="250dp"
+    android:layout_gravity="top"
+    android:orientation="vertical"
+    android:background="@drawable/lldesign7"
+    android:layout_marginTop="10dp">
+    <LinearLayout
+        android:layout_width="320dp"
+        android:layout_height="250dp"
+        android:layout_gravity="top"
+        android:orientation="vertical"
+        android:layout_marginBottom="10dp">
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="320dp"
+            android:layout_height="25dp"
+            android:gravity="right"
+            android:paddingRight="10dp">
+            <ImageView
+                android:id="@+id/imgCancel"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/cancelicon"></ImageView>
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textSize="15sp"
+            android:textColor="@color/maincolor"
+            android:text="In View of global “CoVid – 19” pandemic outspread, most of the cities across India are facing crisis.Govt. has given directive to close Educational Institutions, Exams have been called off, Religious Institution has also shut, most of the organization has adopted work from home concept to combat the crisis. There is a Global economic recession due to the pandemic scenario.Please stay safe,stay home."></TextView>
+        <TextView
+            android:id="@+id/tvLink"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-thin"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textSize="15sp"
+            android:textColor="@color/dcolor"
+            android:text="Video Link:https://youtu.be/tuUhPe5zIEk"></TextView>
+
+    </LinearLayout>
+
+    
+
+
+
+
+</LinearLayout>

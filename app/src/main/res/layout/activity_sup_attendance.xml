@@ -6,12 +6,12 @@
     android:layout_height="match_parent"
     tools:context="io.cordova.myapp00d753.activity.SupAttendanceActivity"
     android:orientation="vertical"
-    android:background="@color/backcolor">
+    android:background="@android:color/white">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@android:color/white"
-        android:orientation="horizontal">
+        android:layout_height="?android:actionBarSize"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -19,8 +19,8 @@
             android:layout_weight="0.5">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dp"
                 android:src="@drawable/backimg"
@@ -37,8 +37,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Attendance"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:textColor="@android:color/black" />
+                android:textSize="@dimen/toolbartextsize"
+                android:textColor="@android:color/white"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -48,8 +49,8 @@
             android:gravity="right">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_gravity="center"
                 android:layout_marginRight="15dp"
                 android:src="@drawable/homeimg"
@@ -60,39 +61,51 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginTop="20dp"
-        android:weightSum="3">
+        android:layout_marginTop="50dp"
+        android:weightSum="3"
+        android:background="@drawable/lldesign"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="20dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:weightSum="3">
+            android:weightSum="3"
+            android:background="#E2E2E2">
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:id="@+id/llAttandanceManage">
+                android:id="@+id/llAttandanceManage"
+                android:background="@android:color/white"
+                >
 
                 <LinearLayout
                     android:layout_width="65dp"
                     android:layout_height="65dp"
-                    android:background="@drawable/lldesign1"
+                    android:background="@drawable/lldesign9"
                     android:gravity="center">
                     <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/manageicon"/>
+                        android:layout_width="@dimen/imagesize"
+                        android:layout_height="@dimen/imagesize"
+                        android:src="@drawable/serviceicon"/>
                 </LinearLayout>
+
+
+
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
-                    android:textAppearance="?android:textAppearanceSmall"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/toolbartextsize"
                     android:text="Manage"
                     android:layout_marginTop="5dp"/>
+
             </LinearLayout>
             <LinearLayout
                 android:layout_width="0dp"
@@ -100,23 +113,27 @@
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:id="@+id/llAttendanceReport">
+                android:id="@+id/llAttendanceReport"
+                android:background="@android:color/white"
+                >
 
                 <LinearLayout
                     android:layout_width="65dp"
                     android:layout_height="65dp"
-                    android:background="@drawable/lldesign1"
+                    android:background="@drawable/lldesign9"
                     android:gravity="center">
                     <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/attendencereportimg"/>
+                        android:layout_width="@dimen/imagesize"
+                        android:layout_height="@dimen/imagesize"
+                        android:src="@drawable/attenreporticon"/>
                 </LinearLayout>
+
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
-                    android:textAppearance="?android:textAppearanceSmall"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/toolbartextsize"
                     android:text="Report"
                     android:layout_marginTop="5dp"/>
             </LinearLayout>
@@ -126,23 +143,27 @@
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:id="@+id/llApproval">
-
+                android:id="@+id/llApproval"
+                android:background="@android:color/white"
+                >
                 <LinearLayout
                     android:layout_width="65dp"
                     android:layout_height="65dp"
-                    android:background="@drawable/lldesign1"
+                    android:background="@drawable/lldesign9"
                     android:gravity="center">
                     <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/attenappicon"/>
+                        android:layout_width="@dimen/imagesize"
+                        android:layout_height="@dimen/imagesize"
+                        android:src="@drawable/ic_apporve"/>
                 </LinearLayout>
+
+
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
-                    android:textAppearance="?android:textAppearanceSmall"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/toolbartextsize"
                     android:text="Approval"
                     android:layout_marginTop="5dp"/>
             </LinearLayout>

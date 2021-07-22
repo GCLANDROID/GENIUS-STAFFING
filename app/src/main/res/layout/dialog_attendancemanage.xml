@@ -28,8 +28,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"
                 android:text="Select Date"
                 android:textAppearance="?android:textAppearanceSmall"/>
             <LinearLayout
@@ -60,7 +59,7 @@
         <Button
             android:layout_width="300dp"
             android:layout_height="50dp"
-            android:background="@drawable/lldesign6"
+            android:background="@drawable/gradientdesign1"
             android:layout_gravity="center"
             android:text="Submit"
             android:textColor="@android:color/white"

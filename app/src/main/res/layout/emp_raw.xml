@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:orientation="vertical"
+    android:layout_marginTop="5dp"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/userimg"
+                android:layout_marginLeft="15dp"/>
+            <TextView
+                android:textSize="11sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@color/colorPrimary"
+                android:text="2018"
+                android:id="@+id/tvName"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.1">
+            <TextView
+                android:textSize="11sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@color/familycolor"
+                android:id="@+id/tvPercentage"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:layout_marginBottom="5dp">
+            <Button
+                android:id="@+id/btnSale"
+                android:textAllCaps="false"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:background="@drawable/lldesign9"
+                android:textSize="11sp"
+                android:textColor="@android:color/black"
+                android:text="SPR"></Button>
+            <Button
+                android:id="@+id/btnVisit"
+                android:textAllCaps="false"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:background="@drawable/lldesign9"
+                android:textSize="11sp"
+                android:textColor="@android:color/black"
+                android:text="Visit Report"></Button>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="3dp"
+        android:background="#279916"></LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+</LinearLayout>

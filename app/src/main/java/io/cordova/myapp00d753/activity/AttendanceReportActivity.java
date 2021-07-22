@@ -3,10 +3,7 @@ package io.cordova.myapp00d753.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -20,6 +17,11 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -39,6 +41,7 @@ import io.cordova.myapp00d753.adapter.AttendanceAdapter;
 import io.cordova.myapp00d753.module.AttendanceModule;
 import io.cordova.myapp00d753.module.SpModule;
 import io.cordova.myapp00d753.utility.AppController;
+import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
 
@@ -70,6 +73,8 @@ public class AttendanceReportActivity extends AppCompatActivity {
     String AttendanceID;
     Pref pref;
     NetworkConnectionCheck connectionCheck;
+    LinearLayout llAgain;
+    ImageView imgAgain,imgSearch;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -158,6 +163,15 @@ public class AttendanceReportActivity extends AppCompatActivity {
         else if (m==12){
             month="December";
         }
+        llAgain=(LinearLayout)findViewById(R.id.llAgain);
+        imgAgain=(ImageView)findViewById(R.id.imgAgain);
+        imgAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getAttendanceList();
+            }
+        });
+        imgSearch=(ImageView)findViewById(R.id.imgSearch);
 
     }
 
@@ -166,7 +180,8 @@ public class AttendanceReportActivity extends AppCompatActivity {
         llLoder.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
         llNodata.setVisibility(View.GONE);
-        String surl ="http://111.93.182.174/GeniusiOSApi/api/get_GCLSelfAttendanceWoLeave?AEMConsultantID="+pref.getEmpConId()+"&AEMClientID="+pref.getEmpClintId()+"&AEMClientOfficeID="+pref.getEmpClintOffId()+"&AEMEmployeeID="+pref.getEmpId()+"&CurrentPage="+mPageCount+"&AID=0&ApproverStatus=4&YearVal="+year+"&MonthName="+month+"&WorkingStatus=1&SecurityCode="+pref.getSecurityCode()+"&DbOperation=8&AttIds=null";
+        llAgain.setVisibility(View.GONE);
+        String surl = AppData.url+"get_GCLSelfAttendanceWoLeave?AEMConsultantID="+pref.getEmpConId()+"&AEMClientID="+pref.getEmpClintId()+"&AEMClientOfficeID="+pref.getEmpClintOffId()+"&AEMEmployeeID="+pref.getEmpId()+"&CurrentPage="+mPageCount+"&AID=0&ApproverStatus=4&YearVal="+year+"&MonthName="+month+"&WorkingStatus=1&SecurityCode="+pref.getSecurityCode()+"&DbOperation=8&AttIds=null";
         Log.d("input",surl);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
@@ -204,6 +219,7 @@ public class AttendanceReportActivity extends AppCompatActivity {
                                 llLoder.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
                                 llNodata.setVisibility(View.GONE);
+                                llAgain.setVisibility(View.GONE);
 
                             }
 
@@ -212,22 +228,28 @@ public class AttendanceReportActivity extends AppCompatActivity {
                                 llLoder.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
                                 llNodata.setVisibility(View.VISIBLE);
-                                Toast.makeText(getApplicationContext(),"No data found",Toast.LENGTH_LONG).show();
+                                llAgain.setVisibility(View.GONE);
+                             //   Toast.makeText(getApplicationContext(),"No data found",Toast.LENGTH_LONG).show();
 
                             }
 
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(AttendanceReportActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
+                           // Toast.makeText(AttendanceReportActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
+
                         }
 
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                llLoder.setVisibility(View.GONE);
+                llMain.setVisibility(View.GONE);
+                llNodata.setVisibility(View.GONE);
+                llAgain.setVisibility(View.VISIBLE);
 
-                Toast.makeText(AttendanceReportActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
+               // Toast.makeText(AttendanceReportActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
                 Log.e("ert",error.toString());
             }
         }) {
@@ -252,13 +274,14 @@ public class AttendanceReportActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(AttendanceReportActivity.this,DashBoardActivity.class);
+                Intent intent=new Intent(AttendanceReportActivity.this,EmployeeDashBoardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish();
+              //  finish();
             }
         });
 
-        llSearch.setOnClickListener(new View.OnClickListener() {
+        imgSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(AttendanceReportActivity.this, R.style.CustomDialogNew);

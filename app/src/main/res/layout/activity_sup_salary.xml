@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="io.cordova.myapp00d753.activity.SupSalaryActivity"
-    android:background="@color/backcolor"
+    android:background="@android:color/white"
     android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@android:color/white"
-        android:orientation="horizontal">
+        android:layout_height="?android:actionBarSize"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary">
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -33,15 +33,24 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:text="Salary"/>
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/toolbartextsize"
+                android:text="Payroll"
+                />
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             android:gravity="right">
+            <ImageView
+                android:id="@+id/imgSearch"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/searchicon"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"/>
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
@@ -51,28 +60,26 @@
                 android:id="@+id/imgHome"/>
         </LinearLayout>
     </LinearLayout>
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#bdbdbd"></LinearLayout>
-    <LinearLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:background="@android:color/white"
+        android:background="@drawable/lldesign13"
         android:orientation="horizontal"
-        android:gravity="center"
-        android:id="@+id/llSearch">
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/addimg"/>
+        android:id="@+id/llSearch"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:textAppearanceSmall"
             android:layout_marginLeft="5dp"
-            android:textColor="@android:color/black"
-            android:text="Search"/>
+            android:textColor="@android:color/white"
+            android:text="Search"
+            android:layout_gravity="center"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -91,18 +98,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@color/designcolor"
+        android:background="@drawable/lldesign"
         android:layout_marginTop="5dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:orientation="vertical"
         android:id="@+id/llMain"
         android:visibility="gone">
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/rvSalary"
-            ></android.support.v7.widget.RecyclerView>
+            android:layout_margin="5dp"></androidx.recyclerview.widget.RecyclerView>
         <ProgressBar
             android:layout_width="match_parent"
             android:layout_height="40dp"

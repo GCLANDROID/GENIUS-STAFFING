@@ -6,12 +6,12 @@
     android:layout_height="match_parent"
     tools:context="io.cordova.myapp00d753.activity.AttendanceActivity"
     android:orientation="vertical"
-    android:background="@color/backcolor">
+    android:background="@android:color/white">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@android:color/white"
-        android:orientation="horizontal">
+        android:layout_height="?android:actionBarSize"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -19,8 +19,8 @@
             android:layout_weight="0.5">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dp"
                 android:src="@drawable/backimg"
@@ -37,8 +37,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Attendance"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:textColor="@android:color/black" />
+
+                android:textSize="@dimen/toolbartextsize"
+                android:textColor="@android:color/white" />
         </LinearLayout>
 
         <LinearLayout
@@ -56,40 +57,143 @@
                 android:id="@+id/imgHome"/>
         </LinearLayout>
     </LinearLayout>
+
     <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/llDemo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginTop="20dp"
         android:weightSum="3">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            >
+            android:layout_weight="1">
             <LinearLayout
+                android:id="@+id/llManageD"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:background="@drawable/lldesign9"
+                    android:gravity="center"
+                    >
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/serviceicon"></ImageView>
+                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/designcolor"
+                    android:text="Manage"></TextView>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/llReportD"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:background="@drawable/lldesign9"
+                    android:gravity="center"
+                    >
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/attenreporticon"></ImageView>
+                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/designcolor"
+                    android:text="Report"></TextView>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:weightSum="2">
+            <LinearLayout
+                android:id="@+id/llFaceD"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+                <LinearLayout
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:background="@drawable/lldesign9"
+                    android:gravity="center"
+                    >
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/facerecognition"></ImageView>
+                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/designcolor"
+                    android:text="Attendance With Face"></TextView>
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"></LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:id="@+id/llMain"
+        android:visibility="visible">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:weightSum="2">
+            <LinearLayout
+
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:id="@+id/llAttandanceManage">
+                android:id="@+id/llAttandanceManage"
+                android:background="@drawable/lldesign9">
 
-                <LinearLayout
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:background="@drawable/lldesign1"
-                    android:gravity="center">
                     <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/manageicon"/>
-                </LinearLayout>
+                        android:layout_width="@dimen/imagesize"
+                        android:layout_height="@dimen/imagesize"
+                        android:src="@drawable/serviceicon"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/designcolor"
                     android:textAppearance="?android:textAppearanceSmall"
                     android:text="Manage"
                     android:layout_marginTop="5dp"/>
@@ -100,26 +204,33 @@
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:id="@+id/llAttendanceReport">
+                android:id="@+id/llAttendanceReport"
+                android:visibility="visible"
+                android:background="@drawable/lldesign9"
+                android:layout_marginLeft="2dp">
 
-                <LinearLayout
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:background="@drawable/lldesign1"
-                    android:gravity="center">
                     <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/attendencereportimg"/>
-                </LinearLayout>
+                        android:layout_width="@dimen/imagesize"
+                        android:layout_height="@dimen/imagesize"
+                        android:src="@drawable/attenreporticon"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/colorPrimary"
                     android:textAppearance="?android:textAppearanceSmall"
                     android:text="Report"
                     android:layout_marginTop="5dp"/>
             </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_marginTop="2dp">
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -127,92 +238,152 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:id="@+id/llBackAttendance"
-                android:visibility="gone">
+                android:visibility="visible"
+                android:background="@drawable/lldesign9">
+
+                    <ImageView
+                        android:layout_width="@dimen/imagesize"
+                        android:layout_height="@dimen/imagesize"
+                        android:src="@drawable/backattenicon"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimary"
+                    android:textAppearance="?android:textAppearanceSmall"
+                    android:text="Backlog Attendance"
+                    android:layout_marginTop="5dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:id="@+id/llOnLeave"
+                android:background="@drawable/lldesign9"
+                android:layout_marginLeft="2dp">
+
+                    <ImageView
+                        android:layout_width="@dimen/imagesize"
+                        android:layout_height="@dimen/imagesize"
+                        android:src="@drawable/attenonleaveicon"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimary"
+                    android:textAppearance="?android:textAppearanceSmall"
+                    android:text="Leave"
+                    android:layout_marginTop="5dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginLeft="2dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/lldesign9"
+                android:id="@+id/llWeekly1">
+                <LinearLayout
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:gravity="center"
+                    android:id="@+id/llWeekly1D"
+                    android:visibility="visible">
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/weeklyofficon"/>
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="65dp"
                     android:layout_height="65dp"
-                    android:background="@drawable/lldesign1"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:id="@+id/llWeekly1D1"
+                    android:visibility="gone">
                     <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/backattendanceimg"/>
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/weeklyofficon1"/>
                 </LinearLayout>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/textcolor"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:text="Back Attendance"
+                    android:text="Weekly Off"
                     android:layout_marginTop="5dp"/>
             </LinearLayout>
+
+
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_marginTop="2dp">
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:id="@+id/llOnLeave">
+                android:id="@+id/llWeekly"
+                android:background="@drawable/lldesign9">
 
-                <LinearLayout
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:background="@drawable/lldesign1"
-                    android:gravity="center">
                     <ImageView
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:src="@drawable/onleaveicon"/>
-                </LinearLayout>
+                        android:layout_width="@dimen/imagesize"
+                        android:layout_height="@dimen/imagesize"
+                        android:src="@drawable/weeklyofficon"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
-                    android:textAppearance="?android:textAppearanceSmall"
-                    android:text="OnLeave"
-                    android:layout_marginTop="5dp"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:id="@+id/llWeekly">
-
-                <LinearLayout
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:background="@drawable/lldesign1"
-                    android:gravity="center">
-                    <ImageView
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:src="@drawable/weeekleyofficon"/>
-                </LinearLayout>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/colorPrimary"
                     android:textAppearance="?android:textAppearanceSmall"
                     android:text="Weekly Off"
                     android:layout_marginTop="5dp"/>
             </LinearLayout>
             <LinearLayout
+                android:layout_marginLeft="2dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:id="@+id/llFCAttendance"
+                android:background="@drawable/lldesign9">
+
+                <ImageView
+                    android:layout_width="@dimen/imagesize"
+                    android:layout_height="@dimen/imagesize"
+                    android:src="@drawable/facerecognition"/>
+
+                <TextView
+                    android:textAlignment="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimary"
+                    android:textAppearance="?android:textAppearanceSmall"
+                    android:text="Attendance With Face"
+                    android:layout_marginTop="5dp"/>
+            </LinearLayout>
+            <LinearLayout
+
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center"
                 android:id="@+id/llApproval"
-                >
+                android:background="@drawable/lldesign9"
+                android:layout_marginLeft="2dp">
 
                 <LinearLayout
                     android:layout_width="65dp"
@@ -227,12 +398,30 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
+                    android:textColor="@android:color/black"
                     android:textAppearance="?android:textAppearanceSmall"
                     android:text="Approval"
                     android:layout_marginTop="5dp"/>
             </LinearLayout>
         </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/llAgain"
+        android:gravity="center"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/againicon"
+            android:id="@+id/imgAgain"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:text="Try Again"/>
     </LinearLayout>
 
 </LinearLayout>

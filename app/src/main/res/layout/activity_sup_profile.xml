@@ -6,21 +6,22 @@
     android:layout_height="match_parent"
     tools:context="io.cordova.myapp00d753.activity.SupProfileActivity"
     android:orientation="vertical"
-    android:background="@color/backcolor">
+    android:background="@android:color/white">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@android:color/white"
-        android:orientation="horizontal">
+        android:layout_height="?android:actionBarSize"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.5">
+            android:layout_weight="0.5"
+            >
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dp"
                 android:src="@drawable/backimg"
@@ -36,9 +37,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Profile"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:textColor="@android:color/black" />
+                android:text="Team Profile"
+                android:textSize="@dimen/toolbartextsize"
+                android:textColor="@android:color/white"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -48,55 +50,89 @@
             android:gravity="right">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_gravity="center"
                 android:layout_marginRight="15dp"
                 android:src="@drawable/homeimg"
                 android:id="@+id/imgHome"/>
         </LinearLayout>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#bdbdbd"></LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@android:color/white"
+        android:layout_height="45dp"
         android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/gradientdesign1"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
        <Button
-           android:layout_width="70dp"
+           android:textAllCaps="false"
+           android:layout_width="90dp"
            android:layout_height="30dp"
-           android:background="@drawable/lldesign6"
+           android:background="@android:color/white"
            android:id="@+id/btnNext"
-           android:textColor="@android:color/white"
-           android:text="next"/>
+           android:textColor="@color/maincolor"
+           android:text="Next"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/llLoader"
         android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:visibility="visible">
         <ProgressBar
             android:layout_width="50dp"
             android:layout_height="50dp" />
     </LinearLayout>
-    <android.support.v7.widget.RecyclerView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/rvProfile"
-        android:visibility="gone"></android.support.v7.widget.RecyclerView>
-    <ProgressBar
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:id="@+id/WLpagination_loader"
+        android:orientation="vertical"
+        android:background="@drawable/lldesign"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/llMain"
+        android:visibility="gone">
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/rvProfile"
+            android:visibility="visible"
+            android:layout_margin="5dp"></androidx.recyclerview.widget.RecyclerView>
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:id="@+id/WLpagination_loader"
 
-        />
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:id="@+id/llAgain">
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/againicon"
+            android:id="@+id/imgAgain"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Try Again"
+            android:textColor="@android:color/black"
+            android:layout_marginTop="10dp"/>
+    </LinearLayout>
+
 </LinearLayout>
