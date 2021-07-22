@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="320dp"
+    android:layout_height="300dp"
+    android:layout_gravity="top"
+    android:orientation="vertical"
+    android:background="@drawable/lldesign7"
+    android:layout_marginTop="10dp">
+    <LinearLayout
+        android:layout_width="320dp"
+        android:layout_height="300dp"
+        android:layout_gravity="top"
+        android:orientation="vertical"
+        android:layout_marginBottom="10dp">
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="320dp"
+            android:layout_height="25dp"
+            android:paddingRight="10dp"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="25dp"
+                android:layout_weight="1"
+                android:paddingLeft="5dp">
+                <TextView
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="18sp"
+                    android:textColor="@color/maincolor"
+                    android:text="Note:"></TextView>
+            </LinearLayout>
+            <ImageView
+                android:id="@+id/imgCancel"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/cancelicon"></ImageView>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/dot"></ImageView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textSize="15sp"
+                android:textColor="@color/maincolor"
+                android:text="Keeping in view the outbreak of Corona virus (COVID-19) in the country, and considering the precautionary measures recommended by Government. For safety of all, Genius Consultant Ltd is operational through “ Work From Home”."></TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/dot"></ImageView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textSize="15sp"
+                android:textColor="@color/maincolor"
+                android:text="NEWLY LAUNCHED - TOLL FREE NUMBER – Temporarily Unavailable Due to COVID-19 Outbreak , You May Connect Us at 9836655124 (9:30 AM To 6:00 PM)"></TextView>
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+    
+
+
+
+
+</LinearLayout>

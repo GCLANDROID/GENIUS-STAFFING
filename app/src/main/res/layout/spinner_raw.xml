@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:layout_marginBottom="10dp">
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/gradientdesign1">
 
     <TextView
         android:id="@+id/tvSpItem"
@@ -11,7 +12,7 @@
         android:layout_height="wrap_content"
         android:text="Demo"
         android:gravity="center"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="14sp"
         />
 

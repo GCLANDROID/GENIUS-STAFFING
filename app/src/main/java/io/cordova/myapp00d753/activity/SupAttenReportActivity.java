@@ -3,10 +3,7 @@ package io.cordova.myapp00d753.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,6 +16,11 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -37,6 +39,7 @@ import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.adapter.AttendanceReportAdapter;
 import io.cordova.myapp00d753.module.AttendancereportModule;
 import io.cordova.myapp00d753.utility.AppController;
+import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
 
@@ -44,7 +47,7 @@ public class SupAttenReportActivity extends AppCompatActivity {
     RecyclerView rvAttendanceReport;
     ArrayList<AttendancereportModule> attendabceInfiList=new ArrayList<>();
 
-    ImageView imgBack,imgHome;
+    ImageView imgBack,imgHome,imgSearch;
     LinearLayout llSearch;
     private AlertDialog alertDialog,alertDialog1,alertDialog2;
 
@@ -65,6 +68,8 @@ public class SupAttenReportActivity extends AppCompatActivity {
     String AttendanceID;
     Pref pref;
     NetworkConnectionCheck connectionCheck;
+    LinearLayout llAgain;
+    ImageView imgAgain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,6 +158,15 @@ public class SupAttenReportActivity extends AppCompatActivity {
         else if (m==12){
             month="December";
         }
+        llAgain=(LinearLayout)findViewById(R.id.llAgain);
+        imgAgain=(ImageView)findViewById(R.id.imgAgain);
+        imgAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getAttendanceList();
+            }
+        });
+        imgSearch=(ImageView)findViewById(R.id.imgSearch);
 
     }
 
@@ -161,7 +175,8 @@ public class SupAttenReportActivity extends AppCompatActivity {
         llLoder.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
         llNodata.setVisibility(View.GONE);
-        String surl ="http://111.93.182.174/GeniusiOSApi/api/get_GCLSelfAttendanceWoLeave?AEMConsultantID="+pref.getEmpConId()+"&AEMClientID="+pref.getEmpClintId()+"&AEMClientOfficeID="+pref.getEmpClintOffId()+"&AEMEmployeeID="+pref.getEmpId()+"&CurrentPage="+mPageCount+"&AID=0&ApproverStatus=4&YearVal="+year+"&MonthName="+month+"&WorkingStatus=1&SecurityCode="+pref.getSecurityCode()+"&DbOperation=8&AttIds=null";
+        llAgain.setVisibility(View.GONE);
+        String surl = AppData.url+"get_GCLSelfAttendanceWoLeave?AEMConsultantID="+pref.getEmpConId()+"&AEMClientID="+pref.getEmpClintId()+"&AEMClientOfficeID="+pref.getEmpClintOffId()+"&AEMEmployeeID="+pref.getEmpId()+"&CurrentPage="+mPageCount+"&AID=0&ApproverStatus=4&YearVal="+year+"&MonthName="+month+"&WorkingStatus=1&SecurityCode="+pref.getSecurityCode()+"&DbOperation=8&AttIds=null";
         Log.d("input",surl);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
@@ -179,7 +194,7 @@ public class SupAttenReportActivity extends AppCompatActivity {
 
                             boolean responseStatus=job1.optBoolean("responseStatus");
                             if (responseStatus){
-                                 Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
+                       //          Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
                                 JSONArray responseData=job1.optJSONArray("responseData");
                                 for (int i = 0; i < responseData.length(); i++){
                                     JSONObject obj=responseData.getJSONObject(i);
@@ -200,6 +215,7 @@ public class SupAttenReportActivity extends AppCompatActivity {
                                 llLoder.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
                                 llNodata.setVisibility(View.GONE);
+                                llAgain.setVisibility(View.GONE);
 
                             }
 
@@ -208,7 +224,8 @@ public class SupAttenReportActivity extends AppCompatActivity {
                                 llLoder.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
                                 llNodata.setVisibility(View.VISIBLE);
-                                Toast.makeText(getApplicationContext(),"No data found",Toast.LENGTH_LONG).show();
+                                llAgain.setVisibility(View.GONE);
+                               // Toast.makeText(getApplicationContext(),"No data found",Toast.LENGTH_LONG).show();
 
                             }
 
@@ -222,8 +239,13 @@ public class SupAttenReportActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                attendanceAdapter.notifyDataSetChanged();
+                llLoder.setVisibility(View.GONE);
+                llMain.setVisibility(View.GONE);
+                llNodata.setVisibility(View.GONE);
+                llAgain.setVisibility(View.VISIBLE);
 
-                Toast.makeText(SupAttenReportActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(SupAttenReportActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
                 Log.e("ert",error.toString());
             }
         }) {
@@ -248,13 +270,14 @@ public class SupAttenReportActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(SupAttenReportActivity.this,DashBoardActivity.class);
+                Intent intent=new Intent(SupAttenReportActivity.this,SuperVisiorDashBoardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish();
+                //finish();
             }
         });
 
-        llSearch.setOnClickListener(new View.OnClickListener() {
+        imgSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SupAttenReportActivity.this, R.style.CustomDialogNew);

@@ -3,82 +3,105 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginBottom="10dp"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    android:layout_marginTop="20dp">
-    <LinearLayout
+    android:layout_marginBottom="5dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginTop="5dp">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/designcolor"
-        android:orientation="horizontal"
-        android:id="@+id/llName"
-        >
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:src="@drawable/forwardimg" />
-
-        <TextView
-            android:id="@+id/tvName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:text="Recruitment"
-            android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="@color/barcolor"
-            android:textStyle="bold" />
-
+        android:layout_height="wrap_content"
+        card_view:cardElevation="5dp"
+        card_view:cardUseCompatPadding="true"
+        android:layout_marginTop="5dp">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginRight="20dp"
-            android:gravity="right">
+            android:layout_height="50dp"
+            android:background="@color/bar1"
+            android:orientation="horizontal"
+            android:id="@+id/llName"
+            >
 
-            <FrameLayout
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/forwardimg"
+                android:id="@+id/imgForward1"
+                android:visibility="gone"/>
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/forwardimg1"
+                android:id="@+id/imgForward"/>
+
+
+            <TextView
+                android:id="@+id/tvName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:text="Recruitment"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@color/designcolor"
+                android:textStyle="bold" />
 
-                <ImageView
-                    android:id="@+id/imgNamePlus"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/plusimg"
-                    />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="20dp"
+                android:gravity="right">
 
-                <ImageView
-                    android:id="@+id/imgNameMins"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/minusimg"
-                    android:visibility="gone"
-                    />
-            </FrameLayout>
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+
+                    <ImageView
+                        android:id="@+id/imgNamePlus"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/plusimg"
+                        />
+
+                    <ImageView
+                        android:id="@+id/imgNameMins"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/minusimg"
+                        android:visibility="gone"
+                        />
+                </FrameLayout>
 
 
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/llDetails"
-        android:background="@android:color/white"
+        android:background="@drawable/lldesign11"
         android:visibility="gone"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:orientation="horizontal"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:paddingRight="10dp"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -86,12 +109,13 @@
                 android:layout_weight="0.5">
 
                 <TextView
+                    android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Employee Id"
+                    android:text="Employee Id:"
                     android:textAppearance="?android:textAppearanceSmall"
                     android:textColor="@color/textcolor"
-                    android:textStyle="bold"/>
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -106,7 +130,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="--"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/textcolor" />
             </LinearLayout>
 
 
@@ -125,12 +149,13 @@
                 android:layout_weight="0.5">
 
                 <TextView
+                    android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Employee Code"
+                    android:text="Employee Code:"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/textcolor"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/misscolor"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -145,7 +170,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="--"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/textcolor" />
             </LinearLayout>
 
 
@@ -164,12 +189,13 @@
                 android:layout_weight="0.5">
 
                 <TextView
+                    android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Employee Name"
+                    android:text="Employee Name:"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/textcolor"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/misscolor"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -184,7 +210,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="--"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/textcolor" />
             </LinearLayout>
 
 
@@ -203,12 +229,13 @@
                 android:layout_weight="0.5">
 
                 <TextView
+                    android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Date of Joining"
+                    android:text="Date of Joining:"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/textcolor"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/misscolor"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -223,7 +250,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="--"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/textcolor" />
             </LinearLayout>
 
 
@@ -242,12 +269,13 @@
                 android:layout_weight="0.5">
 
                 <TextView
+                    android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Department"
+                    android:text="Department:"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/textcolor"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/misscolor"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -262,7 +290,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="--"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/textcolor" />
             </LinearLayout>
 
 
@@ -281,12 +309,13 @@
                 android:layout_weight="0.5">
 
                 <TextView
+                    android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Designation"
+                    android:text="Designation:"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/textcolor"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/misscolor"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -301,7 +330,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="--"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/textcolor" />
             </LinearLayout>
 
 
@@ -320,12 +349,13 @@
                 android:layout_weight="0.5">
 
                 <TextView
+                    android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Location"
+                    android:text="Location:"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/textcolor"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/misscolor"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -340,7 +370,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="--"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/textcolor" />
             </LinearLayout>
 
 
@@ -359,12 +389,13 @@
                 android:layout_weight="0.5">
 
                 <TextView
+                    android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Gender"
+                    android:text="Gender:"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/textcolor"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/misscolor"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -379,7 +410,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="--"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/textcolor" />
             </LinearLayout>
 
 
@@ -398,12 +429,13 @@
                 android:layout_weight="0.5">
 
                 <TextView
+                    android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Date of Birth"
+                    android:text="Date of Birth:"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/textcolor"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/misscolor"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -418,7 +450,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="--"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/textcolor" />
             </LinearLayout>
 
 
@@ -437,12 +469,13 @@
                 android:layout_weight="0.5">
 
                 <TextView
+                    android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Gurdian Name"
+                    android:text="Guardian Name:"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/textcolor"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/misscolor"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -457,7 +490,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="--"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/textcolor" />
             </LinearLayout>
 
 
@@ -476,12 +509,13 @@
                 android:layout_weight="0.5">
 
                 <TextView
+                    android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="RelationShip"
+                    android:text="Relationship:"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/textcolor"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/misscolor"
+                   />
             </LinearLayout>
 
             <LinearLayout
@@ -496,7 +530,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="--"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/textcolor" />
             </LinearLayout>
 
 
@@ -515,12 +549,13 @@
                 android:layout_weight="0.5">
 
                 <TextView
+                    android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Qualification"
+                    android:text="Qualification:"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/textcolor"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/misscolor"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -535,7 +570,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="--"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/textcolor" />
             </LinearLayout>
 
 
@@ -554,12 +589,13 @@
                 android:layout_weight="0.5">
 
                 <TextView
+                    android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Martial Status"
+                    android:text="Marital  Status:"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/textcolor"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/misscolor"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -574,7 +610,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="--"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/textcolor" />
             </LinearLayout>
 
 
@@ -593,12 +629,13 @@
                 android:layout_weight="0.5">
 
                 <TextView
+                    android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Blood Group"
+                    android:text="Blood Group:"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/textcolor"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/misscolor"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -613,7 +650,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="--"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/textcolor" />
             </LinearLayout>
 
 
@@ -632,12 +669,13 @@
                 android:layout_weight="0.5">
 
                 <TextView
+                    android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Permanent Address"
+                    android:text="Permanent Address:"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/textcolor"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/misscolor"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -652,7 +690,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="--"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/textcolor" />
             </LinearLayout>
 
 
@@ -671,12 +709,13 @@
                 android:layout_weight="0.5">
 
                 <TextView
+                    android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Present Address"
+                    android:text="Present Address:"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/textcolor"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/misscolor"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -691,7 +730,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="--"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/textcolor" />
             </LinearLayout>
 
 
@@ -710,12 +749,13 @@
                 android:layout_weight="0.5">
 
                 <TextView
+                    android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Phone Number"
+                    android:text="Phone Number:"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/textcolor"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/misscolor"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -730,7 +770,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="--"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/textcolor" />
             </LinearLayout>
 
 
@@ -749,12 +789,13 @@
                 android:layout_weight="0.5">
 
                 <TextView
+                    android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Mobile Number"
+                    android:text="Mobile Number:"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/textcolor"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/misscolor"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -769,7 +810,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="--"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/textcolor" />
             </LinearLayout>
 
 
@@ -788,12 +829,13 @@
                 android:layout_weight="0.5">
 
                 <TextView
+                    android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Email ID"
+                    android:text="Email ID:"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/textcolor"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/misscolor"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -808,7 +850,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="--"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/textcolor" />
             </LinearLayout>
 
 
@@ -827,12 +869,13 @@
                 android:layout_weight="0.5">
 
                 <TextView
+                    android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="PF Number"
+                    android:text="PF Number:"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/textcolor"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/misscolor"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -847,7 +890,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="--"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/textcolor" />
             </LinearLayout>
 
 
@@ -866,12 +909,13 @@
                 android:layout_weight="0.5">
 
                 <TextView
+                    android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ESI Number"
+                    android:text="ESI Number:"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/textcolor"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/misscolor"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -886,7 +930,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="--"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/textcolor" />
             </LinearLayout>
 
 
@@ -905,12 +949,13 @@
                 android:layout_weight="0.5">
 
                 <TextView
+                    android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Bank Number"
+                    android:text="Bank Name:"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/textcolor"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/misscolor"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -925,7 +970,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="--"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/textcolor" />
             </LinearLayout>
 
 
@@ -944,12 +989,13 @@
                 android:layout_weight="0.5">
 
                 <TextView
+                    android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="A/C Number"
+                    android:text="A/C Number:"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/textcolor"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/misscolor"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -964,7 +1010,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="--"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/textcolor" />
             </LinearLayout>
 
 
@@ -983,12 +1029,13 @@
                 android:layout_weight="0.5">
 
                 <TextView
+                    android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Aadhar Number"
+                    android:text="Aadhaar Number:"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/textcolor"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/misscolor"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -1003,7 +1050,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="--"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/textcolor" />
             </LinearLayout>
 
 
@@ -1014,7 +1061,8 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:paddingRight="10dp"
+            android:layout_marginBottom="5dp">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -1022,12 +1070,13 @@
                 android:layout_weight="0.5">
 
                 <TextView
+                    android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="UAN Number"
+                    android:text="UAN Number:"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/textcolor"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/misscolor"
+                   />
             </LinearLayout>
 
             <LinearLayout
@@ -1042,7 +1091,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="--"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/textcolor" />
             </LinearLayout>
 
 

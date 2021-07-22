@@ -5,10 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -22,6 +19,11 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -42,6 +44,7 @@ import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.adapter.AttandanceManageAdapter;
 import io.cordova.myapp00d753.module.SupAttendenceManageModule;
 import io.cordova.myapp00d753.utility.AppController;
+import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
 
@@ -51,7 +54,7 @@ public class SupAttenManageActivity extends AppCompatActivity {
 
     ArrayList<SupAttendenceManageModule> attedanceList = new ArrayList<>();
     Pref pref;
-    Button btnSubmit;
+    LinearLayout llSubmit;
     ArrayList<String> item = new ArrayList<>();
     ImageView imgBack, imgHome;
     LinearLayout llSearch;
@@ -71,6 +74,15 @@ public class SupAttenManageActivity extends AppCompatActivity {
     String d;
     String empId;
     NetworkConnectionCheck connectionCheck;
+    String year;
+    int y;
+    String month;
+    LinearLayout llAgain;
+    ImageView imgAgain;
+    ImageView imgSearch;
+    LinearLayout llClick,llSelect;
+    int allclick;
+    ArrayList<String>item1=new ArrayList<>();
 
 
     @Override
@@ -93,7 +105,9 @@ public class SupAttenManageActivity extends AppCompatActivity {
         layoutManager
                 = new LinearLayoutManager(SupAttenManageActivity.this, LinearLayoutManager.VERTICAL, false);
         rvAttendanceManage.setLayoutManager(layoutManager);
-        btnSubmit = (Button) findViewById(R.id.btnSubmit);
+        llSubmit = (LinearLayout) findViewById(R.id.llSubmit);
+        llSelect=(LinearLayout)findViewById(R.id.llSelect);
+        llClick=(LinearLayout)findViewById(R.id.llClick);
 
 
         imgBack = (ImageView) findViewById(R.id.imgBack);
@@ -111,7 +125,7 @@ public class SupAttenManageActivity extends AppCompatActivity {
         Log.d("formattedDate", formattedDate);
         if (connectionCheck.isNetworkAvailable()) {
             getAttendanceList(formattedDate);
-        }else {
+        } else {
             connectionCheck.getNetworkActiveAlert().show();
         }
         rvAttendanceManage.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -138,12 +152,47 @@ public class SupAttenManageActivity extends AppCompatActivity {
             }
         });
         setAdapter();
+
+        y = Calendar.getInstance().get(Calendar.YEAR);
+        year = String.valueOf(y);
+        int m = Calendar.getInstance().get(Calendar.MONTH) + 1;
+        Log.d("month", String.valueOf(m));
+        if (m == 1) {
+            month = "January";
+        } else if (m == 2) {
+            month = "February";
+        } else if (m == 3) {
+            month = "March";
+        } else if (m == 4) {
+            month = "April";
+        } else if (m == 5) {
+            month = "May";
+        } else if (m == 6) {
+            month = "June";
+        } else if (m == 7) {
+            month = "July";
+        } else if (m == 8) {
+            month = "August";
+        } else if (m == 9) {
+            month = "September";
+        } else if (m == 10) {
+            month = "October";
+        } else if (m == 11) {
+            month = "November";
+        } else if (m == 12) {
+            month = "December";
+        }
+        imgSearch=(ImageView)findViewById(R.id.imgSearch);
+
+
+
     }
 
     private void getAttendanceList(String date) {
         llLoder.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
-        String surl = "http://111.93.182.174/GeniusiOSApi/api/gcl_AttendanceManageByAdmin?AEMConsultantID=0&AEMClientID=" + pref.getEmpClintId() + "&AEMClientOfficeID=0&AEMEmployeeID=" + pref.getEmpId() + "&UserType=" + pref.getEmpId() + "&CurrentPage=" + mPageCount + "&AttendanceID=0&AttendanceDate=" + date + "&ApproverStatus=0&Remarks=0&WorkingStatus=1&YearVal=2018&MonthName=August&SecurityCode="+pref.getSecurityCode()+"&DbOperation=1";
+
+        String surl = AppData.url+"gcl_AttendanceManageByAdmin?AEMConsultantID=0&AEMClientID=" + pref.getEmpClintId() + "&AEMClientOfficeID=0&AEMEmployeeID=" + pref.getEmpId() + "&UserType=" + pref.getEmpId() + "&CurrentPage=" + mPageCount + "&AttendanceID=0&AttendanceDate=" + date + "&ApproverStatus=0&Remarks=0&WorkingStatus=1&YearVal=" + year + "&MonthName=" + month + "&SecurityCode=" + pref.getSecurityCode() + "&DbOperation=1";
         Log.d("input", surl);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
@@ -158,7 +207,7 @@ public class SupAttenManageActivity extends AppCompatActivity {
                             JSONObject job1 = new JSONObject(response);
                             Log.e("response12", "@@@@@@" + job1);
                             String responseText = job1.optString("responseText");
-                            Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
+                            //    Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
 
                             boolean responseStatus = job1.optBoolean("responseStatus");
                             if (responseStatus) {
@@ -169,6 +218,7 @@ public class SupAttenManageActivity extends AppCompatActivity {
                                     String AttendanceDate = obj.optString("AttendanceDate");
                                     String AEMEmployeeID = obj.optString("AEMEmployeeID");
                                     String Name = obj.optString("Name");
+                                    item1.add(AEMEmployeeID);
                                     String PlaceOfPostingCity = obj.optString("PlaceOfPostingCity");
                                     SupAttendenceManageModule mModule = new SupAttendenceManageModule(AEMEmployeeID, Name, PlaceOfPostingCity, AttendanceDate);
                                     attedanceList.add(mModule);
@@ -177,6 +227,7 @@ public class SupAttenManageActivity extends AppCompatActivity {
                                 madapter.notifyDataSetChanged();
                                 llLoder.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
+
 
 
                             } else {
@@ -198,8 +249,11 @@ public class SupAttenManageActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                llLoder.setVisibility(View.GONE);
+                llMain.setVisibility(View.GONE);
 
-                Toast.makeText(SupAttenManageActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
+
+              //  Toast.makeText(SupAttenManageActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
                 Log.e("ert", error.toString());
             }
         }) {
@@ -215,38 +269,58 @@ public class SupAttenManageActivity extends AppCompatActivity {
 
     public void updateAttendanceStatus(int position, boolean status) {
         attedanceList.get(position).setSelected(status);
-        item.add(attedanceList.get(position).getEmoId());
-        Log.d("arpan", item.toString());
-        String i = item.toString();
-        d = i.replace("[", "").replace("]", "");
-        empId = d.replaceAll("\\s+", "");
-
-        Log.d("commas", d);
-        if (item.size()>0){
-            btnSubmit.setVisibility(View.VISIBLE);
+        if (attedanceList.get(position).isSelected()==true) {
+            item.add(attedanceList.get(position).getEmoId());
         }else {
-            btnSubmit.setVisibility(View.GONE);
+            item.clear();
         }
+        Log.d("arpan", item.toString());
+
+
+
+
 
         madapter.notifyDataSetChanged();
     }
 
 
     private void onClick() {
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
+
+        llClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (llSelect.getVisibility()==View.GONE){
+                    llSelect.setVisibility(View.VISIBLE);
+                    allclick=1;
+                    madapter.selectAll();
+                }else {
+                    llSelect.setVisibility(View.GONE);
+                    madapter.unselectall();
+                    allclick=0;
+                    item1.clear();
+                }
+            }
+        });
+
+        llSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d("manageid", pref.getManageId());
-                postAttendencereport(formattedDate);
+                if (item.size()>0||item1.size()>0) {
+                    postAttendencereport(formattedDate);
+                }else {
+                    Toast.makeText(SupAttenManageActivity.this,"Please select atleast one employee",Toast.LENGTH_LONG).show();
+                }
             }
         });
 
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SupAttenManageActivity.this, DashBoardActivity.class);
+                Intent intent = new Intent(SupAttenManageActivity.this, SuperVisiorDashBoardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish();
+               // finish();
             }
         });
 
@@ -257,7 +331,7 @@ public class SupAttenManageActivity extends AppCompatActivity {
             }
         });
 
-        llSearch.setOnClickListener(new View.OnClickListener() {
+        imgSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 searchDialog();
@@ -267,7 +341,7 @@ public class SupAttenManageActivity extends AppCompatActivity {
 
 
     private void searchDialog() {
-        android.support.v7.app.AlertDialog.Builder dialogBuilder = new android.support.v7.app.AlertDialog.Builder(SupAttenManageActivity.this, R.style.CustomDialogNew);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SupAttenManageActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_attendancemanage, null);
         dialogBuilder.setView(dialogView);
@@ -322,12 +396,18 @@ public class SupAttenManageActivity extends AppCompatActivity {
     }
 
     private void postAttendencereport(final String date) {
+
+        if (allclick==1){
+            empId=item1.toString().replace("[","").replace("]","").replaceAll("\\s+", "");
+        }else {
+            empId = item.toString().replace("[","").replace("]","").replaceAll("\\s+", "");
+        }
         Log.d("riku", "riku");
-        String surl = "http://111.93.182.174/GeniusiOSApi/api/gcl_AttendanceManageByAdmin?AEMConsultantID=0&AEMClientID=AEMCLI0610000075&AEMClientOfficeID=0&AEMEmployeeID=" + empId + "&UserType=847&CurrentPage=1&AttendanceID=0&AttendanceDate=" + date + "&ApproverStatus=1&Remarks=0&WorkingStatus=1&YearVal=2018&MonthName=August&SecurityCode="+pref.getSecurityCode()+"&DbOperation=3 ";
-        Log.d("input", surl);
+        String surl = AppData.url+"gcl_AttendanceManageByAdmin?AEMConsultantID=0&AEMClientID=" + pref.getEmpClintId() + "&AEMClientOfficeID=0&AEMEmployeeID=" + empId + "&UserType=" + pref.getEmpId() + "&CurrentPage=1&AttendanceID=0&AttendanceDate=" + date + "&ApproverStatus=1&Remarks=0&WorkingStatus=1&YearVal=" + year + "&MonthName=" + month + "&SecurityCode=" + pref.getSecurityCode() + "&DbOperation=3 ";
+        Log.d("postatten", surl);
         final ProgressDialog progressBar = new ProgressDialog(this);
         progressBar.setCancelable(true);//you can cancel it by pressing back button
-        progressBar.setMessage("Authenticating...");
+        progressBar.setMessage("Loading...");
         progressBar.show();
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
@@ -344,7 +424,7 @@ public class SupAttenManageActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
                                 mPageCount = 1;
                                 attedanceList.clear();
-                                getAttendanceList(formattedDate);
+                                successAlert("Attendance has been submitted successfully");
 
 
                             }
@@ -373,6 +453,39 @@ public class SupAttenManageActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
 
 
+    }
+
+    private void successAlert(String text) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SupAttenManageActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.dialog_success, null);
+        dialogBuilder.setView(dialogView);
+        TextView tvInvalidDate = (TextView) dialogView.findViewById(R.id.tvSuccess);
+        tvInvalidDate.setText(text);
+
+        Button btnOk = (Button) dialogView.findViewById(R.id.btnOk);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alerDialog1.dismiss();
+
+
+                Intent intent=new Intent(SupAttenManageActivity.this,SupAttendanceActivity.class);
+                startActivity(intent);
+                finish();
+                llSelect.setVisibility(View.GONE);
+
+
+
+            }
+        });
+
+        alerDialog1 = dialogBuilder.create();
+        alerDialog1.setCancelable(false);
+        Window window = alerDialog1.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        alerDialog1.show();
     }
 
 

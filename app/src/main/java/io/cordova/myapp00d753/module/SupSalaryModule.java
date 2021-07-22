@@ -1,7 +1,7 @@
 package io.cordova.myapp00d753.module;
 
 public class SupSalaryModule {
-    String empId,empName,month,year,amount,salaryUrl;
+    String empId,empName,month,year,amount,salaryUrl,ctcGros;
 
     public SupSalaryModule(String empId, String empName, String month, String year, String amount, String salaryUrl) {
         this.empId = empId;
@@ -58,5 +58,13 @@ public class SupSalaryModule {
 
     public void setSalaryUrl(String salaryUrl) {
         this.salaryUrl = salaryUrl;
+    }
+
+    public String getCtcGros() {
+        return ctcGros;
+    }
+
+    public void setCtcGros(String ctcGros) {
+        this.ctcGros = ctcGros;
     }
 }

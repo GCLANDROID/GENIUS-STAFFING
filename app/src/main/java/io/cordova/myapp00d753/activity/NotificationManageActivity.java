@@ -5,7 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -20,6 +20,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -33,6 +36,7 @@ import java.util.Calendar;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.utility.AppController;
+import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
 
@@ -45,7 +49,7 @@ public class NotificationManageActivity extends AppCompatActivity {
     String edate;
     Button btnSend;
     Pref pref;
-    android.support.v7.app.AlertDialog alerDialog1;
+    AlertDialog alerDialog1;
     int s, e;
     NetworkConnectionCheck connectionCheck;
 
@@ -129,9 +133,10 @@ public class NotificationManageActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(NotificationManageActivity.this, DashBoardActivity.class);
+                Intent intent = new Intent(NotificationManageActivity.this, SuperVisiorDashBoardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish();
+                //finish();
             }
         });
 
@@ -188,7 +193,7 @@ public class NotificationManageActivity extends AppCompatActivity {
     }
 
     private void postNotification() {
-        String surl = "http://111.93.182.174/GeniusiOSApi/api/gcl_Notification?MsgMasterId=0&AEMClientID=" + pref.getEmpClintId() + "&AEMEmployeeID=" + pref.getEmpId() + "&StartDate=" + sdate + "&EndDate=" + edate + "&Tagline=" + etTitle.getText().toString().replaceAll("\\s+", "") + "&Description=" + etBody.getText().toString().replaceAll("\\s+", "") + "&CurrentPage=1&ApprovalStatus=0&Operation=3&SecurityCode="+pref.getSecurityCode();
+        String surl = AppData.url+"gcl_Notification?MsgMasterId=0&AEMClientID=" + pref.getEmpClintId() + "&AEMEmployeeID=" + pref.getEmpId() + "&StartDate=" + sdate + "&EndDate=" + edate + "&Tagline=" + etTitle.getText().toString().replaceAll("\\s+", "+") + "&Description=" + etBody.getText().toString().replaceAll("\\s+", "+") + "&CurrentPage=1&ApprovalStatus=0&Operation=3&SecurityCode="+pref.getSecurityCode();
         final ProgressDialog progressBar = new ProgressDialog(this);
         progressBar.setCancelable(true);//you can cancel it by pressing back button
         progressBar.setMessage("Submating...");
@@ -207,6 +212,8 @@ public class NotificationManageActivity extends AppCompatActivity {
                             if (responseStatus) {
 
                                 successAlert();
+                                etTitle.setText("");
+                                etBody.setText("");
 
                             } else {
                                 Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
@@ -238,7 +245,7 @@ public class NotificationManageActivity extends AppCompatActivity {
     }
 
     private void successAlert() {
-        android.support.v7.app.AlertDialog.Builder dialogBuilder = new android.support.v7.app.AlertDialog.Builder(NotificationManageActivity.this, R.style.CustomDialogNew);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(NotificationManageActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_success, null);
         dialogBuilder.setView(dialogView);

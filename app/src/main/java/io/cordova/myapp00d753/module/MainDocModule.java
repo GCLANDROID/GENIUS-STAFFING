@@ -1,6 +1,6 @@
 package io.cordova.myapp00d753.module;
 
-public class MainDocModule {
+public  class MainDocModule {
     String DocID,DocumentType;
 
     public MainDocModule(String docID, String documentType) {
@@ -9,6 +9,7 @@ public class MainDocModule {
     }
 
     public String getDocID() {
+
         return DocID;
     }
 

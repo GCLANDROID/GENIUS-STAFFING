@@ -2,9 +2,7 @@ package io.cordova.myapp00d753.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +10,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -29,6 +31,7 @@ import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.adapter.ProfileAdapter;
 import io.cordova.myapp00d753.module.ProfileModule;
 import io.cordova.myapp00d753.utility.AppController;
+import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
 
@@ -48,6 +51,9 @@ public class SupProfileActivity extends AppCompatActivity {
     ImageView imgBack;
     ImageView imgHome;
     NetworkConnectionCheck connectionCheck;
+    LinearLayout llMain;
+    LinearLayout llAgain;
+    ImageView imgAgain;
 
 
 
@@ -111,6 +117,15 @@ public class SupProfileActivity extends AppCompatActivity {
 
         imgBack=(ImageView)findViewById(R.id.imgBack);
         imgHome=(ImageView)findViewById(R.id.imgHome);
+        llMain=(LinearLayout)findViewById(R.id.llMain);
+        llAgain=(LinearLayout)findViewById(R.id.llAgain);
+        imgAgain=(ImageView)findViewById(R.id.imgAgain);
+        imgAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getProfile();
+            }
+        });
     }
 
     private void setAdapter(){
@@ -125,9 +140,10 @@ public class SupProfileActivity extends AppCompatActivity {
 
     private void getProfile(){
         llLoader.setVisibility(View.VISIBLE);
-        rvProfile.setVisibility(View.GONE);
+        llMain.setVisibility(View.GONE);
+        llAgain.setVisibility(View.GONE);
 
-        String surl ="http://111.93.182.174/GeniusiOSApi/api/gcl_KYC?AEMConsultantID="+pref.getEmpConId()+"&AEMClientID="+pref.getEmpClintId()+"&AEMClientOfficeID="+pref.getEmpClintOffId()+"&AEMEmployeeID="+pref.getEmpId()+"&SecurityCode="+pref.getSecurityCode()+"&WorkingStatus=1&CurrentPage="+mPageCount;
+        String surl = AppData.url+"gcl_KYC?AEMConsultantID="+pref.getEmpConId()+"&AEMClientID="+pref.getEmpClintId()+"&AEMClientOfficeID="+pref.getEmpClintOffId()+"&AEMEmployeeID="+pref.getEmpId()+"&SecurityCode="+pref.getSecurityCode()+"&WorkingStatus=1&CurrentPage="+mPageCount;
         Log.d("inputpr",surl);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
@@ -142,7 +158,7 @@ public class SupProfileActivity extends AppCompatActivity {
                             String responseText=job1.optString("responseText");
                             boolean responseStatus=job1.optBoolean("responseStatus");
                             if (responseStatus){
-                                Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
+                        //        Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
                                 JSONArray responseData=job1.optJSONArray("responseData");
                                 for (int i = 0; i < responseData.length(); i++){
                                     JSONObject obj=responseData.getJSONObject(i);
@@ -171,16 +187,19 @@ public class SupProfileActivity extends AppCompatActivity {
                                     String AadharCard=obj.optString("AadharCard");
                                     String UanNo=obj.optString("UanNo");
                                     String Phone=obj.optString("Phone");
-                                    ProfileModule profileModule=new ProfileModule(AEMEmployeeID,Code,Name,DateOfJoining,Department,Designation,Location,Sex,DateOfBirth,GuardianName,RelationShip,Qualification,MaritalStatus,BloodGroup,PermanentAddress,PresentAddress,Phone,Mobile,EmailID,PFNumber,ESINumber,BankName,AccountNumber,AadharCard,UanNo);
+                                    ProfileModule profileModule=new ProfileModule(AEMEmployeeID,Code,Name,DateOfJoining,Department,Designation,Location,Sex,DateOfBirth,GuardianName,RelationShip,Qualification,MaritalStatus,BloodGroup,PermanentAddress,PresentAddress,Phone,Mobile,EmailID,PFNumber,ESINumber,BankName,AccountNumber,AadharCard,UanNo,false);
                                     profileList.add(profileModule);
                                 }
                                 padapter.notifyDataSetChanged();
                                 llLoader.setVisibility(View.GONE);
-                                rvProfile.setVisibility(View.VISIBLE);
+                                llMain.setVisibility(View.VISIBLE);
+                                llAgain.setVisibility(View.GONE);
                                ;
                             }
                             else {
-
+                                llLoader.setVisibility(View.GONE);
+                                llMain.setVisibility(View.VISIBLE);
+                                llAgain.setVisibility(View.GONE);
 
                             }
 
@@ -189,6 +208,7 @@ public class SupProfileActivity extends AppCompatActivity {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+
                             Toast.makeText(SupProfileActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
                         }
 
@@ -196,8 +216,11 @@ public class SupProfileActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                llLoader.setVisibility(View.GONE);
+                llMain.setVisibility(View.GONE);
+                llAgain.setVisibility(View.VISIBLE);
 
-                Toast.makeText(SupProfileActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
+               // Toast.makeText(SupProfileActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
                 Log.e("ert",error.toString());
             }
         }) {
@@ -208,9 +231,19 @@ public class SupProfileActivity extends AppCompatActivity {
 
     }
 
-    public void updateStudentAttendanceStatus(int position,boolean status)
+    public void updateStatus(int position,boolean status)
     {
-        profileList.get(position).setSelected(status);
+        for (int i =0 ;i<profileList.size();i++)
+        {
+            if (i==position)
+            {
+                profileList.get(i).setExpanded(status);
+            }
+            else
+            {
+                profileList.get(i).setExpanded(false);
+            }
+        }
         padapter.notifyDataSetChanged();
     }
 
@@ -218,9 +251,10 @@ public class SupProfileActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(SupProfileActivity.this,DashBoardActivity.class);
+                Intent intent=new Intent(SupProfileActivity.this,SuperVisiorDashBoardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish();
+               // finish();
             }
         });
 

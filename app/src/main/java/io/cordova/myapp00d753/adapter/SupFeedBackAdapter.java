@@ -1,8 +1,7 @@
 package io.cordova.myapp00d753.adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
@@ -26,14 +27,14 @@ public class SupFeedBackAdapter extends RecyclerView.Adapter<SupFeedBackAdapter.
 
     @NonNull
     @Override
-    public SupFeedBackAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.supfeedback_raw,viewGroup,false);
 
-        return new SupFeedBackAdapter.MyViewHolder(itemView);
+        return new MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final SupFeedBackAdapter.MyViewHolder myViewHolder, final int i) {
+    public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
         final SupFeedBackModule supModel = feedbackList.get(i);
         myViewHolder.tvEmpId.setText(feedbackList.get(i).getEmpId());
         myViewHolder.tvEmpName.setText(feedbackList.get(i).getEmpName());

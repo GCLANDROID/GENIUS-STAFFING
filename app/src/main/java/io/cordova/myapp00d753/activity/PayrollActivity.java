@@ -3,12 +3,13 @@ package io.cordova.myapp00d753.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 
+import androidx.appcompat.app.AppCompatActivity;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.utility.Pref;
@@ -17,6 +18,7 @@ public class PayrollActivity extends AppCompatActivity {
     LinearLayout llSalary,llCTC;
     ImageView imgBack,imgHome;
     Pref pref;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +35,14 @@ public class PayrollActivity extends AppCompatActivity {
         llCTC=(LinearLayout)findViewById(R.id.llCTC);
         imgBack=(ImageView)findViewById(R.id.imgBack);
         imgHome=(ImageView)findViewById(R.id.imgHome);
+
     }
 
     private  void onClick(){
         llSalary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent intent=new Intent(PayrollActivity.this,SalaryActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -48,10 +52,12 @@ public class PayrollActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(PayrollActivity.this,DashBoardActivity.class);
+
+
+                Intent intent=new Intent(PayrollActivity.this,EmployeeDashBoardActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish();
+                //finish();
             }
         });
 
@@ -65,6 +71,7 @@ public class PayrollActivity extends AppCompatActivity {
         llCTC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 openBrowser();
             }
         });

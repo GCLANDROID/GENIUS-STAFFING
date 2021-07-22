@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.GrpahicalFragment"
+    android:orientation="vertical">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:id="@+id/llLoader"
+        android:orientation="vertical">
+        <ProgressBar
+            android:layout_width="50dp"
+            android:layout_height="50dp"></ProgressBar>
+        <TextView
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:textSize="18sp"
+            android:text="Loading......."
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"></TextView>
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/flMain"
+        android:visibility="visible">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:textSize="14sp"
+                android:id="@+id/tvMonth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"></TextView>
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="10dp"
+                        >
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:src="@drawable/doticon"></ImageView>
+                            <TextView
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif"
+                                android:layout_marginLeft="5dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="CY Target VS Achievement (Units) "
+                                android:textColor="@color/doccolor"
+                                android:textSize="12sp"
+                                ></TextView>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="#bdbdbd"
+                            android:layout_marginTop="5dp"></LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/ll1"
+                        >
+                        <com.github.mikephil.charting.charts.CombinedChart
+                            android:id="@+id/comCYTargetChart"
+                            android:layout_width="0dp"
+                            android:layout_height="200dp"
+                            android:layout_weight="1"/>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="10dp"
+                        >
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:src="@drawable/doticon"></ImageView>
+                            <TextView
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif"
+                                android:layout_marginLeft="5dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="CY VS LY  Achievement (Units) "
+                                android:textColor="@color/doccolor"
+                                android:textSize="12sp"
+                                ></TextView>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="#bdbdbd"
+                            android:layout_marginTop="5dp"></LinearLayout>
+
+                    </LinearLayout>
+
+                    <com.github.mikephil.charting.charts.CombinedChart
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/comCYPYTargetChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="10dp"
+                        >
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:src="@drawable/doticon"></ImageView>
+                            <TextView
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif"
+                                android:layout_marginLeft="5dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="CY Target VS Achievement (Revenue)"
+                                android:textColor="@color/doccolor"
+                                android:textSize="12sp"
+                                ></TextView>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="#bdbdbd"
+                            android:layout_marginTop="5dp"></LinearLayout>
+
+                    </LinearLayout>
+                    <TextView
+                        android:fontFamily="sans-serif"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="*All  figures are in Lacs "
+                        android:textColor="#ff00"
+                        android:textSize="10sp"
+                        ></TextView>
+
+                    <com.github.mikephil.charting.charts.CombinedChart
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/comCYRevenueChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="10dp"
+                        >
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:src="@drawable/doticon"></ImageView>
+                            <TextView
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif"
+                                android:layout_marginLeft="5dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="CY VS LY Achievement (Revenue)"
+                                android:textColor="@color/doccolor"
+                                android:textSize="12sp"
+                                ></TextView>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="#bdbdbd"
+                            android:layout_marginTop="5dp"></LinearLayout>
+
+                    </LinearLayout>
+                    <TextView
+                        android:fontFamily="sans-serif"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="*All  figures are in Lacs "
+                        android:textColor="#ff00"
+                        android:textSize="10sp"
+                        ></TextView>
+                    <com.github.mikephil.charting.charts.CombinedChart
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/comCYPYRevenueChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"></com.github.mikephil.charting.charts.CombinedChart>
+
+                    <com.github.mikephil.charting.charts.CombinedChart
+                        android:layout_marginTop="10dp"
+                        android:visibility="gone"
+                        android:id="@+id/comCYPYProductGrowthChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"/>
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="10dp"
+                        >
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:src="@drawable/doticon"></ImageView>
+                            <TextView
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif"
+                                android:layout_marginLeft="5dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="CY VS LY OVERALL REVENUE GROWTH (%)"
+                                android:textColor="@color/doccolor"
+                                android:textSize="12sp"
+                                ></TextView>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="#bdbdbd"
+                            android:layout_marginTop="5dp"></LinearLayout>
+
+                    </LinearLayout>
+                    <com.github.mikephil.charting.charts.CombinedChart
+                        android:layout_marginTop="10dp"
+                        android:visibility="gone"
+                        android:id="@+id/comCYPYRevenueGrowthChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"/>
+                </LinearLayout>
+
+            </ScrollView>
+
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout>

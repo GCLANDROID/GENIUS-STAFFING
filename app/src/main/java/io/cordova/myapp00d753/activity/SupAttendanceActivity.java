@@ -2,12 +2,13 @@ package io.cordova.myapp00d753.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 
+import androidx.appcompat.app.AppCompatActivity;
 
 import io.cordova.myapp00d753.R;
 
@@ -31,6 +32,7 @@ public class SupAttendanceActivity extends AppCompatActivity {
 
         imgBack=(ImageView)findViewById(R.id.imgBack);
         imgHome=(ImageView)findViewById(R.id.imgHome);
+
     }
 
     private void onClick(){
@@ -44,14 +46,15 @@ public class SupAttendanceActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(SupAttendanceActivity.this,DashBoardActivity.class);
+                Intent intent=new Intent(SupAttendanceActivity.this,SuperVisiorDashBoardActivity.class);
                 startActivity(intent);
-                finish();
+                 finish();
             }
         });
         llAttandanceManage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent intent=new Intent(SupAttendanceActivity.this,SupAttenManageActivity.class);
                 startActivity(intent);
             }
@@ -60,6 +63,7 @@ public class SupAttendanceActivity extends AppCompatActivity {
         llAttendanceReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent intent=new Intent(SupAttendanceActivity.this,SupAttenReportActivity.class);
                 startActivity(intent);
             }
@@ -68,8 +72,10 @@ public class SupAttendanceActivity extends AppCompatActivity {
         llApproval.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent intent=new Intent(SupAttendanceActivity.this,AttenApprovalActivity.class);
                 startActivity(intent);
+
             }
         });
 

@@ -4,10 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -25,6 +22,11 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -41,6 +43,7 @@ import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.adapter.FeedBackAdapter;
 import io.cordova.myapp00d753.module.FeedBackModule;
 import io.cordova.myapp00d753.utility.AppController;
+import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
 
@@ -65,6 +68,9 @@ public class FeedBackActivity extends AppCompatActivity {
     LinearLayout llLoader, llMain;
     Pref pref;
     NetworkConnectionCheck connectionCheck;
+    LinearLayout llAgain;
+    ImageView imgAgain;
+    LinearLayout llNodata;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,20 +126,31 @@ public class FeedBackActivity extends AppCompatActivity {
             }
         });
         setAdapter();
+        llAgain=(LinearLayout)findViewById(R.id.llAgain);
+        imgAgain=(ImageView) findViewById(R.id.imgAgain);
+        llNodata=(LinearLayout)findViewById(R.id.llNodata);
+        imgAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFeedBackList();
+            }
+        });
     }
 
     private void getFeedBackList() {
         Log.d("Arpan", "arpan");
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
+        llAgain.setVisibility(View.GONE);
+        llNodata.setVisibility(View.GONE);
 
-        String surl = "http://111.93.182.174/GeniusiOSApi/api/gcl_Feedback?AEMClientID="+pref.getEmpClintId()+"&FeedBackID=0&AEMEmployeeID="+pref.getEmpId()+"&Query=0&RepliedDetails=0&RepliedBy=0&ReplyStatus=" + flag + "&IssueID=0&WorkingStatus=1&CurrentPage=" + mPageCount + "&Operation=1&SecurityCode="+pref.getSecurityCode();
+        String surl = AppData.url+"gcl_Feedback?AEMClientID="+pref.getEmpClintId()+"&FeedBackID=0&AEMEmployeeID="+pref.getEmpId()+"&Query=0&RepliedDetails=0&RepliedBy=0&ReplyStatus=" + flag + "&IssueID=0&WorkingStatus=1&CurrentPage=" + mPageCount + "&Operation=1&SecurityCode="+pref.getSecurityCode();
         Log.d("input", surl);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        feedbackList.clear();
+                        //feedbackList.clear();
 
                         Log.d("responseAttendance", response);
                         loading = false;
@@ -160,13 +177,19 @@ public class FeedBackActivity extends AppCompatActivity {
                                 feedBackAdapter.notifyDataSetChanged();
                                 llLoader.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
+                                llAgain.setVisibility(View.GONE);
+                                llNodata.setVisibility(View.GONE);
 
 
                             } else {
 
-                                Toast.makeText(getApplicationContext(), "No data found", Toast.LENGTH_LONG).show();
+                              //  Toast.makeText(getApplicationContext(), "No data found", Toast.LENGTH_LONG).show();
                                 llLoader.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
+                                llAgain.setVisibility(View.GONE);
+                                llNodata.setVisibility(View.VISIBLE);
+
+
 
 
                             }
@@ -181,8 +204,12 @@ public class FeedBackActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                llLoader.setVisibility(View.GONE);
+                llMain.setVisibility(View.VISIBLE);
+                llAgain.setVisibility(View.GONE);
+                llNodata.setVisibility(View.VISIBLE);
 
-                Toast.makeText(FeedBackActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
+               // Toast.makeText(FeedBackActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
                 Log.e("ert", error.toString());
             }
         }) {
@@ -201,9 +228,10 @@ public class FeedBackActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(FeedBackActivity.this, DashBoardActivity.class);
+                Intent intent = new Intent(FeedBackActivity.this, EmployeeDashBoardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish();
+               // finish();
             }
         });
 
@@ -238,9 +266,15 @@ public class FeedBackActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
 
-                        postFeedBack();
 
-                        alertDialog.dismiss();
+                        if (etFeedBack.getText().toString().length()>0) {
+                            postFeedBack();
+
+
+                        }else {
+                            etFeedBack.setError("please enter");
+                            etFeedBack.requestFocus();
+                        }
 
                     }
                 });
@@ -285,11 +319,11 @@ public class FeedBackActivity extends AppCompatActivity {
     }
 
     private void postFeedBack() {
-        String surl = "http://111.93.182.174/GeniusiOSApi/api/gcl_Feedback?AEMClientID="+pref.getEmpClintId()+"&FeedBackID=0&AEMEmployeeID="+pref.getEmpId()+"&Query=" + etFeedBack.getText().toString().replaceAll("\\s+", "") + "&RepliedDetails=0&RepliedBy=0&ReplyStatus=4&IssueID=0&WorkingStatus=1&CurrentPage=1&Operation=3&SecurityCode="+pref.getSecurityCode()+"&FeedBackIDs=0";
+        String surl = AppData.url+"gcl_Feedback?AEMClientID="+pref.getEmpClintId()+"&FeedBackID=0&AEMEmployeeID="+pref.getEmpId()+"&Query=" + etFeedBack.getText().toString().replaceAll("\\s+", "+") + "&RepliedDetails=0&RepliedBy=0&ReplyStatus=4&IssueID=0&WorkingStatus=1&CurrentPage=1&Operation=3&SecurityCode="+pref.getSecurityCode()+"&FeedBackIDs=0";
         Log.d("feedinput",surl);
         final ProgressDialog progressBar = new ProgressDialog(this);
         progressBar.setCancelable(true);//you can cancel it by pressing back button
-        progressBar.setMessage("Submating...");
+        progressBar.setMessage("Loading...");
         progressBar.show();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, surl,
                 new Response.Listener<String>() {
@@ -305,6 +339,7 @@ public class FeedBackActivity extends AppCompatActivity {
                             if (responseStatus) {
                                 Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
                                 successAlert();
+                                alertDialog.dismiss();
 
                             }else {
                                 Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
@@ -324,7 +359,7 @@ public class FeedBackActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progressBar.dismiss();
-                Toast.makeText(FeedBackActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
+               // Toast.makeText(FeedBackActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
 
                 Log.e("ert", error.toString());
             }
@@ -337,18 +372,21 @@ public class FeedBackActivity extends AppCompatActivity {
     }
 
     private void successAlert() {
-        android.support.v7.app.AlertDialog.Builder dialogBuilder = new android.support.v7.app.AlertDialog.Builder(FeedBackActivity.this, R.style.CustomDialogNew);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(FeedBackActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_success, null);
         dialogBuilder.setView(dialogView);
         TextView tvInvalidDate = (TextView) dialogView.findViewById(R.id.tvSuccess);
-        tvInvalidDate.setText("Data saved successfully");
+        tvInvalidDate.setText("Feedback saved successfully");
         Button btnOk = (Button) dialogView.findViewById(R.id.btnOk);
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 alerDialog1.dismiss();
                 flag = 0;
+                feedbackList.clear();
+
+                mPageCount=1;
                 getFeedBackList();
             }
         });

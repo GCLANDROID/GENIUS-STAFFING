@@ -1,8 +1,9 @@
 package io.cordova.myapp00d753.adapter;
 
+import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import android.graphics.Color;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,25 +12,29 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.ContactUsActivity;
+import io.cordova.myapp00d753.activity.SupProfileActivity;
 import io.cordova.myapp00d753.module.ProfileModule;
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHolder> {
     ArrayList<ProfileModule>profileList=new ArrayList<>();
-    Context context;
+    Activity activity;
     @NonNull
     @Override
-    public ProfileAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.profile_raw,viewGroup,false);
 
-        return new ProfileAdapter.MyViewHolder(itemView);
+        return new MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ProfileAdapter.MyViewHolder myViewHolder, final int i) {
+    public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
       //  final ProfileModule pmodel = profileList.get(i);
         if (!profileList.get(i).getEmailId().equals("")) {
             myViewHolder.tvEmpID.setText(profileList.get(i).getEmailId());
@@ -54,27 +59,11 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHo
         }else {
             myViewHolder.tvDOJ.setText("N/A");
         }
-        if (profileList.get(i).getDepartment().equals("")) {
-            myViewHolder.tvDep.setText(profileList.get(i).getDepartment());
-        }else {
-            myViewHolder.tvDep.setText("N/A");
-        }
-        if (!profileList.get(i).getDesignation().equals("")) {
-            myViewHolder.tvDes.setText(profileList.get(i).getDesignation());
-        }else {
-            myViewHolder.tvDes.setText("N/A");
-        }
-        if (!profileList.get(i).getLocation().equals("")) {
-            myViewHolder.tvLocation.setText(profileList.get(i).getLocation());
+        myViewHolder.tvDep.setText(profileList.get(i).getDepartment());
+        myViewHolder.tvDes.setText(profileList.get(i).getDesignation());
+        myViewHolder.tvLocation.setText(profileList.get(i).getLocation());
+        myViewHolder.tvGender.setText(profileList.get(i).getGender());
 
-        }else {
-            myViewHolder.tvLocation.setText("N/A");
-        }
-        if (!profileList.get(i).getGender().equals("")) {
-            myViewHolder.tvGender.setText(profileList.get(i).getGender());
-        }else {
-            myViewHolder.tvGender.setText("N/A");
-        }
         if (!profileList.get(i).getDOB().equals("")) {
             myViewHolder.tvDOB.setText(profileList.get(i).getDOB());
         }else {
@@ -170,22 +159,39 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHo
         myViewHolder.llName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (myViewHolder.imgNamePlus.getVisibility()==View.VISIBLE){
-                    myViewHolder.imgNamePlus.setVisibility(View.GONE);
-                    myViewHolder.imgNameMinus.setVisibility(View.VISIBLE);
-                    myViewHolder.llName.setVisibility(View.VISIBLE);
-                    myViewHolder.llDetails.setVisibility(View.VISIBLE);
+
+
+                if (!profileList.get(i).isExpanded()){
+                    ((SupProfileActivity)activity).updateStatus(i,true);
                 }else {
-                    myViewHolder.imgNamePlus.setVisibility(View.VISIBLE);
-                    myViewHolder.imgNameMinus.setVisibility(View.GONE);
-                    myViewHolder.llName.setVisibility(View.VISIBLE);
-                    myViewHolder.llDetails.setVisibility(View.GONE);
+                    ((SupProfileActivity)activity).updateStatus(i,false);
                 }
-
-
-
             }
         });
+
+
+        if (profileList.get(i).isExpanded())
+        {
+            myViewHolder.imgNamePlus.setVisibility(View.GONE);
+            myViewHolder.imgNameMinus.setVisibility(View.VISIBLE);
+            myViewHolder.llName.setVisibility(View.VISIBLE);
+            myViewHolder.llDetails.setVisibility(View.VISIBLE);
+            myViewHolder.llName.setBackgroundColor(Color.parseColor("#279616"));
+            myViewHolder.imgForward1.setVisibility(View.VISIBLE);
+            myViewHolder.imgForward.setVisibility(View.GONE);
+            myViewHolder.tvName.setTextColor(Color.parseColor("#ffffff"));
+        }
+        else
+        {
+            myViewHolder.imgNamePlus.setVisibility(View.VISIBLE);
+            myViewHolder.imgNameMinus.setVisibility(View.GONE);
+            myViewHolder.llName.setVisibility(View.VISIBLE);
+            myViewHolder.llDetails.setVisibility(View.GONE);
+            myViewHolder.llName.setBackgroundColor(Color.parseColor("#dadbdc"));
+            myViewHolder.imgForward1.setVisibility(View.GONE);
+            myViewHolder.imgForward.setVisibility(View.VISIBLE);
+            myViewHolder.tvName.setTextColor(Color.parseColor("#000000"));
+        }
 
 
     }
@@ -199,6 +205,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHo
         LinearLayout llName,llDetails;
         TextView tvEmpID,tvEmpCode,tvEmpName,tvName,tvDOJ,tvDep,tvDes,tvLocation,tvGender,tvDOB,tvGurdianNAme,tvRelationShip,tvQualification,tvMartialStatus,tvBloodGroup,tvPerAdd,tvPreAdd,tvPhoneNumbver,tvMobileNumber,tvEmail,tvPFNumber,tvESINumber,tvBankName,tvAccNumber,tvAadharNumber,tvUANNumber;
         ImageView imgNamePlus,imgNameMinus;
+        ImageView imgForward,imgForward1;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             llName=(LinearLayout)itemView.findViewById(R.id.llName);
@@ -233,13 +240,15 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHo
 
             imgNameMinus=(ImageView)itemView.findViewById(R.id.imgNameMins);
             imgNamePlus=(ImageView)itemView.findViewById(R.id.imgNamePlus);
+            imgForward=(ImageView)itemView.findViewById(R.id.imgForward);
+            imgForward1=(ImageView)itemView.findViewById(R.id.imgForward1);
 
 
         }
     }
 
-    public ProfileAdapter(ArrayList<ProfileModule> profileList, Context context) {
+    public ProfileAdapter(ArrayList<ProfileModule> profileList, Activity activity) {
         this.profileList = profileList;
-        this.context = context;
+        this.activity = activity;
     }
 }

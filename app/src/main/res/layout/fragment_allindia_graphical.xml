@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:id="@+id/llLoader"
+            android:orientation="vertical">
+            <ProgressBar
+                android:layout_width="50dp"
+                android:layout_height="50dp"></ProgressBar>
+            <TextView
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:textSize="18sp"
+                android:text="Loading......."
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"></TextView>
+        </LinearLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/flMain"
+            android:visibility="visible">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+                <LinearLayout
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginTop="10dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:paddingLeft="5dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Growth Over LY:"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="13sp"
+                            ></TextView>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+                        <ImageView
+                            android:src="@drawable/uparrow"
+                            android:layout_gravity="center"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:id="@+id/imgUpArrow"></ImageView>
+                        <ImageView
+                            android:visibility="gone"
+                            android:src="@drawable/down"
+                            android:layout_gravity="center"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:id="@+id/imgDownArrow"></ImageView>
+                        <TextView
+                            android:textStyle="bold"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="10dp"
+
+                            android:textSize="18sp"
+                            android:id="@+id/tvMonth"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#000000"></TextView>
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
+
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="5dp">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="10dp"
+                            >
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <ImageView
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    android:src="@drawable/doticon"></ImageView>
+                                <TextView
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="CY Target VS Achievement ( Units ) "
+                                    android:textColor="@color/doccolor"
+                                    android:textSize="12sp"
+                                    ></TextView>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="#bdbdbd"
+                                android:layout_marginTop="5dp"></LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/ll1"
+                            android:orientation="vertical">
+                            <com.github.mikephil.charting.charts.CombinedChart
+                                android:visibility="gone"
+                                android:id="@+id/comCYTargetChart"
+                                android:layout_width="0dp"
+                                android:layout_height="200dp"
+                                android:layout_weight="1"/>
+                            <com.github.mikephil.charting.charts.BarChart
+                                android:id="@+id/cytargetvsachvBar"
+                                android:layout_width="match_parent"
+                                android:layout_height="200dp"
+                                android:visibility="visible" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp">
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center">
+                                    <TextView
+                                        android:textStyle="bold"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/doccolor"
+                                        android:fontFamily="serif"
+                                        android:textSize="10sp"
+                                        android:text="CY Overall Target: "></TextView>
+                                    <TextView
+                                        android:id="@+id/tvCYUnitTarget"
+                                        android:layout_marginLeft="5dp"
+                                        android:textStyle="bold"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="#2DCC70"
+                                        android:fontFamily="serif"
+                                        android:textSize="10sp"
+                                        android:text="CY Total Target: "></TextView>
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_marginTop="5dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center">
+                                    <TextView
+                                        android:textStyle="bold"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/doccolor"
+                                        android:fontFamily="serif"
+                                        android:textSize="10sp"
+                                        android:text="CY Overall Achievement: "></TextView>
+                                    <TextView
+                                        android:id="@+id/tvCYUnitSold"
+                                        android:layout_marginLeft="5dp"
+                                        android:textStyle="bold"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="#F1C40F"
+                                        android:fontFamily="serif"
+                                        android:textSize="10sp"
+                                        android:text="CY Total Target: "></TextView>
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="10dp"
+                            >
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <ImageView
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    android:src="@drawable/doticon"></ImageView>
+                                <TextView
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="CY VS LY Achievement ( Units ) "
+                                    android:textColor="@color/doccolor"
+                                    android:textSize="12sp"
+                                    ></TextView>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="#bdbdbd"
+                                android:layout_marginTop="5dp"></LinearLayout>
+
+                        </LinearLayout>
+
+                        <com.github.mikephil.charting.charts.BarChart
+                            android:id="@+id/cylyachvunits"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:visibility="visible" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center">
+                                <TextView
+                                    android:textStyle="bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/doccolor"
+                                    android:fontFamily="serif"
+                                    android:textSize="10sp"
+                                    android:text="CY Overall Achievement: "></TextView>
+                                <TextView
+                                    android:id="@+id/tvCYAchv"
+                                    android:layout_marginLeft="5dp"
+                                    android:textStyle="bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="#2DCC70"
+                                    android:fontFamily="serif"
+                                    android:textSize="10sp"
+                                    android:text="CY Total Target: "></TextView>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_marginTop="5dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center">
+                                <TextView
+                                    android:textStyle="bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/doccolor"
+                                    android:fontFamily="serif"
+                                    android:textSize="10sp"
+                                    android:text="LY Overall Achievement: "></TextView>
+                                <TextView
+                                    android:id="@+id/tvLYAchv"
+                                    android:layout_marginLeft="5dp"
+                                    android:textStyle="bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="#F1C40F"
+                                    android:fontFamily="serif"
+                                    android:textSize="10sp"
+                                    android:text="CY Total Target: "></TextView>
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="10dp"
+                            >
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <ImageView
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    android:src="@drawable/doticon"></ImageView>
+                                <TextView
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="CY Target VS Achievement (Revenue)"
+                                    android:textColor="@color/doccolor"
+                                    android:textSize="12sp"
+                                    ></TextView>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="#bdbdbd"
+                                android:layout_marginTop="5dp"></LinearLayout>
+
+                        </LinearLayout>
+                        <TextView
+                            android:fontFamily="sans-serif"
+                            android:layout_marginLeft="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="*All  figures are in Lacs "
+                            android:textColor="#ff00"
+                            android:textSize="10sp"
+                            ></TextView>
+
+                        <com.github.mikephil.charting.charts.BarChart
+                            android:id="@+id/cyrevtargetachv"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:visibility="visible" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center">
+                                <TextView
+                                    android:textStyle="bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/doccolor"
+                                    android:fontFamily="serif"
+                                    android:textSize="10sp"
+                                    android:text="CY Overall Target (Revenue): "></TextView>
+                                <TextView
+                                    android:id="@+id/tvcyrevtarget"
+                                    android:layout_marginLeft="5dp"
+                                    android:textStyle="bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="#2DCC70"
+                                    android:fontFamily="serif"
+                                    android:textSize="12sp"
+                                    android:text="CY Total Target: "></TextView>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_marginTop="5dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center">
+                                <TextView
+                                    android:textStyle="bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/doccolor"
+                                    android:fontFamily="serif"
+                                    android:textSize="10sp"
+                                    android:text="CY Overall Achievement (Revenue): "></TextView>
+                                <TextView
+                                    android:id="@+id/tvcyrevAchv"
+                                    android:layout_marginLeft="5dp"
+                                    android:textStyle="bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="#F1C40F"
+                                    android:fontFamily="serif"
+                                    android:textSize="10sp"
+                                    android:text="CY Total Target: "></TextView>
+                            </LinearLayout>
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="10dp"
+                            >
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <ImageView
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    android:src="@drawable/doticon"></ImageView>
+                                <TextView
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="CY VS LY Achievement (Revenue)"
+                                    android:textColor="@color/doccolor"
+                                    android:textSize="12sp"
+                                    ></TextView>
+
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="#bdbdbd"
+                                android:layout_marginTop="5dp"></LinearLayout>
+
+                        </LinearLayout>
+                        <TextView
+                            android:fontFamily="sans-serif"
+                            android:layout_marginLeft="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="*All  figures are in Lacs "
+                            android:textColor="#ff00"
+                            android:textSize="10sp"
+                            ></TextView>
+                        <com.github.mikephil.charting.charts.BarChart
+                            android:id="@+id/cylvRev"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:visibility="visible" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center">
+                                <TextView
+                                    android:textStyle="bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/doccolor"
+                                    android:fontFamily="serif"
+                                    android:textSize="10sp"
+                                    android:text="CY Overall Achievement (Revenue): "></TextView>
+                                <TextView
+                                    android:id="@+id/tvcyrev"
+                                    android:layout_marginLeft="5dp"
+                                    android:textStyle="bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="#2DCC70"
+                                    android:fontFamily="serif"
+                                    android:textSize="10sp"
+                                    android:text="CY Total Target: "></TextView>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_marginTop="5dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center">
+                                <TextView
+                                    android:textStyle="bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/doccolor"
+                                    android:fontFamily="serif"
+                                    android:textSize="10sp"
+                                    android:text="LY Overall Achievement (Revenue): "></TextView>
+                                <TextView
+                                    android:id="@+id/tvlyrev"
+                                    android:layout_marginLeft="5dp"
+                                    android:textStyle="bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="#F1C40F"
+                                    android:fontFamily="serif"
+                                    android:textSize="10sp"
+                                    android:text="CY Total Target: "></TextView>
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </ScrollView>
+
+
+            </LinearLayout>
+
+        </FrameLayout>
+    </LinearLayout>
+
+</LinearLayout>

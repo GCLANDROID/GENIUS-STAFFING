@@ -1,13 +1,22 @@
 package io.cordova.myapp00d753;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -21,15 +30,23 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
+import io.cordova.myapp00d753.activity.AttendanceManageActivity;
 import io.cordova.myapp00d753.activity.DashBoardActivity;
+import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
+import io.cordova.myapp00d753.activity.LoginActivity;
+import io.cordova.myapp00d753.activity.SuperVisiorDashBoardActivity;
+import io.cordova.myapp00d753.activity.TempDashBoardActivity;
 import io.cordova.myapp00d753.utility.CreativePermission;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
+import io.cordova.myapp00d753.utility.Pref;
 
-public class SplashScreenActivity extends AppCompatActivity  implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+public class SplashScreenActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
     private static final int PERMISSION_ALL = 100;
     private CreativePermission myPermission;
     GoogleApiClient googleApiClient;
     private NetworkConnectionCheck connectionCheck;
+    Pref pref;
+    AlertDialog alert1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,10 +60,13 @@ public class SplashScreenActivity extends AppCompatActivity  implements GoogleAp
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(io.cordova.myapp00d753.SplashScreenActivity.this,DashBoardActivity.class));
-                finish();
+
+
+                    startActivity(new Intent(io.cordova.myapp00d753.SplashScreenActivity.this, DashBoardActivity.class));
+                    finish();
+
             }
-        }, 3000);
+        }, 4000);
 
     }
 
@@ -74,17 +94,21 @@ public class SplashScreenActivity extends AppCompatActivity  implements GoogleAp
 
 
     private void initialize() {
+        pref=new Pref(SplashScreenActivity.this);
         connectionCheck = new NetworkConnectionCheck(this);
         myPermission = new CreativePermission(this,PERMISSION_ALL);
+
     }
 
     private void setup(){
-        if (connectionCheck.isGPSEnabled()) {
-            showSplash();
 
-        }else {
-            turnGPSOn();
-        }
+            if (connectionCheck.isNetworkAvailable()) {
+                showSplash();
+            }else {
+                connectionCheck.getNetworkActiveAlert().show();
+            }
+
+
     }
 
     private void turnGPSOn() {
@@ -154,6 +178,7 @@ public class SplashScreenActivity extends AppCompatActivity  implements GoogleAp
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1000) {
             if (resultCode == Activity.RESULT_OK) {
                 String result = data.getStringExtra("result");
@@ -170,6 +195,9 @@ public class SplashScreenActivity extends AppCompatActivity  implements GoogleAp
         super.onResume();
 
     }
+
+
+
 
 
 }

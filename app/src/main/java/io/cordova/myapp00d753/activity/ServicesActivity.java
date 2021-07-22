@@ -2,14 +2,16 @@ package io.cordova.myapp00d753.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -27,6 +29,7 @@ import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.adapter.MenuServiceAdapter;
 import io.cordova.myapp00d753.module.MenuModule;
 import io.cordova.myapp00d753.utility.AppController;
+import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 
 public class ServicesActivity extends AppCompatActivity {
@@ -36,6 +39,9 @@ public class ServicesActivity extends AppCompatActivity {
     ArrayList<MenuModule>menuList=new ArrayList<>();
     LinearLayout llMain,llLoader;
     NetworkConnectionCheck connectionCheck;
+    MenuServiceAdapter menuAdapter;
+    LinearLayout llAgain;
+    ImageView imgAgain;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +65,14 @@ public class ServicesActivity extends AppCompatActivity {
         rvService.setLayoutManager(layoutManager);
         llMain=(LinearLayout)findViewById(R.id.llMain);
         llLoader=(LinearLayout)findViewById(R.id.llLoader);
+        llAgain=(LinearLayout)findViewById(R.id.llAgain);
+        imgAgain=(ImageView)findViewById(R.id.imgAgain);
+        imgAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getServiceInformation();
+            }
+        });
 
 
 
@@ -70,8 +84,9 @@ public class ServicesActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(ServicesActivity.this,DashBoardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish();
+                //finish();
             }
         });
         imgBack.setOnClickListener(new View.OnClickListener() {
@@ -83,9 +98,10 @@ public class ServicesActivity extends AppCompatActivity {
     }
 
     private void getServiceInformation(){
-        String surl ="http://111.93.182.174/GeniusiOSApi/api/gcl_HomeScreen?MenuId=9&SecurityCode=0000";
+        String surl = AppData.url+"gcl_HomeScreen?MenuId=9&SecurityCode=0000";
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
+        llAgain.setVisibility(View.GONE);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
@@ -99,10 +115,10 @@ public class ServicesActivity extends AppCompatActivity {
                             String responseText=job1.optString("responseText");
                             boolean responseStatus=job1.optBoolean("responseStatus");
                             if (responseStatus){
-                                Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
+                              //  Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
 
                                 JSONArray responseData=job1.optJSONArray("responseData");
-                                for (int i = 0; i < responseData.length(); i++){
+                                for (int i = 1; i < responseData.length(); i++){
                                     JSONObject obj=responseData.getJSONObject(i);
                                     String MenuName=obj.optString("MenuName");
                                     String Description=obj.optString("Description").replaceAll("<br/>","").replaceAll("<b>","").replaceAll("</b>","");
@@ -114,7 +130,8 @@ public class ServicesActivity extends AppCompatActivity {
                                 }
                                 llLoader.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
-                                MenuServiceAdapter menuAdapter=new MenuServiceAdapter(menuList);
+                                llAgain.setVisibility(View.GONE);
+                                 menuAdapter=new MenuServiceAdapter(menuList,ServicesActivity.this);
                                 rvService.setAdapter(menuAdapter);
                             }
                             else {
@@ -134,8 +151,11 @@ public class ServicesActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                llLoader.setVisibility(View.GONE);
+                llMain.setVisibility(View.GONE);
+                llAgain.setVisibility(View.VISIBLE);
 
-                Toast.makeText(ServicesActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
+               // Toast.makeText(ServicesActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
 
                 Log.e("ert",error.toString());
             }
@@ -144,5 +164,22 @@ public class ServicesActivity extends AppCompatActivity {
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
 
+    }
+
+
+    public void updateStatus(int position,boolean status)
+    {
+        for (int i =0 ;i<menuList.size();i++)
+        {
+            if (i==position)
+            {
+                menuList.get(i).setExpanded(status);
+            }
+            else
+            {
+                menuList.get(i).setExpanded(false);
+            }
+        }
+        menuAdapter.notifyDataSetChanged();
     }
 }

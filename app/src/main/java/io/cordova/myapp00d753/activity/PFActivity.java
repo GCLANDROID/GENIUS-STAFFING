@@ -7,14 +7,16 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -38,20 +40,23 @@ import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.adapter.PfAdapter;
 import io.cordova.myapp00d753.module.PfModule;
 import io.cordova.myapp00d753.utility.AppController;
+import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.RecyclerItemClickListener;
 
-public class PFActivity extends AppCompatActivity implements RecyclerItemClickListener.OnItemClickListener {
+public class PFActivity extends AppCompatActivity {
     RecyclerView rvPf;
-    ArrayList<PfModule>pfList=new ArrayList<>();
-    ImageView imgBack,imgHome;
+    ArrayList<PfModule> pfList = new ArrayList<>();
+    ImageView imgBack, imgHome;
     Pref pref;
-    LinearLayout llMain,llLoader;
-    String finalYear,pfUrl;
+    LinearLayout llMain, llLoader;
+    String finalYear, pfUrl;
     private ProgressDialog pDialog;
     public static final int progress_bar_type = 0;
     NetworkConnectionCheck networkConnectionCheck;
+    LinearLayout llNodata;
+    LinearLayout llAgain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +67,7 @@ public class PFActivity extends AppCompatActivity implements RecyclerItemClickLi
 
             getpfList();
 
-        }else {
+        } else {
             networkConnectionCheck.getNetworkActiveAlert().show();
         }
 
@@ -70,26 +75,36 @@ public class PFActivity extends AppCompatActivity implements RecyclerItemClickLi
         onClick();
     }
 
-    private  void  initialize(){
-        pref=new Pref(getApplicationContext());
-        networkConnectionCheck=new NetworkConnectionCheck(this);
-        rvPf=(RecyclerView)findViewById(R.id.rvPf);
-        rvPf.addOnItemTouchListener(new RecyclerItemClickListener(PFActivity.this, PFActivity.this));
+    private void initialize() {
+        pref = new Pref(getApplicationContext());
+        networkConnectionCheck = new NetworkConnectionCheck(this);
+        rvPf = (RecyclerView) findViewById(R.id.rvPf);
+        //   rvPf.addOnItemTouchListener(new RecyclerItemClickListener(PFActivity.this, PFActivity.this));
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(PFActivity.this, LinearLayoutManager.VERTICAL, false);
         rvPf.setLayoutManager(layoutManager);
-        imgBack=(ImageView)findViewById(R.id.imgBack);
-        imgHome=(ImageView)findViewById(R.id.imgHome);
-        llMain=(LinearLayout)findViewById(R.id.llMain);
-        llLoader=(LinearLayout)findViewById(R.id.llLoader);
+        imgBack = (ImageView) findViewById(R.id.imgBack);
+        imgHome = (ImageView) findViewById(R.id.imgHome);
+        llMain = (LinearLayout) findViewById(R.id.llMain);
+        llLoader = (LinearLayout) findViewById(R.id.llLoader);
+        llAgain = (LinearLayout) findViewById(R.id.llAgain);
+        ImageView imgAgin = (ImageView) findViewById(R.id.imgAgain);
+        imgAgin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getpfList();
+            }
+        });
+        llNodata=(LinearLayout)findViewById(R.id.llNodata);
     }
 
-    private void getpfList(){
-        String surl ="http://111.93.182.174/GeniusiOSApi/api/get_PfFinYear?AEMEmployeeID="+pref.getEmpId()+"&SecurityCode="+pref.getSecurityCode();
+    private void getpfList() {
+        String surl = AppData.url+"get_PfFinYear?AEMEmployeeID=" + pref.getEmpId() + "&SecurityCode=" + pref.getSecurityCode();
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
-        Log.d("ctcinput",surl);
+        llNodata.setVisibility(View.GONE);
+        Log.d("ctcinput", surl);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
@@ -100,29 +115,30 @@ public class PFActivity extends AppCompatActivity implements RecyclerItemClickLi
                         try {
                             JSONObject job1 = new JSONObject(response);
                             Log.e("response12", "@@@@@@" + job1);
-                            String responseText=job1.optString("responseText");
-                            boolean responseStatus=job1.optBoolean("responseStatus");
-                            if (responseStatus){
-                                Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
-                                JSONArray responseData=job1.optJSONArray("responseData");
-                                for (int i = 0; i < responseData.length(); i++){
-                                    JSONObject obj=responseData.getJSONObject(i);
-                                    String FinYear=obj.optString("FinYear");
-                                    String  url=obj.optString("url");
-                                    Log.d("url",url);
-                                    PfModule pfModule=new PfModule(FinYear,url);
+                            String responseText = job1.optString("responseText");
+                            boolean responseStatus = job1.optBoolean("responseStatus");
+                            if (responseStatus) {
+                                //    Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
+                                JSONArray responseData = job1.optJSONArray("responseData");
+                                for (int i = 1; i < responseData.length(); i++) {
+                                    JSONObject obj = responseData.getJSONObject(i);
+                                    String FinYear = obj.optString("FinYear");
+                                    String url = obj.optString("url");
+                                    Log.d("url", url);
+                                    PfModule pfModule = new PfModule(FinYear, url);
                                     pfList.add(pfModule);
 
 
                                 }
                                 llLoader.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
+                                llNodata.setVisibility(View.GONE);
                                 setAdapter();
-                            }
-                            else {
+                            } else {
                                 llLoader.setVisibility(View.GONE);
-                                llMain.setVisibility(View.VISIBLE);
-                                Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
+                                llMain.setVisibility(View.GONE);
+                                llNodata.setVisibility(View.VISIBLE);
+                                Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
                             }
 
                             // boolean _status = job1.getBoolean("status");
@@ -130,8 +146,7 @@ public class PFActivity extends AppCompatActivity implements RecyclerItemClickLi
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            llLoader.setVisibility(View.VISIBLE);
-                            llMain.setVisibility(View.GONE);
+
                             Toast.makeText(PFActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
                         }
 
@@ -141,10 +156,11 @@ public class PFActivity extends AppCompatActivity implements RecyclerItemClickLi
             public void onErrorResponse(VolleyError error) {
                 llLoader.setVisibility(View.VISIBLE);
                 llMain.setVisibility(View.GONE);
+                llNodata.setVisibility(View.GONE);
 
-                Toast.makeText(PFActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
+               // Toast.makeText(PFActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
 
-                Log.e("ert",error.toString());
+                Log.e("ert", error.toString());
             }
         }) {
 
@@ -152,18 +168,19 @@ public class PFActivity extends AppCompatActivity implements RecyclerItemClickLi
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
     }
 
-    private void setAdapter(){
-        PfAdapter pfAdapter=new PfAdapter(pfList);
+    private void setAdapter() {
+        PfAdapter pfAdapter = new PfAdapter(pfList, PFActivity.this);
         rvPf.setAdapter(pfAdapter);
     }
 
-    private void onClick(){
+    private void onClick() {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(PFActivity.this,DashBoardActivity.class);
+                Intent intent = new Intent(PFActivity.this, EmployeeDashBoardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish();
+                // finish();
             }
         });
 
@@ -176,30 +193,27 @@ public class PFActivity extends AppCompatActivity implements RecyclerItemClickLi
     }
 
 
-    @Override
-    public void onItemClick(View childView, int position) {
-        finalYear=pfList.get(position).getPfYear();
-        Log.d("finalyear",finalYear);
-        pfUrl=pfList.get(position).getPfUrl();
-        Log.d("pfurl",pfUrl);
+    /*  @Override
+      public void onItemClick(View childView, int position) {
+          finalYear=pfList.get(position).getPfYear();
+          Log.d("finalyear",finalYear);
+          pfUrl=pfList.get(position).getPfUrl();
+          Log.d("pfurl",pfUrl);
 
-            operBrowser();
+              operBrowser();
 
-    }
+      }
+      @Override
+      public void onItemLongPress(View childView, int position) {
 
-    @Override
-    public void onItemLongPress(View childView, int position) {
+      }
+  */
+    public void operBrowser(String pfuri) {
+        Uri uri = Uri.parse(pfuri); // missing 'http://' will cause crashed
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
 
-    }
+        startActivity(intent);
 
-    private void operBrowser(){
-            Uri uri = Uri.parse(pfUrl); // missing 'http://' will cause crashed
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-            if (!pfUrl.equals("")) {
-                startActivity(intent);
-            }else {
-
-            }
 
     }
 
@@ -224,7 +238,7 @@ public class PFActivity extends AppCompatActivity implements RecyclerItemClickLi
 
         /**
          * Before starting background thread Show Progress Bar Dialog
-         * */
+         */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -233,7 +247,7 @@ public class PFActivity extends AppCompatActivity implements RecyclerItemClickLi
 
         /**
          * Downloading file in background thread
-         * */
+         */
         @Override
         protected String doInBackground(String... f_url) {
             int count;
@@ -285,7 +299,7 @@ public class PFActivity extends AppCompatActivity implements RecyclerItemClickLi
 
         /**
          * Updating progress bar
-         * */
+         */
         protected void onProgressUpdate(String... progress) {
             // setting progress percentage
             pDialog.setProgress(Integer.parseInt(progress[0]));
@@ -293,7 +307,7 @@ public class PFActivity extends AppCompatActivity implements RecyclerItemClickLi
 
         /**
          * After completing background task Dismiss the progress dialog
-         * **/
+         **/
         @Override
         protected void onPostExecute(String file_url) {
             // dismiss the dialog after the file was downloaded

@@ -1,13 +1,14 @@
 package io.cordova.myapp00d753.adapter;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
@@ -18,14 +19,14 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     ArrayList<NotificationModule>notificationList=new ArrayList<>();
     @NonNull
     @Override
-    public NotificationAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.notification_raw,viewGroup,false);
 
-        return new NotificationAdapter.MyViewHolder(itemView);
+        return new MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NotificationAdapter.MyViewHolder myViewHolder, int i) {
+    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
        myViewHolder.tvTitle.setText(notificationList.get(i).getTvTitle());
        myViewHolder.tvBody.setText(notificationList.get(i).getTvBody());
        myViewHolder.tvDate.setText(notificationList.get(i).getTvDate());

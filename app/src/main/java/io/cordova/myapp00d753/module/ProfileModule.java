@@ -1,10 +1,11 @@
 package io.cordova.myapp00d753.module;
 
 public class ProfileModule {
-    private boolean isSelected = false;
+    boolean isExpanded;
+    boolean check;
     String empId,empCode,empName,DOJ,department,designation,location,gender,DOB,gurdianName,relationship,qualification,martialStatus,bloodGroup,perAddress,preAddress,phoneNumber,mobileNumber,emailId,pfNumber,esiNumber,bankName,accNumber,aadharNumber,uanNumber;
 
-    public ProfileModule(String empId, String empCode, String empName, String DOJ, String department, String designation, String location, String gender, String DOB, String gurdianName, String relationship, String qualification, String martialStatus, String bloodGroup, String perAddress, String preAddress, String phoneNumber, String mobileNumber, String emailId, String pfNumber, String esiNumber, String bankName, String accNumber, String aadharNumber, String uanNumber) {
+    public ProfileModule(String empId, String empCode, String empName, String DOJ, String department, String designation, String location, String gender, String DOB, String gurdianName, String relationship, String qualification, String martialStatus, String bloodGroup, String perAddress, String preAddress, String phoneNumber, String mobileNumber, String emailId, String pfNumber, String esiNumber, String bankName, String accNumber, String aadharNumber, String uanNumber,boolean check) {
         this.empId = empId;
         this.empCode = empCode;
         this.empName = empName;
@@ -30,6 +31,8 @@ public class ProfileModule {
         this.accNumber = accNumber;
         this.aadharNumber = aadharNumber;
         this.uanNumber = uanNumber;
+        this.check = check;
+        isExpanded = false;
     }
 
     public String getEmpId() {
@@ -232,11 +235,20 @@ public class ProfileModule {
         this.uanNumber = uanNumber;
     }
 
-    public boolean isSelected() {
-        return isSelected;
+
+    public boolean isExpanded() {
+        return isExpanded;
     }
 
-    public void setSelected(boolean selected) {
-        isSelected = selected;
+    public void setExpanded(boolean expanded) {
+        isExpanded = expanded;
+    }
+
+    public boolean isCheck() {
+        return check;
+    }
+
+    public void setCheck(boolean check) {
+        this.check = check;
     }
 }

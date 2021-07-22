@@ -4,10 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,6 +16,11 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -37,6 +39,7 @@ import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.adapter.SalaryAdapter;
 import io.cordova.myapp00d753.module.SalaryModule;
 import io.cordova.myapp00d753.utility.AppController;
+import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.RecyclerItemClickListener;
@@ -49,7 +52,7 @@ public class SalaryActivity extends AppCompatActivity implements RecyclerItemCli
     ArrayList<String> splist = new ArrayList<>();
     Spinner spYear;
     ImageView imgBack, imgHome;
-    String year;
+    String year="0";
     int y;
     AlertDialog alertDialog;
     TextView tvYear;
@@ -59,6 +62,8 @@ public class SalaryActivity extends AppCompatActivity implements RecyclerItemCli
     String surl;
     NetworkConnectionCheck connectionCheck;
     LinearLayout llNodata;
+    LinearLayout llAgain;
+    ImageView imgAgain,imgSearch;
 
 
 
@@ -70,9 +75,9 @@ public class SalaryActivity extends AppCompatActivity implements RecyclerItemCli
         if (connectionCheck.isNetworkAvailable()) {
             getSalaryList();
         }else {
-            connectionCheck.getNetworkActiveAlert().show();
+
         }
-        setAdapter();
+
         onClick();
     }
 
@@ -92,22 +97,32 @@ public class SalaryActivity extends AppCompatActivity implements RecyclerItemCli
         imgHome = (ImageView) findViewById(R.id.imgHome);
         llSearch = (LinearLayout) findViewById(R.id.llSearch);
         y = Calendar.getInstance().get(Calendar.YEAR);
-        year = String.valueOf(y);
+
         tvYear = (TextView) findViewById(R.id.tvYear);
         tvYear.setText(year);
         llLoader = (LinearLayout) findViewById(R.id.llLoader);
         llMain = (LinearLayout) findViewById(R.id.llMain);
         llNodata=(LinearLayout)findViewById(R.id.llNodata);
+        llAgain=(LinearLayout)findViewById(R.id.llAgain);
+        imgAgain=(ImageView)findViewById(R.id.imgAgain);
+        imgAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getSalaryList();
+            }
+        });
+        imgSearch=(ImageView)findViewById(R.id.imgSearch);
 
 
     }
 
     private void getSalaryList() {
-        surl = "http://111.93.182.174/GeniusiOSApi/api/get_Salary?AEMConsultantID=0&AEMClientID=null&MasterID=" + pref.getMasterId() + "&AEMEmployeeID=" + pref.getEmpId() + "&SalYear=" + year + "&SalMonth=jan&WorkingStatus=3&CurrentPage=1&SecurityCode="+pref.getSecurityCode();
+        surl = AppData.url+"get_Salary?AEMConsultantID=0&AEMClientID=null&MasterID=" + pref.getMasterId() + "&AEMEmployeeID=" + pref.getEmpId() + "&SalYear=" + year + "&SalMonth=jan&WorkingStatus=3&CurrentPage=1&SecurityCode="+pref.getSecurityCode();
         Log.d("salaryinput",surl);
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
         llNodata.setVisibility(View.GONE);
+        llAgain.setVisibility(View.GONE);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
@@ -122,7 +137,8 @@ public class SalaryActivity extends AppCompatActivity implements RecyclerItemCli
                             String responseText = job1.optString("responseText");
                             boolean responseStatus = job1.optBoolean("responseStatus");
                             if (responseStatus) {
-                                Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
+                          //      Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
+                                salaryList.clear();
                                 JSONArray responseData = job1.optJSONArray("responseData");
                                 for (int i = 0; i < responseData.length(); i++) {
                                     JSONObject obj = responseData.getJSONObject(i);
@@ -130,7 +146,7 @@ public class SalaryActivity extends AppCompatActivity implements RecyclerItemCli
                                     String SalYear = obj.optString("SalYear");
                                     String MonthlyNet = obj.optString("MonthlyNet");
                                     String url = obj.optString("url");
-                                    SalaryModule salaryModule = new SalaryModule(SalYear, SalMonth, MonthlyNet, url);
+                                    SalaryModule salaryModule = new SalaryModule(SalYear, SalMonth,"Rs. "+ MonthlyNet, url);
                                     salaryList.add(salaryModule);
 
 
@@ -140,17 +156,20 @@ public class SalaryActivity extends AppCompatActivity implements RecyclerItemCli
                                     llLoader.setVisibility(View.GONE);
                                     llMain.setVisibility(View.VISIBLE);
                                     llNodata.setVisibility(View.GONE);
+                                    llAgain.setVisibility(View.GONE);
                                     setAdapter();
                                 } else {
                                     llLoader.setVisibility(View.GONE);
                                     llMain.setVisibility(View.GONE);
                                     llNodata.setVisibility(View.GONE);
+                                    llAgain.setVisibility(View.GONE);
                                 }
                             } else {
                                 Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
                                 llLoader.setVisibility(View.GONE);
-                                llMain.setVisibility(View.VISIBLE);
+                                llMain.setVisibility(View.GONE);
                                 llNodata.setVisibility(View.VISIBLE);
+                                llAgain.setVisibility(View.GONE);
 
                             }
 
@@ -159,19 +178,20 @@ public class SalaryActivity extends AppCompatActivity implements RecyclerItemCli
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            llLoader.setVisibility(View.VISIBLE);
-                            llMain.setVisibility(View.GONE);
-                            Toast.makeText(SalaryActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
+
+                            //Toast.makeText(SalaryActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
                         }
 
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                llLoader.setVisibility(View.VISIBLE);
+                llLoader.setVisibility(View.GONE);
                 llMain.setVisibility(View.GONE);
+                llNodata.setVisibility(View.GONE);
+                llAgain.setVisibility(View.VISIBLE);
 
-                Toast.makeText(SalaryActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
+               // Toast.makeText(SalaryActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
 
                 Log.e("ert", error.toString());
             }
@@ -197,13 +217,14 @@ public class SalaryActivity extends AppCompatActivity implements RecyclerItemCli
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SalaryActivity.this, DashBoardActivity.class);
+                Intent intent = new Intent(SalaryActivity.this, EmployeeDashBoardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish();
+              //  finish();
             }
         });
 
-        llSearch.setOnClickListener(new View.OnClickListener() {
+        imgSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                     showYearDialog();
@@ -213,6 +234,7 @@ public class SalaryActivity extends AppCompatActivity implements RecyclerItemCli
 
 
     private void showYearDialog() {
+        year = String.valueOf(y);
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SalaryActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_year, null);

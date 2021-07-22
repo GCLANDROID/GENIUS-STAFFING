@@ -4,10 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,6 +18,11 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -38,11 +40,12 @@ import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.adapter.SupFeedBackAdapter;
 import io.cordova.myapp00d753.module.SupFeedBackModule;
 import io.cordova.myapp00d753.utility.AppController;
+import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.RecyclerItemClickListener;
 
-public class SupFeedBackActivity extends AppCompatActivity  {
+public class SupFeedBackActivity extends AppCompatActivity {
     RecyclerView rvFeedBack;
     ArrayList<SupFeedBackModule>feedbackList=new ArrayList<>();
     SupFeedBackAdapter supAdapter;
@@ -94,7 +97,7 @@ public class SupFeedBackActivity extends AppCompatActivity  {
         llLoder = (LinearLayout) findViewById(R.id.llWLLoader);
         llMain = (LinearLayout) findViewById(R.id.llMain);
         imgBack=(ImageView)findViewById(R.id.imgBack);
-        imgHome=(ImageView)findViewById(R.id.imgHome);
+
         llNodata=(LinearLayout)findViewById(R.id.llNodata);
 
         progressBar = (ProgressBar) findViewById(R.id.WLpagination_loader);
@@ -143,7 +146,7 @@ public class SupFeedBackActivity extends AppCompatActivity  {
         llMain.setVisibility(View.GONE);
         llNodata.setVisibility(View.GONE);
 
-        String surl = "http://111.93.182.174/GeniusiOSApi/api/gcl_Feedback?FeedBackID=0&AEMClientID="+pref.getEmpClintId()+"&AEMEmployeeID="+pref.getEmpId()+"&Query=null&RepliedDetails=null&RepliedBy=null&ReplyStatus=0&IssueID=0&WorkingStatus=1&CurrentPage="+mPageCount+"&Operation=1&SecurityCode="+pref.getSecurityCode();
+        String surl = AppData.url+"gcl_Feedback?FeedBackID=0&AEMClientID="+pref.getEmpClintId()+"&AEMEmployeeID="+pref.getEmpId()+"&Query=null&RepliedDetails=null&RepliedBy=null&ReplyStatus=0&IssueID=0&WorkingStatus=1&CurrentPage="+mPageCount+"&Operation=1&SecurityCode="+pref.getSecurityCode();
         Log.d("input", surl);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
@@ -161,7 +164,7 @@ public class SupFeedBackActivity extends AppCompatActivity  {
 
                             boolean responseStatus = job1.optBoolean("responseStatus");
                             if (responseStatus) {
-                                Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
+                              //  Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
                                 JSONArray responseData = job1.optJSONArray("responseData");
                                 for (int i = 0; i < responseData.length(); i++) {
                                     JSONObject obj = responseData.getJSONObject(i);
@@ -190,7 +193,7 @@ public class SupFeedBackActivity extends AppCompatActivity  {
                                 llMain.setVisibility(View.VISIBLE);
                                 llNodata.setVisibility(View.VISIBLE);
 
-                                Toast.makeText(getApplicationContext(), "No data found", Toast.LENGTH_LONG).show();
+                               // Toast.makeText(getApplicationContext(), "No data found", Toast.LENGTH_LONG).show();
 
                             }
 
@@ -234,8 +237,20 @@ public class SupFeedBackActivity extends AppCompatActivity  {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                alertDialog.dismiss();
-                postReply();
+
+                if (item.size()>0){
+                    if (etFeedBack.getText().toString().length()>0) {
+                        postReply();
+
+                    }else {
+                        etFeedBack.setError("please enter");
+                        etFeedBack.requestFocus();
+                       // alertDialog.dismiss();
+                    }
+                }else {
+                    Toast.makeText(SupFeedBackActivity.this,"Please select atleast one feedback",Toast.LENGTH_LONG).show();
+                }
+
 
 
 
@@ -252,11 +267,11 @@ public class SupFeedBackActivity extends AppCompatActivity  {
     }
 
     private void postReply(){
-        String surl ="http://111.93.182.174/GeniusiOSApi/api/gcl_Feedback?AEMClientID="+pref.getEmpClintId()+"&FeedBackID=0&AEMEmployeeID="+pref.getEmpId()+"&Query=null&RepliedDetails="+etFeedBack.getText().toString().replaceAll("\\s+","")+"&RepliedBy="+pref.getEmpId()+"&ReplyStatus=1&IssueID=0&WorkingStatus=1&CurrentPage=1&Operation=4&SecurityCode="+pref.getSecurityCode()+"&FeedBackIDs="+feedId;
+        String surl =AppData.url+"gcl_Feedback?AEMClientID="+pref.getEmpClintId()+"&FeedBackID=0&AEMEmployeeID="+pref.getEmpId()+"&Query=null&RepliedDetails="+etFeedBack.getText().toString().replaceAll("\\s+","+")+"&RepliedBy="+pref.getEmpId()+"&ReplyStatus=1&IssueID=0&WorkingStatus=1&CurrentPage=1&Operation=4&SecurityCode="+pref.getSecurityCode()+"&FeedBackIDs="+feedId;
         Log.d("postreply",surl);
         final ProgressDialog progressBar = new ProgressDialog(this);
         progressBar.setCancelable(true);//you can cancel it by pressing back button
-        progressBar.setMessage("Submating...");
+        progressBar.setMessage("Loading...");
         progressBar.show();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, surl,
                 new Response.Listener<String>() {
@@ -272,6 +287,8 @@ public class SupFeedBackActivity extends AppCompatActivity  {
                             if (responseStatus){
                                 // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
                                 successAlert();
+                                alertDialog.dismiss();
+                                item.clear();
 
 
                             }
@@ -302,7 +319,7 @@ public class SupFeedBackActivity extends AppCompatActivity  {
     }
 
     private void successAlert(){
-        android.support.v7.app.AlertDialog.Builder dialogBuilder = new android.support.v7.app.AlertDialog.Builder(SupFeedBackActivity.this, R.style.CustomDialogNew);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SupFeedBackActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_success, null);
         dialogBuilder.setView(dialogView);
@@ -333,7 +350,8 @@ public class SupFeedBackActivity extends AppCompatActivity  {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(SupFeedBackActivity.this,DashBoardActivity.class);
+                Intent intent=new Intent(SupFeedBackActivity.this,SuperVisiorDashBoardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
         });
@@ -354,7 +372,11 @@ public class SupFeedBackActivity extends AppCompatActivity  {
 
     public void updateAttendanceStatus(int position, boolean status) {
         feedbackList.get(position).setSelected(status);
-        item.add(feedbackList.get(position).getFeedBackid());
+        if (feedbackList.get(position).isSelected()==true) {
+            item.add(feedbackList.get(position).getFeedBackid());
+        }else {
+            item.clear();
+        }
         Log.d("arpan", item.toString());
         String i = item.toString();
         String d = i.replace("[", "").replace("]", "");

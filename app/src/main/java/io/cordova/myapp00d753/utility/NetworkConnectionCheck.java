@@ -1,5 +1,7 @@
 package io.cordova.myapp00d753.utility;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -7,7 +9,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.Settings;
-import android.support.v7.app.AlertDialog;
+
 
 public class NetworkConnectionCheck {
     private Context context;
@@ -21,7 +23,7 @@ public class NetworkConnectionCheck {
     public boolean isNetworkAvailable(){
         ConnectivityManager connectivityManager = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo info = connectivityManager.getActiveNetworkInfo();
+        @SuppressLint("MissingPermission") NetworkInfo info = connectivityManager.getActiveNetworkInfo();
 
         return info != null && info.isConnectedOrConnecting();
     }
@@ -64,8 +66,8 @@ public class NetworkConnectionCheck {
         return isGPSEnabled;
     }
 
-    public android.app.AlertDialog getSettingsAlert(){
-        final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+    public AlertDialog getSettingsAlert(){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCancelable(false);
         builder.setTitle("GPS Status");
         builder.setMessage("GPS is not enabled. Please enable the GPS.");
@@ -75,7 +77,7 @@ public class NetworkConnectionCheck {
                 context.startActivity(intent);
             }
         });
-        android.app.AlertDialog alertDialog = builder.create();
+        AlertDialog alertDialog = builder.create();
         return  alertDialog;
     }
 

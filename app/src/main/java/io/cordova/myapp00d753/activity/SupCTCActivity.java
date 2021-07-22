@@ -3,15 +3,17 @@ package io.cordova.myapp00d753.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -29,6 +31,7 @@ import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.adapter.CTCAdapter;
 import io.cordova.myapp00d753.module.CTCModule;
 import io.cordova.myapp00d753.utility.AppController;
+import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.RecyclerItemClickListener;
@@ -47,6 +50,9 @@ public class SupCTCActivity extends AppCompatActivity implements RecyclerItemCli
     ImageView imgBack,imgHome;
     NetworkConnectionCheck connectionCheck;
     Pref pref;
+    LinearLayout llAgain;
+    ImageView imgAgain;
+    LinearLayout llNodata;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,13 +107,24 @@ public class SupCTCActivity extends AppCompatActivity implements RecyclerItemCli
             }
         });
         setAdapter();
+        llAgain=(LinearLayout)findViewById(R.id.llAgain);
+        imgAgain=(ImageView)findViewById(R.id.imgAgain);
+        imgAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCTCList();
+            }
+        });
+        llNodata=(LinearLayout)findViewById(R.id.llNodata);
     }
 
     private void getCTCList(){
         llLoder.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
+        llAgain.setVisibility(View.GONE);
+        llNodata.setVisibility(View.GONE);
 
-        String surl ="http://111.93.182.174/GeniusiOSApi/api/gcl_CTC?AEMConsultantID="+pref.getEmpConId()+"&AEMClientID="+pref.getEmpClintId()+"&AEMEmployeeID="+pref.getEmpId()+"&WorkingStatus=1&CurrentPage="+mPageCount+"&SecurityCode="+pref.getSecurityCode();
+        String surl = AppData.url+"gcl_CTC?AEMConsultantID="+pref.getEmpConId()+"&AEMClientID="+pref.getEmpClintId()+"&AEMEmployeeID="+pref.getEmpId()+"&WorkingStatus=1&CurrentPage="+mPageCount+"&SecurityCode="+pref.getSecurityCode();
         Log.d("input",surl);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
@@ -125,7 +142,7 @@ public class SupCTCActivity extends AppCompatActivity implements RecyclerItemCli
 
                             boolean responseStatus=job1.optBoolean("responseStatus");
                             if (responseStatus){
-                                 Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
+                    //             Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
                                 JSONArray responseData=job1.optJSONArray("responseData");
                                 for (int i = 0; i < responseData.length(); i++){
                                     JSONObject obj=responseData.getJSONObject(i);
@@ -142,6 +159,8 @@ public class SupCTCActivity extends AppCompatActivity implements RecyclerItemCli
                                 ctcAdapter.notifyDataSetChanged();
                                 llLoder.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
+                                llAgain.setVisibility(View.GONE);
+                                llNodata.setVisibility(View.GONE);
 
 
                             }
@@ -150,6 +169,8 @@ public class SupCTCActivity extends AppCompatActivity implements RecyclerItemCli
                                 ctcAdapter.notifyDataSetChanged();
                                 llLoder.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
+                                llAgain.setVisibility(View.GONE);
+                                llNodata.setVisibility(View.VISIBLE);
 
                                 Toast.makeText(getApplicationContext(),"No data found",Toast.LENGTH_LONG).show();
 
@@ -158,6 +179,7 @@ public class SupCTCActivity extends AppCompatActivity implements RecyclerItemCli
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+
                             Toast.makeText(SupCTCActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
                         }
 
@@ -165,8 +187,12 @@ public class SupCTCActivity extends AppCompatActivity implements RecyclerItemCli
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                llLoder.setVisibility(View.GONE);
+                llMain.setVisibility(View.GONE);
+                llAgain.setVisibility(View.VISIBLE);
+                llNodata.setVisibility(View.GONE);
 
-                Toast.makeText(SupCTCActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
+              //  Toast.makeText(SupCTCActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
                 Log.e("ert",error.toString());
             }
         }) {
@@ -191,9 +217,10 @@ public class SupCTCActivity extends AppCompatActivity implements RecyclerItemCli
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(SupCTCActivity.this,DashBoardActivity.class);
+                Intent intent=new Intent(SupCTCActivity.this,SuperVisiorDashBoardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish();
+                //finish();
             }
         });
 

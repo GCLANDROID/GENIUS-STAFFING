@@ -1,8 +1,9 @@
 package io.cordova.myapp00d753.adapter;
 
+import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import android.graphics.Color;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
@@ -21,17 +24,17 @@ import io.cordova.myapp00d753.module.MenuModule;
 
 public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MyViewHolder> {
     ArrayList<MenuModule>menuList=new ArrayList<>();
-    Context context;
+    Activity activity;
     @NonNull
     @Override
-    public MenuAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.menu_raw,viewGroup,false);
 
-        return new MenuAdapter.MyViewHolder(itemView);
+        return new MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MenuAdapter.MyViewHolder myViewHolder, final int i) {
+    public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
         myViewHolder.tvMenuName.setText(menuList.get(i).getMenuName());
         myViewHolder.tvMenuDetails.setText(menuList.get(i).getMenuDetails());
         if (menuList.get(i).getMenuName().equals("AboutUs")){
@@ -43,27 +46,36 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MyViewHolder> 
             public void onClick(View view) {
 
 
-                if (myViewHolder.imgMenuPlus.getVisibility()==View.VISIBLE){
-                    myViewHolder.imgMenuPlus.setVisibility(View.GONE);
-                    myViewHolder.imgMenuMins.setVisibility(View.VISIBLE);
-                    myViewHolder.llMenu.setVisibility(View.VISIBLE);
-                    myViewHolder.llMenuDetails.setVisibility(View.VISIBLE);
-                    menuList.get(i).setSelected(true);
-
+                if (!menuList.get(i).isExpanded()){
+                    ((AboutUsActivity)activity).updateStatus(i,true);
                 }else {
-                    myViewHolder.imgMenuPlus.setVisibility(View.VISIBLE);
-                    myViewHolder.imgMenuMins.setVisibility(View.GONE);
-                    myViewHolder.llMenu.setVisibility(View.VISIBLE);
-                    myViewHolder.llMenuDetails.setVisibility(View.GONE);
-                    menuList.get(i).setSelected(false);
-
+                    ((AboutUsActivity)activity).updateStatus(i,false);
                 }
             }
         });
-        if (menuList.get(i).isSelected()){
+
+
+        if (menuList.get(i).isExpanded())
+        {
+            myViewHolder.imgMenuPlus.setVisibility(View.GONE);
+            myViewHolder.imgMenuMins.setVisibility(View.VISIBLE);
+            myViewHolder.llMenu.setVisibility(View.VISIBLE);
             myViewHolder.llMenuDetails.setVisibility(View.VISIBLE);
-        }else {
+            myViewHolder.imgForward.setVisibility(View.VISIBLE);
+            myViewHolder.imgForward1.setVisibility(View.GONE);
+            myViewHolder.llMenu.setBackgroundColor(Color.parseColor("#279616"));
+            myViewHolder.tvMenuName.setTextColor(Color.parseColor("#ffffff"));
+        }
+        else
+        {
+            myViewHolder.imgMenuPlus.setVisibility(View.VISIBLE);
+            myViewHolder.imgMenuMins.setVisibility(View.GONE);
+            myViewHolder.llMenu.setVisibility(View.VISIBLE);
             myViewHolder.llMenuDetails.setVisibility(View.GONE);
+            myViewHolder.imgForward.setVisibility(View.GONE);
+            myViewHolder.imgForward1.setVisibility(View.VISIBLE);
+            myViewHolder.llMenu.setBackgroundColor(Color.parseColor("#c8c9ca"));
+            myViewHolder.tvMenuName.setTextColor(Color.parseColor("#000000"));
         }
 
     }
@@ -77,6 +89,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MyViewHolder> 
         TextView tvMenuDetails,tvMenuName;
         ImageView imgMenuMins,imgMenuPlus;
         LinearLayout llMenu,llMenuDetails;
+        ImageView imgForward,imgForward1;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -86,13 +99,16 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MyViewHolder> 
             imgMenuMins=(ImageView)itemView.findViewById(R.id.imgMenuMins);
             llMenu=(LinearLayout)itemView.findViewById(R.id.llMenu);
             llMenuDetails=(LinearLayout)itemView.findViewById(R.id.llMenuDetails);
+            imgForward=(ImageView)itemView.findViewById(R.id.imgForward);
+            imgForward1=(ImageView)itemView.findViewById(R.id.imgForward1);
+
 
 
         }
     }
 
-    public MenuAdapter(ArrayList<MenuModule> menuList, Context context) {
+    public MenuAdapter(ArrayList<MenuModule> menuList, Activity activity) {
         this.menuList = menuList;
-        this.context = context;
+        this.activity = activity;
     }
 }

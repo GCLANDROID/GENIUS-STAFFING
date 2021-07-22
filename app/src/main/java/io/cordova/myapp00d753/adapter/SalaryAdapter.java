@@ -1,13 +1,14 @@
 package io.cordova.myapp00d753.adapter;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
@@ -18,14 +19,14 @@ public class SalaryAdapter extends RecyclerView.Adapter<SalaryAdapter.MyViewHold
     ArrayList<SalaryModule>salryinfoList=new ArrayList<>();
     @NonNull
     @Override
-    public SalaryAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.salary_raw,viewGroup,false);
 
-        return new SalaryAdapter.MyViewHolder(itemView);
+        return new MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SalaryAdapter.MyViewHolder myViewHolder, int i) {
+    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         myViewHolder.tvYear.setText(salryinfoList.get(i).getYear());
         myViewHolder.tvMonth.setText(salryinfoList.get(i).getMonth());
         myViewHolder.tvSalary.setText(salryinfoList.get(i).getAmount());

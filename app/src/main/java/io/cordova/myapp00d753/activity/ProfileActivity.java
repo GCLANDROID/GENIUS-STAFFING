@@ -2,14 +2,19 @@ package io.cordova.myapp00d753.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -24,236 +29,253 @@ import org.json.JSONObject;
 import java.util.Calendar;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.fragment.ContactFragment;
+import io.cordova.myapp00d753.fragment.MisFragment;
+import io.cordova.myapp00d753.fragment.OfficalFragment;
+import io.cordova.myapp00d753.fragment.PersonalFragment;
 import io.cordova.myapp00d753.utility.AppController;
+import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
 
 public class ProfileActivity extends AppCompatActivity {
-    LinearLayout llOffical,llOffDetail,llCon,llConDetail,llPer,llPerDetail,llMis,llMisDetail;
-    ImageView imgOffiPlus,imgOffiMinus,imgPerPlus,imgPerMinus,imgConPlus,imgConMinus,imgMisPlus,imgMisMinus;
-    ImageView imgHome,imgBack;
-    TextView tvEmplId,tvEmpCode,tvEmpName,tvDOJ,tvDepartment,tvDesignation,tvLocation,tvGender,tvEmpDOB,tvGurdianName,tvRealtionShip,tvQualification,tvMarital,tvBloodGroup;
-     TextView tvParAddr,tvPreAddr,tvPhnNumber,tvEmail,tvPfNumber,tvEsiNumber,tvBankName,tvAcNumber,tvAddharNumber,tvUanNumber;
-     Pref pref;
-    String empConsId,empClinId,empClintOffId,empId;
-    NetworkConnectionCheck connectionCheck;
+      ImageView imgHome,imgBack;
+      ImageView imgOfficial,imgOfficial1,imgContact,imgContact1,imgPersonal,imgPersonal1,imgMis,imgMis1;
+      TextView tvOffical,tvOffical1,tvContact,tvContact1,tvPersonal,tvPersonal1,tvMis,tvMis1;
+      Pref pref;
+      LinearLayout llOfficial,llContact,llPersonal,llMis;
+      TextView tvToolBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         initialize();
-
-        if (connectionCheck.isNetworkAvailable()) {
-            profileFunction();
-            }
-            else {
-            connectionCheck.getNetworkActiveAlert().show();
-        }
-
+        profileFunction();
         onclick();
     }
 
     private void  initialize(){
         pref=new Pref(ProfileActivity.this);
-        connectionCheck = new NetworkConnectionCheck(this);
-
-        llOffical=(LinearLayout)findViewById(R.id.llOffical);
-        llOffDetail=(LinearLayout)findViewById(R.id.llOffiDetail);
-
-        llCon=(LinearLayout)findViewById(R.id.llContact);
-        llConDetail=(LinearLayout)findViewById(R.id.llContactDetail);
-
-        llPer=(LinearLayout)findViewById(R.id.llPersonal);
-        llPerDetail=(LinearLayout)findViewById(R.id.llPersDetail);
-
-        llMis=(LinearLayout)findViewById(R.id.llMis);
-        llMisDetail=(LinearLayout)findViewById(R.id.llMisDetail);
-
-        imgOffiPlus=(ImageView)findViewById(R.id.imgOffiPlus);
-        imgOffiMinus=(ImageView)findViewById(R.id.imgOffiMius);
-
-        imgPerPlus=(ImageView)findViewById(R.id.imgpersPlus);
-        imgPerMinus=(ImageView)findViewById(R.id.imgPersMinus);
-
-        imgConPlus=(ImageView)findViewById(R.id.imgConPlus);
-        imgConMinus=(ImageView)findViewById(R.id.imgConMinus);
-
-        imgMisPlus=(ImageView)findViewById(R.id.imgMisPlus);
-        imgMisMinus=(ImageView)findViewById(R.id.imgMisMinus);
-
         imgHome=(ImageView)findViewById(R.id.imgHome);
         imgBack=(ImageView)findViewById(R.id.imgBack);
 
-        tvEmplId=(TextView)findViewById(R.id.tvEmplId);
-        tvEmpCode=(TextView)findViewById(R.id.tvEmpCode);
-        tvEmpName=(TextView)findViewById(R.id.tvEmpName);
-        tvDOJ=(TextView)findViewById(R.id.tvDOJ);
-        tvDepartment=(TextView)findViewById(R.id.tvDepartment);
-        tvDesignation=(TextView)findViewById(R.id.tvDesignation);
-        tvLocation=(TextView)findViewById(R.id.tvLocation);
+        imgOfficial=(ImageView)findViewById(R.id.imgOfficial);
+        imgOfficial1=(ImageView)findViewById(R.id.imgOfficial1);
 
 
-        tvGender=(TextView)findViewById(R.id.tvGender);
-        tvEmpDOB=(TextView)findViewById(R.id.tvEmpCodeDOB);
-        tvGurdianName=(TextView)findViewById(R.id.tvGurdianName);
-        tvRealtionShip=(TextView)findViewById(R.id.tvRealtionShip);
-        tvQualification=(TextView)findViewById(R.id.tvQualification);
-        tvMarital=(TextView)findViewById(R.id.tvMarital);
-        tvBloodGroup=(TextView)findViewById(R.id.tvBloodGroup);
+        imgContact=(ImageView)findViewById(R.id.imgContact);
+        imgContact1=(ImageView)findViewById(R.id.imgContact1);
 
-        tvParAddr=(TextView)findViewById(R.id.tvParAddr);
-        tvPreAddr=(TextView)findViewById(R.id.tvPreAddr);
-        tvPhnNumber=(TextView)findViewById(R.id.tvPhnNumber);
-        tvEmail=(TextView)findViewById(R.id.tvEmail);
 
-        tvPfNumber=(TextView)findViewById(R.id.tvPfNumber);
-        tvEsiNumber=(TextView)findViewById(R.id.tvEsiNumber);
-        tvAcNumber=(TextView)findViewById(R.id.tvAcNumber);
-        tvBankName=(TextView)findViewById(R.id.tvBankName);
-        tvAddharNumber=(TextView)findViewById(R.id.tvAddharNumber);
-        tvUanNumber=(TextView)findViewById(R.id.tvUanNumber);
-        empConsId=pref.getEmpConId();
-        Log.d("empConsId",empConsId);
-        empClinId=pref.getEmpClintId();
-        Log.d("empClinId",empClinId);
-        empClintOffId=pref.getEmpClintOffId();
-        Log.d("empClintOffId",empClintOffId);
-        empId=pref.getEmpId();
-        Log.d("empId",empId);
+        imgPersonal=(ImageView)findViewById(R.id.imgPersonal);
+        imgPersonal1=(ImageView)findViewById(R.id.imgPersonal1);
 
-        int month=Calendar.getInstance().get(Calendar.MONTH);
-        Log.d("month", String.valueOf(month));
+
+        imgMis=(ImageView)findViewById(R.id.imgMis);
+        imgMis1=(ImageView)findViewById(R.id.imgMis1);
+
+        tvOffical=(TextView)findViewById(R.id.tvOffical);
+        tvOffical1=(TextView)findViewById(R.id.tvOffical1);
+
+        tvContact=(TextView)findViewById(R.id.tvContact);
+        tvContact1=(TextView)findViewById(R.id.tvContact1);
+
+
+        tvPersonal=(TextView)findViewById(R.id.tvPersonal);
+        tvPersonal1=(TextView)findViewById(R.id.tvPersonal1);
+
+
+        tvMis=(TextView)findViewById(R.id.tvMis);
+        tvMis1=(TextView)findViewById(R.id.tvMis1);
+        llOfficial=(LinearLayout)findViewById(R.id.llOfficial);
+        llContact=(LinearLayout)findViewById(R.id.llContact);
+        llPersonal=(LinearLayout)findViewById(R.id.llPersonal);
+        llMis=(LinearLayout)findViewById(R.id.llMis);
+        tvToolBar=(TextView)findViewById(R.id.tvToolBar);
+
 
     }
 
+
+    public void loadOfficialFragment() {
+
+        FragmentManager manager = getSupportFragmentManager();
+       FragmentTransaction transaction = manager.beginTransaction();
+        OfficalFragment fragment=new OfficalFragment();
+        transaction.replace(R.id.flMain, fragment);
+        transaction.commit();
+
+        //official
+        imgOfficial.setVisibility(View.VISIBLE);
+        imgOfficial1.setVisibility(View.GONE);
+        tvOffical.setVisibility(View.VISIBLE);
+        tvOffical1.setVisibility(View.GONE);
+
+        //contact
+        imgContact.setVisibility(View.GONE);
+        imgContact1.setVisibility(View.VISIBLE);
+        tvContact.setVisibility(View.GONE);
+        tvContact1.setVisibility(View.VISIBLE);
+
+
+        //personal
+        imgPersonal.setVisibility(View.GONE);
+        imgPersonal1.setVisibility(View.VISIBLE);
+        tvPersonal.setVisibility(View.GONE);
+        tvPersonal1.setVisibility(View.VISIBLE);
+
+        //mis
+        imgMis.setVisibility(View.GONE);
+        imgMis1.setVisibility(View.VISIBLE);
+        tvMis.setVisibility(View.GONE);
+        tvMis1.setVisibility(View.VISIBLE);
+        tvToolBar.setText("Profile - Official");
+
+
+
+
+        //tvHeader.setText("Official");
+
+
+    }
+
+    public void loadPersonalFragment() {
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        PersonalFragment pfragment=new PersonalFragment();
+        transaction.replace(R.id.flMain, pfragment);
+        transaction.commit();
+
+        //official
+        imgOfficial.setVisibility(View.GONE);
+        imgOfficial1.setVisibility(View.VISIBLE);
+        tvOffical.setVisibility(View.GONE);
+        tvOffical1.setVisibility(View.VISIBLE);
+
+        //contact
+        imgContact.setVisibility(View.GONE);
+        imgContact1.setVisibility(View.VISIBLE);
+        tvContact.setVisibility(View.GONE);
+        tvContact1.setVisibility(View.VISIBLE);
+
+
+        //personal
+        imgPersonal.setVisibility(View.VISIBLE);
+        imgPersonal1.setVisibility(View.GONE);
+        tvPersonal.setVisibility(View.VISIBLE);
+        tvPersonal1.setVisibility(View.GONE);
+
+        //mis
+        imgMis.setVisibility(View.GONE);
+        imgMis1.setVisibility(View.VISIBLE);
+        tvMis.setVisibility(View.GONE);
+        tvMis1.setVisibility(View.VISIBLE);
+
+        tvToolBar.setText("Profile - Personal");
+
+
+
+
+
+
+
+
+    }
+
+    public void loadContactFragment() {
+
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        ContactFragment cfragment=new ContactFragment();
+        transaction.replace(R.id.flMain, cfragment);
+        transaction.commit();
+
+
+        //official
+        imgOfficial.setVisibility(View.GONE);
+        imgOfficial1.setVisibility(View.VISIBLE);
+        tvOffical.setVisibility(View.GONE);
+        tvOffical1.setVisibility(View.VISIBLE);
+
+        //contact
+        imgContact.setVisibility(View.VISIBLE);
+        imgContact1.setVisibility(View.GONE);
+        tvContact.setVisibility(View.VISIBLE);
+        tvContact1.setVisibility(View.GONE);
+
+
+        //personal
+        imgPersonal.setVisibility(View.GONE);
+        imgPersonal1.setVisibility(View.VISIBLE);
+        tvPersonal.setVisibility(View.GONE);
+        tvPersonal1.setVisibility(View.VISIBLE);
+
+        //mis
+        imgMis.setVisibility(View.GONE);
+        imgMis1.setVisibility(View.VISIBLE);
+        tvMis.setVisibility(View.GONE);
+        tvMis1.setVisibility(View.VISIBLE);
+
+        tvToolBar.setText("Profile - Contact");
+
+
+
+
+    }
+
+    public void loadMisFragment() {
+
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        MisFragment ffragment=new MisFragment();
+        transaction.replace(R.id.flMain, ffragment);
+        transaction.commit();
+
+
+        //official
+        imgOfficial.setVisibility(View.GONE);
+        imgOfficial1.setVisibility(View.VISIBLE);
+        tvOffical.setVisibility(View.GONE);
+        tvOffical1.setVisibility(View.VISIBLE);
+
+        //contact
+        imgContact.setVisibility(View.GONE);
+        imgContact1.setVisibility(View.VISIBLE);
+        tvContact.setVisibility(View.GONE);
+        tvContact1.setVisibility(View.VISIBLE);
+
+
+        //personal
+        imgPersonal.setVisibility(View.GONE);
+        imgPersonal1.setVisibility(View.VISIBLE);
+        tvPersonal.setVisibility(View.GONE);
+        tvPersonal1.setVisibility(View.VISIBLE);
+
+        //mis
+        imgMis.setVisibility(View.VISIBLE);
+        imgMis1.setVisibility(View.GONE);
+        tvMis.setVisibility(View.VISIBLE);
+        tvMis1.setVisibility(View.GONE);
+
+        tvToolBar.setText("Profile - Miscellaneous");
+
+
+
+    }
+
+
+
     private void  onclick(){
-        llOffical.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (imgOffiPlus.getVisibility()== view.VISIBLE){
-                    imgOffiPlus.setVisibility(View.GONE);
-                    imgOffiMinus.setVisibility(View.VISIBLE);
-                    llOffDetail.setVisibility(View.VISIBLE);
-                    llPerDetail.setVisibility(View.GONE);
-                    imgPerPlus.setVisibility(View.VISIBLE);
-                    imgConPlus.setVisibility(View.VISIBLE);
-                    llConDetail.setVisibility(View.GONE);
-                    llMisDetail.setVisibility(View.GONE);
-                    imgMisPlus.setVisibility(View.VISIBLE);
 
-                }
-                else {
-                    imgOffiPlus.setVisibility(View.VISIBLE);
-                    imgOffiMinus.setVisibility(View.GONE);
-                    llOffDetail.setVisibility(View.GONE);
-                    llPerDetail.setVisibility(View.GONE);
-                    imgPerPlus.setVisibility(View.VISIBLE);
-                    imgConPlus.setVisibility(View.VISIBLE);
-                    llConDetail.setVisibility(View.GONE);
-                    llMisDetail.setVisibility(View.GONE);
-                    imgMisPlus.setVisibility(View.VISIBLE);
-
-
-                }
-            }
-        });
-
-        llPer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (imgPerPlus.getVisibility()==view.VISIBLE){
-                    imgPerPlus.setVisibility(View.GONE);
-                    imgPerMinus.setVisibility(View.VISIBLE);
-                    llPerDetail.setVisibility(View.VISIBLE);
-                    llOffDetail.setVisibility(View.GONE);
-                    imgOffiPlus.setVisibility(View.VISIBLE);
-                    imgConPlus.setVisibility(View.VISIBLE);
-                    llConDetail.setVisibility(View.GONE);
-                    llMisDetail.setVisibility(View.GONE);
-                    imgMisPlus.setVisibility(View.VISIBLE);
-
-
-                }
-                else {
-                    imgPerPlus.setVisibility(View.VISIBLE);
-                    imgPerMinus.setVisibility(View.GONE);
-                    llPerDetail.setVisibility(View.GONE);
-                    llOffDetail.setVisibility(View.GONE);
-                    imgOffiPlus.setVisibility(View.VISIBLE);
-                    imgConPlus.setVisibility(View.VISIBLE);
-                    llConDetail.setVisibility(View.GONE);
-                    llMisDetail.setVisibility(View.GONE);
-                    imgMisPlus.setVisibility(View.VISIBLE);
-
-
-                }
-            }
-        });
-
-        llCon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (imgConPlus.getVisibility()==view.VISIBLE){
-                    imgConPlus.setVisibility(View.GONE);
-                    imgConMinus.setVisibility(View.VISIBLE);
-                    llConDetail.setVisibility(View.VISIBLE);
-                    imgOffiPlus.setVisibility(View.VISIBLE);
-                    llOffDetail.setVisibility(View.GONE);
-                    llPerDetail.setVisibility(View.GONE);
-                    imgPerPlus.setVisibility(View.VISIBLE);
-                    llMisDetail.setVisibility(View.GONE);
-                    imgMisPlus.setVisibility(View.VISIBLE);
-
-                }
-                else {
-                    imgConPlus.setVisibility(View.VISIBLE);
-                    imgConMinus.setVisibility(View.GONE);
-                    llConDetail.setVisibility(View.GONE);
-                    imgOffiPlus.setVisibility(View.VISIBLE);
-                    llOffDetail.setVisibility(View.GONE);
-                    llPerDetail.setVisibility(View.GONE);
-                    imgPerPlus.setVisibility(View.VISIBLE);
-                    llMisDetail.setVisibility(View.GONE);
-                    imgMisPlus.setVisibility(View.VISIBLE);
-
-                }
-            }
-        });
-
-        llMis.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (imgMisPlus.getVisibility()==View.VISIBLE){
-                    imgMisPlus.setVisibility(View.GONE);
-                    llMisDetail.setVisibility(View.VISIBLE);
-                    imgMisMinus.setVisibility(View.VISIBLE);
-                    imgOffiPlus.setVisibility(View.VISIBLE);
-                    imgConPlus.setVisibility(View.VISIBLE);
-                    imgPerPlus.setVisibility(View.VISIBLE);
-                    llOffDetail.setVisibility(View.GONE);
-                    llPerDetail.setVisibility(View.GONE);
-                    llConDetail.setVisibility(View.GONE);
-                }
-                else {
-                    imgMisPlus.setVisibility(View.VISIBLE);
-                    llMisDetail.setVisibility(View.GONE);
-                    imgMisMinus.setVisibility(View.GONE);
-                    imgOffiPlus.setVisibility(View.VISIBLE);
-                    imgConPlus.setVisibility(View.VISIBLE);
-                    imgPerPlus.setVisibility(View.VISIBLE);
-                    llOffDetail.setVisibility(View.GONE);
-                    llPerDetail.setVisibility(View.GONE);
-                    llConDetail.setVisibility(View.GONE);
-                }
-            }
-        });
 
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(ProfileActivity.this,DashBoardActivity.class);
+                Intent intent=new Intent(ProfileActivity.this,EmployeeDashBoardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish();
+               // finish();
             }
         });
 
@@ -264,12 +286,40 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        llOfficial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadOfficialFragment();
+            }
+        });
+
+        llContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadContactFragment();
+            }
+        });
+
+        llPersonal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadPersonalFragment();
+            }
+        });
+        llMis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadMisFragment();
+            }
+        });
+
     }
 
     public void profileFunction() {
-        String surl ="http://111.93.182.174/GeniusiOSApi/api/gcl_KYC?AEMConsultantID="+empConsId+"&AEMClientID="+empClinId+"&AEMClientOfficeID="+empClintOffId+"&AEMEmployeeID="+empId+"&SecurityCode="+pref.getSecurityCode()+"&WorkingStatus=1&CurrentPage=0";
+        String surl = AppData.url+"gcl_KYC?AEMConsultantID="+pref.getEmpConId()+"&AEMClientID="+pref.getEmpClintId()+"&AEMClientOfficeID="+pref.getEmpClintOffId()+"&AEMEmployeeID="+pref.getEmpId() +"&SecurityCode="+pref.getSecurityCode()+"&WorkingStatus=1&CurrentPage=0";
+        Log.d("kyc",surl);
         final ProgressDialog progressBar = new ProgressDialog(this);
-        progressBar.setCancelable(true);//you can cancel it by pressing back button
+        progressBar.setCancelable(false);//you can cancel it by pressing back button
         progressBar.setMessage("Loading...");
         progressBar.show();
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
@@ -284,150 +334,152 @@ public class ProfileActivity extends AppCompatActivity {
                             String responseText=job1.optString("responseText");
                             boolean responseStatus=job1.optBoolean("responseStatus");
                             if (responseStatus){
-                                Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
+                             //   Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
                                 JSONArray responseData=job1.optJSONArray("responseData");
                                 for (int i = 0; i < responseData.length(); i++){
                                     JSONObject obj=responseData.getJSONObject(i);
                                     String AEMEmployeeID=obj.optString("AEMEmployeeID");
-                                    tvEmplId.setText(AEMEmployeeID);
+                                    pref.saveSEmpID(AEMEmployeeID);
 
                                     String Code=obj.optString("Code");
-                                    tvEmpCode.setText(Code);
+                                    pref.saveSEmpCode(Code);
 
                                     String Name=obj.optString("Name");
-                                    tvEmpName.setText(Name);
+                                    pref.saveSEmpName(Name);
 
                                     String DateOfJoining=obj.optString("DateOfJoining");
-                                    tvDOJ.setText(DateOfJoining);
+                                    pref.saveSDOJ(DateOfJoining);
 
                                     String Department=obj.optString("Department");
-                                    tvDepartment.setText(Department);
+                                    pref.saveSDept(Department);
 
                                     String Designation=obj.optString("Designation");
-                                    tvDesignation.setText(Designation);
+                                    pref.saveSDes(Designation);
 
                                     String Location=obj.optString("Location");
-                                    tvLocation.setText(Location);
+                                    pref.saveSLocation(Location);
 
                                     String Sex=obj.optString("Sex");
                                     if (!Sex.equals("")) {
-                                        tvGender.setText(Sex);
+                                        pref.saveSGender(Sex);
                                     }else {
-                                        tvGender.setText("N/A");
+                                        pref.saveSGender("N/A");
                                     }
 
                                     String DateOfBirth=obj.optString("DateOfBirth");
                                     if (!DateOfBirth.equals("")) {
-                                        tvEmpDOB.setText(DateOfBirth);
+                                        pref.saveSDOB(DateOfBirth);
                                     }else {
-                                        tvEmpDOB.setText("N/A");
+                                        pref.saveSDOB("N/A");
                                     }
 
                                     String GuardianName=obj.optString("GuardianName");
                                     if (!GuardianName.equals("")) {
-                                        tvGurdianName.setText(GuardianName);
+                                        pref.saveSGurdian(GuardianName);
                                     }else {
-                                        tvGurdianName.setText("N/A");
+                                        pref.saveSGurdian("N/A");
                                     }
 
                                     String RelationShip=obj.optString("RelationShip");
                                     if (!RelationShip.equals("")) {
-                                        tvRealtionShip.setText(RelationShip);
+                                        pref.saveSRelation(RelationShip);
 
                                     }else {
-                                        tvRealtionShip.setText("N/A");
+                                        pref.saveSRelation("N/A");
                                     }
 
                                     String Qualification=obj.optString("Qualification");
                                     if (!Qualification.equals("")) {
-                                        tvQualification.setTag(Qualification);
+                                        pref.saveSQualification(Qualification);
                                     }else {
-                                        tvQualification.setText("N/A");
+                                        pref.saveSQualification("N/A");
                                     }
 
                                     String MaritalStatus=obj.optString("MaritalStatus");
 
                                     if (!MaritalStatus.equals("")){
-                                        tvMarital.setText(MaritalStatus);
+                                        pref.saveSMartial(MaritalStatus);
                                     }else {
-                                        tvMarital.setText("N/A");
+                                        pref.saveSMartial("N/A");
                                     }
 
                                     String BloodGroup=obj.optString("BloodGroup");
                                     if (!BloodGroup.equals("")) {
-                                        tvBloodGroup.setText(BloodGroup);
+                                        pref.saveSBlood(BloodGroup);
                                     }else {
-                                        tvBloodGroup.setText("N/A");
+                                        pref.saveSBlood("N/A");
                                     }
 
                                     String PermanentAddress=obj.optString("PermanentAddress");
                                     if (!PermanentAddress.equals("")){
-                                        tvParAddr.setText(PermanentAddress);
+                                        pref.saveSParAdd(PermanentAddress);
                                     }else {
-                                        tvParAddr.setText("N/A");
+                                        pref.saveSParAdd("N/A");
                                     }
 
                                     String PresentAddress=obj.optString("PresentAddress");
                                     if (!PresentAddress.equals("")){
-                                        tvPreAddr.setText(PresentAddress);
+                                        pref.saveSPerAdd(PresentAddress);
                                     }else {
-                                        tvPreAddr.setText("N/A");
+                                        pref.saveSPerAdd("N/A");
                                     }
 
                                     String Mobile=obj.optString("Mobile");
                                     if (!Mobile.equals("")){
-                                        tvPhnNumber.setText(Mobile);
+                                        pref.saveSPhnNo(Mobile);
                                     }else {
-                                        tvPhnNumber.setText("N/A");
+                                        pref.saveSPhnNo("N/A");
                                     }
 
                                     String EmailID=obj.optString("EmailID");
                                     if (!EmailID.equals("")){
-                                        tvEmail.setText(EmailID);
+                                        pref.saveSEmail(EmailID);
                                     }else {
-                                        tvEmail.setText("N/A");
+                                        pref.saveSEmail("N/A");
                                     }
 
                                     String PFNumber=obj.optString("PFNumber");
                                     if (!PFNumber.equals("")){
-                                        tvPfNumber.setText(PFNumber);
+                                        pref.saveSPF(PFNumber);
                                     }else {
-                                        tvPfNumber.setText("N/A");
+                                        pref.saveSPF("N/A");
                                     }
 
                                     String ESINumber=obj.optString("ESINumber");
                                     if (!ESINumber.equals("")){
-                                        tvEsiNumber.setText(ESINumber);
+                                        pref.saveSESI(ESINumber);
                                     }
 
 
                                     String BankName=obj.optString("BankName");
                                     if (!BankName.equals("")){
-                                        tvBankName.setText(BankName);
+                                        pref.saveSBank(BankName);
                                     }
 
 
                                     String AccountNumber=obj.optString("AccountNumber");
                                     if (!AccountNumber.equals("")){
-                                        tvAcNumber.setText(AccountNumber);
+                                        pref.saveSAcc(AccountNumber);
                                     }else {
-                                        tvAcNumber.setText("N/A");
+                                        pref.saveSAcc("N/A");
                                     }
 
                                     String AadharCard=obj.optString("AadharCard");
                                     if (!AadharCard.equals("")){
-                                        tvAddharNumber.setText(AadharCard);
+                                        pref.saveSAadhar(AadharCard);
                                     }else {
-                                        tvAddharNumber.setText("N/A");
+                                        pref.saveSAadhar("N/A");
                                     }
 
                                     String UanNo=obj.optString("UanNo");
                                     if (!UanNo.equals("")){
-                                        tvUanNumber.setText(UanNo);
+                                        pref.saveSUAN(UanNo);
                                     }else {
-                                        tvUanNumber.setText("N/A");
+                                        pref.saveSUAN("N/A");
                                     }
                                 }
+
+                                loadOfficialFragment();
                             }
                             else {
 
@@ -447,7 +499,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progressBar.dismiss();
-                Toast.makeText(ProfileActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
+               // Toast.makeText(ProfileActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
                 Log.e("ert",error.toString());
             }
         }) {
