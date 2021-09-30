@@ -253,9 +253,9 @@ public class DashBoardActivity extends AppCompatActivity {
         Button btnSkip = (Button) dialogView.findViewById(R.id.btnSkip);
         if (responseStatus.equals("Y")) {
 
-            btnSkip.setVisibility(View.VISIBLE);
-        }else {
             btnSkip.setVisibility(View.GONE);
+        }else {
+            btnSkip.setVisibility(View.VISIBLE);
         }
 
         btnSkip.setOnClickListener(new View.OnClickListener() {
