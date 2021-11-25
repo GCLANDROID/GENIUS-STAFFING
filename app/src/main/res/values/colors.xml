@@ -3,7 +3,7 @@
     <color name="colorPrimary">#279616</color>
     <color name="colorPrimaryDark">#279616</color>
     <color name="colorAccent">#27D609</color>
-    <color name="textcolor">#279616</color>
+    <color name="textcolor">#4f8888</color>
     <color name="barcolor">#868789</color>
     <color name="backcolor">#587D2F</color>
     <color name="designcolor">#279616</color>
@@ -19,6 +19,8 @@
     <color name="familycolor">#f2738ea7</color>
     <color name="democolor">#F2CAC9C9</color>
     <color name="democolor1">#F2B61111</color>
+    <color name="grey">#F2454545</color>
     <color name="colorBlack">#F2000000</color>
+
 
 </resources>

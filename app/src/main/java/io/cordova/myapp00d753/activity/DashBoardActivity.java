@@ -25,6 +25,8 @@ import android.widget.Toast;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -38,24 +40,30 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import io.cordova.myapp00d753.R;
 
+import io.cordova.myapp00d753.adapter.DashboardItemAdapter;
+import io.cordova.myapp00d753.module.DashboardItemModel;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
 
 public class DashBoardActivity extends AppCompatActivity {
-    Button llSignIn;
+
     Pref pref;
-    LinearLayout llAbout, llServices, llContact, llBranches;
+
     NetworkConnectionCheck connectionCheck;
-    LinearLayout llAboutD, llAboutD1, llContactD, llContactD1, llServiceD, llServiceD1;
+
     String playversion;
     String version;
     AlertDialog alertDialog,al1,alert1,alert2;
     String responseStatus;
-    TextView tvCall;
+    RecyclerView rvItem;
+    ArrayList<DashboardItemModel> itemList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,16 +77,14 @@ public class DashBoardActivity extends AppCompatActivity {
     }
 
     private void initialize() {
+        rvItem=(RecyclerView)findViewById(R.id.rvItem);
+        rvItem.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         String security = "0000";
         String d = security.replace("\"", "");
         Log.d("de", security);
         pref = new Pref(DashBoardActivity.this);
 
-        llSignIn = (Button) findViewById(R.id.llSignIn);
-        llAbout = (LinearLayout) findViewById(R.id.llAbout);
-        llServices = (LinearLayout) findViewById(R.id.llServices);
-        llContact = (LinearLayout) findViewById(R.id.llContact);
-        llBranches = (LinearLayout) findViewById(R.id.llBranches);
+
         connectionCheck = new NetworkConnectionCheck(DashBoardActivity.this);
 
         try {
@@ -90,85 +96,15 @@ public class DashBoardActivity extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        tvCall=(TextView)findViewById(R.id.tvCall);
+
         checkBersion();
+        setItem();
 
 
     }
 
     private void onClick() {
-        tvCall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel: 18002582585"));
-                startActivity(intent);
-            }
-        });
 
-
-        llSignIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (version.equals(playversion)) {
-                    intentFunction();
-                } else {
-                    upDateAlert();
-                    Toast.makeText(DashBoardActivity.this, "please update your app", Toast.LENGTH_LONG).show();
-                }
-
-            }
-        });
-        llAbout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (connectionCheck.isNetworkAvailable()) {
-
-                    Intent intent = new Intent(DashBoardActivity.this, AboutUsActivity.class);
-                    startActivity(intent);
-                } else {
-                    connectionCheck.getNetworkActiveAlert().show();
-                }
-            }
-        });
-
-        llServices.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (connectionCheck.isNetworkAvailable()) {
-
-                    Intent intent = new Intent(DashBoardActivity.this, ServicesActivity.class);
-                    startActivity(intent);
-                } else {
-                    connectionCheck.getNetworkActiveAlert().show();
-                }
-            }
-        });
-
-        llContact.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (connectionCheck.isNetworkAvailable()) {
-
-                    Intent intent = new Intent(DashBoardActivity.this, ContactUsActivity.class);
-                    startActivity(intent);
-                } else {
-                    connectionCheck.getNetworkActiveAlert().show();
-                }
-            }
-        });
-
-        llBranches.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (connectionCheck.isNetworkAvailable()) {
-
-                    operBrowser();
-                } else {
-                    connectionCheck.getNetworkActiveAlert().show();
-                }
-            }
-        });
 
 
     }
@@ -363,6 +299,17 @@ public class DashBoardActivity extends AppCompatActivity {
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.TOP);
         alert2.show();
+    }
+
+    private void setItem(){
+        itemList.add(new DashboardItemModel("About Us",R.mipmap.aboutus));
+        itemList.add(new DashboardItemModel("Brochure",R.mipmap.brochure));
+        itemList.add(new DashboardItemModel("Services",R.mipmap.services));
+        itemList.add(new DashboardItemModel("Contact Us",R.mipmap.contactus));
+
+        DashboardItemAdapter dashboardItemAdapter=new DashboardItemAdapter(itemList,DashBoardActivity.this);
+        rvItem.setAdapter(dashboardItemAdapter);
+
     }
 
 
