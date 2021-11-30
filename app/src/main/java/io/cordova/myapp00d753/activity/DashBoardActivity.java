@@ -63,7 +63,7 @@ public class DashBoardActivity extends AppCompatActivity {
     String responseStatus;
     RecyclerView rvItem;
     ArrayList<DashboardItemModel> itemList = new ArrayList<>();
-
+    LinearLayout llLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +72,12 @@ public class DashBoardActivity extends AppCompatActivity {
 
 
         initialize();
-        PostCovidalerts();
+        //PostCovidalerts();
         onClick();
     }
 
     private void initialize() {
+        llLogin=(LinearLayout)findViewById(R.id.llLogin);
         rvItem=(RecyclerView)findViewById(R.id.rvItem);
         rvItem.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         String security = "0000";
@@ -105,7 +106,14 @@ public class DashBoardActivity extends AppCompatActivity {
 
     private void onClick() {
 
-
+       llLogin.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               if (pref.getIntentFlag().equals("1")){
+                   intentFunction();
+               }
+           }
+       });
 
     }
 
@@ -302,10 +310,11 @@ public class DashBoardActivity extends AppCompatActivity {
     }
 
     private void setItem(){
-        itemList.add(new DashboardItemModel("About Us",R.mipmap.aboutus));
-        itemList.add(new DashboardItemModel("Brochure",R.mipmap.brochure));
         itemList.add(new DashboardItemModel("Services",R.mipmap.services));
+        itemList.add(new DashboardItemModel("About Us",R.mipmap.aboutus));
         itemList.add(new DashboardItemModel("Contact Us",R.mipmap.contactus));
+        itemList.add(new DashboardItemModel("Brochure",R.mipmap.brochure));
+
 
         DashboardItemAdapter dashboardItemAdapter=new DashboardItemAdapter(itemList,DashBoardActivity.this);
         rvItem.setAdapter(dashboardItemAdapter);

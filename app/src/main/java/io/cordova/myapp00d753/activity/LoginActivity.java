@@ -158,7 +158,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (etUserId.getText().toString().length() > 0) {
                     if (etPassword.getText().toString().length() > 0) {
                         if (connectionCheck.isNetworkAvailable()) {
-
+//
                             loginFunction();
                             /*Intent intent=new Intent(LoginActivity.this,EmployeeDashBoardActivity.class);
                             startActivity(intent);*/

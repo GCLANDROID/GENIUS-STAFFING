@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".SplashScreenActivity"
     android:orientation="vertical"
-    android:background="@mipmap/splash"
+    android:background="@mipmap/splash_new"
     android:gravity="center">
 
 

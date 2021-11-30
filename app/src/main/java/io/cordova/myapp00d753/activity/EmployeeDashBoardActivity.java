@@ -984,6 +984,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 pref.saveEmpId("");
+                pref.saveIntentFlag("0");
                 deleteCache(getApplicationContext());
                 finish();
             }
