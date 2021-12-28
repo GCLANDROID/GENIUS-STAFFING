@@ -109,9 +109,11 @@ public class DashBoardActivity extends AppCompatActivity {
        llLogin.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               if (pref.getIntentFlag().equals("1")){
-                   intentFunction();
-               }
+
+               Intent intent = new Intent(DashBoardActivity.this, LoginActivity.class);
+               startActivity(intent);
+               finish();
+
            }
        });
 
@@ -234,9 +236,7 @@ public class DashBoardActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             } else {
-                Intent intent = new Intent(DashBoardActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
+
             }
         } else {
             Intent intent = new Intent(DashBoardActivity.this, LoginActivity.class);

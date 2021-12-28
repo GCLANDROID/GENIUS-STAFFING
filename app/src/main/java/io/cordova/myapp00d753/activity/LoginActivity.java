@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView tvSignIn;
     EditText etUserId, etPassword;
     String userId, password;
-    Button llSignIn;
+    LinearLayout llSignIn;
     NetworkConnectionCheck connectionCheck;
     AlertDialog alertDialog, al1, al2;
     Pref pref;
@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView tvForgotPass;
     AlertDialog alert1,popUp,alerDialog1;
     String security_code="0000";
-    LinearLayout llForgotPassword;
+    TextView llForgotPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initialize() {
-        llSignIn = (Button) findViewById(R.id.llSignIn);
+        llSignIn = (LinearLayout) findViewById(R.id.llSignIn);
 
         etUserId = (EditText) findViewById(R.id.etUserId);
         etPassword = (EditText) findViewById(R.id.etPassword);
@@ -123,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
         imgVisible = (ImageView) findViewById(R.id.imgVisible);
         imginVisible = (ImageView) findViewById(R.id.imginVisible);
         llLoader = (LinearLayout) findViewById(R.id.llLoader);
-        llForgotPassword = (LinearLayout) findViewById(R.id.llForgotPassword);
+        llForgotPassword = (TextView) findViewById(R.id.llForgotPassword);
 
 
 
@@ -173,12 +173,12 @@ public class LoginActivity extends AppCompatActivity {
 
 
                     } else {
-                        etPassword.setError("please enter your password");
+                        etPassword.setError("Please enter your Password");
                         etPassword.requestFocus();
                     }
 
                 } else {
-                    etUserId.setError("please enter your user id");
+                    etUserId.setError("Please enter your User ID");
                     etUserId.requestFocus();
                 }
 
@@ -238,14 +238,17 @@ public class LoginActivity extends AppCompatActivity {
         String surl = AppData.url+"get_GCLAuthenticateWithEncryption?MasterID=" + etUserId.getText().toString() + "&Password=" + base64 + "&IMEI=0000&Version=" + version + "&SecurityCode=" + etSecurityCode.getText().toString() + "&DeviceID=" + refreshedToken + "&DeviceType=A";
         Log.d("inputLogin", surl);
 
-        llSignIn.setVisibility(View.GONE);
-        llLoader.setVisibility(View.VISIBLE);
+        final ProgressDialog progressDialog=new ProgressDialog(LoginActivity.this);
+        progressDialog.setMessage("Loading..");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Log.d("responseLogin", response);
+                        progressDialog.dismiss();
 
                         try {
                             JSONObject job1 = new JSONObject(response);
@@ -345,7 +348,7 @@ public class LoginActivity extends AppCompatActivity {
                                     } else {
                                         //Toast.makeText(LoginActivity.this,"your actual id generated",Toast.LENGTH_LONG).show();
                                         showEmpDialog();
-                                        llLoader.setVisibility(View.GONE);
+
                                     }
                                 } else if (UserType.equals("3")) {
                                     Intent intent = new Intent(LoginActivity.this, HRMSDashBoardActivity.class);
@@ -354,12 +357,10 @@ public class LoginActivity extends AppCompatActivity {
                                     finish();
                                 }
 
-                                llSignIn.setVisibility(View.GONE);
-                                llLoader.setVisibility(View.VISIBLE);
+
                             } else {
                                 shoeDialog();
-                                llSignIn.setVisibility(View.VISIBLE);
-                                llLoader.setVisibility(View.GONE);
+
 
                             }
 
@@ -375,8 +376,7 @@ public class LoginActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                llSignIn.setVisibility(View.VISIBLE);
-                llLoader.setVisibility(View.GONE);
+               progressDialog.dismiss();
               //  Toast.makeText(LoginActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
                 showInternetDialog();
 

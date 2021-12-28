@@ -1,0 +1,90 @@
+package io.cordova.myapp00d753.module;
+
+public class Question1Model {
+    String question,questionid,answervalue;
+    private boolean isSelected = false;
+    String op1,op2,op3,op4,op5;
+
+    public Question1Model(String question, String questionid,String op1,String op2,String op3,String op4,String op5) {
+        this.question = question;
+        this.questionid = questionid;
+        this.op1=op1;
+        this.op2=op2;
+        this.op3=op3;
+        this.op4=op4;
+        this.op5=op5;
+    }
+
+    public String getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(String question) {
+        this.question = question;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+    public String getQuestionid() {
+        return questionid;
+    }
+
+    public void setQuestionid(String questionid) {
+        this.questionid = questionid;
+    }
+
+
+    public String getAnswervalue() {
+        return answervalue;
+    }
+
+    public void setAnswervalue(String answervalue) {
+        this.answervalue = answervalue;
+    }
+
+    public String getOp1() {
+        return op1;
+    }
+
+    public void setOp1(String op1) {
+        this.op1 = op1;
+    }
+
+    public String getOp2() {
+        return op2;
+    }
+
+    public void setOp2(String op2) {
+        this.op2 = op2;
+    }
+
+    public String getOp3() {
+        return op3;
+    }
+
+    public void setOp3(String op3) {
+        this.op3 = op3;
+    }
+
+    public String getOp4() {
+        return op4;
+    }
+
+    public void setOp4(String op4) {
+        this.op4 = op4;
+    }
+
+    public String getOp5() {
+        return op5;
+    }
+
+    public void setOp5(String op5) {
+        this.op5 = op5;
+    }
+}

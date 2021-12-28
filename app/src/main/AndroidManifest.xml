@@ -58,6 +58,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.FeedBackRatingActivity"
+            android:screenOrientation="userPortrait"></activity>
         <activity
             android:name=".activity.AboutUsActivity"
             android:screenOrientation="userPortrait" />
