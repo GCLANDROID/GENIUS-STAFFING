@@ -85,7 +85,7 @@
                     <ImageView
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:src="@drawable/serviceicon"></ImageView>
+                        android:src="@drawable/manage"></ImageView>
                 </LinearLayout>
                 <TextView
                     android:layout_width="wrap_content"
@@ -188,7 +188,7 @@
                     <ImageView
                         android:layout_width="@dimen/imagesize"
                         android:layout_height="@dimen/imagesize"
-                        android:src="@drawable/serviceicon"/>
+                        android:src="@drawable/manage"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -212,7 +212,7 @@
                     <ImageView
                         android:layout_width="@dimen/imagesize"
                         android:layout_height="@dimen/imagesize"
-                        android:src="@drawable/attenreporticon"/>
+                        android:src="@drawable/report"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -244,7 +244,7 @@
                     <ImageView
                         android:layout_width="@dimen/imagesize"
                         android:layout_height="@dimen/imagesize"
-                        android:src="@drawable/backattenicon"/>
+                        android:src="@drawable/backdate_attendance"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -267,7 +267,7 @@
                     <ImageView
                         android:layout_width="@dimen/imagesize"
                         android:layout_height="@dimen/imagesize"
-                        android:src="@drawable/attenonleaveicon"/>
+                        android:src="@drawable/on_leave"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -340,7 +340,7 @@
                     <ImageView
                         android:layout_width="@dimen/imagesize"
                         android:layout_height="@dimen/imagesize"
-                        android:src="@drawable/weeklyofficon"/>
+                        android:src="@drawable/weekly_off"/>
 
                 <TextView
                     android:layout_width="wrap_content"
