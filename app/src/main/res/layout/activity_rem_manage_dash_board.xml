@@ -108,7 +108,7 @@
                     <ImageView
                         android:layout_width="@dimen/imagesize"
                         android:layout_height="@dimen/imagesize"
-                        android:src="@drawable/newclamicon"/>
+                        android:src="@drawable/manage"/>
                 </LinearLayout>
 
 
@@ -139,7 +139,7 @@
                     <ImageView
                         android:layout_width="@dimen/imagesize"
                         android:layout_height="@dimen/imagesize"
-                        android:src="@drawable/deleteicon"/>
+                        android:src="@drawable/delete"/>
                 </LinearLayout>
 
 

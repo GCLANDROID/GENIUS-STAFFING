@@ -453,6 +453,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         Log.d("responseLogin", response);
                         pd.dismiss();
+                        itemList.clear();
                         try {
                             JSONObject job1 = new JSONObject(response);
                             Log.e("response12", "@@@@@@" + job1);

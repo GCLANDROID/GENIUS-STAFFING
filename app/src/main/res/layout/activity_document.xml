@@ -86,7 +86,7 @@
                     <ImageView
                         android:layout_width="@dimen/imagesize"
                         android:layout_height="@dimen/imagesize"
-                        android:src="@drawable/serviceicon"/>
+                        android:src="@drawable/manage"/>
                 </LinearLayout>
 
                 <TextView
@@ -115,7 +115,7 @@
                     <ImageView
                         android:layout_width="@dimen/imagesize"
                         android:layout_height="@dimen/imagesize"
-                        android:src="@drawable/attenreporticon"/>
+                        android:src="@drawable/report"/>
                 </LinearLayout>
 
                 <TextView

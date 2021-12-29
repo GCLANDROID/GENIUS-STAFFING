@@ -25,6 +25,7 @@ import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.AttendanceActivity;
 import io.cordova.myapp00d753.activity.ChangePasswordActivity;
 import io.cordova.myapp00d753.activity.DailyDashBoardActivity;
+import io.cordova.myapp00d753.activity.DocumentActivity;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.activity.FeedBackRatingActivity;
 import io.cordova.myapp00d753.activity.GeoFenceActivity;
@@ -129,7 +130,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                 }
                 else if (itemList.get(i).getMenuId().equalsIgnoreCase("6")){
                     //document
-                    Intent intent=new Intent(mContex, KYCDashBoardActivity.class);
+                    Intent intent=new Intent(mContex, DocumentActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
                 }
