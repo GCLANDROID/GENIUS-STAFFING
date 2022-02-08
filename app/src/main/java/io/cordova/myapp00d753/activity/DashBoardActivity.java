@@ -139,6 +139,11 @@ public class DashBoardActivity extends AppCompatActivity {
                             JSONObject onj=job.optJSONObject(0);
                             playversion = onj.optString("Version");
                             responseStatus = job1.optString("Mandatory");
+                            if (playversion.equals(version)){
+
+                            }else {
+                                upDateAlert();
+                            }
 
                             // boolean _status = job1.getBoolean("status")
 

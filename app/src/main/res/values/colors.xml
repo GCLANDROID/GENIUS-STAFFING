@@ -21,6 +21,7 @@
     <color name="democolor1">#F2B61111</color>
     <color name="grey">#F2454545</color>
     <color name="colorBlack">#F2000000</color>
+    <color name="transparent">#00000000</color>
 
 
 </resources>

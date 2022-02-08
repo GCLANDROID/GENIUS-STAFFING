@@ -121,7 +121,7 @@ public class ServicesActivity extends AppCompatActivity {
                                 for (int i = 1; i < responseData.length(); i++){
                                     JSONObject obj=responseData.getJSONObject(i);
                                     String MenuName=obj.optString("MenuName");
-                                    String Description=obj.optString("Description").replaceAll("<br/>","").replaceAll("<b>","").replaceAll("</b>","");
+                                    String Description=obj.optString("Description").replaceAll("<br/>","\n").replaceAll("<b>","").replaceAll("</b>","");
                                     MenuModule menuModule=new MenuModule(MenuName,Description,false);
                                     menuList.add(menuModule);
 
