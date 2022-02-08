@@ -4,9 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/transparent">
 
-    <androidx.cardview.widget.CardView
+    <!--<androidx.cardview.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -71,7 +72,7 @@
                         android:layout_weight="0.5">
 
                         <TextView
-                            android:id="@+id/tvInTime"
+
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:text="5 Units"
@@ -223,7 +224,175 @@
 
             </LinearLayout>
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/lldesign"
+            android:backgroundTint="@color/textcolor"
+            android:padding="8dp">
+            <LinearLayout
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/lldesign"
+                android:paddingTop="30dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:textStyle="bold"
+                            android:fontFamily="serif"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:textColor="@color/grey"
+                            android:text="In Time"></TextView>
+                        <TextView
+                            android:layout_marginTop="5dp"
+                            android:id="@+id/tvInTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:textColor="@color/black"
+                            android:text="In Time"></TextView>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:textStyle="bold"
+                            android:fontFamily="serif"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:textColor="@color/grey"
+                            android:text="Our Time"></TextView>
+                        <TextView
+                            android:layout_marginTop="5dp"
+                            android:id="@+id/tvOutTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:textColor="@color/black"
+                            android:text="In Time"></TextView>
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:textStyle="bold"
+                            android:fontFamily="serif"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:textColor="@color/grey"
+                            android:text="Type"></TextView>
+                        <TextView
+                            android:layout_marginTop="5dp"
+                            android:id="@+id/tvType"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:textColor="@color/black"
+                            android:text="In Time"></TextView>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:textStyle="bold"
+                            android:fontFamily="serif"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:textColor="@color/grey"
+                            android:text="Approval Status"></TextView>
+                        <TextView
+                            android:layout_marginTop="5dp"
+                            android:id="@+id/tvStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:textColor="@color/black"
+                            android:text="In Time"></TextView>
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:textStyle="bold"
+                            android:fontFamily="serif"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:textColor="@color/grey"
+                            android:text="Location"></TextView>
+                        <TextView
+                            android:layout_marginTop="5dp"
+                            android:id="@+id/tvLocation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:textColor="@color/black"
+                            android:text="In Time"></TextView>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center">
+            <LinearLayout
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:background="@drawable/lldesign"
+                android:backgroundTint="@color/color1"
+                android:gravity="center">
+                <TextView
+                    android:id="@+id/tvDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/white"></TextView>
+            </LinearLayout>
+
+        </LinearLayout>
+    </FrameLayout>
+
 
 
 
