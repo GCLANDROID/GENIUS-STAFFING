@@ -234,7 +234,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
         if (pref.getFlagLocation().equals("P")) {
             llLocation.setVisibility(View.VISIBLE);
         } else {
-            llLocation.setVisibility(View.GONE);
+            llLocation.setVisibility(View.VISIBLE);
         }
         if (connectionCheck.isGPSEnabled()) {
 

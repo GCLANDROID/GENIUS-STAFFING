@@ -8,8 +8,8 @@ android {
         applicationId "io.cordova.myapp00d753"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 63
-        versionName "53.5"
+        versionCode 64
+        versionName "53.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
