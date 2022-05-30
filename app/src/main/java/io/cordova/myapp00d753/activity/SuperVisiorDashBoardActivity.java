@@ -123,17 +123,11 @@ public class SuperVisiorDashBoardActivity extends AppCompatActivity {
 
             } else if (s1.equals("5")) {
                 llPf.setVisibility(View.GONE);
-
-
-
-
             } else if (s1.equals("6")) {
                 llFeedBack.setVisibility(View.GONE);
             } else if (s1.equals("7")) {
                 llNotification.setVisibility(View.GONE);
             } else if (s1.equals("8")) {
-
-
 
             } else if (s1.equals("10")) {
                 llDocument.setVisibility(View.GONE);

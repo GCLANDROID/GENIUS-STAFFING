@@ -118,6 +118,7 @@ public class AllIndiaSaleReportActivity extends AppCompatActivity {
         llL=(LinearLayout)findViewById(R.id.llL);
         llL.setVisibility(View.GONE);
 
+
        // getItemList();
 
 

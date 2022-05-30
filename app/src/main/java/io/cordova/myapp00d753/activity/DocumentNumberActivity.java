@@ -186,7 +186,7 @@ public class DocumentNumberActivity extends AppCompatActivity {
     }
 
     private void getDocInfoList() {
-        String surl = "http://111.93.182.174/GeniusiOSApi/api//gcl_EmployeeDigitalDocumentUploadInfo?AEMEmployeeID="+pref.getEmpId()+"&SecurityCode=0000"+pref.getSecurityCode();
+        String surl = "http://111.93.182.174/GeniusiOSApi/api//gcl_EmployeeDigitalDocumentUploadInfo?AEMEmployeeID="+pref.getEmpId()+"&SecurityCode="+pref.getSecurityCode();
         Log.d("manageinput",surl);
         pg.show();
 

@@ -207,11 +207,11 @@ public class AttendanceReportActivity extends AppCompatActivity {
                                     String AttendanceInDateTime=obj.optString("AttendanceInTime");
                                     String AttendanceOutDateTime=obj.optString("AttendanceOutTime");
                                     String Address=obj.optString("Address");
-                                     AttendanceID=obj.optString("AttendanceID");
+                                    AttendanceID=obj.optString("AttendanceID");
                                     String ApproverStatus=obj.optString("ApproverStatus");
                                     String AttendanceType=obj.optString("AttendanceType");
                                     AttendanceModule obj2 = new AttendanceModule(AttendanceDate,AttendanceInDateTime,AttendanceOutDateTime,Address,ApproverStatus,AttendanceType);
-                                     attendabceInfiList.add(obj2);
+                                    attendabceInfiList.add(obj2);
 
 
                                 }

@@ -29,6 +29,8 @@
         android:theme="@style/AppTheme"
         android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true">
+        <activity android:name=".activity.VoiceAssistantActivity"
+            android:screenOrientation="userPortrait"></activity>
         <activity android:name=".activity.SPRDashboardActivity"></activity>
         <activity android:name=".activity.SupSaleDialog1Activity" />
         <activity android:name=".activity.CounterVisitReportActivity" />
@@ -42,6 +44,8 @@
         <activity android:name=".activity.SupEmpSaleActivity" />
         <activity android:name=".activity.PFDashBoardActivity" />
         <activity android:name=".activity.DocumentNumberActivity" />
+        <activity android:name=".activity.LeaveApplicationActivity"
+            android:screenOrientation="userPortrait"></activity>
 
         <activity
             android:name=".activity.OffAttenDanceActivity"

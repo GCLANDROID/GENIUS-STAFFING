@@ -463,7 +463,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                             if (responseStatus) {
                                 // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
 
-
+                                 itemList.add(new MenuItemModel("Voice Assistant","0"));
                                 JSONArray responseData = job1.optJSONArray("responseData");
                                 for (int i = 0; i < responseData.length(); i++) {
                                     JSONObject obj = responseData.getJSONObject(i);

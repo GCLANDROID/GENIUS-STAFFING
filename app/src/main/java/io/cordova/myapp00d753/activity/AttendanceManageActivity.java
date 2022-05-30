@@ -173,7 +173,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
         // locationalerts();
         initialize();
         setUpMapIfNeeded();
-        attendanceCheck();
+       // attendanceCheck();
         onClick();
     }
 

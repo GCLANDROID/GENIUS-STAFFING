@@ -30,10 +30,12 @@ import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.activity.FeedBackRatingActivity;
 import io.cordova.myapp00d753.activity.GeoFenceActivity;
 import io.cordova.myapp00d753.activity.KYCDashBoardActivity;
+import io.cordova.myapp00d753.activity.LeaveApplicationActivity;
 import io.cordova.myapp00d753.activity.PayrollActivity;
 import io.cordova.myapp00d753.activity.ProfileActivity;
 import io.cordova.myapp00d753.activity.RemDashBoardActivity;
 import io.cordova.myapp00d753.activity.SalesManagementDashboardActivity;
+import io.cordova.myapp00d753.activity.VoiceAssistantActivity;
 import io.cordova.myapp00d753.module.MenuItemModel;
 
 public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyViewHolder> {
@@ -86,8 +88,12 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
         }
         else if (itemList.get(i).getMenuId().equalsIgnoreCase("11")){
             myViewHolder.imgMenu.setImageResource(R.drawable.chage_password);
+        }else if (itemList.get(i).getMenuId().equalsIgnoreCase("12")){
+            myViewHolder.imgMenu.setImageResource(R.drawable.leave_management);
+        }else if (itemList.get(i).getMenuId().equalsIgnoreCase("0")){
+            myViewHolder.imgMenu.setImageResource(R.drawable.voice);
         }else {
-            myViewHolder.lnMain.setVisibility(View.GONE);
+            myViewHolder.itemView.setVisibility(View.GONE);
         }
 
 
@@ -165,6 +171,18 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                     Intent intent=new Intent(mContex, ChangePasswordActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
+                }   else if (itemList.get(i).getMenuId().equalsIgnoreCase("0")){
+                    //Chanepassword
+                    Intent intent=new Intent(mContex, VoiceAssistantActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContex.startActivity(intent);
+                }
+
+                else if (itemList.get(i).getMenuId().equalsIgnoreCase("12")){
+                    //leave
+                    Intent intent=new Intent(mContex, LeaveApplicationActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContex.startActivity(intent);
                 }
 
             }
@@ -210,4 +228,6 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
         this.itemList = filterdNames;
         notifyDataSetChanged();
     }
+
+
 }

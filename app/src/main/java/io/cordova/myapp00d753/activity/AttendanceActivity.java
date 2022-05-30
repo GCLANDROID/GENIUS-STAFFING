@@ -232,7 +232,15 @@ public class AttendanceActivity extends AppCompatActivity implements GoogleApiCl
                                startActivity(intent);
                            }
                        } else {
-                           atteAlert();
+                           if (pref.getEmpClintId().equalsIgnoreCase("AEMCLI2210001702")){
+                               Intent intent = new Intent(AttendanceActivity.this, AttendanceManageActivity.class);
+                               intent.putExtra("intt","2");
+                               intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                               startActivity(intent);
+                           }else {
+                               atteAlert();
+                           }
+
 
                        }
 
