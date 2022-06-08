@@ -41,7 +41,9 @@ import java.util.Locale;
 import java.util.Objects;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.adapter.DocumentAdapter;
 import io.cordova.myapp00d753.adapter.SalaryAdapter;
+import io.cordova.myapp00d753.module.DocumentManageModule;
 import io.cordova.myapp00d753.module.SalaryModule;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
@@ -67,7 +69,7 @@ public class VoiceAssistantActivity extends AppCompatActivity {
     String year;
     ImageView imgBack,imgHome;
     ArrayList<SalaryModule>salaryList=new ArrayList<>();
-
+    ArrayList<DocumentManageModule> documentList = new ArrayList<>();
 
 
 
@@ -201,6 +203,9 @@ public class VoiceAssistantActivity extends AppCompatActivity {
                 }else if (text.contains("pf") || text.contains("pf balance")){
                     t1.speak("Here is your PF balance", TextToSpeech.QUEUE_FLUSH, null);
                     getPFURL();
+                }else if (text.contains("document") || text.contains("kyc")){
+                    t1.speak("Here is your submitted document", TextToSpeech.QUEUE_FLUSH, null);
+                    getDocList();
                 }
                 else {
                     t1.speak("Sorry! I don't have any training regarding this", TextToSpeech.QUEUE_FLUSH, null);
@@ -488,7 +493,95 @@ public class VoiceAssistantActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);
     }
+    private void getDocList() {
+        String surl = AppData.url+"gcl_DigitalDocument?AEMEmployeeID=" + pref.getEmpId() + "&FileName=null&FileType=0&DocumentID=0&ReferenceNo=0&DbOperation=1&SecurityCode=" + pref.getSecurityCode();
+        Log.d("manageinput",surl);
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(VoiceAssistantActivity.this, LinearLayoutManager.VERTICAL, false);
+        rvSalary.setLayoutManager(layoutManager);
 
+        ProgressDialog pd=new ProgressDialog(VoiceAssistantActivity.this);
+        pd.setMessage("Loading..");
+        pd.setCancelable(false);
+        pd.show();
+        llVoice.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.GONE);
+        llNodata.setVisibility(View.GONE);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("responseLogin", response);
+                        pd.dismiss();
+
+
+                        try {
+                            JSONObject job1 = new JSONObject(response);
+                            Log.e("responsedocumentreport", "@@@@@@" + job1);
+                            String responseText = job1.optString("responseText");
+                            boolean responseStatus = job1.optBoolean("responseStatus");
+                            if (responseStatus) {
+                                //    Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
+                                JSONArray responseData = job1.optJSONArray("responseData");
+                                for (int i = 0; i < responseData.length(); i++) {
+                                    JSONObject obj = responseData.getJSONObject(i);
+                                    String DocumentName = obj.optString("DocumentName");
+                                    String DocumentType = obj.optString("DocumentType");
+                                    String AEMStatusName = obj.optString("AEMStatusName");
+                                    String CreatedOn = obj.optString("CreatedOn");
+                                    String ApprovalRemarks = obj.optString("ApprovalRemarks");
+                                    String DocLink = obj.optString("DocLink");
+                                    DocumentManageModule dmodule = new DocumentManageModule(DocumentName, DocumentType, ApprovalRemarks, CreatedOn, AEMStatusName, DocLink);
+                                    documentList.add(dmodule);
+
+
+                                }
+
+
+                                llVoice.setVisibility(View.GONE);
+                                llMain.setVisibility(View.VISIBLE);
+                                llNodata.setVisibility(View.GONE);
+                                DocumentAdapter  documentAdapter = new DocumentAdapter(documentList,VoiceAssistantActivity.this);
+                                rvSalary.setAdapter(documentAdapter);
+
+
+                            } else {
+                                llVoice.setVisibility(View.GONE);
+                                llMain.setVisibility(View.GONE);
+                                llNodata.setVisibility(View.VISIBLE);
+
+                            }
+
+                            // boolean _status = job1.getBoolean("status");
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+
+                            // Toast.makeText(DocumentReportActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                pd.dismiss();
+                llVoice.setVisibility(View.VISIBLE);
+                llMain.setVisibility(View.GONE);
+                llNodata.setVisibility(View.GONE);
+
+                //  Toast.makeText(DocumentReportActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
+
+                Log.e("ert", error.toString());
+            }
+        }) {
+
+        };
+        AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
+
+
+    }
 
 
 

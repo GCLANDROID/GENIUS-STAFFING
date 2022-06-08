@@ -35,7 +35,7 @@ import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.RecyclerItemClickListener;
 
-public class DocumentReportActivity extends AppCompatActivity implements RecyclerItemClickListener.OnItemClickListener {
+public class DocumentReportActivity extends AppCompatActivity  {
     RecyclerView rvDocument;
     ArrayList<DocumentManageModule> documentList = new ArrayList<>();
     DocumentAdapter documentAdapter;
@@ -72,7 +72,6 @@ public class DocumentReportActivity extends AppCompatActivity implements Recycle
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(DocumentReportActivity.this, LinearLayoutManager.VERTICAL, false);
         rvDocument.setLayoutManager(layoutManager);
-        rvDocument.addOnItemTouchListener(new RecyclerItemClickListener(DocumentReportActivity.this, DocumentReportActivity.this));
         llLoader = (LinearLayout) findViewById(R.id.llLoader);
         llMain = (LinearLayout) findViewById(R.id.llMain);
         imgBack = (ImageView) findViewById(R.id.imgBack);
@@ -174,7 +173,7 @@ public class DocumentReportActivity extends AppCompatActivity implements Recycle
                                 llMain.setVisibility(View.VISIBLE);
                                 llNoadata.setVisibility(View.GONE);
                                 llAgain.setVisibility(View.GONE);
-                                documentAdapter = new DocumentAdapter(documentList);
+                                documentAdapter = new DocumentAdapter(documentList,DocumentReportActivity.this);
                                 rvDocument.setAdapter(documentAdapter);
 
 
@@ -259,7 +258,7 @@ public class DocumentReportActivity extends AppCompatActivity implements Recycle
                                 llMain.setVisibility(View.VISIBLE);
                                 llNoadata.setVisibility(View.GONE);
                                 llAgain.setVisibility(View.GONE);
-                                documentAdapter = new DocumentAdapter(documentList);
+                                documentAdapter = new DocumentAdapter(documentList,DocumentReportActivity.this);
                                 rvDocument.setAdapter(documentAdapter);
 
 
@@ -342,7 +341,7 @@ public class DocumentReportActivity extends AppCompatActivity implements Recycle
                                 llMain.setVisibility(View.VISIBLE);
                                 llNoadata.setVisibility(View.GONE);
                                 llAgain.setVisibility(View.GONE);
-                                documentAdapter = new DocumentAdapter(documentList);
+                                documentAdapter = new DocumentAdapter(documentList,DocumentReportActivity.this);
                                 rvDocument.setAdapter(documentAdapter);
 
 
@@ -384,25 +383,5 @@ public class DocumentReportActivity extends AppCompatActivity implements Recycle
 
     }
 
-    @Override
-    public void onItemClick(View childView, int position) {
-        dLink = documentList.get(position).getDocLink();
-        operBrowser();
 
-    }
-
-    @Override
-    public void onItemLongPress(View childView, int position) {
-
-    }
-
-    private void operBrowser() {
-        Uri uri = Uri.parse(dLink); // missing 'http://' will cause crashed
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        if (!dLink.equals("") && dLink != null) {
-            startActivity(intent);
-        } else {
-
-        }
-    }
 }

@@ -1,6 +1,9 @@
 package io.cordova.myapp00d753.adapter;
 
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +20,7 @@ import io.cordova.myapp00d753.module.DocumentManageModule;
 
 public class DocumentAdapter extends RecyclerView.Adapter<DocumentAdapter.MyViewHolder> {
     ArrayList<DocumentManageModule>documentList=new ArrayList<>();
+    Context context;
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -32,6 +36,18 @@ public class DocumentAdapter extends RecyclerView.Adapter<DocumentAdapter.MyView
         myViewHolder.tvCreatedOn.setText(documentList.get(i).getCreatedOn());
         myViewHolder.tvAEMStatusName.setText(documentList.get(i).getaEMStatusName());
 
+        myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse(documentList.get(i).getDocLink()); // missing 'http://' will cause crashed
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                if (!documentList.get(i).getDocLink().equals("") && documentList.get(i).getDocLink() != null) {
+                    context.startActivity(intent);
+                } else {
+
+                }
+            }
+        });
 
     }
 
@@ -53,7 +69,8 @@ public class DocumentAdapter extends RecyclerView.Adapter<DocumentAdapter.MyView
         }
     }
 
-    public DocumentAdapter(ArrayList<DocumentManageModule> documentList) {
+    public DocumentAdapter(ArrayList<DocumentManageModule> documentList, Context context) {
         this.documentList = documentList;
+        this.context = context;
     }
 }
