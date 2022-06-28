@@ -215,7 +215,7 @@ public class AttenApprovalActivity extends AppCompatActivity {
         llNodata.setVisibility(View.GONE);
         llAgain.setVisibility(View.GONE);
 
-        String surl = AppData.url+"get_GCLSelfAttendanceWoLeave?AEMConsultantID=" + pref.getEmpConId() + "&AEMClientID=" + pref.getEmpClintId() + "&AEMClientOfficeID=" + pref.getEmpClintOffId() + "&AEMEmployeeID=" + pref.getEmpId() + "&CurrentPage=" + mPageCount + "&AID=0&ApproverStatus=0&YearVal=" + year + "&MonthName=" + month + "&WorkingStatus=1&SecurityCode="+pref.getSecurityCode()+"&DbOperation=8&AttIds=null";
+        String surl = AppData.url+"get_GCLSelfAttendanceWoLeave?AEMConsultantID=" + pref.getEmpConId() + "&AEMClientID=" + pref.getEmpClintId() + "&AEMClientOfficeID=" + pref.getEmpClintOffId() + "&AEMEmployeeID=" + pref.getEmpId() + "&CurrentPage=0&AID=0&ApproverStatus=0&YearVal=" + year + "&MonthName=" + month + "&WorkingStatus=1&SecurityCode="+pref.getSecurityCode()+"&DbOperation=8&AttIds=null";
         Log.d("input", surl);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
@@ -224,7 +224,7 @@ public class AttenApprovalActivity extends AppCompatActivity {
                      //   attendabceInfiList.clear();
 
                         Log.d("responseAttendance", response);
-                        loading = false;
+
                         // attendabceInfiList.clear();
 
                         try {

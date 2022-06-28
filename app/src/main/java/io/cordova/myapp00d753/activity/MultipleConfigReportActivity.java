@@ -66,7 +66,7 @@ public class MultipleConfigReportActivity extends AppCompatActivity {
     }
 
     private void fenceget() {
-        String surl = "https://www.cloud.geniusconsultant.com/GHRMSApi/api/get_GeofenceMultiEndPointConfiguration?LocationId=0&Operation=1&SecurityCode="+pref.getSecurityCode();
+        String surl = "https://cloud.geniusconsultant.com/GHRMSApi/api/get_GeofenceMultiEndPointConfiguration?LocationId=0&Operation=1&SecurityCode="+pref.getSecurityCode();
         Log.d("configurl", surl);
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);

@@ -1273,7 +1273,7 @@ public class SalesManageActivity extends AppCompatActivity {
 
     private void pincodecheck(final String pincode) {
         Log.d("hitr", "6");
-        String surl = "https://www.cloud.geniusconsultant.com/GeniusPinCodeApi/api/PinCode?id=" + pincode;
+        String surl = "https://cloud.geniusconsultant.com/GeniusPinCodeApi/api/PinCode?id=" + pincode;
         final ProgressDialog progressBar = new ProgressDialog(this);
         progressBar.setCancelable(true);//you can cancel it by pressing back button
         progressBar.setMessage("Loading...");
@@ -1337,7 +1337,7 @@ public class SalesManageActivity extends AppCompatActivity {
 
     private void setArea(String pincode) {
         Log.d("hhjjk", "kkkk");
-        String surl = "https://www.cloud.geniusconsultant.com/GeniusPinCodeApi/api/PinCode?id=" + pincode;
+        String surl = "https://cloud.geniusconsultant.com/GeniusPinCodeApi/api/PinCode?id=" + pincode;
         final ProgressDialog progressBar = new ProgressDialog(this);
         progressBar.setCancelable(true);//you can cancel it by pressing back button
         progressBar.setMessage("Loading...");

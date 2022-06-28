@@ -104,7 +104,7 @@ public class FenceNumberActivity extends AppCompatActivity {
 
     private void fenceget() {
         if (point.equals("mul")){
-            surl = "https://www.cloud.geniusconsultant.com/GHRMSApi/api/get_GeofenceMultiEndPointConfiguration?LocationId=0&Operation=2&SecurityCode=" + pref.getSecurityCode();
+            surl = "https://cloud.geniusconsultant.com/GHRMSApi/api/get_GeofenceMultiEndPointConfiguration?LocationId=0&Operation=2&SecurityCode=" + pref.getSecurityCode();
 
         }else {
             surl = AppData.url+"get_GeofenceConfiguration?SLongitude=0&SLatitude=0&SAddress=0&ELongitude=0&ELatitude=0&EAddress=0&EndPoint=0&LocationName=0&Operation=2&SecurityCode=" + pref.getSecurityCode();
