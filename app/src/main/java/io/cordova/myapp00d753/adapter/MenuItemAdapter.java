@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.AttenDanceDashboardActivity;
 import io.cordova.myapp00d753.activity.AttendanceActivity;
 import io.cordova.myapp00d753.activity.ChangePasswordActivity;
 import io.cordova.myapp00d753.activity.DailyDashBoardActivity;
@@ -108,7 +109,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                 }else if (itemList.get(i).getMenuId().equalsIgnoreCase("2")){
                     //Attendnace
 
-                        Intent intent = new Intent(mContex, AttendanceActivity.class);
+                        Intent intent = new Intent(mContex, AttenDanceDashboardActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         mContex.startActivity(intent);
 

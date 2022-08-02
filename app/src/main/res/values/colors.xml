@@ -12,7 +12,7 @@
     <color name="maincolor">#4f8888</color>
     <color name="bar1">#dadbdc</color>
     <color name="color1">#f21a7cc2</color>
-    <color name="nessecarycolor">#f2edde08</color>
+    <color name="nessecarycolor">#F2E7E300</color>
     <color name="contactcolor">#f29b9105</color>
     <color name="misscolor">#f2413d03</color>
     <color name="doccolor">#f20758a4</color>
@@ -22,6 +22,7 @@
     <color name="grey">#F2454545</color>
     <color name="colorBlack">#F2000000</color>
     <color name="transparent">#00000000</color>
+    <color name="green">#F202B32E</color>
 
 
 </resources>

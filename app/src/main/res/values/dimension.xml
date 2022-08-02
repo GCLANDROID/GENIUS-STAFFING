@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="toolbartextsize">12sp</dimen>
+    <dimen name="toolbartextsize">14sp</dimen>
     <dimen name="imagesize">40dp</dimen>
     <dimen name="toolbarimgsize">30dp</dimen>
     <dimen name="layout_margin_left_right">5dp</dimen>

@@ -24,14 +24,18 @@
         android:hardwareAccelerated="true"
         android:icon="@drawable/gelogo"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.VoiceAssistantActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.SPRDashboardActivity"></activity>
+        <activity
+            android:name=".activity.AttenDanceDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.VoiceAssistantActivity"
+            android:screenOrientation="userPortrait" />
+        <activity android:name=".activity.SPRDashboardActivity" />
         <activity android:name=".activity.SupSaleDialog1Activity" />
         <activity android:name=".activity.CounterVisitReportActivity" />
         <activity android:name=".activity.CounterVisitDashboardActivity" />
@@ -44,9 +48,9 @@
         <activity android:name=".activity.SupEmpSaleActivity" />
         <activity android:name=".activity.PFDashBoardActivity" />
         <activity android:name=".activity.DocumentNumberActivity" />
-        <activity android:name=".activity.LeaveApplicationActivity"
-            android:screenOrientation="userPortrait"></activity>
-
+        <activity
+            android:name=".activity.LeaveApplicationActivity"
+            android:screenOrientation="userPortrait" />
         <activity
             android:name=".activity.OffAttenDanceActivity"
             android:screenOrientation="userPortrait" />
@@ -62,15 +66,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.FeedBackRatingActivity"
-            android:screenOrientation="userPortrait"></activity>
+        <activity
+            android:name=".activity.FeedBackRatingActivity"
+            android:screenOrientation="userPortrait" />
         <activity
             android:name=".activity.AboutUsActivity"
             android:screenOrientation="userPortrait" />
         <activity
             android:name=".activity.AttenApprovalActivity"
             android:screenOrientation="userPortrait" />
-
         <activity
             android:name=".activity.AttendanceActivity"
             android:screenOrientation="userPortrait" />
@@ -107,7 +111,7 @@
         <activity
             android:name=".activity.LoginActivity"
             android:screenOrientation="userPortrait"
-            android:windowSoftInputMode="adjustResize|stateHidden"/>
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".activity.NotificationActivity"
             android:screenOrientation="userPortrait" />
@@ -358,15 +362,14 @@
         <activity android:name=".activity.SupEmpVistActivity" />
         <activity android:name=".activity.SupSaleDialogActivity" />
         <activity android:name=".activity.ZoneSaleReportActivity" />
-        <activity android:name=".activity.BranchSaleReportActivity"></activity>
-        <activity android:name=".activity.TopPerformerActivity"></activity>
-        <activity android:name=".activity.CustomerReportActivity"></activity>
-        <activity android:name=".activity.CounterVisitEntryActivity"></activity>
-        <activity android:name=".activity.TeamSalesActivity"></activity>
-        <activity android:name=".activity.AllIndiaSaleReportActivity"></activity>
-        <activity android:name=".activity.ConApprovalActivity"></activity>
-        <activity android:name=".activity.TotalSaleActivity"></activity>
-
+        <activity android:name=".activity.BranchSaleReportActivity" />
+        <activity android:name=".activity.TopPerformerActivity" />
+        <activity android:name=".activity.CustomerReportActivity" />
+        <activity android:name=".activity.CounterVisitEntryActivity" />
+        <activity android:name=".activity.TeamSalesActivity" />
+        <activity android:name=".activity.AllIndiaSaleReportActivity" />
+        <activity android:name=".activity.ConApprovalActivity" />
+        <activity android:name=".activity.TotalSaleActivity" />
     </application>
 
 </manifest>

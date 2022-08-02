@@ -96,6 +96,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
     RecyclerView rvItem;
     ArrayList<MenuItemModel>itemList=new ArrayList<>();
     ImageView imglogout;
+    String menuName;
 
 
     @Override
@@ -469,6 +470,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                     JSONObject obj = responseData.getJSONObject(i);
                                     String MenuID=obj.optString("MenuID");
                                     String MenuItem=obj.optString("MenuItem");
+
                                     MenuItemModel itemModel=new MenuItemModel(MenuItem,MenuID);
                                     itemList.add(itemModel);
 
