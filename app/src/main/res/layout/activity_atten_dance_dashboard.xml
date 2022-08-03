@@ -51,7 +51,13 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
                 android:gravity="right">
-
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/searchicon"
+                    android:id="@+id/imgSearch"/>
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"

@@ -30,13 +30,18 @@ public class AttendanceCalenderAdapter extends RecyclerView.Adapter<AttendanceCa
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         if (itemList.get(i).getStatus().equalsIgnoreCase("Approved")){
-            myViewHolder.llMain.setBackgroundColor(Color.parseColor("#F202B32E"));
+
+            myViewHolder.tvTime.setBackgroundColor(Color.parseColor("#F202B32E"));
         }else if (itemList.get(i).getStatus().equalsIgnoreCase("Reject")){
-            myViewHolder.llMain.setBackgroundColor(Color.parseColor("#F2B61111"));
+
+            myViewHolder.tvTime.setBackgroundColor(Color.parseColor("#F2B61111"));
+
         }else if (itemList.get(i).getStatus().equalsIgnoreCase("Approval Pending")){
-            myViewHolder.llMain.setBackgroundColor(Color.parseColor("#f29b9105"));
+
+            myViewHolder.tvTime.setBackgroundColor(Color.parseColor("#f29b9105"));
+
         }else {
-            myViewHolder.llMain.setBackgroundColor(Color.parseColor("#4f8888"));
+            myViewHolder.tvTime.setBackgroundColor(Color.parseColor("#F2454545"));
         }
 
         myViewHolder.tvStatus.setText(itemList.get(i).getStatus());

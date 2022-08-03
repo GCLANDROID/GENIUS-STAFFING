@@ -17,9 +17,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +43,7 @@ import io.cordova.myapp00d753.adapter.AttendanceAdapter;
 import io.cordova.myapp00d753.adapter.AttendanceCalenderAdapter;
 import io.cordova.myapp00d753.module.AttendanceCalenderModel;
 import io.cordova.myapp00d753.module.AttendanceModule;
+import io.cordova.myapp00d753.module.SpineerItemModel;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
@@ -55,6 +59,9 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     AlertDialog alerDialog1;
     String month, year;
     int y ,m;
+    ImageView imgSearch;
+    AlertDialog searchDialog;
+    int futYear,pastYear;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +70,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     }
 
     private void initView() {
+        imgSearch=(ImageView)findViewById(R.id.imgSearch);
         dlMain = (DrawerLayout) findViewById(R.id.dlMain);
         rvItem = (RecyclerView) findViewById(R.id.rvItem);
         pref = new Pref(AttenDanceDashboardActivity.this);
@@ -122,48 +130,25 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         llBackAttendance.setOnClickListener(this);
 
         y = Calendar.getInstance().get(Calendar.YEAR);
+        pastYear=y-1;
+        futYear=y+1;
         year = String.valueOf(y);
         Log.d("year", year);
 
          m = Calendar.getInstance().get(Calendar.MONTH) + 1;
-        Log.d("month", String.valueOf(m));
-        if (m == 1) {
-            month = "January";
-        } else if (m == 2) {
-            month = "February";
-        } else if (m == 3) {
-            month = "March";
-        } else if (m == 4) {
-            month = "April";
-        } else if (m == 5) {
-            month = "May";
-        } else if (m == 6) {
-            month = "June";
-        } else if (m == 7) {
-            month = "July";
-        } else if (m == 8) {
-            month = "August";
-        } else if (m == 9) {
-            month = "September";
-        } else if (m == 10) {
-            month = "October";
-        } else if (m == 11) {
-            month = "November";
-        } else if (m == 12) {
-            month = "December";
-        }
+        imgSearch.setOnClickListener(this);
 
 
 
     }
 
 
-    private void getAttendanceList() {
+    private void getAttendanceList(int year,int month) {
         ProgressDialog pd = new ProgressDialog(AttenDanceDashboardActivity.this);
         pd.setMessage("Loading...");
         pd.show();
         pd.setCancelable(false);
-        String surl = AppData.url + "gcl_Attendancecalender/Get?AemEmployeeid=" + pref.getEmpId() + "&AemClientid=" + pref.getEmpClintId() + "&Monthid="+m+"&yearid="+year+"&SecurityCode=" + pref.getSecurityCode();
+        String surl = AppData.url + "gcl_Attendancecalender/Get?AemEmployeeid=" + pref.getEmpId() + "&AemClientid=" + pref.getEmpClintId() + "&Monthid="+month+"&yearid="+year+"&SecurityCode=" + pref.getSecurityCode();
         Log.d("input", surl);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
@@ -259,6 +244,8 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             startActivity(intent);
         }else if (view==llWeekly){
            weeklyfunction();
+        }else if (view==imgSearch){
+            searchAlert();
         }
 
 
@@ -338,9 +325,109 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         alerDialog1.show();
     }
 
+    private void searchAlert() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(AttenDanceDashboardActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.search_dialog, null);
+        dialogBuilder.setView(dialogView);
+        Spinner spYear=(Spinner)dialogView.findViewById(R.id.spYear);
+        Spinner spMonth=(Spinner)dialogView.findViewById(R.id.spMonth);
+        ArrayList<Integer>yearList=new ArrayList<>();
+        yearList.add(y);
+        yearList.add(pastYear);
+        yearList.add(futYear);
+
+        ArrayList<SpineerItemModel>monthList=new ArrayList<>();
+        monthList.add(new SpineerItemModel("January","1"));
+        monthList.add(new SpineerItemModel("February","2"));
+        monthList.add(new SpineerItemModel("March","3"));
+        monthList.add(new SpineerItemModel("April","4"));
+        monthList.add(new SpineerItemModel("May","5"));
+        monthList.add(new SpineerItemModel("June","6"));
+        monthList.add(new SpineerItemModel("July","7"));
+        monthList.add(new SpineerItemModel("August","8"));
+        monthList.add(new SpineerItemModel("September","9"));
+        monthList.add(new SpineerItemModel("October","10"));
+        monthList.add(new SpineerItemModel("November","11"));
+        monthList.add(new SpineerItemModel("December","12"));
+
+        ArrayList<String>monthItemList=new ArrayList<>();
+        monthItemList.add("January");
+        monthItemList.add("February");
+        monthItemList.add("March");
+        monthItemList.add("April");
+        monthItemList.add("May");
+        monthItemList.add("June");
+        monthItemList.add("July");
+        monthItemList.add("August");
+        monthItemList.add("September");
+        monthItemList.add("October");
+        monthItemList.add("November");
+        monthItemList.add("December");
+
+        ArrayAdapter yearAdapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item,yearList);
+        yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spYear.setAdapter(yearAdapter);
+
+        ArrayAdapter monthAdapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item,monthItemList);
+        monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spMonth.setAdapter(monthAdapter);
+
+        Button btnShow=(Button)dialogView.findViewById(R.id.btnShow);
+
+        spYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                y=yearList.get(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        spMonth.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                m= Integer.parseInt(monthList.get(i).getItemId());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        btnShow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchDialog.dismiss();
+                getAttendanceList(y,m);
+            }
+        });
+
+        ImageView imgCancel=(ImageView)dialogView.findViewById(R.id.imgCancel);
+        imgCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchDialog.dismiss();
+            }
+        });
+
+
+
+
+        searchDialog = dialogBuilder.create();
+        searchDialog.setCancelable(true);
+        Window window = searchDialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        searchDialog.show();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-        getAttendanceList();
+        getAttendanceList(y,m);
     }
 }
