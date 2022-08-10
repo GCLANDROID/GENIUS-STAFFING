@@ -38,7 +38,7 @@ public class AttendanceCalenderAdapter extends RecyclerView.Adapter<AttendanceCa
 
         }else if (itemList.get(i).getStatus().equalsIgnoreCase("Approval Pending")){
 
-            myViewHolder.tvTime.setBackgroundColor(Color.parseColor("#f29b9105"));
+            myViewHolder.tvTime.setBackgroundColor(Color.parseColor("#f21a7cc2"));
 
         }else {
             myViewHolder.tvTime.setBackgroundColor(Color.parseColor("#F2454545"));

@@ -7,6 +7,7 @@
     android:id="@+id/dlMain"
     tools:context=".activity.AttenDanceDashboardActivity"
     android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -67,13 +68,68 @@
                     android:id="@+id/imgHome"/>
             </LinearLayout>
         </LinearLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/rvItem"></androidx.recyclerview.widget.RecyclerView>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_marginTop="20dp"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/rvItem"></androidx.recyclerview.widget.RecyclerView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom|right">
+                <LinearLayout
+                    android:id="@+id/llBottom"
+                    android:padding="5dp"
+                    android:background="@drawable/lldesign"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:id="@+id/llAttenRegularize"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/backdate_attendance"
+                           ></ImageView>
+                        <TextView
+                            android:layout_gravity="center"
+                            android:textColor="@color/textcolor"
+                            android:layout_marginLeft="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:text="Regularize your Attendance"></TextView>
+                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/tvCancel"
+                        android:textStyle="bold"
+                        android:gravity="right"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/textcolor"
+                        android:text="CLOSE"></TextView>
+                </LinearLayout>
+            </LinearLayout>
+        </FrameLayout>
+
+
 
     </LinearLayout>
     <include

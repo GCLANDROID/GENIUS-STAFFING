@@ -52,6 +52,8 @@ public class BackDatedAttendanceActivity extends AppCompatActivity {
     NetworkConnectionCheck connectionCheck;
     TextView tvMan;
     String ApproverStatus;
+    LinearLayout llTick;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +72,7 @@ public class BackDatedAttendanceActivity extends AppCompatActivity {
         imgHome = (ImageView) findViewById(R.id.imgHome);
         llSubmit = (LinearLayout) findViewById(R.id.llSubmit);
         tvMan = (TextView) findViewById(R.id.tvMan);
+
 
     }
 

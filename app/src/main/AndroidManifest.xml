@@ -35,6 +35,7 @@
         <activity
             android:name=".activity.VoiceAssistantActivity"
             android:screenOrientation="userPortrait" />
+        <activity android:name=".activity.BacklogAttendanceActivity"></activity>
         <activity android:name=".activity.SPRDashboardActivity" />
         <activity android:name=".activity.SupSaleDialog1Activity" />
         <activity android:name=".activity.CounterVisitReportActivity" />

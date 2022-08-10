@@ -47,6 +47,7 @@ import io.cordova.myapp00d753.module.SpineerItemModel;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
+import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip;
 
 public class AttenDanceDashboardActivity extends AppCompatActivity implements View.OnClickListener {
     RecyclerView rvItem;
@@ -55,13 +56,14 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     DrawerLayout dlMain;
     boolean mslideState;
     ImageView imgMenu;
-    LinearLayout llAttandanceManage, llAttendanceReport, llBackAttendance, llWeekly;
+    LinearLayout llAttandanceManage, llAttendanceReport, llBackAttendance, llWeekly,llAttenRegularize,llBottom;
     AlertDialog alerDialog1;
     String month, year;
     int y ,m;
     ImageView imgSearch;
     AlertDialog searchDialog;
     int futYear,pastYear;
+    TextView tvCancel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +72,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     }
 
     private void initView() {
-        imgSearch=(ImageView)findViewById(R.id.imgSearch);
+        imgSearch = (ImageView) findViewById(R.id.imgSearch);
         dlMain = (DrawerLayout) findViewById(R.id.dlMain);
         rvItem = (RecyclerView) findViewById(R.id.rvItem);
         pref = new Pref(AttenDanceDashboardActivity.this);
@@ -103,7 +105,10 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         llAttandanceManage = (LinearLayout) findViewById(R.id.llAttandanceManage);
         llAttendanceReport = (LinearLayout) findViewById(R.id.llAttendanceReport);
         llBackAttendance = (LinearLayout) findViewById(R.id.llBackAttendance);
+        llAttenRegularize = (LinearLayout) findViewById(R.id.llAttenRegularize);
         llWeekly = (LinearLayout) findViewById(R.id.llWeekly);
+        tvCancel = (TextView) findViewById(R.id.tvCancel);
+        llBottom = (LinearLayout) findViewById(R.id.llBottom);
 
         if (pref.getOnLeave().equals("1")) {
 
@@ -118,9 +123,11 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
 
         if (pref.getBackAttd().equals("1")) {
             llBackAttendance.setVisibility(View.VISIBLE);
+            llAttenRegularize.setVisibility(View.VISIBLE);
 
         } else {
             llBackAttendance.setVisibility(View.GONE);
+            llAttenRegularize.setVisibility(View.GONE);
 
         }
 
@@ -128,19 +135,45 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         llAttendanceReport.setOnClickListener(this);
         llWeekly.setOnClickListener(this);
         llBackAttendance.setOnClickListener(this);
+        llAttenRegularize.setOnClickListener(this);
+        tvCancel.setOnClickListener(this);
 
         y = Calendar.getInstance().get(Calendar.YEAR);
-        pastYear=y-1;
-        futYear=y+1;
+        pastYear = y - 1;
+        futYear = y + 1;
         year = String.valueOf(y);
         Log.d("year", year);
 
-         m = Calendar.getInstance().get(Calendar.MONTH) + 1;
+        m = Calendar.getInstance().get(Calendar.MONTH) + 1;
         imgSearch.setOnClickListener(this);
 
+        final SimpleTooltip tooltip = new SimpleTooltip.Builder(AttenDanceDashboardActivity.this)
+                .anchorView(imgMenu)
+                .text("Mark your Attendance from here")
+                .gravity(Gravity.BOTTOM)
+                .dismissOnOutsideTouch(true)
+                .dismissOnInsideTouch(true)
+                .modal(true)
+                .animated(true)
+                .animationDuration(2000)
+                .contentView(R.layout.custom_tooltip, R.id.tv_text)
+                .focusable(true)
+                .build();
 
 
+        tooltip.findViewById(R.id.btn_next).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v2) {
+                if (tooltip.isShowing())
+                    tooltip.dismiss();
+
+
+            }
+        });
+
+        tooltip.show();
     }
+
 
 
     private void getAttendanceList(int year,int month) {
@@ -239,13 +272,19 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }else if (view==llBackAttendance){
-            Intent intent = new Intent(AttenDanceDashboardActivity.this, BackDatedAttendanceActivity.class);
+            Intent intent = new Intent(AttenDanceDashboardActivity.this, BacklogAttendanceActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }else if (view==llAttenRegularize){
+            Intent intent = new Intent(AttenDanceDashboardActivity.this, BacklogAttendanceActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }else if (view==llWeekly){
            weeklyfunction();
         }else if (view==imgSearch){
             searchAlert();
+        }else if (view==tvCancel){
+            llBottom.setVisibility(View.GONE);
         }
 
 
