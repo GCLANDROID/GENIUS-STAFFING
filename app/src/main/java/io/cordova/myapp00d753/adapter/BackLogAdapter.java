@@ -4,6 +4,7 @@ package io.cordova.myapp00d753.adapter;
 import android.annotation.SuppressLint;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -37,9 +38,10 @@ public class BackLogAdapter extends RecyclerView.Adapter<BackLogAdapter.MyViewHo
     Context mContex;
     ArrayList<String> item = new ArrayList<>();
     boolean isSelectedAll,isAll;
-    public BackLogAdapter(ArrayList<BackLogAttendanceModel> blockLogList, BacklogAttendanceActivity backlogActivity) {
+    public BackLogAdapter(ArrayList<BackLogAttendanceModel> blockLogList, BacklogAttendanceActivity backlogActivity,ArrayList<String>item) {
         this.itemList = blockLogList;
         this.mContex = backlogActivity;
+        this.item=item;
     }
 
     @NonNull
@@ -53,33 +55,38 @@ public class BackLogAdapter extends RecyclerView.Adapter<BackLogAdapter.MyViewHo
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, @SuppressLint("RecyclerView") final int i) {
         final BackLogAttendanceModel attandanceModel = itemList.get(i);
-       if (itemList.get(i).isSelected()){
-           myViewHolder.imgLike.setVisibility(View.VISIBLE);
-       }else {
-           myViewHolder.imgLike.setVisibility(View.GONE);
-       }
+
 
 
         if (isAll) {
             if (isSelectedAll) {
+
                 myViewHolder.imgLike.setVisibility(View.VISIBLE);
 
-
             } else {
+
                 myViewHolder.imgLike.setVisibility(View.GONE);
+
+
 
             }
         }else {
-            if (itemList.get(i).isSelected()) {
+            /*if (itemList.get(i).isSelected()) {
                 myViewHolder.imgLike.setVisibility(View.VISIBLE);
             } else {
                 myViewHolder.imgLike.setVisibility(View.GONE);
-            }
+            }*/
         }
 
         myViewHolder.tvDate.setText(Util.changeAnyDateFormat(itemList.get(i).getDate(),"MM/dd/yyyy","dd MMM yyyy"));
         myViewHolder.tvInTime.setText(itemList.get(i).getInTime());
         myViewHolder.tvOutTime.setText(itemList.get(i).getOutTime());
+        myViewHolder.tvDayType.setText(itemList.get(i).getDayType());
+        if (!itemList.get(i).getDayType().equalsIgnoreCase("F")){
+            myViewHolder.itemView.setBackgroundColor(Color.parseColor("#F2E7E300"));
+        }else {
+            myViewHolder.itemView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+        }
 
 
 
@@ -143,23 +150,36 @@ public class BackLogAdapter extends RecyclerView.Adapter<BackLogAdapter.MyViewHo
             public void onClick(View view) {
                 attandanceModel.setSelected(!attandanceModel.isSelected());
                 // holder.view.setBackgroundColor(attandanceModel.isSelected() ? Color.CYAN : Color.WHITE);
+                   if (isSelectedAll){
+                       if (myViewHolder.imgLike.getVisibility()==View.VISIBLE){
+                           myViewHolder.imgLike.setVisibility(View.GONE);
+                           ((BacklogAttendanceActivity) mContex).removeItem(i );
+                       }else {
+                           myViewHolder.imgLike.setVisibility(View.VISIBLE);
+                       }
 
-                if (attandanceModel.isSelected()) {
+                   }else {
+                       if (attandanceModel.isSelected()) {
 
-                    myViewHolder.imgLike.setVisibility(View.VISIBLE);
-                    itemList.get(i).setSelected(true);
-                    notifyDataSetChanged();
+                           myViewHolder.imgLike.setVisibility(View.VISIBLE);
+                           itemList.get(i).setSelected(true);
+                           notifyDataSetChanged();
 
-                    ((BacklogAttendanceActivity) mContex).updateItemStatus(i, true );
+                           ((BacklogAttendanceActivity) mContex).updateItemStatus(i, true );
 
 
 
-                } else {
-                    myViewHolder.imgLike.setVisibility(View.GONE);
-                    ((AttenApprovalActivity) mContex).updateAttendanceStatus(i, false);
-                    itemList.get(i).setSelected(false);
-                    notifyDataSetChanged();
-                }
+                       } else {
+
+                           myViewHolder.imgLike.setVisibility(View.GONE);
+
+
+                           ((BacklogAttendanceActivity) mContex).updateItemStatus(i, false);
+                           itemList.get(i).setSelected(false);
+                           notifyDataSetChanged();
+                       }
+                   }
+
 
             }
         });
@@ -173,12 +193,13 @@ public class BackLogAdapter extends RecyclerView.Adapter<BackLogAdapter.MyViewHo
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tvDate, tvInTime, tvOutTime;
+        TextView tvDate, tvInTime, tvOutTime,tvDayType;
         ImageView imgInTime, imgOutTime, imgLike;
         LinearLayout llLike;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
+            tvDayType=(TextView)itemView.findViewById(R.id.tvDayType);
             tvDate = (TextView) itemView.findViewById(R.id.tvDate);
             tvInTime = (TextView) itemView.findViewById(R.id.tvInTime);
             tvOutTime = (TextView) itemView.findViewById(R.id.tvOutTime);
@@ -201,7 +222,7 @@ public class BackLogAdapter extends RecyclerView.Adapter<BackLogAdapter.MyViewHo
     }
     public void unselectall(){
         isSelectedAll=false;
-        isAll=false;
+        isAll=true;
         notifyDataSetChanged();
     }
 

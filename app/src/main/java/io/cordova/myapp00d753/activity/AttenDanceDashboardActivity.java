@@ -149,7 +149,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
 
         final SimpleTooltip tooltip = new SimpleTooltip.Builder(AttenDanceDashboardActivity.this)
                 .anchorView(imgMenu)
-                .text("Mark your Attendance from here")
+                .text("Mark & Regularize your Attendance from here")
                 .gravity(Gravity.BOTTOM)
                 .dismissOnOutsideTouch(true)
                 .dismissOnInsideTouch(true)

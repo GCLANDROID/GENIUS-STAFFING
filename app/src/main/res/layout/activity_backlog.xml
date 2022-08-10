@@ -153,7 +153,7 @@
         android:layout_marginRight="5dp"
         android:orientation="vertical"
         android:id="@+id/llMain"
-        android:visibility="gone">
+        android:visibility="visible">
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -162,18 +162,13 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
                 <TextView
+                    android:layout_marginLeft="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
                     android:textColor="@android:color/holo_red_dark"
-                    android:text="*Note -1:You can change your In Time/Out Time."></TextView>
-                <TextView
-                    android:layout_marginTop="5dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:text="*Note -2:Please Untick the Date if you are actually Absent"></TextView>
+                    android:text="Note:- \n* You can change your In Time/Out Time. \n* F->Full Working Day ,WO ->Weekly Off , H->Holiday"></TextView>
+
                 <TextView
                     android:textStyle="bold"
                     android:layout_marginTop="20dp"
@@ -183,7 +178,7 @@
                     android:textColor="@color/textcolor"
                     android:id="@+id/tvCount"></TextView>
                 <LinearLayout
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -210,11 +205,41 @@
                         android:textStyle="bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
+                        android:textSize="20sp"
                         android:textColor="@color/textcolor"
                         android:layout_gravity="center"
                         android:text="Select All"
                         android:layout_marginLeft="5dp"></TextView>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:paddingRight="10dp">
+                    <LinearLayout
+
+                        android:id="@+id/btnSubmit"
+                        android:layout_width="120dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/lldesign"
+                        android:orientation="horizontal"
+                        android:backgroundTint="@color/maincolor"
+
+                        >
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center">
+                            <TextView
+                                android:layout_gravity="center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="14sp"
+                                android:textColor="@android:color/white"
+                                android:text="SAVE"></TextView>
+                        </LinearLayout>
+                    </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/llHeading"
@@ -272,11 +297,12 @@
                         android:textColor="@android:color/black"
                         android:textSize="12sp"/>
                     <TextView
+                        android:layout_marginRight="2dp"
                         android:gravity="right"
                         android:id="@+id/tvRemark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Daytype"
+                        android:text="Day Type"
                         android:layout_weight="0.2"
                         android:layout_gravity="center"
                         android:textColor="@android:color/black"
@@ -297,38 +323,7 @@
                     android:id="@+id/etFocus"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"></EditText>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="right"
-                    android:paddingRight="10dp">
-                    <LinearLayout
 
-                        android:id="@+id/btnSubmit"
-                        android:layout_width="120dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/lldesign"
-                        android:orientation="horizontal"
-                         android:backgroundTint="@color/maincolor"
-
-                        >
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center">
-                            <TextView
-                                android:layout_gravity="center"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="14sp"
-                                android:textColor="@android:color/white"
-                                android:text="SAVE"></TextView>
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
             </LinearLayout>
         </ScrollView>
 

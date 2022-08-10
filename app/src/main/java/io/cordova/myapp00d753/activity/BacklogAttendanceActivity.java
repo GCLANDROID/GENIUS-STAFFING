@@ -141,6 +141,7 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
                     backLogAdapter.unselectall();
                     allclick=0;
 
+
                 }
             }
         });
@@ -191,7 +192,7 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus){
-                    if (backLogItem.size()>0 ||item1.size()>0) {
+                    if (backLogItem.size()>0 ||allclick==1) {
                         backlogSave();
                     }else {
                         Toast.makeText(getApplicationContext(),"Please Select Your Date(s)",Toast.LENGTH_LONG).show();
@@ -244,9 +245,11 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
                                     String AttDate = obj.optString("Dates");
                                     String InTime = obj.optString("Intime");
                                     String OutTime = obj.optString("Outtime");
+                                    String Daytype=obj.optString("Daytype");
 
 
                                     BackLogAttendanceModel blockModule = new BackLogAttendanceModel(AttDate, InTime, OutTime);
+                                    blockModule.setDayType(Daytype);
                                     blockLogList.add(blockModule);
                                     item1.add(pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+AttDate + "_" + InTime + "_" + OutTime + "_Bcklog_Attendance");
 
@@ -255,7 +258,7 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
                                 llLoader.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
                                 llNodata.setVisibility(View.GONE);
-                                backLogAdapter = new BackLogAdapter(blockLogList, BacklogAttendanceActivity.this);
+                                backLogAdapter = new BackLogAdapter(blockLogList, BacklogAttendanceActivity.this,item1);
                                 rvItem.setAdapter(backLogAdapter);
                                 tvCount.setText("Total Day(s) Count : "+responseData.length());
                             } else {
@@ -311,6 +314,19 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
 
 
         backLogAdapter.notifyDataSetChanged();
+
+
+
+
+
+
+
+    }
+
+    public void removeItem(int position) {
+
+       item1.remove(position);
+
 
 
 
@@ -394,10 +410,14 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
 
 
 
+
         Button btnOk = (Button) dialogView.findViewById(R.id.btnOk);
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (imgLike.getVisibility()==View.VISIBLE){
+                    imgLike.setVisibility(View.GONE);
+                }
                 alerDialog1.dismiss();
 
                 backLogItem.clear();
