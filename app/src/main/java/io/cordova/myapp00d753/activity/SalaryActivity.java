@@ -44,7 +44,7 @@ import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.RecyclerItemClickListener;
 
-public class SalaryActivity extends AppCompatActivity implements RecyclerItemClickListener.OnItemClickListener {
+public class SalaryActivity extends AppCompatActivity  {
     RecyclerView rvSalary;
     ArrayList<SalaryModule> salaryList = new ArrayList<>();
     SalaryAdapter salaryAdapter;
@@ -88,7 +88,6 @@ public class SalaryActivity extends AppCompatActivity implements RecyclerItemCli
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(SalaryActivity.this, LinearLayoutManager.VERTICAL, false);
         rvSalary.setLayoutManager(layoutManager);
-        rvSalary.addOnItemTouchListener(new RecyclerItemClickListener(SalaryActivity.this, SalaryActivity.this));
 
         spYear = (Spinner) findViewById(R.id.spYear);
         //SpinnerAdapter spinnerAdapter = new SpinnerAdapter(SalaryActivity.this, spYearList);
@@ -202,7 +201,7 @@ public class SalaryActivity extends AppCompatActivity implements RecyclerItemCli
     }
 
     private void setAdapter() {
-        salaryAdapter = new SalaryAdapter(salaryList);
+        salaryAdapter = new SalaryAdapter(salaryList,SalaryActivity.this);
         rvSalary.setAdapter(salaryAdapter);
     }
 
@@ -315,21 +314,5 @@ public class SalaryActivity extends AppCompatActivity implements RecyclerItemCli
         alertDialog.show();
     }
 
-    @Override
-    public void onItemClick(View childView, int position) {
-        surl = salaryList.get(position).getSurl();
-        operBrowser();
 
-    }
-
-    @Override
-    public void onItemLongPress(View childView, int position) {
-
-    }
-
-    private void operBrowser() {
-        Uri uri = Uri.parse(surl); // missing 'http://' will cause crashed
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(intent);
-    }
 }

@@ -374,7 +374,7 @@ public class VoiceAssistantActivity extends AppCompatActivity {
                                 llMain.setVisibility(View.VISIBLE);
                                 llNodata.setVisibility(View.GONE);
 
-                                SalaryAdapter  salaryAdapter = new SalaryAdapter(salaryList);
+                                SalaryAdapter  salaryAdapter = new SalaryAdapter(salaryList,VoiceAssistantActivity.this);
                                 rvSalary.setAdapter(salaryAdapter);
 
 
