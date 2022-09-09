@@ -286,8 +286,8 @@ public class LoginActivity extends AppCompatActivity {
                                     pref.saveCTCURL(CTCUrl);
                                     String WeeklyOff = obj.optString("WeeklyOff");
                                     pref.saveWeeklyoff(WeeklyOff);
-                                    String Leave = obj.optString("LeaveApply");
-                                    pref.saveOnLeave(Leave);
+                                    String LeaveApply = obj.optString("LeaveApply");
+                                    pref.saveOnLeave(LeaveApply);
                                     String LeaveUrl = obj.optString("LeaveUrl");
                                     pref.saveLeaveUrl(LeaveUrl);
                                     String AttdImage = obj.optString("AttdImage");
@@ -324,6 +324,8 @@ public class LoginActivity extends AppCompatActivity {
                                     pref.saveMsg(AppRenameText);
                                     String PFConsolidateURL=obj.optString("PFConsolidateURL");
                                     pref.savePFURL(PFConsolidateURL);
+                                    String Leave=obj.optString("Leave");
+                                    pref.saveShiftFlag(Leave);
 
 
                                 }

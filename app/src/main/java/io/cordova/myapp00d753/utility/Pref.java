@@ -974,6 +974,15 @@ public class Pref {
         return _pref.getString("XYZ","");
     }
 
+    public void saveShiftFlag(String ShiftFlag){
+        _editorPref.putString("ShiftFlag", ShiftFlag);
+        _editorPref.commit();
+    }
+
+    public String getShiftFlag(){
+        return _pref.getString("ShiftFlag","");
+    }
+
 
 
 

@@ -30,12 +30,15 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.AttenDanceManageWithShiftActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.AttenDanceDashboardActivity"
             android:exported="false" />
         <activity
             android:name=".activity.VoiceAssistantActivity"
             android:screenOrientation="userPortrait" />
-        <activity android:name=".activity.BacklogAttendanceActivity"></activity>
+        <activity android:name=".activity.BacklogAttendanceActivity" />
         <activity android:name=".activity.SPRDashboardActivity" />
         <activity android:name=".activity.SupSaleDialog1Activity" />
         <activity android:name=".activity.CounterVisitReportActivity" />

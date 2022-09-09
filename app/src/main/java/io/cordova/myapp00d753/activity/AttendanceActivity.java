@@ -78,6 +78,7 @@ public class AttendanceActivity extends AppCompatActivity implements GoogleApiCl
     LinearLayout llDemo,llManageD,llReportD,llFaceD,llMain;
     AlertDialog alertDialog;
     String dateD;
+    String currentDate;
 
 
 
@@ -208,6 +209,12 @@ public class AttendanceActivity extends AppCompatActivity implements GoogleApiCl
             llDemo.setVisibility(View.GONE);
         }
 
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month=calendar.get(Calendar.MONTH);
+        int day=calendar.get(Calendar.DAY_OF_MONTH);
+        currentDate=year+"/"+month+"/"+day;
+
 
 
     }
@@ -218,31 +225,7 @@ public class AttendanceActivity extends AppCompatActivity implements GoogleApiCl
             public void onClick(View v) {
 
 
-                       if (!ApproverStatus.equals("1")) {
-                           if (!pref.getOffAttnFlag().equals("1")) {
-
-                               Intent intent = new Intent(AttendanceActivity.this, AttendanceManageActivity.class);
-                               intent.putExtra("intt","2");
-                               intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                               startActivity(intent);
-                           } else {
-                               Intent intent = new Intent(AttendanceActivity.this, AttendanceManageActivity.class);
-                               intent.putExtra("intt","2");
-                               intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                               startActivity(intent);
-                           }
-                       } else {
-                           if (pref.getEmpClintId().equalsIgnoreCase("AEMCLI2210001702")){
-                               Intent intent = new Intent(AttendanceActivity.this, AttendanceManageActivity.class);
-                               intent.putExtra("intt","2");
-                               intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                               startActivity(intent);
-                           }else {
-                               atteAlert();
-                           }
-
-
-                       }
+                getShift();
 
 
             }
@@ -786,5 +769,70 @@ public class AttendanceActivity extends AppCompatActivity implements GoogleApiCl
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.CENTER);
         alertDialog.show();
+    }
+
+
+    private void getShift() {
+        String surl = AppData.url+"http://gsppi.geniusconsultant.com/GeniusiOSApi/api/post_attedanceRoster/Get_Shift?CompanyID=AEMCLI1410000807&EmployeeID="+pref.getSecurityCode()+"&AttendanceDate="+currentDate+"&SecurityCode="+pref.getSecurityCode();
+        Log.d("attencinput", surl);
+        final ProgressDialog progressBar = new ProgressDialog(this);
+        progressBar.setCancelable(true);//you can cancel it by pressing back button
+        progressBar.setMessage("Loading...");
+        progressBar.show();
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("responsecheck", response);
+                        progressBar.dismiss();
+                        try {
+                            JSONObject job1 = new JSONObject(response);
+                            Log.e("response12", "@@@@@@" + job1);
+
+                            boolean responseStatus = job1.optBoolean("responseStatus");
+
+                            String toastText = job1.optString("responseText");
+                            JSONArray responseData = job1.optJSONArray("responseData");
+                            JSONArray shiftStatusArray=responseData.optJSONArray(0);
+                            JSONObject shiftStatusOBJ=shiftStatusArray.optJSONObject(0);
+                            String ShiftStatus=shiftStatusOBJ.optString("ShiftStatus");
+
+                            JSONArray shiftArray=responseData.optJSONArray(1);
+
+                            Intent intent = new Intent(AttendanceActivity.this, AttenDanceManageWithShiftActivity.class);
+                            intent.putExtra("intt","2");
+                            intent.putExtra("shiftStatus",ShiftStatus);
+                            intent.putExtra("shiftArray",shiftArray.toString());
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+
+
+
+
+
+                            // boolean _status = job1.getBoolean("status");
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Intent intent=new Intent(AttendanceActivity.this,EmployeeDashBoardActivity.class);
+                            startActivity(intent);
+                            Toast.makeText(AttendanceActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressBar.dismiss();
+                Toast.makeText(AttendanceActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
+
+                Log.e("ert", error.toString());
+            }
+        }) {
+
+        };
+        AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
+
     }
 }

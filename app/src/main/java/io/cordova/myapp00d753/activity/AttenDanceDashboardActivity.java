@@ -64,6 +64,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     AlertDialog searchDialog;
     int futYear,pastYear;
     TextView tvCancel;
+    String currentDate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -172,6 +173,13 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         });
 
         tooltip.show();
+
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month=calendar.get(Calendar.MONTH)+1;
+        int day=calendar.get(Calendar.DAY_OF_MONTH);
+        currentDate=month+"/"+day+"/"+year;
+
     }
 
 
@@ -260,12 +268,17 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         if (view == imgMenu) {
             dlMain.openDrawer(Gravity.LEFT);
         } else if (view == llAttandanceManage) {
+            if (pref.getShiftFlag().equals("1")){
+                getShift();
+            }else {
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceManageActivity.class);
+                intent.putExtra("intt","2");
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
 
 
-            Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceManageActivity.class);
-            intent.putExtra("intt", "2");
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+
 
         }else if (view==llAttendanceReport){
             Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceReportActivity.class);
@@ -468,5 +481,69 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     protected void onResume() {
         super.onResume();
         getAttendanceList(y,m);
+    }
+
+    private void getShift() {
+        String surl = AppData.url+"post_attedanceRoster/Get_Shift?CompanyID=AEMCLI1410000807&EmployeeID="+pref.getEmpId()+"&AttendanceDate="+currentDate+"&SecurityCode="+pref.getSecurityCode();
+        Log.d("attencinput", surl);
+        final ProgressDialog progressBar = new ProgressDialog(this);
+        progressBar.setCancelable(true);//you can cancel it by pressing back button
+        progressBar.setMessage("Loading...");
+        progressBar.show();
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("responsecheck", response);
+                        progressBar.dismiss();
+                        try {
+                            JSONObject job1 = new JSONObject(response);
+                            Log.e("response12", "@@@@@@" + job1);
+
+                            boolean responseStatus = job1.optBoolean("responseStatus");
+
+                            String toastText = job1.optString("responseText");
+                            JSONArray responseData = job1.optJSONArray("responseData");
+                            JSONArray shiftStatusArray=responseData.optJSONArray(0);
+                            JSONObject shiftStatusOBJ=shiftStatusArray.optJSONObject(0);
+                            String ShiftStatus=shiftStatusOBJ.optString("ShiftStatus");
+
+                            JSONArray shiftArray=responseData.optJSONArray(1);
+
+                            Intent intent = new Intent(AttenDanceDashboardActivity.this, AttenDanceManageWithShiftActivity.class);
+                            intent.putExtra("intt","2");
+                            intent.putExtra("shiftStatus",ShiftStatus);
+                            intent.putExtra("shiftArray",shiftArray.toString());
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+
+
+
+
+
+                            // boolean _status = job1.getBoolean("status");
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Intent intent=new Intent(AttenDanceDashboardActivity.this,EmployeeDashBoardActivity.class);
+                            startActivity(intent);
+                            Toast.makeText(AttenDanceDashboardActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressBar.dismiss();
+                Toast.makeText(AttenDanceDashboardActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
+
+                Log.e("ert", error.toString());
+            }
+        }) {
+
+        };
+        AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
+
     }
 }
