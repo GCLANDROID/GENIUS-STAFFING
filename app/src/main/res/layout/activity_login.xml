@@ -10,7 +10,7 @@
         android:background="@mipmap/bg_green"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.5"
+        android:layout_weight="0.4"
         android:padding="50dp">
         <TextView
             android:layout_width="wrap_content"
@@ -173,6 +173,39 @@
                 android:textColor="@color/textcolor"
                 android:text="Forgot Password"></TextView>
         </LinearLayout>
+       <!-- <LinearLayout
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_height="wrap_content">
+            <test.jinesh.captchaimageviewlib.CaptchaImageView
+                android:layout_width="wrap_content"
+                android:id="@+id/captchaimage"
+                android:layout_weight="6"
+                android:layout_margin="5dp"
+                android:layout_height="50dp"
+
+                />
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:background="@android:drawable/ic_menu_rotate"
+                android:gravity="center"
+                android:id="@+id/regen"
+
+                />
+        </LinearLayout>
+        <EditText
+            android:visibility="gone"
+            android:hint="Please Enter Your Captcha here"
+            android:id="@+id/etCaptcha"
+            android:textSize="14sp"
+            android:textColor="@color/textcolor"
+            android:paddingLeft="5dp"
+            android:background="@drawable/lldesign13"
+            android:backgroundTint="@color/bar1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"></EditText>-->
         <LinearLayout
             android:orientation="vertical"
             android:id="@+id/llSignIn"

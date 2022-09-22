@@ -55,6 +55,7 @@ import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
 
+
 public class LoginActivity extends AppCompatActivity {
     TextView tvSignIn;
     EditText etUserId, etPassword;
@@ -75,6 +76,11 @@ public class LoginActivity extends AppCompatActivity {
     AlertDialog alert1,popUp,alerDialog1;
     String security_code="0000";
     TextView llForgotPassword;
+
+    ImageView refreshButton;
+    EditText etCaptcha;
+    Button submitButton;
+   // CaptchaImageView captchaImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,12 +131,22 @@ public class LoginActivity extends AppCompatActivity {
         llLoader = (LinearLayout) findViewById(R.id.llLoader);
         llForgotPassword = (TextView) findViewById(R.id.llForgotPassword);
 
+       /* refreshButton= (ImageView) findViewById(R.id.regen);
+        etCaptcha= (EditText) findViewById(R.id.etCaptcha);
+        captchaImageView= (CaptchaImageView) findViewById(R.id.captchaimage);
+        captchaImageView.setCaptchaType(CaptchaImageView.CaptchaGenerator.BOTH);
+*/
 
 
     }
 
     private void onClick() {
-
+       /* refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                captchaImageView.regenerate();
+            }
+        });*/
         etUserId.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -158,15 +174,18 @@ public class LoginActivity extends AppCompatActivity {
                 if (etUserId.getText().toString().length() > 0) {
                     if (etPassword.getText().toString().length() > 0) {
                         if (connectionCheck.isNetworkAvailable()) {
+                          //  if(etCaptcha.getText().toString().equals(captchaImageView.getCaptchaCode())){
+                                loginFunction();
+                                Date d = new Date();
+                                SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
+                                String currentDateTimeString = sdf.format(d);
+                                Log.d("ctime", currentDateTimeString);
+                                pref.saveCtime(currentDateTimeString);
+                          /*  }else{
+                                Toast.makeText(LoginActivity.this, "Not Matching", Toast.LENGTH_SHORT).show();
+                            }*/
 //
-                            loginFunction();
-                            /*Intent intent=new Intent(LoginActivity.this,EmployeeDashBoardActivity.class);
-                            startActivity(intent);*/
-                            Date d = new Date();
-                            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
-                            String currentDateTimeString = sdf.format(d);
-                            Log.d("ctime", currentDateTimeString);
-                            pref.saveCtime(currentDateTimeString);
+
                         } else {
                             connectionCheck.getNetworkActiveAlert().show();
                         }

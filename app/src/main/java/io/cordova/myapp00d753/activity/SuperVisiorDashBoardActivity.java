@@ -55,7 +55,7 @@ public class SuperVisiorDashBoardActivity extends AppCompatActivity {
     boolean mslideState;
     LinearLayout llCall;
     android.app.AlertDialog alerDialog1;
-    LinearLayout llSale;
+    LinearLayout llSale,llLeave;
 
 
 
@@ -80,7 +80,7 @@ public class SuperVisiorDashBoardActivity extends AppCompatActivity {
         llPf = (LinearLayout) findViewById(R.id.llPf);
         llFeedBack = (LinearLayout) findViewById(R.id.llFeedBack);
         llNotification = (LinearLayout) findViewById(R.id.llNotification);
-
+        llLeave=(LinearLayout)findViewById(R.id.llLeave);
 
         llDocument = (LinearLayout) findViewById(R.id.llDocument);
         llLogout=(LinearLayout)findViewById(R.id.llLogout);
@@ -764,6 +764,16 @@ public class SuperVisiorDashBoardActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 Intent intent=new Intent(SuperVisiorDashBoardActivity.this,SupProfileActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+
+        llLeave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent=new Intent(SuperVisiorDashBoardActivity.this,SupLeaveApprovalActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }

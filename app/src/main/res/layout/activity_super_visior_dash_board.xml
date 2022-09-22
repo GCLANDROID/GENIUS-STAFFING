@@ -126,7 +126,29 @@
                              android:textColor="@color/colorPrimary"
                              android:textSize="13sp" />
                      </LinearLayout>
+                     <LinearLayout
+                         android:id="@+id/llLeave"
+                         android:layout_width="match_parent"
+                         android:layout_height="0dp"
+                         android:layout_marginTop="2dp"
+                         android:layout_weight="1"
+                         android:background="@android:color/white"
+                         android:gravity="center"
+                         android:orientation="vertical">
 
+                         <ImageView
+                             android:layout_width="55dp"
+                             android:layout_height="55dp"
+                             android:src="@drawable/leaveapproval" />
+
+                         <TextView
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:text="Leave Approval"
+                             android:textColor="@color/colorPrimary"
+                             android:textSize="13sp" />
+
+                     </LinearLayout>
                      <LinearLayout
                          android:id="@+id/llDocument"
                          android:layout_width="match_parent"
@@ -185,6 +207,7 @@
                      </LinearLayout>
 
                      <LinearLayout
+                         android:visibility="gone"
                          android:id="@+id/llPf"
                          android:layout_width="match_parent"
                          android:layout_height="0dp"
@@ -208,6 +231,7 @@
                              android:textSize="13sp" />
 
                      </LinearLayout>
+
                      <LinearLayout
                          android:id="@+id/llSale"
                          android:layout_width="match_parent"

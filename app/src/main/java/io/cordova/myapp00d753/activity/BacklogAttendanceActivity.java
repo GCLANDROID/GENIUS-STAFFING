@@ -247,7 +247,6 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
                                     String OutTime = obj.optString("Outtime");
                                     String Daytype=obj.optString("Daytype");
 
-
                                     BackLogAttendanceModel blockModule = new BackLogAttendanceModel(AttDate, InTime, OutTime);
                                     blockModule.setDayType(Daytype);
                                     blockLogList.add(blockModule);

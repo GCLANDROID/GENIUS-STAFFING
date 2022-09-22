@@ -30,6 +30,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".SupLeaveApprovalActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.AttenDanceManageWithShiftActivity"
             android:exported="false" />
         <activity
@@ -306,6 +309,8 @@
         <activity
             android:name=".activity.FenceConfigActivity"
             android:screenOrientation="userPortrait" />
+        <activity android:name=".activity.SupLeaveApprovalActivity"
+            android:screenOrientation="userPortrait"></activity>
 
         <service
             android:name=".utility.LocationUpdaterService"
