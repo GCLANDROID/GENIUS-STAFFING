@@ -313,25 +313,11 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
 
 
         backLogAdapter.notifyDataSetChanged();
-
-
-
-
-
-
-
     }
 
     public void removeItem(int position) {
 
        item1.remove(position);
-
-
-
-
-
-
-
 
     }
 
@@ -344,6 +330,7 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
             backlogDetails=backLogItem.toString().replace("[","").replace("]","").replaceAll("\\s+", "");
 
         }
+        Log.d("backlogDetails",backlogDetails);
 
         final ProgressDialog pg=new ProgressDialog(BacklogAttendanceActivity.this);
         pg.setMessage("Loading..");

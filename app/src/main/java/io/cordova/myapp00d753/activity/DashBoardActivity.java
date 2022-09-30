@@ -142,7 +142,11 @@ public class DashBoardActivity extends AppCompatActivity {
                             if (playversion.equals(version)){
 
                             }else {
-                                upDateAlert();
+                                if (responseStatus.equalsIgnoreCase("Y")) {
+                                    upDateAlert();
+                                }else {
+
+                                }
                             }
 
                             // boolean _status = job1.getBoolean("status")

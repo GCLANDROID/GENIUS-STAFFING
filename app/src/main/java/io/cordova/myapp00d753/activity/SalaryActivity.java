@@ -96,6 +96,7 @@ public class SalaryActivity extends AppCompatActivity  {
         imgHome = (ImageView) findViewById(R.id.imgHome);
         llSearch = (LinearLayout) findViewById(R.id.llSearch);
         y = Calendar.getInstance().get(Calendar.YEAR);
+        year=String.valueOf(y);
 
         tvYear = (TextView) findViewById(R.id.tvYear);
         tvYear.setText(year);

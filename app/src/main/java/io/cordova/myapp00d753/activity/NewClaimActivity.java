@@ -68,6 +68,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -149,7 +150,14 @@ public class NewClaimActivity extends AppCompatActivity {
     ImageView imgMultiPle;
     ImageView imgMultiPleImg;
     File pdfFile;
+    LinearLayout lnGalleryOne,lnGalleryTwo;
+    ImageView imgGalleryOne,imgGalleryTwo;
 
+    private static final int REQUEST_GALLERY_CODE_ONE = 200;
+    private static final int REQUEST_GALLERY_CODE_TWO = 500;
+    private Uri uri;
+
+    String galleryflagone,galleryflagtwo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -256,10 +264,33 @@ public class NewClaimActivity extends AppCompatActivity {
         imgMultiPleImg=(ImageView) findViewById(R.id.imgMultiPleImg);
         imgMultiPle=(ImageView)findViewById(R.id.imgMultiPle);
 
+        lnGalleryOne=(LinearLayout) findViewById(R.id.lnGalleryOne);
+        lnGalleryTwo=(LinearLayout) findViewById(R.id.lnGalleryTwo);
+
+        imgGalleryOne=(ImageView) findViewById(R.id.imgGalleryOne);
+        imgGalleryTwo=(ImageView) findViewById(R.id.imgGalleryTwo);
+
 
     }
 
     private void onClick() {
+        lnGalleryOne.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent openGalleryIntent = new Intent(Intent.ACTION_PICK);
+                openGalleryIntent.setType("image/*");
+                startActivityForResult(openGalleryIntent, REQUEST_GALLERY_CODE_ONE);
+            }
+        });
+
+        lnGalleryTwo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent openGalleryIntent = new Intent(Intent.ACTION_PICK);
+                openGalleryIntent.setType("image/*");
+                startActivityForResult(openGalleryIntent, REQUEST_GALLERY_CODE_TWO);
+            }
+        });
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -423,11 +454,8 @@ public class NewClaimActivity extends AppCompatActivity {
                 if (componentId != "") {
                     if (etDescription.getText().toString().length() > 0) {
                         if (etAmount.getText().toString().length() > 0) {
-                            if (pdfflag == 1) {
-                                uploadMultipart();
-                            } else {
-                                Toast.makeText(getApplicationContext(), "Please attach PDF file", Toast.LENGTH_LONG).show();
-                            }
+                            attachFileAPI();
+
                         } else {
                             Toast.makeText(getApplicationContext(), "Please enter Claim Amount", Toast.LENGTH_LONG).show();
                         }
@@ -898,6 +926,75 @@ public class NewClaimActivity extends AppCompatActivity {
                     Log.d("imageSixw", String.valueOf(getReadableFileSize(pictureFile.length())));
                     alerDialog3.dismiss();
 
+
+                }
+                break;
+
+            case REQUEST_GALLERY_CODE_ONE:
+                if (resultCode == Activity.RESULT_OK) {
+                    InputStream imageStream = null;
+                    try {
+                        try {
+                            uri = data.getData();
+                            String filePath = getRealPathFromURIPath(uri, NewClaimActivity.this);
+                            file = new File(filePath);
+                            compressedImageFile = new ImageZipper(NewClaimActivity.this)
+                                    .setQuality(100)
+                                    .setMaxWidth(300)
+                                    .setMaxHeight(300)
+                                    .compressToFile(file);
+                            //  Log.d(TAG, "filePath=" + filePath);
+                            imageStream = getContentResolver().openInputStream(uri);
+                            Bitmap bm = cropToSquare(BitmapFactory.decodeStream(imageStream));
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            bm.compress(Bitmap.CompressFormat.PNG, 10, baos); //bm is the bitmap object
+                            byte[] b = baos.toByteArray();
+                            encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+                            imgGalleryOne.setImageBitmap(bm);
+
+                            galleryflagone = "1";
+
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } catch (OutOfMemoryError e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                break;
+            case REQUEST_GALLERY_CODE_TWO:
+                if (resultCode == Activity.RESULT_OK) {
+                    InputStream imageStream = null;
+                    try {
+                        try {
+                            uri = data.getData();
+                            String filePath = getRealPathFromURIPath(uri, NewClaimActivity.this);
+                            file = new File(filePath);
+                            compressedImageFile2 = new ImageZipper(NewClaimActivity.this)
+                                    .setQuality(100)
+                                    .setMaxWidth(300)
+                                    .setMaxHeight(300)
+                                    .compressToFile(file);
+                            //  Log.d(TAG, "filePath=" + filePath);
+                            imageStream = getContentResolver().openInputStream(uri);
+                            Bitmap bm = cropToSquare(BitmapFactory.decodeStream(imageStream));
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            bm.compress(Bitmap.CompressFormat.PNG, 10, baos); //bm is the bitmap object
+                            byte[] b = baos.toByteArray();
+                            encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+                            imgGalleryTwo.setImageBitmap(bm);
+
+                            galleryflagtwo = "1";
+
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } catch (OutOfMemoryError e) {
+                        e.printStackTrace();
+                    }
 
                 }
                 break;
@@ -1543,6 +1640,146 @@ public class NewClaimActivity extends AppCompatActivity {
 
     }
 
+    public void uploadMultipartwithfile() {
+        //getting name for the pdf
+
+        //getting the actual path of the pdf
+
+        AndroidNetworking.upload(UPLOAD_URL)
+                .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
+                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("Description", description)
+                .addMultipartParameter("ReimbursementAmount", amount)
+                .addMultipartParameter("Year", year)
+                .addMultipartParameter("Month", month)
+                .addMultipartParameter("SecurityCode", securitycode)
+                .addMultipartParameter("ConveyanceTypeId", componentId)
+                .addMultipartParameter("LocationTypeID", "0")
+                .addMultipartParameter("ReimbursementDate", "0")
+                .addMultipartFile("SingleFile", pdfFile)
+                .setPercentageThresholdForCancelling(60)
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                        progressDialog.show();
+
+
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        progressDialog.dismiss();
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        String responseText = job1.optString("responseText");
+                        boolean responseStatus = job1.optBoolean("responseStatus");
+
+                        if (responseStatus) {
+
+                            postoneimage();
+
+                        } else {
+
+                            Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
+
+                        }
+
+
+                        // boolean _status = job1.getBoolean("status");
+
+
+
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        Log.e("errt", String.valueOf(error));
+
+                        Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+
+
+    }
+
+    public void uploadMultipartwithTwofile() {
+        //getting name for the pdf
+
+        //getting the actual path of the pdf
+
+        AndroidNetworking.upload(UPLOAD_URL)
+                .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
+                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("Description", description)
+                .addMultipartParameter("ReimbursementAmount", amount)
+                .addMultipartParameter("Year", year)
+                .addMultipartParameter("Month", month)
+                .addMultipartParameter("SecurityCode", securitycode)
+                .addMultipartParameter("ConveyanceTypeId", componentId)
+                .addMultipartParameter("LocationTypeID", "0")
+                .addMultipartParameter("ReimbursementDate", "0")
+                .addMultipartFile("SingleFile", pdfFile)
+                .setPercentageThresholdForCancelling(60)
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                        progressDialog.show();
+
+
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        progressDialog.dismiss();
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        String responseText = job1.optString("responseText");
+                        boolean responseStatus = job1.optBoolean("responseStatus");
+
+                        if (responseStatus) {
+
+                            postoneimage();
+
+                        } else {
+
+                            Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
+
+                        }
+
+
+                        // boolean _status = job1.getBoolean("status");
+
+
+
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        Log.e("errt", String.valueOf(error));
+
+                        Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+
+
+    }
+
 
     public String getReadableFileSize(long size) {
         if (size <= 0) {
@@ -1613,6 +1850,37 @@ public class NewClaimActivity extends AppCompatActivity {
             }
         });
         dialog.show();
+    }
+
+    private String getRealPathFromURIPath(Uri contentURI, Activity activity) {
+        Cursor cursor = activity.getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null) {
+            return contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            return cursor.getString(idx);
+        }
+    }
+
+    private void attachFileAPI(){
+        if (pdfflag == 1) {
+            uploadMultipart();
+        }else if (pdfflag==1 && galleryflagone.equals("1")){
+            uploadMultipartwithfile();
+
+        }else if (pdfflag==1 && galleryflagone.equals("1")&& galleryflagtwo.equals("1")){
+            uploadMultipartwithTwofile();
+
+        }else if (galleryflagone.equals("1")){
+            postoneimage();
+
+        }else if (galleryflagtwo.equals("1")){
+            posttwoimage();
+
+        }else {
+            Toast.makeText(NewClaimActivity.this,"Please Attach Your Reimbusement File",Toast.LENGTH_LONG).show();
+        }
     }
 
 }
