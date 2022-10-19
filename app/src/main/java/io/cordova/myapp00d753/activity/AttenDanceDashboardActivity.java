@@ -65,6 +65,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     int futYear,pastYear;
     TextView tvCancel;
     String currentDate;
+    Button btnMarkAttendance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +74,8 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     }
 
     private void initView() {
+        btnMarkAttendance=(Button)findViewById(R.id.btnMarkAttendance);
+        btnMarkAttendance.setOnClickListener(this);
         imgSearch = (ImageView) findViewById(R.id.imgSearch);
         dlMain = (DrawerLayout) findViewById(R.id.dlMain);
         rvItem = (RecyclerView) findViewById(R.id.rvItem);
@@ -293,11 +296,24 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }else if (view==llWeekly){
-           weeklyfunction();
+            if (pref.getEmpClintId().equals("AEMCLI2210001707")){
+                Intent intent=new Intent(AttenDanceDashboardActivity.this,WeeklyOffAttendanceActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+
+            }else {
+                weeklyfunction();
+            }
+
         }else if (view==imgSearch){
             searchAlert();
         }else if (view==tvCancel){
             llBottom.setVisibility(View.GONE);
+        }else if (view==btnMarkAttendance){
+            Intent intent=new Intent(AttenDanceDashboardActivity.this,AttendanceManageActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("intt","2");
+            startActivity(intent);
         }
 
 

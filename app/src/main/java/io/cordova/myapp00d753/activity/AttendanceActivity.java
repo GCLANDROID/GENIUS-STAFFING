@@ -326,7 +326,7 @@ public class AttendanceActivity extends AppCompatActivity implements GoogleApiCl
                 if (connectionCheck.isNetworkAvailable()) {
 
 
-                    Intent intent = new Intent(AttendanceActivity.this, BackDatedAttendanceActivity.class);
+                    Intent intent = new Intent(AttendanceActivity.this, WeeklyOffAttendanceActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 } else {

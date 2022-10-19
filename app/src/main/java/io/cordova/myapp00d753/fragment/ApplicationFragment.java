@@ -434,7 +434,7 @@ public class ApplicationFragment extends Fragment {
                                     String LeaveTypeID = balanceObject.optString("LeaveTypeID");
                                     typeAvaild.add(LeaveTypeID + "_" + Avaliable);
 
-                                    LeaveBalanceDetailsModel model = new LeaveBalanceDetailsModel(Code, Opening, LeaveAvailed);
+                                    LeaveBalanceDetailsModel model = new LeaveBalanceDetailsModel(Code, Opening, Avaliable);
                                     itemList.add(model);
                                 }
                                 typeAvailable = typeAvaild.toString().replace("]", "").replace("[", "").replaceAll("\\s+", "");

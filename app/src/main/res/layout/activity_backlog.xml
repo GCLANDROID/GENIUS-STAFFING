@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.BackDatedAttendanceActivity"
+    tools:context=".activity.WeeklyOffAttendanceActivity"
     android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
@@ -85,7 +85,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="5dp"
                     android:id="@+id/tvStrtDate"
-                    android:text="Please select your Start Date"></TextView>
+                    android:text="Start Date"></TextView>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/lnEndDate"
@@ -106,7 +106,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="5dp"
                     android:id="@+id/tvEndDate"
-                    android:text="Please select your End Date"></TextView>
+                    android:text="End Date"></TextView>
             </LinearLayout>
         </LinearLayout>
         <Button
@@ -167,7 +167,55 @@
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
                     android:textColor="@android:color/holo_red_dark"
-                    android:text="Note:- \n* You can change your In Time/Out Time. \n* F->Full Working Day ,WO ->Weekly Off , H->Holiday"></TextView>
+                    android:text="Note:- \n* You can change your In Time/Out Time."></TextView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/holo_red_dark"
+                        android:text= "F:"></TextView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:textColor="@android:color/holo_red_dark"
+                        android:text= "Full Working Day"></TextView>
+                    <TextView
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/holo_red_dark"
+                        android:text= "WO:"></TextView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:textColor="@android:color/holo_red_dark"
+                        android:text= "Weekly Off"></TextView>
+                    <TextView
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/holo_red_dark"
+                        android:text= "H:"></TextView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:textColor="@android:color/holo_red_dark"
+                        android:text= "Holiday"></TextView>
+                </LinearLayout>
+
+
 
                 <TextView
                     android:textStyle="bold"

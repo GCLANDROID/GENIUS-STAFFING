@@ -61,7 +61,7 @@ public class DetailsFragment extends Fragment {
     ArrayList<LeaveDetailsModel> itemList=new ArrayList<>();
     LinearLayout llStrtDate,llEndDate;
     TextView tvStrtDate,tvEndDate;
-    String startDate="",endDate="";
+    String startDate="1/1/1900",endDate="1/1/1900";
     Button btnShow;
     LinearLayout llNoData,llLoader,llMain;
     Pref pref;
@@ -73,6 +73,7 @@ public class DetailsFragment extends Fragment {
         // Inflate the layout for this fragment
         v= inflater.inflate(R.layout.fragment_details, container, false);
         initView();
+        getItem();
         onClick();
 
         return v;
@@ -94,8 +95,6 @@ public class DetailsFragment extends Fragment {
         tvEndDate=(TextView)v.findViewById(R.id.tvEndDate);
         btnShow=(Button)v.findViewById(R.id.btnShow);
 
-            tvStrtDate.setText("Select your leave start date");
-            tvEndDate.setText("Select your leave end date");
             btnShow.setText("Show");
 
     }

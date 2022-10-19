@@ -20,7 +20,7 @@
           android:layout_height="25dp"
           android:src="@drawable/calendericon"></ImageView>
       <TextView
-          android:text="Select your leave start date"
+          android:text="Start Date"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:textSize="12sp"
@@ -40,7 +40,7 @@
           android:layout_height="25dp"
           android:src="@drawable/calendericon"></ImageView>
       <TextView
-          android:text="Select your leave end date"
+          android:text="End Date"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:textSize="12sp"

@@ -92,7 +92,7 @@
             android:name=".activity.AttendanceReportActivity"
             android:screenOrientation="userPortrait" />
         <activity
-            android:name=".activity.BackDatedAttendanceActivity"
+            android:name=".activity.WeeklyOffAttendanceActivity"
             android:screenOrientation="userPortrait" />
         <activity
             android:name=".activity.ContactUsActivity"

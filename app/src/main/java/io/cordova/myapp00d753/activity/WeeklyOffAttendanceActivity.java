@@ -26,6 +26,11 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.androidnetworking.interfaces.UploadProgressListener;
 
 
 import org.json.JSONArray;
@@ -40,14 +45,14 @@ import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
 
-public class BackDatedAttendanceActivity extends AppCompatActivity {
+public class WeeklyOffAttendanceActivity extends AppCompatActivity {
     LinearLayout llDate;
     TextView tvDate;
     ImageView imgBack, imgHome;
     LinearLayout llSubmit;
     Pref pref;
     String newdate;
-    private AlertDialog alertDialog, alerDialog1,al2;
+    private AlertDialog alertDialog, alerDialog1, al2;
     String responseText;
     NetworkConnectionCheck connectionCheck;
     TextView tvMan;
@@ -58,7 +63,7 @@ public class BackDatedAttendanceActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_back_dated);
+        setContentView(R.layout.activity_weeklyoff);
         initialize();
         onclick();
     }
@@ -87,18 +92,19 @@ public class BackDatedAttendanceActivity extends AppCompatActivity {
                 c.add(Calendar.DAY_OF_MONTH, -7);
 
 
-                final DatePickerDialog dialog = new DatePickerDialog(BackDatedAttendanceActivity.this, new DatePickerDialog.OnDateSetListener() {
+                final DatePickerDialog dialog = new DatePickerDialog(WeeklyOffAttendanceActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int y, int m, int d) {
 
-                        newdate = (m + 1) + "/" + d + "/" + y;
+
+                        newdate = y + "-" + (m + 1) + "-" + d;
 
                         tvDate.setVisibility(View.VISIBLE);
                         tvDate.setText(newdate);
 
                     }
                 }, year, month, day);
-                dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+                dialog.getDatePicker();
                 dialog.show();
             }
         });
@@ -113,7 +119,7 @@ public class BackDatedAttendanceActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(BackDatedAttendanceActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent = new Intent(WeeklyOffAttendanceActivity.this, EmployeeDashBoardActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 //finish();
@@ -125,14 +131,14 @@ public class BackDatedAttendanceActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (newdate != null) {
                     if (connectionCheck.isNetworkAvailable()) {
-                        attendanceCheck();
+                        attendance();
                         tvMan.setVisibility(View.GONE);
                     } else {
                         connectionCheck.getNetworkActiveAlert().show();
                     }
 
                 } else {
-                    Toast.makeText(BackDatedAttendanceActivity.this, "please select date", Toast.LENGTH_LONG).show();
+                    Toast.makeText(WeeklyOffAttendanceActivity.this, "please select date", Toast.LENGTH_LONG).show();
                 }
 
 
@@ -143,57 +149,59 @@ public class BackDatedAttendanceActivity extends AppCompatActivity {
     }
 
 
-    public void backDatedAttendance() {
-        String surl = AppData.url+"get_GCLSelfAttendanceWoLeave?AEMEmployeeID=" + pref.getEmpId() + "&Adate=" + newdate + "&DbOperation=5&SecurityCode=" + pref.getSecurityCode();
-        final ProgressDialog progressBar = new ProgressDialog(this);
-        progressBar.setCancelable(true);//you can cancel it by pressing back button
-        progressBar.setMessage("Loading...");
-        progressBar.show();
-        Log.d("backattendanceurl",surl);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, surl,
-                new Response.Listener<String>() {
+    private void attendance() {
+        ProgressDialog progressDialog = new ProgressDialog(WeeklyOffAttendanceActivity.this);
+        progressDialog.setMessage("Loading");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        AndroidNetworking.upload(AppData.url + "get_GCLSelfAttendanceWoLeave/WOApplicationSave")
+                .addMultipartParameter("Aid", "0")
+                .addMultipartParameter("EmployeeId", pref.getEmpId())
+                .addMultipartParameter("AttType", "WO")
+                .addMultipartParameter("ApprovalStatus", "1")
+                .addMultipartParameter("Operation", "7")
+                .addMultipartParameter("Adate", newdate)
+                .addMultipartParameter("SecurityCode","0000")
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
                     @Override
-                    public void onResponse(String response) {
-                        Log.d("responseLogin", response);
-                        progressBar.dismiss();
-                        try {
-                            JSONObject job1 = new JSONObject(response);
-                            Log.e("response12", "@@@@@@" + job1);
-                            responseText = job1.optString("responseText");
-                            boolean responseStatus = job1.optBoolean("responseStatus");
-                            if (responseStatus) {
-                               // Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
-                                successAlert(responseText);
+                    public void onProgress(long bytesUploaded, long totalBytes) {
 
-
-                            } else {
-                                showAlertforFalse(responseText);
-
-                            }
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(BackDatedAttendanceActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
-                        }
 
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                progressBar.dismiss();
-              //  Toast.makeText(BackDatedAttendanceActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
-                Log.e("ert", error.toString());
-            }
-        }) {
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
 
-        };
-        AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
+                        progressDialog.dismiss();
+                        JSONObject job = response;
+                        responseText = job.optString("responseText");
+                        boolean responseStatus = job.optBoolean("responseStatus");
 
+                        successAlert(responseText);
+
+
+                        // boolean _status = job1.getBoolean("status");
+
+
+                        // do anything with response
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        progressDialog.dismiss();
+                        Toast.makeText(WeeklyOffAttendanceActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+
+                    }
+                });
     }
 
     private void showAlertforFalse(String text) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BackDatedAttendanceActivity.this, R.style.CustomDialogNew);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(WeeklyOffAttendanceActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_invaliddate, null);
         dialogBuilder.setView(dialogView);
@@ -222,7 +230,7 @@ public class BackDatedAttendanceActivity extends AppCompatActivity {
 
 
     private void successAlert(String text) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BackDatedAttendanceActivity.this, R.style.CustomDialogNew);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(WeeklyOffAttendanceActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_success, null);
         dialogBuilder.setView(dialogView);
@@ -232,7 +240,9 @@ public class BackDatedAttendanceActivity extends AppCompatActivity {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                attendanceCheck();
+                Intent intent=new Intent(WeeklyOffAttendanceActivity.this,AttenDanceDashboardActivity.class);
+                startActivity(intent);
+                finish();
                 alerDialog1.dismiss();
 
             }
@@ -247,74 +257,11 @@ public class BackDatedAttendanceActivity extends AppCompatActivity {
     }
 
 
-    private void attendanceCheck() {
-        String surl = AppData.url+"gcl_FetchEmployeeAttendanceByDate?AEMEmployeeID=" + pref.getEmpId() + "&Adate=" + newdate + "&CurrentPage=1&Operation=1&SecurityCode=" + pref.getSecurityCode();
-        Log.d("attencinput", surl);
-        final ProgressDialog progressBar = new ProgressDialog(this);
-        progressBar.setCancelable(true);//you can cancel it by pressing back button
-        progressBar.setMessage("Loading...");
-        progressBar.show();
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("responseLeave", response);
-                        progressBar.dismiss();
-                        try {
-                            JSONObject job1 = new JSONObject(response);
-                            Log.e("response12", "@@@@@@" + job1);
 
-                            boolean responseStatus = job1.optBoolean("responseStatus");
-                            if (responseStatus) {
-                                String toastText = job1.optString("responseText");
-                                JSONArray responseData = job1.optJSONArray("responseData");
-                                for (int i = 0; i < responseData.length(); i++) {
-                                    JSONObject obj = responseData.getJSONObject(i);
-                                    ApproverStatus = obj.optString("ApproverStatus");
-                                    if (!ApproverStatus.equals("1")){
-                                        backDatedAttendance();
-                                    }else {
-                                        showAlertforFalse1(toastText);
-                                    }
-
-
-
-                                }
-
-
-                            } else {
-                                backDatedAttendance();
-
-                            }
-
-
-                            // boolean _status = job1.getBoolean("status");
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(BackDatedAttendanceActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
-                        }
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                progressBar.dismiss();
-                Toast.makeText(BackDatedAttendanceActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
-
-                Log.e("ert", error.toString());
-            }
-        }) {
-
-        };
-        AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
-
-    }
 
 
     private void showAlertforFalse1(String text) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BackDatedAttendanceActivity.this, R.style.CustomDialogNew);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(WeeklyOffAttendanceActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_invaliddate, null);
         dialogBuilder.setView(dialogView);
@@ -338,7 +285,6 @@ public class BackDatedAttendanceActivity extends AppCompatActivity {
         al2.show();
 
     }
-
 
 
 }

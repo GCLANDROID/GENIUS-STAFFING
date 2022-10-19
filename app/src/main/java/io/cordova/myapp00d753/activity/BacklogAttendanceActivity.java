@@ -246,11 +246,13 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
                                     String InTime = obj.optString("Intime");
                                     String OutTime = obj.optString("Outtime");
                                     String Daytype=obj.optString("Daytype");
+                                    String Remarks=obj.optString("Remarks");
 
                                     BackLogAttendanceModel blockModule = new BackLogAttendanceModel(AttDate, InTime, OutTime);
                                     blockModule.setDayType(Daytype);
+                                    blockModule.setRemarks(Remarks);
                                     blockLogList.add(blockModule);
-                                    item1.add(pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+AttDate + "_" + InTime + "_" + OutTime + "_Bcklog_Attendance");
+                                    item1.add(pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+AttDate + "_" + InTime + "_" + OutTime + "_"+Remarks);
 
 
                                 }
@@ -305,7 +307,7 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
 
         blockLogList.get(position).setSelected(status);
         if (blockLogList.get(position).isSelected()==true) {
-            backLogItem.add(pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(position).getDate() + "_" + blockLogList.get(position).getInTime() + "_" + blockLogList.get(position).getOutTime() + "_Bcklog_Attendance");
+            backLogItem.add(pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(position).getDate() + "_" + blockLogList.get(position).getInTime() + "_" + blockLogList.get(position).getOutTime() + "_"+blockLogList.get(position).getRemarks());
 
         }else {
             backLogItem.clear();
