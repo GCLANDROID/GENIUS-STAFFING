@@ -296,7 +296,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }else if (view==llWeekly){
-            if (pref.getEmpClintId().equals("AEMCLI2210001707")){
+            if (pref.getEmpClintId().equals("AEMCLI2210001707") ||pref.getEmpClintId().equals("AEMCLI2210001697")||pref.getEmpClintId().equals("AEMCLI2210001698")){
                 Intent intent=new Intent(AttenDanceDashboardActivity.this,WeeklyOffAttendanceActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);

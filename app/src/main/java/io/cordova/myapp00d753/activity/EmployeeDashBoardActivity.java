@@ -470,23 +470,13 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                     JSONObject obj = responseData.getJSONObject(i);
                                     String MenuID=obj.optString("MenuID");
                                     String MenuItem=obj.optString("MenuItem");
-
                                     MenuItemModel itemModel=new MenuItemModel(MenuItem,MenuID);
                                     itemList.add(itemModel);
-
-
-
-
-
 
                                 }
 
                                 MenuItemAdapter menuItemAdapter=new MenuItemAdapter(itemList,getApplicationContext(),PFLink);
                                 rvItem.setAdapter(menuItemAdapter);
-
-
-
-
                             }
 
 

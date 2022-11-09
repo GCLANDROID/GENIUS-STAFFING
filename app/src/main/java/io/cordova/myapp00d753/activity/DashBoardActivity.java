@@ -1,5 +1,6 @@
 package io.cordova.myapp00d753.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,6 +36,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.play.core.review.ReviewInfo;
+import com.google.android.play.core.review.ReviewManager;
+import com.google.android.play.core.review.ReviewManagerFactory;
+import com.google.android.play.core.tasks.OnCompleteListener;
+import com.google.android.play.core.tasks.OnFailureListener;
+import com.google.android.play.core.tasks.Task;
 
 
 import org.json.JSONArray;
@@ -64,6 +72,7 @@ public class DashBoardActivity extends AppCompatActivity {
     RecyclerView rvItem;
     ArrayList<DashboardItemModel> itemList = new ArrayList<>();
     LinearLayout llLogin;
+    private ReviewManager reviewManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +86,7 @@ public class DashBoardActivity extends AppCompatActivity {
     }
 
     private void initialize() {
+        reviewManager = ReviewManagerFactory.create(this);
         llLogin=(LinearLayout)findViewById(R.id.llLogin);
         rvItem=(RecyclerView)findViewById(R.id.rvItem);
         rvItem.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -100,6 +110,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
         checkBersion();
         setItem();
+       // RateApp(DashBoardActivity.this);
 
 
     }
@@ -328,6 +339,39 @@ public class DashBoardActivity extends AppCompatActivity {
         DashboardItemAdapter dashboardItemAdapter=new DashboardItemAdapter(itemList,DashBoardActivity.this);
         rvItem.setAdapter(dashboardItemAdapter);
 
+    }
+
+    public void RateApp(final Context mContext) {
+        try {
+            final ReviewManager manager = ReviewManagerFactory.create(mContext);
+            manager.requestReviewFlow().addOnCompleteListener(new OnCompleteListener<ReviewInfo>() {
+                @Override
+                public void onComplete(@NonNull Task<ReviewInfo> task) {
+                    if(task.isSuccessful()){
+                        ReviewInfo reviewInfo = task.getResult();
+                        manager.launchReviewFlow((Activity) mContext, reviewInfo).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(Exception e) {
+                                Toast.makeText(mContext, "Rating Failed", Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Toast.makeText(mContext, "Review Completed, Thank You!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(Exception e) {
+                    Toast.makeText(mContext, "In-App Request Failed", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 
