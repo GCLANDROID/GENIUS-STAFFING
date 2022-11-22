@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -110,7 +111,25 @@ public class DashBoardActivity extends AppCompatActivity {
 
         checkBersion();
         setItem();
-       // RateApp(DashBoardActivity.this);
+
+        SharedPreferences prefs = getSharedPreferences("io.cordova.myapp00d753", MODE_PRIVATE);
+
+        int launch_count = prefs.getInt("launch_count", 0);
+
+        if(launch_count>=5){
+            // third time launch
+           // Toast.makeText(DashBoardActivity.this,"3 time",Toast.LENGTH_LONG).show();
+            RateApp(DashBoardActivity.this);
+
+        } else {
+            prefs.edit()
+                    .putInt("launch_count", launch_count+1)
+                    .apply();
+        }
+
+
+
+
 
 
     }
@@ -352,12 +371,12 @@ public class DashBoardActivity extends AppCompatActivity {
                         manager.launchReviewFlow((Activity) mContext, reviewInfo).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(Exception e) {
-                                Toast.makeText(mContext, "Rating Failed", Toast.LENGTH_SHORT).show();
+                               // Toast.makeText(mContext, "Rating Failed", Toast.LENGTH_SHORT).show();
                             }
                         }).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-                                Toast.makeText(mContext, "Review Completed, Thank You!", Toast.LENGTH_SHORT).show();
+                               // Toast.makeText(mContext, "Review Completed, Thank You!", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -366,7 +385,7 @@ public class DashBoardActivity extends AppCompatActivity {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(Exception e) {
-                    Toast.makeText(mContext, "In-App Request Failed", Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(mContext, "In-App Request Failed", Toast.LENGTH_SHORT).show();
                 }
             });
         } catch (ActivityNotFoundException e) {

@@ -274,10 +274,17 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             if (pref.getShiftFlag().equals("1")){
                 getShift();
             }else {
-                Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceManageActivity.class);
-                intent.putExtra("intt","2");
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                if (pref.getEmpClintId().equals("AEMCLI2210001697")||pref.getEmpClintId().equals("AEMCLI2210001698")) {
+                    Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceManageWithoutLocActivity.class);
+                    intent.putExtra("intt", "2");
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }else {
+                    Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceManageActivity.class);
+                    intent.putExtra("intt", "2");
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
             }
 
 
@@ -310,10 +317,17 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         }else if (view==tvCancel){
             llBottom.setVisibility(View.GONE);
         }else if (view==btnMarkAttendance){
-            Intent intent=new Intent(AttenDanceDashboardActivity.this,AttendanceManageActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra("intt","2");
-            startActivity(intent);
+            if (pref.getEmpClintId().equals("AEMCLI2210001697")||pref.getEmpClintId().equals("AEMCLI2210001698")) {
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceManageWithoutLocActivity.class);
+                intent.putExtra("intt", "2");
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }else {
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceManageActivity.class);
+                intent.putExtra("intt", "2");
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
         }
 
 
@@ -373,9 +387,9 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_success, null);
         dialogBuilder.setView(dialogView);
-        TextView tvInvalidDate = (TextView) dialogView.findViewById(R.id.tvSuccess);
+        TextView tvSuccess = (TextView) dialogView.findViewById(R.id.tvSuccess);
 
-        tvInvalidDate.setText(text);
+        tvSuccess.setText(text);
 
         Button btnOk = (Button) dialogView.findViewById(R.id.btnOk);
         btnOk.setOnClickListener(new View.OnClickListener() {

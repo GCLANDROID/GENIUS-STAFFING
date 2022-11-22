@@ -95,6 +95,7 @@ public class SplashScreenActivity extends AppCompatActivity implements GoogleApi
 
     private void initialize() {
         pref=new Pref(SplashScreenActivity.this);
+
         connectionCheck = new NetworkConnectionCheck(this);
         myPermission = new CreativePermission(this,PERMISSION_ALL);
 

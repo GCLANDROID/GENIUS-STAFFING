@@ -311,6 +311,8 @@
             android:screenOrientation="userPortrait" />
         <activity android:name=".activity.SupLeaveApprovalActivity"
             android:screenOrientation="userPortrait"></activity>
+        <activity android:name=".activity.AttendanceManageWithoutLocActivity"
+            android:screenOrientation="userPortrait"></activity>
 
         <service
             android:name=".utility.LocationUpdaterService"
