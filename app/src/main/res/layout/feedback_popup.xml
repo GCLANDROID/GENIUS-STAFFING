@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="450dp"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:background="@mipmap/popupbg"
+    android:gravity="center"
+    android:padding="20dp">
+    <LinearLayout
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@mipmap/popupuser"></ImageView>
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:text="Your opinion matters to us!"></TextView>
+    <TextView
+        android:textAlignment="center"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/grey"
+        android:text="We work super hard to make Genius better for you, and would be glad to hear your opinion"></TextView>
+    <LinearLayout
+        android:id="@+id/lnFeedback"
+        android:backgroundTint="@color/maincolor"
+        android:layout_marginTop="20dp"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:background="@drawable/lldesign"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:text="Give Feeedback"></TextView>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/lnSkip"
+        android:backgroundTint="@color/backcolor"
+        android:layout_marginTop="20dp"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:background="@drawable/lldesign"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:text="SKIP"></TextView>
+    </LinearLayout>
+
+
+</LinearLayout>

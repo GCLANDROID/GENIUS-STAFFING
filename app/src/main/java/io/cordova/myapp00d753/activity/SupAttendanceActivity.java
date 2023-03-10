@@ -11,10 +11,12 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.utility.Pref;
 
 public class SupAttendanceActivity extends AppCompatActivity {
-    LinearLayout llAttandanceManage,llAttendanceReport,llApproval,llConso;
+    LinearLayout llAttandanceManage,llAttendanceReport,llApproval,llQR;
     ImageView imgBack,imgHome;
+    Pref pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,10 +27,16 @@ public class SupAttendanceActivity extends AppCompatActivity {
     }
 
     private void initialize(){
+        pref=new Pref(SupAttendanceActivity.this);
         llAttandanceManage=(LinearLayout)findViewById(R.id.llAttandanceManage);
         llAttendanceReport=(LinearLayout)findViewById(R.id.llAttendanceReport);
         llApproval=(LinearLayout)findViewById(R.id.llApproval);
-        llConso=(LinearLayout)findViewById(R.id.llConso);
+        llQR=(LinearLayout)findViewById(R.id.llQR);
+        if (pref.getEmpClintId().equals("AEMCLI0910000315")){
+            llQR.setVisibility(View.VISIBLE);
+        }else {
+            llQR.setVisibility(View.GONE);
+        }
 
         imgBack=(ImageView)findViewById(R.id.imgBack);
         imgHome=(ImageView)findViewById(R.id.imgHome);
@@ -65,6 +73,15 @@ public class SupAttendanceActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 Intent intent=new Intent(SupAttendanceActivity.this,SupAttenReportActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        llQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent=new Intent(SupAttendanceActivity.this,QRGeneratorActivity.class);
                 startActivity(intent);
             }
         });

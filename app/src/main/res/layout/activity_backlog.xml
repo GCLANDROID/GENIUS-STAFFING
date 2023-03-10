@@ -36,8 +36,7 @@
                 android:id="@+id/tvToolBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Backlog Attendance"
-                android:textAllCaps="true"
+                android:text="Attendance Regularization"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textColor="@android:color/white"
                 />
@@ -259,118 +258,130 @@
                         android:text="Select All"
                         android:layout_marginLeft="5dp"></TextView>
                 </LinearLayout>
-                <LinearLayout
+
+                <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:paddingRight="10dp">
+                    android:layout_height="match_parent">
                     <LinearLayout
-
-                        android:id="@+id/btnSubmit"
-                        android:layout_width="120dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/lldesign"
-                        android:orientation="horizontal"
-                        android:backgroundTint="@color/maincolor"
-
-                        >
-
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
                         <LinearLayout
+                            android:id="@+id/llHeading"
+                            android:visibility="visible"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center">
-                            <TextView
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginTop="15sp"
+                            android:background="@drawable/lldesign7"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:visibility="gone"
+                                android:orientation="vertical"
+                                android:id="@+id/llLike"
+                                android:gravity="center"
                                 android:layout_gravity="center"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_weight="0.1">
+
+                            </LinearLayout>
+                            <TextView
+                                android:gravity="center"
+                                android:id="@+id/tvDate"
+                                android:layout_marginLeft="2dp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="14sp"
-                                android:textColor="@android:color/white"
-                                android:text="SAVE"></TextView>
+                                android:text="Date"
+                                android:layout_weight="0.5"
+                                android:layout_gravity="center"
+                                android:textColor="@android:color/black"
+                                android:textSize="12sp"/>
+                            <TextView
+                                android:gravity="center"
+                                android:id="@+id/tvInTime"
+                                android:layout_marginLeft="5dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="In time"
+                                android:layout_weight="0.5"
+                                android:layout_gravity="center"
+                                android:textColor="@android:color/black"
+                                android:textSize="12sp"/>
+                            <TextView
+                                android:gravity="center"
+                                android:id="@+id/tvOutTime"
+                                android:layout_marginLeft="5dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Out time"
+                                android:layout_weight="0.5"
+                                android:layout_gravity="center"
+                                android:textColor="@android:color/black"
+                                android:textSize="12sp"/>
+                            <TextView
+                                android:layout_marginRight="2dp"
+                                android:gravity="right"
+                                android:id="@+id/tvRemark"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Day Type"
+                                android:layout_weight="0.2"
+                                android:layout_gravity="center"
+                                android:textColor="@android:color/black"
+                                android:textSize="12sp"/>
                         </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/llHeading"
-                    android:visibility="visible"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginTop="15sp"
-                    android:background="@drawable/lldesign7"
-                    android:orientation="horizontal">
-                    <LinearLayout
-                        android:visibility="gone"
-                        android:orientation="vertical"
-                        android:id="@+id/llLike"
-                        android:gravity="center"
-                        android:layout_gravity="center"
-                        android:layout_width="0dp"
-                        android:layout_height="20dp"
-                        android:layout_weight="0.1">
+                        <androidx.recyclerview.widget.RecyclerView
 
-                    </LinearLayout>
-                    <TextView
-                        android:gravity="center"
-                        android:id="@+id/tvDate"
-                        android:layout_marginLeft="2dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Date"
-                        android:layout_weight="0.5"
-                        android:layout_gravity="center"
-                        android:textColor="@android:color/black"
-                        android:textSize="12sp"/>
-                    <TextView
-                        android:gravity="center"
-                        android:id="@+id/tvInTime"
-                        android:layout_marginLeft="5dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="In time"
-                        android:layout_weight="0.5"
-                        android:layout_gravity="center"
-                        android:textColor="@android:color/black"
-                        android:textSize="12sp"/>
-                    <TextView
-                        android:gravity="center"
-                        android:id="@+id/tvOutTime"
-                        android:layout_marginLeft="5dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Out time"
-                        android:layout_weight="0.5"
-                        android:layout_gravity="center"
-                        android:textColor="@android:color/black"
-                        android:textSize="12sp"/>
-                    <TextView
-                        android:layout_marginRight="2dp"
-                        android:gravity="right"
-                        android:id="@+id/tvRemark"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Day Type"
-                        android:layout_weight="0.2"
-                        android:layout_gravity="center"
-                        android:textColor="@android:color/black"
-                        android:textSize="12sp"/>
-                </LinearLayout>
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/rvItem"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp">
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/rvItem"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginTop="10dp">
 
-                </androidx.recyclerview.widget.RecyclerView>
-                <EditText
-                    android:background="@null"
-                    android:id="@+id/etFocus"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"></EditText>
+                        </androidx.recyclerview.widget.RecyclerView>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:paddingRight="10dp">
+                            <LinearLayout
+
+                                android:id="@+id/btnSubmit"
+                                android:layout_width="120dp"
+                                android:layout_height="40dp"
+                                android:background="@drawable/lldesign"
+                                android:orientation="horizontal"
+                                android:backgroundTint="@color/maincolor"
+
+                                >
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center">
+                                    <TextView
+                                        android:layout_gravity="center"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="14sp"
+                                        android:textColor="@android:color/white"
+                                        android:text="SAVE"></TextView>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                        <EditText
+                            android:background="@null"
+                            android:id="@+id/etFocus"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"></EditText>
+                    </LinearLayout>
+                </androidx.core.widget.NestedScrollView>
+
 
             </LinearLayout>
         </ScrollView>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="320dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center">
+
+        <LinearLayout
+
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+
+            android:background="@drawable/lldesign">
+            <LinearLayout
+                android:layout_width="320dp"
+                android:layout_height="34dp"
+                android:paddingRight="10dp"
+                android:background="@color/maincolor">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:gravity="right"></LinearLayout>
+                <TextView
+                    android:text="Notice"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"></TextView>
+                <LinearLayout
+                    android:id="@+id/lnCancel"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:gravity="right">
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:id="@+id/imgCancel"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/cancelicon"
+                        app:tint="@color/white" />
+                </LinearLayout>
+
+            </LinearLayout>
+            <TextView
+                android:padding="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/textcolor"
+                android:text="Attention: Effective 7th March 2023 the process of application for NRW, Settlement, Transfer Out and Transfer In will be blocked. Kindly do the needful before that."/>
+            <TextView
+                android:padding="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/textcolor"
+                android:text="In the reference to surrendering PF Trust to EPFO, Please download the FAQ from this link"/>
+            <TextView
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:gravity="center"
+                android:background="@drawable/lldesign7"
+                android:backgroundTint="@color/colorPrimaryDark"
+                android:id="@+id/tvLink"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:text="Please Click Here For The PDF"/>
+        </LinearLayout>
+
+
+
+
+</LinearLayout>

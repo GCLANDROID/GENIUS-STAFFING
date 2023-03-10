@@ -127,11 +127,6 @@ public class DashBoardActivity extends AppCompatActivity {
                     .apply();
         }
 
-
-
-
-
-
     }
 
     private void onClick() {
@@ -172,11 +167,9 @@ public class DashBoardActivity extends AppCompatActivity {
                             if (playversion.equals(version)){
 
                             }else {
-                                if (responseStatus.equalsIgnoreCase("Y")) {
-                                    upDateAlert();
-                                }else {
 
-                                }
+                                    upDateAlert();
+
                             }
 
                             // boolean _status = job1.getBoolean("status")

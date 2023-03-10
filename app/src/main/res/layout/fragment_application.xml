@@ -28,12 +28,13 @@
                         android:background="@color/colorPrimary"
                         android:gravity="center">
                         <TextView
+                            android:textAlignment="center"
                             android:id="@+id/tvDetail"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="12sp"
                             android:textColor="@android:color/white"
-                            android:text="Leave request details"></TextView>
+                            android:text="Leave Request Summary as on Date"></TextView>
                         <LinearLayout
                             android:visibility="gone"
                             android:layout_width="wrap_content"
@@ -287,12 +288,13 @@
                         android:gravity="center"
                         android:orientation="vertical">
                         <TextView
+                            android:textAlignment="center"
                             android:id="@+id/tvBalance"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="12sp"
                             android:textColor="@android:color/white"
-                            android:text="Leave balance details"></TextView>
+                            android:text="Leave balance summary as on date"></TextView>
 
                     </LinearLayout>
                     <androidx.recyclerview.widget.RecyclerView

@@ -105,7 +105,7 @@ public class AttendanceReportActivity extends AppCompatActivity {
         llMain=(LinearLayout)findViewById(R.id.llMain);
         llNodata=(LinearLayout)findViewById(R.id.llNodata);
         progressBar=(ProgressBar)findViewById(R.id.WLpagination_loader);
-        rvAttendanceReport.addOnScrollListener(new RecyclerView.OnScrollListener() {
+     /*   rvAttendanceReport.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 if (dy > 0) //check for scroll down
@@ -127,7 +127,7 @@ public class AttendanceReportActivity extends AppCompatActivity {
                     }
                 }
             }
-        });
+        });*/
         setAdapter();
          y= Calendar.getInstance().get(Calendar.YEAR);
         year=String.valueOf(y);
@@ -181,7 +181,7 @@ public class AttendanceReportActivity extends AppCompatActivity {
         llMain.setVisibility(View.GONE);
         llNodata.setVisibility(View.GONE);
         llAgain.setVisibility(View.GONE);
-        String surl = AppData.url+"get_GCLSelfAttendanceWoLeave?AEMConsultantID="+pref.getEmpConId()+"&AEMClientID="+pref.getEmpClintId()+"&AEMClientOfficeID="+pref.getEmpClintOffId()+"&AEMEmployeeID="+pref.getEmpId()+"&CurrentPage="+mPageCount+"&AID=0&ApproverStatus=4&YearVal="+year+"&MonthName="+month+"&WorkingStatus=1&SecurityCode="+pref.getSecurityCode()+"&DbOperation=8&AttIds=null";
+        String surl = AppData.url+"get_GCLSelfAttendanceWoLeave?AEMConsultantID="+pref.getEmpConId()+"&AEMClientID="+pref.getEmpClintId()+"&AEMClientOfficeID="+pref.getEmpClintOffId()+"&AEMEmployeeID="+pref.getEmpId()+"&CurrentPage=0&AID=0&ApproverStatus=4&YearVal="+year+"&MonthName="+month+"&WorkingStatus=1&SecurityCode="+pref.getSecurityCode()+"&DbOperation=8&AttIds=null";
         Log.d("input",surl);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
@@ -189,7 +189,7 @@ public class AttendanceReportActivity extends AppCompatActivity {
                     public void onResponse(String response) {
 
                         Log.d("responseAttendance", response);
-                        loading=false;
+
                        // attendabceInfiList.clear();
 
                         try {

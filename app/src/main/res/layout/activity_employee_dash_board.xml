@@ -518,10 +518,25 @@
             android:layout_weight="1"
             android:orientation="horizontal"
             android:padding="10dp">
-           <androidx.recyclerview.widget.RecyclerView
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               android:id="@+id/rvItem"></androidx.recyclerview.widget.RecyclerView>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/rvItem"></androidx.recyclerview.widget.RecyclerView>
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fbSpoke"
+                    android:backgroundTint="@color/misscolor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    app:fabSize="auto"
+                   android:layout_gravity="bottom|right"
+                    app:srcCompat="@drawable/helpdesk" />
+
+            </FrameLayout>
+
         </LinearLayout>
     </LinearLayout>
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -91,6 +91,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+
                     android:id="@+id/llMain"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -124,7 +125,15 @@
                                 android:visibility="gone" />
 
                             <androidx.recyclerview.widget.RecyclerView
+                                android:scrollbars="none"
                                 android:id="@+id/rvItem"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="10dp"></androidx.recyclerview.widget.RecyclerView>
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:scrollbars="none"
+                                android:id="@+id/rvItem1"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_marginLeft="10dp"
@@ -136,12 +145,7 @@
                                 android:layout_marginTop="10dp"
                                 android:layout_weight="0.6">
 
-                                <androidx.recyclerview.widget.RecyclerView
-                                    android:id="@+id/rvItem1"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_marginLeft="10dp"
-                                    android:layout_marginRight="10dp"></androidx.recyclerview.widget.RecyclerView>
+
                             </LinearLayout>
 
 
@@ -208,6 +212,20 @@
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/lnFeedback"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:textColor="@color/maincolor"
+                        android:text="Thank you for your valuable feddback"></TextView>
+                </LinearLayout>
             </LinearLayout>
             <LinearLayout
                 android:visibility="gone"
@@ -227,4 +245,4 @@
     </LinearLayout>
 
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

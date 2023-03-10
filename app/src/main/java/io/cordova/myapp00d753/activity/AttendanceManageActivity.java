@@ -165,7 +165,6 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
     TextView tvToolBar;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -173,7 +172,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
         // locationalerts();
         initialize();
         setUpMapIfNeeded();
-       // attendanceCheck();
+        // attendanceCheck();
         onClick();
     }
 
@@ -264,7 +263,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
         address1 = address.replaceAll("\\s+", "%20");
         tvAddress.setText(address);
         intt = getIntent().getStringExtra("intt");
-        tvToolBar=(TextView)findViewById(R.id.tvToolBar);
+        tvToolBar = (TextView) findViewById(R.id.tvToolBar);
 
         if (intt.equals("2")) {
             btnSubmit.setVisibility(View.VISIBLE);
@@ -316,7 +315,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
             @Override
             public void onClick(View view) {
                 if (connectionCheck.isNetworkAvailable()) {
-                   imgemandatoryCheck();
+                    imgemandatoryCheck();
                 } else {
                     connectionCheck.getNetworkActiveAlert().show();
                 }
@@ -669,7 +668,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
         int cropW = (width - height) / 2;
         cropW = (cropW < 0) ? 0 : cropW;
         int cropH = (height - width) / 2;
-        cropH = (cropH <  0) ? 0 : cropH;
+        cropH = (cropH < 0) ? 0 : cropH;
         Bitmap cropImg = Bitmap.createBitmap(bitmap, cropW, cropH, newWidth, newHeight);
 
         return cropImg;
@@ -703,11 +702,10 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
                         btnSubmit.setVisibility(View.VISIBLE);
                         llL.setVisibility(View.GONE);
                         JSONObject job = response;
-                        responseText=job.optString("responseText");
+                        responseText = job.optString("responseText");
                         boolean responseStatus = job.optBoolean("responseStatus");
 
-                            successAlert();
-
+                        successAlert();
 
 
                         // boolean _status = job1.getBoolean("status");
@@ -726,8 +724,6 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
                     }
                 });
     }
-
-
 
 
     private void attendanceGivenfunction() {
@@ -784,7 +780,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
             @Override
             public void onClick(View view) {
                 alerDialog1.dismiss();
-                Intent intent=new Intent(AttendanceManageActivity.this,AttendanceReportActivity.class);
+                Intent intent = new Intent(AttendanceManageActivity.this, AttendanceReportActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -1002,25 +998,18 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
         return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
     }
 
-    private void imgemandatoryCheck(){
-        if (pref.getEmpClintId().equals("AEMCLI1410000807")){
-            if (flag == 1) {
+    private void imgemandatoryCheck() {
+
+        if (flag == 1) {
 
 
-                attendance();
-            } else {
-                Toast.makeText(AttendanceManageActivity.this,"Please Capture Selfie Image",Toast.LENGTH_LONG).show();
-            }
-        }else {
-            if (flag == 1) {
+            attendance();
+        } else {
+            attendanceGivenfunction();
 
-
-                attendance();
-            } else {
-                attendanceGivenfunction();
-            }
         }
     }
+
 
 
 }

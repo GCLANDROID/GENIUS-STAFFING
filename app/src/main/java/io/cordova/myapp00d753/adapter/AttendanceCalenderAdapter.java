@@ -1,6 +1,7 @@
 package io.cordova.myapp00d753.adapter;
 
 
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,19 +30,22 @@ public class AttendanceCalenderAdapter extends RecyclerView.Adapter<AttendanceCa
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
-        if (itemList.get(i).getStatus().equalsIgnoreCase("Approved")){
+        if (itemList.get(i).getStatus().equalsIgnoreCase("Approved")) {
+            myViewHolder.llStatus.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#F205E33C")));
+            myViewHolder.tvTime.setTextColor(Color.parseColor("#FFFFFF"));
+        } else if (itemList.get(i).getStatus().equalsIgnoreCase("Reject")) {
 
-            myViewHolder.tvTime.setBackgroundColor(Color.parseColor("#F202B32E"));
-        }else if (itemList.get(i).getStatus().equalsIgnoreCase("Reject")){
+            myViewHolder.llStatus.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#F2D80606")));
+            myViewHolder.tvTime.setTextColor(Color.parseColor("#FFFFFF"));
 
-            myViewHolder.tvTime.setBackgroundColor(Color.parseColor("#F2B61111"));
+        } else if (itemList.get(i).getStatus().equalsIgnoreCase("Approval Pending")) {
 
-        }else if (itemList.get(i).getStatus().equalsIgnoreCase("Approval Pending")){
+            myViewHolder.llStatus.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#F2066EF1")));
+            myViewHolder.tvTime.setTextColor(Color.parseColor("#FFFFFF"));
 
-            myViewHolder.tvTime.setBackgroundColor(Color.parseColor("#f21a7cc2"));
-
-        }else {
-            myViewHolder.tvTime.setBackgroundColor(Color.parseColor("#F2454545"));
+        } else {
+            myViewHolder.llStatus.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#F2DFDFDF")));
+            myViewHolder.tvTime.setTextColor(Color.parseColor("#FFFFFF"));
         }
 
         myViewHolder.tvStatus.setText(itemList.get(i).getStatus());
@@ -61,7 +65,7 @@ public class AttendanceCalenderAdapter extends RecyclerView.Adapter<AttendanceCa
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvDay,tvDate,tvTime,tvStatus;
-        LinearLayout llMain;
+        LinearLayout llStatus;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tvDate=(TextView) itemView.findViewById(R.id.tvDate);
@@ -69,7 +73,7 @@ public class AttendanceCalenderAdapter extends RecyclerView.Adapter<AttendanceCa
             tvTime=(TextView) itemView.findViewById(R.id.tvTime);
             tvStatus=(TextView)itemView.findViewById(R.id.tvStatus);
 
-            llMain=(LinearLayout) itemView.findViewById(R.id.llMain);
+            llStatus=(LinearLayout) itemView.findViewById(R.id.llStatus);
 
         }
     }

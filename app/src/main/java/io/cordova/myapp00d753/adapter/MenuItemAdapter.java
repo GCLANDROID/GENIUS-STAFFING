@@ -29,6 +29,7 @@ import io.cordova.myapp00d753.activity.DailyDashBoardActivity;
 import io.cordova.myapp00d753.activity.DocumentActivity;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.activity.FeedBackRatingActivity;
+import io.cordova.myapp00d753.activity.FeedBackRatingForJLLActivity;
 import io.cordova.myapp00d753.activity.GeoFenceActivity;
 import io.cordova.myapp00d753.activity.KYCDashBoardActivity;
 import io.cordova.myapp00d753.activity.LeaveApplicationActivity;
@@ -38,11 +39,13 @@ import io.cordova.myapp00d753.activity.RemDashBoardActivity;
 import io.cordova.myapp00d753.activity.SalesManagementDashboardActivity;
 import io.cordova.myapp00d753.activity.VoiceAssistantActivity;
 import io.cordova.myapp00d753.module.MenuItemModel;
+import io.cordova.myapp00d753.utility.Pref;
 
 public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyViewHolder> {
     ArrayList<MenuItemModel> itemList=new ArrayList<>();
     Context mContex;
     String PFLink;
+    Pref pref;
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -54,7 +57,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
 
-
+        pref=new Pref(mContex);
         myViewHolder.tvMenuItem.setText(itemList.get(i).getMenuName());
 
         if (itemList.get(i).getMenuId().equalsIgnoreCase("1")){
@@ -93,6 +96,8 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
             myViewHolder.imgMenu.setImageResource(R.drawable.leave_management);
         }else if (itemList.get(i).getMenuId().equalsIgnoreCase("0")){
             myViewHolder.imgMenu.setImageResource(R.drawable.voice);
+        }else if (itemList.get(i).getMenuId().equalsIgnoreCase("200")){
+            myViewHolder.imgMenu.setImageResource(R.drawable.survey);
         }else {
             myViewHolder.itemView.setVisibility(View.GONE);
         }
@@ -101,12 +106,12 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
         myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (itemList.get(i).getMenuId().equalsIgnoreCase("1")){
+                if (itemList.get(i).getMenuId().equals("1")){
                     //Profile
                     Intent intent=new Intent(mContex, ProfileActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
-                }else if (itemList.get(i).getMenuId().equalsIgnoreCase("2")){
+                }else if (itemList.get(i).getMenuId().equals("2")){
                     //Attendnace
 
                         Intent intent = new Intent(mContex, AttenDanceDashboardActivity.class);
@@ -114,20 +119,20 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                         mContex.startActivity(intent);
 
                 }
-                else if (itemList.get(i).getMenuId().equalsIgnoreCase("3")){
+                else if (itemList.get(i).getMenuId().equals("3")){
                     //Payroll
 
                     Intent intent=new Intent(mContex, PayrollActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
                 }
-                else if (itemList.get(i).getMenuId().equalsIgnoreCase("4")){
+                else if (itemList.get(i).getMenuId().equals("4")){
                     //Saales
                     Intent intent=new Intent(mContex, SalesManagementDashboardActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
                 }
-                else if (itemList.get(i).getMenuId().equalsIgnoreCase("5")){
+                else if (itemList.get(i).getMenuId().equals("5")){
                     //PF
                     Uri uri = Uri.parse(PFLink); // missing 'http://' will cause crashed
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
@@ -135,31 +140,34 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                     mContex.startActivity(intent);
 
                 }
-                else if (itemList.get(i).getMenuId().equalsIgnoreCase("6")){
+                else if (itemList.get(i).getMenuId().equals("6")){
                     //document
                     Intent intent=new Intent(mContex, DocumentActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
                 }
-                else if (itemList.get(i).getMenuId().equalsIgnoreCase("7")){
+                else if (itemList.get(i).getMenuId().equals("7")){
                     //reimbursement
                     Intent intent=new Intent(mContex, RemDashBoardActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
                 }
-                else if (itemList.get(i).getMenuId().equalsIgnoreCase("8")){
+                else if (itemList.get(i).getMenuId().equals("8")){
                     //feedback
-                    Intent intent = new Intent(mContex, FeedBackRatingActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    mContex.startActivity(intent);
+
+
+                        Intent intent = new Intent(mContex, FeedBackRatingActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        mContex.startActivity(intent);
+
                 }
-                else if (itemList.get(i).getMenuId().equalsIgnoreCase("9")){
+                else if (itemList.get(i).getMenuId().equals("9")){
                     //geofence
                     Intent intent=new Intent(mContex, GeoFenceActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
                 }
-                else if (itemList.get(i).getMenuId().equalsIgnoreCase("10")){
+                else if (itemList.get(i).getMenuId().equals("10")){
                     //Dailylog
 
                         Intent intent = new Intent(mContex, DailyDashBoardActivity.class);
@@ -167,21 +175,26 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                         mContex.startActivity(intent);
 
                 }
-                else if (itemList.get(i).getMenuId().equalsIgnoreCase("11")){
+                else if (itemList.get(i).getMenuId().equals("11")){
                     //Chanepassword
                     Intent intent=new Intent(mContex, ChangePasswordActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
-                }   else if (itemList.get(i).getMenuId().equalsIgnoreCase("0")){
+                }   else if (itemList.get(i).getMenuId().equals("0")){
                     //Chanepassword
                     Intent intent=new Intent(mContex, VoiceAssistantActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
                 }
 
-                else if (itemList.get(i).getMenuId().equalsIgnoreCase("12")){
+                else if (itemList.get(i).getMenuId().equals("12")){
                     //leave
                     Intent intent=new Intent(mContex, LeaveApplicationActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContex.startActivity(intent);
+                } else if (itemList.get(i).getMenuId().equals("200")){
+                    //leave
+                    Intent intent=new Intent(mContex, FeedBackRatingForJLLActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
                 }

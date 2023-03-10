@@ -29,8 +29,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".activity.CustomCalendarActivity"></activity>
         <activity
-            android:name=".SupLeaveApprovalActivity"
+            android:name=".activity.EmailActivity"
+            android:exported="false" />
+        <activity android:name=".activity.FeedBackRatingForJLLActivity"
+            android:screenOrientation="userPortrait"></activity>
+        <activity
+            android:name=".activity.ViewSpokePersonActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.SupLeaveApprovalActivity"
             android:exported="false" />
         <activity
             android:name=".activity.AttenDanceManageWithShiftActivity"
@@ -55,6 +64,8 @@
         <activity android:name=".activity.SupEmpSaleActivity" />
         <activity android:name=".activity.PFDashBoardActivity" />
         <activity android:name=".activity.DocumentNumberActivity" />
+        <activity android:name=".activity.QRCodeScannerActivity" />
+        <activity android:name=".activity.QRGeneratorActivity" />
         <activity
             android:name=".activity.LeaveApplicationActivity"
             android:screenOrientation="userPortrait" />
@@ -66,7 +77,9 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name=".SplashScreenActivity">
+        <activity
+            android:name=".SplashScreenActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -178,12 +191,16 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <service android:name=".FCM.MyFirebaseInstanceIDService">
+        <service
+            android:name=".FCM.MyFirebaseInstanceIDService"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".FCM.MyFirebaseMessagingService">
+        <service
+            android:name=".FCM.MyFirebaseMessagingService"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -246,7 +263,9 @@
             android:name=".activity.RecktitRemActivity"
             android:screenOrientation="userPortrait" />
 
-        <receiver android:name=".reciver.NetworkStateChecker">
+        <receiver
+            android:name=".reciver.NetworkStateChecker"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
@@ -309,10 +328,9 @@
         <activity
             android:name=".activity.FenceConfigActivity"
             android:screenOrientation="userPortrait" />
-        <activity android:name=".activity.SupLeaveApprovalActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.AttendanceManageWithoutLocActivity"
-            android:screenOrientation="userPortrait"></activity>
+        <activity
+            android:name=".activity.AttendanceManageWithoutLocActivity"
+            android:screenOrientation="userPortrait" />
 
         <service
             android:name=".utility.LocationUpdaterService"

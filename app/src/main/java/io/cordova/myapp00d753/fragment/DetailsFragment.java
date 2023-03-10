@@ -327,7 +327,7 @@ public class DetailsFragment extends Fragment {
         dialogBuilder.setView(dialogView);
         TextView tvInvalidDate = (TextView) dialogView.findViewById(R.id.tvSuccess);
 
-            tvInvalidDate.setText("Leave delete successfully");
+            tvInvalidDate.setText("Leave has been deleted successfully");
 
 
 

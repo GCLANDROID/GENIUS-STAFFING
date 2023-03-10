@@ -255,8 +255,8 @@ public class ApplicationFragment extends Fragment {
             tvDocName.setText("Upload document");
             tvLeaveTypeName.setText(Html.fromHtml("Type" + color));
             tvLeaveModeName.setText(Html.fromHtml("Mode" + color));
-            tvBalance.setText("Leave balance details");
-            tvDetail.setText("Leave request details");
+            tvBalance.setText("Leave Balance Summary as on Date");
+            tvDetail.setText("Leave Request Summary as on Date");
             tvPreviewName.setText("PREVIEW");
 
 
@@ -1441,7 +1441,7 @@ public class ApplicationFragment extends Fragment {
 
 
             tvReason.setText("Reason");
-            tvValue.setText("Value");
+            tvValue.setText("No. of day(s)");
             tvEndDate.setText("End date");
             tvStrtDate.setText("Start date");
             tvType.setText("Type");
@@ -1647,7 +1647,7 @@ public class ApplicationFragment extends Fragment {
         View dialogView = inflater.inflate(R.layout.dialog_success, null);
         dialogBuilder.setView(dialogView);
         TextView tvInvalidDate = (TextView) dialogView.findViewById(R.id.tvSuccess);
-        tvInvalidDate.setText("Successfully applied");
+        tvInvalidDate.setText("Your leave has been applied successfully");
 
 
 

@@ -4,10 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.LinearGradient;
-import android.graphics.Paint;
-import android.graphics.Shader;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,11 +27,8 @@ import android.widget.Toast;
 
 
 import androidx.annotation.ColorInt;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,9 +36,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.github.florent37.viewtooltip.ViewTooltip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.kyanogen.signatureview.SignatureView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -97,6 +90,11 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
     ArrayList<MenuItemModel>itemList=new ArrayList<>();
     ImageView imglogout;
     String menuName;
+    AlertDialog feedbackpopupDialog;
+    FloatingActionButton fbSpoke;
+    JSONArray spokepersonArray;
+    AlertDialog al1;
+    boolean survey;
 
 
     @Override
@@ -105,11 +103,13 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_employee_dash_board);
         initialize();
         loginFunction();
+        getPFURL();
         onClick();
     }
 
     private void initialize() {
         pref = new Pref(EmployeeDashBoardActivity.this);
+        fbSpoke=(FloatingActionButton)findViewById(R.id.fbSpoke);
         connectionCheck = new NetworkConnectionCheck(EmployeeDashBoardActivity.this);
         imglogout=(ImageView)findViewById(R.id.imglogout);
 
@@ -138,8 +138,27 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
 
         rvItem=(RecyclerView)findViewById(R.id.rvItem);
         rvItem.setLayoutManager(new GridLayoutManager(this, 3));
+        if (pref.getSecurityCode().equals("555") || pref.getSecurityCode().equals("444")){
+
+        }else {
+            noticeAlert();
+
+            SharedPreferences prefs = getSharedPreferences("io.cordova.myapp00d753", MODE_PRIVATE);
+
+            int launch_count = prefs.getInt("launch_count", 0);
+
+            if(launch_count>=15){
+                al1.dismiss();
 
 
+            } else {
+                prefs.edit()
+                        .putInt("launch_count", launch_count+1)
+                        .apply();
+            }
+
+
+        }
 
 
     }
@@ -151,6 +170,15 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
              Intent intent=new Intent(EmployeeDashBoardActivity.this,LoginActivity.class);
              startActivity(intent);
              finish();
+         }
+     });
+     fbSpoke.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View view) {
+             Intent intent=new Intent(EmployeeDashBoardActivity.this,ViewSpokePersonActivity.class);
+             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+             intent.putExtra("spokepersonarray",spokepersonArray.toString());
+             startActivity(intent);
          }
      });
 
@@ -464,6 +492,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                             if (responseStatus) {
                                 // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
 
+
                                  itemList.add(new MenuItemModel("Voice Assistant","0"));
                                 JSONArray responseData = job1.optJSONArray("responseData");
                                 for (int i = 0; i < responseData.length(); i++) {
@@ -475,8 +504,17 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
 
                                 }
 
+                                if (pref.getEmpClintId().equals("AEMCLI1910000054") || pref.getEmpClintId().equals("AEMCLI2010000067") ||pref.getEmpClintId().equals("SECCLI2110000011") ||pref.getEmpClintId().equals("SECCLI2110000012") ){
+                                    itemList.add(new MenuItemModel("Survey","200"));
+
+                                }else {
+
+                                }
+
                                 MenuItemAdapter menuItemAdapter=new MenuItemAdapter(itemList,getApplicationContext(),PFLink);
                                 rvItem.setAdapter(menuItemAdapter);
+
+                                getFeedbackChecking();
                             }
 
 
@@ -502,6 +540,154 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
 
+    }
+
+    public void getFeedbackChecking() {
+
+        String surl = AppData.url+"gel_EmployeeFeedbackStatus?MasterID="+pref.getMasterId()+"&Operation=1&SecurityCode="+pref.getSecurityCode();
+        Log.d("inputLogin", surl);
+
+        final ProgressDialog pd=new ProgressDialog(EmployeeDashBoardActivity.this);
+        pd.setMessage("Loading.....");
+        pd.show();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("responseLogin", response);
+                        pd.dismiss();
+                        getSpokePersonList();
+
+                        try {
+                            JSONObject job1 = new JSONObject(response);
+                            Log.e("response12", "@@@@@@" + job1);
+                            String responseText = job1.optString("responseText");
+                            boolean responseStatus = job1.optBoolean("responseStatus");
+                            responseCode=job1.optString("responseCode");
+
+                            if (responseStatus) {
+                                // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
+                               // shoeFeedbackPopupDialog();
+
+                            }else {
+                                 shoeFeedbackPopupDialog();
+                            }
+
+
+                            // boolean _status = job1.getBoolean("status");
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(EmployeeDashBoardActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                pd.dismiss();
+                //  Toast.makeText(LoginActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
+                showAlert();
+                Log.e("ert", error.toString());
+            }
+        }) {
+
+        };
+        AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
+
+    }
+
+
+    public void getSurveyChecking() {
+
+        String surl = AppData.url+"EmployeeSurveyJLL?AEMEmployeeID="+pref.getEmpId()+"SecurityCode="+pref.getSecurityCode();
+        Log.d("inputLogin", surl);
+
+        final ProgressDialog pd=new ProgressDialog(EmployeeDashBoardActivity.this);
+        pd.setMessage("Loading.....");
+        pd.show();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("responseLogin", response);
+                        pd.dismiss();
+
+
+                        try {
+                            JSONObject job1 = new JSONObject(response);
+                            Log.e("response12", "@@@@@@" + job1);
+                            String responseText = job1.optString("responseText");
+                            boolean responseStatus = job1.optBoolean("responseStatus");
+                            responseCode=job1.optString("responseCode");
+                            if (responseStatus) {
+                                survey=true;
+
+                            }else {
+                                survey=false;
+                            }
+
+
+                            // boolean _status = job1.getBoolean("status");
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(EmployeeDashBoardActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                pd.dismiss();
+                //  Toast.makeText(LoginActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
+                showAlert();
+                Log.e("ert", error.toString());
+            }
+        }) {
+
+        };
+        AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
+
+    }
+
+    private void noticeAlert() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(EmployeeDashBoardActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.popup_dialog, null);
+        dialogBuilder.setView(dialogView);
+
+        TextView tvLink=(TextView) dialogView.findViewById(R.id.tvLink);
+        tvLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://111.93.182.170/GeniusEAM/DocFile/FAQ_EMP_.pdf"));
+                startActivity(browserIntent);
+                al1.dismiss();
+            }
+        });
+
+
+
+        LinearLayout lnCancel = (LinearLayout) dialogView.findViewById(R.id.lnCancel);
+
+        lnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                al1.dismiss();
+            }
+        });
+
+        al1 = dialogBuilder.create();
+        al1.setCancelable(false);
+        Window window = al1.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        al1.show();
     }
 
     private void showAlert() {
@@ -546,6 +732,39 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.CENTER);
         alertDialog.show();
+
+
+    }
+
+    private void shoeFeedbackPopupDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(EmployeeDashBoardActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.feedback_popup, null);
+        dialogBuilder.setView(dialogView);
+        LinearLayout lnFeedback=(LinearLayout)dialogView.findViewById(R.id.lnFeedback);
+        lnFeedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(EmployeeDashBoardActivity.this,FeedBackRatingActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        LinearLayout lnSkip=(LinearLayout)dialogView.findViewById(R.id.lnSkip);
+        lnSkip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                feedbackpopupDialog.dismiss();
+            }
+        });
+
+
+        feedbackpopupDialog = dialogBuilder.create();
+        feedbackpopupDialog.setCancelable(true);
+        Window window = feedbackpopupDialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        feedbackpopupDialog.show();
 
 
     }
@@ -628,7 +847,66 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getPFURL();
+
+    }
+
+    private void getSpokePersonList(){
+        ProgressDialog pd=new ProgressDialog(EmployeeDashBoardActivity.this);
+        pd.setMessage("Loading..");
+        pd.setCancelable(false);
+        pd.show();
+        String surl = AppData.url+"gcl_GeniusSpocList?ID="+pref.getEmpId()+"&SecurityCode="+pref.getSecurityCode();
+        Log.d("input",surl);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("responseAttendance", response);
+                        pd.dismiss();
+                        spokepersonArray=new JSONArray();
+
+
+                        // attendabceInfiList.clear();
+
+                        try {
+                            JSONObject job1 = new JSONObject(response);
+                            Log.e("response12", "@@@@@@" + job1);
+                            String responseText=job1.optString("responseText");
+
+                            boolean responseStatus=job1.optBoolean("responseStatus");
+
+                            // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
+                            JSONArray responseData=job1.optJSONArray("responseData");
+                            spokepersonArray=responseData;
+                            if (responseData.length()>0) {
+                                fbSpoke.setVisibility(View.VISIBLE);
+                            }else {
+                                fbSpoke.setVisibility(View.GONE);
+                            }
+
+
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            // Toast.makeText(AttendanceReportActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
+
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                pd.dismiss();
+
+                // Toast.makeText(AttendanceReportActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
+                Log.e("ert",error.toString());
+            }
+        }) {
+
+        };
+        AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
     }
 }
 
