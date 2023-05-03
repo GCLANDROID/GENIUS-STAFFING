@@ -98,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = (EditText) findViewById(R.id.etPassword);
         connectionCheck = new NetworkConnectionCheck(this);
         pref = new Pref(LoginActivity.this);
-        refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        refreshedToken = "1123444";
 //        Log.d("token",refreshedToken);
         etSecurityCode = (EditText) findViewById(R.id.etSecuritycode);
         try {
@@ -349,11 +349,19 @@ public class LoginActivity extends AppCompatActivity {
 
                                 }
                                 if (UserType.equals("1")) {
+                                    if (etPassword.getText().toString().equalsIgnoreCase("password")){
+                                        Intent intent = new Intent(LoginActivity.this, ChangePasswordActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(intent);
+                                        finish();
+                                    }else {
+                                        Intent intent = new Intent(LoginActivity.this, EmployeeDashBoardActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(intent);
+                                        finish();
+                                    }
 
-                                    Intent intent = new Intent(LoginActivity.this, EmployeeDashBoardActivity.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(intent);
-                                    finish();
+
                                 } else if (UserType.equals("2")) {
                                     Intent intent = new Intent(LoginActivity.this, SuperVisiorDashBoardActivity.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -405,8 +413,12 @@ public class LoginActivity extends AppCompatActivity {
         }) {
 
         };
-        AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
-
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+        requestQueue.add(stringRequest);
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                300000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     }
 
     private void shoeDialog() {

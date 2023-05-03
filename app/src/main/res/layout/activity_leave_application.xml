@@ -74,13 +74,15 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:gravity="center">
+        android:gravity="center"
+            android:backgroundTint="@color/colorPrimaryDark">
         <TextView
+            android:textAlignment="center"
             android:id="@+id/tvApllication"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:textColor="@color/maincolor"
+            android:textColor="@color/white"
             android:text="Leave Application"></TextView>
     </LinearLayout>
         <LinearLayout
@@ -98,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textColor="@color/maincolor"
-                android:text="Leave Application Details"></TextView>
+                android:text="Report"></TextView>
         </LinearLayout>
 
         <LinearLayout
@@ -109,12 +111,30 @@
             android:background="@drawable/lldesign11"
             android:gravity="center">
             <TextView
+                android:textAlignment="center"
                 android:id="@+id/tvApproval"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textColor="@color/maincolor"
-                android:text="Team Report"></TextView>
+                android:text="Leave \nApproval"></TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llAdjustment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/lldesign11"
+            android:gravity="center">
+            <TextView
+                android:textAlignment="center"
+                android:id="@+id/tvAdjustment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/maincolor"
+                android:text="Leave \nAdjustment"></TextView>
         </LinearLayout>
 
     </LinearLayout>

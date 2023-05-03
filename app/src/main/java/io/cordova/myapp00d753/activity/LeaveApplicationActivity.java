@@ -16,13 +16,14 @@ import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.fragment.ApplicationFragment;
 import io.cordova.myapp00d753.fragment.ApproverFragment;
 import io.cordova.myapp00d753.fragment.DetailsFragment;
+import io.cordova.myapp00d753.fragment.LeaveAdjustmentFragment;
 import io.cordova.myapp00d753.utility.Pref;
 
 
 public class LeaveApplicationActivity extends AppCompatActivity {
-    LinearLayout llApplication,llApproval,llDetails;
+    LinearLayout llApplication,llApproval,llDetails,llAdjustment;
     ImageView imgBack,imgHome;
-    TextView tvApproval,tvDetails,tvApllication,tvToolBar;
+    TextView tvApproval,tvDetails,tvApllication,tvToolBar,tvAdjustment;
     Pref pref;
 
     @Override
@@ -40,12 +41,14 @@ public class LeaveApplicationActivity extends AppCompatActivity {
         llApplication=(LinearLayout)findViewById(R.id.llApplication);
         llApproval=(LinearLayout)findViewById(R.id.llApproval);
         llDetails=(LinearLayout)findViewById(R.id.llDetails);
+        llAdjustment=(LinearLayout)findViewById(R.id.llAdjustment);
         imgBack=(ImageView)findViewById(R.id.imgBack);
         imgHome=(ImageView)findViewById(R.id.imgHome);
 
         tvApllication=(TextView)findViewById(R.id.tvApllication);
         tvDetails=(TextView)findViewById(R.id.tvDetails);
         tvApproval=(TextView)findViewById(R.id.tvApproval);
+        tvAdjustment=(TextView)findViewById(R.id.tvAdjustment);
         tvToolBar=(TextView)findViewById(R.id.tvToolBar);
 
     }
@@ -66,6 +69,13 @@ public class LeaveApplicationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loadDetailsFragment();
+            }
+        });
+
+        llAdjustment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadAdjustmentFragment();
             }
         });
         imgBack.setOnClickListener(new View.OnClickListener() {
@@ -94,9 +104,16 @@ public class LeaveApplicationActivity extends AppCompatActivity {
         transaction.replace(R.id.frameLayout, pfragment);
         transaction.commit();
 
-        tvApllication.setTextColor(Color.parseColor("#075994"));
+        llApplication.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.colorPrimaryDark));
+        llDetails.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.white));
+        llApproval.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.white));
+        llAdjustment.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.white));
+
+
+        tvApllication.setTextColor(Color.parseColor("#FFFFFF"));
         tvDetails.setTextColor(Color.parseColor("#4f8888"));
         tvApproval.setTextColor(Color.parseColor("#4f8888"));
+        tvAdjustment.setTextColor(Color.parseColor("#4f8888"));
         tvToolBar.setText("Leave Application");
 
    }
@@ -108,9 +125,16 @@ public class LeaveApplicationActivity extends AppCompatActivity {
         transaction.replace(R.id.frameLayout, efr);
         transaction.commit();
 
-        tvDetails.setTextColor(Color.parseColor("#4f8888"));
+        llApplication.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.white));
+        llDetails.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.white));
+        llApproval.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.colorPrimaryDark));
+        llAdjustment.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.white));
+
+
         tvApllication.setTextColor(Color.parseColor("#4f8888"));
-        tvApproval.setTextColor(Color.parseColor("#075994"));
+        tvDetails.setTextColor(Color.parseColor("#4f8888"));
+        tvApproval.setTextColor(Color.parseColor("#FFFFFF"));
+        tvAdjustment.setTextColor(Color.parseColor("#4f8888"));
     }
 
 
@@ -121,11 +145,40 @@ public class LeaveApplicationActivity extends AppCompatActivity {
         transaction.replace(R.id.frameLayout, htfragment);
         transaction.commit();
 
-        tvDetails.setTextColor(Color.parseColor("#075994"));
+        llApplication.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.white));
+        llDetails.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.colorPrimaryDark));
+        llApproval.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.white));
+        llAdjustment.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.white));
+
+
         tvApllication.setTextColor(Color.parseColor("#4f8888"));
+        tvDetails.setTextColor(Color.parseColor("#FFFFFF"));
         tvApproval.setTextColor(Color.parseColor("#4f8888"));
+        tvAdjustment.setTextColor(Color.parseColor("#4f8888"));
 
         tvToolBar.setText("Leave Application Details");
+
+    }
+
+    public void loadAdjustmentFragment() {
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        LeaveAdjustmentFragment htfragment=new LeaveAdjustmentFragment();
+        transaction.replace(R.id.frameLayout, htfragment);
+        transaction.commit();
+
+        llApplication.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.white));
+        llDetails.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.white));
+        llApproval.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.white));
+        llAdjustment.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.colorPrimaryDark));
+
+
+        tvApllication.setTextColor(Color.parseColor("#4f8888"));
+        tvDetails.setTextColor(Color.parseColor("#4f8888"));
+        tvApproval.setTextColor(Color.parseColor("#4f8888"));
+        tvAdjustment.setTextColor(Color.parseColor("#FFFFFF"));
+
+        tvToolBar.setText("Leave Adjustment");
 
     }
 

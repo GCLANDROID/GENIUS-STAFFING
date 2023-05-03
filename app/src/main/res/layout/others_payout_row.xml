@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+    android:background="@drawable/lldesign7"
+
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+    <TextView
+        android:id="@+id/tvBillType"
+        android:textAlignment="center"
+        android:layout_marginLeft="2dp"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:text="Bill Type"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="0.5"></TextView>
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/black"></View>
+    <TextView
+        android:id="@+id/tvYear"
+        android:textAlignment="center"
+        android:layout_marginLeft="2dp"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:text="Payable \nYear"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="0.5"></TextView>
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/black"></View>
+    <TextView
+        android:id="@+id/tvMonth"
+        android:textAlignment="center"
+        android:layout_marginLeft="2dp"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:text="Payable \nMonth"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="0.5"></TextView>
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/black"></View>
+    <TextView
+        android:id="@+id/tvAmt"
+        android:textAlignment="center"
+        android:layout_marginLeft="2dp"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:text="Disbursed \nAmt."
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="0.5"></TextView>
+
+</LinearLayout>
+
+</LinearLayout>

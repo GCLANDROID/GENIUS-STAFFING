@@ -3,12 +3,15 @@ package io.cordova.myapp00d753.utility;
 import android.app.Application;
 import android.text.TextUtils;
 
+import androidx.multidex.MultiDex;
+import androidx.multidex.MultiDexApplication;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
-public class AppController extends Application {
+public class AppController extends MultiDexApplication {
     public static final String TAG = AppController.class
             .getSimpleName();
 
@@ -20,6 +23,7 @@ public class AppController extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        MultiDex.install(this);
         mInstance = this;
     }
 

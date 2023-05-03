@@ -90,7 +90,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
     ArrayList<MenuItemModel>itemList=new ArrayList<>();
     ImageView imglogout;
     String menuName;
-    AlertDialog feedbackpopupDialog;
+    AlertDialog feedbackpopupDialog,aknowledgePopUp;
     FloatingActionButton fbSpoke;
     JSONArray spokepersonArray;
     AlertDialog al1;
@@ -769,6 +769,30 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
 
     }
 
+    private void shoePFAknowledge() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(EmployeeDashBoardActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.pf_aklowdegement, null);
+        dialogBuilder.setView(dialogView);
+        TextView tvAcknowledge=(TextView)dialogView.findViewById(R.id.tvAcknowledge);
+        tvAcknowledge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                postPFAknowledge();
+            }
+        });
+
+
+        aknowledgePopUp = dialogBuilder.create();
+        aknowledgePopUp.setCancelable(true);
+        Window window = aknowledgePopUp.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        aknowledgePopUp.show();
+
+
+    }
+
 
 
 
@@ -883,6 +907,120 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                 fbSpoke.setVisibility(View.VISIBLE);
                             }else {
                                 fbSpoke.setVisibility(View.GONE);
+                            }
+
+                            getPFAknowledgementcheck();
+
+
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            // Toast.makeText(AttendanceReportActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
+
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                pd.dismiss();
+
+                // Toast.makeText(AttendanceReportActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
+                Log.e("ert",error.toString());
+            }
+        }) {
+
+        };
+        AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
+    }
+
+
+    private void getPFAknowledgementcheck(){
+        ProgressDialog pd=new ProgressDialog(EmployeeDashBoardActivity.this);
+        pd.setMessage("Loading..");
+        pd.setCancelable(false);
+        pd.show();
+        String surl = AppData.url+"get_EmployeePFTrustAck?EmployeeID="+pref.getEmpId()+"&Operation=1&SecurityCode="+pref.getSecurityCode();
+        Log.d("input",surl);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("responseAttendance", response);
+                        pd.dismiss();
+
+
+
+                        // attendabceInfiList.clear();
+
+                        try {
+                            JSONObject job1 = new JSONObject(response);
+                            Log.e("response12", "@@@@@@" + job1);
+                            String responseText=job1.optString("responseText");
+
+                            boolean responseStatus=job1.optBoolean("responseStatus");
+                            if (responseStatus){
+
+                            }else {
+                                shoePFAknowledge();
+                            }
+
+
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            // Toast.makeText(AttendanceReportActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
+
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                pd.dismiss();
+
+                // Toast.makeText(AttendanceReportActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
+                Log.e("ert",error.toString());
+            }
+        }) {
+
+        };
+        AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
+    }
+
+
+    private void postPFAknowledge(){
+        ProgressDialog pd=new ProgressDialog(EmployeeDashBoardActivity.this);
+        pd.setMessage("Loading..");
+        pd.setCancelable(false);
+        pd.show();
+        String surl = AppData.url+"get_EmployeePFTrustAck?EmployeeID="+pref.getEmpId()+"&Operation=2&SecurityCode="+pref.getSecurityCode();
+        Log.d("input",surl);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("responseAttendance", response);
+                        pd.dismiss();
+
+
+
+                        // attendabceInfiList.clear();
+
+                        try {
+                            JSONObject job1 = new JSONObject(response);
+                            Log.e("response12", "@@@@@@" + job1);
+                            String responseText=job1.optString("responseText");
+
+                            boolean responseStatus=job1.optBoolean("responseStatus");
+                            if (responseStatus){
+                                aknowledgePopUp.dismiss();
+                            }else {
+
                             }
 
 

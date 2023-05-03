@@ -39,7 +39,7 @@ public class SupLeaveApproverAdapter extends RecyclerView.Adapter<SupLeaveApprov
         myViewHolder.tvEndDate.setText(itemList.get(i).getEndDate());
         myViewHolder.tvValue.setText(itemList.get(i).getValue());
 
-        if (itemList.get(i).getApprovalStatus().equals("Pending")){
+        if (itemList.get(i).getApprovalStatus().equalsIgnoreCase("Pending")){
             myViewHolder.llTick.setVisibility(View.VISIBLE);
             myViewHolder.llGreen.setVisibility(View.GONE);
             myViewHolder.llYellow.setVisibility(View.GONE);

@@ -44,7 +44,7 @@ import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
 
 public class SuperVisiorDashBoardActivity extends AppCompatActivity {
-    LinearLayout llProfile, llAttandence, llPayroll, llPf, llFeedBack, llNotification, llDocument, llLogout;
+    LinearLayout llProfile, llAttandence, llPayroll, llPf, llFeedBack, llNotification, llDocument, llLogout,llGeoFenceApproval;
     Pref pref;
     TextView tvEmployeeName,tvGreeting,tvLoginDateTime;
     String s1,s2,s3,s4,s5,s6;
@@ -84,6 +84,7 @@ public class SuperVisiorDashBoardActivity extends AppCompatActivity {
 
         llDocument = (LinearLayout) findViewById(R.id.llDocument);
         llLogout=(LinearLayout)findViewById(R.id.llLogout);
+        llGeoFenceApproval=(LinearLayout)findViewById(R.id.llGeoFenceApproval);
 
 
         Calendar c = Calendar.getInstance();
@@ -828,6 +829,17 @@ public class SuperVisiorDashBoardActivity extends AppCompatActivity {
 
 
                 Intent intent=new Intent(SuperVisiorDashBoardActivity.this,SupFeedBackActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+
+        llGeoFenceApproval.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                Intent intent=new Intent(SuperVisiorDashBoardActivity.this,GeoFenceApprovalActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }

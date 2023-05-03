@@ -31,6 +31,8 @@ import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.activity.FeedBackRatingActivity;
 import io.cordova.myapp00d753.activity.FeedBackRatingForJLLActivity;
 import io.cordova.myapp00d753.activity.GeoFenceActivity;
+import io.cordova.myapp00d753.activity.GeoFenceManageDashBoardActivity;
+import io.cordova.myapp00d753.activity.InsuranceActivity;
 import io.cordova.myapp00d753.activity.KYCDashBoardActivity;
 import io.cordova.myapp00d753.activity.LeaveApplicationActivity;
 import io.cordova.myapp00d753.activity.PayrollActivity;
@@ -98,6 +100,8 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
             myViewHolder.imgMenu.setImageResource(R.drawable.voice);
         }else if (itemList.get(i).getMenuId().equalsIgnoreCase("200")){
             myViewHolder.imgMenu.setImageResource(R.drawable.survey);
+        }else if (itemList.get(i).getMenuId().equalsIgnoreCase("20")){
+            myViewHolder.imgMenu.setImageResource(R.drawable.insurance);
         }else {
             myViewHolder.itemView.setVisibility(View.GONE);
         }
@@ -163,7 +167,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                 }
                 else if (itemList.get(i).getMenuId().equals("9")){
                     //geofence
-                    Intent intent=new Intent(mContex, GeoFenceActivity.class);
+                    Intent intent=new Intent(mContex, GeoFenceManageDashBoardActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
                 }
@@ -195,6 +199,11 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                 } else if (itemList.get(i).getMenuId().equals("200")){
                     //leave
                     Intent intent=new Intent(mContex, FeedBackRatingForJLLActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContex.startActivity(intent);
+                }else if (itemList.get(i).getMenuId().equals("20")){
+                    //leave
+                    Intent intent=new Intent(mContex, InsuranceActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
                 }

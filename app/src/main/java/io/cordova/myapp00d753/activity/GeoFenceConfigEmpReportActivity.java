@@ -30,6 +30,8 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -43,7 +45,9 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.developers.imagezipper.ImageZipper;
+
 import com.google.android.cameraview.LongImageCameraActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
 import org.json.JSONArray;
@@ -53,21 +57,27 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.adapter.GeoFenceReportEmpAdapter;
+import io.cordova.myapp00d753.module.GeoFenceReportEmpModel;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.GPSTracker;
 import io.cordova.myapp00d753.utility.Pref;
 
-public class GeoFenceManageDashBoardActivity extends AppCompatActivity {
-    ImageView imgBack, imgHome;
-    LinearLayout llManage, llReport,llApproval;
+public class GeoFenceConfigEmpReportActivity extends AppCompatActivity implements View.OnClickListener {
+
+    LinearLayout llLoader, llMain, llNoData;
+    RecyclerView rvItem;
     Pref pref;
-    String surl, surl1;
-    String point;
-    AlertDialog alerDialog1, alertDialog2, alerDialog2;
+    ArrayList<GeoFenceReportEmpModel> itemList = new ArrayList<>();
+    ImageView imgBack;
+    FloatingActionButton btnAdd;
+    ImageView imgHome;
+    AlertDialog alerDialog1,alertDialog2,alerDialog2;
     ImageView imgPic;
     int pic1Flag;
     GPSTracker gps;
@@ -76,32 +86,19 @@ public class GeoFenceManageDashBoardActivity extends AppCompatActivity {
     String latt, longt;
     Uri imageUri;
     private static final int CAMERA_REQUEST = 1;
-    File file, imageZipperFile;
-    LinearLayout llConfig;
-    double SLongitude, SLatitude, s;
-    String jsonData;
+    File file,imageZipperFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_geo_fence_manage_dash_board);
+        setContentView(R.layout.activity_geo_fence_config_emp_report);
         initView();
-        checkGeoFenceConfiguredOrNot();
-
-        onClick();
+        getReportItem();
     }
 
     private void initView() {
         pref = new Pref(getApplicationContext());
-        llManage = (LinearLayout) findViewById(R.id.llManage);
-        llReport = (LinearLayout) findViewById(R.id.llReport);
-        llConfig = (LinearLayout) findViewById(R.id.llConfig);
-        llApproval=(LinearLayout)findViewById(R.id.llApproval);
-        imgBack = (ImageView) findViewById(R.id.imgBack);
-        imgHome = (ImageView) findViewById(R.id.imgHome);
-        point = getIntent().getStringExtra("point");
-
-        gps = new GPSTracker(GeoFenceManageDashBoardActivity.this);
+        gps = new GPSTracker(GeoFenceConfigEmpReportActivity.this);
         if (gps.canGetLocation()) {
             latitude = gps.getLatitude();
             latt = String.valueOf(latitude);
@@ -114,131 +111,111 @@ public class GeoFenceManageDashBoardActivity extends AppCompatActivity {
 
         }
         address = getCompleteAddressString(latitude, longitude);
+        llLoader = (LinearLayout) findViewById(R.id.llLoader);
+        llMain = (LinearLayout) findViewById(R.id.llMain);
+        llNoData = (LinearLayout) findViewById(R.id.llNoData);
+        rvItem = (RecyclerView) findViewById(R.id.rvItem);
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(GeoFenceConfigEmpReportActivity.this, LinearLayoutManager.VERTICAL, false);
+        rvItem.setLayoutManager(layoutManager);
+        imgBack=(ImageView)findViewById(R.id.imgBack);
 
-
-    }
-    //GeoFenceDailyLogManageActivity
-
-    private void onClick() {
-        llApproval.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), GeoFenceApprovalActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            }
-        });
-        llManage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                getValueForGeoFence();
-
-
-            }
-        });
-
-
-        llReport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), AttendanceReportActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            }
-        });
-
-
-        llConfig.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), GeoFenceConfigEmpReportActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            }
-        });
-
-        imgBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        imgHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), EmployeeDashBoardActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            }
-        });
+        imgHome=(ImageView)findViewById(R.id.imgHome);
+        btnAdd=(FloatingActionButton) findViewById(R.id.btnAdd);
+        btnAdd.setOnClickListener(this);
 
     }
 
-
-    private void checkGeoFenceConfiguredOrNot() {
-        final ProgressDialog pd = new ProgressDialog(GeoFenceManageDashBoardActivity.this);
-        pd.setMessage("Loading...");
-        pd.setCancelable(true);
-        pd.show();
-
-        String surl = AppData.url + "Get_EmployeeGeoFence?AEMEmployeeID=" + pref.getEmpId() + "&SecurityCode=" + pref.getSecurityCode();
-        Log.d("printurlbalance", surl);
+    private void getReportItem() {
+        String surl =AppData.url+"Get_EmployeeGeoFence?AEMEmployeeID="+pref.getEmpId()+"&SecurityCode=" + pref.getSecurityCode();
+        Log.d("configurl", surl);
+        llLoader.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.GONE);
+        llNoData.setVisibility(View.GONE);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
-                        Log.d("responseAttendance", response);
-//                        llLoader.setVisibility(View.GONE);
-
-                        pd.dismiss();
-
+                        Log.d("responseconfig", response);
+                        itemList.clear();
 
                         try {
                             JSONObject job1 = new JSONObject(response);
-                            Log.e("response12", "@@@@@@" + job1);
+                            Log.e("responseconfig", "@@@@@@" + job1);
                             String responseText = job1.optString("responseText");
-
                             boolean responseStatus = job1.optBoolean("responseStatus");
                             if (responseStatus) {
-                                llConfig.setVisibility(View.VISIBLE);
+
+                                JSONArray responseData = job1.optJSONArray("responseData");
+                                for (int i = 0; i < responseData.length(); i++) {
+                                    JSONObject obj = responseData.getJSONObject(i);
+                                    String SLongitude = obj.optString("Longitude");
+                                    String SLatitude = obj.optString("Latitude");
+                                    String Address = obj.optString("Address");
+                                    String Status=obj.optString("Status");
+                                    GeoFenceReportEmpModel mModel = new GeoFenceReportEmpModel();
+                                    mModel.setAddress(Address);
+                                    mModel.setLaat(SLatitude);
+                                    mModel.setLoong(SLongitude);
+                                    mModel.setStatus(Status);
+                                    itemList.add(mModel);
+
+
+                                }
+
+                                GeoFenceReportEmpAdapter cAdapter = new GeoFenceReportEmpAdapter(itemList,GeoFenceConfigEmpReportActivity.this);
+                                rvItem.setAdapter(cAdapter);
+
+                                llLoader.setVisibility(View.GONE);
+                                llMain.setVisibility(View.VISIBLE);
+                                llNoData.setVisibility(View.GONE);
 
 
                             } else {
-
-                                counterMapDialog();
-                                llConfig.setVisibility(View.GONE);
+                                llLoader.setVisibility(View.GONE);
+                                llMain.setVisibility(View.GONE);
+                                llNoData.setVisibility(View.VISIBLE);
                             }
+
+
+                            // boolean _status = job1.getBoolean("status");
 
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            // Toast.makeText(AttendanceReportActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
-
+                            //  Toast.makeText(EmployeeDashBoardActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
                         }
 
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                pd.dismiss();
 
+                // Toast.makeText(EmployeeDashBoardActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
 
-                // Toast.makeText(AttendanceReportActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
                 Log.e("ert", error.toString());
+
             }
         }) {
 
         };
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        RequestQueue requestQueue = Volley.newRequestQueue(GeoFenceConfigEmpReportActivity.this);
         requestQueue.add(stringRequest);
+
 
     }
 
+    @Override
+    public void onClick(View view) {
+        if (view==btnAdd){
+            counterMapDialog();
+        }
+
+    }
+
+
     private void counterMapDialog() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(GeoFenceManageDashBoardActivity.this, R.style.CustomDialogNew);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(GeoFenceConfigEmpReportActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_geofence_config, null);
         dialogBuilder.setView(dialogView);
@@ -272,7 +249,7 @@ public class GeoFenceManageDashBoardActivity extends AppCompatActivity {
                     alerDialog1.dismiss();
                     postCounterImage();
                 } else {
-                    Toast.makeText(GeoFenceManageDashBoardActivity.this, "Please Upload Counter Image", Toast.LENGTH_LONG).show();
+                    Toast.makeText(GeoFenceConfigEmpReportActivity.this, "Please Upload Counter Image", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -310,14 +287,14 @@ public class GeoFenceManageDashBoardActivity extends AppCompatActivity {
         return strAdd;
     }
 
-    public void dialogCamera() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(GeoFenceManageDashBoardActivity.this, R.style.CustomDialogNew);
+    public void dialogCamera(){
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(GeoFenceConfigEmpReportActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_camera, null);
         dialogBuilder.setView(dialogView);
         //TextView tvInvalidDate = (TextView) dialogView.findViewById(R.id.tvSuccess);
-        Button btnCamera1 = (Button) dialogView.findViewById(R.id.btnCamera1);
-        Button btnCamera2 = (Button) dialogView.findViewById(R.id.btnCamera2);
+        Button btnCamera1=(Button) dialogView.findViewById(R.id.btnCamera1);
+        Button btnCamera2=(Button) dialogView.findViewById(R.id.btnCamera2);
 
         btnCamera1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -332,7 +309,7 @@ public class GeoFenceManageDashBoardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 alertDialog2.dismiss();
-                LongImageCameraActivity.launch(GeoFenceManageDashBoardActivity.this);
+                LongImageCameraActivity.launch(GeoFenceConfigEmpReportActivity.this);
             }
         });
 
@@ -368,7 +345,7 @@ public class GeoFenceManageDashBoardActivity extends AppCompatActivity {
                         try {
                             String imageurl = /*"file://" +*/ getRealPathFromURI(imageUri);
                             file = new File(imageurl);
-                            imageZipperFile = new ImageZipper(GeoFenceManageDashBoardActivity.this)
+                            imageZipperFile = new ImageZipper(GeoFenceConfigEmpReportActivity.this)
                                     .setQuality(100)
                                     .setMaxWidth(300)
                                     .setMaxHeight(300)
@@ -383,7 +360,8 @@ public class GeoFenceManageDashBoardActivity extends AppCompatActivity {
                             encodedImage = Base64.encodeToString(b, Base64.DEFAULT);*/
 
                             imgPic.setImageBitmap(bm);
-                            pic1Flag = 1;
+                            pic1Flag=1;
+
 
 
                             // _pref.saveImage(encodedImage);
@@ -402,7 +380,7 @@ public class GeoFenceManageDashBoardActivity extends AppCompatActivity {
             case LongImageCameraActivity.LONG_IMAGE_RESULT_CODE:
 
 
-                if (resultCode == RESULT_OK && requestCode == LongImageCameraActivity.LONG_IMAGE_RESULT_CODE) {
+                if (resultCode == RESULT_OK && requestCode ==  LongImageCameraActivity.LONG_IMAGE_RESULT_CODE) {
                     String imageFileName = data.getStringExtra(LongImageCameraActivity.IMAGE_PATH_KEY);
                     Log.d("imageFileName", imageFileName);
                     Bitmap d = BitmapFactory.decodeFile(imageFileName);
@@ -411,10 +389,10 @@ public class GeoFenceManageDashBoardActivity extends AppCompatActivity {
                     imgPic.setImageBitmap(putImage);
                     file = (File) data.getExtras().get("picture");
                     Log.d("fjjgk", file.toString());
-                    pic1Flag = 1;
+                    pic1Flag=1;
 
                     try {
-                        imageZipperFile = new ImageZipper(GeoFenceManageDashBoardActivity.this)
+                        imageZipperFile = new ImageZipper(GeoFenceConfigEmpReportActivity.this)
                                 .setQuality(100)
                                 .setMaxWidth(300)
                                 .setMaxHeight(300)
@@ -424,9 +402,14 @@ public class GeoFenceManageDashBoardActivity extends AppCompatActivity {
                     }
 
 
+
+
+
                 }
                 break;
         }
+
+
 
 
     }
@@ -465,18 +448,19 @@ public class GeoFenceManageDashBoardActivity extends AppCompatActivity {
 
     private void postCounterImage() {
 
-        final ProgressDialog pd = new ProgressDialog(GeoFenceManageDashBoardActivity.this);
+        final ProgressDialog pd = new ProgressDialog(GeoFenceConfigEmpReportActivity.this);
         pd.setMessage("Loading..");
         pd.setCancelable(false);
         pd.show();
 
-        AndroidNetworking.upload(AppData.url + "Post_EmployeeGeoFence")
+        AndroidNetworking.upload(AppData.url +"Post_EmployeeGeoFence")
                 .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
                 .addMultipartParameter("Longitude", longt)
                 .addMultipartParameter("Latitude", latt)
                 .addMultipartParameter("Address", address)
                 .addMultipartFile("Fname", imageZipperFile)
                 .addMultipartParameter("SecurityCode", pref.getSecurityCode())
+
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
@@ -503,7 +487,7 @@ public class GeoFenceManageDashBoardActivity extends AppCompatActivity {
 
                         } else {
                             pd.dismiss();
-                            Toast.makeText(GeoFenceManageDashBoardActivity.this, responseText, Toast.LENGTH_LONG).show();
+                            Toast.makeText(GeoFenceConfigEmpReportActivity.this, responseText, Toast.LENGTH_LONG).show();
 
                         }
 
@@ -523,7 +507,7 @@ public class GeoFenceManageDashBoardActivity extends AppCompatActivity {
     }
 
     private void successAlert(String text) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(GeoFenceManageDashBoardActivity.this, R.style.CustomDialogNew);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(GeoFenceConfigEmpReportActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_success, null);
         dialogBuilder.setView(dialogView);
@@ -535,7 +519,7 @@ public class GeoFenceManageDashBoardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 alerDialog2.dismiss();
-                checkGeoFenceConfiguredOrNot();
+                getReportItem();
 
             }
         });
@@ -547,86 +531,4 @@ public class GeoFenceManageDashBoardActivity extends AppCompatActivity {
         window.setGravity(Gravity.CENTER);
         alerDialog2.show();
     }
-
-    private void getValueForGeoFence() {
-
-        String surl = AppData.url + "get_EmployeeGeofenceConfigureSet?EmployeeId=" + pref.getEmpId() + "&GeoFenceId=000&Operation=5&SecurityCode=" + pref.getSecurityCode();
-        Log.d("valuefetechurl", surl);
-        final ProgressDialog pd = new ProgressDialog(this);
-        pd.setMessage("Loading..");
-        pd.setCancelable(false);
-        pd.show();
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("responseconfig", response);
-
-
-                        try {
-                            JSONObject job1 = new JSONObject(response);
-                            Log.e("responseconfig", "@@@@@@" + job1);
-                            String responseText = job1.optString("responseText");
-                            boolean responseStatus = job1.optBoolean("responseStatus");
-                            if (responseStatus) {
-
-                                JSONArray responseData = job1.optJSONArray("responseData");
-                                jsonData = responseData.toString();
-                                for (int i = 0; i < responseData.length(); i++) {
-                                    JSONObject obj = responseData.getJSONObject(i);
-                                    SLatitude = Double.parseDouble(obj.optString("Latitude"));
-                                    SLongitude = Double.parseDouble(obj.optString("Longitude"));
-                                    double EndPoint = Double.parseDouble(obj.optString("Radius"));
-                                    s = EndPoint / 10;
-
-
-                                }
-                                Intent intent = new Intent(GeoFenceManageDashBoardActivity.this, GeoFenceAttendanceManageActivity.class);
-                                intent.putExtra("radius", s);
-                                intent.putExtra("jsonData", jsonData);
-                                startActivity(intent);
-
-
-                                //LatLng q=new LatLng(currentLatitude,currentLongitude);
-                                // double distance=CalculationByDistance(p,q);
-
-
-                                pd.dismiss();
-
-
-                            } else {
-
-                                pd.dismiss();
-                                Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
-
-                            }
-
-
-                            // boolean _status = job1.getBoolean("status");
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            //  Toast.makeText(EmployeeDashBoardActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
-                        }
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-                // Toast.makeText(EmployeeDashBoardActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
-
-                Log.e("ert", error.toString());
-
-            }
-        }) {
-
-        };
-        RequestQueue requestQueue = Volley.newRequestQueue(GeoFenceManageDashBoardActivity.this);
-        requestQueue.add(stringRequest);
-
-
-    }
-
 }

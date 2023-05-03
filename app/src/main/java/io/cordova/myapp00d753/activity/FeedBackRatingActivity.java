@@ -229,7 +229,7 @@ public class FeedBackRatingActivity extends AppCompatActivity {
                 if (item.size() + item1.size() == itemList.size() + itemList1.size()) {
                     if (networkConnectionCheck.isNetworkAvailable()) {
 
-                        signatureAlert();
+                        submitAnswer(null);
 
                     } else {
                         Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
@@ -621,12 +621,9 @@ public class FeedBackRatingActivity extends AppCompatActivity {
 
 
    private void submitAnswer(File file) {
-        if (canvasLL.isBitmapEmpty()){
-            Toast.makeText(getApplicationContext(),"Please sign",Toast.LENGTH_LONG).show();
-        }else {
 
-            postwithimageanswer(file);
-        }
+        postwithimageanswer(file);
+
 
     }
 

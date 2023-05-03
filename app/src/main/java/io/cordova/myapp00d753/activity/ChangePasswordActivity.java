@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import android.text.Html;
+import android.util.Base64;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
@@ -28,9 +34,15 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.utility.AppController;
+import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
 
 
@@ -172,56 +184,65 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
     private void changePassword() {
 
-        final ProgressDialog pd = new ProgressDialog(ChangePasswordActivity.this);
-        pd.setMessage("Loading..");
-        pd.setCancelable(false);
-        pd.show();
+        byte[] oldpassworddata = new byte[0];
+        byte[] newpassworddata = new byte[0];
+        try {
+            oldpassworddata = etOldPassword.getText().toString().getBytes("UTF-8");
+            newpassworddata = etNewPassword.getText().toString().getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String oldpasswordbase64 = Base64.encodeToString(oldpassworddata, Base64.DEFAULT).replaceAll("\\s+", "");;
+        String newpasswordbase64 = Base64.encodeToString(newpassworddata, Base64.DEFAULT).replaceAll("\\s+", "");;
 
-        AndroidNetworking.upload("https://payhr.geniusconsultant.com/Himadri/HimadriAPI/api/Authentication/ChangePassword")
-                .addMultipartParameter("EmployeeId", pref.getEmpId())
-                .addMultipartParameter("NewPassword", etNewPassword.getText().toString())
-                .addMultipartParameter("ExistingPassword", etOldPassword.getText().toString())
-                .addMultipartParameter("SecurityCode", pref.getSecurityCode())
 
+        String surl = AppData.url+"gcl_EmployeePasswordChange?MasterID=" + pref.getMasterId() + "&OldPassword=" + oldpasswordbase64 + "&Password=" + newpasswordbase64 + "&SecurityCode=" + pref.getSecurityCode() ;
+        Log.d("inputLogin", surl);
 
-                .setPriority(Priority.HIGH)
-                .build()
-                .setUploadProgressListener(new UploadProgressListener() {
+        final ProgressDialog progressDialog=new ProgressDialog(ChangePasswordActivity.this);
+        progressDialog.setMessage("Loading..");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
+                new Response.Listener<String>() {
                     @Override
-                    public void onProgress(long bytesUploaded, long totalBytes) {
-                        pd.show();
+                    public void onResponse(String response) {
+                        Log.d("responseLogin", response);
+                        progressDialog.dismiss();
 
-                    }
-                })
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONObject job1 = new JSONObject(response);
+                            Log.e("response12", "@@@@@@" + job1);
+                            String responseText = job1.optString("responseText");
+                            boolean responseStatus = job1.optBoolean("responseStatus");
+                            if (responseStatus) {
+                                // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
+                                successAlert("Password has been changed successfully");
+                            }
 
-                        pd.dismiss();
-                        JSONObject job = response;
-                        boolean responseStatus = job.optBoolean("responseStatus");
-                        String responseText = job.optString("responseText");
-                        if (responseStatus) {
-                            successAlert("Password has been changed successfully");
-                        } else {
-                            Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
+                            // boolean _status = job1.getBoolean("status");
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(ChangePasswordActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
                         }
 
-
-                        // boolean _status = job1.getBoolean("status");
-
-
-                        // do anything with response
                     }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressDialog.dismiss();
+                  Toast.makeText(ChangePasswordActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
 
-                    @Override
-                    public void onError(ANError error) {
-                        // handle error
-                        pd.dismiss();
-                        Toast.makeText(ChangePasswordActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
 
-                    }
-                });
+            }
+        }) {
+
+        };
+        AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
+
     }
 
     private void successAlert(String text) {

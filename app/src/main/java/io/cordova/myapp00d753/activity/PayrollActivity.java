@@ -15,7 +15,7 @@ import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.utility.Pref;
 
 public class PayrollActivity extends AppCompatActivity {
-    LinearLayout llSalary,llCTC;
+    LinearLayout llSalary,llCTC,llPayout;
     ImageView imgBack,imgHome;
     Pref pref;
 
@@ -33,6 +33,7 @@ public class PayrollActivity extends AppCompatActivity {
         pref=new Pref(this);
         llSalary=(LinearLayout)findViewById(R.id.llSalary);
         llCTC=(LinearLayout)findViewById(R.id.llCTC);
+        llPayout=(LinearLayout)findViewById(R.id.llPayout);
         imgBack=(ImageView)findViewById(R.id.imgBack);
         imgHome=(ImageView)findViewById(R.id.imgHome);
 
@@ -44,6 +45,16 @@ public class PayrollActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 Intent intent=new Intent(PayrollActivity.this,SalaryActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+
+        llPayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent=new Intent(PayrollActivity.this,OthersPayoutActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
