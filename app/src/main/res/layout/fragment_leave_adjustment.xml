@@ -8,6 +8,7 @@
     android:orientation="vertical"
     android:padding="10dp">
     <TextView
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/colorPrimaryDark"
@@ -15,6 +16,7 @@
         android:textSize="16sp"
         android:textStyle="bold"></TextView>
     <LinearLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:background="@drawable/lldesign7">
@@ -25,6 +27,7 @@
             android:id="@+id/spFinYear"></Spinner>
     </LinearLayout>
     <Button
+        android:visibility="gone"
         android:id="@+id/btnShow"
         android:layout_width="100dp"
         android:layout_height="40dp"
@@ -39,7 +42,7 @@
      android:id="@+id/lnAddApplication"
      android:layout_width="200dp"
      android:layout_height="40dp"
-     android:layout_marginTop="20dp"
+     android:layout_marginTop="30dp"
      android:background="@drawable/lldesign"
      android:backgroundTint="@color/color1"
      android:gravity="center">

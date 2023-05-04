@@ -51,6 +51,7 @@ public class LeaveApplicationActivity extends AppCompatActivity {
         tvAdjustment=(TextView)findViewById(R.id.tvAdjustment);
         tvToolBar=(TextView)findViewById(R.id.tvToolBar);
 
+
     }
     private void onClick(){
         llApplication.setOnClickListener(new View.OnClickListener() {

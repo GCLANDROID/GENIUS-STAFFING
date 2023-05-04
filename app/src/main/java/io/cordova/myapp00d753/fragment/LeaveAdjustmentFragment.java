@@ -22,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -32,13 +33,21 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.androidnetworking.interfaces.UploadProgressListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.AttendanceManageActivity;
@@ -55,7 +64,7 @@ import io.cordova.myapp00d753.utility.Pref;
 public class LeaveAdjustmentFragment extends Fragment {
     LinearLayout lnAddApplication;
     View view;
-    AlertDialog alerDialog1;
+    AlertDialog alerDialog1,successDialog;
     String next;
     Pref pref;
     ArrayList<String>otApplicationComponentList=new ArrayList<>();
@@ -68,6 +77,7 @@ public class LeaveAdjustmentFragment extends Fragment {
     ArrayList<String>modelist=new ArrayList<>();
     ArrayList<SpineerItemModel>modelModulelist=new ArrayList<>();
     String mode="";
+    String month;
 
 
 
@@ -92,6 +102,16 @@ public class LeaveAdjustmentFragment extends Fragment {
         modelModulelist.add(new SpineerItemModel("Full Day","2"));
         modelModulelist.add(new SpineerItemModel("First Half","1"));
         modelModulelist.add(new SpineerItemModel("Second Half","3"));
+
+
+        Date c = Calendar.getInstance().getTime();
+        System.out.println("Current time => " + c);
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MMM-dd", Locale.getDefault());
+        effectiveDate = df.format(c);
+        Log.d("effectiveDate",effectiveDate);
+        int m = Calendar.getInstance().get(Calendar.MONTH) + 1;
+        month= String.valueOf(m);
         getOtherApplicationComponentItem();
     }
 
@@ -312,6 +332,23 @@ public class LeaveAdjustmentFragment extends Fragment {
             }
         });
 
+        EditText etReason=(EditText)dialogView.findViewById(R.id.etReason);
+        Button btnSave=(Button)dialogView.findViewById(R.id.btnSave);
+        Button btnCancel=(Button)dialogView.findViewById(R.id.btnCancel);
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                postData(etReason.getText().toString(),tvInTime.getText().toString(),tvOutTime.getText().toString());
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alerDialog1.dismiss();
+            }
+        });
+
 
 
 
@@ -344,7 +381,7 @@ public class LeaveAdjustmentFragment extends Fragment {
 
 
                         int month = (monthOfYear + 1);
-                        effectiveDate = dayOfMonth + "/" + month + "/" + year;
+                        effectiveDate = year + "-" + month + "-" + dayOfMonth;
                         tv.setText(effectiveDate);
 
                     }
@@ -371,7 +408,7 @@ public class LeaveAdjustmentFragment extends Fragment {
 
 
                         int month = (monthOfYear + 1);
-                        endDate = dayOfMonth + "/" + month + "/" + year;
+                        endDate = year + "-" + month + "-" + dayOfMonth;
                         tv.setText(endDate);
 
                     }
@@ -399,7 +436,7 @@ public class LeaveAdjustmentFragment extends Fragment {
 
 
                         int month = (monthOfYear + 1);
-                        startDate = dayOfMonth + "/" + month + "/" + year;
+                        startDate = year + "-" + month + "-" + dayOfMonth;
                         tv.setText(startDate);
 
                     }
@@ -408,5 +445,99 @@ public class LeaveAdjustmentFragment extends Fragment {
 
         datePickerDialog.show();
 
+    }
+
+
+    private void postData(String remarks,String intime,String outtime) {
+        ProgressDialog pd=new ProgressDialog(getContext());
+        pd.setMessage("Loading");
+        pd.setCancelable(false);
+        pd.show();
+        AndroidNetworking.upload(AppData.url + "Post_EmployeeOTandODAdjustment")
+                .addMultipartParameter("CompanyID", pref.getEmpClintId())
+                .addMultipartParameter("EmployeeID", pref.getEmpId())
+                .addMultipartParameter("YearId", "19")
+                .addMultipartParameter("MonthId", month)
+                .addMultipartParameter("GatePassDate", effectiveDate +" 00:00:00.000")
+                .addMultipartParameter("EndDate", endDate+" 00:00:00.000")
+                .addMultipartParameter("Remarks", remarks)
+                .addMultipartParameter("StartTime", effectiveDate+" "+intime+":00.000")
+                .addMultipartParameter("EndTime", effectiveDate+" "+outtime+":00.000")
+                .addMultipartParameter("GatePassType", applicationComponentID)
+                .addMultipartParameter("clinetname", "")
+                .addMultipartParameter("clinetphn", "")
+                .addMultipartParameter("CreatedBy", pref.getEmpId())
+                .addMultipartParameter("AID", "0")
+                .addMultipartParameter("Oddaytype", mode)
+                .addMultipartParameter("OtMin", "0")
+                .addMultipartParameter("refdate", effectiveDate+" 00:00:00.000")
+                .addMultipartParameter("LtMin", "0")
+                .addMultipartParameter("SecurityCode", pref.getSecurityCode())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+
+
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        pd.dismiss();
+
+
+                        JSONObject job = response;
+                        boolean responseStatus = job.optBoolean("responseStatus");
+                        if (responseStatus) {
+
+                            successAlert();
+                        }
+
+
+                        // boolean _status = job1.getBoolean("status");
+
+
+                        // do anything with response
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        pd.dismiss();
+                        Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
+
+                    }
+                });
+    }
+
+
+    private void successAlert() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.dialog_success, null);
+        dialogBuilder.setView(dialogView);
+        TextView tvInvalidDate = (TextView) dialogView.findViewById(R.id.tvSuccess);
+
+        tvInvalidDate.setText("Leave adjustment has been saved successfully");
+
+        Button btnOk = (Button) dialogView.findViewById(R.id.btnOk);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alerDialog1.dismiss();
+                successDialog.dismiss();
+
+            }
+        });
+
+        successDialog = dialogBuilder.create();
+        successDialog.setCancelable(true);
+        Window window = successDialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        successDialog.show();
     }
 }
