@@ -114,7 +114,7 @@ public class FeedBackRatingActivity extends AppCompatActivity {
     File f;
     private static final String IMAGE_DIRECTORY = "/signdemo";
     GPSTracker gps;
-    String cuulat, cuulong, cuaddress;
+    String cuulat="0.00", cuulong="0.00", cuaddress="ok";
     String userid, domain, clintid, clintname, clintemail, clinntdes, officeid, officename, clintphn, address, answer, longt, lat, clintoffname, username;
     int signFlag;
     LinearLayout llLoad;

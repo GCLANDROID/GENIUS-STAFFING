@@ -1,5 +1,10 @@
 package io.cordova.myapp00d753.activity;
 
+import static android.Manifest.permission.READ_PHONE_NUMBERS;
+import static android.Manifest.permission.READ_PHONE_STATE;
+import static android.Manifest.permission.READ_SMS;
+
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,6 +13,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
@@ -30,6 +36,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -73,14 +80,15 @@ public class LoginActivity extends AppCompatActivity {
     ImageView imgVisible, imginVisible;
     LinearLayout llLoader;
     TextView tvForgotPass;
-    AlertDialog alert1,popUp,alerDialog1;
-    String security_code="0000";
+    AlertDialog alert1, popUp, alerDialog1;
+    String security_code = "0000";
     TextView llForgotPassword;
 
     ImageView refreshButton;
     EditText etCaptcha;
     Button submitButton;
-   // CaptchaImageView captchaImageView;
+    // CaptchaImageView captchaImageView;
+    String phoneNumber="0000";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +146,11 @@ public class LoginActivity extends AppCompatActivity {
 */
 
 
-    }
+
+
+
+
+        }
 
     private void onClick() {
        /* refreshButton.setOnClickListener(new View.OnClickListener() {
@@ -254,7 +266,7 @@ public class LoginActivity extends AppCompatActivity {
         String base64 = Base64.encodeToString(data, Base64.DEFAULT).replaceAll("\\s+", "");;
 
 
-        String surl = AppData.url+"get_GCLAuthenticateWithEncryption?MasterID=" + etUserId.getText().toString() + "&Password=" + base64 + "&IMEI=0000&Version=" + version + "&SecurityCode=" + etSecurityCode.getText().toString() + "&DeviceID=" + refreshedToken + "&DeviceType=A";
+        String surl = AppData.url+"get_GCLAuthenticateWithEncryption?MasterID=" + etUserId.getText().toString() + "&Password=" + base64 + "&IMEI="+phoneNumber+"&Version=" + version + "&SecurityCode=" + etSecurityCode.getText().toString() + "&DeviceID=" + refreshedToken + "&DeviceType=A";
         Log.d("inputLogin", surl);
 
         final ProgressDialog progressDialog=new ProgressDialog(LoginActivity.this);

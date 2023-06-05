@@ -1,16 +1,23 @@
 package io.cordova.myapp00d753.activity;
 
+import static android.Manifest.permission.READ_PHONE_NUMBERS;
+import static android.Manifest.permission.READ_PHONE_STATE;
+import static android.Manifest.permission.READ_SMS;
+
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 
+import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
@@ -29,6 +36,7 @@ import android.widget.Toast;
 import androidx.annotation.ColorInt;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -95,6 +103,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
     JSONArray spokepersonArray;
     AlertDialog al1;
     boolean survey;
+    String phoneNumber="0000";
 
 
     @Override
@@ -159,6 +168,13 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
 
 
         }
+
+
+
+
+
+
+
 
 
     }
@@ -253,7 +269,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         String base64 = Base64.encodeToString(data, Base64.DEFAULT).replaceAll("\\s+", "");;
 
 
-        String surl = AppData.url+"get_GCLAuthenticateWithEncryption?MasterID=" + pref.getMasterId() + "&Password=" + base64 + "&IMEI=0000&Version=1.0&SecurityCode=" + pref.getSecurityCode() + "&DeviceID=azzzzzz&DeviceType=A";
+        String surl = AppData.url+"get_GCLAuthenticateWithEncryption?MasterID=" + pref.getMasterId() + "&Password=" + base64 + "&IMEI="+phoneNumber+"&Version=1.0&SecurityCode=" + pref.getSecurityCode() + "&DeviceID=azzzzzz&DeviceType=A";
         Log.d("inputLogin", surl);
 
         final ProgressDialog pd=new ProgressDialog(EmployeeDashBoardActivity.this);

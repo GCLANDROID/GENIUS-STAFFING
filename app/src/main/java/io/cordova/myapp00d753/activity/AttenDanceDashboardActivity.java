@@ -91,7 +91,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     ArrayList<String>dateList=new ArrayList<>();
 
     TextView tvPresent,tvDetails,tvOK;
-    LinearLayout lnStatus;
+    LinearLayout lnStatus,llAdjustment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +138,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
 
             }
         });
+        llAdjustment=(LinearLayout)findViewById(R.id.llAdjustment);
         llAttandanceManage = (LinearLayout) findViewById(R.id.llAttandanceManage);
         llAttendanceReport = (LinearLayout) findViewById(R.id.llAttendanceReport);
         llBackAttendance = (LinearLayout) findViewById(R.id.llBackAttendance);
@@ -177,6 +178,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         llWeekly.setOnClickListener(this);
         llBackAttendance.setOnClickListener(this);
         llAttenRegularize.setOnClickListener(this);
+        llAdjustment.setOnClickListener(this);
         tvCancel.setOnClickListener(this);
 
         y = Calendar.getInstance().get(Calendar.YEAR);
@@ -346,7 +348,11 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         });
 
         tvOK.setOnClickListener(this);
-
+        if (pref.getEmpClintId().equals("AEMCLI0910000343") || pref.getEmpClintId().equals("AEMCLI0910000315")){
+            llAdjustment.setVisibility(View.VISIBLE);
+        }else {
+            llAdjustment.setVisibility(View.GONE);
+        }
         
 
 
@@ -582,7 +588,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else if (view == llWeekly) {
-            if (pref.getEmpClintId().equals("AEMCLI2210001707") || pref.getEmpClintId().equals("AEMCLI2210001697") || pref.getEmpClintId().equals("AEMCLI2210001698")) {
+            if (pref.getEmpClintId().equals("AEMCLI2210001707") || pref.getEmpClintId().equals("AEMCLI2210001697") || pref.getEmpClintId().equals("AEMCLI2210001698")|| pref.getEmpClintId().equals("AEMCLI2310001805")) {
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, WeeklyOffAttendanceActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -617,6 +623,10 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             startActivity(intent);
         }else if (view==tvOK){
             lnStatus.setVisibility(View.GONE);
+        }else if (view==llAdjustment){
+            Intent intent = new Intent(AttenDanceDashboardActivity.this, AdjustmentActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         }
 
 

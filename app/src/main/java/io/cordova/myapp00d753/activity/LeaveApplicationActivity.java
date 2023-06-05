@@ -51,6 +51,12 @@ public class LeaveApplicationActivity extends AppCompatActivity {
         tvAdjustment=(TextView)findViewById(R.id.tvAdjustment);
         tvToolBar=(TextView)findViewById(R.id.tvToolBar);
 
+        if (pref.getEmpClintId().equals("AEMCLI0910000343") || pref.getEmpClintId().equals("AEMCLI0910000315")){
+            llAdjustment.setVisibility(View.GONE);
+        }else {
+            llAdjustment.setVisibility(View.GONE);
+        }
+
 
     }
     private void onClick(){
