@@ -8,8 +8,8 @@ android {
         applicationId "io.cordova.myapp00d753"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 97
-        versionName "55.9"
+        versionCode 106
+        versionName "60.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -28,6 +28,9 @@ android {
     }
     packagingOptions {
         exclude 'META-INF/proguard/androidx-annotations.pro'
+    }
+    dataBinding {
+        enabled = true
     }
 }
 
@@ -119,9 +122,9 @@ dependencies {
     // If you want to additionally use the CameraX Extensions library
     implementation "androidx.camera:camera-extensions:1.0.0-alpha20"
 
-    implementation('org.tensorflow:tensorflow-lite:2.4.0') { changing = true }
+   /* implementation('org.tensorflow:tensorflow-lite:2.4.0') { changing = true }
     implementation('org.tensorflow:tensorflow-lite-gpu:0.0.0-nightly') { changing = true }
-    implementation('org.tensorflow:tensorflow-lite-support:0.0.0-nightly') { changing = true }
+    implementation('org.tensorflow:tensorflow-lite-support:0.0.0-nightly') { changing = true }*/
    // implementation 'com.google.android.gms:play-services-mlkit-face-detection:17.0.1'
     //implementation 'com.google.mlkit:face-detection:16.1.5'
 

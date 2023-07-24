@@ -78,7 +78,7 @@ public class LeaveAdjustmentFragment extends Fragment {
     ArrayList<SpineerItemModel>modelModulelist=new ArrayList<>();
     String mode="";
     String month;
-
+    Spinner spMode;
 
 
     @Override
@@ -231,7 +231,7 @@ public class LeaveAdjustmentFragment extends Fragment {
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spAdjustment.setAdapter(spinnerArrayAdapter);
 
-        Spinner spMode=(Spinner)dialogView.findViewById(R.id.spMode);
+         spMode=(Spinner)dialogView.findViewById(R.id.spMode);
         ArrayAdapter<String> spinnerModeArrayAdapter = new ArrayAdapter<String>
                 (getContext(), android.R.layout.simple_spinner_item,
                         modelist); //selected item will look like a spinner set from XML
@@ -245,13 +245,15 @@ public class LeaveAdjustmentFragment extends Fragment {
                     applicationComponent=otApplicationComponentModuleList.get(i).getItemName();
                     applicationComponentID=otApplicationComponentModuleList.get(i).getItemId();
                     if (applicationComponent.equalsIgnoreCase("On Duty")){
-                         llStartEndDate.setVisibility(View.GONE);
-                         llEffectiveDate.setVisibility(View.VISIBLE);
+                         llStartEndDate.setVisibility(View.VISIBLE);
+                         llEffectiveDate.setVisibility(View.GONE);
                          llMode.setVisibility(View.VISIBLE);
+                        llInOutTime.setVisibility(View.GONE);
                     }else if (applicationComponent.equalsIgnoreCase("OT Application")){
                         llStartEndDate.setVisibility(View.VISIBLE);
                         llEffectiveDate.setVisibility(View.GONE);
                         llMode.setVisibility(View.GONE);
+                        llInOutTime.setVisibility(View.VISIBLE);
                     }
 
                 }
@@ -338,7 +340,13 @@ public class LeaveAdjustmentFragment extends Fragment {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                postData(etReason.getText().toString(),tvInTime.getText().toString(),tvOutTime.getText().toString());
+
+                if (applicationComponent.equalsIgnoreCase("On Duty")){
+                    postDataOD(etReason.getText().toString());
+                }else {
+                    postData(etReason.getText().toString(),tvInTime.getText().toString(),tvOutTime.getText().toString());
+                }
+
             }
         });
 
@@ -410,6 +418,11 @@ public class LeaveAdjustmentFragment extends Fragment {
                         int month = (monthOfYear + 1);
                         endDate = year + "-" + month + "-" + dayOfMonth;
                         tv.setText(endDate);
+                        if (startDate.equalsIgnoreCase(endDate)){
+                            spMode.setEnabled(true);
+                        }else {
+                            spMode.setEnabled(false);
+                        }
 
                     }
                 }, mYear, mMonth, mDay);
@@ -494,6 +507,73 @@ public class LeaveAdjustmentFragment extends Fragment {
                         if (responseStatus) {
 
                             successAlert();
+                        }
+
+
+                        // boolean _status = job1.getBoolean("status");
+
+
+                        // do anything with response
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        pd.dismiss();
+                        Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
+
+                    }
+                });
+    }
+
+    private void postDataOD(String remarks) {
+        ProgressDialog pd=new ProgressDialog(getContext());
+        pd.setMessage("Loading");
+        pd.setCancelable(false);
+        pd.show();
+        AndroidNetworking.upload(AppData.url + "Post_EmployeeOTandODAdjustment")
+                .addMultipartParameter("CompanyID", pref.getEmpClintId())
+                .addMultipartParameter("EmployeeID", pref.getEmpId())
+                .addMultipartParameter("YearId", "19")
+                .addMultipartParameter("MonthId", month)
+                .addMultipartParameter("GatePassDate", startDate +" 00:00:00.000")
+                .addMultipartParameter("EndDate", endDate+" 00:00:00.000")
+                .addMultipartParameter("Remarks", remarks)
+                .addMultipartParameter("StartTime", startDate +" 00:00:00.000")
+                .addMultipartParameter("EndTime", startDate +" 00:00:00.000")
+                .addMultipartParameter("GatePassType", applicationComponentID)
+                .addMultipartParameter("clinetname", "")
+                .addMultipartParameter("clinetphn", "")
+                .addMultipartParameter("CreatedBy", pref.getEmpId())
+                .addMultipartParameter("AID", "0")
+                .addMultipartParameter("Oddaytype", mode)
+                .addMultipartParameter("OtMin", "0")
+                .addMultipartParameter("refdate", effectiveDate+" 00:00:00.000")
+                .addMultipartParameter("LtMin", "0")
+                .addMultipartParameter("SecurityCode", pref.getSecurityCode())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+
+
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        pd.dismiss();
+
+
+                        JSONObject job = response;
+                        boolean responseStatus = job.optBoolean("responseStatus");
+                        if (responseStatus) {
+
+                            successAlert();
+                        }else {
+                            Toast.makeText(getContext(),"False",Toast.LENGTH_LONG).show();
                         }
 
 

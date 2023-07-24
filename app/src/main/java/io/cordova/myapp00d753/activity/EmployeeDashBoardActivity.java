@@ -523,7 +523,10 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                 if (pref.getEmpClintId().equals("AEMCLI1910000054") || pref.getEmpClintId().equals("AEMCLI2010000067") ||pref.getEmpClintId().equals("SECCLI2110000011") ||pref.getEmpClintId().equals("SECCLI2110000012") ){
                                     itemList.add(new MenuItemModel("Survey","200"));
 
-                                }else {
+                                }/*else if (pref.getEmpClintId().equals("AEMCLI0910000315")){
+                                    itemList.add(new MenuItemModel("Interview","300"));
+                                }*/
+                                else {
 
                                 }
 

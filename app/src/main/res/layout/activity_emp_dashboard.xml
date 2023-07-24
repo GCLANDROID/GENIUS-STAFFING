@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activity.EmpDashboardActivity">
+ <LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimaryDark"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:text="Attendance Manage"></TextView>
+    </LinearLayout>
+    <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="vertical"
+         android:id="@+id/llMain"
+         android:visibility="visible"
+         android:layout_marginTop="20dp"
+         android:layout_marginLeft="5dp"
+         android:layout_marginRight="5dp"
+         >
+
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:visibility="visible">
+             <FrameLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content">
+                 <LinearLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent"
+                     android:orientation="vertical"
+                     android:layout_marginLeft="5dp"
+                     android:layout_marginTop="5dp"
+                     android:layout_marginRight="5dp"
+                     android:id="@+id/llLocation">
+                     <fragment
+                         android:id="@+id/map"
+                         android:name="com.google.android.gms.maps.SupportMapFragment"
+                         android:layout_width="match_parent"
+                         android:layout_height="150dp"
+                         android:layout_gravity="center"
+                         android:layout_marginTop="20dp"
+                         />
+
+                     <LinearLayout
+                         android:layout_width="match_parent"
+                         android:layout_height="60dp"
+                         android:background="@drawable/lldesign7"
+                         android:layout_gravity="center"
+                         android:paddingLeft="5dp"
+                         android:layout_marginBottom="25dp"
+                         android:paddingTop="5dp"
+                         >
+                         <TextView
+                             android:layout_marginTop="5dp"
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:textColor="@android:color/black"
+                             android:textSize="14sp"
+                             android:id="@+id/tvAddress"/>
+
+                     </LinearLayout>
+                 </LinearLayout>
+
+                 <LinearLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent"
+                     android:orientation="vertical">
+                     <LinearLayout
+                         android:layout_width="match_parent"
+                         android:layout_height="0dp"
+                         android:layout_weight="1"
+                         android:layout_marginTop="20dp"
+                         ></LinearLayout>
+
+
+                 </LinearLayout>
+
+             </FrameLayout>
+         </LinearLayout>
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="0dp"
+             android:layout_weight="0.7"
+             android:orientation="vertical"
+             android:layout_marginTop="10dp">
+
+             <LinearLayout
+                 android:layout_width="150dp"
+                 android:layout_height="wrap_content"
+                 android:orientation="vertical"
+                 android:layout_gravity="center"
+                 android:gravity="center"
+                 android:id="@+id/llCamera">
+                 <ImageView
+                     android:id="@+id/imgCamera"
+                     android:layout_width="45dp"
+                     android:layout_height="45dp"
+                     android:src="@drawable/cameraimg"
+                     android:layout_gravity="center"/>
+                 <TextView
+                     android:visibility="gone"
+                     android:id="@+id/tvFace"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:textColor="@color/maincolor"
+                     android:textSize="13sp"
+                     android:layout_marginTop="5dp"
+                     android:fontFamily="serif"
+                     android:text="Recognize my face"></TextView>
+
+                 <ImageView
+                     android:layout_width="100dp"
+                     android:layout_height="100dp"
+                     android:id="@+id/imgEmp"/>
+
+             </LinearLayout>
+             <FrameLayout
+                 android:layout_marginTop="20dp"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginBottom="20dp"
+                 android:layout_gravity="center">
+
+                 <Button
+                     android:id="@+id/btnSubmit"
+                     android:layout_width="200dp"
+                     android:layout_height="50dp"
+                     android:layout_gravity="center"
+                     android:background="@color/colorPrimaryDark"
+
+                     android:text="Submit"
+                     android:textAppearance="?android:textAppearanceSmall"
+                     android:textColor="@android:color/white" />
+
+                 <LinearLayout
+                     android:id="@+id/llL"
+                     android:visibility="gone"
+                     android:layout_gravity="center"
+                     android:layout_width="50dp"
+                     android:layout_height="50dp"
+                     android:background="@color/colorPrimaryDark"
+                     android:gravity="center">
+                     <ProgressBar
+                         android:layout_width="30dp"
+                         android:layout_height="30dp"
+                         ></ProgressBar>
+
+                 </LinearLayout>
+             </FrameLayout>
+
+         </LinearLayout>
+
+
+     </LinearLayout>
+ </LinearLayout>
+</layout>

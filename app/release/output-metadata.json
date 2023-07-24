@@ -5,13 +5,13 @@
     "kind": "Directory"
   },
   "applicationId": "io.cordova.myapp00d753",
-  "variantName": "release",
+  "variantName": "processReleaseResources",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
-      "versionCode": 68,
-      "versionName": "54.0",
+      "versionCode": 106,
+      "versionName": "60.7",
       "outputFile": "app-release.apk"
     }
   ]

@@ -238,7 +238,7 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
                             boolean responseStatus = job1.optBoolean("responseStatus");
                             if (responseStatus) {
                                 // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
-
+                                blockLogList.clear();
                                 JSONArray responseData = job1.optJSONArray("responseData");
                                 for (int i = 0; i < responseData.length(); i++) {
                                     JSONObject obj = responseData.getJSONObject(i);

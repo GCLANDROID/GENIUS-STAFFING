@@ -40,6 +40,7 @@ import io.cordova.myapp00d753.activity.ProfileActivity;
 import io.cordova.myapp00d753.activity.RemDashBoardActivity;
 import io.cordova.myapp00d753.activity.SalesManagementDashboardActivity;
 import io.cordova.myapp00d753.activity.VoiceAssistantActivity;
+import io.cordova.myapp00d753.facereogntion.LoginDashboardActivity;
 import io.cordova.myapp00d753.module.MenuItemModel;
 import io.cordova.myapp00d753.utility.Pref;
 
@@ -102,6 +103,8 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
             myViewHolder.imgMenu.setImageResource(R.drawable.survey);
         }else if (itemList.get(i).getMenuId().equalsIgnoreCase("20")){
             myViewHolder.imgMenu.setImageResource(R.drawable.insurance);
+        }else if (itemList.get(i).getMenuId().equalsIgnoreCase("300")){
+            myViewHolder.imgMenu.setImageResource(R.drawable.interview);
         }else {
             myViewHolder.itemView.setVisibility(View.GONE);
         }
@@ -197,13 +200,18 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
                 } else if (itemList.get(i).getMenuId().equals("200")){
-                    //leave
+                    //feedback
                     Intent intent=new Intent(mContex, FeedBackRatingForJLLActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
                 }else if (itemList.get(i).getMenuId().equals("20")){
                     //leave
                     Intent intent=new Intent(mContex, InsuranceActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContex.startActivity(intent);
+                }else if (itemList.get(i).getMenuId().equals("300")){
+                    //interview
+                    Intent intent=new Intent(mContex, LoginDashboardActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
                 }
