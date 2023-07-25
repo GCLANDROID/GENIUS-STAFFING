@@ -43,6 +43,10 @@
         <activity
             android:name=".activity.AdjustmentActivity"
             android:exported="false" />
+        <activity android:name=".bluedart.BlueDartAttenDanceDashboardActivity"
+            android:screenOrientation="userPortrait"></activity>
+        <activity android:name=".bluedart.BlueDartAttendanceManageActivity"
+            android:screenOrientation="userPortrait"></activity>
         <activity
             android:name=".activity.InsuranceActivity"
             android:exported="false" />

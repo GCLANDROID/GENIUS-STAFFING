@@ -40,6 +40,7 @@ import io.cordova.myapp00d753.activity.ProfileActivity;
 import io.cordova.myapp00d753.activity.RemDashBoardActivity;
 import io.cordova.myapp00d753.activity.SalesManagementDashboardActivity;
 import io.cordova.myapp00d753.activity.VoiceAssistantActivity;
+import io.cordova.myapp00d753.bluedart.BlueDartAttenDanceDashboardActivity;
 import io.cordova.myapp00d753.facereogntion.LoginDashboardActivity;
 import io.cordova.myapp00d753.module.MenuItemModel;
 import io.cordova.myapp00d753.utility.Pref;
@@ -121,9 +122,17 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                 }else if (itemList.get(i).getMenuId().equals("2")){
                     //Attendnace
 
-                        Intent intent = new Intent(mContex, AttenDanceDashboardActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        mContex.startActivity(intent);
+                        if (pref.getEmpClintId().equalsIgnoreCase("AEMCLI1810001410")){
+                            Intent intent = new Intent(mContex, BlueDartAttenDanceDashboardActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            mContex.startActivity(intent);
+                        }else {
+                            Intent intent = new Intent(mContex, AttenDanceDashboardActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            mContex.startActivity(intent);
+                        }
+
+
 
                 }
                 else if (itemList.get(i).getMenuId().equals("3")){
