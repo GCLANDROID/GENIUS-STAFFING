@@ -355,6 +355,7 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
         } else {
             llAdjustment.setVisibility(View.GONE);
         }
+        llTour.setOnClickListener(this);
 
 
     }
@@ -611,6 +612,14 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
             Intent intent = new Intent(BlueDartAttenDanceDashboardActivity.this, AdjustmentActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+        }else if (view == llTour) {
+
+            Intent intent = new Intent(BlueDartAttenDanceDashboardActivity.this, BlueDartTourManageActivity.class);
+            intent.putExtra("intt", "2");
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+
+
         }
 
 

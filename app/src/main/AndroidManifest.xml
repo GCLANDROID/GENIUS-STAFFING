@@ -47,6 +47,7 @@
             android:screenOrientation="userPortrait"></activity>
         <activity android:name=".bluedart.BlueDartAttendanceManageActivity"
             android:screenOrientation="userPortrait"></activity>
+        <activity android:name=".bluedart.BlueDartTourManageActivity"></activity>
         <activity
             android:name=".activity.InsuranceActivity"
             android:exported="false" />
