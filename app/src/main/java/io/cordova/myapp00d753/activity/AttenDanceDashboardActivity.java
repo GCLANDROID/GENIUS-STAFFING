@@ -170,7 +170,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         } else {
             llBackAttendance.setVisibility(View.GONE);
             llAttenRegularize.setVisibility(View.GONE);
-
+//
         }
 
         llAttandanceManage.setOnClickListener(this);
