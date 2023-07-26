@@ -2,7 +2,10 @@ package io.cordova.myapp00d753.bluedart;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -11,6 +14,13 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +29,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.androidnetworking.interfaces.UploadProgressListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -33,10 +48,14 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONObject;
+
 import java.util.List;
 import java.util.Locale;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.AttendanceManageActivity;
+import io.cordova.myapp00d753.activity.AttendanceReportActivity;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.GPSTracker;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
@@ -63,6 +82,8 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
     double currentLatitude,currentLongitude;
     String lat,longt,address,address1;
     TextView tvAddress;
+    AlertDialog alerDialog1;
+    LinearLayout lnMark;
 
 
     @Override
@@ -80,7 +101,7 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
         pref = new Pref(getApplicationContext());
         tvAddress=(TextView)findViewById(R.id.tvAddress);
         connectionCheck = new NetworkConnectionCheck(getApplicationContext());
-
+        lnMark=(LinearLayout)findViewById(R.id.lnMark);
         mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(10 * 1000)        // 10 seconds, in milliseconds
@@ -119,7 +140,12 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
 
     private void onClick() {
 
-
+        lnMark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attendance();
+            }
+        });
 
 
 
@@ -387,9 +413,85 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
     }
 
 
+    private void attendance() {
+        ProgressDialog pd=new ProgressDialog(BlueDartTourManageActivity.this);
+        pd.setMessage("Loading...");
+        pd.setCancelable(false);
+        pd.show();
+        AndroidNetworking.upload(AppData.url + "gcl_post_attedance")
+                .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
+                .addMultipartParameter("Address", address)
+                .addMultipartParameter("Longitude", longt)
+                .addMultipartParameter("Latitude", lat)
+                .addMultipartParameter("SecurityCode", pref.getSecurityCode())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+
+
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        pd.dismiss();
+                        JSONObject job = response;
+                        String responseText = job.optString("responseText");
+                        boolean responseStatus = job.optBoolean("responseStatus");
+                        if (responseStatus){
+                            successAlert();
+                        }
 
 
 
+
+                        // boolean _status = job1.getBoolean("status");
+
+
+                        // do anything with response
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        pd.dismiss();
+                        Toast.makeText(BlueDartTourManageActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+
+                    }
+                });
+    }
+
+    private void successAlert() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BlueDartTourManageActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.dialog_success, null);
+        dialogBuilder.setView(dialogView);
+        TextView tvInvalidDate = (TextView) dialogView.findViewById(R.id.tvSuccess);
+
+        tvInvalidDate.setText("Your attendnace has been saved successfully");
+
+        Button btnOk = (Button) dialogView.findViewById(R.id.btnOk);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alerDialog1.dismiss();
+                Intent intent = new Intent(BlueDartTourManageActivity.this, AttendanceReportActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        alerDialog1 = dialogBuilder.create();
+        alerDialog1.setCancelable(true);
+        Window window = alerDialog1.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        alerDialog1.show();
+    }
 
 
 
