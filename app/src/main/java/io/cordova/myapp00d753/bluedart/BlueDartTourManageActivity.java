@@ -644,9 +644,8 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
                     }
                     //set text to edit text
                     Log.i("IAMAM ", "IMAGE VAVA " + sb.toString());
-                    odometerEdittext.setText(sb.toString());
                     odometerValue = getOdometerRegexValue(sb.toString());
-
+                    odometerEdittext.setText(odometerValue);
                     Toast.makeText(getApplicationContext(), "ODE::  " + odometerValue, Toast.LENGTH_SHORT).show();
 
                     onDialogClosedSubBtnClicked();
