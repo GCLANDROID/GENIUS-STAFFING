@@ -249,7 +249,7 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
             //got image from camera now crop it
             CropImage.activity(image_uri)
                     .setGuidelines(CropImageView.Guidelines.ON) //enable image guid lines
-                    .setCropMenuCropButtonIcon(R.drawable.ic_baseline_check_24)
+                    .setCropMenuCropButtonIcon(R.drawable.checked)
                     .setCropMenuCropButtonTitle("Crop")
                     .start(BlueDartAttendanceManageActivity.this);
 

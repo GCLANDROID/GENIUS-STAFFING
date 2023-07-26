@@ -609,7 +609,7 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
             //got image from camera now crop it
             CropImage.activity(image_uri)
                     .setGuidelines(CropImageView.Guidelines.ON) //enable image guid lines
-                    .setCropMenuCropButtonIcon(R.drawable.ic_baseline_check_24)
+                    .setCropMenuCropButtonIcon(R.drawable.checked)
                     .setCropMenuCropButtonTitle("Crop")
                     .start(BlueDartTourManageActivity.this);
 
@@ -642,7 +642,6 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
                         TextBlock myItem = items.valueAt(i);
                         sb.append(myItem.getValue());
                     }
-
                     //set text to edit text
                     Log.i("IAMAM ", "IMAGE VAVA " + sb.toString());
                     odometerEdittext.setText(sb.toString());
