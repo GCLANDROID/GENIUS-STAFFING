@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
 
     <application
@@ -30,22 +30,29 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".facereogntion.LoginDashboardActivity"
+        <activity
+            android:name=".facereogntion.LoginDashboardActivity"
             android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".facereogntion.CandidateLoginActivity"
+        <activity
+            android:name=".facereogntion.CandidateLoginActivity"
             android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".facereogntion.InterviewrLoginActivity"
+        <activity
+            android:name=".facereogntion.InterviewrLoginActivity"
             android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".facereogntion.HRLoginActivity"
+        <activity
+            android:name=".facereogntion.HRLoginActivity"
             android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".facereogntion.InterviewFormActivity"
+        <activity
+            android:name=".facereogntion.InterviewFormActivity"
             android:screenOrientation="userPortrait"></activity>
         <activity
             android:name=".activity.AdjustmentActivity"
             android:exported="false" />
-        <activity android:name=".bluedart.BlueDartAttenDanceDashboardActivity"
+        <activity
+            android:name=".bluedart.BlueDartAttenDanceDashboardActivity"
             android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".bluedart.BlueDartAttendanceManageActivity"
+        <activity
+            android:name=".bluedart.BlueDartAttendanceManageActivity"
             android:screenOrientation="userPortrait"></activity>
         <activity android:name=".bluedart.BlueDartTourManageActivity"></activity>
         <activity
@@ -83,10 +90,12 @@
         <activity
             android:name=".activity.VoiceAssistantActivity"
             android:screenOrientation="userPortrait" />
-        <activity android:name=".activity.BacklogAttendanceActivity"
-            android:screenOrientation="userPortrait"/>
-        <activity android:name=".activity.SPRDashboardActivity"
-            android:screenOrientation="userPortrait"/>
+        <activity
+            android:name=".activity.BacklogAttendanceActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.SPRDashboardActivity"
+            android:screenOrientation="userPortrait" />
         <activity android:name=".activity.SupSaleDialog1Activity" />
         <activity android:name=".activity.CounterVisitReportActivity" />
         <activity android:name=".activity.CounterVisitDashboardActivity" />
@@ -218,6 +227,12 @@
         <activity
             android:name=".activity.SupSalaryActivity"
             android:screenOrientation="userPortrait" />
+
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:exported="true"
+
+            android:theme="@style/CropImage" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -437,13 +452,17 @@
         <activity android:name=".activity.TotalSaleActivity" />
         <activity android:name="com.google.android.cameraview.LongImageFrontCameraActivity"></activity>
         <activity android:name="com.google.android.cameraview.LongImageBackCameraActivity"></activity>
-        <activity android:name=".facereogntion.EmpDashboardActivity"
+        <activity
+            android:name=".facereogntion.EmpDashboardActivity"
             android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".facereogntion.HRDashboardActivity"
+        <activity
+            android:name=".facereogntion.HRDashboardActivity"
             android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".facereogntion.HRActivity"
+        <activity
+            android:name=".facereogntion.HRActivity"
             android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".facereogntion.InterViewerPanelActivity"
+        <activity
+            android:name=".facereogntion.InterViewerPanelActivity"
             android:screenOrientation="userPortrait"></activity>
     </application>
 

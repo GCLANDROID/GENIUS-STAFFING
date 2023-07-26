@@ -1,226 +1,256 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".bluedart.BlueDartAttendanceManageActivity"
-    android:background="@android:color/white">
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="?android:actionBarSize"
-        android:orientation="horizontal"
-        android:background="@color/colorPrimary">
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            >
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/backimg"
-                android:layout_marginLeft="10dp"
-                android:layout_gravity="center"
-                android:id="@+id/imgBack"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
-            <TextView
-                android:id="@+id/tvToolBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/toolbartextsize"
-                android:text="Mark Attendance"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            android:gravity="right">
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/homeimg"
-                android:layout_gravity="center"
-                android:layout_marginRight="15dp"
-                android:id="@+id/imgHome"/>
-        </LinearLayout>
-    </LinearLayout>
-    <LinearLayout
+<layout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@android:color/white"
         android:orientation="vertical"
-        android:id="@+id/llMain"
-        android:visibility="visible"
+        tools:context=".bluedart.BlueDartAttendanceManageActivity">
 
-        android:background="@drawable/lldesign">
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="?android:actionBarSize"
+            android:background="@color/colorPrimary"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5">
+
+                <ImageView
+                    android:id="@+id/imgBack"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/backimg" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tvToolBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mark Attendance"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/toolbartextsize" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:gravity="right">
+
+                <ImageView
+                    android:id="@+id/imgHome"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/homeimg" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llMain"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@drawable/lldesign"
+            android:orientation="vertical"
             android:visibility="visible">
-            <FrameLayout
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <LinearLayout
+                android:layout_height="match_parent"
+                android:visibility="visible">
+
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:id="@+id/llLocation">
-                    <fragment
-                        android:id="@+id/map"
-                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:id="@+id/llLocation"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_gravity="center"
+                        android:orientation="vertical">
 
-                        />
-
-
-                </LinearLayout>
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="bottom">
-                    <LinearLayout
-                        android:visibility="gone"
-                        android:id="@+id/lnAttendance"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:background="@color/white">
-                        <ImageView
-                            android:layout_marginLeft="5dp"
-                            android:layout_gravity="center"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/setting"
-                            app:tint="@color/textcolor" />
-                        <TextView
-                            android:layout_marginLeft="5dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:textColor="@color/textcolor"
-                            android:text="Mark Attendance"></TextView>
-                    </LinearLayout>
-                    <LinearLayout
-
-                        android:padding="10dp"
-                        android:orientation="vertical"
-                        android:id="@+id/lnAttendancePanel"
-                        android:layout_width="match_parent"
-                        android:layout_height="150dp"
-                        android:background="@color/bar2">
-                        <TextView
-                            android:textAlignment="center"
-                            android:layout_gravity="center"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="14sp"
-                            android:textColor="@color/textcolor"
-                            android:id="@+id/tvAddress"
-                            android:maxLines="2"></TextView>
-                        <LinearLayout
-                            android:layout_marginTop="10dp"
+                        <fragment
+                            android:id="@+id/map"
+                            android:name="com.google.android.gms.maps.SupportMapFragment"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                            <LinearLayout
-                                android:layout_weight="1"
-                                android:id="@+id/lnMark"
-                                android:gravity="center"
-                                android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+
+                            />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="bottom"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/lnAttendance"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:background="@color/white"
+                            android:visibility="gone">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="5dp"
+                                android:src="@drawable/setting"
+                                app:tint="@color/textcolor" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical">
-                                <LinearLayout
-                                    android:gravity="center"
-                                    android:backgroundTint="@color/textcolor"
-                                    android:layout_width="50dp"
-                                    android:layout_height="50dp"
-                                    android:background="@drawable/lloval">
-                                    <ImageView
-                                        android:layout_width="30dp"
-                                        android:layout_height="30dp"
-                                        android:src="@drawable/tap"
-                                        app:tint="@color/white"></ImageView>
-                                </LinearLayout>
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textColor="@color/textcolor"
-                                    android:textSize="14sp"
-                                    android:text="Mark Attendance"></TextView>
-                            </LinearLayout>
-                            <LinearLayout
-                                android:id="@+id/lnJrStart"
-                                android:gravity="center"
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="5dp"
+                                android:text="Mark Attendance"
+                                android:textColor="@color/textcolor"></TextView>
+                        </LinearLayout>
+
+                        <LinearLayout
+
+                            android:id="@+id/lnAttendancePanel"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:background="@color/bar2"
+                            android:orientation="vertical"
+                            android:padding="10dp">
+
+                            <TextView
+                                android:id="@+id/tvAddress"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical">
-                                <LinearLayout
-                                    android:gravity="center"
-                                    android:backgroundTint="@color/textcolor"
-                                    android:layout_width="50dp"
-                                    android:layout_height="50dp"
-                                    android:background="@drawable/lloval">
-                                    <ImageView
-                                        android:layout_width="30dp"
-                                        android:layout_height="30dp"
-                                        android:src="@drawable/departure"
-                                        app:tint="@color/white"></ImageView>
-                                </LinearLayout>
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textColor="@color/textcolor"
-                                    android:textSize="14sp"
-                                    android:text="Journey Start"></TextView>
-                            </LinearLayout>
+                                android:layout_gravity="center"
+                                android:maxLines="2"
+                                android:textAlignment="center"
+                                android:textColor="@color/textcolor"
+                                android:textSize="14sp"></TextView>
+
                             <LinearLayout
-                                android:id="@+id/lnJrEnd"
-                                android:gravity="center"
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical">
+                                android:layout_marginTop="10dp">
+
                                 <LinearLayout
-                                    android:gravity="center"
-                                    android:backgroundTint="@color/textcolor"
-                                    android:layout_width="50dp"
-                                    android:layout_height="50dp"
-                                    android:background="@drawable/lloval">
-                                    <ImageView
-                                        android:layout_width="30dp"
-                                        android:layout_height="30dp"
-                                        android:src="@drawable/arrivals"
-                                        app:tint="@color/white"></ImageView>
-                                </LinearLayout>
-                                <TextView
-                                    android:layout_width="wrap_content"
+                                    android:id="@+id/lnMark"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/textcolor"
-                                    android:textSize="14sp"
-                                    android:text="Journey End"></TextView>
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:orientation="vertical">
+
+                                    <LinearLayout
+                                        android:layout_width="50dp"
+                                        android:layout_height="50dp"
+                                        android:background="@drawable/lloval"
+                                        android:backgroundTint="@color/textcolor"
+                                        android:gravity="center">
+
+                                        <ImageView
+                                            android:layout_width="30dp"
+                                            android:layout_height="30dp"
+                                            android:src="@drawable/tap"
+                                            app:tint="@color/white"></ImageView>
+                                    </LinearLayout>
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Mark Attendance"
+                                        android:textColor="@color/textcolor"
+                                        android:textSize="14sp"></TextView>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/lnJrStart"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:orientation="vertical">
+
+                                    <LinearLayout
+                                        android:layout_width="50dp"
+                                        android:layout_height="50dp"
+                                        android:background="@drawable/lloval"
+                                        android:backgroundTint="@color/textcolor"
+                                        android:gravity="center">
+
+                                        <ImageView
+                                            android:id="@+id/journey_start"
+                                            android:layout_width="30dp"
+                                            android:layout_height="30dp"
+                                            android:src="@drawable/departure"
+                                            app:tint="@color/white"></ImageView>
+                                    </LinearLayout>
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Journey Start"
+                                        android:textColor="@color/textcolor"
+                                        android:textSize="14sp"></TextView>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/lnJrEnd"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:orientation="vertical">
+
+                                    <LinearLayout
+                                        android:layout_width="50dp"
+                                        android:layout_height="50dp"
+                                        android:background="@drawable/lloval"
+                                        android:backgroundTint="@color/textcolor"
+                                        android:gravity="center">
+
+                                        <ImageView
+                                            android:id="@+id/journey_end"
+                                            android:layout_width="30dp"
+                                            android:layout_height="30dp"
+                                            android:src="@drawable/arrivals"
+                                            app:tint="@color/white"></ImageView>
+                                    </LinearLayout>
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Journey End"
+                                        android:textColor="@color/textcolor"
+                                        android:textSize="14sp"></TextView>
+                                </LinearLayout>
+
                             </LinearLayout>
 
                         </LinearLayout>
-
                     </LinearLayout>
-                </LinearLayout>
-            </FrameLayout>
+                </FrameLayout>
+            </LinearLayout>
+
+
         </LinearLayout>
 
-
-
     </LinearLayout>
-
-</LinearLayout>
+</layout>
