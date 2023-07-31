@@ -369,7 +369,6 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
         // initialize calendar
         Calendar calendar = Calendar.getInstance();
 
-
         ProgressDialog pd = new ProgressDialog(BlueDartAttenDanceDashboardActivity.this);
         pd.setMessage("Loading...");
         pd.show();
@@ -509,8 +508,6 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
                                         presentDays.add(Day);
                                     }
                                     dateHashmap.put(date, Status);
-
-
                                 }
 
                                 customCalendar.setDate(calendar, dateHashmap);
