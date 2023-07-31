@@ -151,7 +151,11 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                    etFocus.requestFocus();
+                if (backLogItem.size()>0 ||allclick==1) {
+                    backlogSave();
+                }else {
+                    Toast.makeText(getApplicationContext(),"Please Select Your Date(s)",Toast.LENGTH_LONG).show();
+                }
 
             }
         });
@@ -192,11 +196,7 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus){
-                    if (backLogItem.size()>0 ||allclick==1) {
-                        backlogSave();
-                    }else {
-                        Toast.makeText(getApplicationContext(),"Please Select Your Date(s)",Toast.LENGTH_LONG).show();
-                    }
+
                 }
             }
         });
