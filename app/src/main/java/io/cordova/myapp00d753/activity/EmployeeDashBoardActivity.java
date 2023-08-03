@@ -101,7 +101,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
     AlertDialog feedbackpopupDialog,aknowledgePopUp;
     FloatingActionButton fbSpoke;
     JSONArray spokepersonArray;
-    AlertDialog al1;
+    AlertDialog al1,al2;
     boolean survey;
     String phoneNumber="0000";
 
@@ -157,7 +157,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
             int launch_count = prefs.getInt("launch_count", 0);
 
             if(launch_count>=15){
-                al1.dismiss();
+                al2.dismiss();
 
 
             } else {
@@ -686,7 +686,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://111.93.182.170/GeniusEAM/DocFile/FAQ_EMP_.pdf"));
                 startActivity(browserIntent);
-                al1.dismiss();
+                al2.dismiss();
             }
         });
 
@@ -697,16 +697,16 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         lnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                al1.dismiss();
+                al2.dismiss();
             }
         });
 
-        al1 = dialogBuilder.create();
-        al1.setCancelable(false);
-        Window window = al1.getWindow();
+        al2 = dialogBuilder.create();
+        al2.setCancelable(false);
+        Window window = al2.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.CENTER);
-        al1.show();
+        al2.show();
     }
 
     private void showAlert() {

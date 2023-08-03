@@ -53,15 +53,31 @@
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textColor="@color/textcolor"
-                android:text="Attention: Effective 7th March 2023 the process of application for NRW, Settlement, Transfer Out and Transfer In will be blocked. Kindly do the needful before that."/>
+                android:text="Dear Member,"/>
+
             <TextView
                 android:padding="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textColor="@color/textcolor"
-                android:text="In the reference to surrendering PF Trust to EPFO, Please download the FAQ from this link"/>
+                android:text="With subject to the PF-Trust surrendered process. We are pleased to inform you that EPFO office is updating the past contribution of the employees in their PF portal and with that they are also verifying the contribution details of the respective employees."/>
             <TextView
+                android:padding="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/textcolor"
+                android:text="For the above mentioned reason the time span for updating the individuals’ contribution in their PF portal will be extended till 31st August, 2023."/>
+            <TextView
+                android:padding="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/textcolor"
+                android:text="Yours’ all services that is PF, Pension and Passbook on EPFO member portal along with your earlier balance will be resumed from September, 2023 onwards. We request you to cooperate with us till then."/>
+            <TextView
+                android:visibility="gone"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
