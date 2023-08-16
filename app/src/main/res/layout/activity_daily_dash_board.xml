@@ -98,7 +98,8 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@drawable/serviceicon" />
+                            android:src="@drawable/serviceicon"
+                            card_view:tint="@color/textcolor" />
 
 
                         <TextView
@@ -140,6 +141,7 @@
                         android:gravity="center">
 
                         <ImageView
+                            card_view:tint="@color/textcolor"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:src="@drawable/ic_logbook" />
@@ -246,6 +248,7 @@
             android:weightSum="2"
             android:layout_marginTop="20dp">
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/llReport"
                 android:layout_width="0dp"
                 android:layout_height="150dp"
@@ -269,6 +272,7 @@
                         android:gravity="center">
 
                         <ImageView
+                            card_view:tint="@color/textcolor"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:src="@drawable/ic_report" />

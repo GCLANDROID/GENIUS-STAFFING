@@ -44,6 +44,7 @@ public class OffDailyLogAdapter extends RecyclerView.Adapter<OffDailyLogAdapter.
 
 
 
+
         if (activityList.get(i).getInRemarks().equals("")){
             myViewHolder.llInRemark.setVisibility(View.GONE);
         }else {
@@ -80,7 +81,7 @@ public class OffDailyLogAdapter extends RecyclerView.Adapter<OffDailyLogAdapter.
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tvDate,tvInTime,tvOutTime,tvInLocation,tvOutLocation,tvRemarksIn,tvRemarksOut;
+        TextView tvDate,tvInTime,tvOutTime,tvInLocation,tvOutLocation,tvRemarksIn,tvRemarksOut,tvTime;
         LinearLayout llInRemark,llOutRemark,llOutTime,llOutLocation;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -96,6 +97,7 @@ public class OffDailyLogAdapter extends RecyclerView.Adapter<OffDailyLogAdapter.
             llOutRemark=(LinearLayout)itemView.findViewById(R.id.llOutRemraks);
             llOutTime=(LinearLayout)itemView.findViewById(R.id.llOutTime);
             llOutLocation=(LinearLayout)itemView.findViewById(R.id.llOutLocation);
+            tvTime=(TextView) itemView.findViewById(R.id.tvTime);
 
 
 

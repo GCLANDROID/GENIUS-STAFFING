@@ -2,6 +2,7 @@ package io.cordova.myapp00d753.module;
 
 public class OfflineDailyModel {
     String date,inTime,outTime,inLocation,outLocation,inRemarks,outRemarks;
+    int time;
 
     public OfflineDailyModel(String date, String inTime, String outTime, String inLocation, String outLocation, String inRemarks, String outRemarks) {
         this.date = date;
@@ -67,5 +68,13 @@ public class OfflineDailyModel {
 
     public void setOutRemarks(String outRemarks) {
         this.outRemarks = outRemarks;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
     }
 }

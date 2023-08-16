@@ -33,8 +33,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.adapter.OffDailyLogAdapter;
@@ -61,7 +64,7 @@ public class OfflineDailyLogReportActivity extends AppCompatActivity {
     LinearLayout llAgain;
     ImageView imgAgain;
     Pref pref;
-
+    int time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +161,8 @@ public class OfflineDailyLogReportActivity extends AppCompatActivity {
                                     String AddressOUT = obj.optString("AddressOUT");
                                     String RemarksIN = obj.optString("RemarksIN");
                                     String RemarksOUT = obj.optString("RemarksOUT");
+
+
 
                                     OfflineDailyModel obj2 = new OfflineDailyModel(PunchIn, PunchInTime, PunchOutTime, AddressIN, AddressOUT, RemarksIN, RemarksOUT);
                                     activityList.add(obj2);
@@ -511,5 +516,28 @@ public class OfflineDailyLogReportActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private int calculateTime(String intime, String outtime){
+        int hrs;
+        Date date1=null,date2 = null;
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
+
+        try {
+            date1 = simpleDateFormat.parse(intime);
+            date2 = simpleDateFormat.parse(outtime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        long difference = date2.getTime() - date1.getTime();
+        int days = (int) (difference / (1000*60*60*24));
+        int hours = (int) ((difference - (1000*60*60*24*days)) / (1000*60*60));
+        int min = (int) (difference - (1000*60*60*24*days) - (1000*60*60*hours)) / (1000*60);
+        hours = (hours < 0 ? -hours : hours);
+        hrs=hours;
+        return hrs;
     }
 }

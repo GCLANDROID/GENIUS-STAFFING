@@ -111,7 +111,11 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employee_dash_board);
         initialize();
-        loginFunction();
+        if (pref.getMsgAlertStatus()){
+            msgAlert();
+        }else {
+            acceptance();
+        }
         getPFURL();
         onClick();
     }
@@ -296,27 +300,12 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                     JSONObject obj = responseData.getJSONObject(i);
                                     String LoginDateTime = obj.optString("LoginDateTime");
                                     pref.saveloginTime(LoginDateTime);
-                                    boolean AppRenameFlag=obj.optBoolean("AppRenameFlag");
-                                    String AppRenameText=obj.optString("AppRenameText");
-                                    String AEMClientID=obj.optString("AEMClientID");
-                                    pref.saveEmpClintId(AEMClientID);
-
-                                    pref.saveMsgAlertStatus(AppRenameFlag);
-                                    pref.saveMsg(AppRenameText);
-
-                                    String PFConsolidateURL=obj.optString("PFConsolidateURL");
-                                    pref.savePFURL(PFConsolidateURL);
-
 
 
 
                                 }
 
-                                if (pref.getMsgAlertStatus()){
-                                    msgAlert();
-                                }else {
-                                    acceptance();
-                                }
+
                             }else {
                                 Intent intent=new Intent(EmployeeDashBoardActivity.this,LoginActivity.class);
                                 startActivity(intent);

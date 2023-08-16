@@ -357,6 +357,12 @@ public class LoginActivity extends AppCompatActivity {
                                     pref.savePFURL(PFConsolidateURL);
                                     String Leave=obj.optString("Leave");
                                     pref.saveShiftFlag(Leave);
+                                    pref.saveEmpClintId(AEMClientID);
+                                    pref.saveMsgAlertStatus(AppRenameFlag);
+                                    pref.saveMsg(AppRenameText);
+                                    pref.savePFURL(PFConsolidateURL);
+
+
 
 
                                 }
