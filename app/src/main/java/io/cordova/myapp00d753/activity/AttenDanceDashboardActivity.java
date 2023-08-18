@@ -566,7 +566,13 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                     intent.putExtra("intt", "2");
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
-                } else {
+                } else if (pref.getEmpClintId().equals("AEMCLI1910001556")){
+                    Intent intent = new Intent(AttenDanceDashboardActivity.this, DailyDashBoardActivity.class);
+                    intent.putExtra("intt", "2");
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+                else {
                     Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceManageActivity.class);
                     intent.putExtra("intt", "2");
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -607,7 +613,12 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 intent.putExtra("intt", "2");
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-            } else {
+            } else if (pref.getEmpClintId().equals("AEMCLI1910001556")){
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, DailyDashBoardActivity.class);
+                intent.putExtra("intt", "2");
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }else {
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceManageActivity.class);
                 intent.putExtra("intt", "2");
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

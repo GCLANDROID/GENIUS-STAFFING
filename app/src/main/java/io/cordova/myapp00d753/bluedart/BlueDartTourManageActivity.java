@@ -187,7 +187,7 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
                 attendance();
             }
         });
-        binding.journeyStart.setOnClickListener(v -> {
+        binding.lnJrStart.setOnClickListener(v -> {
             if (!checkCameraPermission()) {
                 //camera permission not allowed, request it
                 requestCameraPermission();
@@ -196,7 +196,7 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
                 pickCamera();
             }
         });
-        binding.journeyEnd.setOnClickListener(v -> {
+        binding.lnJrEnd.setOnClickListener(v -> {
             if (!checkCameraPermission()) {
                 //camera permission not allowed, request it
                 requestCameraPermission();

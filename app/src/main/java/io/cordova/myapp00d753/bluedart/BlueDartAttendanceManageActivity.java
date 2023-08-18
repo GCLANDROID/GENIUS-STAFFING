@@ -183,7 +183,7 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
     }
 
     private void onClick() {
-        binding.journeyStart.setOnClickListener(v -> {
+        binding.lnJrStart.setOnClickListener(v -> {
             if (!checkCameraPermission()) {
                 //camera permission not allowed, request it
                 requestCameraPermission();
@@ -192,7 +192,7 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
                 pickCamera();
             }
         });
-        binding.journeyEnd.setOnClickListener(v -> {
+        binding.lnJrEnd.setOnClickListener(v -> {
             if (!checkCameraPermission()) {
                 //camera permission not allowed, request it
                 requestCameraPermission();
