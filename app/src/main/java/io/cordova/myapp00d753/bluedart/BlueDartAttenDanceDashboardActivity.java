@@ -615,8 +615,6 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-
-
         }
 
 

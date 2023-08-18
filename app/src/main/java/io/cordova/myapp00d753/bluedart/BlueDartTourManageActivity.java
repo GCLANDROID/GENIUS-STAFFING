@@ -22,6 +22,7 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.Gravity;
@@ -70,6 +71,7 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -121,6 +123,7 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
     TextInputEditText odometerEdittext;
     String odometerValue = "";
     Button dialogSubmitBtn;
+    String encodeToString="";
 
 
     @Override
@@ -627,6 +630,11 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
                 //  get drawable bitmap for text recognition
                 BitmapDrawable bitmapDrawable = (BitmapDrawable) odometerImage.getDrawable();
                 Bitmap bitmap = bitmapDrawable.getBitmap();
+
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                byte[] byteArray = byteArrayOutputStream.toByteArray();
+                encodeToString= Base64.encodeToString(byteArray, Base64.DEFAULT);
 
                 TextRecognizer recognizer = new TextRecognizer.Builder(getApplicationContext()).build();
 

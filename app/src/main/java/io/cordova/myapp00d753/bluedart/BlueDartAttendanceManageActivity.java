@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -22,6 +23,7 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.Gravity;
@@ -63,7 +65,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
@@ -73,6 +74,8 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -123,6 +126,7 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
     Button dialogSubmitBtn;
     AlertDialog alerDialog1;
     LinearLayout lnMark;
+    String encodeToString="";
 
 
     @Override
@@ -140,7 +144,7 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
         pref = new Pref(getApplicationContext());
         tvAddress = (TextView) findViewById(R.id.tvAddress);
         connectionCheck = new NetworkConnectionCheck(getApplicationContext());
-        lnMark=(LinearLayout)findViewById(R.id.lnMark);
+        lnMark = (LinearLayout) findViewById(R.id.lnMark);
         dialog = new Dialog(BlueDartAttendanceManageActivity.this);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.journey_dialog);
@@ -294,6 +298,13 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
                 BitmapDrawable bitmapDrawable = (BitmapDrawable) odometerImage.getDrawable();
                 Bitmap bitmap = bitmapDrawable.getBitmap();
 
+
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                byte[] byteArray = byteArrayOutputStream.toByteArray();
+                encodeToString= Base64.encodeToString(byteArray, Base64.DEFAULT);
+
+
                 TextRecognizer recognizer = new TextRecognizer.Builder(getApplicationContext()).build();
 
                 if (!recognizer.isOperational()) {
@@ -326,6 +337,24 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
                 Exception error = result.getError();
                 Toast.makeText(this, "" + error, Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    public static Bitmap uriToBitmap(Context context, Uri uri) {
+        try {
+            // Open an input stream from the Uri
+            InputStream inputStream = context.getContentResolver().openInputStream(uri);
+
+            // Decode the input stream into a Bitmap
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+
+            // Close the input stream
+            inputStream.close();
+
+            return bitmap;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -646,9 +675,8 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
     }
 
 
-
     private void attendance() {
-        ProgressDialog pd=new ProgressDialog(BlueDartAttendanceManageActivity.this);
+        ProgressDialog pd = new ProgressDialog(BlueDartAttendanceManageActivity.this);
         pd.setMessage("Loading...");
         pd.setCancelable(false);
         pd.show();
@@ -676,13 +704,11 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
                         JSONObject job = response;
                         String responseText = job.optString("responseText");
                         boolean responseStatus = job.optBoolean("responseStatus");
-                        if (responseStatus){
+                        if (responseStatus) {
                             successAlert();
-                        }else {
-                            Toast.makeText(BlueDartAttendanceManageActivity.this,responseText,Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(BlueDartAttendanceManageActivity.this, responseText, Toast.LENGTH_LONG).show();
                         }
-
-
 
 
                         // boolean _status = job1.getBoolean("status");
