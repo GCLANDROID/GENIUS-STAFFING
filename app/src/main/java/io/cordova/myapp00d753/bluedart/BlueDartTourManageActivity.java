@@ -513,7 +513,7 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
                         String responseText = job.optString("responseText");
                         boolean responseStatus = job.optBoolean("responseStatus");
                         if (responseStatus){
-                            successAlert();
+                            successAlert("Your attendance has been saved successfully");
                         }
 
 
@@ -535,14 +535,14 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
                 });
     }
 
-    private void successAlert() {
+    private void successAlert(String text) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BlueDartTourManageActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_success, null);
         dialogBuilder.setView(dialogView);
         TextView tvInvalidDate = (TextView) dialogView.findViewById(R.id.tvSuccess);
 
-        tvInvalidDate.setText("Your attendnace has been saved successfully");
+        tvInvalidDate.setText(text);
 
         Button btnOk = (Button) dialogView.findViewById(R.id.btnOk);
         btnOk.setOnClickListener(new View.OnClickListener() {
@@ -708,6 +708,117 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
             }
         });
 
+    }
+
+
+    private void journeyStart(String reading) {
+        ProgressDialog pd = new ProgressDialog(BlueDartTourManageActivity.this);
+        pd.setMessage("Loading...");
+        pd.setCancelable(false);
+        pd.show();
+        AndroidNetworking.upload(AppData.url + "gcl_post_odometer/OdometerSaveWithApproval")
+                .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
+                .addMultipartParameter("Address", reading)
+                .addMultipartParameter("Longitude", longt)
+                .addMultipartParameter("Latitude", lat)
+                .addMultipartParameter("ImgData", encodeToString)
+                .addMultipartParameter("Remarks", "1")
+                .addMultipartParameter("ApprovalStatus", "0")
+                .addMultipartParameter("SecurityCode", pref.getSecurityCode())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+
+
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        pd.dismiss();
+                        JSONObject job = response;
+                        String responseText = job.optString("responseText");
+                        boolean responseStatus = job.optBoolean("responseStatus");
+                        if (responseStatus) {
+                            successAlert("Your KM reading has been saved successfully");
+                        } else {
+                            Toast.makeText(BlueDartTourManageActivity.this, responseText, Toast.LENGTH_LONG).show();
+                        }
+
+
+                        // boolean _status = job1.getBoolean("status");
+
+
+                        // do anything with response
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        pd.dismiss();
+                        Toast.makeText(BlueDartTourManageActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+
+                    }
+                });
+    }
+
+    private void journeyEnd(String reading) {
+        ProgressDialog pd = new ProgressDialog(BlueDartTourManageActivity.this);
+        pd.setMessage("Loading...");
+        pd.setCancelable(false);
+        pd.show();
+        AndroidNetworking.upload(AppData.url + "gcl_post_odometer/OdometerSaveWithApproval")
+                .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
+                .addMultipartParameter("Address", reading)
+                .addMultipartParameter("Longitude", longt)
+                .addMultipartParameter("Latitude", lat)
+                .addMultipartParameter("ImgData", encodeToString)
+                .addMultipartParameter("Remarks", "2")
+                .addMultipartParameter("ApprovalStatus", "0")
+                .addMultipartParameter("SecurityCode", pref.getSecurityCode())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+
+
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        pd.dismiss();
+                        JSONObject job = response;
+                        String responseText = job.optString("responseText");
+                        boolean responseStatus = job.optBoolean("responseStatus");
+                        if (responseStatus) {
+                            successAlert("Your KM reading has been saved successfully");
+                        } else {
+                            Toast.makeText(BlueDartTourManageActivity.this, responseText, Toast.LENGTH_LONG).show();
+                        }
+
+
+                        // boolean _status = job1.getBoolean("status");
+
+
+                        // do anything with response
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        pd.dismiss();
+                        Toast.makeText(BlueDartTourManageActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+
+                    }
+                });
     }
 
 
