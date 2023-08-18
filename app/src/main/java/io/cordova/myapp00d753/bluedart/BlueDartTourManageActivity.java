@@ -61,7 +61,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
@@ -78,7 +77,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.cordova.myapp00d753.R;
-import io.cordova.myapp00d753.activity.AttendanceManageActivity;
 import io.cordova.myapp00d753.activity.AttendanceReportActivity;
 import io.cordova.myapp00d753.databinding.ActivityBlueDartAttendanceManageBinding;
 import io.cordova.myapp00d753.utility.AppData;
@@ -88,7 +86,7 @@ import io.cordova.myapp00d753.utility.Pref;
 
 
 public class BlueDartTourManageActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
-   ActivityBlueDartAttendanceManageBinding binding;
+    ActivityBlueDartAttendanceManageBinding binding;
     public static final String TAG = BlueDartTourManageActivity.class.getSimpleName();
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     //  private MapView mapView;
@@ -105,8 +103,8 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
     double latitude, longitude;
     TextView tvToolBar;
     Pref pref;
-    double currentLatitude,currentLongitude;
-    String lat,longt,address,address1;
+    double currentLatitude, currentLongitude;
+    String lat, longt, address, address1;
     TextView tvAddress;
     AlertDialog alerDialog1;
     LinearLayout lnMark;
@@ -123,13 +121,14 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
     TextInputEditText odometerEdittext;
     String odometerValue = "";
     Button dialogSubmitBtn;
-    String encodeToString="";
+    String encodeToString = "";
+    Integer id = 0;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_blue_dart_attendance_manage);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_blue_dart_attendance_manage);
         // locationalerts();
         initialize();
         setUpMapIfNeeded();
@@ -139,9 +138,9 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
 
     private void initialize() {
         pref = new Pref(getApplicationContext());
-        tvAddress=(TextView)findViewById(R.id.tvAddress);
+        tvAddress = (TextView) findViewById(R.id.tvAddress);
         connectionCheck = new NetworkConnectionCheck(getApplicationContext());
-        lnMark=(LinearLayout)findViewById(R.id.lnMark);
+        lnMark = (LinearLayout) findViewById(R.id.lnMark);
 
         dialog = new Dialog(BlueDartTourManageActivity.this);
         dialog.setCancelable(false);
@@ -178,7 +177,7 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
 // Ask user to enable GPS/network in settings
 
         }
-        tvToolBar=(TextView) findViewById(R.id.tvToolBar);
+        tvToolBar = (TextView) findViewById(R.id.tvToolBar);
         tvToolBar.setText("Tour Attendance");
     }
 
@@ -195,6 +194,7 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
                 //camera permission not allowed, request it
                 requestCameraPermission();
             } else {
+                id = 1;
                 //permission allowed, take picture
                 pickCamera();
             }
@@ -204,6 +204,7 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
                 //camera permission not allowed, request it
                 requestCameraPermission();
             } else {
+                id = 2;
                 //permission allowed, take picture
                 pickCamera();
             }
@@ -277,13 +278,12 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
         latLng = new LatLng(currentLatitude, currentLongitude);
         address = getCompleteAddressString(currentLatitude, currentLongitude);
         address1 = address.replaceAll("\\s+", "");
-        tvAddress.setText("Address :- "+address);
+        tvAddress.setText("Address :- " + address);
 
         MarkerOptions options = new MarkerOptions()
                 .position(latLng)
                 .title(address)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.mapmarker));
-
 
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -484,7 +484,7 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
 
 
     private void attendance() {
-        ProgressDialog pd=new ProgressDialog(BlueDartTourManageActivity.this);
+        ProgressDialog pd = new ProgressDialog(BlueDartTourManageActivity.this);
         pd.setMessage("Loading...");
         pd.setCancelable(false);
         pd.show();
@@ -512,11 +512,9 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
                         JSONObject job = response;
                         String responseText = job.optString("responseText");
                         boolean responseStatus = job.optBoolean("responseStatus");
-                        if (responseStatus){
+                        if (responseStatus) {
                             successAlert("Your attendance has been saved successfully");
                         }
-
-
 
 
                         // boolean _status = job1.getBoolean("status");
@@ -589,6 +587,7 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
 
         return s.replaceAll("\\s+", "");
     }
+
     private void pickCamera() {
         //intent to take image from camera, it will also be save to storage to get high quality image
         ContentValues values = new ContentValues();
@@ -634,7 +633,7 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
                 byte[] byteArray = byteArrayOutputStream.toByteArray();
-                encodeToString= Base64.encodeToString(byteArray, Base64.DEFAULT);
+                encodeToString = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
                 TextRecognizer recognizer = new TextRecognizer.Builder(getApplicationContext()).build();
 
@@ -668,10 +667,17 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
             }
         }
     }
+
     private void onDialogSubBtnClicked() {
         dialogSubmitBtn.setOnClickListener(v -> {
             if (TextUtils.isEmpty(odometerEdittext.getText().toString())) {
                 Toast.makeText(getApplicationContext(), "Reading Mandatory", Toast.LENGTH_SHORT).show();
+            } else {
+                if (id == 1) {
+                    journeyStart(odometerEdittext.getText().toString());
+                } else if (id == 2) {
+                    journeyEnd(odometerEdittext.getText().toString());
+                }
             }
             dialog.dismiss();
         });
@@ -820,8 +826,6 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
                     }
                 });
     }
-
-
 
 
 }

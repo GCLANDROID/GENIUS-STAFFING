@@ -128,6 +128,8 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
     LinearLayout lnMark;
     String encodeToString="";
 
+    Integer id=0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,6 +194,7 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
                 //camera permission not allowed, request it
                 requestCameraPermission();
             } else {
+                id=1;
                 //permission allowed, take picture
                 pickCamera();
             }
@@ -201,6 +204,7 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
                 //camera permission not allowed, request it
                 requestCameraPermission();
             } else {
+                id=2;
                 //permission allowed, take picture
                 pickCamera();
             }
@@ -218,6 +222,12 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
         dialogSubmitBtn.setOnClickListener(v -> {
             if (TextUtils.isEmpty(odometerEdittext.getText().toString())) {
                 Toast.makeText(getApplicationContext(), "Reading Mandatory", Toast.LENGTH_SHORT).show();
+            } else {
+                if(id==1){
+                    journeyStart(odometerEdittext.getText().toString());
+                } else if(id==2){
+                    journeyEnd(odometerEdittext.getText().toString());
+                }
             }
 
             dialog.dismiss();
