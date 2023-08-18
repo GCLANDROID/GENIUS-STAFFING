@@ -513,7 +513,7 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
                         String responseText = job.optString("responseText");
                         boolean responseStatus = job.optBoolean("responseStatus");
                         if (responseStatus) {
-                            successAlert("Your attendance has been saved successfully");
+                            successAlert("Your attendance has been saved successfully",1);
                         }
 
 
@@ -533,7 +533,7 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
                 });
     }
 
-    private void successAlert(String text) {
+    private void successAlert(String text,int flag) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BlueDartTourManageActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_success, null);
@@ -547,9 +547,14 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
             @Override
             public void onClick(View view) {
                 alerDialog1.dismiss();
-                Intent intent = new Intent(BlueDartTourManageActivity.this, AttendanceReportActivity.class);
-                startActivity(intent);
-                finish();
+                if (flag==1){
+                    Intent intent = new Intent(BlueDartTourManageActivity.this, AttendanceReportActivity.class);
+                    startActivity(intent);
+                    finish();
+                }else {
+                    onBackPressed();
+                }
+
             }
         });
 
@@ -750,7 +755,7 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
                         String responseText = job.optString("responseText");
                         boolean responseStatus = job.optBoolean("responseStatus");
                         if (responseStatus) {
-                            successAlert("Your KM reading has been saved successfully");
+                            successAlert("Your KM reading has been saved successfully",2);
                         } else {
                             Toast.makeText(BlueDartTourManageActivity.this, responseText, Toast.LENGTH_LONG).show();
                         }
@@ -805,7 +810,7 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
                         String responseText = job.optString("responseText");
                         boolean responseStatus = job.optBoolean("responseStatus");
                         if (responseStatus) {
-                            successAlert("Your KM reading has been saved successfully");
+                            successAlert("Your KM reading has been saved successfully",2);
                         } else {
                             Toast.makeText(BlueDartTourManageActivity.this, responseText, Toast.LENGTH_LONG).show();
                         }

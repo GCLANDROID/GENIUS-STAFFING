@@ -716,7 +716,7 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
                         String responseText = job.optString("responseText");
                         boolean responseStatus = job.optBoolean("responseStatus");
                         if (responseStatus) {
-                            successAlert("Your attendance has been saved successfully");
+                            successAlert("Your attendance has been saved successfully",1);
                         } else {
                             Toast.makeText(BlueDartAttendanceManageActivity.this, responseText, Toast.LENGTH_LONG).show();
                         }
@@ -771,7 +771,7 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
                         String responseText = job.optString("responseText");
                         boolean responseStatus = job.optBoolean("responseStatus");
                         if (responseStatus) {
-                            successAlert("Your KM reading has been saved successfully");
+                            successAlert("Your KM reading has been saved successfully",2);
                         } else {
                             Toast.makeText(BlueDartAttendanceManageActivity.this, responseText, Toast.LENGTH_LONG).show();
                         }
@@ -826,7 +826,7 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
                         String responseText = job.optString("responseText");
                         boolean responseStatus = job.optBoolean("responseStatus");
                         if (responseStatus) {
-                            successAlert("Your KM reading has been saved successfully");
+                            successAlert("Your KM reading has been saved successfully",2);
                         } else {
                             Toast.makeText(BlueDartAttendanceManageActivity.this, responseText, Toast.LENGTH_LONG).show();
                         }
@@ -848,7 +848,7 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
                 });
     }
 
-    private void successAlert(String text) {
+    private void successAlert(String text,int flag) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BlueDartAttendanceManageActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_success, null);
@@ -862,9 +862,14 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
             @Override
             public void onClick(View view) {
                 alerDialog1.dismiss();
-                Intent intent = new Intent(BlueDartAttendanceManageActivity.this, AttendanceReportActivity.class);
-                startActivity(intent);
-                finish();
+                if (flag==1){
+                    Intent intent = new Intent(BlueDartAttendanceManageActivity.this, AttendanceReportActivity.class);
+                    startActivity(intent);
+                    finish();
+                }else {
+                    onBackPressed();
+                }
+
             }
         });
 

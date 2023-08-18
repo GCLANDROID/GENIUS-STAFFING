@@ -92,7 +92,7 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
     ArrayList<String> dateList = new ArrayList<>();
 
     TextView tvPresent, tvDetails, tvOK;
-    LinearLayout lnStatus, llAdjustment;
+    LinearLayout lnStatus, llAdjustment,llODOMeter;
     TextView tvAttendance;
     LinearLayout llTour;
 
@@ -106,6 +106,8 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
     private void initView() {
         btnLeave = (Button) findViewById(R.id.btnLeave);
         llQR = (LinearLayout) findViewById(R.id.llQR);
+        llODOMeter=(LinearLayout)findViewById(R.id.llODOMeter);
+        llODOMeter.setVisibility(View.VISIBLE);
         llTour = (LinearLayout) findViewById(R.id.llTour);
         llQR.setOnClickListener(this);
         btnMarkAttendance = (Button) findViewById(R.id.btnMarkAttendance);
@@ -356,6 +358,7 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
             llAdjustment.setVisibility(View.GONE);
         }
         llTour.setOnClickListener(this);
+        llODOMeter.setOnClickListener(this);
 
 
     }
@@ -612,6 +615,12 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
         }else if (view == llTour) {
 
             Intent intent = new Intent(BlueDartAttenDanceDashboardActivity.this, BlueDartTourManageActivity.class);
+            intent.putExtra("intt", "2");
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }else if (view == llODOMeter) {
+
+            Intent intent = new Intent(BlueDartAttenDanceDashboardActivity.this, ODOMeterReadingReportActivity.class);
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
