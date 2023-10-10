@@ -57,6 +57,7 @@
         android:background="@color/barcolor"></LinearLayout>
 
     <LinearLayout
+        android:id="@+id/lnEmpCode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -195,6 +196,7 @@
         android:background="@color/barcolor"></LinearLayout>
 
     <LinearLayout
+        android:id="@+id/lnDept"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"

@@ -147,13 +147,6 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
         tvAddress = (TextView) findViewById(R.id.tvAddress);
         connectionCheck = new NetworkConnectionCheck(getApplicationContext());
         lnMark = (LinearLayout) findViewById(R.id.lnMark);
-        dialog = new Dialog(BlueDartAttendanceManageActivity.this);
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.journey_dialog);
-        odometerImage = dialog.findViewById(R.id.imageView);
-        odometerEdittext = dialog.findViewById(R.id.odometer_text);
-        dialogSubmitBtn = dialog.findViewById(R.id.submit_button);
-        dialogClosedImage = dialog.findViewById(R.id.closed);
 
         mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
@@ -181,33 +174,31 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
             // can't get location
             // GPS or Network is not enabled
             // Ask user to enable GPS/network in settings
-            odometerTextChange();
-            onDialogSubBtnClicked();
-            onDialogClosedSubBtnClicked();
 
         }
+
+
+        odometerTextChange();
+        onDialogSubBtnClicked();
+        onDialogClosedSubBtnClicked();
+
     }
 
     private void onClick() {
         binding.lnJrStart.setOnClickListener(v -> {
-            if (!checkCameraPermission()) {
-                //camera permission not allowed, request it
-                requestCameraPermission();
-            } else {
+
                 id=1;
+                pref.saveJrFlag("1");
                 //permission allowed, take picture
                 pickCamera();
-            }
+
         });
         binding.lnJrEnd.setOnClickListener(v -> {
-            if (!checkCameraPermission()) {
-                //camera permission not allowed, request it
-                requestCameraPermission();
-            } else {
-                id=2;
+
+                pref.saveJrFlag("2");
                 //permission allowed, take picture
                 pickCamera();
-            }
+
         });
         lnMark.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -219,51 +210,16 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
     }
 
     private void onDialogSubBtnClicked() {
-        dialogSubmitBtn.setOnClickListener(v -> {
-            if (TextUtils.isEmpty(odometerEdittext.getText().toString())) {
-                Toast.makeText(getApplicationContext(), "Reading Mandatory", Toast.LENGTH_SHORT).show();
-            } else {
-                if(id==1){
-                    journeyStart(odometerEdittext.getText().toString());
-                } else if(id==2){
-                    journeyEnd(odometerEdittext.getText().toString());
-                }
-            }
 
-            dialog.dismiss();
-        });
     }
 
     private void onDialogClosedSubBtnClicked() {
-        dialogClosedImage.setOnClickListener(v -> {
-            dialog.dismiss();
-        });
+
     }
 
     private void odometerTextChange() {
 
-        odometerEdittext.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // no body
-            }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // no body
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.length() <= 0) {
-                    odometerEdittext.setText(odometerValue);
-                    Toast.makeText(getApplicationContext(), "Value cannot  empty ", Toast.LENGTH_SHORT).show();
-                } else {
-                    odometerValue = odometerEdittext.getText().toString();
-                }
-
-            }
-        });
 
     }
 
@@ -301,7 +257,13 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
                 Uri resultUri = result.getUri(); //get image uri
                 Log.i("HHSSHSH ", "RRRRRRR " + resultUri.toString());
 
-                dialog.show();
+                if (pref.getJrFlag().equals("1")){
+                    Log.d("JRFlag",pref.getJrFlag());
+                    startJourney();
+                }else {
+                    endJourney();
+                    Log.d("JRFlag",pref.getJrFlag());
+                }
 
                 //  set image to image view
                 odometerImage.setImageURI(resultUri);
@@ -319,27 +281,28 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
                 TextRecognizer recognizer = new TextRecognizer.Builder(getApplicationContext()).build();
 
                 if (!recognizer.isOperational()) {
-                    Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+
                 } else {
-                    Frame frame = new Frame.Builder().setBitmap(bitmap).build();
-                    SparseArray<TextBlock> items = recognizer.detect(frame);
-                    StringBuilder sb = new StringBuilder();
-                    //get text from sb until there is no text
-                    for (int i = 0; i < items.size(); i++) {
-                        TextBlock myItem = items.valueAt(i);
-                        sb.append(myItem.getValue());
-                    }
+
 
                     //set text to edit text
-                    Log.i("IAMAM ", "IMAGE VAVA " + sb.toString());
-                    odometerValue = getOdometerRegexValue(sb.toString());
-                    odometerEdittext.setText(odometerValue);
+                    try {
+                        Frame frame = new Frame.Builder().setBitmap(bitmap).build();
+                        SparseArray<TextBlock> items = recognizer.detect(frame);
+                        StringBuilder sb = new StringBuilder();
+                        //get text from sb until there is no text
+                        for (int i = 0; i < items.size(); i++) {
+                            TextBlock myItem = items.valueAt(i);
+                            sb.append(myItem.getValue());
+                        }
+                        odometerValue = getOdometerRegexValue(sb.toString());
+                        odometerEdittext.setText(odometerValue);
 
-                    Toast.makeText(getApplicationContext(), "ODE::  " + odometerValue, Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
-                    onDialogClosedSubBtnClicked();
-                    onDialogSubBtnClicked();
-                    odometerTextChange();
+
 
 
                 }
@@ -583,56 +546,6 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-
-            // other 'case' lines to check for other
-            // permissions this app might request
-            case MY_PERMISSIONS_REQUEST_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // location-related task you need to do.
-                    if (ContextCompat.checkSelfPermission(BlueDartAttendanceManageActivity.this,
-                            Manifest.permission.ACCESS_FINE_LOCATION)
-                            == PackageManager.PERMISSION_GRANTED) {
-
-                        if (mGoogleApiClient == null) {
-                            buildGoogleApiClient();
-                        }
-                        mMap.setMyLocationEnabled(true);
-                    }
-
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                    Toast.makeText(BlueDartAttendanceManageActivity.this, "permission denied", Toast.LENGTH_LONG).show();
-                }
-                return;
-            }
-            case CAMERA_REQUEST_CODE:
-                if (grantResults.length > 0) {
-                    boolean cameraAccepted = grantResults[0] ==
-                            PackageManager.PERMISSION_GRANTED;
-                    boolean writeStorageAccepted = grantResults[0] ==
-                            PackageManager.PERMISSION_GRANTED;
-
-                    if (cameraAccepted && writeStorageAccepted) {
-                        pickCamera();
-                    } else {
-                        Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                break;
-
-            // other 'case' lines to check for other
-            // permissions this app might request
-        }
-    }
 
     private String getCompleteAddressString(double LATITUDE, double LONGITUDE) {
         String strAdd = "";
@@ -758,7 +671,7 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
                 .setUploadProgressListener(new UploadProgressListener() {
                     @Override
                     public void onProgress(long bytesUploaded, long totalBytes) {
-
+                        pd.show();
 
                     }
                 })
@@ -814,7 +727,7 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
                     @Override
                     public void onProgress(long bytesUploaded, long totalBytes) {
 
-
+                        pd.show();
                     }
                 })
                 .getAsJSONObject(new JSONObjectRequestListener() {
@@ -868,6 +781,7 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
                     finish();
                 }else {
                     onBackPressed();
+                    pref.saveJrFlag("0");
                 }
 
             }
@@ -879,5 +793,90 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.CENTER);
         alerDialog1.show();
+    }
+
+
+    private void startJourney() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BlueDartAttendanceManageActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.journey_dialog, null);
+        dialogBuilder.setView(dialogView);
+        odometerImage = dialogView.findViewById(R.id.imageView);
+        odometerEdittext = dialogView.findViewById(R.id.odometer_text);
+        dialogSubmitBtn = dialogView.findViewById(R.id.submit_button);
+        dialogClosedImage = dialogView.findViewById(R.id.closed);
+        TextView tvToolBar=(TextView)dialogView.findViewById(R.id.tvToolBar);
+        tvToolBar.setText("Start Journey");
+
+
+        dialogSubmitBtn.setOnClickListener(v -> {
+            if (TextUtils.isEmpty(odometerEdittext.getText().toString())) {
+                Toast.makeText(getApplicationContext(), "Reading Mandatory", Toast.LENGTH_SHORT).show();
+            } else {
+                journeyStart(odometerEdittext.getText().toString());
+                dialog.dismiss();
+
+            }
+
+
+        });
+
+        dialogClosedImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+
+        dialog = dialogBuilder.create();
+        dialog.setCancelable(false);
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        dialog.show();
+    }
+
+
+    private void endJourney() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BlueDartAttendanceManageActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.journey_dialog, null);
+        dialogBuilder.setView(dialogView);
+        odometerImage = dialogView.findViewById(R.id.imageView);
+        odometerEdittext = dialogView.findViewById(R.id.odometer_text);
+        dialogSubmitBtn = dialogView.findViewById(R.id.submit_button);
+        dialogClosedImage = dialogView.findViewById(R.id.closed);
+        TextView tvToolBar=(TextView)dialogView.findViewById(R.id.tvToolBar);
+        tvToolBar.setText("End Journey");
+
+
+
+        dialogSubmitBtn.setOnClickListener(v -> {
+            if (TextUtils.isEmpty(odometerEdittext.getText().toString())) {
+                Toast.makeText(getApplicationContext(), "Reading Mandatory", Toast.LENGTH_SHORT).show();
+            } else {
+                journeyEnd(odometerEdittext.getText().toString());
+                dialog.dismiss();
+
+            }
+
+
+        });
+
+        dialogClosedImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+
+        dialog = dialogBuilder.create();
+        dialog.setCancelable(false);
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        dialog.show();
     }
 }

@@ -984,6 +984,16 @@ public class Pref {
     }
 
 
+    public void saveJrFlag(String JrFlag){
+        _editorPref.putString("JrFlag", JrFlag);
+        _editorPref.commit();
+    }
+
+    public String getJrFlag(){
+        return _pref.getString("JrFlag","");
+    }
+
+
 
 
 

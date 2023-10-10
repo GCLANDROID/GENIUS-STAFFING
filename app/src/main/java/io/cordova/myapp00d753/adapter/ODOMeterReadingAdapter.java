@@ -14,6 +14,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 import io.cordova.myapp00d753.R;
@@ -41,15 +43,29 @@ public class ODOMeterReadingAdapter extends RecyclerView.Adapter<ODOMeterReading
         myViewHolder.tvApprovalStatus.setText(itemList.get(i).getApprovalstatus());
 
 
-        byte[] decodedStrtString = Base64.decode(itemList.get(i).getJrstrtimage(), Base64.DEFAULT);
-        Bitmap strtBitmap = BitmapFactory.decodeByteArray(decodedStrtString, 0, decodedStrtString.length);
-        myViewHolder.imgJrStrt.setImageBitmap(strtBitmap);
 
-        byte[] decodedEndString = Base64.decode(itemList.get(i).getJrendimage(), Base64.DEFAULT);
-        Bitmap endBitmap = BitmapFactory.decodeByteArray(decodedEndString, 0, decodedEndString.length);
-        myViewHolder.imgJrEnd.setImageBitmap(endBitmap);
 
         myViewHolder.tvDate.setText(itemList.get(i).getDate());
+
+        try {
+            Picasso.with(context)
+                    .load(itemList.get(i).getJrstrtimage()).error(R.drawable.noimage)
+                    .into(myViewHolder.imgJrStrt);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Picasso.with(context)
+                    .load(itemList.get(i).getJrendimage()).error(R.drawable.noimage)
+                    .into(myViewHolder.imgJrEnd);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
 
 
 

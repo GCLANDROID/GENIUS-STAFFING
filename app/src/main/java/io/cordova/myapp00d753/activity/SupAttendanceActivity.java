@@ -11,10 +11,12 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.adapter.ODOMeterApprovalAdapter;
+import io.cordova.myapp00d753.bluedart.ODOmeterApprvalActivity;
 import io.cordova.myapp00d753.utility.Pref;
 
 public class SupAttendanceActivity extends AppCompatActivity {
-    LinearLayout llAttandanceManage,llAttendanceReport,llApproval,llQR;
+    LinearLayout llAttandanceManage,llAttendanceReport,llApproval,llQR,llODOmeter;
     ImageView imgBack,imgHome;
     Pref pref;
 
@@ -30,6 +32,7 @@ public class SupAttendanceActivity extends AppCompatActivity {
         pref=new Pref(SupAttendanceActivity.this);
         llAttandanceManage=(LinearLayout)findViewById(R.id.llAttandanceManage);
         llAttendanceReport=(LinearLayout)findViewById(R.id.llAttendanceReport);
+        llODOmeter=(LinearLayout)findViewById(R.id.llODOmeter);
         llApproval=(LinearLayout)findViewById(R.id.llApproval);
         llQR=(LinearLayout)findViewById(R.id.llQR);
         if (pref.getEmpClintId().equals("AEMCLI0910000315")){
@@ -82,6 +85,15 @@ public class SupAttendanceActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 Intent intent=new Intent(SupAttendanceActivity.this,QRGeneratorActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        llODOmeter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent=new Intent(SupAttendanceActivity.this, ODOmeterApprvalActivity.class);
                 startActivity(intent);
             }
         });

@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="300dp"
         android:layout_height="350dp"
-        android:layout_marginStart="8dp">
+        android:layout_marginStart="8dp"
+        android:background="@drawable/lldesign"
+        android:orientation="vertical">
 
         <LinearLayout
+            android:backgroundTint="@color/textcolor"
             android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
             android:background="@color/white"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -58,7 +61,8 @@
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:layout_marginRight="15dp"
-                    android:src="@drawable/ic_baseline_close_24" />
+                    android:src="@drawable/ic_baseline_close_24"
+                    app:tint="@color/white" />
             </LinearLayout>
         </LinearLayout>
 
@@ -104,5 +108,5 @@
             app:layout_constraintTop_toBottomOf="@+id/odometer_layout" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+    </LinearLayout>
+

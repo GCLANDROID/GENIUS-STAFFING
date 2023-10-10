@@ -142,13 +142,6 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
         connectionCheck = new NetworkConnectionCheck(getApplicationContext());
         lnMark = (LinearLayout) findViewById(R.id.lnMark);
 
-        dialog = new Dialog(BlueDartTourManageActivity.this);
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.journey_dialog);
-        odometerImage = dialog.findViewById(R.id.imageView);
-        odometerEdittext = dialog.findViewById(R.id.odometer_text);
-        dialogSubmitBtn = dialog.findViewById(R.id.submit_button);
-        dialogClosedImage = dialog.findViewById(R.id.closed);
 
 
         mLocationRequest = LocationRequest.create()
@@ -627,7 +620,12 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
                 Uri resultUri = result.getUri(); //get image uri
                 Log.i("HHSSHSH ", "RRRRRRR " + resultUri.toString());
 
-                dialog.show();
+                if (id==1){
+                    startJourney();
+                }else {
+                    endJourney();
+                }
+
 
                 //  set image to image view
                 odometerImage.setImageURI(resultUri);
@@ -674,50 +672,16 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
     }
 
     private void onDialogSubBtnClicked() {
-        dialogSubmitBtn.setOnClickListener(v -> {
-            if (TextUtils.isEmpty(odometerEdittext.getText().toString())) {
-                Toast.makeText(getApplicationContext(), "Reading Mandatory", Toast.LENGTH_SHORT).show();
-            } else {
-                if (id == 1) {
-                    journeyStart(odometerEdittext.getText().toString());
-                } else if (id == 2) {
-                    journeyEnd(odometerEdittext.getText().toString());
-                }
-            }
-            dialog.dismiss();
-        });
+
     }
 
     private void onDialogClosedSubBtnClicked() {
-        dialogClosedImage.setOnClickListener(v -> {
-            dialog.dismiss();
-        });
+
     }
 
     private void odometerTextChange() {
 
-        odometerEdittext.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // no body
-            }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // no body
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.length() <= 0) {
-                    odometerEdittext.setText(odometerValue);
-                    Toast.makeText(getApplicationContext(), "Value cannot  empty ", Toast.LENGTH_SHORT).show();
-                } else {
-                    odometerValue = odometerEdittext.getText().toString();
-                }
-
-            }
-        });
 
     }
 
@@ -743,7 +707,7 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
                     @Override
                     public void onProgress(long bytesUploaded, long totalBytes) {
 
-
+                        pd.show();
                     }
                 })
                 .getAsJSONObject(new JSONObjectRequestListener() {
@@ -798,7 +762,7 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
                     @Override
                     public void onProgress(long bytesUploaded, long totalBytes) {
 
-
+                        pd.show();
                     }
                 })
                 .getAsJSONObject(new JSONObjectRequestListener() {
@@ -830,6 +794,88 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
 
                     }
                 });
+    }
+
+
+    private void startJourney() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BlueDartTourManageActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.journey_dialog, null);
+        dialogBuilder.setView(dialogView);
+        odometerImage = dialogView.findViewById(R.id.imageView);
+        odometerEdittext = dialogView.findViewById(R.id.odometer_text);
+        dialogSubmitBtn = dialogView.findViewById(R.id.submit_button);
+        dialogClosedImage = dialogView.findViewById(R.id.closed);
+
+
+
+        dialogSubmitBtn.setOnClickListener(v -> {
+            if (TextUtils.isEmpty(odometerEdittext.getText().toString())) {
+                Toast.makeText(getApplicationContext(), "Reading Mandatory", Toast.LENGTH_SHORT).show();
+            } else {
+                journeyStart(odometerEdittext.getText().toString());
+                dialog.dismiss();
+
+            }
+
+
+        });
+
+        dialogClosedImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+
+        dialog = dialogBuilder.create();
+        dialog.setCancelable(false);
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        dialog.show();
+    }
+
+
+    private void endJourney() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BlueDartTourManageActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.journey_dialog, null);
+        dialogBuilder.setView(dialogView);
+        odometerImage = dialogView.findViewById(R.id.imageView);
+        odometerEdittext = dialogView.findViewById(R.id.odometer_text);
+        dialogSubmitBtn = dialogView.findViewById(R.id.submit_button);
+        dialogClosedImage = dialogView.findViewById(R.id.closed);
+
+
+
+        dialogSubmitBtn.setOnClickListener(v -> {
+            if (TextUtils.isEmpty(odometerEdittext.getText().toString())) {
+                Toast.makeText(getApplicationContext(), "Reading Mandatory", Toast.LENGTH_SHORT).show();
+            } else {
+                journeyEnd(odometerEdittext.getText().toString());
+                dialog.dismiss();
+
+            }
+
+
+        });
+
+        dialogClosedImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+
+        dialog = dialogBuilder.create();
+        dialog.setCancelable(false);
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        dialog.show();
     }
 
 

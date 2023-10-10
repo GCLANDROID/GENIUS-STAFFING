@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -23,6 +24,7 @@ public class OfficalFragment extends Fragment {
     View view;
     TextView tvEmplId,tvEmpCode,tvEmpName,tvDOJ,tvDepartment,tvDesignation,tvLocation;
     Pref pref;
+    LinearLayout lnDept,lnEmpCode;
 
 
     @Override
@@ -51,6 +53,16 @@ public class OfficalFragment extends Fragment {
         tvDesignation.setText(pref.getSDes());
         tvLocation=(TextView)view.findViewById(R.id.tvLocation);
         tvLocation.setText(pref.getSLocation());
+        lnEmpCode=(LinearLayout) view.findViewById(R.id.lnEmpCode);
+        lnDept=(LinearLayout) view.findViewById(R.id.lnDept);
+
+        if (pref.getEmpClintId().equals("AEMCLI2310001813")){
+            lnEmpCode.setVisibility(View.GONE);
+            lnDept.setVisibility(View.GONE);
+        }else {
+            lnEmpCode.setVisibility(View.VISIBLE);
+            lnDept.setVisibility(View.VISIBLE);
+        }
     }
 
 }

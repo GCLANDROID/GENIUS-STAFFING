@@ -95,6 +95,7 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
     LinearLayout lnStatus, llAdjustment,llODOMeter;
     TextView tvAttendance;
     LinearLayout llTour;
+    int date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,6 +154,7 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
         llBackAttendance = (LinearLayout) findViewById(R.id.llBackAttendance);
         llAttenRegularize = (LinearLayout) findViewById(R.id.llAttenRegularize);
         llWeekly = (LinearLayout) findViewById(R.id.llWeekly);
+        llWeekly.setVisibility(View.VISIBLE);
         tvCancel = (TextView) findViewById(R.id.tvCancel);
         llBottom = (LinearLayout) findViewById(R.id.llBottom);
         if (pref.getEmpClintId().equals("AEMCLI0910000315")) {
@@ -161,16 +163,7 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
             llQR.setVisibility(View.GONE);
         }
 
-        if (pref.getOnLeave().equals("1")) {
 
-            llWeekly.setVisibility(View.VISIBLE);
-
-        } else {
-
-            llWeekly.setVisibility(View.GONE);
-
-
-        }
 
         if (pref.getBackAttd().equals("1")) {
             llBackAttendance.setVisibility(View.VISIBLE);
@@ -401,8 +394,13 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
                                 for (int i = 0; i < responseData.length(); i++) {
                                     JSONObject obj = responseData.getJSONObject(i);
                                     String sDate = obj.optString("Date");
-                                    String Date = Util.changeAnyDateFormat(obj.optString("Date"), "dd MMM yy", "dd");
-                                    int date = Integer.parseInt(Date);
+                                    String Date = Util.changeAnyDateFormat(obj.optString("Sdate"), "dd/MM/yyyy", "dd");
+
+                                     try {
+                                         date = Integer.parseInt(Date);
+                                     } catch (Exception e) {
+                                         e.printStackTrace();
+                                     }
                                     String PunchTiming = obj.optString("PunchTiming");
                                     String Day = obj.optString("Address");
                                     String Status = obj.optString("Status");
@@ -493,7 +491,7 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
                                 for (int i = 0; i < responseData.length(); i++) {
                                     JSONObject obj = responseData.getJSONObject(i);
                                     String sDate = obj.optString("Date");
-                                    String Date = Util.changeAnyDateFormat(obj.optString("Date"), "dd MMM yy", "dd");
+                                    String Date = Util.changeAnyDateFormat(obj.optString("Sdate"), "dd/MM/yyyy", "dd");
                                     int date = Integer.parseInt(Date);
                                     String PunchTiming = obj.optString("PunchTiming");
                                     String Day = obj.optString("Address");
@@ -578,7 +576,7 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else if (view == llWeekly) {
-            if (pref.getEmpClintId().equals("AEMCLI2210001707") || pref.getEmpClintId().equals("AEMCLI2210001697") || pref.getEmpClintId().equals("AEMCLI2210001698") || pref.getEmpClintId().equals("AEMCLI2310001805")) {
+            if (pref.getEmpClintId().equals("AEMCLI2210001707") || pref.getEmpClintId().equals("AEMCLI2210001697") || pref.getEmpClintId().equals("AEMCLI2210001698") || pref.getEmpClintId().equals("AEMCLI2310001805")|| pref.getEmpClintId().equals("AEMCLI1810001410")) {
                 Intent intent = new Intent(BlueDartAttenDanceDashboardActivity.this, WeeklyOffAttendanceActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);

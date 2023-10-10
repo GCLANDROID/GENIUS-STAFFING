@@ -92,6 +92,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
 
     TextView tvPresent,tvDetails,tvOK;
     LinearLayout lnStatus,llAdjustment;
+    int date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -397,8 +398,12 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                                 for (int i = 0; i < responseData.length(); i++) {
                                     JSONObject obj = responseData.getJSONObject(i);
                                     String sDate = obj.optString("Date");
-                                    String Date = Util.changeAnyDateFormat(obj.optString("Date"), "dd MMM yy", "dd");
-                                    int date = Integer.parseInt(Date);
+                                    String Date = Util.changeAnyDateFormat(obj.optString("Sdate"), "dd/MM/yyyy", "dd");
+                                    try {
+                                        date = Integer.parseInt(Date);
+                                    } catch (NumberFormatException e) {
+                                        e.printStackTrace();
+                                    }
                                     String PunchTiming = obj.optString("PunchTiming");
                                     String Day = obj.optString("Address");
                                     String Status = obj.optString("Status");
@@ -490,7 +495,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                                 for (int i = 0; i < responseData.length(); i++) {
                                     JSONObject obj = responseData.getJSONObject(i);
                                     String sDate = obj.optString("Date");
-                                    String Date = Util.changeAnyDateFormat(obj.optString("Date"), "dd MMM yy", "dd");
+                                    String Date = Util.changeAnyDateFormat(obj.optString("Sdate"), "dd/MM/yyyy", "dd");
                                     int date = Integer.parseInt(Date);
                                     String PunchTiming = obj.optString("PunchTiming");
                                     String Day = obj.optString("Address");

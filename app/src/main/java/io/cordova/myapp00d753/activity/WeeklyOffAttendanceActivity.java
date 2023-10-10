@@ -240,7 +240,7 @@ public class WeeklyOffAttendanceActivity extends AppCompatActivity {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(WeeklyOffAttendanceActivity.this,AttenDanceDashboardActivity.class);
+                Intent intent=new Intent(WeeklyOffAttendanceActivity.this,EmployeeDashBoardActivity.class);
                 startActivity(intent);
                 finish();
                 alerDialog1.dismiss();

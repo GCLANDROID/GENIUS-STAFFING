@@ -158,6 +158,7 @@ public class NewClaimActivity extends AppCompatActivity {
     private Uri uri;
 
     String galleryflagone,galleryflagtwo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

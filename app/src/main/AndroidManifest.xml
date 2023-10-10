@@ -30,6 +30,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".bluedart.ODOmeterApprvalActivity"
+            android:exported="false" />
+        <activity
             android:name=".bluedart.ODOMeterReadingReportActivity"
             android:exported="false" />
         <activity

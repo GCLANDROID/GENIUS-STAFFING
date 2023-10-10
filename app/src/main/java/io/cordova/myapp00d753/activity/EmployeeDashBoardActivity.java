@@ -98,7 +98,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
     ArrayList<MenuItemModel>itemList=new ArrayList<>();
     ImageView imglogout;
     String menuName;
-    AlertDialog feedbackpopupDialog,aknowledgePopUp;
+    AlertDialog feedbackpopupDialog,aknowledgePopUp,pfImageDialog;
     FloatingActionButton fbSpoke;
     JSONArray spokepersonArray;
     AlertDialog al1,al2;
@@ -117,6 +117,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
             acceptance();
         }
         getPFURL();
+        shoePFImage();
         onClick();
     }
 
@@ -156,20 +157,31 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         }else {
             noticeAlert();
 
-            SharedPreferences prefs = getSharedPreferences("io.cordova.myapp00d753", MODE_PRIVATE);
-
-            int launch_count = prefs.getInt("launch_count", 0);
-
-            if(launch_count>=15){
-                al2.dismiss();
 
 
-            } else {
-                prefs.edit()
-                        .putInt("launch_count", launch_count+1)
-                        .apply();
-            }
 
+
+
+
+
+        }
+
+
+        Date cd = Calendar.getInstance().getTime();
+        System.out.println("Current time => " + cd);
+
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        String formattedDate = df.format(cd);
+        Log.d("formattedDate",formattedDate);
+        if (formattedDate.equals("26-11-2023")){
+            pfImageDialog.dismiss();
+            al2.dismiss();
+
+        }
+
+
+        if (formattedDate.equals("02-11-2023")){
+            al2.dismiss();
 
         }
 
@@ -669,15 +681,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         View dialogView = inflater.inflate(R.layout.popup_dialog, null);
         dialogBuilder.setView(dialogView);
 
-        TextView tvLink=(TextView) dialogView.findViewById(R.id.tvLink);
-        tvLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://111.93.182.170/GeniusEAM/DocFile/FAQ_EMP_.pdf"));
-                startActivity(browserIntent);
-                al2.dismiss();
-            }
-        });
+
 
 
 
@@ -797,6 +801,31 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.CENTER);
         aknowledgePopUp.show();
+
+
+    }
+
+
+    private void shoePFImage() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(EmployeeDashBoardActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.dialog_pf_image, null);
+        dialogBuilder.setView(dialogView);
+        ImageView imgCancel=(ImageView)dialogView.findViewById(R.id.imgCancel);
+        imgCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pfImageDialog.dismiss();
+            }
+        });
+
+
+        pfImageDialog = dialogBuilder.create();
+        pfImageDialog.setCancelable(true);
+        Window window = pfImageDialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        pfImageDialog.show();
 
 
     }
