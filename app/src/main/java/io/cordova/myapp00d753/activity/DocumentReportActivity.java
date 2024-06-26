@@ -18,6 +18,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
 
 import org.json.JSONArray;
@@ -36,6 +40,7 @@ import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.RecyclerItemClickListener;
 
 public class DocumentReportActivity extends AppCompatActivity  {
+    private static final String TAG = "DocumentReportActivity";
     RecyclerView rvDocument;
     ArrayList<DocumentManageModule> documentList = new ArrayList<>();
     DocumentAdapter documentAdapter;
@@ -88,6 +93,19 @@ public class DocumentReportActivity extends AppCompatActivity  {
         status=getIntent().getStringExtra("status");
         if (status.equals("Approval Pending")){
             getDocListForPending();
+            JSONObject obj=new JSONObject();
+            try {
+                obj.put("AEMEmployeeID", pref.getEmpId());
+                obj.put("FileName",JSONObject.NULL);
+                obj.put("FileType","0");
+                obj.put("DocumentID","0");
+                obj.put("ReferenceNo","0");
+                obj.put("DbOperation","1");
+                obj.put("SecurityCode",pref.getSecurityCode());
+                getDocListForPending(obj);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }else if (status.equals("Approved")){
             getDocListForApproval();
         }else {
@@ -126,6 +144,69 @@ public class DocumentReportActivity extends AppCompatActivity  {
                 getDocList();
             }
         });
+    }
+
+    private void getDocListForPending(JSONObject jsonObject) {
+        llLoader.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.GONE);
+        llNoadata.setVisibility(View.GONE);
+        llAgain.setVisibility(View.GONE);
+        AndroidNetworking.post(AppData.EMPLOYEE_DOCUMENT_MANAGE)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "PENDING_DOC_LIST: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String DocumentName = obj.optString("DocumentName");
+                                    String DocumentType = obj.optString("DocumentType");
+                                    String AEMStatusName = obj.optString("AEMStatusName");
+                                    String CreatedOn = obj.optString("CreatedOn");
+                                    String ApprovalRemarks = obj.optString("ApprovalRemarks");
+                                    String DocLink = obj.optString("DocLink");
+                                    if (AEMStatusName.equals("Pending")) {
+                                        DocumentManageModule dmodule = new DocumentManageModule(DocumentName, DocumentType, ApprovalRemarks, CreatedOn, AEMStatusName, DocLink);
+                                        documentList.add(dmodule);
+                                    }
+                                }
+
+                                llLoader.setVisibility(View.GONE);
+                                llMain.setVisibility(View.VISIBLE);
+                                llNoadata.setVisibility(View.GONE);
+                                llAgain.setVisibility(View.GONE);
+                                documentAdapter = new DocumentAdapter(documentList,DocumentReportActivity.this);
+                                rvDocument.setAdapter(documentAdapter);
+                            } else {
+                                llLoader.setVisibility(View.GONE);
+                                llMain.setVisibility(View.VISIBLE);
+                                llNoadata.setVisibility(View.VISIBLE);
+                                llAgain.setVisibility(View.GONE);
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        llLoader.setVisibility(View.GONE);
+                        llMain.setVisibility(View.GONE);
+                        llNoadata.setVisibility(View.GONE);
+                        llAgain.setVisibility(View.VISIBLE);
+                        Log.e(TAG, "PENDING_DOC_LIST_error: "+anError.getErrorBody());
+                    }
+                });
     }
 
     private void getDocListForPending() {

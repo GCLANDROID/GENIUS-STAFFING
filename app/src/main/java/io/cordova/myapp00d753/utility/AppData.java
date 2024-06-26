@@ -9,4 +9,7 @@ public class AppData {
 
     //gcl_KYC
     public static String GCL_KYC=newv2url+"Profile/GetKYCDetails";
+    public static String MENU=newv2url+"Dashboard/GetMobileAppMenuList";
+    public static String EMPLOYEE_DOCUMENT_MANAGE=newv2url+"Document/EmployeeDocumentManage";
+    public static String DOCUMENT_UPLOAD_INFO=newv2url+"Document/GetDigitalDocumentUploadInfo";
 }

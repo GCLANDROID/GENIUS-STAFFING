@@ -86,10 +86,7 @@ public class DocumentManageActivity extends AppCompatActivity {
     private static final int GALLERY_REQUEST = 2;
     ImageView imgBack, imgHome;
     Spinner spDocType, spDoc;
-
     int flag;
-
-
     ProgressDialog progressDialog;
     File file, compressedImageFile;
     private static final int REQUEST_GALLERY_CODE = 200;
@@ -128,7 +125,6 @@ public class DocumentManageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_document_manage);
         initialize();
-
         onClick();
     }
 
@@ -176,13 +172,9 @@ public class DocumentManageActivity extends AppCompatActivity {
             aempEmployeeid = pref.getMasterId();
             Log.d("aempEmployeeid", aempEmployeeid);
         }
-
-
     }
 
     private void onClick() {
-
-
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -417,8 +409,6 @@ public class DocumentManageActivity extends AppCompatActivity {
                     }
                     Log.d("imageSixw", String.valueOf(getReadableFileSize(pictureFile.length())));
                     alerDialog3.dismiss();
-
-
                 }
                 break;
         }

@@ -59,6 +59,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ProfileUpdatectivity extends AppCompatActivity {
+    private static final String TAG = "ProfileUpdatectivity";
     TextView tvGurdianTitle, tvRealationTitle, tvQualificationtitle, tvMartialTitle, tvPerAddTitle, tvPerCountry, tvPerPinTile, tvPreAddTitle, tvPreCountry, tvPrePinTile, tvMobTitle;
     LinearLayout llLoader, llMain;
     Pref pref;
@@ -105,7 +106,21 @@ public class ProfileUpdatectivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_updatectivity);
         initialize();
-        profileFunction();
+        //profileFunction();
+        JSONObject obj=new JSONObject();
+        try {
+            obj.put("AEMConsultantID", pref.getEmpConId());
+            obj.put("AEMClientID",pref.getEmpClintId());
+            obj.put("AEMClientOfficeID",pref.getEmpClintOffId());
+            obj.put("AEMEmployeeID",pref.getEmpId());
+            obj.put("SecurityCode",pref.getSecurityCode());
+            obj.put("WorkingStatus","1");
+            obj.put("CurrentPage","0");
+            profileFunction(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         onClick();
     }
 
@@ -354,6 +369,96 @@ public class ProfileUpdatectivity extends AppCompatActivity {
 
     }
 
+
+    private void profileFunction(JSONObject jsonObject) {
+        Log.e(TAG, "profileFunction: "+jsonObject);
+        llLoader.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.GONE);
+        AndroidNetworking.post(AppData.GCL_KYC)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+                            Log.e(TAG, "PROFILE: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    AEMEmployeeID = obj.optString("AEMEmployeeID");
+                                    Code = obj.optString("Code");
+                                    Name = obj.optString("Name");
+                                    DateOfJoining = obj.optString("DOJ");
+                                    Department = obj.optString("Department");
+                                    Designation = obj.optString("Designation");
+                                    Location = obj.optString("Location");
+                                    tvPreLocation.setText(Location);
+                                    tvPerLocation.setText(Location);
+                                    Sex = obj.optString("Sex");
+                                    DateOfBirth = obj.optString("DateOfBirth");
+                                    GuardianName = obj.optString("GuardianName");
+                                    etGurdianName.setText(GuardianName);
+                                    RelationShip = obj.optString("RelationShip");
+                                    Qualification = obj.optString("Qualification");
+                                    MaritalStatus = obj.optString("MaritalStatus");
+                                    BloodGroup = obj.optString("BloodGroup");
+                                    PermanentAddress = obj.optString("PermanentAddress");
+                                    etPerAddr.setText(PermanentAddress);
+                                    PresentAddress = obj.optString("PresentAddress");
+                                    etPreAddr.setText(PresentAddress);
+                                    Mobile = obj.optString("Mobile");
+                                    etMobile.setText(Mobile);
+                                    EmailID = obj.optString("EmailID");
+                                    etEmailID.setText(EmailID);
+                                    PFNumber = obj.optString("PFNumber");
+                                    ESINumber = obj.optString("ESINumber");
+                                    BankName = obj.optString("BankName");
+                                    AccountNumber = obj.optString("AccountNumber");
+                                    String Phone = obj.optString("Phone");
+                                    etPhn.setText(Phone);
+                                    PermanentCity = obj.optString("PermanentCity");
+                                    String PermanentPinCode = obj.optString("PermanentPinCode");
+                                    etPerPinCode.setText(PermanentPinCode);
+                                    String PresentPincode = obj.optString("PresentPincode");
+                                    etPrePinCode.setText(PresentPincode);
+                                    PresentCity = obj.optString("PresentCity");
+                                    String FirstName = obj.optString("FirstName");
+                                    tvFirstName.setText(FirstName);
+                                    String LastName = obj.optString("LastName");
+                                    tvLastName.setText(LastName);
+                                    String DateOfBirth = obj.optString("DateOfBirth");
+                                    tvDOB.setText(DateOfBirth);
+                                }
+
+                                llLoader.setVisibility(View.VISIBLE);
+                                llMain.setVisibility(View.GONE);
+                                setGender();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(ProfileUpdatectivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        llLoader.setVisibility(View.VISIBLE);
+                        llMain.setVisibility(View.GONE);
+                        Log.e(TAG, "PROFILE_error: "+anError.getErrorCode());
+                    }
+                });
+    }
+
+
     public void profileFunction() {
         Log.d("apihit", "1");
         String surl = AppData.url+"gcl_KYC?AEMConsultantID=" + pref.getEmpConId() + "&AEMClientID=" + pref.getEmpClintId() + "&AEMClientOfficeID=" + pref.getEmpClintOffId() + "&AEMEmployeeID=" + pref.getEmpId() + "&SecurityCode=" + pref.getSecurityCode() + "&WorkingStatus=1&CurrentPage=0";
@@ -366,7 +471,6 @@ public class ProfileUpdatectivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Log.d("responseLogin", response);
-
                         try {
                             JSONObject job1 = new JSONObject(response);
                             Log.e("response12", "@@@@@@" + job1);
@@ -453,7 +557,6 @@ public class ProfileUpdatectivity extends AppCompatActivity {
 
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
-
     }
 
 
@@ -528,8 +631,6 @@ public class ProfileUpdatectivity extends AppCompatActivity {
 
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
-
-
     }
 
 
@@ -550,8 +651,6 @@ public class ProfileUpdatectivity extends AppCompatActivity {
         Log.d("indexr", String.valueOf(index));
         spRealation.setSelection(index);
         setBlood();
-
-
     }
 
     private void setBlood() {
@@ -596,14 +695,8 @@ public class ProfileUpdatectivity extends AppCompatActivity {
                                 spBlood.setSelection(index);
                                 setQualification();
 
-                            } else {
-
-
-                            }
-
+                            } else {}
                             // boolean _status = job1.getBoolean("status");
-
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                             // Toast.makeText(ProfileUpdatectivity.this, "Volly Error", Toast.LENGTH_LONG).show();
@@ -615,16 +708,11 @@ public class ProfileUpdatectivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 llLoader.setVisibility(View.VISIBLE);
                 llMain.setVisibility(View.GONE);
-
                 //   Toast.makeText(DocumentManageActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
                 Log.e("ert", error.toString());
             }
-        }) {
-
-        };
+        }) { };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
-
-
     }
 
     private void setQualification() {
@@ -1094,7 +1182,20 @@ public class ProfileUpdatectivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 alerDialog1.dismiss();
-                profileFunction();
+                //profileFunction();
+                JSONObject obj=new JSONObject();
+                try {
+                    obj.put("AEMConsultantID", pref.getEmpConId());
+                    obj.put("AEMClientID",pref.getEmpClintId());
+                    obj.put("AEMClientOfficeID",pref.getEmpClintOffId());
+                    obj.put("AEMEmployeeID",pref.getEmpId());
+                    obj.put("SecurityCode",pref.getSecurityCode());
+                    obj.put("WorkingStatus","1");
+                    obj.put("CurrentPage","0");
+                    profileFunction(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

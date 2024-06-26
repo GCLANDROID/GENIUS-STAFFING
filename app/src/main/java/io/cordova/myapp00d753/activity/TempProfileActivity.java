@@ -99,6 +99,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static java.util.Calendar.DAY_OF_MONTH;
 
 public class TempProfileActivity extends AppCompatActivity {
+    private static final String TAG = "TempProfileActivity";
     TextView tvEmplId, tvEmpCode, tvEmpName, tvDOJ, tvDepartment, tvDesignation, tvLocation, tvGender, tvEmpCodeDOB, tvRealtionShip, tvQualification, tvMarital, tvBloodGroup, tvParAddr, tvDOB, tvComName;
     Spinner spGender, spRealation, spQualification, spMartial, spBloodGrp;
     EditText etPhnNumber, etMobNumber, etEmailId, etGurdianName;
@@ -230,7 +231,22 @@ public class TempProfileActivity extends AppCompatActivity {
         llLoader = (LinearLayout) findViewById(R.id.llLoader);
 
         llMain = (LinearLayout) findViewById(R.id.llMain);
-        profileFunction();
+
+        JSONObject obj=new JSONObject();
+        try {
+            obj.put("AEMConsultantID", pref.getEmpConId());
+            obj.put("AEMClientID",pref.getEmpClintId());
+            obj.put("AEMClientOfficeID",pref.getEmpClintOffId());
+            obj.put("AEMEmployeeID",pref.getEmpId());
+            obj.put("SecurityCode",pref.getSecurityCode());
+            obj.put("WorkingStatus","1");
+            obj.put("CurrentPage","0");
+            profileFunction(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        //profileFunction();
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
@@ -384,6 +400,254 @@ public class TempProfileActivity extends AppCompatActivity {
 
     }
 
+    public void profileFunction(JSONObject jsonObject) {
+        Log.e(TAG, "profileFunction: "+jsonObject);
+        llLoader.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.GONE);
+        AndroidNetworking.post(AppData.GCL_KYC)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "PROFILE: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    AEMEmployeeID = obj.optString("AEMEmployeeID");
+                                    tvEmplId.setText(AEMEmployeeID);
+                                    pref.saveEmpId(AEMEmployeeID);
+
+                                    Code = obj.optString("Code");
+                                    tvEmpCode.setText(Code);
+
+                                    Name = obj.optString("Name");
+                                    tvEmpName.setText(Name);
+
+                                    DateOfJoining = obj.optString("DOJ");
+                                    tvDOJ.setText(DateOfJoining);
+
+                                    Department = obj.optString("Department");
+                                    tvDepartment.setText(Department);
+
+                                    Designation = obj.optString("Designation");
+                                    tvDesignation.setText(Designation);
+
+                                    Location = obj.optString("Location");
+                                    tvLocation.setText(Location);
+
+                                    Sex = obj.optString("Sex").toUpperCase();
+                                    Log.d("sexid", Sex);
+                                    if (!Sex.equals("")) {
+                                        tvGender.setText(Sex);
+                                    } else {
+                                        tvGender.setText("");
+                                    }
+
+                                    DateOfBirth = obj.optString("DateOfBirth");
+                                    if (!DateOfBirth.equals("")) {
+                                        tvEmpCodeDOB.setText(DateOfBirth);
+                                    } else {
+                                        tvEmpCodeDOB.setText("");
+                                    }
+
+                                    GuardianName = obj.optString("GuardianName");
+                                    if (!GuardianName.equals("")) {
+                                        etGurdianName.setText(GuardianName);
+                                    } else {
+                                        etGurdianName.setText("");
+                                    }
+
+                                    RelationShip = obj.optString("RelationShip").toUpperCase();
+                                    if (!RelationShip.equals("")) {
+                                        tvRealtionShip.setText(RelationShip);
+
+                                    } else {
+                                        tvRealtionShip.setText("");
+                                    }
+
+                                    Qualification = obj.optString("Qualification");
+                                    if (!Qualification.equals("")) {
+                                        tvQualification.setTag(Qualification);
+                                    } else {
+                                        tvQualification.setText("");
+                                    }
+
+                                    MaritalStatus = obj.optString("MaritalStatus");
+
+                                    if (!MaritalStatus.equals("")) {
+                                        tvMarital.setText(MaritalStatus);
+                                    } else {
+                                        tvMarital.setText("");
+                                    }
+
+                                    BloodGroup = obj.optString("BloodGroup");
+                                    if (!BloodGroup.equals("")) {
+                                        tvBloodGroup.setText(BloodGroup);
+                                    } else {
+                                        tvBloodGroup.setText("");
+                                    }
+
+                                    PermanentAddress = obj.optString("PresentAddress");
+                                   /* if (!PermanentAddress.equals("")) {
+                                        tvParAddr.setText(PermanentAddress);
+                                    } else {
+                                        tvParAddr.setText("");
+                                    }
+*/
+
+                                    Mobile = obj.optString("Mobile");
+                                    if (!Mobile.equals("")) {
+                                        etMobNumber.setText(Mobile);
+                                    } else {
+                                        etMobNumber.setText("");
+                                    }
+
+                                    EmailID = obj.optString("EmailID");
+                                    if (!EmailID.equals("")) {
+                                        etEmailId.setText(EmailID);
+                                    } else {
+                                        etEmailId.setText("");
+                                    }
+
+                                    Phone = obj.optString("Phone");
+                                    if (!Phone.equals("")) {
+                                        etPhnNumber.setText(Phone);
+                                    } else {
+                                        etPhnNumber.setText("");
+                                    }
+                                    AEMClientName = obj.optString("AEMClientName");
+                                    tvComName.setText(AEMClientName);
+                                    String ESINumber = obj.optString("ESINumber");
+                                    if (!ESINumber.equals("")) {
+                                        etESI.setText(ESINumber);
+                                    } else {
+                                        etESI.setText("");
+                                    }
+                                    String UanNo = obj.optString("UANNumber");
+                                    if (!UanNo.equals("")) {
+                                        etUAN.setText(UanNo);
+                                    } else {
+                                        etUAN.setText("");
+                                    }
+                                    PresentCity = obj.optString("PresentCity");
+
+                                    String PresentPincode = obj.optString("PresentPincode");
+                                    Log.d("rikusaga", PresentPincode);
+                                    etPrePinCode.setText(PresentPincode);
+
+
+                                    PresentAddress = obj.optString("PresentAddress");
+                                    etPreAddr.setText(PresentAddress);
+
+                                    FirstNameAsperBank = obj.optString("FirstNameAsperBank");
+                                    if (FirstNameAsperBank.equals("null")) {
+                                        etBankFirstName.setText("");
+                                    } else {
+                                        etBankFirstName.setText(FirstNameAsperBank);
+                                    }
+
+                                    LastNameAsperBank = obj.optString("LastNameAsperBank");
+                                    if (LastNameAsperBank.equals("null")) {
+                                        etLastBank.setText("");
+                                    } else {
+                                        etLastBank.setText(LastNameAsperBank);
+                                    }
+
+                                    String AadharCard = obj.optString("AadharNo");
+                                    etAddaharNo.setText(AadharCard);
+
+                                    String PermanentAddress = obj.optString("PermanentAddress");
+                                    etPerAddr.setText(PermanentAddress);
+
+                                    String PermanentPinCode = obj.optString("PermanentPinCode");
+                                    if (PermanentPinCode.equals("null")) {
+                                        etPerPinCode.setText("");
+                                    } else {
+                                        etPerPinCode.setText(PermanentPinCode);
+                                    }
+
+                                    PermanentState = obj.optString("PermanentState");
+                                    PermanentCity = obj.optString("PermanentCity");
+                                    PresentState = obj.optString("PresentState");
+
+                                    String PAN = obj.optString("PAN");
+                                    Log.d("pan", PAN);
+                                    String IFSCode = obj.optString("IFSCode");
+                                    Log.d("ifsccode", IFSCode);
+                                    pref.saveIFSC(IFSCode);
+                                    String FirstNameAsperBank = obj.optString("FirstNameAsperBank");
+                                    Log.d("fname", FirstNameAsperBank);
+                                    pref.saveBFName(FirstNameAsperBank);
+                                    String LastNameAsperBank = obj.optString("LastNameAsperBank");
+                                    pref.saveBLName(LastNameAsperBank);
+                                    Log.d("lname", LastNameAsperBank);
+                                    String MemberName1 = obj.optString("MemberName1");
+                                    Log.d("m1name", MemberName1);
+                                    pref.saveM1Name(MemberName1);
+                                    String MemberRelationship1 = obj.optString("MemberRelationship1");
+                                    Log.d("MemberRelationship1", MemberRelationship1);
+                                    String MemberAadhar1 = obj.optString("MemberAadhar1");
+                                    Log.d("MemberAadhar1", MemberAadhar1);
+                                    pref.saveM1Aadahar(MemberAadhar1);
+                                    String MemberDOB1 = obj.optString("MemberDOB1");
+                                    pref.saveM1DOB(MemberDOB1);
+                                    Log.d("MemberDOB1", MemberDOB1);
+                                    String MemberName2 = obj.optString("MemberName2");
+                                    Log.d("MemberName2", MemberName2);
+                                    pref.saveM2Name(MemberName2);
+                                    String MemberRelationship2 = obj.optString("MemberRelationship2");
+                                    Log.d("MemberRelationship2", MemberRelationship2);
+                                    String MemberAadhar2 = obj.optString("MemberAadhar2");
+                                    Log.d("MemberAadhar2", MemberAadhar2);
+                                    pref.saveM2Aadahar(MemberAadhar2);
+                                    String MemberDOB2 = obj.optString("MemberDOB2");
+                                    Log.d("MemberDOB2", MemberDOB2);
+                                    pref.saveM2DOB(MemberDOB2);
+                                    String MemberName3 = obj.optString("MemberName3");
+                                    Log.d("MemberName3", MemberName3);
+                                    pref.saveM3Name(MemberName3);
+                                    String MemberRelationship3 = obj.optString("MemberRelationship3");
+                                    Log.d("MemberRelationship3", MemberRelationship3);
+                                    String MemberAadhar3 = obj.optString("MemberAadhar3");
+                                    Log.d("MemberAadhar3", MemberAadhar3);
+                                    pref.saveM3Aadahar(MemberAadhar3);
+                                    String MemberDOB3 = obj.optString("MemberDOB3");
+                                    Log.d("MemberDOB3", MemberDOB3);
+                                    pref.saveM3DOB(MemberDOB3);
+                                    String BankName = obj.optString("BankName");
+                                    pref.saveBankName(BankName);
+                                    String AccountNumber = obj.optString("AccountNumber");
+                                    pref.saveAccNumber(AccountNumber);
+                                }
+                                llMain.setVisibility(View.GONE);
+                                llLoader.setVisibility(View.VISIBLE);
+                                setQualification();
+                            } else {
+                                
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(TempProfileActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        errflag = 1;
+                        showInternetDialog();
+                    }
+                });
+    }
 
     public void profileFunction() {
         String surl = AppData.url+"gcl_KYC?AEMConsultantID=" + pref.getEmpConId() + "&AEMClientID=" + pref.getEmpClintId() + "&AEMClientOfficeID=" + pref.getEmpClintOffId() + "&AEMEmployeeID=" + pref.getMasterId() + "&SecurityCode=" + pref.getSecurityCode() + "&WorkingStatus=1&CurrentPage=0";
@@ -516,7 +780,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                     } else {
                                         etESI.setText("");
                                     }
-                                    String UanNo = obj.optString("UanNo");
+                                    String UanNo = obj.optString("UANNumber");
                                     if (!UanNo.equals("")) {
                                         etUAN.setText(UanNo);
                                     } else {
@@ -627,14 +891,12 @@ public class TempProfileActivity extends AppCompatActivity {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(TempProfileActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
+                            Toast.makeText(TempProfileActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
                         }
-
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
                 // Toast.makeText(TempProfileActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
                 Log.e("ert", error.toString());
                 errflag = 1;

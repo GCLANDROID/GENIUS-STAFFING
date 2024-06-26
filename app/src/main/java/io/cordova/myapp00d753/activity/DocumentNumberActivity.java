@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +21,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
@@ -58,9 +63,37 @@ public class DocumentNumberActivity extends AppCompatActivity {
         if (from.equals(TempDashBoardActivity.TEMP_DASHBOARD)){
             Log.e(TAG, "for: "+TempDashBoardActivity.TEMP_DASHBOARD);
             getNumberListForTempDashboard();
+
+            /*JSONObject obj=new JSONObject();
+            try {
+                obj.put("AEMEmployeeID", pref.getMasterId());
+                obj.put("FileName",JSONObject.NULL);
+                obj.put("FileType","0");
+                obj.put("DocumentID","0");
+                obj.put("ReferenceNo","0");
+                obj.put("DbOperation","1");
+                obj.put("SecurityCode",pref.getSecurityCode());
+                getNumberListForTempDashboard(obj);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }*/
         } else {
             Log.e(TAG, "for: common use");
-            getNumberList();
+            //getNumberList();
+
+            JSONObject obj=new JSONObject();
+            try {
+                obj.put("AEMEmployeeID", pref.getEmpId());
+                obj.put("FileName",JSONObject.NULL);
+                obj.put("FileType","0");
+                obj.put("DocumentID","0");
+                obj.put("ReferenceNo","0");
+                obj.put("DbOperation","1");
+                obj.put("SecurityCode",pref.getSecurityCode());
+                getNumberList(obj);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
         onClick();
     }
@@ -129,6 +162,74 @@ public class DocumentNumberActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void getNumberListForTempDashboard(JSONObject jsonObject) {
+        AndroidNetworking.post(AppData.EMPLOYEE_DOCUMENT_MANAGE)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "TEMP_DOC_NUMBER_LIST: "+response.toString(4));
+                            pg.show();
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            int approved = 0, pending = 0, reject = 0;
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String DocumentName = obj.optString("DocumentName");
+                                    String DocumentType = obj.optString("DocumentType");
+                                    String AEMStatusName = obj.optString("AEMStatusName");
+                                    String CreatedOn = obj.optString("CreatedOn");
+                                    String ApprovalRemarks = obj.optString("ApprovalRemarks");
+                                    if (obj.optString("ApprovalRemarks").equalsIgnoreCase("NA")){
+                                        pending++;
+                                    } else if (obj.optString("ApprovalRemarks").equalsIgnoreCase("approved")){
+                                        approved++;
+                                    } else if (obj.optString("ApprovalRemarks").equalsIgnoreCase("reject")){
+                                        reject++;
+                                    }
+                                    String DocLink = obj.optString("DocLink");
+                                    DocumentManageModule dmodule = new DocumentManageModule(DocumentName, DocumentType, ApprovalRemarks, CreatedOn, AEMStatusName, DocLink);
+                                    docNumList.add(dmodule);
+                                    String size= String.valueOf(docNumList.size());
+                                    tvTotalDoc.setText(size);
+                                }
+                                if (approved > 0){
+                                    tempDocList.add(new DocumentNumberRawModel("Approved",String.valueOf(approved)));
+                                }
+                                if (pending > 0){
+                                    tempDocList.add(new DocumentNumberRawModel("Pending",String.valueOf(pending)));
+                                }
+                                if (reject > 0){
+                                    tempDocList.add(new DocumentNumberRawModel("Reject",String.valueOf(reject)));
+                                }
+                                pg.dismiss();
+                                DocNumberReportAdapter dAdapter=new DocNumberReportAdapter(tempDocList,DocumentNumberActivity.this);
+                                rvItem.setAdapter(dAdapter);
+                            } else {
+                                pg.dismiss();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(DocumentNumberActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        pg.dismiss();
+                        Log.e(TAG, "TEMP_DOC_NUMBER_LIST_error: "+anError.getErrorBody());
+                    }
+                });
     }
 
     private void getNumberListForTempDashboard() {
@@ -206,6 +307,63 @@ public class DocumentNumberActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
     }
 
+    private void getNumberList(JSONObject jsonObject) {
+        Log.e(TAG, "getNumberList: INPUT: "+jsonObject);
+        pg.show();
+        AndroidNetworking.post(AppData.EMPLOYEE_DOCUMENT_MANAGE)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "DOC_NUMBER_LIST: "+response.toString(0) );
+                                JSONObject job1 = response;
+                                String Response_Code = job1.optString("Response_Code");
+                                if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String DocumentName = obj.optString("DocumentName");
+                                    String DocumentType = obj.optString("DocumentType");
+                                    String AEMStatusName = obj.optString("AEMStatusName");
+                                    String CreatedOn = obj.optString("CreatedOn");
+                                    String ApprovalRemarks = obj.optString("ApprovalRemarks");
+                                    String DocLink = obj.optString("DocLink");
+                                    DocumentManageModule dmodule = new DocumentManageModule(DocumentName, DocumentType, ApprovalRemarks, CreatedOn, AEMStatusName, DocLink);
+                                    docNumList.add(dmodule);
+                                    String size= String.valueOf(docNumList.size());
+                                    tvTotalDoc.setText(size);
+                                }
+
+                                JSONObject obj=new JSONObject();
+                                try {
+                                    obj.put("AEMEmployeeID", pref.getEmpId());
+                                    obj.put("SecurityCode",pref.getSecurityCode());
+                                    getDocInfoList(obj);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(DocumentNumberActivity.this, "", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        pg.dismiss();
+                        Log.e(TAG, "DOC_NUMBER_LIST_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
     private void getNumberList() {
         String surl = AppData.url+"gcl_DigitalDocument?AEMEmployeeID=" + pref.getEmpId() + "&FileName=null&FileType=0&DocumentID=0&ReferenceNo=0&DbOperation=1&SecurityCode=" + pref.getSecurityCode();
         Log.d("manageinput",surl);
@@ -239,8 +397,6 @@ public class DocumentNumberActivity extends AppCompatActivity {
                                     docNumList.add(dmodule);
                                     String size= String.valueOf(docNumList.size());
                                     tvTotalDoc.setText(size);
-
-
                                 }
                                 getDocInfoList();
 
@@ -273,6 +429,51 @@ public class DocumentNumberActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
 
 
+    }
+
+    private void getDocInfoList(JSONObject jsonObject) {
+        AndroidNetworking.post(AppData.DOCUMENT_UPLOAD_INFO)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            pg.dismiss();
+                            Log.e(TAG, "DOCUMENT_UPLOAD_INFO: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String StatusName = obj.optString("StatusName");
+                                    String TotalDocument = obj.optString("TotalDocument");
+                                    DocumentNumberRawModel dmodule = new DocumentNumberRawModel(StatusName,TotalDocument);
+                                    docList.add(dmodule);
+                                }
+                                pg.dismiss();
+                                DocNumberReportAdapter dAdapter=new DocNumberReportAdapter(docList,DocumentNumberActivity.this);
+                                rvItem.setAdapter(dAdapter);
+                            } else {
+                                pg.dismiss();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(DocumentNumberActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        pg.dismiss();
+                        Log.e(TAG, "DOCUMENT_UPLOAD_INFO_error: "+anError.getErrorBody());
+                    }
+                });
     }
 
     private void getDocInfoList() {
