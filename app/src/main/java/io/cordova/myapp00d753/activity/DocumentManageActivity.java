@@ -41,6 +41,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.developers.imagezipper.ImageZipper;
 import com.google.android.cameraview.LongImageCameraActivity;
 
@@ -61,6 +65,7 @@ import java.util.concurrent.TimeUnit;
 import id.zelory.compressor.Compressor;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.module.AttendanceService;
+import io.cordova.myapp00d753.module.DocumentManageModule;
 import io.cordova.myapp00d753.module.MainDocModule;
 import io.cordova.myapp00d753.module.SubDocumentModule;
 import io.cordova.myapp00d753.module.UploadObject;
@@ -78,6 +83,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DocumentManageActivity extends AppCompatActivity {
+    private static final String TAG = "DocumentManageActivity";
     ImageView imgDoc;
     String userChoosenTask = "";
     private String encodedImage;
@@ -143,7 +149,17 @@ public class DocumentManageActivity extends AppCompatActivity {
         llSp = (LinearLayout) findViewById(R.id.llSp);
         etReferenceNumber = (EditText) findViewById(R.id.etReferenceNumber);
         llSave = (LinearLayout) findViewById(R.id.llSave);
-        setMainDoc();
+        //setMainDoc();
+        JSONObject obj=new JSONObject();
+        try {
+            obj.put("DocID", "0");
+            obj.put("DocumentID", "0");
+            obj.put("DbOperation","1");
+            obj.put("SecurityCode",pref.getSecurityCode());
+            setMainDoc(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         securityCode = pref.getSecurityCode();
 
 
@@ -204,7 +220,19 @@ public class DocumentManageActivity extends AppCompatActivity {
 
                 mainDocument = mainDocType.get(i).getDocID();
 
-                setSubDocType();
+                //setSubDocType();
+
+                JSONObject obj=new JSONObject();
+                try {
+                    obj.put("DocID", "1");
+                    obj.put("DocumentID", mainDocument);
+                    obj.put("DbOperation","2");
+                    obj.put("SecurityCode",pref.getSecurityCode());
+                    setSubDocType(obj);
+                    //DocID=1&DocumentID=" + mainDocument + "&DbOperation=2&SecurityCode=" + pref.getSecurityCode();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
 
             }
@@ -452,9 +480,59 @@ public class DocumentManageActivity extends AppCompatActivity {
         return cropImg;
     }
 
+    private void setMainDoc(JSONObject jsonObject) {
+        final ProgressDialog progressBar = new ProgressDialog(this);
+        progressBar.setCancelable(true);//you can cancel it by pressing back button
+        progressBar.setMessage("Loading...");
+        progressBar.show();
+        AndroidNetworking.post(AppData.DIGITAL_DOCUMENT_TYPE)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressBar.dismiss();
+                            Log.e(TAG, "DIGITAL_DOCUMENT_TYPE: "+response.toString(0));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String DocID = obj.optString("DocID");
+                                    String DocumentType = obj.optString("DocumentType");
+                                    doctype.add(DocumentType);
+                                    MainDocModule mainDocModule = new MainDocModule(DocID, DocumentType);
+                                    mainDocType.add(mainDocModule);
+                                }
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                        (DocumentManageActivity.this, android.R.layout.simple_spinner_item,
+                                                doctype); //selected item will look like a spinner set from XML
+                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                spDocType.setAdapter(spinnerArrayAdapter);
+                            } else {
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressBar.dismiss();
+                        Log.e(TAG, "DIGITAL_DOCUMENT_TYPE_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
 
     private void setMainDoc() {
-
         String surl = AppData.url+"gcl_DigitalDocumentType?DocID=0&DocumentID=0&DbOperation=1&SecurityCode=" + pref.getSecurityCode();
         final ProgressDialog progressBar = new ProgressDialog(this);
         progressBar.setCancelable(true);//you can cancel it by pressing back button
@@ -513,8 +591,60 @@ public class DocumentManageActivity extends AppCompatActivity {
 
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
+    }
 
+    private void setSubDocType(JSONObject jsonObject) {
+        llSp.setVisibility(View.VISIBLE);
+        final ProgressDialog progressBar = new ProgressDialog(this);
+        progressBar.setCancelable(true);//you can cancel it by pressing back button
+        progressBar.setMessage("Loading...");
+        progressBar.show();
+        AndroidNetworking.post(AppData.DIGITAL_DOCUMENT_TYPE)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            subDoc.clear();
+                            subDocType.clear();
+                            progressBar.dismiss();
+                            Log.e(TAG, "SUB_DOC_TYPE: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String DocumentID = obj.optString("DocumentID");
+                                    String Document = obj.optString("Document");
+                                    subDoc.add(Document);
+                                    SubDocumentModule mainDocModule = new SubDocumentModule(DocumentID, Document);
+                                    subDocType.add(mainDocModule);
+                                }
 
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                        (DocumentManageActivity.this, android.R.layout.simple_spinner_item,
+                                                subDoc); //selected item will look like a spinner set from XML
+                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                spDoc.setAdapter(spinnerArrayAdapter);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(DocumentManageActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "SUB_DOC_TYPE_error: "+anError.getErrorBody());
+                        progressBar.dismiss();
+                    }
+                });
     }
 
 

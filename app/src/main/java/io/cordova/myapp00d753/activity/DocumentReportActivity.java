@@ -92,7 +92,7 @@ public class DocumentReportActivity extends AppCompatActivity  {
         }
         status=getIntent().getStringExtra("status");
         if (status.equals("Approval Pending")){
-            getDocListForPending();
+            //getDocListForPending();
             JSONObject obj=new JSONObject();
             try {
                 obj.put("AEMEmployeeID", pref.getEmpId());
@@ -107,9 +107,35 @@ public class DocumentReportActivity extends AppCompatActivity  {
                 e.printStackTrace();
             }
         }else if (status.equals("Approved")){
-            getDocListForApproval();
+            //getDocListForApproval();
+            JSONObject obj=new JSONObject();
+            try {
+                obj.put("AEMEmployeeID", pref.getEmpId());
+                obj.put("FileName",JSONObject.NULL);
+                obj.put("FileType","0");
+                obj.put("DocumentID","0");
+                obj.put("ReferenceNo","0");
+                obj.put("DbOperation","1");
+                obj.put("SecurityCode",pref.getSecurityCode());
+                getDocListForApproval(obj);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }else {
-            getDocList();
+            //getDocList();
+            JSONObject obj=new JSONObject();
+            try {
+                obj.put("AEMEmployeeID", pref.getEmpId());
+                obj.put("FileName",JSONObject.NULL);
+                obj.put("FileType","0");
+                obj.put("DocumentID","0");
+                obj.put("ReferenceNo","0");
+                obj.put("DbOperation","1");
+                obj.put("SecurityCode",pref.getSecurityCode());
+                getDocList(obj);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
     }
@@ -295,6 +321,71 @@ public class DocumentReportActivity extends AppCompatActivity  {
 
 
     }
+
+    private void getDocListForApproval(JSONObject jsonObject) {
+        llLoader.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.GONE);
+        llNoadata.setVisibility(View.GONE);
+        llAgain.setVisibility(View.GONE);
+        AndroidNetworking.post(AppData.EMPLOYEE_DOCUMENT_MANAGE)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, " APPROVE_DOC_LIST: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String DocumentName = obj.optString("DocumentName");
+                                    String DocumentType = obj.optString("DocumentType");
+                                    String AEMStatusName = obj.optString("AEMStatusName");
+                                    String CreatedOn = obj.optString("CreatedOn");
+                                    String ApprovalRemarks = obj.optString("ApprovalRemarks");
+                                    String DocLink = obj.optString("DocLink");
+                                    if (AEMStatusName.equals("Approved")) {
+                                        DocumentManageModule dmodule = new DocumentManageModule(DocumentName, DocumentType, ApprovalRemarks, CreatedOn, AEMStatusName, DocLink);
+                                        documentList.add(dmodule);
+                                    }
+                                }
+
+                                llLoader.setVisibility(View.GONE);
+                                llMain.setVisibility(View.VISIBLE);
+                                llNoadata.setVisibility(View.GONE);
+                                llAgain.setVisibility(View.GONE);
+                                documentAdapter = new DocumentAdapter(documentList,DocumentReportActivity.this);
+                                rvDocument.setAdapter(documentAdapter);
+                            } else {
+                                llLoader.setVisibility(View.GONE);
+                                llMain.setVisibility(View.VISIBLE);
+                                llNoadata.setVisibility(View.VISIBLE);
+                                llAgain.setVisibility(View.GONE);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(DocumentReportActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "APPROVE_DOC_LIST_error: "+anError.getErrorBody());
+                        llLoader.setVisibility(View.GONE);
+                        llMain.setVisibility(View.GONE);
+                        llNoadata.setVisibility(View.GONE);
+                        llAgain.setVisibility(View.VISIBLE);
+                    }
+                });
+    }
+    
     private void getDocListForApproval() {
         String surl = AppData.url+"gcl_DigitalDocument?AEMEmployeeID=" + aempEmployeeid + "&FileName=null&FileType=0&DocumentID=0&ReferenceNo=0&DbOperation=1&SecurityCode=" + pref.getSecurityCode();
         Log.d("manageinput",surl);
@@ -377,9 +468,68 @@ public class DocumentReportActivity extends AppCompatActivity  {
 
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
-
-
     }
+
+    private void getDocList(JSONObject jsonObject) {
+        llLoader.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.GONE);
+        llNoadata.setVisibility(View.GONE);
+        llAgain.setVisibility(View.GONE);
+        AndroidNetworking.post(AppData.EMPLOYEE_DOCUMENT_MANAGE)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "DOC_LIST: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String DocumentName = obj.optString("DocumentName");
+                                    String DocumentType = obj.optString("DocumentType");
+                                    String AEMStatusName = obj.optString("AEMStatusName");
+                                    String CreatedOn = obj.optString("CreatedOn");
+                                    String ApprovalRemarks = obj.optString("ApprovalRemarks");
+                                    String DocLink = obj.optString("DocLink");
+                                    DocumentManageModule dmodule = new DocumentManageModule(DocumentName, DocumentType, ApprovalRemarks, CreatedOn, AEMStatusName, DocLink);
+                                    documentList.add(dmodule);
+                                }
+                                llLoader.setVisibility(View.GONE);
+                                llMain.setVisibility(View.VISIBLE);
+                                llNoadata.setVisibility(View.GONE);
+                                llAgain.setVisibility(View.GONE);
+                                documentAdapter = new DocumentAdapter(documentList,DocumentReportActivity.this);
+                                rvDocument.setAdapter(documentAdapter);
+                            } else {
+                                llLoader.setVisibility(View.GONE);
+                                llMain.setVisibility(View.VISIBLE);
+                                llNoadata.setVisibility(View.VISIBLE);
+                                llAgain.setVisibility(View.GONE);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(DocumentReportActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        llLoader.setVisibility(View.GONE);
+                        llMain.setVisibility(View.GONE);
+                        llNoadata.setVisibility(View.GONE);
+                        llAgain.setVisibility(View.VISIBLE);
+                    }
+                });
+    }
+
     private void getDocList() {
         String surl = AppData.url+"gcl_DigitalDocument?AEMEmployeeID=" + aempEmployeeid + "&FileName=null&FileType=0&DocumentID=0&ReferenceNo=0&DbOperation=1&SecurityCode=" + pref.getSecurityCode();
         Log.d("manageinput",surl);
@@ -460,8 +610,6 @@ public class DocumentReportActivity extends AppCompatActivity  {
 
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
-
-
     }
 
 

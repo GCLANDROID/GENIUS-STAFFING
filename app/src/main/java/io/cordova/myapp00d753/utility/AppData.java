@@ -12,4 +12,5 @@ public class AppData {
     public static String MENU=newv2url+"Dashboard/GetMobileAppMenuList";
     public static String EMPLOYEE_DOCUMENT_MANAGE=newv2url+"Document/EmployeeDocumentManage";
     public static String DOCUMENT_UPLOAD_INFO=newv2url+"Document/GetDigitalDocumentUploadInfo";
+    public static String DIGITAL_DOCUMENT_TYPE = newv2url+"Document/GetDigitalDocumentType";
 }
