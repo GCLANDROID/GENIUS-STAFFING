@@ -1,0 +1,177 @@
+package io.cordova.myapp00d753.activity.honnasa.adapter;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+
+import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.honnasa.HonasaSalesActivity;
+import io.cordova.myapp00d753.activity.honnasa.model.ViewSalesModel;
+
+
+public class HanasaSalesAdapter extends RecyclerView.Adapter<HanasaSalesAdapter.MyViewHolder>{
+    private static final String TAG = "HanasaSalesAdapter";
+    Context context;
+    ArrayList<ViewSalesModel> viewSalesList;
+
+    public HanasaSalesAdapter(Context context, ArrayList<ViewSalesModel> viewSalesList) {
+        this.context = context;
+        this.viewSalesList = viewSalesList;
+    }
+
+    @NonNull
+    @Override
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView= LayoutInflater.from(parent.getContext()).inflate(R.layout.honasa_sales_entry_row,parent,false);
+        return new MyViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        holder.txtProductName.setText(viewSalesList.get(position).productName);
+        holder.txtStockInHand.setText(String.valueOf(viewSalesList.get(position).inStock));
+        Log.e(TAG, "onBindViewHolder: "+viewSalesList.get(position).productValue);
+        holder.txtReceivingStock.setText("");
+        holder.txtSalesDone.setText("");
+        holder.txtSalesValues.setText("");
+        holder.txtClosingStock.setText("");
+
+        holder.txtReceivingStock.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (!editable.toString().isEmpty()){
+                    Log.e(TAG, "afterTextChanged: 1");
+                    if (!holder.txtSalesDone.getText().toString().isEmpty()){
+                        Log.e(TAG, "afterTextChanged: 1.1");
+                        int sum = (Integer.parseInt(holder.txtStockInHand.getText().toString().trim())+
+                                Integer.parseInt(holder.txtReceivingStock.getText().toString()))-Integer.parseInt(holder.txtSalesDone.getText().toString());
+                        holder.txtClosingStock.setText(String.valueOf(sum));
+                    } else {
+                        Log.e(TAG, "afterTextChanged: 1.2");
+                        int sum = Integer.parseInt(holder.txtStockInHand.getText().toString().trim())+Integer.parseInt(holder.txtReceivingStock.getText().toString().trim());
+                        holder.txtClosingStock.setText(String.valueOf(sum));
+                    }
+                    viewSalesList.get(position).setReceivingStock(holder.txtReceivingStock.getText().toString().trim());
+                }
+            }
+        });
+
+        holder.txtSalesDone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (!holder.txtSalesDone.getText().toString().isEmpty()){
+                    Log.e(TAG, "afterTextChanged: 2");
+                    if (!holder.txtSalesDone.getText().toString().isEmpty()){
+                        Log.e(TAG, "afterTextChanged: 2.1");
+                        int sum = (Integer.parseInt(holder.txtStockInHand.getText().toString().trim()) +
+                                Integer.parseInt(holder.txtReceivingStock.getText().toString()))-Integer.parseInt(holder.txtSalesDone.getText().toString());
+                        holder.txtClosingStock.setText(String.valueOf(sum));
+
+                        if (sum < 0){
+                            holder.txtError.setVisibility(View.VISIBLE);
+                            ((HonasaSalesActivity) context).isSalesDoneIsLessThenClosingStock = false;
+                        } else {
+                            holder.txtError.setVisibility(View.GONE);
+                            ((HonasaSalesActivity) context).isSalesDoneIsLessThenClosingStock = true;
+                        }
+
+                        viewSalesList.get(position).setClosingStock(String.valueOf(sum));
+
+                        double salesValue = Double.valueOf(viewSalesList.get(position).productValue) * Integer.parseInt(holder.txtSalesDone.getText().toString().trim());
+                        holder.txtSalesValues.setText(String.valueOf(salesValue));
+
+                        viewSalesList.get(position).setSalesValues(String.valueOf(salesValue));
+                        viewSalesList.get(position).setSalesDone(holder.txtSalesDone.getText().toString().trim());
+                    } else {
+                        Log.e(TAG, "afterTextChanged: 2.2");
+                        int sum = Integer.parseInt(holder.txtStockInHand.getText().toString().trim())+Integer.parseInt(holder.txtReceivingStock.getText().toString().trim());
+                        holder.txtClosingStock.setText(String.valueOf(sum));
+                        viewSalesList.get(position).setClosingStock(String.valueOf(sum));
+
+                        double salesValue = Double.valueOf(viewSalesList.get(position).productValue) * Integer.parseInt(holder.txtSalesDone.getText().toString().trim());
+                        holder.txtSalesValues.setText(String.valueOf(salesValue));
+
+                        viewSalesList.get(position).setSalesValues(String.valueOf(salesValue));
+                        viewSalesList.get(position).setSalesDone(holder.txtSalesDone.getText().toString().trim());
+                    }
+                }
+            }
+        });
+
+
+        holder.txtClosingStock.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                Log.e(TAG, "txtClosingStock: called");
+                if (holder.txtClosingStock.getText().toString().isEmpty()){
+                    viewSalesList.get(position).setModified(false);
+                } else {
+                    viewSalesList.get(position).setModified(true);
+                }
+            }
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return viewSalesList.size();
+    }
+
+    class MyViewHolder extends RecyclerView.ViewHolder{
+        TextView txtProductName,txtError;
+        EditText txtStockInHand,txtReceivingStock,txtSalesDone,txtSalesValues,txtClosingStock;
+        public MyViewHolder(@NonNull View itemView) {
+            super(itemView);
+            txtProductName = itemView.findViewById(R.id.txtProductName);
+            txtStockInHand = itemView.findViewById(R.id.txtStockInHand);
+            txtReceivingStock = itemView.findViewById(R.id.txtReceivingStock);
+            txtSalesDone = itemView.findViewById(R.id.txtSalesDone);
+            txtSalesValues = itemView.findViewById(R.id.txtSalesValues);
+            txtClosingStock = itemView.findViewById(R.id.txtClosingStock);
+            txtError = itemView.findViewById(R.id.txtError);
+        }
+    }
+}
