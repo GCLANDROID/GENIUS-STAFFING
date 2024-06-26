@@ -619,7 +619,6 @@ public class LoginActivity extends AppCompatActivity {
                                     pref.saveOffAttnFlag(OffAttFlag);
                                     if (pref.getCheckFlag().equals("1")){
                                         pref.saveIntentFlag("1");
-
                                     }
 
                                     String  DemoFlag=obj.optString("DemoFlag");
@@ -751,10 +750,7 @@ public class LoginActivity extends AppCompatActivity {
                         arg0.dismiss();
                     }
                 });
-
-
     }
-
 
     private void showEmpDialog() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(LoginActivity.this, R.style.CustomDialogNew);
@@ -774,8 +770,6 @@ public class LoginActivity extends AppCompatActivity {
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.CENTER);
         al1.show();
-
-
     }
 
     private void showInternetDialog() {
@@ -798,8 +792,6 @@ public class LoginActivity extends AppCompatActivity {
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.CENTER);
         alert1.show();
-
-
     }
 
 
@@ -868,7 +860,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void changePassword() {
-
         String surl = AppData.url+"GCl_ForgotPassword?MasterID="+etUserId.getText().toString()+"&SecurityCode="+ security_code;
         Log.d("inputLogin", surl);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
@@ -947,9 +938,4 @@ public class LoginActivity extends AppCompatActivity {
         window.setGravity(Gravity.CENTER);
         alerDialog1.show();
     }
-
-
-
-
-
 }

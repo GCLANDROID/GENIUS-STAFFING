@@ -217,17 +217,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         }else {
 
         }
-
         //
-
-
-
-
-
-
-
-
-
     }
 
     private void onClick() {
@@ -239,6 +229,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                 finish();
             }
         });
+
         fbSpoke.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -248,7 +239,6 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
 
     @Override

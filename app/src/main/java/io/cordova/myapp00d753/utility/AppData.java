@@ -7,4 +7,6 @@ public class AppData {
 
     //http://gsppi.geniusconsultant.com/
 
+    //gcl_KYC
+    public static String GCL_KYC=newv2url+"Profile/GetKYCDetails";
 }

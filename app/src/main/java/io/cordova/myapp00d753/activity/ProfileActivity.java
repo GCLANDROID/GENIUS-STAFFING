@@ -20,6 +20,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
 
 import org.json.JSONArray;
@@ -37,8 +41,10 @@ import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
+import io.cordova.myapp00d753.utility.Util;
 
 public class ProfileActivity extends AppCompatActivity {
+    private static final String TAG = "ProfileActivity";
       ImageView imgHome,imgBack;
       ImageView imgOfficial,imgOfficial1,imgContact,imgContact1,imgPersonal,imgPersonal1,imgMis,imgMis1;
       TextView tvOffical,tvOffical1,tvContact,tvContact1,tvPersonal,tvPersonal1,tvMis,tvMis1;
@@ -51,9 +57,26 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         initialize();
-        profileFunction();
+
+        JSONObject obj=new JSONObject();
+        try {
+            obj.put("AEMConsultantID", pref.getEmpConId());
+            obj.put("AEMClientID",pref.getEmpClintId());
+            obj.put("AEMClientOfficeID",pref.getEmpClintOffId());
+            obj.put("AEMEmployeeID",pref.getEmpId());
+            obj.put("SecurityCode",pref.getSecurityCode());
+            obj.put("WorkingStatus","1");
+            obj.put("CurrentPage","0");
+            profileFunction(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        //profileFunction();
         onclick();
+        //AEMConsultantID="+pref.getEmpConId()+"&AEMClientID="+pref.getEmpClintId()+"&AEMClientOfficeID="+pref.getEmpClintOffId()+"&AEMEmployeeID="+pref.getEmpId() +"&SecurityCode="+pref.getSecurityCode()+"&WorkingStatus=1&CurrentPage=0";
     }
+
+
 
     private void  initialize(){
         pref=new Pref(ProfileActivity.this);
@@ -268,7 +291,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void  onclick(){
 
-
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -312,7 +334,187 @@ public class ProfileActivity extends AppCompatActivity {
                 loadMisFragment();
             }
         });
+    }
 
+    private void profileFunction(JSONObject jsonObject) {
+        Log.e(TAG, "profileFunction: "+jsonObject);
+        final ProgressDialog progressBar = new ProgressDialog(this);
+        progressBar.setCancelable(false);//you can cancel it by pressing back button
+        progressBar.setMessage("Loading...");
+        progressBar.show();
+        AndroidNetworking.post(AppData.GCL_KYC)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        progressBar.dismiss();
+                        try {
+                            Log.e(TAG, "PROFILE: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj=jsonArray.getJSONObject(i);
+                                    String AEMEmployeeID=obj.optString("AEMEmployeeID");
+                                    pref.saveSEmpID(AEMEmployeeID);
+
+                                    String Code=obj.optString("Code");
+                                    pref.saveSEmpCode(Code);
+
+                                    String Name=obj.optString("Name");
+                                    pref.saveSEmpName(Name);
+
+                                    String DateOfJoining=obj.optString("DOJ");
+                                    pref.saveSDOJ(DateOfJoining);
+
+                                    String Department=obj.optString("Department");
+                                    pref.saveSDept(Department);
+
+                                    String Designation=obj.optString("Designation");
+                                    pref.saveSDes(Designation);
+
+                                    String Location=obj.optString("Location");
+                                    pref.saveSLocation(Location);
+
+                                    String Sex=obj.optString("Sex");
+                                    if (!Sex.equals("")) {
+                                        pref.saveSGender(Sex);
+                                    }else {
+                                        pref.saveSGender("N/A");
+                                    }
+
+                                    String DateOfBirth=obj.optString("DateOfBirth");
+                                    if (!DateOfBirth.equals("")) {
+                                        pref.saveSDOB(DateOfBirth);
+                                    }else {
+                                        pref.saveSDOB("N/A");
+                                    }
+
+                                    String GuardianName=obj.optString("GuardianName");
+                                    if (!GuardianName.equals("")) {
+                                        pref.saveSGurdian(GuardianName);
+                                    }else {
+                                        pref.saveSGurdian("N/A");
+                                    }
+
+                                    String RelationShip=obj.optString("RelationShip");
+                                    if (!RelationShip.equals("")) {
+                                        pref.saveSRelation(RelationShip);
+                                    }else {
+                                        pref.saveSRelation("N/A");
+                                    }
+
+                                    String Qualification=obj.optString("Qualification");
+                                    if (!Qualification.equals("")) {
+                                        pref.saveSQualification(Qualification);
+                                    }else {
+                                        pref.saveSQualification("N/A");
+                                    }
+
+                                    String MaritalStatus=obj.optString("MaritalStatus");
+
+                                    if (!MaritalStatus.equals("")){
+                                        pref.saveSMartial(MaritalStatus);
+                                    }else {
+                                        pref.saveSMartial("N/A");
+                                    }
+
+                                    String BloodGroup=obj.optString("BloodGroup");
+                                    if (!BloodGroup.equals("")) {
+                                        pref.saveSBlood(BloodGroup);
+                                    }else {
+                                        pref.saveSBlood("N/A");
+                                    }
+
+                                    String PermanentAddress=obj.optString("PermanentAddress");
+                                    if (!PermanentAddress.equals("")){
+                                        pref.saveSParAdd(PermanentAddress);
+                                    }else {
+                                        pref.saveSParAdd("N/A");
+                                    }
+
+                                    String PresentAddress=obj.optString("PresentAddress");
+                                    if (!PresentAddress.equals("")){
+                                        pref.saveSPerAdd(PresentAddress);
+                                    }else {
+                                        pref.saveSPerAdd("N/A");
+                                    }
+
+                                    String Mobile=obj.optString("Mobile");
+                                    if (!Mobile.equals("")){
+                                        pref.saveSPhnNo(Mobile);
+                                    }else {
+                                        pref.saveSPhnNo("N/A");
+                                    }
+
+                                    String EmailID=obj.optString("EmailID");
+                                    if (!EmailID.equals("")){
+                                        pref.saveSEmail(EmailID);
+                                    }else {
+                                        pref.saveSEmail("N/A");
+                                    }
+
+                                    String PFNumber=obj.optString("PFNumber");
+                                    if (!PFNumber.equals("")){
+                                        pref.saveSPF(PFNumber);
+                                    }else {
+                                        pref.saveSPF("N/A");
+                                    }
+
+                                    String ESINumber=obj.optString("ESINumber");
+                                    if (!ESINumber.equals("")){
+                                        pref.saveSESI(ESINumber);
+                                    }
+
+
+                                    String BankName=obj.optString("BankName");
+                                    if (!BankName.equals("")){
+                                        pref.saveSBank(BankName);
+                                    }
+
+
+                                    String AccountNumber=obj.optString("AccountNumber");
+                                    if (!AccountNumber.equals("")){
+                                        pref.saveSAcc(AccountNumber);
+                                    }else {
+                                        pref.saveSAcc("N/A");
+                                    }
+
+                                    String AadharCard=obj.optString("AadharNo");
+                                    if (!AadharCard.equals("")){
+                                        pref.saveSAadhar(AadharCard);
+                                    }else {
+                                        pref.saveSAadhar("N/A");
+                                    }
+
+                                    String UanNo=obj.optString("UANNumber");
+                                    if (!UanNo.equals("")){
+                                        pref.saveSUAN(UanNo);
+                                    }else {
+                                        pref.saveSUAN("N/A");
+                                    }
+                                }
+
+                                loadOfficialFragment();
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressBar.dismiss();
+                        Log.e(TAG, "PROFILE_error: "+anError.getErrorCode());
+                    }
+                });
     }
 
     public void profileFunction() {
