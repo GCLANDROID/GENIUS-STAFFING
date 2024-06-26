@@ -48,6 +48,7 @@ import java.io.File;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.databinding.ActivityInterViewerPanelBinding;
+import io.cordova.myapp00d753.utility.AppData;
 
 public class InterViewerPanelActivity extends AppCompatActivity {
     ActivityInterViewerPanelBinding binding;
@@ -182,7 +183,7 @@ public class InterViewerPanelActivity extends AppCompatActivity {
 
     public void getCanData() {
 
-        String surl = "http://gsppi.geniusconsultant.com/GeniusiOSApi/api/get_SBICardCandidate?CandidateID=0&ReferenceNo=" + binding.etRefNo.getText().toString() + "&Operation=1";
+        String surl = AppData.url+ "get_SBICardCandidate?CandidateID=0&ReferenceNo=" + binding.etRefNo.getText().toString() + "&Operation=1";
         Log.d("inputLogin", surl);
 
         final ProgressDialog progressDialog = new ProgressDialog(InterViewerPanelActivity.this);
@@ -267,7 +268,7 @@ public class InterViewerPanelActivity extends AppCompatActivity {
 
     public void getCanDataSelfieData() {
 
-        String surl = "http://gsppi.geniusconsultant.com/GeniusiOSApi/api/get_SBICardCandidate?CandidateID=0&ReferenceNo=" + binding.etRefNo.getText().toString() + "&Operation=2";
+        String surl = AppData.url+"get_SBICardCandidate?CandidateID=0&ReferenceNo=" + binding.etRefNo.getText().toString() + "&Operation=2";
         Log.d("inputLogin", surl);
 
         final ProgressDialog progressDialog = new ProgressDialog(InterViewerPanelActivity.this);

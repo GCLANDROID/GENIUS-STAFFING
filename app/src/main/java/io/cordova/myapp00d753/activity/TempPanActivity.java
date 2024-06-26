@@ -3,36 +3,65 @@ package io.cordova.myapp00d753.activity;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
+import android.util.SparseArray;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.androidnetworking.interfaces.UploadProgressListener;
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.text.TextBlock;
+import com.google.android.gms.vision.text.TextRecognizer;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
+
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import id.zelory.compressor.Compressor;
+import io.cordova.myapp00d753.AndroidXCamera.AndroidXCameraActivity;
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.metso.MetsoPMSTargetAchivementActivity;
+import io.cordova.myapp00d753.bluedart.BlueDartAttendanceManageActivity;
 import io.cordova.myapp00d753.module.AttendanceService;
 import io.cordova.myapp00d753.module.UploadObject;
 import io.cordova.myapp00d753.utility.AppData;
@@ -65,10 +94,22 @@ public class TempPanActivity extends AppCompatActivity {
     String security;
     EditText etPanNumber;
     int flag;
+    int backflag;
+    int frontflag;
     TextView tvSubmit,tvSkip;
     ImageView imgBackDown,imgForward;
-    String pan_pattern;
+    String pan_pattern,aadharPatern="^[2-9]{1}[0-9]{3}[0-9]{4}[0-9]{4}$";
     ImageView imgHome,imgBack;
+    String color;
+    TextView tvAddaharNo,tvAddaharImg,tvAddaharBackImg;
+    AlertDialog alerDialog1;
+    Uri image_uri;
+    String encodeToString;
+    Button btnPanSave;
+    ImageView imgAadharCamera,imgAadharBackCamera,imgAadharBackDocument,imgAadharDocument;
+    Button btnAadharSave;
+    EditText etAddaharNo;
+    int responseflag=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +121,24 @@ public class TempPanActivity extends AppCompatActivity {
 
     private void initialize(){
         pref = new Pref(TempPanActivity.this);
+        etAddaharNo=(EditText)findViewById(R.id.etAddaharNo);
+        btnPanSave=(Button)findViewById(R.id.btnPanSave);
+
+        color = "<font color='#EE0000'>*</font>";
+        tvAddaharNo = (TextView) findViewById(R.id.tvAddaharNo);
+        String aadaharno = "Aadhar Number";
+        tvAddaharNo.setText(Html.fromHtml(aadaharno + color));
+
+        tvAddaharImg = (TextView) findViewById(R.id.tvAddaharImg);
+        String aadharimg = "Aadhar Front Image";
+        tvAddaharImg.setText(Html.fromHtml(aadharimg + color));
+
+
+        tvAddaharBackImg = (TextView) findViewById(R.id.tvAddaharBackImg);
+        String aadharbackimg = "Aadhar Back Image";
+        tvAddaharBackImg.setText(Html.fromHtml(aadharbackimg + color));
+
+
         llSubmit=(LinearLayout)findViewById(R.id.llSubmit);
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -107,10 +166,67 @@ public class TempPanActivity extends AppCompatActivity {
         imgHome=(ImageView)findViewById(R.id.imgHome);
         imgBack=(ImageView)findViewById(R.id.imgBack);
 
+        imgAadharCamera=(ImageView)findViewById(R.id.imgAadharCamera);
+        imgAadharBackCamera=(ImageView)findViewById(R.id.imgAadharBackCamera);
+        imgAadharBackDocument=(ImageView)findViewById(R.id.imgAadharBackDocument);
+        imgAadharDocument=(ImageView)findViewById(R.id.imgAadharDocument);
+        btnAadharSave=(Button) findViewById(R.id.btnAadharSave);
 
     }
 
     private void onClick(){
+        btnAadharSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (etAddaharNo.getText().toString().length()>0){
+
+                        if (frontflag==1 && backflag==1){
+
+                            Pattern r = Pattern.compile(aadharPatern);
+                            if (regex_matcher(r, etAddaharNo.getText().toString())) {
+                                aadharFrontUpload();
+                            }else {
+                                Toast.makeText(getApplicationContext(),"Invalid Aadhar number",Toast.LENGTH_LONG).show();
+                            }
+                        }else {
+                            Toast.makeText(getApplicationContext(),"Please upload Aadhar Front and Back Image",Toast.LENGTH_LONG).show();
+                        }
+
+
+                }else {
+                    Toast.makeText(getApplicationContext(),"Please enter valid Aadhar number",Toast.LENGTH_LONG).show();
+
+                }
+            }
+        });
+
+
+        btnPanSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (etPanNumber.getText().toString().length()>0){
+                    if (etPanNumber.getText().toString().length()>9){
+                        if (flag==1){
+
+                            Pattern r = Pattern.compile(pan_pattern);
+                            if (regex_matcher(r, etPanNumber.getText().toString())) {
+                                panUpload();
+                            }else {
+                                Toast.makeText(getApplicationContext(),"Invalid PAN number",Toast.LENGTH_LONG).show();
+                            }
+                        }else {
+                            Toast.makeText(getApplicationContext(),"Please upload PAN document",Toast.LENGTH_LONG).show();
+                        }
+
+                    }else {
+                        Toast.makeText(getApplicationContext(),"Please enter valid PAN number",Toast.LENGTH_LONG).show();
+                    }
+                }else {
+                    Toast.makeText(getApplicationContext(),"Please enter valid PAN number",Toast.LENGTH_LONG).show();
+
+                }
+            }
+        });
         etPanNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -130,35 +246,39 @@ public class TempPanActivity extends AppCompatActivity {
         tvSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              if (etPanNumber.getText().toString().length()>0){
-                  if (etPanNumber.getText().toString().length()>9){
-                      if (flag==1){
-
-                          Pattern r = Pattern.compile(pan_pattern);
-                          if (regex_matcher(r, etPanNumber.getText().toString())) {
-                              cameraImageDoc();
-                          }else {
-                              Toast.makeText(getApplicationContext(),"Invalid PAN number",Toast.LENGTH_LONG).show();
-                          }
-                      }else {
-                          Toast.makeText(getApplicationContext(),"Please upload PAN document",Toast.LENGTH_LONG).show();
-                      }
-
-                  }else {
-                      Toast.makeText(getApplicationContext(),"Please enter valid PAN number",Toast.LENGTH_LONG).show();
-                  }
-              }else {
-
-              }
+                if (responseflag==1) {
+                    Intent intent = new Intent(TempPanActivity.this, TempBankActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(TempPanActivity.this,"Please Upload Aadhaar Details",Toast.LENGTH_LONG).show();
+                }
             }
         });
 
         imgCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cameraIntent();
+                attechmentAlert(200,1001);
             }
         });
+
+
+        imgAadharCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                attechmentAlert(300,2001);
+            }
+        });
+
+
+        imgAadharBackCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                attechmentAlert(400,3001);
+            }
+        });
+
 
         imgBackDown.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -208,46 +328,127 @@ public class TempPanActivity extends AppCompatActivity {
 
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case CAMERA_REQUEST:
+        if (requestCode == 2000 && resultCode == 1001){
+            Log.e("TAG", "onActivityResult: "+data.getExtras().get("picture"));
+            Log.e("TAG", "onActivityResult: "+data.getExtras().get(AndroidXCameraActivity.IMAGE_PATH_KEY));
+            image_uri =  Uri.parse(String.valueOf(data.getExtras().get("picture")));
+            //image_uri = (Uri) data.getExtras().get(AndroidXCameraActivity.IMAGE_PATH_KEY);
+           compressedImageFile = new File(String.valueOf(data.getExtras().get("picture")));
 
-                if (resultCode == Activity.RESULT_OK) {
-                    try {
-                        try {
-                            String imageurl = /*"file://" +*/ getRealPathFromURI(imageUri);
-                            file = new File(imageurl);
-                            compressedImageFile = new Compressor(this).compressToFile(file);
-                            Log.d("imageSixw", String.valueOf(getReadableFileSize(compressedImageFile.length())));
-                            BitmapFactory.Options o = new BitmapFactory.Options();
-                            o.inSampleSize = 2;
-                            Bitmap bm = cropToSquare(BitmapFactory.decodeFile(imageurl, o));
-                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            bm.compress(Bitmap.CompressFormat.PNG, 10, baos); //bm is the bitmap object
-                            byte[] b = baos.toByteArray();
-                            encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-                            imgDoc.setImageBitmap(bm);
-                            Log.d("images", encodedImage);
-                            flag=1;
+            if (image_uri != null){
+                imgDoc.setImageURI(image_uri);
+                flag=1;
+
+            }
+        }else if ((requestCode == 200 )) {
+            InputStream imageStream = null;
+            try {
+                try {
+                    uri = data.getData();
+                    String filePath = getRealPathFromURIPath(uri, TempPanActivity.this);
+                    compressedImageFile = new File(filePath);
+                    //  Log.d(TAG, "filePath=" + filePath);
+                    imageStream = getContentResolver().openInputStream(uri);
+                    Bitmap bm = cropToSquare(BitmapFactory.decodeStream(imageStream));
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bm.compress(Bitmap.CompressFormat.PNG, 10, baos); //bm is the bitmap object
+                    byte[] b = baos.toByteArray();
+                    encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+
+                    imgDoc.setImageBitmap(bm);
+
+                    flag = 1;
 
 
-                            // _pref.saveImage(encodedImage);
-                            //saveImage(encodedImage);
-
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    } catch (OutOfMemoryError e) {
-                        e.printStackTrace();
-                    }
-
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                break;
+            } catch (OutOfMemoryError e) {
+                e.printStackTrace();
+            }
 
+        }else if (requestCode == 2000 && resultCode == 2001){
+            Log.e("TAG", "onActivityResult: "+data.getExtras().get("picture"));
+            Log.e("TAG", "onActivityResult: "+data.getExtras().get(AndroidXCameraActivity.IMAGE_PATH_KEY));
+            image_uri =  Uri.parse(String.valueOf(data.getExtras().get("picture")));
+            //image_uri = (Uri) data.getExtras().get(AndroidXCameraActivity.IMAGE_PATH_KEY);
+            compressedImageFile = new File(String.valueOf(data.getExtras().get("picture")));
+
+            if (image_uri != null){
+                imgAadharDocument.setImageURI(image_uri);
+                frontflag=1;
+
+            }
+        }else if ((requestCode == 300 )) {
+            InputStream imageStream = null;
+            try {
+                try {
+                    uri = data.getData();
+                    String filePath = getRealPathFromURIPath(uri, TempPanActivity.this);
+                    compressedImageFile = new File(filePath);
+                    //  Log.d(TAG, "filePath=" + filePath);
+                    imageStream = getContentResolver().openInputStream(uri);
+                    Bitmap bm = cropToSquare(BitmapFactory.decodeStream(imageStream));
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bm.compress(Bitmap.CompressFormat.PNG, 10, baos); //bm is the bitmap object
+                    byte[] b = baos.toByteArray();
+                    encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+
+                    imgAadharDocument.setImageBitmap(bm);
+
+                    frontflag=1;
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } catch (OutOfMemoryError e) {
+                e.printStackTrace();
+            }
+
+        }else if (requestCode == 2000 && resultCode == 3001){
+            Log.e("TAG", "onActivityResult: "+data.getExtras().get("picture"));
+            Log.e("TAG", "onActivityResult: "+data.getExtras().get(AndroidXCameraActivity.IMAGE_PATH_KEY));
+            image_uri =  Uri.parse(String.valueOf(data.getExtras().get("picture")));
+            //image_uri = (Uri) data.getExtras().get(AndroidXCameraActivity.IMAGE_PATH_KEY);
+            file = new File(String.valueOf(data.getExtras().get("picture")));
+
+            if (image_uri != null){
+                imgAadharBackDocument.setImageURI(image_uri);
+                backflag=1;
+
+            }
+        }else if ((requestCode == 400 )) {
+            InputStream imageStream = null;
+            try {
+                try {
+                    uri = data.getData();
+                    String filePath = getRealPathFromURIPath(uri, TempPanActivity.this);
+                    file = new File(filePath);
+                    //  Log.d(TAG, "filePath=" + filePath);
+                    imageStream = getContentResolver().openInputStream(uri);
+                    Bitmap bm = cropToSquare(BitmapFactory.decodeStream(imageStream));
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bm.compress(Bitmap.CompressFormat.PNG, 10, baos); //bm is the bitmap object
+                    byte[] b = baos.toByteArray();
+                    encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+
+                    imgAadharBackDocument.setImageBitmap(bm);
+
+                    backflag=1;
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } catch (OutOfMemoryError e) {
+                e.printStackTrace();
+            }
 
         }
+
 
     }
 
@@ -288,41 +489,65 @@ public class TempPanActivity extends AppCompatActivity {
     }
 
 
-    private void cameraImageDoc() {
+    private void panUpload() {
         progressDialog.show();
 
         //RequestBody mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        RequestBody mFile = RequestBody.create(MediaType.parse(".jpg"), compressedImageFile);
-        MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", compressedImageFile.getName(), mFile);
-        RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile.getName());
+        AndroidNetworking.upload(AppData.url+"post_empdigitaldocument")
+                .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
+                .addMultipartParameter("DocumentID", "003")
+                .addMultipartParameter("ReferenceNo", etPanNumber.getText().toString())
+                .addMultipartParameter("SecurityCode", pref.getSecurityCode())
+                .addMultipartFile("SingleFile", compressedImageFile)
+                .setPercentageThresholdForCancelling(60)
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                        progressDialog.show();
 
-        Call<UploadObject> fileUpload = uploadService.uploadDocument(fileToUpload, pref.getMasterId(), "003", etPanNumber.getText().toString(), security);
-        fileUpload.enqueue(new Callback<UploadObject>() {
-            @Override
-            public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
-                progressDialog.dismiss();
-                UploadObject extraWorkingDayModel = response.body();
-                if (extraWorkingDayModel.isResponseStatus()) {
-                    //  Toast.makeText(getApplicationContext(), extraWorkingDayModel.getResponseText(), Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent(TempPanActivity.this,TempBankActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
 
-                } else {
-                    Toast.makeText(getApplicationContext(), extraWorkingDayModel.getResponseText(), Toast.LENGTH_SHORT).show();
-                }
-            }
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        progressDialog.dismiss();
 
-            @Override
-            public void onFailure(Call<UploadObject> call, Throwable t) {
-                progressDialog.dismiss();
 
-                Log.e("error", "Error " + t.getMessage());
-                Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        String responseText = job1.optString("responseText");
+                        boolean responseStatus = job1.optBoolean("responseStatus");
 
-            }
+                        if (responseStatus) {
 
-        });
+                            btnPanSave.setVisibility(View.GONE);
+                            Toast.makeText(getApplicationContext(), "Your PAN details has been updated Successfully", Toast.LENGTH_LONG).show();
+
+                        } else {
+
+                            Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
+
+                        }
+
+
+                        // boolean _status = job1.getBoolean("status");
+
+
+
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        Log.e("errt", String.valueOf(error));
+
+                        Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
+                    }
+                });
 
     }
 
@@ -338,5 +563,173 @@ public class TempPanActivity extends AppCompatActivity {
         final String[] units = new String[]{"B", "KB", "MB", "GB", "TB"};
         int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
         return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
+    }
+
+
+    private void attechmentAlert(int gallerycode,int cameracode) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(TempPanActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.dialog_attachment, null);
+        dialogBuilder.setView(dialogView);
+        LinearLayout lnCamera=(LinearLayout)dialogView.findViewById(R.id.lnCamera);
+        LinearLayout lnGallery=(LinearLayout)dialogView.findViewById(R.id.lnGallery);
+        lnCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AndroidXCameraActivity.launch(TempPanActivity.this, cameracode);
+                alerDialog1.dismiss();
+            }
+        });
+
+
+        lnGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                galleryIntent(gallerycode);
+                alerDialog1.dismiss();
+            }
+        });
+
+
+
+
+        alerDialog1 = dialogBuilder.create();
+        alerDialog1.setCancelable(false);
+        Window window = alerDialog1.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        alerDialog1.show();
+    }
+
+
+    private void galleryIntent(int gallerycode) {
+        Intent openGalleryIntent = new Intent(Intent.ACTION_PICK);
+        openGalleryIntent.setType("image/*");
+        startActivityForResult(openGalleryIntent, gallerycode);
+    }
+
+
+    private void aadharFrontUpload() {
+        progressDialog.show();
+
+        //RequestBody mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        AndroidNetworking.upload(AppData.url+"post_empdigitaldocument")
+                .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
+                .addMultipartParameter("DocumentID", "002")
+                .addMultipartParameter("ReferenceNo", etAddaharNo.getText().toString())
+                .addMultipartParameter("SecurityCode", pref.getSecurityCode())
+                .addMultipartFile("SingleFile", compressedImageFile)
+                .setPercentageThresholdForCancelling(60)
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                        progressDialog.show();
+
+
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        progressDialog.show();
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        String responseText = job1.optString("responseText");
+                        boolean responseStatus = job1.optBoolean("responseStatus");
+
+                        if (responseStatus) {
+
+                           aadharBackUpload();
+                        } else {
+
+                            Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
+
+                        }
+
+
+                        // boolean _status = job1.getBoolean("status");
+
+
+
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        Log.e("errt", String.valueOf(error));
+
+                        Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+    }
+
+
+    private void aadharBackUpload() {
+        progressDialog.show();
+
+        //RequestBody mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        AndroidNetworking.upload(AppData.url+"post_empdigitaldocument")
+                .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
+                .addMultipartParameter("DocumentID", "00233")
+                .addMultipartParameter("ReferenceNo", etAddaharNo.getText().toString())
+                .addMultipartParameter("SecurityCode", pref.getSecurityCode())
+                .addMultipartFile("SingleFile", file)
+                .setPercentageThresholdForCancelling(60)
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                        progressDialog.show();
+
+
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        progressDialog.dismiss();
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        String responseText = job1.optString("responseText");
+                        boolean responseStatus = job1.optBoolean("responseStatus");
+
+                        if (responseStatus) {
+
+                            btnAadharSave.setVisibility(View.GONE);
+                            responseflag=1;
+                            Toast.makeText(getApplicationContext(), "Your Aadhar details has been updated Successfully", Toast.LENGTH_LONG).show();
+
+                        } else {
+
+                            Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
+
+                        }
+
+
+                        // boolean _status = job1.getBoolean("status");
+
+
+
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        Log.e("errt", String.valueOf(error));
+
+                        Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
+                    }
+                });
+
     }
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "747562614937",
+    "project_id": "genius-staffing",
+    "storage_bucket": "genius-staffing.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:747562614937:android:d2929d3ddad1fc1545f808",
+        "android_client_info": {
+          "package_name": "io.cordova.myapp00d753"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCf0Zl3-PBdONHZlWbPm4Zh8XVYOxQq0uU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -20,9 +20,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.util.SparseArray;
@@ -75,11 +73,14 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import io.cordova.myapp00d753.AndroidXCamera.AndroidXCameraActivity;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.AttendanceReportActivity;
@@ -186,19 +187,17 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
 
     private void onClick() {
         binding.lnJrStart.setOnClickListener(v -> {
-
-                id=1;
-                pref.saveJrFlag("1");
-                //permission allowed, take picture
-                pickCamera();
-
+            id = 1;
+            pref.saveJrFlag("1");
+            //permission allowed, take picture
+            //pickCamera();
+            AndroidXCameraActivity.launch(BlueDartAttendanceManageActivity.this, 1001);
         });
         binding.lnJrEnd.setOnClickListener(v -> {
-
-                pref.saveJrFlag("2");
-                //permission allowed, take picture
-                pickCamera();
-
+            pref.saveJrFlag("2");
+            //permission allowed, take picture
+            //pickCamera();
+            AndroidXCameraActivity.launch(BlueDartAttendanceManageActivity.this, 1001);
         });
         lnMark.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -208,6 +207,8 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
         });
 
     }
+
+
 
     private void onDialogSubBtnClicked() {
 
@@ -240,15 +241,83 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 2000 && resultCode == 1001){
+            Log.e(TAG, "onActivityResult: "+data.getExtras().get("picture"));
+            Log.e(TAG, "onActivityResult: "+data.getExtras().get(AndroidXCameraActivity.IMAGE_PATH_KEY));
+            image_uri =  Uri.parse(String.valueOf(data.getExtras().get("picture")));
+            //image_uri = (Uri) data.getExtras().get(AndroidXCameraActivity.IMAGE_PATH_KEY);
+            File imageFile = new File(String.valueOf(data.getExtras().get("picture")));
+            Log.e(TAG, "image_uri: "+image_uri);
+            if (image_uri != null){
+                CropImage.activity(Uri.fromFile(imageFile.getAbsoluteFile()))
+                        .setGuidelines(CropImageView.Guidelines.ON) //enable image guid lines
+                        .setCropMenuCropButtonIcon(R.drawable.checked)
+                        .setCropMenuCropButtonTitle("Crop")
+                        .start(BlueDartAttendanceManageActivity.this);
+            }
+        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri(); //get image uri
+                Log.i("HHSSHSH ", "RRRRRRR " + resultUri.toString());
 
-        if (requestCode == IMAGE_PICK_CAMERA_CODE) {
+                    if (pref.getJrFlag().equals("1")){
+                        Log.d("JRFlag",pref.getJrFlag());
+                        startJourney();
+                    }else {
+                        endJourney();
+                        Log.d("JRFlag",pref.getJrFlag());
+                    }
+
+                //  set image to image view
+                odometerImage.setImageURI(resultUri);
+                //  get drawable bitmap for text recognition
+                BitmapDrawable bitmapDrawable = (BitmapDrawable) odometerImage.getDrawable();
+                Bitmap bitmap = bitmapDrawable.getBitmap();
+
+
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                byte[] byteArray = byteArrayOutputStream.toByteArray();
+                encodeToString= Base64.encodeToString(byteArray, Base64.DEFAULT);
+
+
+                TextRecognizer recognizer = new TextRecognizer.Builder(getApplicationContext()).build();
+
+                if (!recognizer.isOperational()) {
+
+                } else {
+                    //set text to edit text
+                    try {
+                        Frame frame = new Frame.Builder().setBitmap(bitmap).build();
+                        SparseArray<TextBlock> items = recognizer.detect(frame);
+                        StringBuilder sb = new StringBuilder();
+                        //get text from sb until there is no text
+                        for (int i = 0; i < items.size(); i++) {
+                            TextBlock myItem = items.valueAt(i);
+                            sb.append(myItem.getValue());
+                        }
+                        odometerValue = getOdometerRegexValue(sb.toString());
+                        odometerEdittext.setText(odometerValue);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                //if there is any error show it
+                Exception error = result.getError();
+                Log.e(TAG, "onActivityResult: "+error);
+                Toast.makeText(this, "" + error, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        /*if (requestCode == IMAGE_PICK_CAMERA_CODE) {
             //got image from camera now crop it
             CropImage.activity(image_uri)
                     .setGuidelines(CropImageView.Guidelines.ON) //enable image guid lines
                     .setCropMenuCropButtonIcon(R.drawable.checked)
                     .setCropMenuCropButtonTitle("Crop")
                     .start(BlueDartAttendanceManageActivity.this);
-
         }
         //get cropped image
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
@@ -283,8 +352,6 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
                 if (!recognizer.isOperational()) {
 
                 } else {
-
-
                     //set text to edit text
                     try {
                         Frame frame = new Frame.Builder().setBitmap(bitmap).build();
@@ -311,7 +378,7 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
                 Exception error = result.getError();
                 Toast.makeText(this, "" + error, Toast.LENGTH_SHORT).show();
             }
-        }
+        }*/
     }
 
     public static Bitmap uriToBitmap(Context context, Uri uri) {
@@ -375,7 +442,6 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
         mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
@@ -398,11 +464,7 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
         }
-
-
-        // Creates a CameraPosition from the builder
-
-
+        // Creates a CameraPosition from the builde
     }
 
     private void handleNewLocation(Location location) {
@@ -726,7 +788,6 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
                 .setUploadProgressListener(new UploadProgressListener() {
                     @Override
                     public void onProgress(long bytesUploaded, long totalBytes) {
-
                         pd.show();
                     }
                 })
@@ -817,7 +878,6 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
                 dialog.dismiss();
 
             }
-
 
         });
 

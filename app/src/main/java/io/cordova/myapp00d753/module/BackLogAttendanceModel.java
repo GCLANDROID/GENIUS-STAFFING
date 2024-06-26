@@ -7,8 +7,25 @@ public class BackLogAttendanceModel {
     String remarks;
     boolean selected=false;
     String dayType;
+    long shiftID;
+    String remarks2="";
 
 
+
+
+
+    public BackLogAttendanceModel(String date, String inTime, String outTime, boolean selected) {
+        this.date = date;
+        this.inTime = inTime;
+        this.outTime = outTime;
+        this.selected = selected;
+    }
+
+    public BackLogAttendanceModel(String date, String inTime, String outTime) {
+        this.date = date;
+        this.inTime = inTime;
+        this.outTime = outTime;
+    }
 
 
     public String getDate() {
@@ -59,14 +76,20 @@ public class BackLogAttendanceModel {
         this.dayType = dayType;
     }
 
-    public BackLogAttendanceModel(String date, String inTime, String outTime)
-{
-   this.date=date;
-   this.inTime=inTime;
-   this.outTime=outTime;
+    public long getShiftID() {
+        return shiftID;
+    }
+
+    public void setShiftID(long shiftID) {
+        this.shiftID = shiftID;
+    }
 
 
+    public String getRemarks2() {
+        return remarks2;
+    }
 
-}
-
+    public void setRemarks2(String remarks2) {
+        this.remarks2 = remarks2;
+    }
 }

@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -29,6 +30,93 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".activity.PFManualActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity android:name=".activity.honnasa.HonasaSalesActivity" />
+        <activity android:name=".activity.honnasa.HanasaSalesReportActivity" />
+        <activity
+            android:name=".activity.protectorgamble.ProtectorGambleAttendanceActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.bosch.BoschAttendanceActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.bosch.BoschAndroidXCameraActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.bosch.BoschAttendanceReportActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.TempOtherDocumentActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".activity.TempEducationaActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".activity.GratuityNominationActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".activity.WidowNominationActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".activity.EPSNominationActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity android:name=".activity.FMSNewClaimActivity" />
+        <activity
+            android:name=".activity.honnasa.HonasaSalesDashboardActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".activity.metso.MetsoPMSReportActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".activity.metso.MetsoPMSTargetAchivementActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".activity.metso.MetsoReimbursementReportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.metso.MetsoReimbursementDeleteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.metso.MetsoNewReimbursementClaimActivity"
+            android:exported="false" />
         <activity
             android:name=".bluedart.ODOmeterApprvalActivity"
             android:exported="false" />
@@ -467,6 +555,18 @@
         <activity
             android:name=".facereogntion.InterViewerPanelActivity"
             android:screenOrientation="userPortrait" />
+        <activity android:name=".activity.metso.MetsoAttendanceActivity" />
+        <activity android:name=".activity.metso.MetsoAttendanceRegularizationActivity" />
+        <activity android:name=".activity.metso.MetsoAttendanceReportActivity" />
+        <activity android:name=".AndroidXCamera.AndroidXCameraActivity" />
+
+        <service
+            android:name=".FirebaseNotification.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

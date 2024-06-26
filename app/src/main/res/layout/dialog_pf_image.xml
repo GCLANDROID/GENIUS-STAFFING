@@ -24,6 +24,7 @@
                 android:id="@+id/imgCancel"/>
         </LinearLayout>
         <ImageView
+            android:id="@+id/imgPF"
             android:layout_width="320dp"
             android:layout_height="400dp"
             android:src="@mipmap/pf"/>

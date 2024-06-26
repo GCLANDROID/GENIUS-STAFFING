@@ -111,6 +111,7 @@ public class NewClaimActivity extends AppCompatActivity {
     String monthname;
     private String encodedImage;
     private Uri imageUri;
+    String pdfFilePath,pdfFileName;
     private static final int CAMERA_REQUEST = 1;
     private static final int CAMERA_REQUEST1 = 2;
     private static final int CAMERA_REQUEST2 = 3;
@@ -326,7 +327,6 @@ public class NewClaimActivity extends AppCompatActivity {
                     componentId = moduleComponentList.get(position).getItemId();
                     Log.d("componentId", componentId);
                 }
-
             }
 
             @Override
@@ -511,7 +511,6 @@ public class NewClaimActivity extends AppCompatActivity {
 
 
     private void setHideItem() {
-
         String surl = AppData.url+"gcl_CommonDDL?ddltype=16&id1=" + pref.getEmpConId() + "&id2=" + pref.getEmpClintId() + "&id3=0&SecurityCode=" + pref.getSecurityCode();
         Log.d("compurl", surl);
         final ProgressDialog progressBar = new ProgressDialog(this);
@@ -571,12 +570,9 @@ public class NewClaimActivity extends AppCompatActivity {
 
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
-
-
     }
 
     private void setComponenetItem() {
-
         String surl = AppData.url+"gcl_CommonDDL?ddltype=160&id1=" + pref.getEmpConId() + "&id2=" + pref.getEmpClintId() + "&id3=0&SecurityCode=" + pref.getSecurityCode();
         Log.d("compurl", surl);
         final ProgressDialog progressBar = new ProgressDialog(this);
@@ -588,9 +584,7 @@ public class NewClaimActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Log.d("responseLogin", response);
-
                         progressBar.dismiss();
-
                         try {
                             JSONObject job1 = new JSONObject(response);
                             Log.e("response12", "@@@@@@" + job1);
@@ -619,12 +613,8 @@ public class NewClaimActivity extends AppCompatActivity {
                                 spComponent.setAdapter(spinnerArrayAdapter);
                             } else {
 
-
                             }
-
                             // boolean _status = job1.getBoolean("status");
-
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(NewClaimActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
@@ -635,15 +625,13 @@ public class NewClaimActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progressBar.dismiss();
-                //   Toast.makeText(DocumentManageActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(DocumentManageActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
                 Log.e("ert", error.toString());
             }
         }) {
 
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
-
-
     }
 
     private void cameraIntent() {

@@ -7,57 +7,112 @@
     tools:context=".fragment.LeaveAdjustmentFragment"
     android:orientation="vertical"
     android:padding="10dp">
-    <TextView
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimaryDark"
-        android:text="Financial Year"
-        android:textSize="16sp"
-        android:textStyle="bold"></TextView>
+
     <LinearLayout
-        android:visibility="gone"
+        android:layout_margin="10dp"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@drawable/lldesign7">
-        <Spinner
-            android:layout_marginTop="5dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <TextView
+            android:visibility="visible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="Financial Year"
+            android:textSize="16sp"
+            android:textStyle="bold"></TextView>
+        <LinearLayout
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/lldesign7">
+            <Spinner
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/spFinYear"></Spinner>
+        </LinearLayout>
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:visibility="visible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="Month"
+            android:textSize="16sp"
+            android:textStyle="bold"></TextView>
+        <LinearLayout
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/lldesign7">
+            <Spinner
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/spMonth"></Spinner>
+        </LinearLayout>
+        <Button
+            android:visibility="visible"
+            android:id="@+id/btnShow"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/lldesign"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:text="Show"
+            android:textColor="@color/white"
+            android:textAllCaps="false"></Button>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/spFinYear"></Spinner>
+            android:id="@+id/rvItem"></androidx.recyclerview.widget.RecyclerView>
+        <TextView
+            android:layout_marginTop="10dp"
+            android:textAlignment="center"
+            android:id="@+id/tvNoData"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="@color/textcolor"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:text="No Application(s) found on Selected Month"></TextView>
     </LinearLayout>
-    <Button
-        android:visibility="gone"
-        android:id="@+id/btnShow"
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/lldesign"
-        android:backgroundTint="@color/colorPrimaryDark"
-        android:text="Show"
-        android:textColor="@color/white"
-        android:textAllCaps="false"></Button>
- <LinearLayout
-     android:layout_gravity="center"
-     android:id="@+id/lnAddApplication"
-     android:layout_width="200dp"
-     android:layout_height="40dp"
-     android:layout_marginTop="30dp"
-     android:background="@drawable/lldesign"
-     android:backgroundTint="@color/color1"
-     android:gravity="center">
-     <ImageView
-         android:layout_width="24dp"
-         android:layout_height="24dp"
-         android:src="@drawable/addimg"
-         app:tint="@color/white"></ImageView>
-     <TextView
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:textSize="14sp"
-         android:textColor="@color/white"
-         android:layout_marginLeft="5dp"
-         android:text="Add Application"></TextView>
- </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.1"
+        android:gravity="center"
+        android:padding="10dp">
+        <LinearLayout
+            android:layout_gravity="center"
+            android:id="@+id/lnAddApplication"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/lldesign"
+            android:backgroundTint="@color/color1"
+            android:gravity="center">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/addimg"
+                app:tint="@color/white"></ImageView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="5dp"
+                android:text="Add Application"></TextView>
+        </LinearLayout>
+    </LinearLayout>
+
+
 
 </LinearLayout>

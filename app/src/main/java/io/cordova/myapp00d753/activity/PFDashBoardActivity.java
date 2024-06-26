@@ -14,9 +14,11 @@ import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.utility.Pref;
 
 public class PFDashBoardActivity extends AppCompatActivity {
-    LinearLayout llConsolidated,llMonth;
+    LinearLayout llWebsite,llManual;
     Pref pref;
     ImageView imgBack,imgHome;
+    String PFLink;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,34 +29,34 @@ public class PFDashBoardActivity extends AppCompatActivity {
     }
 
     private void initView(){
+        PFLink=getIntent().getStringExtra("PFLink");
         pref=new Pref(PFDashBoardActivity.this);
-        llConsolidated=(LinearLayout)findViewById(R.id.llConsolidated);
-        llMonth=(LinearLayout)findViewById(R.id.llMonth);
+        llManual=(LinearLayout)findViewById(R.id.llManual);
+        llWebsite=(LinearLayout)findViewById(R.id.llWebsite);
 
         imgBack=(ImageView)findViewById(R.id.imgBack);
         imgHome=(ImageView)findViewById(R.id.imgHome);
-        if (!pref.getPFURL().equals("")){
-            llConsolidated.setVisibility(View.VISIBLE);
-        }else {
-            llConsolidated.setVisibility(View.GONE);
 
-        }
     }
 
     private void onClick(){
-        llMonth.setOnClickListener(new View.OnClickListener() {
+        llWebsite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(PFDashBoardActivity.this,PFActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                Uri uri = Uri.parse(PFLink); // missing 'http://' will cause crashed
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
         });
 
-        llConsolidated.setOnClickListener(new View.OnClickListener() {
+        llManual.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openBrowser();
+                Intent intent=new Intent(PFDashBoardActivity.this,PFManualActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+
             }
         });
 

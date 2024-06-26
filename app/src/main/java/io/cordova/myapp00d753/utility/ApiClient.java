@@ -15,7 +15,7 @@ import retrofit2.http.Part;
  */
 
 public class ApiClient {
-    public  static  String baseUrl="http://111.93.182.174/GeniusiOSApi/api/";
+    public  static  String baseUrl="https://gsppi.geniusconsultant.com/GeniusiOSApi/api/";
     public static GetDataWorkingDay getDataWorkingDay = null;
 
     public static GetDataWorkingDay getService()

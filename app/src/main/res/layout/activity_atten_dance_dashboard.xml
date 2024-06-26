@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/dlMain"
     tools:context=".activity.AttenDanceDashboardActivity"
+
     android:orientation="vertical">
 
     <LinearLayout
@@ -268,7 +269,10 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/custom_calendar"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+
+                </org.naishadhparmar.zcustomcalendar.CustomCalendar>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -487,6 +491,42 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:gravity="bottom">
+
+                <LinearLayout
+                    android:id="@+id/lnStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/white"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tvDetails"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="1"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"></TextView>
+
+                    <TextView
+                        android:id="@+id/tvOK"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="0.1"
+                        android:text="OK"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"></TextView>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:gravity="bottom|right">
 
                 <LinearLayout
@@ -529,39 +569,7 @@
                         android:text="CLOSE"></TextView>
                 </LinearLayout>
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="bottom">
-                <LinearLayout
-                    android:visibility="gone"
-                    android:orientation="horizontal"
-                    android:id="@+id/lnStatus"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@color/white">
-                    <TextView
-                        android:textSize="14sp"
-                        android:textColor="@color/white"
-                        android:layout_marginLeft="5dp"
-                        android:layout_gravity="center"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:id="@+id/tvDetails"></TextView>
-                    <TextView
-                        android:text="OK"
-                        android:textSize="14sp"
-                        android:textColor="@color/white"
-                        android:layout_marginRight="5dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_gravity="center"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.1"
-                        android:id="@+id/tvOK"></TextView>
-                </LinearLayout>
-            </LinearLayout>
+
         </FrameLayout>
 
 

@@ -65,7 +65,7 @@ public class SuperVisiorDashBoardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_super_visior_dash_board);
         initialize();
         onClick();
-        loginFunction();
+
     }
 
     private  void  initialize(){

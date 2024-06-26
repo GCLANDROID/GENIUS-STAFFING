@@ -1,5 +1,7 @@
 package io.cordova.myapp00d753.module;
 
+import com.google.gson.annotations.SerializedName;
+
 /* renamed from: io.cordova.myapp00d753.module.AttendanceModule */
 public class AttendanceModule {
     String attendanceDate;
@@ -8,6 +10,21 @@ public class AttendanceModule {
     String attendanceOutTime;
     String attendanceReply;
     String attendanceType;
+    @SerializedName("Longitude")
+    String shift;
+    @SerializedName("Latitude")
+    String location;
+
+    public AttendanceModule(String attendanceDate, String attendanceInTime, String attendanceLocation, String attendanceOutTime, String attendanceReply, String attendanceType, String shift, String location) {
+        this.attendanceDate = attendanceDate;
+        this.attendanceInTime = attendanceInTime;
+        this.attendanceLocation = attendanceLocation;
+        this.attendanceOutTime = attendanceOutTime;
+        this.attendanceReply = attendanceReply;
+        this.attendanceType = attendanceType;
+        this.shift = shift;
+        this.location = location;
+    }
 
     public AttendanceModule(String attendanceDate2, String attendanceInTime2, String attendanceOutTime2, String attendanceLocation2, String attendanceReply2, String attendanceType2) {
         this.attendanceDate = attendanceDate2;
@@ -64,5 +81,21 @@ public class AttendanceModule {
 
     public void setAttendanceType(String attendanceType2) {
         this.attendanceType = attendanceType2;
+    }
+
+    public String getShift() {
+        return shift;
+    }
+
+    public void setShift(String shift) {
+        this.shift = shift;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

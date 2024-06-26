@@ -51,6 +51,7 @@ import java.util.List;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.module.ChartModel;
+import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
 
 
@@ -198,7 +199,7 @@ public class SupSaleDialogActivity extends AppCompatActivity {
     public void targetGet() {
 
         pd.show();
-        String surl = "http://gsppi.geniusconsultant.com/GeniusiOSApi/api/get_EmployeeSalesAchvAlert?ClientID="+prefManager.getEmpClintId()+"&MasterID="+prefManager.getMasterId()+"&Operation=1&SecurityCode=0000";
+        String surl = AppData.url+"get_EmployeeSalesAchvAlert?ClientID="+prefManager.getEmpClintId()+"&MasterID="+prefManager.getMasterId()+"&Operation=1&SecurityCode=0000";
         Log.d("inputCheck", surl);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {

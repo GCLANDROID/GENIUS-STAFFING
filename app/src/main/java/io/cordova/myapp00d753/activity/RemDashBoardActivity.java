@@ -10,11 +10,13 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.metso.MetsoReimbursementReportActivity;
+import io.cordova.myapp00d753.utility.Pref;
 
 public class RemDashBoardActivity extends AppCompatActivity {
     ImageView imgBack,imgHome;
     LinearLayout llManage,llReport;
-
+    Pref pref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +26,7 @@ public class RemDashBoardActivity extends AppCompatActivity {
     }
 
     private void initialize(){
+        pref=new Pref(getApplicationContext());
         imgBack=(ImageView)findViewById(R.id.imgBack);
         imgHome=(ImageView)findViewById(R.id.imhHome);
 
@@ -53,7 +56,6 @@ public class RemDashBoardActivity extends AppCompatActivity {
         llManage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent=new Intent(RemDashBoardActivity.this,RemManageDashBoardActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -63,10 +65,15 @@ public class RemDashBoardActivity extends AppCompatActivity {
         llReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent=new Intent(RemDashBoardActivity.this,ClaimReportActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                if(pref.getEmpClintId().equals("AEMCLI2110001671")){
+                    Intent intent=new Intent(RemDashBoardActivity.this, MetsoReimbursementReportActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                } else {
+                    Intent intent=new Intent(RemDashBoardActivity.this,ClaimReportActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
             }
         });
     }

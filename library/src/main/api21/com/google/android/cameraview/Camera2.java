@@ -474,6 +474,7 @@ class Camera2 extends CameraViewImpl {
      */
     void startCaptureSession() {
         if (!isCameraOpened() || !mPreview.isReady() || mImageReader == null) {
+            Log.e(TAG, "startCaptureSession: Library 1");
             return;
         }
         Size previewSize = chooseOptimalSize();
@@ -485,7 +486,8 @@ class Camera2 extends CameraViewImpl {
             mCamera.createCaptureSession(Arrays.asList(surface, mImageReader.getSurface()),
                     mSessionCallback, null);
         } catch (CameraAccessException e) {
-            throw new RuntimeException("Failed to start camera session");
+            Log.e(TAG, "startCaptureSession: Error");
+                //throw new RuntimeException("Failed to start camera session");
         }
     }
 

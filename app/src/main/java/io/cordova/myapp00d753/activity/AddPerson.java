@@ -49,9 +49,7 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.tomergoldst.tooltips.ToolTip;
 import com.tomergoldst.tooltips.ToolTipsManager;
-import com.tzutalin.dlib.Constants;
-import com.tzutalin.dlib.FaceRec;
-import com.tzutalin.dlib.VisionDetRet;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -224,7 +222,7 @@ public class AddPerson extends AppCompatActivity {
 
 
 
-        destination = new File(Constants.getDLibDirectoryPath() + "/temp.jpg");
+        //destination = new File(Constants.getDLibDirectoryPath() + "/temp.jpg");
         getItemList();
         imgBack=(ImageView)findViewById(R.id.imgBack);
         imgHome=(ImageView)findViewById(R.id.imgHome);
@@ -258,8 +256,8 @@ public class AddPerson extends AppCompatActivity {
                     startActivityForResult(intent, PICK_IMAGE_CAMERA);
                     break;
                 case R.id.btn_add:
-                    String targetPath = Constants.getDLibImageDirectoryPath() + "/"  + pref.getMasterId()   + ".jpg";
-                    FileUtils.copyFile(imgPath,targetPath);
+                    //String targetPath = Constants.getDLibImageDirectoryPath() + "/"  + pref.getMasterId()   + ".jpg";
+                    //FileUtils.copyFile(imgPath,targetPath);
                     postAddFace();
                     break;
             }
@@ -352,7 +350,7 @@ public class AddPerson extends AppCompatActivity {
         return newBitmap;
     }
 
-    private FaceRec mFaceRec;
+    //private FaceRec mFaceRec;
 
     private class detectAsync extends AsyncTask<Bitmap, Void, String> {
         ProgressDialog dialog = new ProgressDialog(AddPerson.this);
@@ -366,11 +364,11 @@ public class AddPerson extends AppCompatActivity {
         }
 
         protected String doInBackground(Bitmap... bp) {
-            mFaceRec = new FaceRec(Constants.getDLibDirectoryPath());
-            List<VisionDetRet> results;
-            results = mFaceRec.detect(bp[0]);
+           // mFaceRec = new FaceRec(Constants.getDLibDirectoryPath());
+            //List<VisionDetRet> results;
+            //results = mFaceRec.detect(bp[0]);
             String msg = null;
-            if (results.size()==0) {
+           /* if (results.size()==0) {
                 msg = "No face was detected or face was too small. Please select a different image";
             } else if (results.size() > 1) {
                 msg = "More than one face was detected. Please select a different image";
@@ -389,7 +387,7 @@ public class AddPerson extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 imgPath = destination.getAbsolutePath();
-            }
+            }*/
             return msg;
         }
 

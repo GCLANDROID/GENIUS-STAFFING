@@ -28,6 +28,92 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:paddingTop="20dp">
+
+        <LinearLayout
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp">
+            <LinearLayout
+                android:id="@+id/llWorkForce"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <LinearLayout
+
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:background="@drawable/lldesign9"
+                    android:gravity="center">
+                    <ImageView
+                        android:id="@+id/imgWorkForce"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:src="@drawable/tick"></ImageView>
+                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/textcolor"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:text="Workforce"></TextView>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/llSupervisior"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <LinearLayout
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:background="@drawable/lldesign9"
+                    android:gravity="center">
+                    <ImageView
+                        android:visibility="gone"
+                        android:id="@+id/imgSupTick"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:src="@drawable/tick"></ImageView>
+                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/textcolor"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:text="Supervisor"></TextView>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/llTEMP"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <LinearLayout
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:background="@drawable/lldesign9"
+                    android:gravity="center">
+                    <ImageView
+                        android:visibility="gone"
+                        android:id="@+id/imgTEMP"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:src="@drawable/tick"></ImageView>
+                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/textcolor"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:text="KYC User"></TextView>
+            </LinearLayout>
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -64,6 +150,7 @@
                 android:background="@color/textcolor"></View>
         </LinearLayout>
         <LinearLayout
+
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -117,6 +204,8 @@
                 android:background="@color/textcolor"></View>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/llSecurityCode"
+            android:visibility="gone"
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -207,14 +296,14 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"></EditText>-->
         <LinearLayout
-            android:orientation="vertical"
             android:id="@+id/llSignIn"
             android:layout_width="250dp"
             android:layout_height="80dp"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="5dp"
-            android:background="@mipmap/loginbutton"></LinearLayout>
+            android:background="@mipmap/loginbutton"
+            android:orientation="vertical"></LinearLayout>
     </LinearLayout>
 
 

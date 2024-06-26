@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:id="@+id/llMainLayout">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:id="@+id/tvJan"
+        android:text="January"
+        android:textStyle="bold"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:textAppearance="?android:textAppearanceMedium"/>
+
+</LinearLayout>

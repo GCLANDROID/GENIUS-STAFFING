@@ -31,6 +31,7 @@ import java.util.regex.Pattern;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.databinding.ActivityCandidateLoginBinding;
+import io.cordova.myapp00d753.utility.AppData;
 
 public class CandidateLoginActivity extends AppCompatActivity {
     ActivityCandidateLoginBinding binding;
@@ -184,7 +185,7 @@ public class CandidateLoginActivity extends AppCompatActivity {
 
     public void login() {
 
-        String surl = "http://gsppi.geniusconsultant.com/GeniusiOSApi/api/get_SBICardCandidate?CandidateID=0&ReferenceNo=" + binding.etRefNo.getText().toString() + "&Operation=1";
+        String surl = AppData.url+"get_SBICardCandidate?CandidateID=0&ReferenceNo=" + binding.etRefNo.getText().toString() + "&Operation=1";
         Log.d("inputLogin", surl);
 
         final ProgressDialog progressDialog = new ProgressDialog(CandidateLoginActivity.this);

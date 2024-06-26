@@ -44,6 +44,7 @@ import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
 
 public class ClaimReportActivity extends AppCompatActivity {
+    private static final String TAG = "ClaimReportActivity";
     RecyclerView rvItem;
     ArrayList<ClaimModule> itemList = new ArrayList<>();
     LinearLayout llLoder,llMain,llNodata,llAgain,llSearch;
@@ -60,10 +61,10 @@ public class ClaimReportActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_claim_report);
-        initialize();
-        getItemList();
-        onClick();
+            setContentView(R.layout.activity_claim_report);
+            initialize();
+            getItemList();
+            onClick();
 
     }
 
@@ -145,6 +146,8 @@ public class ClaimReportActivity extends AppCompatActivity {
                                 JSONArray responseData=job1.optJSONArray("responseData");
                                 for (int i = 0; i < responseData.length(); i++){
                                     JSONObject job=responseData.getJSONObject(i);
+                                    Log.e(TAG, "ActualClaimAmount: "+job.optString("ActualClaimAmount"));
+                                    Log.e(TAG, "ApprovedClaimAmount: "+job.optString("ApprovedClaimAmount"));
                                     String ClaimedDate=job.optString("ClaimedDate");
                                     String Amount=job.optString("ActualClaimAmount");
                                     String ApprovedClaimAmount=job.optString("ApprovedClaimAmount");
@@ -153,8 +156,6 @@ public class ClaimReportActivity extends AppCompatActivity {
                                     String Category=job.optString("CategoryComponent");
                                     ClaimModule obj2 = new ClaimModule(ClaimedDate,Amount,Category,ProcessStaus,ClaimID,ApprovedClaimAmount);
                                     itemList.add(obj2);
-
-
                                 }
 
                                 llLoder.setVisibility(View.GONE);

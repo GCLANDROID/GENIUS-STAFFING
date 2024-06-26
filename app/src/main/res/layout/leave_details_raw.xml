@@ -192,7 +192,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:paddingLeft="5dp"
-                        android:text="Value:"
+                        android:text="Day(s):"
                         android:textColor="@color/maincolor"
                         android:textSize="12sp"></TextView>
                 </LinearLayout>

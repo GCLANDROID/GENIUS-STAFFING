@@ -64,6 +64,7 @@ public class SalaryActivity extends AppCompatActivity  {
     LinearLayout llNodata;
     LinearLayout llAgain;
     ImageView imgAgain,imgSearch;
+    TextView tvToolBar;
 
 
 
@@ -112,7 +113,8 @@ public class SalaryActivity extends AppCompatActivity  {
             }
         });
         imgSearch=(ImageView)findViewById(R.id.imgSearch);
-
+        tvToolBar=(TextView) findViewById(R.id.tvToolBar);
+        tvToolBar.setText("Monthly Salary - \n"+year);
 
     }
 

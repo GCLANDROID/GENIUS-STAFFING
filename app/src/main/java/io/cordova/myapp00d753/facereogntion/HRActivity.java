@@ -39,6 +39,7 @@ import java.util.regex.Pattern;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.databinding.ActivityHractivityBinding;
+import io.cordova.myapp00d753.utility.AppData;
 
 public class HRActivity extends AppCompatActivity {
     ActivityHractivityBinding binding;
@@ -294,7 +295,7 @@ public class HRActivity extends AppCompatActivity {
         pd.setCancelable(false);
         pd.dismiss();
 
-        AndroidNetworking.upload("http://gsppi.geniusconsultant.com/GeniusiOSApi/api/post_SBICardCandidate")
+        AndroidNetworking.upload(AppData.url+"post_SBICardCandidate")
                 .addMultipartParameter("CandidateID", "0")
                 .addMultipartParameter("EmployeeName", binding.etCanName.getText().toString())
                 .addMultipartParameter("MobileNumber", binding.etCanMob.getText().toString())

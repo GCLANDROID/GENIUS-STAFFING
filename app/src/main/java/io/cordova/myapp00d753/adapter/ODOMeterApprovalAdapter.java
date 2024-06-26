@@ -13,6 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 import io.cordova.myapp00d753.R;
@@ -42,9 +44,11 @@ public class ODOMeterApprovalAdapter extends RecyclerView.Adapter<ODOMeterApprov
         myViewHolder.tvPunchType.setText(itemList.get(i).getJrType());
         myViewHolder.tvReading.setText(itemList.get(i).getOdometereading());
 
-        byte[] decodedStrtString = Base64.decode(itemList.get(i).getImageData(), Base64.DEFAULT);
-        Bitmap strtBitmap = BitmapFactory.decodeByteArray(decodedStrtString, 0, decodedStrtString.length);
-        myViewHolder.imgImage.setImageBitmap(strtBitmap);
+        Picasso.with(context)
+                .load(itemList.get(i).getImageData())
+                .placeholder(R.drawable.load)   // optional
+                .error(R.drawable.load)      // optional
+                .into(myViewHolder.imgImage);
 
 
 
@@ -88,6 +92,7 @@ public class ODOMeterApprovalAdapter extends RecyclerView.Adapter<ODOMeterApprov
                 }
             });
         }
+        myViewHolder.tvEmpName.setText(itemList.get(i).getName());
 
 
 
@@ -101,7 +106,7 @@ public class ODOMeterApprovalAdapter extends RecyclerView.Adapter<ODOMeterApprov
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tvDate,tvReading,tvPunchType;
+        TextView tvDate,tvReading,tvPunchType,tvEmpName;
         ImageView imgLike,imgImage;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -109,6 +114,7 @@ public class ODOMeterApprovalAdapter extends RecyclerView.Adapter<ODOMeterApprov
             tvDate=(TextView)itemView.findViewById(R.id.tvDate);
             tvReading=(TextView)itemView.findViewById(R.id.tvReading);
             tvPunchType=(TextView)itemView.findViewById(R.id.tvPunchType);
+            tvEmpName=(TextView)itemView.findViewById(R.id.tvEmpName);
 
 
             imgLike=(ImageView) itemView.findViewById(R.id.imgLike);

@@ -114,4 +114,26 @@ import retrofit2.http.Part;
     @POST("post_EmployeeDailyActivity")
     Call<UploadObject> dailyactivityTATAGY(@Part MultipartBody.Part file, @Part("AEMEmployeeID") String AEMEmployeeID, @Part("ApprovalStatus") String ApprovalStatus, @Part("Remarks") String Remarks, @Part("Longitude") String Longitude, @Part("Latitude") String Latitude, @Part("Address") String Address, @Part("Year") String Year, @Part("Month") String Month, @Part("SecurityCode") String SecurityCode, @Part("FName") String FName);
 
+    @Multipart
+    @POST("post_reimbursementClaimFMS_SEC")
+    Call<UploadObject> FMSpostreimburstmentwithimage1(@Part("AEMEmployeeID") String AEMEmployeeID, @Part("AEMComponentID") String AEMComponentID, @Part("Description") String Description, @Part("ReimbursementAmount") String ReimbursementAmount, @Part("Year") String Year, @Part("Month") String Month, @Part("SecurityCode") String SecurityCode, @Part MultipartBody.Part file, @Part("ConveyanceTypeId") String ConveyanceTypeId, @Part("LocationTypeID") String LocationTypeID, @Part("ReimbursementDate") String ReimbursementDate, @Part("SupervisorID") String SupervisorID);
+
+
+    @Multipart
+    @POST("post_reimbursementClaimFMS_SEC")
+    Call<UploadObject> FMSpostreimburstmentwithimage2(@Part("AEMEmployeeID") String AEMEmployeeID, @Part("AEMComponentID") String AEMComponentID, @Part("Description") String Description, @Part("ReimbursementAmount") String ReimbursementAmount, @Part("Year") String Year, @Part("Month") String Month, @Part("SecurityCode") String SecurityCode, @Part MultipartBody.Part file, @Part MultipartBody.Part fil1, @Part("ConveyanceTypeId") String ConveyanceTypeId, @Part("LocationTypeID") String LocationTypeID, @Part("ReimbursementDate") String ReimbursementDate,@Part("SupervisorID") String SupervisorID);
+
+
+    @Multipart
+    @POST("post_reimbursementClaimFMS_SEC")
+    Call<UploadObject> FMSpostreimburstmentwithimage3(@Part("AEMEmployeeID") String AEMEmployeeID, @Part("AEMComponentID") String AEMComponentID, @Part("Description") String Description, @Part("ReimbursementAmount") String ReimbursementAmount, @Part("Year") String Year, @Part("Month") String Month, @Part("SecurityCode") String SecurityCode, @Part MultipartBody.Part file, @Part MultipartBody.Part fil1, @Part MultipartBody.Part fil2, @Part("ConveyanceTypeId") String ConveyanceTypeId, @Part("LocationTypeID") String LocationTypeID, @Part("ReimbursementDate") String ReimbursementDate,@Part("SupervisorID") String SupervisorID);
+
+    @Multipart
+    @POST("post_reimbursementClaimFMS_SEC")
+    Call<UploadObject> FMSpostreimburstmentwithimage4(@Part("AEMEmployeeID") String AEMEmployeeID, @Part("AEMComponentID") String AEMComponentID, @Part("Description") String Description, @Part("ReimbursementAmount") String ReimbursementAmount, @Part("Year") String Year, @Part("Month") String Month, @Part("SecurityCode") String SecurityCode, @Part MultipartBody.Part file, @Part MultipartBody.Part fil1, @Part MultipartBody.Part fil2, @Part MultipartBody.Part fil3, @Part("ConveyanceTypeId") String ConveyanceTypeId, @Part("LocationTypeID") String LocationTypeID, @Part("ReimbursementDate") String ReimbursementDate,@Part("SupervisorID") String SupervisorID);
+
+    @Multipart
+    @POST("post_reimbursementClaimFMS_SEC")
+    Call<UploadObject> FMSpostreimburstmentwithimage5(@Part("AEMEmployeeID") String AEMEmployeeID, @Part("AEMComponentID") String AEMComponentID, @Part("Description") String Description, @Part("ReimbursementAmount") String ReimbursementAmount, @Part("Year") String Year, @Part("Month") String Month, @Part("SecurityCode") String SecurityCode, @Part MultipartBody.Part file, @Part MultipartBody.Part fil1, @Part MultipartBody.Part fil2, @Part MultipartBody.Part fil3, @Part MultipartBody.Part fil4, @Part("ConveyanceTypeId") String ConveyanceTypeId, @Part("LocationTypeID") String LocationTypeID, @Part("ReimbursementDate") String ReimbursementDate,@Part("SupervisorID") String SupervisorID);
+
 }

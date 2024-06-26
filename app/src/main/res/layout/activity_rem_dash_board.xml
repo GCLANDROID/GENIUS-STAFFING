@@ -98,8 +98,7 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:id="@+id/llManage"
-                android:background="@android:color/white"
-                >
+                android:background="@android:color/white">
                 <LinearLayout
                     android:layout_width="65dp"
                     android:layout_height="65dp"
@@ -110,8 +109,6 @@
                         android:layout_height="@dimen/imagesize"
                         android:src="@drawable/manage"/>
                 </LinearLayout>
-
-
 
                 <TextView
                     android:layout_width="wrap_content"

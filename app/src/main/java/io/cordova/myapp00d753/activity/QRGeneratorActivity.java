@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -24,6 +25,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.security.spec.KeySpec;
+
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
@@ -41,6 +52,9 @@ public class QRGeneratorActivity extends AppCompatActivity {
     String latt,longt;
     String coordinates;
     Button btnDwnload;
+    String base64coordinates,encryptedString;
+    private static String INIT_VECTOR="8080808080808080";
+    private static String SECRET_KEY="8373197000523095";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +78,15 @@ public class QRGeneratorActivity extends AppCompatActivity {
 
         }
 
-        coordinates=latt+","+longt;
+        coordinates="Genius,"+latt+","+longt;
+        byte[] data = new byte[0];
+        try {
+            data = coordinates.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        base64coordinates = Base64.encodeToString(data, Base64.DEFAULT).replaceAll("\\s+", "");;
+        encryptedString = encrypt(base64coordinates,SECRET_KEY);
         imgQR=(ImageView) findViewById(R.id.imgQR);
         WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
 
@@ -87,7 +109,7 @@ public class QRGeneratorActivity extends AppCompatActivity {
 
         // setting this dimensions inside our qr code
         // encoder to generate our qr code.
-        qrgEncoder = new QRGEncoder(coordinates, null, QRGContents.Type.TEXT, dimen);
+        qrgEncoder = new QRGEncoder(encryptedString, null, QRGContents.Type.TEXT, dimen);
         try {
             // getting our qrcode in the form of bitmap.
             bitmap = qrgEncoder.encodeAsBitmap();
@@ -137,4 +159,22 @@ public class QRGeneratorActivity extends AppCompatActivity {
             }
         });
     }
+
+    public static String encrypt(String value,String KEY) {
+        try {
+            IvParameterSpec iv = new IvParameterSpec(INIT_VECTOR.getBytes("UTF-8"));
+            SecretKeySpec skeySpec = new SecretKeySpec(KEY.getBytes("UTF-8"), "AES");
+
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
+
+            byte[] encrypted = cipher.doFinal(value.getBytes());
+            return Base64.encodeToString(encrypted, Base64.DEFAULT);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+
 }

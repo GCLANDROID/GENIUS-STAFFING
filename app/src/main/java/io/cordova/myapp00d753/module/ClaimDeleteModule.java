@@ -2,7 +2,29 @@ package io.cordova.myapp00d753.module;
 
 public class ClaimDeleteModule {
     String claimDate,claimAmount,claimType,claimStatus,claimId;
-    private boolean isSelected = false;
+    String costCenter,wbsCode,siteName,supervisor;
+    boolean isSelected = false;
+    public ClaimDeleteModule(String claimDate, String claimAmount, String claimType, String claimStatus, String claimId) {
+        this.claimDate = claimDate;
+        this.claimAmount = claimAmount;
+        this.claimType = claimType;
+        this.claimStatus = claimStatus;
+        this.claimId=claimId;
+    }
+
+    public ClaimDeleteModule(String claimDate, String claimAmount, String claimType, String claimStatus, String claimId, String costCenter, String wbsCode, String siteName, String supervisor) {
+        this.claimDate = claimDate;
+        this.claimAmount = claimAmount;
+        this.claimType = claimType;
+        this.claimStatus = claimStatus;
+        this.claimId = claimId;
+        this.costCenter = costCenter;
+        this.wbsCode = wbsCode;
+        this.siteName = siteName;
+        this.supervisor = supervisor;
+    }
+
+
 
     public String getClaimDate() {
         return claimDate;
@@ -44,13 +66,7 @@ public class ClaimDeleteModule {
         this.claimId = claimId;
     }
 
-    public ClaimDeleteModule(String claimDate, String claimAmount, String claimType, String claimStatus, String claimId) {
-        this.claimDate = claimDate;
-        this.claimAmount = claimAmount;
-        this.claimType = claimType;
-        this.claimStatus = claimStatus;
-        this.claimId=claimId;
-    }
+
 
     public boolean isSelected() {
         return isSelected;
@@ -59,4 +75,39 @@ public class ClaimDeleteModule {
     public void setSelected(boolean selected) {
         isSelected = selected;
     }
+
+    public String getCostCenter() {
+        return costCenter;
+    }
+
+    public void setCostCenter(String costCenter) {
+        this.costCenter = costCenter;
+    }
+
+    public String getWbsCode() {
+        return wbsCode;
+    }
+
+    public void setWbsCode(String wbsCode) {
+        this.wbsCode = wbsCode;
+    }
+
+    public String getSiteName() {
+        return siteName;
+    }
+
+    public void setSiteName(String siteName) {
+        this.siteName = siteName;
+    }
+
+    public String getSupervisor() {
+        return supervisor;
+    }
+
+    public void setSupervisor(String supervisor) {
+        this.supervisor = supervisor;
+    }
+
+
+
 }

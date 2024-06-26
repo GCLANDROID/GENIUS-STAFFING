@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.metso.fragment.MetsoLeaveApplicationFragment;
 import io.cordova.myapp00d753.fragment.ApplicationFragment;
 import io.cordova.myapp00d753.fragment.ApproverFragment;
 import io.cordova.myapp00d753.fragment.DetailsFragment;
@@ -31,7 +32,11 @@ public class LeaveApplicationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leave_application);
         initView();
-        loadApplicationFragment();
+        if (pref.getEmpClintId().equalsIgnoreCase("AEMCLI2110001671")) {
+            loadMetsoApplicationFragment();
+        }else {
+            loadApplicationFragment();
+        }
         onClick();
     }
 
@@ -99,15 +104,14 @@ public class LeaveApplicationActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-
     }
 
 
     public void loadApplicationFragment() {
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        ApplicationFragment pfragment=new ApplicationFragment();
+        ApplicationFragment pfragment = new ApplicationFragment(); // for Metso Only
+        //ApplicationFragment pfragment=new ApplicationFragment();
         transaction.replace(R.id.frameLayout, pfragment);
         transaction.commit();
 
@@ -124,6 +128,28 @@ public class LeaveApplicationActivity extends AppCompatActivity {
         tvToolBar.setText("Leave Application");
 
    }
+
+    public void loadMetsoApplicationFragment() {
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        MetsoLeaveApplicationFragment pfragment = new MetsoLeaveApplicationFragment(); // for Metso Only
+        //ApplicationFragment pfragment=new ApplicationFragment();
+        transaction.replace(R.id.frameLayout, pfragment);
+        transaction.commit();
+
+        llApplication.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.colorPrimaryDark));
+        llDetails.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.white));
+        llApproval.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.white));
+        llAdjustment.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.white));
+
+
+        tvApllication.setTextColor(Color.parseColor("#FFFFFF"));
+        tvDetails.setTextColor(Color.parseColor("#4f8888"));
+        tvApproval.setTextColor(Color.parseColor("#4f8888"));
+        tvAdjustment.setTextColor(Color.parseColor("#4f8888"));
+        tvToolBar.setText("Leave Application");
+
+    }
 
     public void loadApproverFragment() {
         FragmentManager manager = getSupportFragmentManager();

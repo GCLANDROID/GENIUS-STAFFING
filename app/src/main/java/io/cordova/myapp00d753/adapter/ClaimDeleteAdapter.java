@@ -1,5 +1,6 @@
 package io.cordova.myapp00d753.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 import android.view.LayoutInflater;
@@ -28,12 +29,11 @@ public class ClaimDeleteAdapter extends RecyclerView.Adapter<ClaimDeleteAdapter.
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.claim_delraw,viewGroup,false);
-
         return new MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
+    public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, @SuppressLint("RecyclerView") final int i) {
         final ClaimDeleteModule delModel = claimList.get(i);
         myViewHolder.tvDate.setText(claimList.get(i).getClaimDate());
         myViewHolder.tvAmount.setText("Rs. "+claimList.get(i).getClaimAmount());

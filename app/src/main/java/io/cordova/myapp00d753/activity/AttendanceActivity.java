@@ -773,7 +773,7 @@ public class AttendanceActivity extends AppCompatActivity implements GoogleApiCl
 
 
     private void getShift() {
-        String surl = AppData.url+"http://gsppi.geniusconsultant.com/GeniusiOSApi/api/post_attedanceRoster/Get_Shift?CompanyID=AEMCLI1410000807&EmployeeID="+pref.getSecurityCode()+"&AttendanceDate="+currentDate+"&SecurityCode="+pref.getSecurityCode();
+        String surl = AppData.url+"post_attedanceRoster/Get_Shift?CompanyID=AEMCLI1410000807&EmployeeID="+pref.getSecurityCode()+"&AttendanceDate="+currentDate+"&SecurityCode="+pref.getSecurityCode();
         Log.d("attencinput", surl);
         final ProgressDialog progressBar = new ProgressDialog(this);
         progressBar.setCancelable(true);//you can cancel it by pressing back button

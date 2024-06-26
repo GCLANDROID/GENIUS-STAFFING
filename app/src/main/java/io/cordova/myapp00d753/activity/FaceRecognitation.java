@@ -49,9 +49,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.cameraview.CameraView;
-import com.tzutalin.dlib.Constants;
-import com.tzutalin.dlib.FaceRec;
-import com.tzutalin.dlib.VisionDetRet;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -171,7 +169,7 @@ public class FaceRecognitation extends AppCompatActivity implements
     }
 
 
-    @Override
+   /* @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
@@ -185,10 +183,10 @@ public class FaceRecognitation extends AppCompatActivity implements
             i.putExtra("info", msg);
             startActivity(i);
         }
-    }
+    }*/
 
     //END
-    private FaceRec mFaceRec;
+    //private FaceRec mFaceRec;
 
     private void changeProgressDialogMessage(final ProgressDialog pd, final String msg) {
         Runnable changeMessage = new Runnable() {
@@ -215,7 +213,7 @@ public class FaceRecognitation extends AppCompatActivity implements
         protected Void doInBackground(Void... args) {
 // create dlib_rec_example directory in sd card and copy model files
 
-                File image_folder = new File(Constants.getDLibImageDirectoryPath());
+                /*File image_folder = new File(Constants.getDLibImageDirectoryPath());
                 image_folder.mkdirs();
                 if (!new File(Constants.getFaceShapeModelPath()).exists()) {
                     FileUtils.copyFileFromRawToOthers(FaceRecognitation.this, R.raw.shape_predictor_5_face_landmarks, Constants.getFaceShapeModelPath());
@@ -226,7 +224,7 @@ public class FaceRecognitation extends AppCompatActivity implements
 
             mFaceRec = new FaceRec(Constants.getDLibDirectoryPath());
             changeProgressDialogMessage(dialog, "Adding people...");
-            mFaceRec.train();
+            mFaceRec.train();*/
             return null;
         }
 
@@ -286,9 +284,9 @@ public class FaceRecognitation extends AppCompatActivity implements
     protected void onDestroy() {
         Log.d(TAG, "onDestroy called");
         super.onDestroy();
-        if (mFaceRec != null) {
+     /*   if (mFaceRec != null) {
             mFaceRec.release();
-        }
+        }*/
         if (mBackgroundHandler != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 mBackgroundHandler.getLooper().quitSafely();
@@ -385,7 +383,7 @@ public class FaceRecognitation extends AppCompatActivity implements
             drawResizedBitmap(bp[0], mCroppedBitmap);
             Log.d(TAG, "byte to bitmap");
 
-            long startTime = System.currentTimeMillis();
+           /* long startTime = System.currentTimeMillis();
             List<VisionDetRet> results;
             results = mFaceRec.recognize(mCroppedBitmap);
             long endTime = System.currentTimeMillis();
@@ -394,7 +392,7 @@ public class FaceRecognitation extends AppCompatActivity implements
             ArrayList<String> names = new ArrayList<>();
             for (VisionDetRet n : results) {
                 names.add(n.getLabel());
-            }
+            }*/
             return names;
         }
 

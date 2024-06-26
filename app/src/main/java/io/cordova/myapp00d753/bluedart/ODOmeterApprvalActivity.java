@@ -199,7 +199,7 @@ public class ODOmeterApprvalActivity extends AppCompatActivity {
         binding.llLoader.setVisibility(View.VISIBLE);
         binding.llMain.setVisibility(View.GONE);
         binding.llNoData.setVisibility(View.GONE);
-        String surl = AppData.url +"Leave/Odometerapprovaldata?CompanyID=aaa&ApproverID=bbb&Startdate="+startDate+"&Enddate="+endDate+"&SecurityCode=0000";
+        String surl = AppData.url +"Leave/Odometerapprovaldata?CompanyID=aaa&ApproverID="+pref.getEmpId()+"&Startdate="+startDate+"&Enddate="+endDate+"&SecurityCode=0000";
         Log.d("inputLeaveBlanace", surl);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
@@ -226,6 +226,7 @@ public class ODOmeterApprvalActivity extends AppCompatActivity {
                                     String ODOMETERREADING = obj.optString("ODOMETERREADING");
                                     String JOURNEYTYPE = obj.optString("JOURNEYTYPE");
                                     String IMAGENAME = obj.optString("IMAGENAME");
+                                    String Code=obj.optString("Code");
                                     int AID = obj.optInt("AID");
                                     item1.add(AID);
                                     ODOMeterApprovalModule obj2 = new ODOMeterApprovalModule();
@@ -234,6 +235,8 @@ public class ODOmeterApprvalActivity extends AppCompatActivity {
                                     obj2.setJrType(JOURNEYTYPE);
                                     obj2.setOdometereading(ODOMETERREADING);
                                     obj2.setAid(AID);
+                                    obj2.setName(Code);
+
                                     itemList.add(obj2);
 
 

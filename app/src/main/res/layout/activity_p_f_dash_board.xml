@@ -75,7 +75,7 @@
             >
             <LinearLayout
                 android:layout_marginLeft="2dp"
-                android:id="@+id/llConsolidated"
+                android:id="@+id/llWebsite"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -85,17 +85,18 @@
                 <ImageView
                     android:layout_width="@dimen/imagesize"
                     android:layout_height="@dimen/imagesize"
-                    android:src="@drawable/consolidatedif"/>
+                    android:src="@drawable/internet"
+                    app:tint="@color/colorPrimary" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="Consolidate Statement"
+                    android:text="PF Site"
                     android:textSize="@dimen/toolbartextsize"
                     android:textColor="@color/colorPrimary" />
             </LinearLayout>
             <LinearLayout
-                android:id="@+id/llMonth"
+                android:id="@+id/llManual"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -108,12 +109,13 @@
                 <ImageView
                     android:layout_width="@dimen/imagesize"
                     android:layout_height="@dimen/imagesize"
-                    android:src="@drawable/monthlypf"/>
+                    android:src="@drawable/instructions"
+                    app:tint="@color/colorPrimary" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="Monthly Statement"
+                    android:text="PF Claim Manual"
                     android:textSize="@dimen/toolbartextsize"
                     android:textColor="@color/colorPrimary" />
             </LinearLayout>

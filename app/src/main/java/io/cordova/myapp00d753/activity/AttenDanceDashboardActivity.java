@@ -1,22 +1,28 @@
 package io.cordova.myapp00d753.activity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -32,7 +38,17 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.google.android.material.snackbar.Snackbar;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStates;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,33 +58,33 @@ import org.naishadhparmar.zcustomcalendar.OnDateSelectedListener;
 import org.naishadhparmar.zcustomcalendar.OnNavigationButtonClickedListener;
 import org.naishadhparmar.zcustomcalendar.Property;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
 import io.cordova.myapp00d753.R;
-import io.cordova.myapp00d753.adapter.AttendanceAdapter;
+import io.cordova.myapp00d753.activity.bosch.BoschAttendanceActivity;
+import io.cordova.myapp00d753.activity.bosch.BoschAttendanceReportActivity;
+import io.cordova.myapp00d753.activity.metso.MetsoAttendanceActivity;
+import io.cordova.myapp00d753.activity.metso.MetsoAttendanceRegularizationActivity;
+import io.cordova.myapp00d753.activity.metso.MetsoAttendanceReportActivity;
+import io.cordova.myapp00d753.activity.metso.MetsoPMSTargetAchivementActivity;
+import io.cordova.myapp00d753.activity.protectorgamble.ProtectorGambleAttendanceActivity;
 import io.cordova.myapp00d753.adapter.AttendanceCalenderAdapter;
-import io.cordova.myapp00d753.adapter.DaywiseAttendanceCalenderAdapter;
 import io.cordova.myapp00d753.module.AttendanceCalenderModel;
-import io.cordova.myapp00d753.module.AttendanceModule;
 import io.cordova.myapp00d753.module.SpineerItemModel;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
+import io.cordova.myapp00d753.utility.GPSTracker;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.Util;
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip;
 
-public class AttenDanceDashboardActivity extends AppCompatActivity implements View.OnClickListener , OnNavigationButtonClickedListener {
+public class AttenDanceDashboardActivity extends AppCompatActivity implements View.OnClickListener, OnNavigationButtonClickedListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     RecyclerView rvItem, rvSun, rvMon, rvTue, rvWed, rvThu, rvFri, rvSat;
     ArrayList<AttendanceCalenderModel> itemList = new ArrayList<>();
-
+    GoogleApiClient googleApiClient;
     Pref pref;
     DrawerLayout dlMain;
     boolean mslideState;
@@ -87,12 +103,13 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     CustomCalendar customCalendar;
     JSONArray attendanceArray;
     Button btnLeave;
-    ArrayList<String>presentDays=new ArrayList<>();
-    ArrayList<String>dateList=new ArrayList<>();
+    ArrayList<String> presentDays = new ArrayList<>();
+    ArrayList<String> dateList = new ArrayList<>();
 
-    TextView tvPresent,tvDetails,tvOK;
-    LinearLayout lnStatus,llAdjustment;
+    TextView tvPresent, tvDetails, tvOK;
+    LinearLayout lnStatus, llAdjustment;
     int date;
+    GPSTracker gps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +119,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     }
 
     private void initView() {
-        btnLeave=(Button)findViewById(R.id.btnLeave);
+        btnLeave = (Button) findViewById(R.id.btnLeave);
         llQR = (LinearLayout) findViewById(R.id.llQR);
         llQR.setOnClickListener(this);
         btnMarkAttendance = (Button) findViewById(R.id.btnMarkAttendance);
@@ -139,7 +156,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
 
             }
         });
-        llAdjustment=(LinearLayout)findViewById(R.id.llAdjustment);
+        llAdjustment = (LinearLayout) findViewById(R.id.llAdjustment);
         llAttandanceManage = (LinearLayout) findViewById(R.id.llAttandanceManage);
         llAttendanceReport = (LinearLayout) findViewById(R.id.llAttendanceReport);
         llBackAttendance = (LinearLayout) findViewById(R.id.llBackAttendance);
@@ -203,9 +220,6 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 .contentView(R.layout.custom_tooltip, R.id.tv_text)
                 .focusable(true)
                 .build();
-
-
-
 
 
         tooltip.findViewById(R.id.btn_next).setOnClickListener(new View.OnClickListener() {
@@ -272,15 +286,12 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         leaveProperty.layoutResource = R.layout.leave_view;
         leaveProperty.dateTextViewResource = R.id.text_view;
         descHashMap.put("leave", leaveProperty);
-        tvPresent=(TextView)findViewById(R.id.tvPresent);
+        tvPresent = (TextView) findViewById(R.id.tvPresent);
 
         Property hdlProperty = new Property();
         hdlProperty.layoutResource = R.layout.hdl_view;
         hdlProperty.dateTextViewResource = R.id.text_view;
         descHashMap.put("hdl", hdlProperty);
-
-
-
 
         // set desc hashmap on custom calendar
         customCalendar.setMapDescToProp(descHashMap);
@@ -288,29 +299,29 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         customCalendar.setOnNavigationButtonClickedListener(CustomCalendar.NEXT, this);
         btnLeave.setOnClickListener(this);
 
-        lnStatus=(LinearLayout)findViewById(R.id.lnStatus);
-        tvDetails=(TextView)findViewById(R.id.tvDetails);
-        tvOK=(TextView)findViewById(R.id.tvOK);
+        lnStatus = (LinearLayout) findViewById(R.id.lnStatus);
+        tvDetails = (TextView) findViewById(R.id.tvDetails);
+        tvOK = (TextView) findViewById(R.id.tvOK);
 
         customCalendar.setOnDateSelectedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(View view, Calendar selectedDate, Object desc) {
-                String sDate=selectedDate.get(Calendar.DAY_OF_MONTH)
-                        +"/" +(selectedDate.get(Calendar.MONTH)+1)
-                        +"/" + selectedDate.get(Calendar.YEAR);
+                String sDate = selectedDate.get(Calendar.DAY_OF_MONTH)
+                        + "/" + (selectedDate.get(Calendar.MONTH) + 1)
+                        + "/" + selectedDate.get(Calendar.YEAR);
 
 
-                String date=Util.changeAnyDateFormat(sDate,"dd/MM/yyyy","dd MMM yy");
-                int pos =dateList.indexOf(date);
+                String date = Util.changeAnyDateFormat(sDate, "dd/MM/yyyy", "dd MMM yy");
+                int pos = dateList.indexOf(date);
                 Log.d("position", String.valueOf(pos));
-                JSONObject object=attendanceArray.optJSONObject(pos);
+                JSONObject object = attendanceArray.optJSONObject(pos);
                 String PunchTiming = object.optString("PunchTiming");
                 String Status = object.optString("Status").toUpperCase();
 
 
                 if (Status.equalsIgnoreCase("DEFAULT")) {
                     lnStatus.setVisibility(View.GONE);
-                }else if (Status.equalsIgnoreCase("PRESENT")){
+                } else if (Status.equalsIgnoreCase("PRESENT")) {
                     lnStatus.setVisibility(View.VISIBLE);
                     lnStatus.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#F224F400")));
                     tvDetails.setText(date + " : " + PunchTiming + " - " + "Present");
@@ -318,28 +329,28 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                     tvOK.setTextColor(Color.parseColor("#000000"));
 
 
-                }else if (Status.equalsIgnoreCase("ABSENT")){
+                } else if (Status.equalsIgnoreCase("ABSENT")) {
                     lnStatus.setVisibility(View.VISIBLE);
                     lnStatus.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#F2FA0209")));
                     tvDetails.setText(date + " : " + PunchTiming + " - " + "Absent");
 
-                }else if (Status.equalsIgnoreCase("LEAVE")){
+                } else if (Status.equalsIgnoreCase("LEAVE")) {
                     lnStatus.setVisibility(View.VISIBLE);
                     lnStatus.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#F2DD7C03")));
                     tvDetails.setText(date + " : " + PunchTiming + " - " + "On Leave");
 
-                }else if (Status.equalsIgnoreCase("HDL")){
+                } else if (Status.equalsIgnoreCase("HDL")) {
                     lnStatus.setVisibility(View.VISIBLE);
                     lnStatus.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AD9951")));
                     tvDetails.setText(date + " : " + PunchTiming + " - " + "Half Day Leave");
 
-                }else if (Status.equalsIgnoreCase("H")){
+                } else if (Status.equalsIgnoreCase("H")) {
                     lnStatus.setVisibility(View.VISIBLE);
                     lnStatus.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FFED45")));
                     tvDetails.setText(date + " : " + PunchTiming + " - " + "Holiday");
                     tvDetails.setTextColor(Color.parseColor("#000000"));
                     tvOK.setTextColor(Color.parseColor("#000000"));
-                }else if (Status.equalsIgnoreCase("WO")){
+                } else if (Status.equalsIgnoreCase("WO")) {
                     lnStatus.setVisibility(View.VISIBLE);
                     lnStatus.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#F20A75F6")));
                     tvDetails.setText(date + " : " + PunchTiming + "-" + "Weekly Off");
@@ -349,20 +360,17 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         });
 
         tvOK.setOnClickListener(this);
-        if (pref.getEmpClintId().equals("AEMCLI0910000343") || pref.getEmpClintId().equals("AEMCLI0910000315")){
+        if (pref.getEmpClintId().equals("AEMCLI0910000343") || pref.getEmpClintId().equals("AEMCLI0910000315") || pref.getEmpClintId().equals("AEMCLI2110001671")) {
             llAdjustment.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             llAdjustment.setVisibility(View.GONE);
         }
-        
-
-
     }
 
 
     private void getAttendanceList(int year, int month) {
-        presentDays=new ArrayList<>();
-        dateList=new ArrayList<>();
+        presentDays = new ArrayList<>();
+        dateList = new ArrayList<>();
         HashMap<Integer, Object> dateHashmap = new HashMap<>();
 
         // initialize calendar
@@ -394,7 +402,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                             if (responseStatus) {
                                 // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
                                 JSONArray responseData = job1.optJSONArray("responseData");
-                                attendanceArray=responseData;
+                                attendanceArray = responseData;
                                 for (int i = 0; i < responseData.length(); i++) {
                                     JSONObject obj = responseData.getJSONObject(i);
                                     String sDate = obj.optString("Date");
@@ -416,7 +424,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                                     obj2.setDay(Day);
                                     itemList.add(obj2);
                                     dateList.add(sDate);
-                                    if (Status.equalsIgnoreCase("present")){
+                                    if (Status.equalsIgnoreCase("present")) {
                                         presentDays.add(Day);
                                     }
 
@@ -426,7 +434,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                                 }
 
                                 customCalendar.setDate(calendar, dateHashmap);
-                                tvPresent.setText(""+presentDays.size());
+                                tvPresent.setText("" + presentDays.size());
                                 setAdapter();
 
 
@@ -458,12 +466,11 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
     }
 
-    private void getAttendanceListForNav(int year, int month,Calendar calendar) {
+    private void getAttendanceListForNav(int year, int month, Calendar calendar) {
         HashMap<Integer, Object> dateHashmap = new HashMap<>();
-        presentDays=new ArrayList<>();
-        dateList=new ArrayList<>();
+        presentDays = new ArrayList<>();
+        dateList = new ArrayList<>();
         // initialize calendar
-
 
 
         ProgressDialog pd = new ProgressDialog(AttenDanceDashboardActivity.this);
@@ -491,7 +498,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                             if (responseStatus) {
                                 // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
                                 JSONArray responseData = job1.optJSONArray("responseData");
-                                attendanceArray=responseData;
+                                attendanceArray = responseData;
                                 for (int i = 0; i < responseData.length(); i++) {
                                     JSONObject obj = responseData.getJSONObject(i);
                                     String sDate = obj.optString("Date");
@@ -509,7 +516,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                                     obj2.setDay(Day);
                                     itemList.add(obj2);
                                     dateList.add(sDate);
-                                    if (Status.equalsIgnoreCase("present")){
+                                    if (Status.equalsIgnoreCase("present")) {
                                         presentDays.add(Day);
                                     }
                                     dateHashmap.put(date, Status);
@@ -518,7 +525,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                                 }
 
                                 customCalendar.setDate(calendar, dateHashmap);
-                                tvPresent.setText(""+presentDays.size());
+                                tvPresent.setText("" + presentDays.size());
 
                                 setAdapter();
 
@@ -552,7 +559,6 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     }
 
 
-
     private void setAdapter() {
         AttendanceCalenderAdapter attendanceAdapter = new AttendanceCalenderAdapter(itemList);
         rvItem.setAdapter(attendanceAdapter);
@@ -566,7 +572,8 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             if (pref.getShiftFlag().equals("1")) {
                 getShift();
             } else {
-                if (pref.getEmpClintId().equals("AEMCLI2210001697") || pref.getEmpClintId().equals("AEMCLI2210001698")) {
+                turnGPSOn();
+                /*if (pref.getEmpClintId().equals("AEMCLI2210001697") || pref.getEmpClintId().equals("AEMCLI2210001698")) {
                     Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceManageWithoutLocActivity.class);
                     intent.putExtra("intt", "2");
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -576,76 +583,104 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                     intent.putExtra("intt", "2");
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
-                }
-                else {
+                }else if (pref.getEmpClintId().equals("AEMCLI2110001671")){
+                    Intent intent = new Intent(AttenDanceDashboardActivity.this, MetsoAttendanceActivity.class);
+                    intent.putExtra("intt", "2");
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                } else {
                     Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceManageActivity.class);
                     intent.putExtra("intt", "2");
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
-                }
+                }*/
             }
-
-
         } else if (view == llAttendanceReport) {
-            Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceReportActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            if (pref.getEmpClintId().equals("AEMCLI2110001671")) {
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, MetsoAttendanceReportActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            } else if (pref.getEmpClintId().equals("AEMCLI1110000593")){
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, BoschAttendanceReportActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }else {
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceReportActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                /////
+            }
         } else if (view == llBackAttendance) {
-            Intent intent = new Intent(AttenDanceDashboardActivity.this, BacklogAttendanceActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            if (pref.getEmpClintId().equals("AEMCLI2110001671")) {
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, MetsoAttendanceRegularizationActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, BacklogAttendanceActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
         } else if (view == llAttenRegularize) {
-            Intent intent = new Intent(AttenDanceDashboardActivity.this, BacklogAttendanceActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            if (pref.getEmpClintId().equals("AEMCLI2110001671")) {
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, MetsoAttendanceRegularizationActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, BacklogAttendanceActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
         } else if (view == llWeekly) {
-            if (pref.getEmpClintId().equals("AEMCLI2210001707") || pref.getEmpClintId().equals("AEMCLI2210001697") || pref.getEmpClintId().equals("AEMCLI2210001698")|| pref.getEmpClintId().equals("AEMCLI2310001805")) {
+            if (pref.getEmpClintId().equals("AEMCLI2210001707") || pref.getEmpClintId().equals("AEMCLI2210001697") || pref.getEmpClintId().equals("AEMCLI2210001698") || pref.getEmpClintId().equals("AEMCLI2310001805")|| pref.getEmpClintId().equals("AEMCLI2110001671")) {
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, WeeklyOffAttendanceActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-
             } else {
                 weeklyfunction();
             }
-
         } else if (view == imgSearch) {
             searchAlert();
         } else if (view == tvCancel) {
             llBottom.setVisibility(View.GONE);
         } else if (view == btnMarkAttendance) {
-            if (pref.getEmpClintId().equals("AEMCLI2210001697") || pref.getEmpClintId().equals("AEMCLI2210001698")) {
-                Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceManageWithoutLocActivity.class);
-                intent.putExtra("intt", "2");
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            } else if (pref.getEmpClintId().equals("AEMCLI1910001556")){
-                Intent intent = new Intent(AttenDanceDashboardActivity.this, DailyDashBoardActivity.class);
-                intent.putExtra("intt", "2");
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            }else {
-                Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceManageActivity.class);
-                intent.putExtra("intt", "2");
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            }
+            turnGPSOn();
         } else if (view == llQR) {
             Intent intent = new Intent(AttenDanceDashboardActivity.this, QRCodeScannerActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-        }else if (view == btnLeave) {
+        } else if (view == btnLeave) {
             Intent intent = new Intent(AttenDanceDashboardActivity.this, LeaveApplicationActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-        }else if (view==tvOK){
+        } else if (view == tvOK) {
             lnStatus.setVisibility(View.GONE);
-        }else if (view==llAdjustment){
+        } else if (view == llAdjustment) {
             Intent intent = new Intent(AttenDanceDashboardActivity.this, AdjustmentActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
 
+    }
 
+    private void openLocationOnRequestPopup() {
+        Dialog locationRequestDialog = new Dialog(AttenDanceDashboardActivity.this, R.style.CustomDialogNew2);
+        locationRequestDialog.setContentView(R.layout.location_request_layout);
+        locationRequestDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        locationRequestDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+
+        TextView txtOkey = locationRequestDialog.findViewById(R.id.txtOkey);
+        txtOkey.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+                locationRequestDialog.dismiss();
+            }
+        });
+
+        locationRequestDialog.setCancelable(false);
+        locationRequestDialog.show();
     }
 
     private void weeklyfunction() {
@@ -668,7 +703,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                             if (responseStatus) {
                                 // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
                                 successAlert(responseText);
-
+//
 
                             }
 
@@ -891,87 +926,260 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     public Map<Integer, Object>[] onNavigationButtonClicked(int whichButton, Calendar newMonth) {
         Map<Integer, Object>[] arr = new Map[2];
         arr[0] = new HashMap<>();
-        switch(newMonth.get(Calendar.MONTH)) {
+        switch (newMonth.get(Calendar.MONTH)) {
             case Calendar.JANUARY:
-                Calendar calendar=Calendar.getInstance();
-                calendar.set(y,0,1);
-
-                getAttendanceListForNav(y,1,calendar);
-
-
-
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(y, 0, 1);
+                getAttendanceListForNav(y, 1, calendar);
                 break;
             case Calendar.FEBRUARY:
-                Calendar calendar1=Calendar.getInstance();
-                calendar1.set(y,1,1);
+                Calendar calendar1 = Calendar.getInstance();
+                calendar1.set(y, 1, 1);
 
-                getAttendanceListForNav(y,2,calendar1);
+                getAttendanceListForNav(y, 2, calendar1);
 
                 break;
             case Calendar.MARCH:
-                Calendar calendar2=Calendar.getInstance();
-                calendar2.set(y,2,1);
+                Calendar calendar2 = Calendar.getInstance();
+                calendar2.set(y, 2, 1);
 
-                getAttendanceListForNav(y,3,calendar2);
+                getAttendanceListForNav(y, 3, calendar2);
 
                 break;
-            case  Calendar.APRIL:
-                Calendar calendar3=Calendar.getInstance();
-                calendar3.set(y,3,1);
+            case Calendar.APRIL:
+                Calendar calendar3 = Calendar.getInstance();
+                calendar3.set(y, 3, 1);
 
-                getAttendanceListForNav(y,4,calendar3);
+                getAttendanceListForNav(y, 4, calendar3);
                 break;
             case Calendar.MAY:
-                Calendar calendar4=Calendar.getInstance();
-                calendar4.set(y,4,1);
+                Calendar calendar4 = Calendar.getInstance();
+                calendar4.set(y, 4, 1);
 
-                getAttendanceListForNav(y,5,calendar4);
+                getAttendanceListForNav(y, 5, calendar4);
                 break;
             case Calendar.JUNE:
-                Calendar calendar5=Calendar.getInstance();
-                calendar5.set(y,5,1);
+                Calendar calendar5 = Calendar.getInstance();
+                calendar5.set(y, 5, 1);
 
-                getAttendanceListForNav(y,6,calendar5);
+                getAttendanceListForNav(y, 6, calendar5);
                 break;
             case Calendar.JULY:
-                Calendar calendar6=Calendar.getInstance();
-                calendar6.set(y,6,1);
+                Calendar calendar6 = Calendar.getInstance();
+                calendar6.set(y, 6, 1);
 
-                getAttendanceListForNav(y,7,calendar6);
+                getAttendanceListForNav(y, 7, calendar6);
                 break;
             case Calendar.AUGUST:
-                Calendar calendar7=Calendar.getInstance();
-                calendar7.set(y,7,1);
+                Calendar calendar7 = Calendar.getInstance();
+                calendar7.set(y, 7, 1);
 
-                getAttendanceListForNav(y,8,calendar7);
+                getAttendanceListForNav(y, 8, calendar7);
                 break;
             case Calendar.SEPTEMBER:
-                Calendar calendar8=Calendar.getInstance();
-                calendar8.set(y,8,1);
+                Calendar calendar8 = Calendar.getInstance();
+                calendar8.set(y, 8, 1);
 
-                getAttendanceListForNav(y,9,calendar8);
+                getAttendanceListForNav(y, 9, calendar8);
                 break;
             case Calendar.OCTOBER:
-                Calendar calendar9=Calendar.getInstance();
-                calendar9.set(y,9,1);
+                Calendar calendar9 = Calendar.getInstance();
+                calendar9.set(y, 9, 1);
 
-                getAttendanceListForNav(y,10,calendar9);
+                getAttendanceListForNav(y, 10, calendar9);
                 break;
             case Calendar.NOVEMBER:
-                Calendar calendar10=Calendar.getInstance();
-                calendar10.set(y,10,1);
+                Calendar calendar10 = Calendar.getInstance();
+                calendar10.set(y, 10, 1);
 
-                getAttendanceListForNav(y,11,calendar10);
+                getAttendanceListForNav(y, 11, calendar10);
                 break;
             case Calendar.DECEMBER:
-                Calendar calendar11=Calendar.getInstance();
-                calendar11.set(y,11,1);
+                Calendar calendar11 = Calendar.getInstance();
+                calendar11.set(y, 11, 1);
 
-                getAttendanceListForNav(y,12,calendar11);
+                getAttendanceListForNav(y, 12, calendar11);
                 break;
         }
 
 
         return arr;
+    }
+
+    private void turnGPSOn() {
+        if (googleApiClient == null) {
+            googleApiClient = new GoogleApiClient.Builder(this)
+                    .addApi(LocationServices.API).addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(AttenDanceDashboardActivity.this).build();
+            googleApiClient.connect();
+            LocationRequest locationRequest = LocationRequest.create();
+            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            locationRequest.setInterval(30 * 1000);
+            locationRequest.setFastestInterval(5 * 1000);
+            LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
+
+            // **************************
+            builder.setAlwaysShow(true); // this is the key ingredient
+            // **************************
+
+            PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi
+                    .checkLocationSettings(googleApiClient, builder.build());
+            result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
+                @Override
+                public void onResult(LocationSettingsResult result) {
+                    final Status status = result.getStatus();
+                    final LocationSettingsStates state = result
+                            .getLocationSettingsStates();
+                    switch (status.getStatusCode()) {
+                        case LocationSettingsStatusCodes.SUCCESS:
+                            Log.e("LOCATION", "onResult: location on");
+                            openMarkAttendanceActivities();
+                            break;
+                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                            Log.e("LOCATION", "onResult: log 2");
+                            try {
+                                try {
+                                    status.startResolutionForResult(AttenDanceDashboardActivity.this, 1000);
+                                } catch (IntentSender.SendIntentException e) {
+                                    // Ignore the error.
+                                }
+                            } catch (Exception e) {
+                                // Ignore the error.
+                            }
+                            break;
+                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                            Log.e("LOCATION", "onResult: log 3");
+                            finish();
+                            break;
+                        case LocationSettingsStatusCodes.ERROR:
+                            Log.e("LOCATION", "onResult: log 4");
+                            finish();
+                            break;
+                    }
+                }
+            });
+        } else {
+            openMarkAttendanceActivities();
+        }
+    }
+
+    private void openMarkAttendanceActivities() {
+        if (pref.getEmpClintId().equals("AEMCLI2210001697") || pref.getEmpClintId().equals("AEMCLI2210001698")) {
+            Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceManageWithoutLocActivity.class);
+            intent.putExtra("intt", "2");
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } else if (pref.getEmpClintId().equals("AEMCLI1910001556")||pref.getEmpClintId().equals("AEMCLI2410001861")) {
+            Intent intent = new Intent(AttenDanceDashboardActivity.this, DailyDashBoardActivity.class);
+            intent.putExtra("intt", "2");
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } else if (pref.getEmpClintId().equals("AEMCLI2110001671")) {
+            //
+            Intent intent = new Intent(AttenDanceDashboardActivity.this, MetsoAttendanceActivity.class);
+            intent.putExtra("intt", "2");
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }else if (pref.getEmpClintId().equals("AEMCLI1110000593")) {
+            //
+            Intent intent = new Intent(AttenDanceDashboardActivity.this, BoschAttendanceActivity.class);
+            intent.putExtra("intt", "2");
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }else if (pref.getEmpClintId().equals("AEMCLI1310000776")) {
+            //
+            Intent intent = new Intent(AttenDanceDashboardActivity.this, ProtectorGambleAttendanceActivity.class);
+            intent.putExtra("intt", "2");
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceManageActivity.class);
+            intent.putExtra("intt", "2");
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1000) {
+            if (resultCode == Activity.RESULT_OK) {
+                openMarkAttendanceActivities();
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+                finish();
+            }
+        }
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        finish();
+    }
+
+
+    private void getPMSSubmitDetails() {
+        String surl = AppData.url + "gcl_EmployeePMS_Metso?MasterID=" + pref.getMasterId() + "&SecurityCode=" + pref.getSecurityCode();
+        Log.d("attencinput", surl);
+        final ProgressDialog progressBar = new ProgressDialog(this);
+        progressBar.setCancelable(true);//you can cancel it by pressing back button
+        progressBar.setMessage("Loading...");
+        progressBar.show();
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("responsecheck", response);
+                        progressBar.dismiss();
+                        try {
+                            JSONArray job1 = new JSONArray(response);
+                            JSONObject jsonObject = job1.optJSONObject(0);
+                            String bFlag = jsonObject.optString("bFlag");
+                            if (bFlag.equals("0")) {
+                                Intent intent = new Intent(AttenDanceDashboardActivity.this, MetsoAttendanceActivity.class);
+                                intent.putExtra("intt", "2");
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            } else {
+                                Intent intent = new Intent(AttenDanceDashboardActivity.this, MetsoPMSTargetAchivementActivity.class);
+                                intent.putExtra("bFlag", bFlag);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
+
+                            // boolean _status = job1.getBoolean("status");
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressBar.dismiss();
+                Toast.makeText(AttenDanceDashboardActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
+
+                Log.e("ert", error.toString());
+            }
+        }) {
+
+        };
+        AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
+
     }
 }

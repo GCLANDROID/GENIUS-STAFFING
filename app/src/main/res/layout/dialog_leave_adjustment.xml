@@ -96,33 +96,40 @@
                         android:text="dd/MM/yyyy"></TextView>
 
                 </LinearLayout>
-                <TextView
-                    android:layout_marginTop="10dp"
-                    android:id="@+id/tvEndDateName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:text="End Date"
-                    android:textStyle="bold"></TextView>
                 <LinearLayout
-                    android:id="@+id/llEndDate"
-                    android:layout_width="320dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/lldesign7"
-                    android:layout_marginTop="5dp"
-                    >
+                    android:id="@+id/llEndTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
                     <TextView
-                        android:id="@+id/tvEndDate"
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/tvEndDateName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="12sp"
+                        android:textSize="14sp"
                         android:textColor="@color/colorPrimaryDark"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="5dp"
-                        android:text="dd/MM/yyyy"></TextView>
+                        android:text="End Date"
+                        android:textStyle="bold"></TextView>
+                    <LinearLayout
+                        android:id="@+id/llEndDate"
+                        android:layout_width="320dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/lldesign7"
+                        android:layout_marginTop="5dp"
+                        >
+                        <TextView
+                            android:id="@+id/tvEndDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="5dp"
+                            android:text="dd/MM/yyyy"></TextView>
 
+                    </LinearLayout>
                 </LinearLayout>
+
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/llInOutTime"

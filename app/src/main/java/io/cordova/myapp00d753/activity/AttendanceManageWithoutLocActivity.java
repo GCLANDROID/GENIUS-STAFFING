@@ -611,8 +611,6 @@ public class AttendanceManageWithoutLocActivity extends AppCompatActivity  {
             @Override
             public void onClick(View view) {
                 alertDialog.dismiss();
-
-
             }
         });
 
@@ -685,6 +683,4 @@ public class AttendanceManageWithoutLocActivity extends AppCompatActivity  {
             }
         }
     }
-
-
 }

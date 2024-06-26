@@ -172,7 +172,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
         // locationalerts();
         initialize();
         setUpMapIfNeeded();
-        // attendanceCheck();
+        //attendanceCheck();
         onClick();
     }
 
@@ -278,7 +278,6 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
 
         llL = (LinearLayout) findViewById(R.id.llL);
 
-
     }
 
     private void onClick() {
@@ -319,8 +318,6 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
                 } else {
                     connectionCheck.getNetworkActiveAlert().show();
                 }
-
-
             }
         });
         btnSubmit1.setOnClickListener(new View.OnClickListener() {
@@ -329,7 +326,6 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
                 attendanceGivenfunction();
             }
         });
-
     }
 
 
@@ -346,7 +342,6 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
 
 
     private void setUpMapIfNeeded() {
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -380,10 +375,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
             mMap.setMyLocationEnabled(true);
         }
 
-
         // Creates a CameraPosition from the builder
-
-
     }
 
     private void handleNewLocation(Location location) {
@@ -416,7 +408,6 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
         mMap.addMarker(options);
-
     }
 
 
@@ -437,7 +428,6 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
     }
 
     protected synchronized void buildGoogleApiClient() {
-
         mGoogleApiClient = new GoogleApiClient.Builder(AttendanceManageActivity.this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -727,8 +717,6 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
 
 
     private void attendanceGivenfunction() {
-
-
         if (!address.equals("")) {
             addr = address;
         } else {

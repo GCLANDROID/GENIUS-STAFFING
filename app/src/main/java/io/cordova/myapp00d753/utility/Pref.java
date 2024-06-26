@@ -993,7 +993,23 @@ public class Pref {
         return _pref.getString("JrFlag","");
     }
 
+    public void savePFNotificationURL(String PFNotificationURL){
+        _editorPref.putString("PFNotificationURL", PFNotificationURL);
+        _editorPref.commit();
+    }
 
+    public String getPFNotificationURL(){
+        return _pref.getString("PFNotificationURL","");
+    }
+
+    public void saveAccessToken(String AccessToken){
+        _editorPref.putString("AccessToken", AccessToken);
+        _editorPref.commit();
+    }
+
+    public String getAccessToken(){
+        return _pref.getString("AccessToken","");
+    }
 
 
 

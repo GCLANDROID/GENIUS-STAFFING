@@ -10,11 +10,13 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.metso.MetsoNewReimbursementClaimActivity;
+import io.cordova.myapp00d753.activity.metso.MetsoReimbursementDeleteActivity;
 import io.cordova.myapp00d753.utility.Pref;
 
 public class RemManageDashBoardActivity extends AppCompatActivity {
-    ImageView imgBack,imgHome;
-    LinearLayout llManage,llDelete;
+    ImageView imgBack, imgHome;
+    LinearLayout llManage, llDelete;
     Pref pref;
 
 
@@ -26,29 +28,35 @@ public class RemManageDashBoardActivity extends AppCompatActivity {
         onClick();
     }
 
-    private void initialize(){
-        pref=new Pref(getApplicationContext());
-        llManage=(LinearLayout)findViewById(R.id.llManage);
+    private void initialize() {
+        pref = new Pref(getApplicationContext());
+        llManage = (LinearLayout) findViewById(R.id.llManage);
 
-        llDelete=(LinearLayout)findViewById(R.id.llDelete);
+        llDelete = (LinearLayout) findViewById(R.id.llDelete);
 
-        imgBack=(ImageView)findViewById(R.id.imgBack);
-        imgHome=(ImageView)findViewById(R.id.imhHome);
+        imgBack = (ImageView) findViewById(R.id.imgBack);
+        imgHome = (ImageView) findViewById(R.id.imhHome);
 
 
     }
 
-    private void onClick(){
+    private void onClick() {
         llManage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (pref.getEmpClintId().equals("AEMCLI1110000501")){
+                if (pref.getEmpClintId().equals("AEMCLI1110000501")) {
                     Intent intent = new Intent(RemManageDashBoardActivity.this, RecktitRemActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
-                }else {
-
+                } else if (pref.getEmpClintId().equals("AEMCLI2110001671")) {
+                    Intent intent = new Intent(RemManageDashBoardActivity.this, MetsoNewReimbursementClaimActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                } else if (pref.getSecurityCode().equals("222")) {
+                    Intent intent = new Intent(RemManageDashBoardActivity.this, FMSNewClaimActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                } else {
                     Intent intent = new Intent(RemManageDashBoardActivity.this, NewClaimActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
@@ -60,11 +68,15 @@ public class RemManageDashBoardActivity extends AppCompatActivity {
         llDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-                Intent intent=new Intent(RemManageDashBoardActivity.this,ClaimDeletActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                if (pref.getEmpClintId().equals("AEMCLI2110001671")) {
+                    Intent intent = new Intent(RemManageDashBoardActivity.this, MetsoReimbursementDeleteActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(RemManageDashBoardActivity.this, ClaimDeletActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -78,8 +90,8 @@ public class RemManageDashBoardActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(RemManageDashBoardActivity.this,EmployeeDashBoardActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                Intent intent = new Intent(RemManageDashBoardActivity.this, EmployeeDashBoardActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
         });

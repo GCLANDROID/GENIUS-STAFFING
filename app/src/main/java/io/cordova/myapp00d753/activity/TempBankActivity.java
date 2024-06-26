@@ -42,6 +42,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import id.zelory.compressor.Compressor;
+import io.cordova.myapp00d753.AndroidXCamera.AndroidXCameraActivity;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.module.AttendanceService;
 import io.cordova.myapp00d753.module.MainDocModule;
@@ -163,8 +164,6 @@ public class TempBankActivity extends AppCompatActivity {
                 if (etAccNumber.getText().toString().length()>0){
                     if (flag==1){
                         if (etIFSC.getText().toString().length()>10){
-                            Pattern r = Pattern.compile(pan_pattern);
-                            if (regex_matcher(r, etIFSC.getText().toString())) {
                                 if (etFName.getText().toString().length()>0){
                                     if (etLName.getText().toString().length()>0){
                                         BankDetailsSubmit();
@@ -177,9 +176,7 @@ public class TempBankActivity extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(),"Please enter First Name as per Bank ",Toast.LENGTH_LONG).show();
                                 }
 
-                            }else {
-                                Toast.makeText(getApplicationContext(),"Please enter valid IFSC code",Toast.LENGTH_LONG).show();
-                            }
+
 
                         }else {
                             Toast.makeText(getApplicationContext(),"Please enter IFSC code",Toast.LENGTH_LONG).show();
@@ -227,7 +224,7 @@ public class TempBankActivity extends AppCompatActivity {
         tvSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(TempBankActivity.this,KYCFamilyActivity.class);
+                Intent intent=new Intent(TempBankActivity.this,TempOtherDocumentActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
@@ -389,57 +386,25 @@ public class TempBankActivity extends AppCompatActivity {
     }
 
     private void cameraIntent() {
-        ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.TITLE, "Profile Picture");
-        values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera");
-        imageUri = getContentResolver().insert(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-        startActivityForResult(cameraIntent, CAMERA_REQUEST);
+        AndroidXCameraActivity.launch(TempBankActivity.this, 1001);
     }
 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case CAMERA_REQUEST:
+        if (requestCode == 2000 && resultCode == 1001){
+            Log.e("TAG", "onActivityResult: "+data.getExtras().get("picture"));
+            Log.e("TAG", "onActivityResult: "+data.getExtras().get(AndroidXCameraActivity.IMAGE_PATH_KEY));
+            uri =  Uri.parse(String.valueOf(data.getExtras().get("picture")));
+            //image_uri = (Uri) data.getExtras().get(AndroidXCameraActivity.IMAGE_PATH_KEY);
+            compressedImageFile = new File(String.valueOf(data.getExtras().get("picture")));
 
-                if (resultCode == Activity.RESULT_OK) {
-                    try {
-                        try {
-                            String imageurl = /*"file://" +*/ getRealPathFromURI(imageUri);
-                            file = new File(imageurl);
-                            compressedImageFile = new Compressor(this).compressToFile(file);
-                            Log.d("imageSixw", String.valueOf(getReadableFileSize(compressedImageFile.length())));
-                            BitmapFactory.Options o = new BitmapFactory.Options();
-                            o.inSampleSize = 2;
-                            Bitmap bm = cropToSquare(BitmapFactory.decodeFile(imageurl, o));
-                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            bm.compress(Bitmap.CompressFormat.PNG, 10, baos); //bm is the bitmap object
-                            byte[] b = baos.toByteArray();
-                            encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-                            imgDoc.setImageBitmap(bm);
-                            Log.d("images", encodedImage);
-                            flag = 1;
+            if (uri != null){
+                imgDoc.setImageURI(uri);
+                flag=1;
 
-
-                            // _pref.saveImage(encodedImage);
-                            //saveImage(encodedImage);
-
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    } catch (OutOfMemoryError e) {
-                        e.printStackTrace();
-                    }
-
-                }
-                break;
-
-
+            }
         }
 
     }
@@ -501,7 +466,7 @@ public class TempBankActivity extends AppCompatActivity {
                 UploadObject extraWorkingDayModel = response.body();
                 if (extraWorkingDayModel.isResponseStatus()) {
                     //  Toast.makeText(getApplicationContext(), extraWorkingDayModel.getResponseText(), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(TempBankActivity.this, KYCFamilyActivity.class);
+                    Intent intent = new Intent(TempBankActivity.this, TempOtherDocumentActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
 

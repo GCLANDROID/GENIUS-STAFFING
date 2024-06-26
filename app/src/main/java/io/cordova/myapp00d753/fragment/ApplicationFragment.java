@@ -592,8 +592,6 @@ public class ApplicationFragment extends Fragment {
                                     final String Name = obj.optString("Name");
                                     String ApplicantID = obj.optString("ApplicantID");
                                     applicantList.add(Name);
-
-
                                     SpinnerModel spModel = new SpinnerModel(Name, ApplicantID);
                                     mApplicantList.add(spModel);
 

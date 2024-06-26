@@ -35,11 +35,14 @@ import io.cordova.myapp00d753.activity.GeoFenceManageDashBoardActivity;
 import io.cordova.myapp00d753.activity.InsuranceActivity;
 import io.cordova.myapp00d753.activity.KYCDashBoardActivity;
 import io.cordova.myapp00d753.activity.LeaveApplicationActivity;
+import io.cordova.myapp00d753.activity.PFDashBoardActivity;
 import io.cordova.myapp00d753.activity.PayrollActivity;
 import io.cordova.myapp00d753.activity.ProfileActivity;
 import io.cordova.myapp00d753.activity.RemDashBoardActivity;
 import io.cordova.myapp00d753.activity.SalesManagementDashboardActivity;
 import io.cordova.myapp00d753.activity.VoiceAssistantActivity;
+import io.cordova.myapp00d753.activity.honnasa.HonasaSalesDashboardActivity;
+import io.cordova.myapp00d753.activity.metso.MetsoPMSTargetAchivementActivity;
 import io.cordova.myapp00d753.bluedart.BlueDartAttenDanceDashboardActivity;
 import io.cordova.myapp00d753.facereogntion.LoginDashboardActivity;
 import io.cordova.myapp00d753.module.MenuItemModel;
@@ -106,6 +109,8 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
             myViewHolder.imgMenu.setImageResource(R.drawable.insurance);
         }else if (itemList.get(i).getMenuId().equalsIgnoreCase("300")){
             myViewHolder.imgMenu.setImageResource(R.drawable.interview);
+        }else if (itemList.get(i).getMenuId().equalsIgnoreCase("201")){
+            myViewHolder.imgMenu.setImageResource(R.drawable.pms);
         }else {
             myViewHolder.itemView.setVisibility(View.GONE);
         }
@@ -144,16 +149,23 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                 }
                 else if (itemList.get(i).getMenuId().equals("4")){
                     //Saales
-                    Intent intent=new Intent(mContex, SalesManagementDashboardActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
-                    mContex.startActivity(intent);
+                    if (pref.getEmpClintId().equalsIgnoreCase("AEMCLI2310001780")){
+                        Intent intent=new Intent(mContex, HonasaSalesDashboardActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
+                        mContex.startActivity(intent);
+                    }else {
+                        Intent intent=new Intent(mContex, SalesManagementDashboardActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
+                        mContex.startActivity(intent);
+                    }
+
                 }
                 else if (itemList.get(i).getMenuId().equals("5")){
                     //PF
-                    Uri uri = Uri.parse(PFLink); // missing 'http://' will cause crashed
-                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                    mContex.startActivity(intent);
+                   Intent intent=new Intent(mContex, PFDashBoardActivity.class);
+                   intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                   intent.putExtra("PFLink",PFLink);
+                   mContex.startActivity(intent);
 
                 }
                 else if (itemList.get(i).getMenuId().equals("6")){
@@ -204,6 +216,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                 }
 
                 else if (itemList.get(i).getMenuId().equals("12")){
+
                     //leave
                     Intent intent=new Intent(mContex, LeaveApplicationActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -221,6 +234,11 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                 }else if (itemList.get(i).getMenuId().equals("300")){
                     //interview
                     Intent intent=new Intent(mContex, LoginDashboardActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContex.startActivity(intent);
+                }else if (itemList.get(i).getMenuId().equals("201")){
+                    //interview
+                    Intent intent=new Intent(mContex, MetsoPMSTargetAchivementActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
                 }
@@ -251,10 +269,6 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
             tvMenuItem=(TextView)itemView.findViewById(R.id.tvMenuItem);
             imgMenu=(ImageView)itemView.findViewById(R.id.imgMenu);
             lnMain=(LinearLayout)itemView.findViewById(R.id.lnMain);
-
-
-
-
         }
     }
 

@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="320dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="320dp"
     android:layout_height="320dp"
     android:background="@drawable/lldesign7"
     android:layout_gravity="center"
     android:orientation="vertical">
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="320dp"
         android:layout_height="50dp"
         android:background="@drawable/lldesign8"
@@ -14,39 +16,55 @@
         android:layout_marginLeft="1dp"
         android:layout_marginRight="1dp"
         android:layout_marginTop="1dp">
+
         <LinearLayout
+            android:id="@+id/linearLayout3"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1.1"
-            android:gravity="center">
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
             <LinearLayout
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:background="@drawable/lldesign2"
-                android:gravity="center"
-                android:layout_marginLeft="30dp">
+                android:gravity="center">
+
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/companylogo"/>
+                    android:src="@drawable/companylogo" />
             </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.2"
-            android:gravity="center">
+            android:gravity="center"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/linearLayout3"
+            app:layout_constraintTop_toTopOf="parent">
+
             <ImageView
+                android:id="@+id/imgCancel"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@drawable/cancelicon"
-                android:id="@+id/imgCancel"/>
+                android:layout_marginEnd="15dp"
+                android:background="@color/white"
+                android:src="@drawable/cancelicon" />
         </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="visible">
         <LinearLayout
             android:layout_width="320dp"
             android:layout_height="match_parent"
@@ -62,13 +80,11 @@
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/black"
                     android:id="@+id/tvJan"
+                    android:text="January"
                     android:textStyle="bold"
                     android:textAppearance="?android:textAppearanceMedium"/>
-
-
-
-
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="320dp"
                 android:layout_height="30dp"
@@ -263,16 +279,7 @@
                     android:text="December"
                     android:textStyle="bold"
                     android:textAppearance="?android:textAppearanceMedium"/>
-
-
-
-
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-
-
-
-
-
 </LinearLayout>

@@ -98,16 +98,10 @@ public class InsuranceActivity extends AppCompatActivity {
                                     insuranceModel.setCompanyURL(Policy_URL);
                                     insuranceModel.setTrainingURL(Doc_URL);
                                     itemList.add(insuranceModel);
-
-
                                 }
 
                                 InsuranceAdapter insuranceAdapter=new InsuranceAdapter(itemList,InsuranceActivity.this);
                                 rvItem.setAdapter(insuranceAdapter);
-
-
-
-
 
                             // boolean _status = job1.getBoolean("status");
 
@@ -124,7 +118,6 @@ public class InsuranceActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                progressDialog.dismiss();
                 Toast.makeText(InsuranceActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
-
                 Log.e("ert", error.toString());
             }
         }) {

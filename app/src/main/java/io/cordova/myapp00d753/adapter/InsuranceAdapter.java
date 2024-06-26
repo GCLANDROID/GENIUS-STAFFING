@@ -3,6 +3,7 @@ package io.cordova.myapp00d753.adapter;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -36,7 +37,7 @@ public class InsuranceAdapter extends RecyclerView.Adapter<InsuranceAdapter.MyVi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
+    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, @SuppressLint("RecyclerView") int i) {
 
         myViewHolder.tvPolicyName.setText(itemList.get(i).getPolicyName());
         myViewHolder.tvPolicyNumber.setText(itemList.get(i).getPolicyNumber());
@@ -71,9 +72,6 @@ public class InsuranceAdapter extends RecyclerView.Adapter<InsuranceAdapter.MyVi
                 Toast.makeText(context, "Text Copied", Toast.LENGTH_SHORT).show();
             }
         });
-
-
-
     }
 
     @Override

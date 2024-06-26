@@ -61,11 +61,8 @@ public class SplashScreenActivity extends AppCompatActivity implements GoogleApi
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-
-
-                    startActivity(new Intent(io.cordova.myapp00d753.SplashScreenActivity.this, DashBoardActivity.class));
-                    finish();
-
+                startActivity(new Intent(io.cordova.myapp00d753.SplashScreenActivity.this, DashBoardActivity.class));
+                finish();
             }
         }, 4000);
 

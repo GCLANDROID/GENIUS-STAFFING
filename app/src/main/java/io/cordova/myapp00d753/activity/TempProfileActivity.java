@@ -38,11 +38,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
@@ -72,9 +77,11 @@ import java.util.List;
 
 import id.zelory.compressor.Compressor;
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.databinding.ActivityTempProfileBinding;
 import io.cordova.myapp00d753.module.AttendanceService;
 import io.cordova.myapp00d753.module.MainDocModule;
 import io.cordova.myapp00d753.module.UploadObject;
+import io.cordova.myapp00d753.utility.ApiClient;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
@@ -146,6 +153,8 @@ public class TempProfileActivity extends AppCompatActivity {
     private static final int GALLERY_REQUEST = 2;
     File file, compressedImageFile;
     String permanentcity = "";
+    String permanentstate = "";
+    String presentstate = "";
     String presentcity = "";
     String aadharno = "";
     String preaddr = "";
@@ -167,18 +176,27 @@ public class TempProfileActivity extends AppCompatActivity {
     AlertDialog alert1;
     int errflag = 0;
     TextView tv1,tv2;
+    ActivityTempProfileBinding binding;
+
+    ArrayList<String> residing = new ArrayList<>();
+    ArrayList<String> uanPercentage = new ArrayList<>();
+    String esicDOB="",uanDOB="",esicGender="",esicRltionshp="",uanRltionshp="",residingIP="",pfPercantage="";
+    ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_temp_profile);
+        binding= DataBindingUtil.setContentView(this,R.layout.activity_temp_profile);
         initialize();
-        completedialog();
+       // completedialog();
         onClick();
     }
 
     private void initialize() {
         pref = new Pref(TempProfileActivity.this);
+        pd=new ProgressDialog(TempProfileActivity.this);
+        pd.setMessage("Loading");
+        pd.setCancelable(false);
         tvEmplId = (TextView) findViewById(R.id.tvEmplId);
         tvEmpCode = (TextView) findViewById(R.id.tvEmpCode);
         tvEmpName = (TextView) findViewById(R.id.tvEmpName);
@@ -390,6 +408,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                     JSONObject obj = responseData.getJSONObject(i);
                                     AEMEmployeeID = obj.optString("AEMEmployeeID");
                                     tvEmplId.setText(AEMEmployeeID);
+                                    pref.saveEmpId(AEMEmployeeID);
 
                                     Code = obj.optString("Code");
                                     tvEmpCode.setText(Code);
@@ -810,6 +829,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                                 gender); //selected item will look like a spinner set from XML
                                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 spGender.setAdapter(spinnerArrayAdapter);
+                                binding.spESICGender.setAdapter(spinnerArrayAdapter);
                                 int index = gender.indexOf(Sex);
                                 Log.d("indexr", String.valueOf(index));
                                 spGender.setSelection(index);
@@ -863,8 +883,114 @@ public class TempProfileActivity extends AppCompatActivity {
         spRealation.setAdapter(spinnerArrayAdapter);
         int index = realation.indexOf(RelationShip);
         Log.d("indexr", String.valueOf(index));
-        spRealation.setSelection(index);
-        setBlood();
+        spRealation.setSelection(1);
+
+
+        residing.add("Please Select");
+        residing.add("Yes");
+        residing.add("No");
+
+
+        ArrayAdapter<String> residingspinnerArrayAdapter = new ArrayAdapter<String>
+                (TempProfileActivity.this, android.R.layout.simple_spinner_item,
+                        residing); //selected item will look like a spinner set from XML
+        residingspinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spResiding.setAdapter(residingspinnerArrayAdapter);
+
+
+        uanPercentage.add("Please Select");
+        uanPercentage.add("100");
+        uanPercentage.add("75");
+        uanPercentage.add("50");
+        uanPercentage.add("25");
+
+
+
+        ArrayAdapter<String> uanspinnerArrayAdapter = new ArrayAdapter<String>
+                (TempProfileActivity.this, android.R.layout.simple_spinner_item,
+                        uanPercentage); //selected item will look like a spinner set from XML
+        uanspinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spTotalAmt.setAdapter(uanspinnerArrayAdapter);
+
+
+        setNomineeRelation();
+
+
+    }
+
+
+    private void setNomineeRelation() {
+
+        String surl = AppData.url+"gcl_CommonDDL?ddltype=7&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
+        llLoader.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.GONE);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("responseLogin", response);
+                        llLoader.setVisibility(View.VISIBLE);
+                        llMain.setVisibility(View.GONE);
+                        realation.clear();
+                        mainRealation.clear();
+                        realation.add("Please Select");
+                        mainRealation.add(new MainDocModule("0",""));
+
+                        try {
+                            JSONObject job1 = new JSONObject(response);
+                            Log.e("response12", "@@@@@@" + job1);
+                            String responseText = job1.optString("responseText");
+                            boolean responseStatus = job1.optBoolean("responseStatus");
+                            if (responseStatus) {
+                                //Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
+                                JSONArray responseData = job1.optJSONArray("responseData");
+                                for (int i = 0; i < responseData.length(); i++) {
+                                    JSONObject obj = responseData.getJSONObject(i);
+                                    String value = obj.optString("value");
+                                    String id = obj.optString("id");
+                                    realation.add(value);
+                                    MainDocModule mainDocModule = new MainDocModule(id, value);
+                                    mainRealation.add(mainDocModule);
+
+                                }
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                        (TempProfileActivity.this, android.R.layout.simple_spinner_item,
+                                                realation); //selected item will look like a spinner set from XML
+                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                binding.spESICRealation.setAdapter(spinnerArrayAdapter);
+                                binding.spUANRealation.setAdapter(spinnerArrayAdapter);
+
+                                setBlood();
+
+                            } else {
+
+
+                            }
+
+                            // boolean _status = job1.getBoolean("status");
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(TempProfileActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                llLoader.setVisibility(View.VISIBLE);
+                llMain.setVisibility(View.GONE);
+
+                //   Toast.makeText(DocumentManageActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
+                Log.e("ert", error.toString());
+                errflag=5;
+                showInternetDialog();
+            }
+        }) {
+
+        };
+        AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
 
 
     }
@@ -960,7 +1086,7 @@ public class TempProfileActivity extends AppCompatActivity {
                 String qualification = mainQualification.get(position).getDocumentType();
                 tvQualification.setText(qualification);
 
-                education = mainQualification.get(position).getDocID();
+                education = mainQualification.get(position).getDocumentType();
                 Log.d("qualification", education);
             }
 
@@ -981,10 +1107,64 @@ public class TempProfileActivity extends AppCompatActivity {
             }
         });
 
+        spPermanentState.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                permanentstate = mainPerState.get(position).getDocID();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spPresentState.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                presentstate = mainPerState.get(position).getDocID();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        binding.spResiding.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position>0){
+                    residingIP = residing.get(position);
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        binding.spTotalAmt.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position>0){
+                    pfPercantage = uanPercentage.get(position);
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         tvSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(TempProfileActivity.this, TempPanActivity.class);
+                Intent intent = new Intent(TempProfileActivity.this, KYCFamilyActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
@@ -1013,6 +1193,55 @@ public class TempProfileActivity extends AppCompatActivity {
 
                 sexGender = mainGender.get(position).getDocID();
                 Log.d("sexgender", sexGender);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+        binding.spESICGender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                esicGender = mainGender.get(position).getDocID();
+                Log.d("sexgender", sexGender);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+        binding.spESICRealation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position>0){
+                    esicRltionshp = mainRealation.get(position).getDocID();
+
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+        binding.spUANRealation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position>0){
+                    uanRltionshp = mainRealation.get(position).getDocID();
+
+                }
+
             }
 
             @Override
@@ -1102,7 +1331,7 @@ public class TempProfileActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                realationship = mainRealation.get(position).getDocID();
+                realationship = mainRealation.get(position).getDocumentType();
                 Log.d("realation", realationship);
             }
 
@@ -1274,15 +1503,147 @@ public class TempProfileActivity extends AppCompatActivity {
                         } else if (mm == 12) {
                             month = "December";
                         }
-                        DateOfJoining = d + " " + month + " " + y;
+                        DateOfBirth = d + " " + month + " " + y;
 
-                        tvEmpCodeDOB.setText(DateOfJoining);
+                        tvEmpCodeDOB.setText(DateOfBirth);
 
 
                     }
                 }, dyear, dmonth, dday);
                 dialog.getDatePicker().setMaxDate((long) (System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 365.25 * 18)));
                 dialog.getDatePicker().setMinDate((long) (System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 365.25 * 80)));
+                dialog.show();
+
+            }
+        });
+
+
+        binding.imgESICCal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar now = Calendar.getInstance();
+                System.out.println("Current date : " + (now.get(Calendar.MONTH) + 1) + "-"
+                        + now.get(Calendar.DATE) + "-" + now.get(Calendar.YEAR));
+
+                now = Calendar.getInstance();
+                now.add(Calendar.YEAR, -18);
+                int dyear = now.get(Calendar.YEAR);
+                final int dmonth = now.get(Calendar.MONTH);
+                int dday = now.get(DAY_OF_MONTH);
+                Calendar c1 = Calendar.getInstance();
+                /*final int syear = year - 18;
+
+                final int month1 = c1.get(Calendar.MONTH);
+                final int sday1 = c1.get(DAY_OF_MONTH);*/
+
+
+                final DatePickerDialog dialog = new DatePickerDialog(TempProfileActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int y, int m, int d) {
+
+                        int mm = (m + 1);
+                        int s = (m + 1) + d + y;
+                        if (mm == 1) {
+                            month = "January";
+                        } else if (mm == 2) {
+                            month = "February";
+                        } else if (mm == 3) {
+                            month = "March";
+                        } else if (mm == 4) {
+                            month = "April";
+                        } else if (mm == 5) {
+                            month = "May";
+                        } else if (mm == 6) {
+                            month = "June";
+                        } else if (mm == 7) {
+                            month = "July";
+                        } else if (mm == 8) {
+                            month = "August";
+                        } else if (mm == 9) {
+                            month = "September";
+                        } else if (mm == 10) {
+                            month = "October";
+                        } else if (mm == 11) {
+                            month = "November";
+                        } else if (mm == 12) {
+                            month = "December";
+                        }
+                        esicDOB = d + " " + month + " " + y;
+                        uanDOB=d + " " + month + " " + y;
+
+                        binding.tvESICDOB.setText(esicDOB);
+                        binding.tvUANDOB.setText(uanDOB);
+
+
+                    }
+                }, dyear, dmonth, dday);
+                dialog.getDatePicker().setMaxDate((long) (System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 365.25 * 18)));
+                dialog.getDatePicker().setMinDate((long) (System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 365.25 * 80)));
+                dialog.show();
+
+            }
+        });
+
+
+        binding.imgUANCal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar now = Calendar.getInstance();
+                System.out.println("Current date : " + (now.get(Calendar.MONTH) + 1) + "-"
+                        + now.get(Calendar.DATE) + "-" + now.get(Calendar.YEAR));
+
+                now = Calendar.getInstance();
+                now.add(Calendar.YEAR, -18);
+                int dyear = now.get(Calendar.YEAR);
+                final int dmonth = now.get(Calendar.MONTH);
+                int dday = now.get(DAY_OF_MONTH);
+                Calendar c1 = Calendar.getInstance();
+                /*final int syear = year - 18;
+
+                final int month1 = c1.get(Calendar.MONTH);
+                final int sday1 = c1.get(DAY_OF_MONTH);*/
+
+
+                final DatePickerDialog dialog = new DatePickerDialog(TempProfileActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int y, int m, int d) {
+
+                        int mm = (m + 1);
+                        int s = (m + 1) + d + y;
+                        if (mm == 1) {
+                            month = "January";
+                        } else if (mm == 2) {
+                            month = "February";
+                        } else if (mm == 3) {
+                            month = "March";
+                        } else if (mm == 4) {
+                            month = "April";
+                        } else if (mm == 5) {
+                            month = "May";
+                        } else if (mm == 6) {
+                            month = "June";
+                        } else if (mm == 7) {
+                            month = "July";
+                        } else if (mm == 8) {
+                            month = "August";
+                        } else if (mm == 9) {
+                            month = "September";
+                        } else if (mm == 10) {
+                            month = "October";
+                        } else if (mm == 11) {
+                            month = "November";
+                        } else if (mm == 12) {
+                            month = "December";
+                        }
+                        uanDOB = d + " " + month + " " + y;
+
+                        binding.tvUANDOB.setText(uanDOB);
+
+
+                    }
+                }, dyear, dmonth, dday);
+                dialog.getDatePicker().setMaxDate((long) (System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 365.25 * 18)));
+                dialog.getDatePicker().setMinDate((long) (System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 365.25 * 90)));
                 dialog.show();
 
             }
@@ -1296,15 +1657,32 @@ public class TempProfileActivity extends AppCompatActivity {
                 if (!preaddr.equals("")) {
                     if (!prepin.equals("")) {
                         if (etGurdianName.getText().toString().length() > 0) {
-                            if (etAddaharNo.getText().toString().length() > 11) {
-                                if (flag == 1) {
+
+
                                     if (etPerAddr.getText().toString().length() > 0) {
                                         if (etPrePinCode.getText().toString().length() > 0) {
                                             if (etESI.getText().toString().equals("") || etESI.getText().toString().length() > 9) {
                                                 if (etUAN.getText().toString().equals("") || etUAN.getText().toString().length() > 11) {
                                                     if (etPhnNumber.getText().toString().equals("") || etPhnNumber.getText().toString().length() > 9) {
 
-                                                        updateProfile();
+                                                        JSONObject mainobject=new JSONObject();
+                                                        try {
+                                                            mainobject.put("DbOperation","1");
+                                                            mainobject.put("SecurityCode",pref.getSecurityCode());
+                                                            JSONObject personalOBJ=new JSONObject();
+                                                            personalOBJ.put("AEMEMPLOYEEID",AEMEmployeeID);
+                                                            personalOBJ.put("Sex",sexGender);
+                                                            personalOBJ.put("GuardianName",etGurdianName.getText().toString());
+                                                            personalOBJ.put("RelationShip",realationship);
+                                                            personalOBJ.put("BloodGroup",bloodgrp);
+                                                            personalOBJ.put("DateOfBirth",DateOfBirth);
+                                                            personalOBJ.put("Qualification",education);
+                                                            personalOBJ.put("MaritalStatus",martialstatus);
+                                                            mainobject.put("PersonalDetails",personalOBJ);
+                                                            uploadOfficalDetails(mainobject);
+                                                        } catch (JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
                                                     } else {
                                                         Toast.makeText(getApplicationContext(), "Please enter valid Phone number", Toast.LENGTH_LONG).show();
                                                     }
@@ -1328,15 +1706,9 @@ public class TempProfileActivity extends AppCompatActivity {
 
                                     }
 
-                                } else {
-                                    Toast.makeText(getApplicationContext(), "Please upload your aadhar document", Toast.LENGTH_LONG).show();
 
-                                }
 
-                            } else {
-                                Toast.makeText(getApplicationContext(), "Please update your Aadhaar Number", Toast.LENGTH_LONG).show();
 
-                            }
 
                         } else {
                             Toast.makeText(getApplicationContext(), "Please update your fathers or husband name", Toast.LENGTH_LONG).show();
@@ -2013,4 +2385,225 @@ public class TempProfileActivity extends AppCompatActivity {
     }
 
 
+    private void uploadOfficalDetails(JSONObject jsonObject) {
+        pd.show();
+        AndroidNetworking.post(AppData.newv2url+"KYC/UpdateKYCDetails")
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+
+
+                        int Response_Code = job1.optInt("Response_Code");
+                        if (Response_Code == 101) {
+                            pd.show();
+                            JSONObject mainobject=new JSONObject();
+                            try {
+                                mainobject.put("DbOperation","2");
+                                mainobject.put("SecurityCode",pref.getSecurityCode());
+                                JSONObject innerobj=new JSONObject();
+                                innerobj.put("AEMEMPLOYEEID",AEMEmployeeID);
+                                innerobj.put("PermanentAddress",etPerAddr.getText().toString());
+                                innerobj.put("PermanentStateID",permanentstate);
+                                innerobj.put("PermanentCityID",permanentcity);
+                                innerobj.put("PermanentPinCode",etPerPinCode.getText().toString());
+                                innerobj.put("PresentAddress",etPreAddr.getText().toString());
+                                innerobj.put("PresentStateID",presentstate);
+                                innerobj.put("PresentCityID",presentcity);
+                                innerobj.put("PresentPincode",etPrePinCode.getText().toString());
+                                innerobj.put("Phone",binding.etPhnNumber.getText().toString());
+                                innerobj.put("Mobile",etMobNumber.getText().toString());
+                                innerobj.put("EmailID",etEmailId.getText().toString());
+                                innerobj.put("RefContact",binding.etRefNumber.getText().toString());
+                                mainobject.put("ContactDetails",innerobj);
+                                uploadContactDetails(mainobject);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            Toast.makeText(TempProfileActivity.this,"Personal Details has been updated Successfully",Toast.LENGTH_LONG).show();
+
+                        }else {
+                            pd.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+
+                            Intent intent=new Intent(TempProfileActivity.this,LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+
+                    }
+                });
+    }
+
+
+    private void uploadContactDetails(JSONObject jsonObject) {
+        pd.show();
+        AndroidNetworking.post(AppData.newv2url+"KYC/UpdateKYCDetails")
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+
+
+                        int Response_Code = job1.optInt("Response_Code");
+                        if (Response_Code == 101) {
+                            pd.show();
+                            JSONObject mainobject=new JSONObject();
+                            try {
+                                mainobject.put("DbOperation","3");
+                                mainobject.put("SecurityCode",pref.getSecurityCode());
+                                JSONObject innerobj=new JSONObject();
+                                innerobj.put("AEMEMPLOYEEID",AEMEmployeeID);
+                                innerobj.put("OldESINo",etESI.getText().toString());
+                                innerobj.put("NomineeName",binding.etESINominee.getText().toString());
+                                innerobj.put("NomineeDOB",esicDOB);
+                                innerobj.put("NomineeGender",esicGender);
+                                innerobj.put("NomineeRelation",esicRltionshp);
+                                innerobj.put("ResidingIP",residingIP);
+                                mainobject.put("OLDESICDetails",innerobj);
+                                uploadesicDetails(mainobject);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            Toast.makeText(TempProfileActivity.this,"Contact Details has been updated Successfully",Toast.LENGTH_LONG).show();
+
+                        }else {
+                            pd.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+
+                            Intent intent=new Intent(TempProfileActivity.this,LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+
+                    }
+                });
+    }
+
+    private void uploadesicDetails(JSONObject jsonObject) {
+        pd.show();
+        AndroidNetworking.post(AppData.newv2url+"KYC/UpdateKYCDetails")
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+
+
+                        int Response_Code = job1.optInt("Response_Code");
+                        if (Response_Code == 101) {
+                            pd.show();
+
+                            JSONObject mainobject=new JSONObject();
+                            try {
+                                mainobject.put("DbOperation","4");
+                                mainobject.put("SecurityCode",pref.getSecurityCode());
+                                JSONObject innerobj=new JSONObject();
+                                innerobj.put("AEMEMPLOYEEID",AEMEmployeeID);
+                                innerobj.put("OldUANNo",etUAN.getText().toString());
+                                innerobj.put("MemberName",binding.etUANNominee.getText().toString());
+                                innerobj.put("RelationID",uanRltionshp);
+                                innerobj.put("MemberDateOfBirth",uanDOB);
+                                innerobj.put("Sex",esicGender);
+                                innerobj.put("PFPercentage",pfPercantage);
+                                innerobj.put("PFNumber",binding.etPFNumber.getText().toString());
+                                innerobj.put("NomineeAddress",binding.etUANNomineeAddress.getText().toString());
+                                innerobj.put("PrevEmprName",binding.etPreviousEmployer.getText().toString());
+                                mainobject.put("OLDUANDetails",innerobj);
+                                uploaduanDetails(mainobject);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            Toast.makeText(TempProfileActivity.this,"ESIC Details has been updated Successfully",Toast.LENGTH_LONG).show();
+
+                        }else {
+                            pd.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+
+                            Intent intent=new Intent(TempProfileActivity.this,LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+
+                    }
+                });
+    }
+
+    private void uploaduanDetails(JSONObject jsonObject) {
+        pd.show();
+        AndroidNetworking.post(AppData.newv2url+"KYC/UpdateKYCDetails")
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        pd.dismiss();
+
+                        int Response_Code = job1.optInt("Response_Code");
+                        if (Response_Code == 101) {
+                            Intent intent = new Intent(TempProfileActivity.this, KYCFamilyActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+
+                            Toast.makeText(TempProfileActivity.this,"UAN Details has been updated Successfully",Toast.LENGTH_LONG).show();
+
+                        }else {
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+
+                            Intent intent=new Intent(TempProfileActivity.this,LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+
+                    }
+                });
+    }
 }

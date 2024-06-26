@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
 
 
@@ -529,7 +530,7 @@ public class SalesManagementDashboardActivity extends AppCompatActivity {
        pd.setMessage("Loading..");
        pd.setCancelable(false);
         pd.show();
-        String surl = "http://gsppi.geniusconsultant.com/GeniusiOSApi/api/get_EmployeeSalesAchvAlert?ClientID="+pref.getEmpClintId()+"&MasterID="+pref.getMasterId()+"&Operation=1&SecurityCode=0000";
+        String surl = AppData.url+"get_EmployeeSalesAchvAlert?ClientID="+pref.getEmpClintId()+"&MasterID="+pref.getMasterId()+"&Operation=1&SecurityCode=0000";
         Log.d("inputCheck", surl);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {

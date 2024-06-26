@@ -49,6 +49,7 @@ import java.util.regex.Pattern;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.databinding.ActivityInterviewFormBinding;
+import io.cordova.myapp00d753.utility.AppData;
 
 public class InterviewFormActivity extends AppCompatActivity {
     ActivityInterviewFormBinding binding;
@@ -590,7 +591,7 @@ public class InterviewFormActivity extends AppCompatActivity {
 
         pd.show();
 
-        AndroidNetworking.upload("http://gsppi.geniusconsultant.com/GeniusiOSApi/api/post_SBICardCandidate")
+        AndroidNetworking.upload(AppData.url+"post_SBICardCandidate")
                 .addMultipartParameter("CandidateID", CandidateID)
                 .addMultipartParameter("EmployeeName", binding.etFirstName.getText().toString())
                 .addMultipartParameter("MobileNumber", MobileNumber)

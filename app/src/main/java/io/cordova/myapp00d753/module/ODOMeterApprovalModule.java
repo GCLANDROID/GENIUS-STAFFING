@@ -1,7 +1,7 @@
 package io.cordova.myapp00d753.module;
 
 public class ODOMeterApprovalModule {
-    String date,odometereading,jrType,imageData;
+    String date,odometereading,jrType,imageData,name;
     private boolean isSelected = false;
     int aid;
     public String getDate() {
@@ -50,5 +50,13 @@ public class ODOMeterApprovalModule {
 
     public void setAid(int aid) {
         this.aid = aid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

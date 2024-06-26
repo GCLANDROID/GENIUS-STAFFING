@@ -1,1632 +1,2440 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:orientation="vertical"
-    tools:context=".activity.TempProfileActivity">
-
+    >
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="?android:actionBarSize"
-        android:orientation="horizontal"
-        android:background="@color/colorPrimary">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5">
-
-            <ImageView
-                android:id="@+id/imgBack"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:src="@drawable/backimg" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="2dp"
-                android:text="PROFILE"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:textColor="@android:color/white" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            android:gravity="right">
-
-            <ImageView
-                android:id="@+id/imgHome"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:layout_marginRight="20dp"
-                android:src="@drawable/homeimg" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/llLoader"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="visible">
-
-        <ProgressBar
-            android:layout_width="50dp"
-            android:layout_height="50dp" />
-        <TextView
-            android:id="@+id/tv1"
-            android:layout_marginTop="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:textSize="14sp"
-            android:text="Loading......."/>
-        <TextView
-            android:visibility="gone"
-            android:textAlignment="center"
-            android:layout_gravity="center"
-            android:id="@+id/tv2"
-            android:layout_marginTop="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:textSize="14sp"
-            android:text="It's taking longer than usual.Please wait!"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="10dp"
         android:orientation="vertical">
-        <TextView
-            android:id="@+id/tvView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold|italic"
-            android:textColor="@android:color/white"
-            android:textAppearance="?android:textAppearanceSmall"
-            android:text="VIEW DOCUMENT"/>
         <LinearLayout
-            android:layout_width="120dp"
-            android:layout_height="1dp"
-            android:background="@android:color/white"></LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/llMain"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/lldesign">
-
-        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="?android:actionBarSize"
+            android:orientation="horizontal"
+            android:background="@color/colorPrimary">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="10dp">
+                android:layout_weight="0.5">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="* Mandatory field"
-                    android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Necessary field"
-                    android:textAppearance="?android:textAppearanceMedium"
-                    android:textColor="@android:color/black" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="5dp"
-                    android:background="#bdbdbd"></LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Employee Id:"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/tvEmplId"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text="--"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black" />
-                    </LinearLayout>
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Employee Code:"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/tvEmpCode"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text="--"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Name"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/tvEmpName"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text="--"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Compnay Name"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/tvComName"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text="--"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Date of Joining"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/tvDOJ"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text="--"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Department"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/tvDepartment"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text="--"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Designation"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/tvDesignation"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text="--"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Location"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/tvLocation"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text="--"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:id="@+id/tvPreAddr"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <EditText
-                            android:id="@+id/etPreAddr"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_marginLeft="10dp"
-                            android:background="@drawable/lldesign9"
-                            android:paddingLeft="5dp"
-                            android:singleLine="true"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:id="@+id/tvPrePin"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <EditText
-                            android:id="@+id/etPrePinCode"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_marginLeft="10dp"
-                            android:background="@drawable/lldesign9"
-                            android:inputType="number"
-                            android:maxLength="6"
-                            android:paddingLeft="5dp"
-                            android:singleLine="true"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:id="@+id/imgBack"
+                    android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:id="@+id/tvDOBTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/tvEmpCodeDOB"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text="--"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black" />
-
-                        <ImageView
-                            android:id="@+id/imgCal"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_marginLeft="5dp"
-                            android:src="@drawable/calendar" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:id="@+id/tvGurdianTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <EditText
-                            android:id="@+id/etGurdianName"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_marginLeft="10dp"
-
-                            android:background="@drawable/lldesign9"
-                            android:paddingLeft="5dp"
-                            android:singleLine="true"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:id="@+id/tvRealationTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/tvRealtionShip"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text="--"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black"
-                            android:visibility="gone" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_marginLeft="10dp"
-                            android:background="@drawable/lldesign9">
-
-                            <Spinner
-                                android:id="@+id/spRealation"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"></Spinner>
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:id="@+id/tvMobTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <EditText
-                            android:id="@+id/etMobNumber"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_marginLeft="10dp"
-                            android:background="@null"
-                            android:digits="1234567890"
-                            android:enabled="false"
-                            android:inputType="number"
-                            android:maxLength="10"
-                            android:paddingLeft="10dp"
-                            android:text="--"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:id="@+id/tvGenderTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/tvGender"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text="--"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black"
-                            android:visibility="gone" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_marginLeft="10dp"
-                            android:background="@drawable/lldesign9">
-
-                            <Spinner
-                                android:id="@+id/spGender"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"></Spinner>
-                        </LinearLayout>
-
-
-                    </LinearLayout>
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:id="@+id/tvQualificationtitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/tvQualification"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text="--"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black"
-                            android:visibility="gone" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_marginLeft="10dp"
-                            android:background="@drawable/lldesign9">
-
-                            <Spinner
-                                android:id="@+id/spQualification"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"></Spinner>
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:id="@+id/tvMartialTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/tvMarital"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text="--"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black"
-                            android:visibility="gone" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_marginLeft="10dp"
-                            android:background="@drawable/lldesign9">
-
-                            <Spinner
-                                android:id="@+id/spMartial"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"></Spinner>
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-
-                            android:id="@+id/tvBloodTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/tvBloodGroup"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text="--"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black"
-                            android:visibility="gone" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_marginLeft="10dp"
-                            android:background="@drawable/lldesign9">
-
-                            <Spinner
-                                android:id="@+id/spBloodGrp"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"></Spinner>
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Old ESI no:"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <EditText
-                            android:id="@+id/etESI"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_marginLeft="10dp"
-                            android:background="@drawable/lldesign9"
-                            android:digits="1234567890"
-                            android:maxLength="10"
-                            android:inputType="number"
-                            android:paddingLeft="10dp"
-                            android:text="--"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Old UAN no:"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <EditText
-                            android:inputType="number"
-                            android:maxLength="12"
-                            android:id="@+id/etUAN"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_marginLeft="10dp"
-                            android:background="@drawable/lldesign9"
-                            android:digits="1234567890"
-                            android:paddingLeft="10dp"
-                            android:text="--"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:visibility="gone">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="First Name as per bank"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <EditText
-                            android:id="@+id/etBankFirstName"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_marginLeft="10dp"
-                            android:background="@drawable/lldesign9"
-                            android:digits="1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                            android:paddingLeft="10dp"
-                            android:text="--"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:visibility="gone">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Last Name as per bank:"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <EditText
-                            android:id="@+id/etLastBank"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_marginLeft="10dp"
-                            android:background="@drawable/lldesign9"
-                            android:digits="1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                            android:paddingLeft="10dp"
-                            android:text="--"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:id="@+id/tvAddaharNo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <EditText
-                            android:id="@+id/etAddaharNo"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_marginLeft="10dp"
-                            android:background="@drawable/lldesign9"
-                            android:inputType="number"
-                            android:maxLength="12"
-                            android:paddingLeft="5dp"
-                            android:singleLine="true"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:id="@+id/tvAddaharImg"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:id="@+id/imgCamera"
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
-                            android:src="@drawable/cameraicon" />
-
-                        <ImageView
-                            android:id="@+id/imgDocument"
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
-                            android:layout_marginLeft="10dp" />
-
-
-                    </LinearLayout>
-                </LinearLayout>
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Contact"
-                    android:textAppearance="?android:textAppearanceMedium"
-                    android:textColor="@android:color/black" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="5dp"
-                    android:background="#bdbdbd"></LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:id="@+id/tvPerAddr"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <EditText
-                            android:id="@+id/etPerAddr"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_marginLeft="10dp"
-                            android:background="@drawable/lldesign9"
-                            android:maxLength="10"
-                            android:paddingLeft="10dp"
-                            android:text="--"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black" />
-                    </LinearLayout>
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:id="@+id/tvPerPin"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <EditText
-                            android:id="@+id/etPerPinCode"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_marginLeft="10dp"
-                            android:background="@drawable/lldesign9"
-                            android:digits="1234567890"
-                            android:inputType="number"
-                            android:maxLength="6"
-                            android:paddingLeft="10dp"
-                            android:text="--"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black" />
-                    </LinearLayout>
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:id="@+id/tvPreState"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_marginLeft="10dp"
-                            android:background="@drawable/lldesign9">
-
-                            <Spinner
-                                android:id="@+id/spPresentState"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"></Spinner>
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:id="@+id/tvPreCity"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_marginLeft="10dp"
-                            android:background="@drawable/lldesign9">
-
-                            <Spinner
-                                android:id="@+id/spPresentCity"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"></Spinner>
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:id="@+id/tvPerState"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_marginLeft="10dp"
-                            android:background="@drawable/lldesign9">
-
-                            <Spinner
-                                android:id="@+id/spPermanentState"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"></Spinner>
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:id="@+id/tvPerCity"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_marginLeft="10dp"
-                            android:background="@drawable/lldesign9">
-
-                            <Spinner
-                                android:id="@+id/spPermanentCity"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"></Spinner>
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Phone Number"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <EditText
-                            android:id="@+id/etPhnNumber"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_marginLeft="10dp"
-                            android:background="@drawable/lldesign9"
-                            android:digits="1234567890"
-                            android:inputType="number"
-                            android:maxLength="10"
-                            android:paddingLeft="10dp"
-                            android:text="--"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:id="@+id/tvEmailTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <EditText
-                            android:id="@+id/etEmail"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_marginLeft="10dp"
-                            android:background="@drawable/lldesign9"
-                            android:paddingLeft="10dp"
-                            android:text="--"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Miscellaneous"
-                    android:textAppearance="?android:textAppearanceMedium"
-                    android:textColor="@android:color/black" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="5dp"
-                    android:background="#bdbdbd"></LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Skill"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/textcolor" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <EditText
-                            android:id="@+id/etSkill"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_marginLeft="10dp"
-                            android:background="@drawable/lldesign9"
-                            android:paddingLeft="10dp"
-                            android:text="--"
-                            android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@android:color/black" />
-                    </LinearLayout>
-                </LinearLayout>
-
-
-               <LinearLayout
-                   android:layout_width="match_parent"
-                   android:layout_height="50dp"
-                   android:background="@drawable/gradientdesign2"
-                   android:layout_marginTop="20dp"
-                   android:orientation="horizontal">
-                   <LinearLayout
-                       android:layout_width="0dp"
-                       android:layout_height="match_parent"
-                       android:layout_weight="0.5">
-
-                   </LinearLayout>
-                   <LinearLayout
-                       android:layout_width="0dp"
-                       android:layout_height="match_parent"
-                       android:layout_weight="1"
-                       android:gravity="center">
-                       <TextView
-                           android:id="@+id/tvSubmit"
-                           android:layout_width="wrap_content"
-                           android:layout_height="wrap_content"
-                           android:textColor="@android:color/white"
-                           android:textAppearance="?android:textAppearanceMedium"
-                           android:textStyle="bold"
-                           android:text="Submit"/>
-                       <LinearLayout
-                           android:layout_width="1dp"
-                           android:layout_height="20dp"
-                           android:background="@android:color/white"
-                           android:layout_marginLeft="10dp"></LinearLayout>
-                       <TextView
-                           android:layout_marginLeft="10dp"
-                           android:id="@+id/tvSkip"
-                           android:layout_width="wrap_content"
-                           android:layout_height="wrap_content"
-                           android:textColor="@android:color/white"
-                           android:textAppearance="?android:textAppearanceMedium"
-                           android:textStyle="bold"
-                           android:text="Skip"/>
-                   </LinearLayout>
-                   <LinearLayout
-                       android:layout_width="0dp"
-                       android:layout_height="match_parent"
-                       android:layout_weight="0.5"
-                       android:gravity="center">
-                       <ImageView
-                           android:visibility="gone"
-                           android:id="@+id/imgForward"
-                           android:layout_width="30dp"
-                           android:layout_height="30dp"
-                           android:background="@drawable/ic_forward"/>
-                   </LinearLayout>
-               </LinearLayout>
-
-
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/backimg" />
             </LinearLayout>
-        </ScrollView>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="2dp"
+                    android:text="PROFILE"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:gravity="right">
+
+                <ImageView
+                    android:id="@+id/imgHome"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/homeimg" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llLoader"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
+            <TextView
+                android:id="@+id/tv1"
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:text="Loading......."/>
+            <TextView
+                android:visibility="gone"
+                android:textAlignment="center"
+                android:layout_gravity="center"
+                android:id="@+id/tv2"
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:text="It's taking longer than usual.Please wait!"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tvView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold|italic"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:text="VIEW DOCUMENT"/>
+            <LinearLayout
+                android:layout_width="120dp"
+                android:layout_height="1dp"
+                android:background="@android:color/white"></LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llMain"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/lldesign">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:text="* Mandatory field"
+                        android:textSize="12sp"
+                        android:textColor="@android:color/holo_red_dark"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Necessary field"
+                        android:textSize="12sp"
+                        android:textColor="@android:color/black" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="#bdbdbd"></LinearLayout>
+
+                    <LinearLayout
+                        android:layout_marginTop="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="@drawable/lldesign"
+                        android:backgroundTint="@color/blue">
+                        <TextView
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:textColor="@color/white"
+                            android:text="Official Details :-"></TextView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Employee Id:"
+                                android:textSize="12sp"
+                                android:textColor="@color/textcolor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/tvEmplId"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:text="--"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/black" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Employee Code:"
+                                android:textSize="12sp"
+                                android:textColor="@color/textcolor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/tvEmpCode"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:text="--"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/black" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Name"
+                                android:textSize="12sp"
+                                android:textColor="@color/textcolor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/tvEmpName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:text="--"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/black" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Company Name"
+                                android:textSize="12sp"
+                                android:textColor="@color/textcolor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/tvComName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:text="--"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/black" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Date of Joining"
+                                android:textSize="12sp"
+                                android:textColor="@color/textcolor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/tvDOJ"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:text="--"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/black" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Department"
+                                android:textSize="12sp"
+                                android:textColor="@color/textcolor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/tvDepartment"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:text="--"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/black" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Designation"
+                                android:textSize="12sp"
+                                android:textColor="@color/textcolor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/tvDesignation"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:text="--"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/black" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Location"
+                                android:textSize="12sp"
+                                android:textColor="@color/textcolor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/tvLocation"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:text="--"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/black" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!--personal-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_marginTop="20dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:background="@drawable/lldesign"
+                            android:backgroundTint="@color/blue">
+                            <TextView
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="10dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="14sp"
+                                android:textColor="@color/white"
+                                android:text="Personal Details :-"></TextView>
+                        </LinearLayout>
+
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.5">
+
+                                <TextView
+                                    android:id="@+id/tvDOBTitle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/textcolor" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvEmpCodeDOB"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:text="--"
+                                    android:textSize="12sp"
+                                    android:textColor="@android:color/black" />
+
+                                <ImageView
+                                    android:id="@+id/imgCal"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="5dp"
+                                    android:src="@drawable/calendar" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5">
+
+                                <TextView
+                                    android:id="@+id/tvGurdianTitle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/textcolor" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <EditText
+                                    android:id="@+id/etGurdianName"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="10dp"
+
+                                    android:background="@drawable/lldesign9"
+                                    android:paddingLeft="5dp"
+                                    android:singleLine="true"
+                                    android:textSize="12sp"
+                                    android:textColor="@android:color/black" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="10dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5">
+
+                                <TextView
+                                    android:id="@+id/tvRealationTitle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/textcolor" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/tvRealtionShip"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:text="--"
+                                    android:textSize="12sp"
+                                    android:textColor="@android:color/black"
+                                    android:visibility="gone" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:background="@drawable/lldesign9">
+
+                                    <Spinner
+                                        android:id="@+id/spRealation"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"></Spinner>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5">
+
+                                <TextView
+                                    android:id="@+id/tvGenderTitle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/textcolor" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/tvGender"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:text="--"
+                                    android:textSize="12sp"
+                                    android:textColor="@android:color/black"
+                                    android:visibility="gone" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:background="@drawable/lldesign9">
+
+                                    <Spinner
+                                        android:id="@+id/spGender"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"></Spinner>
+                                </LinearLayout>
+
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5">
+
+                                <TextView
+                                    android:id="@+id/tvQualificationtitle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/textcolor" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/tvQualification"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:text="--"
+                                    android:textSize="12sp"
+                                    android:textColor="@android:color/black"
+                                    android:visibility="gone" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:background="@drawable/lldesign9">
+
+                                    <Spinner
+                                        android:id="@+id/spQualification"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"></Spinner>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="10dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5">
+
+                                <TextView
+                                    android:id="@+id/tvMartialTitle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/textcolor" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/tvMarital"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:text="--"
+                                    android:textSize="12sp"
+                                    android:textColor="@android:color/black"
+                                    android:visibility="gone" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:background="@drawable/lldesign9">
+
+                                    <Spinner
+                                        android:id="@+id/spMartial"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"></Spinner>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5">
+
+                                <TextView
+
+                                    android:id="@+id/tvBloodTitle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/textcolor" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/tvBloodGroup"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:text="--"
+                                    android:textSize="12sp"
+                                    android:textColor="@android:color/black"
+                                    android:visibility="gone" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:background="@drawable/lldesign9">
+
+                                    <Spinner
+                                        android:id="@+id/spBloodGrp"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"></Spinner>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+
+                    <!--  contact-->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_marginTop="20dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:background="@drawable/lldesign"
+                            android:backgroundTint="@color/blue">
+                            <TextView
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="10dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="14sp"
+                                android:textColor="@color/white"
+                                android:text="Contact Details :-"></TextView>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5">
+
+                                <TextView
+                                    android:id="@+id/tvMobTitle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/textcolor" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <EditText
+                                    android:id="@+id/etMobNumber"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:background="@null"
+                                    android:digits="1234567890"
+                                    android:enabled="false"
+                                    android:inputType="number"
+                                    android:maxLength="10"
+                                    android:paddingLeft="10dp"
+                                    android:text="--"
+                                    android:textSize="12sp"
+                                    android:textColor="@android:color/black" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Emergency Number"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/textcolor" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <EditText
+                                    android:id="@+id/etPhnNumber"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:background="@drawable/lldesign9"
+                                    android:digits="1234567890"
+                                    android:inputType="number"
+                                    android:maxLength="10"
+                                    android:paddingLeft="10dp"
+                                    android:text="--"
+                                    android:textSize="12sp"
+                                    android:textColor="@android:color/black" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5">
+
+                                <TextView
+                                    android:id="@+id/tvEmailTitle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/textcolor" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <EditText
+                                    android:id="@+id/etEmail"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:background="@drawable/lldesign9"
+                                    android:paddingLeft="10dp"
+                                    android:text="--"
+                                    android:textSize="12sp"
+                                    android:textColor="@android:color/black" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Reference Number"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/textcolor" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <EditText
+                                    android:id="@+id/etRefNumber"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:background="@drawable/lldesign9"
+                                    android:digits="1234567890"
+                                    android:inputType="number"
+                                    android:maxLength="10"
+                                    android:paddingLeft="10dp"
+                                    android:text="--"
+                                    android:textSize="12sp"
+                                    android:textColor="@android:color/black" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:visibility="visible"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp">
+
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5">
+
+                                <TextView
+                                    android:id="@+id/tvPreAddr"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/textcolor" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <EditText
+                                    android:id="@+id/etPreAddr"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="60dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:background="@drawable/lldesign9"
+                                    android:paddingLeft="5dp"
+                                    android:singleLine="true"
+                                    android:textSize="12sp"
+                                    android:textColor="@android:color/black" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:visibility="visible"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5">
+
+                                <TextView
+                                    android:id="@+id/tvPrePin"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/textcolor" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <EditText
+                                    android:id="@+id/etPrePinCode"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:background="@drawable/lldesign9"
+                                    android:inputType="number"
+                                    android:maxLength="6"
+                                    android:paddingLeft="5dp"
+                                    android:singleLine="true"
+                                    android:textSize="12sp"
+                                    android:textColor="@android:color/black" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="10dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5">
+
+                                <TextView
+                                    android:id="@+id/tvPreState"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="14sp"
+                                    android:textColor="@color/textcolor" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:background="@drawable/lldesign9">
+
+                                    <Spinner
+                                        android:id="@+id/spPresentState"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"></Spinner>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="10dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5">
+
+                                <TextView
+                                    android:id="@+id/tvPreCity"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/textcolor" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:background="@drawable/lldesign9">
+
+                                    <Spinner
+                                        android:id="@+id/spPresentCity"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"></Spinner>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+
+
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5">
+
+                                <TextView
+                                    android:id="@+id/tvPerAddr"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/textcolor" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <EditText
+                                    android:id="@+id/etPerAddr"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="60dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:background="@drawable/lldesign9"
+                                    android:paddingLeft="10dp"
+                                    android:text="--"
+                                    android:textSize="12sp"
+                                    android:textColor="@android:color/black" />
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5">
+
+                                <TextView
+                                    android:id="@+id/tvPerPin"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/textcolor" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <EditText
+                                    android:id="@+id/etPerPinCode"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:background="@drawable/lldesign9"
+                                    android:digits="1234567890"
+                                    android:inputType="number"
+                                    android:maxLength="6"
+                                    android:paddingLeft="10dp"
+                                    android:text="--"
+                                    android:textSize="12sp"
+                                    android:textColor="@android:color/black" />
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="10dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5">
+
+                                <TextView
+                                    android:id="@+id/tvPerState"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/textcolor" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:background="@drawable/lldesign9">
+
+                                    <Spinner
+                                        android:id="@+id/spPermanentState"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"></Spinner>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="10dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5">
+
+                                <TextView
+                                    android:id="@+id/tvPerCity"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/textcolor" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:background="@drawable/lldesign9">
+
+                                    <Spinner
+                                        android:id="@+id/spPermanentCity"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"></Spinner>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+
+
+
+
+
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_marginTop="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="@drawable/lldesign"
+                        android:backgroundTint="@color/blue">
+                        <TextView
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:textColor="@color/white"
+                            android:text="Old Esic Details :-"></TextView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="ESIC Number:"
+                                android:textSize="12sp"
+                                android:textColor="@color/textcolor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:id="@+id/etESI"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="10dp"
+                                android:background="@drawable/lldesign9"
+                                android:maxLength="17"
+                                android:paddingLeft="10dp"
+                                android:text="--"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/black" />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <!--nominee name-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Nominee Name:"
+                                android:textSize="12sp"
+                                android:textColor="@color/textcolor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:id="@+id/etESINominee"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="10dp"
+                                android:background="@drawable/lldesign9"
+                                android:inputType="text"
+                                android:paddingLeft="10dp"
+                                android:text="--"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/black" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!--nominee age-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Date of Birth:"
+                                android:textSize="12sp"
+                                android:textColor="@color/textcolor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tvESICDOB"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:text="--"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/black" />
+
+                            <ImageView
+                                android:id="@+id/imgESICCal"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="5dp"
+                                android:src="@drawable/calendar" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!--nominee gender-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Gender:"
+                                android:textSize="12sp"
+                                android:textColor="@color/textcolor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="10dp"
+                                android:background="@drawable/lldesign9">
+
+                                <Spinner
+                                    android:id="@+id/spESICGender"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"></Spinner>
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!--nominee realtionship-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Relationship:"
+                                android:textSize="12sp"
+                                android:textColor="@color/textcolor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="10dp"
+                                android:background="@drawable/lldesign9">
+
+                                <Spinner
+                                    android:id="@+id/spESICRealation"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"></Spinner>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!--residing-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Residing with you or not:"
+                                android:textSize="12sp"
+                                android:textColor="@color/textcolor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_marginLeft="10dp"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/lldesign9">
+
+                            <Spinner
+
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:id="@+id/spResiding"></Spinner>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/llResidingAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="10dp">
+                        <!--residing state-->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Residing State:"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/textcolor" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <EditText
+                                    android:id="@+id/etESINomineeState"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:background="@drawable/lldesign9"
+                                    android:inputType="text"
+                                    android:paddingLeft="10dp"
+                                    android:text="--"
+                                    android:textSize="12sp"
+                                    android:textColor="@android:color/black" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!--residing town-->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Residing Town:"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/textcolor" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <EditText
+                                    android:id="@+id/etESINomineeTown"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:background="@drawable/lldesign9"
+                                    android:inputType="text"
+                                    android:paddingLeft="10dp"
+                                    android:text="--"
+                                    android:textSize="12sp"
+                                    android:textColor="@android:color/black" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_marginTop="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="@drawable/lldesign"
+                        android:backgroundTint="@color/blue">
+                        <TextView
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:textColor="@color/white"
+                            android:text="Old UAN Details :-"></TextView>
+                    </LinearLayout>
+                    <!--UAN Number-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="UAN Number:"
+                                android:textSize="12sp"
+                                android:textColor="@color/textcolor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:inputType="number"
+                                android:maxLength="12"
+                                android:id="@+id/etUAN"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="10dp"
+                                android:background="@drawable/lldesign9"
+                                android:digits="1234567890"
+                                android:paddingLeft="10dp"
+                                android:text="--"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/black" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!--PF Number-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="PF Number:"
+                                android:textSize="12sp"
+                                android:textColor="@color/textcolor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:id="@+id/etPFNumber"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="10dp"
+                                android:background="@drawable/lldesign9"
+                                android:paddingLeft="10dp"
+                                android:text="--"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/black" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!--employer name-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Previous Employer Name:"
+                                android:textSize="12sp"
+                                android:textColor="@color/textcolor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:id="@+id/etPreviousEmployer"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="10dp"
+                                android:background="@drawable/lldesign9"
+                                android:paddingLeft="10dp"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/black" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!--nominee name-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Name of the Nominee:"
+                                android:textSize="12sp"
+                                android:textColor="@color/textcolor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:id="@+id/etUANNominee"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="10dp"
+                                android:background="@drawable/lldesign9"
+                                android:paddingLeft="10dp"
+                                android:text="--"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/black" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!--nominee address-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Address of the Nominee:"
+                                android:textSize="12sp"
+                                android:textColor="@color/textcolor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:id="@+id/etUANNomineeAddress"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_marginLeft="10dp"
+                                android:background="@drawable/lldesign9"
+                                android:paddingLeft="10dp"
+                                android:text="--"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/black" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!--ralationship-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Relationship with Member:"
+                                android:textSize="12sp"
+                                android:textColor="@color/textcolor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="10dp"
+                                android:background="@drawable/lldesign9">
+
+                                <Spinner
+                                    android:id="@+id/spUANRealation"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"></Spinner>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!--dob-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Date of Birth of Nominee:"
+                                android:textSize="12sp"
+                                android:textColor="@color/textcolor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tvUANDOB"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:text="--"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/black" />
+
+                            <ImageView
+                                android:id="@+id/imgUANCal"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="5dp"
+                                android:src="@drawable/calendar" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Total amount or share of accumulations in Provident Funds to be paid to each nominee:"
+                                android:textSize="12sp"
+                                android:textColor="@color/textcolor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_marginLeft="10dp"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/lldesign9">
+
+                            <Spinner
+
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:id="@+id/spTotalAmt"></Spinner>
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+                    <!--nimor-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="If the nominee is minor, name and address of the guardian who may receive the amount during the minority of the nominee:"
+                                android:textSize="12sp"
+                                android:textColor="@color/textcolor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:id="@+id/etUANMinorNameAddress"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_marginLeft="10dp"
+                                android:background="@drawable/lldesign9"
+                                android:paddingLeft="10dp"
+                                android:text="--"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/black" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="First Name as per bank"
+                                android:textSize="12sp"
+                                android:textColor="@color/textcolor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:id="@+id/etBankFirstName"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="10dp"
+                                android:background="@drawable/lldesign9"
+                                android:digits="1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                android:paddingLeft="10dp"
+                                android:text="--"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/black" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Last Name as per bank:"
+                                android:textSize="12sp"
+                                android:textColor="@color/textcolor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:id="@+id/etLastBank"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="10dp"
+                                android:background="@drawable/lldesign9"
+                                android:digits="1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                android:paddingLeft="10dp"
+                                android:text="--"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/black" />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <!-- AAdhar-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+                        <LinearLayout
+                            android:layout_marginTop="20dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:background="@drawable/lldesign"
+                            android:backgroundTint="@color/blue">
+                            <TextView
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="10dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="14sp"
+                                android:textColor="@color/white"
+                                android:text="Aadhaar Details :-"></TextView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5">
+
+                                <TextView
+                                    android:id="@+id/tvAddaharNo"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/textcolor" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <EditText
+                                    android:id="@+id/etAddaharNo"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:background="@drawable/lldesign9"
+                                    android:inputType="number"
+                                    android:maxLength="12"
+                                    android:paddingLeft="5dp"
+                                    android:singleLine="true"
+                                    android:textSize="12sp"
+                                    android:textColor="@android:color/black" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5">
+
+                                <TextView
+                                    android:id="@+id/tvAddaharImg"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/textcolor" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/imgCamera"
+                                    android:layout_width="60dp"
+                                    android:layout_height="60dp"
+                                    android:src="@drawable/cameraicon" />
+
+                                <ImageView
+                                    android:id="@+id/imgDocument"
+                                    android:layout_width="60dp"
+                                    android:layout_height="60dp"
+                                    android:layout_marginLeft="10dp" />
+
+
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+                        <LinearLayout
+                            android:layout_marginTop="20dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:background="@drawable/lldesign"
+                            android:backgroundTint="@color/blue">
+                            <TextView
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="10dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="14sp"
+                                android:textColor="@color/white"
+                                android:text="Miscellaneous Details :-"></TextView>
+                        </LinearLayout>
+
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Skill"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/textcolor" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <EditText
+                                    android:id="@+id/etSkill"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:background="@drawable/lldesign9"
+                                    android:paddingLeft="10dp"
+                                    android:text="--"
+                                    android:textSize="12sp"
+                                    android:textColor="@android:color/black" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/lldesign"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:backgroundTint="@color/textcolor">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5">
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center">
+                            <TextView
+                                android:gravity="center"
+                                android:id="@+id/tvSubmit"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@android:color/white"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:text="Submit"/>
+                            <LinearLayout
+
+                                android:visibility="gone"
+                                android:layout_width="1dp"
+                                android:layout_height="20dp"
+                                android:background="@android:color/white"
+                                android:layout_marginLeft="10dp"></LinearLayout>
+                            <TextView
+                                android:visibility="gone"
+                                android:layout_marginLeft="10dp"
+                                android:id="@+id/tvSkip"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@android:color/white"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:text="Skip"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5"
+                            android:gravity="center">
+                            <ImageView
+                                android:visibility="gone"
+                                android:id="@+id/imgForward"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:background="@drawable/ic_forward"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
     </LinearLayout>
 
 
-</LinearLayout>
+
+
+</layout>

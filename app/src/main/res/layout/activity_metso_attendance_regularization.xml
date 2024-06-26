@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="activity.metso.MetsoAttendanceRegularizationActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5">
+
+            <ImageView
+                android:id="@+id/imgBack"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/backimg" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tvToolBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Attendance Regularization"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="right">
+
+            <ImageView
+                android:id="@+id/imgHome"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/homeimg" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/lnStartDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/calendar"
+                    app:tint="@color/maincolor"></ImageView>
+
+                <TextView
+                    android:id="@+id/tvStartDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:text="Start Date"
+                    android:textAlignment="center"
+                    android:textColor="@color/textcolor"
+                    android:textSize="12sp"></TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lnEndDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/calendar"
+                    app:tint="@color/maincolor"></ImageView>
+
+                <TextView
+                    android:id="@+id/tvEndDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:text="End Date"
+                    android:textAlignment="center"
+                    android:textColor="@color/textcolor"
+                    android:textSize="12sp"></TextView>
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnShow"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/lldesign"
+            android:backgroundTint="@color/maincolor"
+            android:text="show"
+            android:textColor="@color/white"></Button>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llLoader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/ProgressbarWL"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="“In most cases, being a good boss means hiring talented people and then getting out of their way.”-Tina Fey"
+            android:textAlignment="center"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="13sp"
+            android:textStyle="italic" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="5dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_marginBottom="10dp"
+            android:paddingRight="10dp">
+
+            <LinearLayout
+                android:id="@+id/btnSubmit"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:background="@drawable/lldesign"
+                android:backgroundTint="@color/maincolor"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="SAVE"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp"></TextView>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <!--     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_marginLeft="10dp"
+                         android:text="Note:- \n* You can change your In Time/Out Time."
+                         android:textColor="@android:color/holo_red_dark"
+                         android:textSize="12sp"></TextView>-->
+                <!--
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+                                    <TextView
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="12sp"
+                                        android:textStyle="bold"
+                                        android:textColor="@android:color/holo_red_dark"
+                                        android:text= "F:"></TextView>
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="12sp"
+                                        android:textColor="@android:color/holo_red_dark"
+                                        android:text= "Full Working Day"></TextView>
+                                    <TextView
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="12sp"
+                                        android:textStyle="bold"
+                                        android:textColor="@android:color/holo_red_dark"
+                                        android:text= "WO:"></TextView>
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="12sp"
+                                        android:textColor="@android:color/holo_red_dark"
+                                        android:text= "Weekly Off"></TextView>
+                                    <TextView
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="12sp"
+                                        android:textStyle="bold"
+                                        android:textColor="@android:color/holo_red_dark"
+                                        android:text= "H:"></TextView>
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="12sp"
+                                        android:textColor="@android:color/holo_red_dark"
+                                        android:text= "Holiday"></TextView>
+                                </LinearLayout>
+                -->
+
+
+               <!-- <TextView
+                    android:id="@+id/tvCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/textcolor"
+                    android:textSize="12sp"
+                    android:textStyle="bold"></TextView>
+                                <LinearLayout
+                                    android:visibility="visible"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginBottom="5dp">
+                                    <LinearLayout
+
+                                        android:id="@+id/llTick"
+                                        android:gravity="center"
+                                        android:background="@drawable/lldesign"
+                                        android:layout_gravity="center"
+                                        android:backgroundTint="@color/grey"
+                                        android:layout_width="30dp"
+                                        android:layout_height="30dp"
+                                        >
+                                        <ImageView
+                                            android:visibility="gone"
+                                            android:id="@+id/imgLike"
+                                            android:layout_width="15dp"
+                                            android:layout_height="15dp"
+                                            android:src="@drawable/likeicon"
+                                            app:tint="@color/white"></ImageView>
+                                    </LinearLayout>
+                                    <TextView
+                                        android:textStyle="bold"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="20sp"
+                                        android:textColor="@color/textcolor"
+                                        android:layout_gravity="center"
+                                        android:text="Select All"
+                                        android:layout_marginLeft="5dp"></TextView>
+                                </LinearLayout>-->
+
+
+
+
+                <androidx.core.widget.NestedScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/llHeading"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="15sp"
+                            android:layout_marginRight="5dp"
+                            android:background="@drawable/lldesign7"
+                            android:orientation="horizontal"
+                            android:visibility="visible">
+
+                            <LinearLayout
+                                android:id="@+id/llLike"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:layout_weight="0.1"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:visibility="gone">
+
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tvDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="2dp"
+                                android:layout_weight="0.5"
+                                android:gravity="center"
+                                android:text="Date"
+                                android:textColor="@android:color/black"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/tvInTime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="5dp"
+                                android:layout_weight="0.5"
+                                android:gravity="center"
+                                android:text="In time"
+                                android:textColor="@android:color/black"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/tvOutTime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="5dp"
+                                android:layout_weight="0.5"
+                                android:gravity="center"
+                                android:text="Out time"
+                                android:textColor="@android:color/black"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/tvRemark"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginRight="2dp"
+                                android:layout_weight="0.4"
+                                android:gravity="center"
+                                android:text="Shift Type    "
+                                android:textColor="@android:color/black"
+                                android:textSize="12sp"
+                                android:visibility="gone" />
+                        </LinearLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+
+                            android:id="@+id/rvItem"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginBottom="10dp"
+                            tools:listitem="@layout/metso_attendance_row">
+
+                        </androidx.recyclerview.widget.RecyclerView>
+
+                        <EditText
+                            android:id="@+id/etFocus"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:background="@null"></EditText>
+                    </LinearLayout>
+                </androidx.core.widget.NestedScrollView>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llNodata"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:gravity="top|center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/problemicon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="No data found"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
+</LinearLayout>
