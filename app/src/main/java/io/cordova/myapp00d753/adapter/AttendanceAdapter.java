@@ -63,6 +63,8 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.My
             myViewHolder.tvStatus.setText("-");
         }
 
+        myViewHolder.tvOutLocation.setText(attendanceInfoList.get(i).getAddress_out());
+
 
 
     }
@@ -73,7 +75,7 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.My
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tvDate,tvInTime,tvOutTime,tvLocation,tvType,tvStatus;
+        TextView tvDate,tvInTime,tvOutTime,tvLocation,tvType,tvStatus,tvOutLocation;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tvDate=(TextView)itemView.findViewById(R.id.tvDate);
@@ -82,7 +84,7 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.My
             tvLocation=(TextView)itemView.findViewById(R.id.tvLocation);
             tvType=(TextView)itemView.findViewById(R.id.tvType);
             tvStatus=(TextView)itemView.findViewById(R.id.tvStatus);
-
+            tvOutLocation=(TextView) itemView.findViewById(R.id.tvOutLocation);
         }
     }
 
