@@ -84,6 +84,8 @@ import java.util.List;
 import java.util.Locale;
 
 import id.zelory.compressor.Compressor;
+import io.cordova.myapp00d753.AndroidXCamera.AndroidXCameraActivity;
+import io.cordova.myapp00d753.AndroidXCamera.FrontAndroidXCameraActivity;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.module.AttendanceManageModule;
 import io.cordova.myapp00d753.module.AttendanceService;
@@ -163,6 +165,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
     TextView tvFace;
     LinearLayout llL;
     TextView tvToolBar;
+    Uri image_uri;
 
 
     @Override
@@ -285,7 +288,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
             @Override
             public void onClick(View view) {
                 if (intt.equals("2")) {
-                    cameraIntent();
+                    FrontAndroidXCameraActivity.launch(AttendanceManageActivity.this, 8001);
                 } else {
                     Intent intent = new Intent(AttendanceManageActivity.this, FaceRecognitation.class);
                     intent.putExtra("address", address1);
@@ -597,7 +600,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
+        /*switch (requestCode) {
             case CAMERA_REQUEST:
 
                 if (resultCode == Activity.RESULT_OK) {
@@ -605,7 +608,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
                         try {
 
                             //messageAlert();
-                            String imageurl = /*"file://" +*/ getRealPathFromURIPath(imageUri);
+                            String imageurl = *//*"file://" +*//* getRealPathFromURIPath(imageUri);
                             file = new File(imageurl);
                             compressedImageFile = new ImageZipper(AttendanceManageActivity.this)
                                     .setQuality(75)
@@ -635,6 +638,21 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
                 break;
 
 
+        }*/
+
+
+        if (requestCode == 2000 && resultCode == 8001){
+            Log.e("TAG", "onActivityResult: "+data.getExtras().get("picture"));
+            Log.e("TAG", "onActivityResult: "+data.getExtras().get(AndroidXCameraActivity.IMAGE_PATH_KEY));
+            image_uri =  Uri.parse(String.valueOf(data.getExtras().get("picture")));
+            //image_uri = (Uri) data.getExtras().get(AndroidXCameraActivity.IMAGE_PATH_KEY);
+            compressedImageFile = new File(String.valueOf(data.getExtras().get("picture")));
+
+            if (image_uri != null){
+                imgEmp.setImageURI(image_uri);
+                flag=1;
+
+            }
         }
 
 
@@ -988,14 +1006,17 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
 
     private void imgemandatoryCheck() {
 
-        if (flag == 1) {
-
-
-            attendance();
-        } else {
+        if (pref.getAttdImg().equals("P")){
+            if (flag == 1) {
+                attendance();
+            }else {
+                Toast.makeText(AttendanceManageActivity.this,"Please attach your image",Toast.LENGTH_LONG).show();
+            }
+        }else {
             attendanceGivenfunction();
-
         }
+
+
     }
 
 
