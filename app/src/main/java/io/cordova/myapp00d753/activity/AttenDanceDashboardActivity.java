@@ -781,7 +781,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             } else {
-                JSONObject obj=new JSONObject();
+                /*JSONObject obj=new JSONObject();
                 try {
                     obj.put("AEMConsultantID", pref.getEmpId());
                     obj.put("AEMClientID",pref.getEmpClintId());
@@ -799,8 +799,8 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                     weeklyfunction(obj);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
-                //weeklyfunction();
+                }*/
+                weeklyfunction();
             }
         } else if (view == imgSearch) {
             searchAlert();
