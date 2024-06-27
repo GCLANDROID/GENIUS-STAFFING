@@ -10,6 +10,7 @@ public class AttendanceModule {
     String attendanceOutTime;
     String attendanceReply;
     String attendanceType;
+    String Address_out;
     @SerializedName("Longitude")
     String shift;
     @SerializedName("Latitude")
@@ -97,5 +98,13 @@ public class AttendanceModule {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getAddress_out() {
+        return Address_out;
+    }
+
+    public void setAddress_out(String address_out) {
+        Address_out = address_out;
     }
 }

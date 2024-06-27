@@ -210,7 +210,9 @@ public class AttendanceReportActivity extends AppCompatActivity {
                                     AttendanceID=obj.optString("AttendanceID");
                                     String ApproverStatus=obj.optString("ApproverStatus");
                                     String AttendanceType=obj.optString("AttendanceType");
+                                    String Address_out=obj.optString("Address_out");
                                     AttendanceModule obj2 = new AttendanceModule(AttendanceDate,AttendanceInDateTime,AttendanceOutDateTime,Address,ApproverStatus,AttendanceType);
+                                    obj2.setAddress_out(Address_out);
                                     attendabceInfiList.add(obj2);
 
 
