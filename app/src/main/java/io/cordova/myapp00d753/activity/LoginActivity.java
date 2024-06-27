@@ -605,7 +605,7 @@ public class LoginActivity extends AppCompatActivity {
                                     pref.saveLeaveUrl(LeaveUrl);
                                     String AttdImage = obj.optString("AttdImage");
                                     pref.saveAttdImg(AttdImage);
-                                    String BackAttd = obj.optString("BackAttd");
+                                    String BackAttd = obj.optString("BackDateAttendance");
                                     pref.saveBackAttd(BackAttd);
                                     String IsSupervisor = obj.optString("IsSupervisor");
                                     pref.saveSup(IsSupervisor);
