@@ -200,7 +200,8 @@ public class SalaryActivity extends AppCompatActivity  {
                                 llAgain.setVisibility(View.GONE);
                             }
                         } catch (JSONException e) {
-                            throw new RuntimeException(e);
+                            e.printStackTrace();
+                            Toast.makeText(SalaryActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -460,6 +461,4 @@ public class SalaryActivity extends AppCompatActivity  {
         window.setGravity(Gravity.CENTER);
         alertDialog.show();
     }
-
-
 }

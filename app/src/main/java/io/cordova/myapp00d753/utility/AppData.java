@@ -18,4 +18,5 @@ public class AppData {
     public static String SAVE_WEEKLY_OFF_APPLICATION = newv2url+"Attendance/SaveWOApplication";
 
     public static String GET_EMPLOYEE_SALARY = newv2url+"Payroll/GetEmpSalary";
+    public static String GET_EMPLOYEE_DISBURSED_PAYOUT = newv2url+"Payroll/GetEmpDisbursedPayout";
 }

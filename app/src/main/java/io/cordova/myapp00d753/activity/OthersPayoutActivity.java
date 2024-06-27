@@ -24,6 +24,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,6 +46,7 @@ import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
 
 public class OthersPayoutActivity extends AppCompatActivity {
+    private static final String TAG = "OthersPayoutActivity";
     RecyclerView rvItem;
     Spinner spYear;
     Button btnView;
@@ -121,10 +126,90 @@ public class OthersPayoutActivity extends AppCompatActivity {
         btnView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getOthersPayoutItem();
+                //getOthersPayoutItem();
+
+                JSONObject obj=new JSONObject();
+                try {
+                    obj.put("AEMEmployeeID", pref.getEmpId());
+                    obj.put("FinancialYear", finYear);
+                    obj.put("SecurityCode",pref.getSecurityCode());
+                    getOthersPayoutItem(obj);
+                    //"gcl_EmployeeOtherDisbursedPayout?AEMEmployeeID="+pref.getEmpId()+"&FinancialYear="+finYear+"&SecurityCode="+pref.getSecurityCode();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
+    }
+
+    private void getOthersPayoutItem(JSONObject jsonObject) {
+        Log.e(TAG, "getOthersPayoutItem: "+jsonObject);
+        ProgressDialog progressDialog=new ProgressDialog(OthersPayoutActivity.this);
+        progressDialog.setMessage("Loading");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        lnMain.setVisibility(View.GONE);
+        lnNoData.setVisibility(View.GONE);
+        AndroidNetworking.post(AppData.GET_EMPLOYEE_DISBURSED_PAYOUT)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressDialog.dismiss();
+                            Log.e(TAG, "DISBURSED_PAYOUT_LIST: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String BillType = obj.optString("BillType");
+                                    String Amount = obj.optString("Amount");
+                                    String SalMonth = obj.optString("SalMonth");
+                                    String SalYear = obj.optString("SalYear");
+                                    OthersPayableModel othersPayableModel=new OthersPayableModel();
+                                    othersPayableModel.setBilltype(BillType);
+                                    othersPayableModel.setYear(SalYear);
+                                    othersPayableModel.setMonth(SalMonth);
+                                    othersPayableModel.setAmt(Amount);
+                                    itemList.add(othersPayableModel);
+                                }
+
+                                if (itemList.size() > 0) {
+
+                                    lnMain.setVisibility(View.VISIBLE);
+                                    lnNoData.setVisibility(View.GONE);
+
+                                    setAdapter();
+                                } else {
+                                    lnMain.setVisibility(View.GONE);
+                                    lnNoData.setVisibility(View.VISIBLE);
+                                }
+                            } else {
+                                lnMain.setVisibility(View.GONE);
+                                lnNoData.setVisibility(View.VISIBLE);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(OthersPayoutActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.dismiss();
+                        Log.e(TAG, "DISBURSED_PAYOUT_LIST_error: "+anError.getErrorBody());
+                        lnMain.setVisibility(View.GONE);
+                        lnNoData.setVisibility(View.VISIBLE);
+                    }
+                });
     }
 
     private void getOthersPayoutItem() {
