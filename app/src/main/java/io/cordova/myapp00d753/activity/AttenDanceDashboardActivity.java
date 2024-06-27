@@ -115,6 +115,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     LinearLayout lnStatus, llAdjustment;
     int date;
     GPSTracker gps;
+    int leaveFlag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +125,13 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     }
 
     private void initView() {
+        leaveFlag=getIntent().getIntExtra("leaveFlag",1);
         btnLeave = (Button) findViewById(R.id.btnLeave);
+        if (leaveFlag==1){
+            btnLeave.setVisibility(View.VISIBLE);
+        }else {
+            btnLeave.setVisibility(View.GONE);
+        }
         llQR = (LinearLayout) findViewById(R.id.llQR);
         llQR.setOnClickListener(this);
         btnMarkAttendance = (Button) findViewById(R.id.btnMarkAttendance);
