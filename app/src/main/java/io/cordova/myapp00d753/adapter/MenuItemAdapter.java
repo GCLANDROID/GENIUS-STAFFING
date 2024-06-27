@@ -124,30 +124,23 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                     Intent intent=new Intent(mContex, ProfileActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
-                }else if (itemList.get(i).getMenuId().equals("2")){
+                }else if (itemList.get(i).getMenuId().equals("2")) {
                     //Attendnace
-
-                        if (pref.getEmpClintId().equalsIgnoreCase("AEMCLI1810001410")){
-                            Intent intent = new Intent(mContex, BlueDartAttenDanceDashboardActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            mContex.startActivity(intent);
-                        }else {
-                            Intent intent = new Intent(mContex, AttenDanceDashboardActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            mContex.startActivity(intent);
-                        }
-
-
-
-                }
-                else if (itemList.get(i).getMenuId().equals("3")){
+                    if (pref.getEmpClintId().equalsIgnoreCase("AEMCLI1810001410")) {
+                        Intent intent = new Intent(mContex, BlueDartAttenDanceDashboardActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        mContex.startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(mContex, AttenDanceDashboardActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        mContex.startActivity(intent);
+                    }
+                } else if (itemList.get(i).getMenuId().equals("3")) {
                     //Payroll
-
                     Intent intent=new Intent(mContex, PayrollActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
-                }
-                else if (itemList.get(i).getMenuId().equals("4")){
+                } else if (itemList.get(i).getMenuId().equals("4")) {
                     //Saales
                     if (pref.getEmpClintId().equalsIgnoreCase("AEMCLI2310001780")){
                         Intent intent=new Intent(mContex, HonasaSalesDashboardActivity.class);
@@ -159,56 +152,46 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                         mContex.startActivity(intent);
                     }
 
-                }
-                else if (itemList.get(i).getMenuId().equals("5")){
+                } else if (itemList.get(i).getMenuId().equals("5")){
                     //PF
                    Intent intent=new Intent(mContex, PFDashBoardActivity.class);
                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                    intent.putExtra("PFLink",PFLink);
                    mContex.startActivity(intent);
 
-                }
-                else if (itemList.get(i).getMenuId().equals("6")){
+                } else if (itemList.get(i).getMenuId().equals("6")) {
                     //document
                     Intent intent=new Intent(mContex, DocumentActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
-                }
-                else if (itemList.get(i).getMenuId().equals("7")){
+                } else if (itemList.get(i).getMenuId().equals("7")) {
                     //reimbursement
                     Intent intent=new Intent(mContex, RemDashBoardActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
-                }
-                else if (itemList.get(i).getMenuId().equals("8")){
+                } else if (itemList.get(i).getMenuId().equals("8")) {
                     //feedback
+                    Intent intent = new Intent(mContex, FeedBackRatingActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContex.startActivity(intent);
 
-
-                        Intent intent = new Intent(mContex, FeedBackRatingActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        mContex.startActivity(intent);
-
-                }
-                else if (itemList.get(i).getMenuId().equals("9")){
+                } else if (itemList.get(i).getMenuId().equals("9")){
                     //geofence
                     Intent intent=new Intent(mContex, GeoFenceManageDashBoardActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
-                }
-                else if (itemList.get(i).getMenuId().equals("10")){
+                } else if (itemList.get(i).getMenuId().equals("10")) {
                     //Dailylog
+                    Intent intent = new Intent(mContex, DailyDashBoardActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContex.startActivity(intent);
 
-                        Intent intent = new Intent(mContex, DailyDashBoardActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        mContex.startActivity(intent);
-
-                }
-                else if (itemList.get(i).getMenuId().equals("11")){
+                } else if (itemList.get(i).getMenuId().equals("11")) {
                     //Chanepassword
                     Intent intent=new Intent(mContex, ChangePasswordActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
-                }   else if (itemList.get(i).getMenuId().equals("0")){
+                } else if (itemList.get(i).getMenuId().equals("0")){
                     //Chanepassword
                     Intent intent=new Intent(mContex, VoiceAssistantActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);

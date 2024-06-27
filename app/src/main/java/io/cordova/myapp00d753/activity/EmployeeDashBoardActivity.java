@@ -82,6 +82,7 @@ import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
 
 public class  EmployeeDashBoardActivity extends AppCompatActivity {
+    private static final String TAG = "EmployeeDashBoardActivi";
     Pref pref;
     TextView  tvLoginDateTime;
     NetworkConnectionCheck connectionCheck;
@@ -456,7 +457,19 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                             String responseText = job1.optString("responseText");
                             boolean responseStatus = job1.optBoolean("responseStatus");
                             responseCode=job1.optString("responseCode");
-                            getMenutem();
+
+                            //getMenutem();
+
+                            JSONObject objMenu=new JSONObject();
+                            try {
+                                objMenu.put("ConsultantID", pref.getEmpConId());
+                                objMenu.put("ClientID",pref.getEmpClintId());
+                                objMenu.put("SecurityCode",pref.getSecurityCode());
+                                getMenu(objMenu);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
                             if (responseStatus) {
                                 // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
 
@@ -488,6 +501,62 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
 
+    }
+
+    public void getMenu(JSONObject jsonObject) {
+        AndroidNetworking.post(AppData.MENU)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "GET_MENU: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String MenuID=obj.optString("MenuID");
+                                    String MenuItem=obj.optString("MenuItem");
+                                    MenuItemModel itemModel=new MenuItemModel(MenuItem,MenuID);
+                                    itemList.add(itemModel);
+                                }
+
+                                if (pref.getEmpClintId().equals("AEMCLI1910000054") || pref.getEmpClintId().equals("AEMCLI2010000067") ||pref.getEmpClintId().equals("SECCLI2110000011") ||pref.getEmpClintId().equals("SECCLI2110000012") ){
+                                    itemList.add(new MenuItemModel("Survey","200"));
+
+                                }/*else if (pref.getEmpClintId().equals("AEMCLI0910000315")){
+                                    itemList.add(new MenuItemModel("Interview","300"));
+                                }*/
+                                else if (pref.getEmpClintId().equals("AEMCLI2110001671")){
+                                    itemList.add(new MenuItemModel("PMS","201"));
+                                }else if (pref.getEmpClintId().equals("AEMCLI2310001780")){
+                                    itemList.add(new MenuItemModel("Sales Management","4"));
+                                }else {
+
+                                }
+
+                                MenuItemAdapter menuItemAdapter=new MenuItemAdapter(itemList,getApplicationContext(),PFLink);
+                                rvItem.setAdapter(menuItemAdapter);
+
+                                getFeedbackChecking();
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "GET_MENU_error: "+anError.getErrorBody());
+                    }
+                });
     }
 
     public void getMenutem() {
@@ -523,7 +592,6 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                     String MenuItem=obj.optString("MenuItem");
                                     MenuItemModel itemModel=new MenuItemModel(MenuItem,MenuID);
                                     itemList.add(itemModel);
-
                                 }
 
                                 if (pref.getEmpClintId().equals("AEMCLI1910000054") || pref.getEmpClintId().equals("AEMCLI2010000067") ||pref.getEmpClintId().equals("SECCLI2110000011") ||pref.getEmpClintId().equals("SECCLI2110000012") ){

@@ -38,6 +38,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -82,6 +86,7 @@ import io.cordova.myapp00d753.utility.Util;
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip;
 
 public class AttenDanceDashboardActivity extends AppCompatActivity implements View.OnClickListener, OnNavigationButtonClickedListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+    private static final String TAG = "AttenDanceDashboard";
     RecyclerView rvItem, rvSun, rvMon, rvTue, rvWed, rvThu, rvFri, rvSat;
     ArrayList<AttendanceCalenderModel> itemList = new ArrayList<>();
     GoogleApiClient googleApiClient;
@@ -171,14 +176,9 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         }
 
         if (pref.getOnLeave().equals("1")) {
-
             llWeekly.setVisibility(View.VISIBLE);
-
         } else {
-
             llWeekly.setVisibility(View.GONE);
-
-
         }
 
         if (pref.getBackAttd().equals("1")) {
@@ -367,6 +367,81 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         }
     }
 
+    private void getAttendanceList(JSONObject jsonObject) {
+        Log.e(TAG, "getAttendanceList: INPUT: "+jsonObject);
+        presentDays = new ArrayList<>();
+        dateList = new ArrayList<>();
+        HashMap<Integer, Object> dateHashmap = new HashMap<>();
+        // initialize calendar
+        Calendar calendar = Calendar.getInstance();
+
+        ProgressDialog pd = new ProgressDialog(AttenDanceDashboardActivity.this);
+        pd.setMessage("Loading...");
+        pd.setCancelable(false);
+        pd.show();
+
+        AndroidNetworking.post(AppData.GET_ATTENDANCE_CALENDER)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            pd.dismiss();
+                            itemList.clear();
+                            Log.e(TAG, "ATTENDANCE_CALENDER: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String sDate = obj.optString("Date");
+                                    String Date = Util.changeAnyDateFormat(obj.optString("SDate"), "dd/MM/yyyy", "dd");
+                                    try {
+                                        date = Integer.parseInt(Date);
+                                    } catch (NumberFormatException e) {
+                                        e.printStackTrace();
+                                    }
+                                    String PunchTiming = obj.optString("PunchTiming");
+                                    String Day = obj.optString("Address");
+                                    String Status = obj.optString("Status");
+
+                                    AttendanceCalenderModel obj2 = new AttendanceCalenderModel();
+                                    obj2.setDate(Date);
+                                    obj2.setStatus(Status);
+                                    obj2.setTime(PunchTiming);
+                                    obj2.setDay(Day);
+                                    itemList.add(obj2);
+                                    dateList.add(sDate);
+                                    if (Status.equalsIgnoreCase("present")) {
+                                        presentDays.add(Day);
+                                    }
+                                    dateHashmap.put(date, Status);
+                                }
+                                customCalendar.setDate(calendar, dateHashmap);
+                                tvPresent.setText("" + presentDays.size());
+                                setAdapter();
+                            } else {
+
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        pd.dismiss();
+                        Log.e(TAG, "ATTENDANCE_CALENDER_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
 
     private void getAttendanceList(int year, int month) {
         presentDays = new ArrayList<>();
@@ -429,19 +504,13 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                                     }
 
                                     dateHashmap.put(date, Status);
-
-
                                 }
 
                                 customCalendar.setDate(calendar, dateHashmap);
                                 tvPresent.setText("" + presentDays.size());
                                 setAdapter();
-
-
                             } else {
-
                                 //   Toast.makeText(getApplicationContext(),"No data found",Toast.LENGTH_LONG).show();
-
                             }
 
 
@@ -464,6 +533,75 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
 
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
+    }
+
+    private void getAttendanceListForNav(JSONObject jsonObject, Calendar calendar) {
+        Log.e(TAG, "getAttendanceListForNav: "+jsonObject);
+        HashMap<Integer, Object> dateHashmap = new HashMap<>();
+        presentDays = new ArrayList<>();
+        dateList = new ArrayList<>();
+        ProgressDialog pd = new ProgressDialog(AttenDanceDashboardActivity.this);
+        pd.setMessage("Loading...");
+        pd.setCancelable(false);
+        pd.show();
+
+        AndroidNetworking.post(AppData.GET_ATTENDANCE_CALENDER)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "ATTENDANCE_CALENDER_NAV: "+response.toString(4));
+                            pd.dismiss();
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String sDate = obj.optString("Date");
+                                    String Date = Util.changeAnyDateFormat(obj.optString("SDate"), "dd/MM/yyyy", "dd");
+                                    int date = Integer.parseInt(Date);
+                                    String PunchTiming = obj.optString("PunchTiming");
+                                    String Day = obj.optString("Address");
+                                    String Status = obj.optString("Status");
+
+
+                                    AttendanceCalenderModel obj2 = new AttendanceCalenderModel();
+                                    obj2.setDate(Date);
+                                    obj2.setStatus(Status);
+                                    obj2.setTime(PunchTiming);
+                                    obj2.setDay(Day);
+                                    itemList.add(obj2);
+                                    dateList.add(sDate);
+                                    if (Status.equalsIgnoreCase("present")) {
+                                        presentDays.add(Day);
+                                    }
+                                    dateHashmap.put(date, Status);
+                                }
+
+                                customCalendar.setDate(calendar, dateHashmap);
+                                tvPresent.setText("" + presentDays.size());
+                                setAdapter();
+                            } else {
+
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        pd.dismiss();
+                        Log.e(TAG, "ATTENDANCE_CALENDER_NAV: "+anError.getErrorBody());
+                    }
+                });
     }
 
     private void getAttendanceListForNav(int year, int month, Calendar calendar) {
@@ -636,6 +774,23 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             } else {
+                JSONObject obj=new JSONObject();
+                try {
+                    obj.put("AEMConsultantID", pref.getEmpId());
+                    obj.put("AEMClientID",pref.getEmpClintId());
+                    obj.put("AEMClientOfficeID","11");
+                    obj.put("AEMEmployeeID",y);
+                    obj.put("CurrentPage",pref.getSecurityCode());
+                    obj.put("AID",pref.getSecurityCode());
+                    obj.put("ApproverStatus",pref.getSecurityCode());
+                    obj.put("YearVal",pref.getSecurityCode());
+                    obj.put("MonthName",pref.getSecurityCode());
+                    obj.put("WorkingStatus",pref.getSecurityCode());
+                    weeklyfunction(obj);
+                    //"get_GCLSelfAttendanceWoLeave?AEMConsultantID=" + pref.getEmpConId() + "&AEMClientID=" + pref.getEmpClintId() + "&AEMClientOfficeID=" + pref.getEmpClintOffId() + "&AEMEmployeeID=" + pref.getEmpId() + "&CurrentPage=1&AID=0&ApproverStatus=4&YearVal=" + year + "&MonthName=" + month + "&WorkingStatus=1&SecurityCode=" + pref.getSecurityCode() + "&DbOperation=6&AttIds=0";
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 weeklyfunction();
             }
         } else if (view == imgSearch) {
@@ -681,6 +836,10 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
 
         locationRequestDialog.setCancelable(false);
         locationRequestDialog.show();
+    }
+
+    private void weeklyfunction(JSONObject jsonObject) {
+
     }
 
     private void weeklyfunction() {
@@ -834,7 +993,19 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             @Override
             public void onClick(View view) {
                 searchDialog.dismiss();
-                getAttendanceList(y, m);
+                //getAttendanceList(y, m);
+
+                JSONObject obj=new JSONObject();
+                try {
+                    obj.put("AemEmployeeid", pref.getEmpId());
+                    obj.put("AemClientid",pref.getEmpClintId());
+                    obj.put("Monthid",m);
+                    obj.put("yearid",y);
+                    obj.put("SecurityCode",pref.getSecurityCode());
+                    getAttendanceList(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -858,7 +1029,17 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     @Override
     protected void onResume() {
         super.onResume();
-        getAttendanceList(y, m);
+        JSONObject obj=new JSONObject();
+        try {
+            obj.put("AemEmployeeid", pref.getEmpId());
+            obj.put("AemClientid",pref.getEmpClintId());
+            obj.put("Monthid",m);
+            obj.put("yearid",y);
+            obj.put("SecurityCode",pref.getSecurityCode());
+            getAttendanceList(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void getShift() {
@@ -930,79 +1111,221 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             case Calendar.JANUARY:
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(y, 0, 1);
-                getAttendanceListForNav(y, 1, calendar);
+                //getAttendanceListForNav(y, 1, calendar);
+
+                JSONObject obj1=new JSONObject();
+                try {
+                    obj1.put("AemEmployeeid", pref.getEmpId());
+                    obj1.put("AemClientid",pref.getEmpClintId());
+                    obj1.put("Monthid","1");
+                    obj1.put("yearid",y);
+                    obj1.put("SecurityCode",pref.getSecurityCode());
+                    getAttendanceListForNav(obj1,calendar);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
             case Calendar.FEBRUARY:
                 Calendar calendar1 = Calendar.getInstance();
                 calendar1.set(y, 1, 1);
 
-                getAttendanceListForNav(y, 2, calendar1);
+                //getAttendanceListForNav(y, 2, calendar1);
+
+                JSONObject obj2=new JSONObject();
+                try {
+                    obj2.put("AemEmployeeid", pref.getEmpId());
+                    obj2.put("AemClientid",pref.getEmpClintId());
+                    obj2.put("Monthid","2");
+                    obj2.put("yearid",y);
+                    obj2.put("SecurityCode",pref.getSecurityCode());
+                    getAttendanceListForNav(obj2,calendar1);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
                 break;
             case Calendar.MARCH:
                 Calendar calendar2 = Calendar.getInstance();
                 calendar2.set(y, 2, 1);
 
-                getAttendanceListForNav(y, 3, calendar2);
+                //getAttendanceListForNav(y, 3, calendar2);
+
+                JSONObject obj3=new JSONObject();
+                try {
+                    obj3.put("AemEmployeeid", pref.getEmpId());
+                    obj3.put("AemClientid",pref.getEmpClintId());
+                    obj3.put("Monthid","3");
+                    obj3.put("yearid",y);
+                    obj3.put("SecurityCode",pref.getSecurityCode());
+                    getAttendanceListForNav(obj3,calendar2);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
                 break;
             case Calendar.APRIL:
                 Calendar calendar3 = Calendar.getInstance();
                 calendar3.set(y, 3, 1);
 
-                getAttendanceListForNav(y, 4, calendar3);
+                //getAttendanceListForNav(y, 4, calendar3);
+
+                JSONObject obj4=new JSONObject();
+                try {
+                    obj4.put("AemEmployeeid", pref.getEmpId());
+                    obj4.put("AemClientid",pref.getEmpClintId());
+                    obj4.put("Monthid","4");
+                    obj4.put("yearid",y);
+                    obj4.put("SecurityCode",pref.getSecurityCode());
+                    getAttendanceListForNav(obj4,calendar3);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
             case Calendar.MAY:
                 Calendar calendar4 = Calendar.getInstance();
                 calendar4.set(y, 4, 1);
 
-                getAttendanceListForNav(y, 5, calendar4);
+                //getAttendanceListForNav(y, 5, calendar4);
+
+                JSONObject obj5=new JSONObject();
+                try {
+                    obj5.put("AemEmployeeid", pref.getEmpId());
+                    obj5.put("AemClientid",pref.getEmpClintId());
+                    obj5.put("Monthid","5");
+                    obj5.put("yearid",y);
+                    obj5.put("SecurityCode",pref.getSecurityCode());
+                    getAttendanceListForNav(obj5,calendar4);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
             case Calendar.JUNE:
                 Calendar calendar5 = Calendar.getInstance();
                 calendar5.set(y, 5, 1);
 
-                getAttendanceListForNav(y, 6, calendar5);
+                //getAttendanceListForNav(y, 6, calendar5);
+
+                JSONObject obj6=new JSONObject();
+                try {
+                    obj6.put("AemEmployeeid", pref.getEmpId());
+                    obj6.put("AemClientid",pref.getEmpClintId());
+                    obj6.put("Monthid","6");
+                    obj6.put("yearid",y);
+                    obj6.put("SecurityCode",pref.getSecurityCode());
+                    getAttendanceListForNav(obj6,calendar5);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
             case Calendar.JULY:
                 Calendar calendar6 = Calendar.getInstance();
                 calendar6.set(y, 6, 1);
 
-                getAttendanceListForNav(y, 7, calendar6);
+                //getAttendanceListForNav(y, 7, calendar6);
+
+                JSONObject obj7=new JSONObject();
+                try {
+                    obj7.put("AemEmployeeid", pref.getEmpId());
+                    obj7.put("AemClientid",pref.getEmpClintId());
+                    obj7.put("Monthid","7");
+                    obj7.put("yearid",y);
+                    obj7.put("SecurityCode",pref.getSecurityCode());
+                    getAttendanceListForNav(obj7,calendar6);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
             case Calendar.AUGUST:
                 Calendar calendar7 = Calendar.getInstance();
                 calendar7.set(y, 7, 1);
 
-                getAttendanceListForNav(y, 8, calendar7);
+                //getAttendanceListForNav(y, 8, calendar7);
+
+                JSONObject obj8=new JSONObject();
+                try {
+                    obj8.put("AemEmployeeid", pref.getEmpId());
+                    obj8.put("AemClientid",pref.getEmpClintId());
+                    obj8.put("Monthid","8");
+                    obj8.put("yearid",y);
+                    obj8.put("SecurityCode",pref.getSecurityCode());
+                    getAttendanceListForNav(obj8,calendar7);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
             case Calendar.SEPTEMBER:
                 Calendar calendar8 = Calendar.getInstance();
                 calendar8.set(y, 8, 1);
 
-                getAttendanceListForNav(y, 9, calendar8);
+                //getAttendanceListForNav(y, 9, calendar8);
+
+                JSONObject obj9=new JSONObject();
+                try {
+                    obj9.put("AemEmployeeid", pref.getEmpId());
+                    obj9.put("AemClientid",pref.getEmpClintId());
+                    obj9.put("Monthid","9");
+                    obj9.put("yearid",y);
+                    obj9.put("SecurityCode",pref.getSecurityCode());
+                    getAttendanceListForNav(obj9,calendar8);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
             case Calendar.OCTOBER:
                 Calendar calendar9 = Calendar.getInstance();
                 calendar9.set(y, 9, 1);
 
-                getAttendanceListForNav(y, 10, calendar9);
+                //getAttendanceListForNav(y, 10, calendar9);
+
+                JSONObject obj10=new JSONObject();
+                try {
+                    obj10.put("AemEmployeeid", pref.getEmpId());
+                    obj10.put("AemClientid",pref.getEmpClintId());
+                    obj10.put("Monthid","10");
+                    obj10.put("yearid",y);
+                    obj10.put("SecurityCode",pref.getSecurityCode());
+                    getAttendanceListForNav(obj10,calendar9);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
             case Calendar.NOVEMBER:
                 Calendar calendar10 = Calendar.getInstance();
                 calendar10.set(y, 10, 1);
 
-                getAttendanceListForNav(y, 11, calendar10);
+                //getAttendanceListForNav(y, 11, calendar10);
+
+                JSONObject obj11=new JSONObject();
+                try {
+                    obj11.put("AemEmployeeid", pref.getEmpId());
+                    obj11.put("AemClientid",pref.getEmpClintId());
+                    obj11.put("Monthid","11");
+                    obj11.put("yearid",y);
+                    obj11.put("SecurityCode",pref.getSecurityCode());
+                    getAttendanceListForNav(obj11,calendar10);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
             case Calendar.DECEMBER:
                 Calendar calendar11 = Calendar.getInstance();
                 calendar11.set(y, 11, 1);
 
-                getAttendanceListForNav(y, 12, calendar11);
+                //getAttendanceListForNav(y, 12, calendar11);
+
+                JSONObject obj12=new JSONObject();
+                try {
+                    obj12.put("AemEmployeeid", pref.getEmpId());
+                    obj12.put("AemClientid",pref.getEmpClintId());
+                    obj12.put("Monthid","12");
+                    obj12.put("yearid",y);
+                    obj12.put("SecurityCode",pref.getSecurityCode());
+                    getAttendanceListForNav(obj12,calendar11);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
         }
-
-
         return arr;
     }
 
