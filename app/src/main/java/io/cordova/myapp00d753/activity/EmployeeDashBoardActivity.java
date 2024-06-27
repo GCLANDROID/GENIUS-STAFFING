@@ -126,6 +126,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
     File consetfile;
     String ConsentFlag="1";
     String android_id;
+    int leaveFlag;
 
 
     @Override
@@ -524,6 +525,12 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                     JSONObject obj = jsonArray.getJSONObject(i);
                                     String MenuID=obj.optString("MenuID");
                                     String MenuItem=obj.optString("MenuItem");
+                                    if (MenuID.equals("12")){
+                                        leaveFlag=1;
+                                    }else {
+                                        leaveFlag=0;
+                                    }
+
                                     MenuItemModel itemModel=new MenuItemModel(MenuItem,MenuID);
                                     itemList.add(itemModel);
                                 }
@@ -542,7 +549,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
 
                                 }
 
-                                MenuItemAdapter menuItemAdapter=new MenuItemAdapter(itemList,getApplicationContext(),PFLink);
+                                MenuItemAdapter menuItemAdapter=new MenuItemAdapter(itemList,getApplicationContext(),PFLink,leaveFlag);
                                 rvItem.setAdapter(menuItemAdapter);
 
                                 getFeedbackChecking();
@@ -608,8 +615,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
 
                                 }
 
-                                MenuItemAdapter menuItemAdapter=new MenuItemAdapter(itemList,getApplicationContext(),PFLink);
-                                rvItem.setAdapter(menuItemAdapter);
+
 
                                 getFeedbackChecking();
                             }

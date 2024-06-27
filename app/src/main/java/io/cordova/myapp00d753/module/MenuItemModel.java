@@ -3,6 +3,7 @@ package io.cordova.myapp00d753.module;
 public class MenuItemModel {
     String menuName;
     String menuId;
+    int leaveFlag;
 
     public MenuItemModel(String menuName, String menuId) {
         this.menuName = menuName;
@@ -23,5 +24,13 @@ public class MenuItemModel {
 
     public void setMenuId(String menuId) {
         this.menuId = menuId;
+    }
+
+    public int getLeaveFlag() {
+        return leaveFlag;
+    }
+
+    public void setLeaveFlag(int leaveFlag) {
+        this.leaveFlag = leaveFlag;
     }
 }

@@ -53,6 +53,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
     Context mContex;
     String PFLink;
     Pref pref;
+    int leaveFlag;
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -132,6 +133,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                         mContex.startActivity(intent);
                     } else {
                         Intent intent = new Intent(mContex, AttenDanceDashboardActivity.class);
+                        intent.putExtra("leaveFlag",leaveFlag);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         mContex.startActivity(intent);
                     }
@@ -255,10 +257,11 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
         }
     }
 
-    public MenuItemAdapter(ArrayList<MenuItemModel> itemList, Context mContext,String pfLink) {
+    public MenuItemAdapter(ArrayList<MenuItemModel> itemList, Context mContext,String pfLink,int leaveFlag) {
         this.itemList = itemList;
         this.mContex=mContext;
         this.PFLink=pfLink;
+        this.leaveFlag=leaveFlag;
     }
 
     public void filterList(ArrayList<MenuItemModel> filterdNames) {
