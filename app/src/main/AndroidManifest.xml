@@ -555,6 +555,8 @@
         <activity
             android:name=".facereogntion.InterViewerPanelActivity"
             android:screenOrientation="userPortrait" />
+        <activity android:name=".activity.FrontCamera"></activity>
+        <activity android:name=".AndroidXCamera.FrontAndroidXCameraActivity"></activity>
         <activity android:name=".activity.metso.MetsoAttendanceActivity" />
         <activity android:name=".activity.metso.MetsoAttendanceRegularizationActivity" />
         <activity android:name=".activity.metso.MetsoAttendanceReportActivity" />
