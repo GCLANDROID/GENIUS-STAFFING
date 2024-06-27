@@ -54,7 +54,11 @@ import retrofit2.http.Part;
 
    @Multipart
    @POST("post_empdigitaldocument")
-   Call<UploadObject> uploadDocument(@Part MultipartBody.Part file, @Part("AEMEmployeeID") String AEMEmployeeID, @Part("DocumentID") String DocumentID, @Part("ReferenceNo") String ReferenceNo, @Part("SecurityCode") String SecurityCode);
+   Call<UploadObject> uploadDocument(@Part MultipartBody.Part file,
+                                     @Part("AEMEmployeeID") String AEMEmployeeID,
+                                     @Part("DocumentID") String DocumentID,
+                                     @Part("ReferenceNo") String ReferenceNo,
+                                     @Part("SecurityCode") String SecurityCode);
 
 
     @Multipart

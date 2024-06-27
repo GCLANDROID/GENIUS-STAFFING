@@ -26,6 +26,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
 
 import org.json.JSONArray;
@@ -45,6 +49,7 @@ import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.RecyclerItemClickListener;
 
 public class SalaryActivity extends AppCompatActivity  {
+    private static final String TAG = "SalaryActivity";
     RecyclerView rvSalary;
     ArrayList<SalaryModule> salaryList = new ArrayList<>();
     SalaryAdapter salaryAdapter;
@@ -76,28 +81,23 @@ public class SalaryActivity extends AppCompatActivity  {
         if (connectionCheck.isNetworkAvailable()) {
             JSONObject obj=new JSONObject();
             try {
-                obj.put("AEMConsultantID", pref.getEmpId());
-                obj.put("AEMClientID",pref.getEmpClintId());
-                obj.put("AEMClientOfficeID",pref.getEmpClintOffId());
-                obj.put("AEMEmployeeID",y);
-                obj.put("CurrentPage",1);
-                obj.put("AID",0);
-                obj.put("ApproverStatus",4);
-                obj.put("YearVal",year);
-                obj.put("MonthName",month);
-                obj.put("WorkingStatus","1");
+                obj.put("AEMConsultantID", "0");
+                obj.put("AEMClientID",JSONObject.NULL);
+                obj.put("MasterID",pref.getMasterId());
+                obj.put("AEMEmployeeID",pref.getEmpId());
+                obj.put("SalYear",year);
+                obj.put("SalMonth","jan");
+                obj.put("WorkingStatus","3");
+                obj.put("CurrentPage","1");
                 obj.put("SecurityCode",pref.getSecurityCode());
-                obj.put("DbOperation","6");
-                obj.put("AttIds","0");
                 getSalaryList(obj);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            getSalaryList();
+            //getSalaryList();
         }else {
 
         }
-
         onClick();
     }
 
@@ -128,7 +128,22 @@ public class SalaryActivity extends AppCompatActivity  {
         imgAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getSalaryList();
+                //getSalaryList();
+                JSONObject obj=new JSONObject();
+                try {
+                    obj.put("AEMConsultantID", "0");
+                    obj.put("AEMClientID",JSONObject.NULL);
+                    obj.put("MasterID",pref.getMasterId());
+                    obj.put("AEMEmployeeID",pref.getEmpId());
+                    obj.put("SalYear",year);
+                    obj.put("SalMonth","jan");
+                    obj.put("WorkingStatus","3");
+                    obj.put("CurrentPage","1");
+                    obj.put("SecurityCode",pref.getSecurityCode());
+                    getSalaryList(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
         imgSearch=(ImageView)findViewById(R.id.imgSearch);
@@ -138,7 +153,66 @@ public class SalaryActivity extends AppCompatActivity  {
     }
 
     private void getSalaryList(JSONObject jsonObject) {
+        Log.e(TAG, "getSalaryList: "+jsonObject);
+        AndroidNetworking.post(AppData.GET_EMPLOYEE_SALARY)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "SALARY_LIST: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String SalMonth = obj.optString("SalMonth");
+                                    String SalYear = obj.optString("SalYear");
+                                    String MonthlyNet = obj.optString("MonthlyNet");
+                                    String url = obj.optString("url");
+                                    SalaryModule salaryModule = new SalaryModule(SalYear, SalMonth,"Rs. "+ MonthlyNet, url);
+                                    salaryList.add(salaryModule);
+                                }
 
+                                if (salaryList.size() > 0) {
+                                    llLoader.setVisibility(View.GONE);
+                                    llMain.setVisibility(View.VISIBLE);
+                                    llNodata.setVisibility(View.GONE);
+                                    llAgain.setVisibility(View.GONE);
+                                    setAdapter();
+                                } else {
+                                    llLoader.setVisibility(View.GONE);
+                                    llMain.setVisibility(View.GONE);
+                                    llNodata.setVisibility(View.GONE);
+                                    llAgain.setVisibility(View.GONE);
+                                }
+                            } else {
+                                //Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
+                                llLoader.setVisibility(View.GONE);
+                                llMain.setVisibility(View.GONE);
+                                llNodata.setVisibility(View.VISIBLE);
+                                llAgain.setVisibility(View.GONE);
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "SALARY_LIST_error: "+anError.getErrorBody());
+                        llLoader.setVisibility(View.GONE);
+                        llMain.setVisibility(View.GONE);
+                        llNodata.setVisibility(View.GONE);
+                        llAgain.setVisibility(View.VISIBLE);
+                    }
+                });
     }
 
     private void getSalaryList() {
@@ -300,7 +374,23 @@ public class SalaryActivity extends AppCompatActivity  {
                 Log.d("yrtrr", year);
                 tvYear.setText(year);
                 salaryList.clear();
-                getSalaryList();
+                //getSalaryList();
+
+                JSONObject obj=new JSONObject();
+                try {
+                    obj.put("AEMConsultantID", "0");
+                    obj.put("AEMClientID",JSONObject.NULL);
+                    obj.put("MasterID",pref.getMasterId());
+                    obj.put("AEMEmployeeID",pref.getEmpId());
+                    obj.put("SalYear",year);
+                    obj.put("SalMonth","jan");
+                    obj.put("WorkingStatus","3");
+                    obj.put("CurrentPage","1");
+                    obj.put("SecurityCode",pref.getSecurityCode());
+                    getSalaryList(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 alertDialog.dismiss();
 
             }
@@ -313,7 +403,23 @@ public class SalaryActivity extends AppCompatActivity  {
                 alertDialog.dismiss();
                 tvYear.setText(year);
                 salaryList.clear();
-                getSalaryList();
+                //getSalaryList();
+
+                JSONObject obj=new JSONObject();
+                try {
+                    obj.put("AEMConsultantID", "0");
+                    obj.put("AEMClientID",JSONObject.NULL);
+                    obj.put("MasterID",pref.getMasterId());
+                    obj.put("AEMEmployeeID",pref.getEmpId());
+                    obj.put("SalYear",year);
+                    obj.put("SalMonth","jan");
+                    obj.put("WorkingStatus","3");
+                    obj.put("CurrentPage","1");
+                    obj.put("SecurityCode",pref.getSecurityCode());
+                    getSalaryList(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 alertDialog.dismiss();
                 Log.d("ttt", year);
             }
@@ -326,7 +432,22 @@ public class SalaryActivity extends AppCompatActivity  {
                 alertDialog.dismiss();
                 tvYear.setText(year);
                 salaryList.clear();
-                getSalaryList();
+                //getSalaryList();
+                JSONObject obj=new JSONObject();
+                try {
+                    obj.put("AEMConsultantID", "0");
+                    obj.put("AEMClientID",JSONObject.NULL);
+                    obj.put("MasterID",pref.getMasterId());
+                    obj.put("AEMEmployeeID",pref.getEmpId());
+                    obj.put("SalYear",year);
+                    obj.put("SalMonth","jan");
+                    obj.put("WorkingStatus","3");
+                    obj.put("CurrentPage","1");
+                    obj.put("SecurityCode",pref.getSecurityCode());
+                    getSalaryList(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 alertDialog.dismiss();
                 Log.d("ttt", year);
             }

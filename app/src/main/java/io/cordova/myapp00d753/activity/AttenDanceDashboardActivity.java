@@ -783,15 +783,15 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             } else {
                 JSONObject obj=new JSONObject();
                 try {
-                    obj.put("AEMConsultantID", pref.getEmpId());
+                    obj.put("AEMConsultantID", pref.getEmpConId());
                     obj.put("AEMClientID",pref.getEmpClintId());
                     obj.put("AEMClientOfficeID",pref.getEmpClintOffId());
-                    obj.put("AEMEmployeeID",y);
+                    obj.put("AEMEmployeeID",pref.getEmpId());
                     obj.put("CurrentPage",1);
                     obj.put("AID",0);
                     obj.put("ApproverStatus",4);
                     obj.put("YearVal",year);
-                    obj.put("MonthName",month);
+                    obj.put("MonthName",(month == null)?JSONObject.NULL:month);
                     obj.put("WorkingStatus","1");
                     obj.put("SecurityCode",pref.getSecurityCode());
                     obj.put("DbOperation","6");
@@ -863,10 +863,9 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                             String Response_Code = job1.optString("Response_Code");
                             if (Response_Code.equals("101")) {
                                 String Response_Data = job1.optString("Response_Data");
-                                JSONArray jsonArray = new JSONArray(Response_Data);
-                                for (int i = 0; i < jsonArray.length(); i++) {
+                                String Response_Message = job1.optString("Response_Message");
 
-                                }
+                                successAlert(Response_Message);
                             }
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
@@ -882,6 +881,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
 
     private void weeklyfunction() {
         String surl = AppData.url + "get_GCLSelfAttendanceWoLeave?AEMConsultantID=" + pref.getEmpConId() + "&AEMClientID=" + pref.getEmpClintId() + "&AEMClientOfficeID=" + pref.getEmpClintOffId() + "&AEMEmployeeID=" + pref.getEmpId() + "&CurrentPage=1&AID=0&ApproverStatus=4&YearVal=" + year + "&MonthName=" + month + "&WorkingStatus=1&SecurityCode=" + pref.getSecurityCode() + "&DbOperation=6&AttIds=0";
+        Log.e(TAG, "weeklyfunction: URL: "+surl);
         final ProgressDialog progressBar = new ProgressDialog(this);
         progressBar.setCancelable(true);//you can cancel it by pressing back button
         progressBar.setMessage("Loading...");

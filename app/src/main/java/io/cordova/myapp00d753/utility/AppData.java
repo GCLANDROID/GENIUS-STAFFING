@@ -13,6 +13,7 @@ public class AppData {
     public static String EMPLOYEE_DOCUMENT_MANAGE=newv2url+"Document/EmployeeDocumentManage";
     public static String DOCUMENT_UPLOAD_INFO=newv2url+"Document/GetDigitalDocumentUploadInfo";
     public static String DIGITAL_DOCUMENT_TYPE = newv2url+"Document/GetDigitalDocumentType";
+    public static String SAVE_EMPLOYEE_DIGITAL_DOCUMENT = newv2url+"Document/SaveEmployeeDigitalDocument";
     public static String GET_ATTENDANCE_CALENDER = newv2url+"Attendance/GetAttendancecalender";
     public static String SAVE_WEEKLY_OFF_APPLICATION = newv2url+"Attendance/SaveWOApplication";
 

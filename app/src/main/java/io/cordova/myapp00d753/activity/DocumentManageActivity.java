@@ -81,6 +81,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Part;
 
 public class DocumentManageActivity extends AppCompatActivity {
     private static final String TAG = "DocumentManageActivity";
@@ -271,37 +272,39 @@ public class DocumentManageActivity extends AppCompatActivity {
                 if (flag1 == 1) {
                     if (document.equals("Aadhar Card")) {
                         if (etReferenceNumber.getText().toString().length() == 12) {
-                            cameraImageDoc();
-
+                            //cameraImageDoc();
+                            cameraImageDoc2();
                         } else {
                             Toast.makeText(DocumentManageActivity.this, "Please enter valid Aadhaar Number", Toast.LENGTH_LONG).show();
                         }
                     } else if (document.equals("PAN Card")) {
                         if (etReferenceNumber.getText().toString().length() == 12) {
-                            cameraImageDoc();
-
+                            //cameraImageDoc();
+                            cameraImageDoc2();
                         } else {
                             Toast.makeText(DocumentManageActivity.this, "Please enter valid PAN number", Toast.LENGTH_LONG).show();
                         }
                     } else {
                         if (etReferenceNumber.getText().toString().length() > 0) {
-                            cameraImageDoc();
+                            //cameraImageDoc();
+                            cameraImageDoc2();
                         } else {
                             Toast.makeText(DocumentManageActivity.this, "Please enter reference  number", Toast.LENGTH_LONG).show();
 
                         }
-
                     }
                 } else if (flag1 == 2) {
                     if (etReferenceNumber.getText().toString().length() > 0) {
-                        saveAttachDoc();
+                        //saveAttachDoc();
+                        saveAttachDoc2();
                     } else {
                         Toast.makeText(DocumentManageActivity.this, "please enter refernce number", Toast.LENGTH_LONG).show();
 
                     }
                 } else if (flag1 == 3) {
                     if (etReferenceNumber.getText().toString().length() > 0) {
-                        pdfFileSend();
+                        //pdfFileSend();
+                        pdfFileSend2();
                     } else {
                         Toast.makeText(DocumentManageActivity.this, "please enter refernce number", Toast.LENGTH_LONG).show();
 
@@ -311,6 +314,138 @@ public class DocumentManageActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void pdfFileSend2() {
+        progressDialog.show();
+        AndroidNetworking.upload(AppData.SAVE_EMPLOYEE_DIGITAL_DOCUMENT)
+                .addMultipartParameter("AEMEmployeeID", aempEmployeeid)
+                .addMultipartParameter("DocumentID", subDocumentID)
+                .addMultipartParameter("ReferenceNo", etReferenceNumber.getText().toString().trim())
+                .addMultipartParameter("SecurityCode",securityCode)
+                .addMultipartFile("file",file)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressDialog.dismiss();
+                            Log.e(TAG, "SAVE_PDF_DOC: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                successAlert(Response_Message);
+                                //alerDialog3.dismiss();
+                            } else {
+                                Toast.makeText(getApplicationContext(),Response_Message, Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(DocumentManageActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.dismiss();
+                        Log.e(TAG, "SAVE_IMAGE_DOC: "+anError.getErrorBody());
+                        Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
+                        messageAlert();
+                    }
+                });
+    }
+
+    private void saveAttachDoc2() {
+        progressDialog.show();
+        AndroidNetworking.upload(AppData.SAVE_EMPLOYEE_DIGITAL_DOCUMENT)
+                .addMultipartParameter("AEMEmployeeID", aempEmployeeid)
+                .addMultipartParameter("DocumentID", subDocumentID)
+                .addMultipartParameter("ReferenceNo", etReferenceNumber.getText().toString().trim())
+                .addMultipartParameter("SecurityCode",securityCode)
+                .addMultipartFile("file",file)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressDialog.dismiss();
+                            Log.e(TAG, "SAVE_ATTACH_DOC: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                successAlert(Response_Message);
+                                //alerDialog3.dismiss();
+                            } else {
+                                Toast.makeText(getApplicationContext(),Response_Message, Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(DocumentManageActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.dismiss();
+                        Log.e(TAG, "SAVE_IMAGE_DOC: "+anError.getErrorBody());
+                        Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
+                        messageAlert();
+                    }
+                });
+    }
+
+    private void cameraImageDoc2() {
+        progressDialog.show();
+        AndroidNetworking.upload(AppData.SAVE_EMPLOYEE_DIGITAL_DOCUMENT)
+                .addMultipartParameter("AEMEmployeeID", aempEmployeeid)
+                .addMultipartParameter("DocumentID", subDocumentID)
+                .addMultipartParameter("ReferenceNo", etReferenceNumber.getText().toString().trim())
+                .addMultipartParameter("SecurityCode",securityCode)
+                .addMultipartFile("file",compressedImageFile)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressDialog.dismiss();
+                            Log.e(TAG, "SAVE_IMAGE_DOC: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                successAlert(Response_Message);
+                                alerDialog3.dismiss();
+                            } else {
+                                Toast.makeText(getApplicationContext(),Response_Message, Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(DocumentManageActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.dismiss();
+                        Log.e(TAG, "SAVE_IMAGE_DOC: "+anError.getErrorBody());
+                        Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
+                        messageAlert();
+                    }
+                });
     }
 
     private void cameraIntent() {
@@ -726,7 +861,8 @@ public class DocumentManageActivity extends AppCompatActivity {
         MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", compressedImageFile.getName(), mFile);
         RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile.getName());
 
-        Call<UploadObject> fileUpload = uploadService.uploadDocument(fileToUpload, aempEmployeeid, subDocumentID, etReferenceNumber.getText().toString(), securityCode);
+        Call<UploadObject> fileUpload = uploadService.uploadDocument(fileToUpload,
+                aempEmployeeid, subDocumentID, etReferenceNumber.getText().toString(), securityCode);
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
@@ -832,9 +968,11 @@ public class DocumentManageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 alertDialog.dismiss();
                 if (flag1 == 1) {
-                    cameraImageDoc();
+                    //cameraImageDoc();
+                    cameraImageDoc2();
                 } else if (flag1 == 2) {
-                    saveAttachDoc();
+                    //saveAttachDoc();
+                    saveAttachDoc2();
                 }
 
 
