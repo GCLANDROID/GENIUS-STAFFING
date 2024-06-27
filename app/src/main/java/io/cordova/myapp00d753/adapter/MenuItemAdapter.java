@@ -153,14 +153,12 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                         mContex.startActivity(intent);
                     }
-
                 } else if (itemList.get(i).getMenuId().equals("5")){
                     //PF
                    Intent intent=new Intent(mContex, PFDashBoardActivity.class);
                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                    intent.putExtra("PFLink",PFLink);
                    mContex.startActivity(intent);
-
                 } else if (itemList.get(i).getMenuId().equals("6")) {
                     //document
                     Intent intent=new Intent(mContex, DocumentActivity.class);

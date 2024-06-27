@@ -74,6 +74,25 @@ public class SalaryActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_salary);
         initialize();
         if (connectionCheck.isNetworkAvailable()) {
+            JSONObject obj=new JSONObject();
+            try {
+                obj.put("AEMConsultantID", pref.getEmpId());
+                obj.put("AEMClientID",pref.getEmpClintId());
+                obj.put("AEMClientOfficeID",pref.getEmpClintOffId());
+                obj.put("AEMEmployeeID",y);
+                obj.put("CurrentPage",1);
+                obj.put("AID",0);
+                obj.put("ApproverStatus",4);
+                obj.put("YearVal",year);
+                obj.put("MonthName",month);
+                obj.put("WorkingStatus","1");
+                obj.put("SecurityCode",pref.getSecurityCode());
+                obj.put("DbOperation","6");
+                obj.put("AttIds","0");
+                getSalaryList(obj);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             getSalaryList();
         }else {
 
@@ -115,6 +134,10 @@ public class SalaryActivity extends AppCompatActivity  {
         imgSearch=(ImageView)findViewById(R.id.imgSearch);
         tvToolBar=(TextView) findViewById(R.id.tvToolBar);
         tvToolBar.setText("Monthly Salary - \n"+year);
+
+    }
+
+    private void getSalaryList(JSONObject jsonObject) {
 
     }
 
