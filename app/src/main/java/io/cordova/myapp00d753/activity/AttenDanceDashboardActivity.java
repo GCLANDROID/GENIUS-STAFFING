@@ -778,20 +778,22 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 try {
                     obj.put("AEMConsultantID", pref.getEmpId());
                     obj.put("AEMClientID",pref.getEmpClintId());
-                    obj.put("AEMClientOfficeID","11");
+                    obj.put("AEMClientOfficeID",pref.getEmpClintOffId());
                     obj.put("AEMEmployeeID",y);
-                    obj.put("CurrentPage",pref.getSecurityCode());
-                    obj.put("AID",pref.getSecurityCode());
-                    obj.put("ApproverStatus",pref.getSecurityCode());
-                    obj.put("YearVal",pref.getSecurityCode());
-                    obj.put("MonthName",pref.getSecurityCode());
-                    obj.put("WorkingStatus",pref.getSecurityCode());
+                    obj.put("CurrentPage",1);
+                    obj.put("AID",0);
+                    obj.put("ApproverStatus",4);
+                    obj.put("YearVal",year);
+                    obj.put("MonthName",month);
+                    obj.put("WorkingStatus","1");
+                    obj.put("SecurityCode",pref.getSecurityCode());
+                    obj.put("DbOperation","6");
+                    obj.put("AttIds","0");
                     weeklyfunction(obj);
-                    //"get_GCLSelfAttendanceWoLeave?AEMConsultantID=" + pref.getEmpConId() + "&AEMClientID=" + pref.getEmpClintId() + "&AEMClientOfficeID=" + pref.getEmpClintOffId() + "&AEMEmployeeID=" + pref.getEmpId() + "&CurrentPage=1&AID=0&ApproverStatus=4&YearVal=" + year + "&MonthName=" + month + "&WorkingStatus=1&SecurityCode=" + pref.getSecurityCode() + "&DbOperation=6&AttIds=0";
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                weeklyfunction();
+                //weeklyfunction();
             }
         } else if (view == imgSearch) {
             searchAlert();
@@ -839,7 +841,37 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     }
 
     private void weeklyfunction(JSONObject jsonObject) {
+        Log.e(TAG, "weeklyfunction: "+jsonObject);
+        AndroidNetworking.post(AppData.SAVE_WEEKLY_OFF_APPLICATION)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "SAVE_WEEKLY_OFF_APPLICATION: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
 
+                                }
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "SAVE_WEEKLY_OFF_APPLICATION_error: "+anError.getErrorBody());
+                    }
+                });
     }
 
     private void weeklyfunction() {
