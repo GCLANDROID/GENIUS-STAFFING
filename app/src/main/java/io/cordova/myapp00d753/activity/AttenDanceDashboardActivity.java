@@ -405,6 +405,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                             if (Response_Code.equals("101")) {
                                 String Response_Data = job1.optString("Response_Data");
                                 JSONArray jsonArray = new JSONArray(Response_Data);
+                                attendanceArray=jsonArray;
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject obj = jsonArray.getJSONObject(i);
                                     String sDate = obj.optString("Date");
@@ -569,6 +570,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                             if (Response_Code.equals("101")) {
                                 String Response_Data = job1.optString("Response_Data");
                                 JSONArray jsonArray = new JSONArray(Response_Data);
+                                attendanceArray=jsonArray;
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject obj = jsonArray.getJSONObject(i);
                                     String sDate = obj.optString("Date");
