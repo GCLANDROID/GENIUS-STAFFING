@@ -71,17 +71,48 @@ import retrofit2.http.Part;
 
     @Multipart
     @POST("post_reimbursementClaimByComponent")
-    Call<UploadObject> postreimburstmentwithimage1(@Part("AEMEmployeeID") String AEMEmployeeID, @Part("AEMComponentID") String AEMComponentID, @Part("Description") String Description, @Part("ReimbursementAmount") String ReimbursementAmount, @Part("Year") String Year, @Part("Month") String Month, @Part("SecurityCode") String SecurityCode, @Part MultipartBody.Part file, @Part("ConveyanceTypeId") String ConveyanceTypeId, @Part("LocationTypeID") String LocationTypeID, @Part("ReimbursementDate") String ReimbursementDate);
+    Call<UploadObject> postreimburstmentwithimage1(@Part("AEMEmployeeID") String AEMEmployeeID,
+                                                   @Part("AEMComponentID") String AEMComponentID,
+                                                   @Part("Description") String Description,
+                                                   @Part("ReimbursementAmount") String ReimbursementAmount,
+                                                   @Part("Year") String Year,
+                                                   @Part("Month") String Month,
+                                                   @Part("SecurityCode") String SecurityCode,
+                                                   @Part MultipartBody.Part file,
+                                                   @Part("ConveyanceTypeId") String ConveyanceTypeId,
+                                                   @Part("LocationTypeID") String LocationTypeID,
+                                                   @Part("ReimbursementDate") String ReimbursementDate);
 
     @Multipart
     @POST("post_reimbursementClaimByComponent")
-    Call<UploadObject> postreimburstmentwithimage2(@Part("AEMEmployeeID") String AEMEmployeeID, @Part("AEMComponentID") String AEMComponentID, @Part("Description") String Description, @Part("ReimbursementAmount") String ReimbursementAmount, @Part("Year") String Year, @Part("Month") String Month, @Part("SecurityCode") String SecurityCode, @Part MultipartBody.Part file, @Part MultipartBody.Part fil1, @Part("ConveyanceTypeId") String ConveyanceTypeId, @Part("LocationTypeID") String LocationTypeID, @Part("ReimbursementDate") String ReimbursementDate);
+    Call<UploadObject> postreimburstmentwithimage2(@Part("AEMEmployeeID") String AEMEmployeeID,
+                                                   @Part("AEMComponentID") String AEMComponentID,
+                                                   @Part("Description") String Description,
+                                                   @Part("ReimbursementAmount") String ReimbursementAmount,
+                                                   @Part("Year") String Year,
+                                                   @Part("Month") String Month,
+                                                   @Part("SecurityCode") String SecurityCode,
+                                                   @Part MultipartBody.Part file,
+                                                   @Part MultipartBody.Part fil1,
+                                                   @Part("ConveyanceTypeId") String ConveyanceTypeId,
+                                                   @Part("LocationTypeID") String LocationTypeID,
+                                                   @Part("ReimbursementDate") String ReimbursementDate);
     @Multipart
     @POST("post_reimbursementClaimByComponent")
     Call<UploadObject> postreimburstmentwithimage3(@Part("AEMEmployeeID") String AEMEmployeeID, @Part("AEMComponentID") String AEMComponentID, @Part("Description") String Description, @Part("ReimbursementAmount") String ReimbursementAmount, @Part("Year") String Year, @Part("Month") String Month, @Part("SecurityCode") String SecurityCode, @Part MultipartBody.Part file, @Part MultipartBody.Part fil1, @Part MultipartBody.Part fil2, @Part("ConveyanceTypeId") String ConveyanceTypeId, @Part("LocationTypeID") String LocationTypeID, @Part("ReimbursementDate") String ReimbursementDate);
     @Multipart
     @POST("post_reimbursementClaimByComponent")
-    Call<UploadObject> postreimburstmentwithimage4(@Part("AEMEmployeeID") String AEMEmployeeID, @Part("AEMComponentID") String AEMComponentID, @Part("Description") String Description, @Part("ReimbursementAmount") String ReimbursementAmount, @Part("Year") String Year, @Part("Month") String Month, @Part("SecurityCode") String SecurityCode, @Part MultipartBody.Part file, @Part MultipartBody.Part fil1, @Part MultipartBody.Part fil2, @Part MultipartBody.Part fil3, @Part("ConveyanceTypeId") String ConveyanceTypeId, @Part("LocationTypeID") String LocationTypeID, @Part("ReimbursementDate") String ReimbursementDate);
+    Call<UploadObject> postreimburstmentwithimage4(@Part("AEMEmployeeID") String AEMEmployeeID,
+                                                   @Part("AEMComponentID") String AEMComponentID,
+                                                   @Part("Description") String Description,
+                                                   @Part("ReimbursementAmount") String ReimbursementAmount,
+                                                   @Part("Year") String Year, @Part("Month") String Month,
+                                                   @Part("SecurityCode") String SecurityCode,
+                                                   @Part MultipartBody.Part file,
+                                                   @Part MultipartBody.Part fil1,
+                                                   @Part MultipartBody.Part fil2,
+                                                   @Part MultipartBody.Part fil3,
+                                                   @Part("ConveyanceTypeId") String ConveyanceTypeId, @Part("LocationTypeID") String LocationTypeID, @Part("ReimbursementDate") String ReimbursementDate);
     @Multipart
     @POST("post_reimbursementClaimByComponent")
     Call<UploadObject> postreimburstmentwithimage5(@Part("AEMEmployeeID") String AEMEmployeeID, @Part("AEMComponentID") String AEMComponentID, @Part("Description") String Description, @Part("ReimbursementAmount") String ReimbursementAmount, @Part("Year") String Year, @Part("Month") String Month, @Part("SecurityCode") String SecurityCode, @Part MultipartBody.Part file, @Part MultipartBody.Part fil1, @Part MultipartBody.Part fil2, @Part MultipartBody.Part fil3, @Part MultipartBody.Part fil4, @Part("ConveyanceTypeId") String ConveyanceTypeId, @Part("LocationTypeID") String LocationTypeID, @Part("ReimbursementDate") String ReimbursementDate);

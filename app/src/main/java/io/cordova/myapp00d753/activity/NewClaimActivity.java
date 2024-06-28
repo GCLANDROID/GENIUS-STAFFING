@@ -56,11 +56,6 @@ import com.developers.imagezipper.ImageZipper;
 import com.google.android.cameraview.LongImageCameraActivity;
 
 
-import net.gotev.uploadservice.MultipartUploadRequest;
-
-import net.gotev.uploadservice.UploadNotificationConfig;
-
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -74,7 +69,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 
@@ -85,7 +79,6 @@ import io.cordova.myapp00d753.module.SpineerItemModel;
 import io.cordova.myapp00d753.module.UploadObject;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
-import io.cordova.myapp00d753.utility.FilePath;
 import io.cordova.myapp00d753.utility.Pref;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -96,7 +89,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.POST;
 import retrofit2.http.Part;
 
 public class NewClaimActivity extends AppCompatActivity {
@@ -133,7 +125,7 @@ public class NewClaimActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     LinearLayout llSubmit;
     File file1, file2, file3, file4,compressedImageFile,compressedImageFile1,compressedImageFile2,compressedImageFile3,compressedImageFile4;
-    int flag = 0;
+    int  flag = 0;
     AlertDialog alerDialog1, alertDialog2, alertDialog1,alert1;
     TextView tvMonth, tvYear;
     String comeid = "";
@@ -497,15 +489,21 @@ public class NewClaimActivity extends AppCompatActivity {
                         if (etDescription.getText().toString().length() > 0) {
                             if (etAmount.getText().toString().length() > 0) {
                                 if (flag == 1) {
-                                    postoneimage();
+                                    //postoneimage();
+                                    postOneImage();
+
                                 } else if (flag == 2) {
-                                    posttwoimage();
+                                    //posttwoimage();
+                                    postTwoImage();
                                 } else if (flag == 3) {
-                                    postthreeimage();
+                                    //postthreeimage();
+                                    postThreeImage();
                                 } else if (flag == 4) {
-                                    postfourimage();
+                                    //postfourimage();
+                                    postFourImage();
                                 } else if (flag == 5) {
-                                    postfiveimage();
+                                    //postfiveimage();
+                                    postFiveImage();
                                 }
                             } else {
                                 Toast.makeText(getApplicationContext(), "Please enter Claim Amount", Toast.LENGTH_LONG).show();
@@ -521,6 +519,247 @@ public class NewClaimActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void postFiveImage() {
+        progressDialog.show();
+        AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
+                .addMultipartParameter("AEMEmployeeID", aempid)
+                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("Description", description)
+                .addMultipartParameter("ReimbursementAmount",amount)
+                .addMultipartParameter("Year",year)
+                .addMultipartParameter("Month",month)
+                .addMultipartParameter("SecurityCode",securitycode)
+                .addMultipartParameter("ConveyanceTypeId",componentId)
+                .addMultipartParameter("LocationTypeID","0")
+                .addMultipartParameter("ReimbursementDate","0")
+                .addMultipartFile("file",compressedImageFile)
+                .addMultipartFile("fil1",compressedImageFile1)
+                .addMultipartFile("fil2",compressedImageFile2)
+                .addMultipartFile("fil3",compressedImageFile3)
+                .addMultipartFile("fil4",compressedImageFile4)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressDialog.show();
+                            Log.e(TAG, "POST_FOUR_IMAGES: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                successAlert(Response_Message);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.show();
+                        Log.e(TAG, "POST_FOUR_IMAGES_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
+    private void postFourImage() {
+        progressDialog.show();
+        AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
+                .addMultipartParameter("AEMEmployeeID", aempid)
+                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("Description", description)
+                .addMultipartParameter("ReimbursementAmount",amount)
+                .addMultipartParameter("Year",year)
+                .addMultipartParameter("Month",month)
+                .addMultipartParameter("SecurityCode",securitycode)
+                .addMultipartParameter("ConveyanceTypeId",componentId)
+                .addMultipartParameter("LocationTypeID","0")
+                .addMultipartParameter("ReimbursementDate","0")
+                .addMultipartFile("file",compressedImageFile)
+                .addMultipartFile("fil1",compressedImageFile1)
+                .addMultipartFile("fil2",compressedImageFile2)
+                .addMultipartFile("fil3",compressedImageFile3)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressDialog.show();
+                            Log.e(TAG, "POST_FOUR_IMAGES: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                successAlert(Response_Message);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.show();
+                        Log.e(TAG, "POST_FOUR_IMAGES_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
+    private void postThreeImage() {
+        progressDialog.show();
+        AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
+                .addMultipartParameter("AEMEmployeeID", aempid)
+                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("Description", description)
+                .addMultipartParameter("ReimbursementAmount",amount)
+                .addMultipartParameter("Year",year)
+                .addMultipartParameter("Month",month)
+                .addMultipartParameter("SecurityCode",securitycode)
+                .addMultipartParameter("ConveyanceTypeId",componentId)
+                .addMultipartParameter("LocationTypeID","0")
+                .addMultipartParameter("ReimbursementDate","0")
+                .addMultipartFile("file",compressedImageFile)
+                .addMultipartFile("fil1",compressedImageFile1)
+                .addMultipartFile("fil2",compressedImageFile2)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressDialog.show();
+                            Log.e(TAG, "POST_THREE_IMAGE: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                successAlert(Response_Message);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.show();
+                        Log.e(TAG, "POST_THREE_IMAGE_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
+    private void postTwoImage() {
+        progressDialog.show();
+        AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
+                .addMultipartParameter("AEMEmployeeID", aempid)
+                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("Description", description)
+                .addMultipartParameter("ReimbursementAmount",amount)
+                .addMultipartParameter("Year",year)
+                .addMultipartParameter("Month",month)
+                .addMultipartParameter("SecurityCode",securitycode)
+                .addMultipartParameter("ConveyanceTypeId",componentId)
+                .addMultipartParameter("LocationTypeID","0")
+                .addMultipartParameter("ReimbursementDate","0")
+                .addMultipartFile("file",compressedImageFile)
+                .addMultipartFile("fil1",compressedImageFile1)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressDialog.show();
+                            Log.e(TAG, "POST_TWO_IMAGES: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                successAlert(Response_Message);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.show();
+                        Log.e(TAG, "POST_TWO_IMAGES_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
+    private void postOneImage() {
+        Log.e(TAG, "postOneImage: \nAEMEmployeeID:"+aempid
+                +"\nAEMComponentID:"+comeid
+                +"\nDescription:"+description
+                +"\nReimbursementAmount:"+amount
+                +"\nYear:"+year
+                +"\nMonth:"+month
+                +"\nSecurityCode:"+securitycode
+                +"\nConveyanceTypeId:"+componentId
+                +"\nLocationTypeID:"+"0"
+                +"\nReimbursementDate:"+"0"
+                +"\nfile: ");
+        progressDialog.show();
+        AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
+                .addMultipartParameter("AEMEmployeeID", aempid)
+                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("Description", description)
+                .addMultipartParameter("ReimbursementAmount",amount)
+                .addMultipartParameter("Year",year)
+                .addMultipartParameter("Month",month)
+                .addMultipartParameter("SecurityCode",securitycode)
+                .addMultipartParameter("ConveyanceTypeId",componentId)
+                .addMultipartParameter("LocationTypeID","0")
+                .addMultipartParameter("ReimbursementDate","0")
+                .addMultipartFile("file",compressedImageFile)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressDialog.show();
+                            Log.e(TAG, "POST_ONE_IMAGE: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                successAlert(Response_Message);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.show();
+                        Log.e(TAG, "POST_ONE_IMAGE: "+anError.getErrorBody());
+                    }
+                });
     }
 
     private void setHideItem(JSONObject jsonObject) {
@@ -557,7 +796,7 @@ public class NewClaimActivity extends AppCompatActivity {
 
                                 JSONObject obj1=new JSONObject();
                                 try {
-                                    obj1.put("ddltype", "16");
+                                    obj1.put("ddltype", "160");
                                     obj1.put("id1",pref.getEmpConId());
                                     obj1.put("id2",pref.getEmpClintId());
                                     obj1.put("id3",0);
@@ -566,10 +805,19 @@ public class NewClaimActivity extends AppCompatActivity {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-
-                                //"gcl_CommonDDL?ddltype=160&id1=" + pref.getEmpConId() + "&id2=" + pref.getEmpClintId() + "&id3=0&SecurityCode=" + pref.getSecurityCode();
                             } else {
                                 hideAlert();
+                                /*JSONObject obj1=new JSONObject();
+                                try {
+                                    obj1.put("ddltype", "160");
+                                    obj1.put("id1",pref.getEmpConId());
+                                    obj1.put("id2",pref.getEmpClintId());
+                                    obj1.put("id3",0);
+                                    obj1.put("SecurityCode",pref.getSecurityCode());
+                                    setComponenetItem(obj1);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }*/
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -615,8 +863,6 @@ public class NewClaimActivity extends AppCompatActivity {
                                     Log.d("comeeid", comeid);
                                     String value = obj.optString("value");
                                     Log.d("comvalue", value);
-
-
                                 }
                                 setComponenetItem();
 
@@ -650,7 +896,60 @@ public class NewClaimActivity extends AppCompatActivity {
     }
 
     private void setComponenetItem(JSONObject jsonObject) {
+        Log.e(TAG, "setComponenetItem: "+jsonObject);
+        final ProgressDialog progressBar = new ProgressDialog(this);
+        progressBar.setCancelable(true);//you can cancel it by pressing back button
+        progressBar.setMessage("Loading...");
+        progressBar.show();
+        AndroidNetworking.post(AppData.GET_COMMON_DROP_DOWN_FILL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressBar.dismiss();
+                            Log.e(TAG, "COMPONENT_ITEM: "+response.toString(4) );
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                componentList.add("Please Select Reimbursement Type");
+                                moduleComponentList.add(new SpineerItemModel("0","0"));
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String comid = obj.optString("id");
+                                    Log.e(TAG,"comid: "+comid);
+                                    String value = obj.optString("value");
+                                    componentList.add(value);
+                                    SpineerItemModel mainDocModule = new SpineerItemModel(value, comid);
+                                    moduleComponentList.add(mainDocModule);
+                                }
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                        (NewClaimActivity.this, android.R.layout.simple_spinner_item,
+                                                componentList); //selected item will look like a spinner set from XML
+                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                spComponent.setSelection(0);
+                                spComponent.setAdapter(spinnerArrayAdapter);
+                            } else {
 
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(NewClaimActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressBar.dismiss();
+                        Log.e(TAG, "COMPONENT_ITEM: "+anError.getErrorBody());
+                    }
+                });
     }
 
     private void setComponenetItem() {
@@ -815,7 +1114,6 @@ public class NewClaimActivity extends AppCompatActivity {
                 }
                 break;
             case CAMERA_REQUEST1:
-
                 if (resultCode == Activity.RESULT_OK) {
                     try {
                         try {
@@ -854,7 +1152,6 @@ public class NewClaimActivity extends AppCompatActivity {
                 }
                 break;
             case CAMERA_REQUEST2:
-
                 if (resultCode == Activity.RESULT_OK) {
                     try {
                         try {
@@ -1571,6 +1868,7 @@ public class NewClaimActivity extends AppCompatActivity {
                 alertDialog2.dismiss();
             }
         });
+
         ImageView imgCancel = (ImageView) dialogView.findViewById(R.id.imgCancel);
         imgCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1578,7 +1876,6 @@ public class NewClaimActivity extends AppCompatActivity {
                 alertDialog2.dismiss();
             }
         });
-
 
         alertDialog2 = dialogBuilder.create();
         alertDialog2.setCancelable(true);
@@ -1637,7 +1934,82 @@ public class NewClaimActivity extends AppCompatActivity {
 
         //getting the actual path of the pdf
 
-            AndroidNetworking.upload(UPLOAD_URL)
+        AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
+                .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
+                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("Description", description)
+                .addMultipartParameter("ReimbursementAmount", amount)
+                .addMultipartParameter("Year", year)
+                .addMultipartParameter("Month", month)
+                .addMultipartParameter("SecurityCode", securitycode)
+                .addMultipartParameter("ConveyanceTypeId", componentId)
+                .addMultipartParameter("LocationTypeID", "0")
+                .addMultipartParameter("ReimbursementDate", "0")
+                .addMultipartFile("SingleFile", pdfFile)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                        progressDialog.show();
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        progressDialog.dismiss();
+
+                        try {
+                            Log.e(TAG, "MULTIPART_FILE: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+
+                                successAlert(Response_Message);
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+
+
+
+
+                        /*JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        String responseText = job1.optString("responseText");
+                        boolean responseStatus = job1.optBoolean("responseStatus");
+
+                        if (responseStatus) {
+
+                            successAlert(responseText);
+
+                        } else {
+
+                            Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
+
+                        }*/
+
+
+                        // boolean _status = job1.getBoolean("status");
+
+
+
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        Log.e("errt", String.valueOf(error));
+
+                        Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+           /* AndroidNetworking.upload(UPLOAD_URL)
                     .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
                     .addMultipartParameter("AEMComponentID", comeid)
                     .addMultipartParameter("Description", description)
@@ -1657,8 +2029,6 @@ public class NewClaimActivity extends AppCompatActivity {
                         @Override
                         public void onProgress(long bytesUploaded, long totalBytes) {
                             progressDialog.show();
-
-
                         }
                     })
                     .getAsJSONObject(new JSONObjectRequestListener() {
@@ -1696,7 +2066,7 @@ public class NewClaimActivity extends AppCompatActivity {
 
                             Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                         }
-                    });
+                    });*/
 
 
 
@@ -1707,7 +2077,60 @@ public class NewClaimActivity extends AppCompatActivity {
 
         //getting the actual path of the pdf
 
-        AndroidNetworking.upload(UPLOAD_URL)
+        //.addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+
+        AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
+                .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
+                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("Description", description)
+                .addMultipartParameter("ReimbursementAmount", amount)
+                .addMultipartParameter("Year", year)
+                .addMultipartParameter("Month", month)
+                .addMultipartParameter("SecurityCode", securitycode)
+                .addMultipartParameter("ConveyanceTypeId", componentId)
+                .addMultipartParameter("LocationTypeID", "0")
+                .addMultipartParameter("ReimbursementDate", "0")
+                .addMultipartFile("SingleFile", pdfFile)
+
+                .setPercentageThresholdForCancelling(60)
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                        progressDialog.show();
+
+
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressDialog.dismiss();
+                            Log.e(TAG, "MULTIPART_WITH_FILE: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                postOneImage();
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        Log.e(TAG, "MULTIPART_WITH_FILE_error: "+error.getErrorBody());
+                        Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        /*AndroidNetworking.upload(UPLOAD_URL)
                 .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
                 .addMultipartParameter("AEMComponentID", comeid)
                 .addMultipartParameter("Description", description)
@@ -1766,7 +2189,7 @@ public class NewClaimActivity extends AppCompatActivity {
 
                         Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                     }
-                });
+                });*/
 
 
 
@@ -1777,7 +2200,59 @@ public class NewClaimActivity extends AppCompatActivity {
 
         //getting the actual path of the pdf
 
-        AndroidNetworking.upload(UPLOAD_URL)
+        AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
+                .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
+                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("Description", description)
+                .addMultipartParameter("ReimbursementAmount", amount)
+                .addMultipartParameter("Year", year)
+                .addMultipartParameter("Month", month)
+                .addMultipartParameter("SecurityCode", securitycode)
+                .addMultipartParameter("ConveyanceTypeId", componentId)
+                .addMultipartParameter("LocationTypeID", "0")
+                .addMultipartParameter("ReimbursementDate", "0")
+                .addMultipartFile("SingleFile", pdfFile)
+                .setPercentageThresholdForCancelling(60)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                        progressDialog.show();
+
+
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressDialog.dismiss();
+                            Log.e(TAG, "MULTIPART_WITH_TWO_FILE: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        Log.e(TAG, "MULTIPART_WITH_TWO_FILE_error: "+error.getErrorBody() );
+                        Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        /*AndroidNetworking.upload(UPLOAD_URL)
                 .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
                 .addMultipartParameter("AEMComponentID", comeid)
                 .addMultipartParameter("Description", description)
@@ -1836,7 +2311,7 @@ public class NewClaimActivity extends AppCompatActivity {
 
                         Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                     }
-                });
+                });*/
 
 
 
@@ -1933,11 +2408,13 @@ public class NewClaimActivity extends AppCompatActivity {
         } else if (pdfflag==1 && galleryflagone.equals("1")&& galleryflagtwo.equals("1")) {
             uploadMultipartwithTwofile();
         } else if (galleryflagone.equals("1")) {
-            postoneimage();
+            //postoneimage();
+            postOneImage();
         } else if (galleryflagtwo.equals("1")) {
-            posttwoimage();
+            //posttwoimage();
+            postTwoImage();
         } else {
-            Toast.makeText(NewClaimActivity.this,"Please Attach Your Reimbusement File",Toast.LENGTH_LONG).show();
+            Toast.makeText(NewClaimActivity.this,"Please Attach Your Reimbursement File",Toast.LENGTH_LONG).show();
         }
     }
 
