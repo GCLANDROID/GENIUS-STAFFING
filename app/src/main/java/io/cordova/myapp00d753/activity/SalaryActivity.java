@@ -105,13 +105,12 @@ public class SalaryActivity extends AppCompatActivity  {
         pref = new Pref(getApplicationContext());
         connectionCheck=new NetworkConnectionCheck(SalaryActivity.this);
         rvSalary = (RecyclerView) findViewById(R.id.rvSalary);
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(SalaryActivity.this, LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(SalaryActivity.this, LinearLayoutManager.VERTICAL, false);
         rvSalary.setLayoutManager(layoutManager);
 
         spYear = (Spinner) findViewById(R.id.spYear);
         //SpinnerAdapter spinnerAdapter = new SpinnerAdapter(SalaryActivity.this, spYearList);
-        //  spYear.setAdapter(spinnerAdapter);
+        //spYear.setAdapter(spinnerAdapter);
         imgBack = (ImageView) findViewById(R.id.imgBack);
         imgHome = (ImageView) findViewById(R.id.imgHome);
         llSearch = (LinearLayout) findViewById(R.id.llSearch);
@@ -248,8 +247,6 @@ public class SalaryActivity extends AppCompatActivity  {
                                     String url = obj.optString("url");
                                     SalaryModule salaryModule = new SalaryModule(SalYear, SalMonth,"Rs. "+ MonthlyNet, url);
                                     salaryList.add(salaryModule);
-
-
                                 }
 
                                 if (salaryList.size() > 0) {
@@ -362,8 +359,6 @@ public class SalaryActivity extends AppCompatActivity  {
             @Override
             public void onClick(View view) {
                 alertDialog.dismiss();
-
-
             }
         });
 
@@ -376,7 +371,6 @@ public class SalaryActivity extends AppCompatActivity  {
                 tvYear.setText(year);
                 salaryList.clear();
                 //getSalaryList();
-
                 JSONObject obj=new JSONObject();
                 try {
                     obj.put("AEMConsultantID", "0");
@@ -393,7 +387,6 @@ public class SalaryActivity extends AppCompatActivity  {
                     e.printStackTrace();
                 }
                 alertDialog.dismiss();
-
             }
         });
 

@@ -620,8 +620,9 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
 
         ProgressDialog pd = new ProgressDialog(AttenDanceDashboardActivity.this);
         pd.setMessage("Loading...");
-        pd.show();
         pd.setCancelable(false);
+        pd.show();
+
         String surl = AppData.url + "gcl_Attendancecalender/Get?AemEmployeeid=" + pref.getEmpId() + "&AemClientid=" + pref.getEmpClintId() + "&Monthid=" + month + "&yearid=" + year + "&SecurityCode=" + pref.getSecurityCode();
         Log.d("input", surl);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,

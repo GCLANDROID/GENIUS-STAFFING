@@ -100,6 +100,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 
 public class NewClaimActivity extends AppCompatActivity {
+    private static final String TAG = "NewClaimActivity";
     ImageView imgBack, imgHome;
     Spinner spComponent;
     ArrayList<SpineerItemModel> moduleComponentList = new ArrayList<>();
@@ -165,6 +166,19 @@ public class NewClaimActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_claim);
         initialize();
+
+
+        JSONObject obj1=new JSONObject();
+        try {
+            obj1.put("ddltype", "16");
+            obj1.put("id1",pref.getEmpConId());
+            obj1.put("id2",pref.getEmpClintId());
+            obj1.put("id3",0);
+            obj1.put("SecurityCode",pref.getSecurityCode());
+            setHideItem(obj1);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         setHideItem();
         onClick();
     }
@@ -509,10 +523,73 @@ public class NewClaimActivity extends AppCompatActivity {
         });
     }
 
+    private void setHideItem(JSONObject jsonObject) {
+        Log.e(TAG, "setHideItem: "+jsonObject);
+        final ProgressDialog progressBar = new ProgressDialog(this);
+        progressBar.setCancelable(true);//you can cancel it by pressing back button
+        progressBar.setMessage("Loading...");
+        progressBar.show();
+        AndroidNetworking.post(AppData.GET_COMMON_DROP_DOWN_FILL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressBar.dismiss();
+                            Log.e(TAG, "GET_COMMON_DROP_DOWN_FILL: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    comeid = obj.optString("id");
+                                    Log.d(TAG, "comeeid: "+comeid);
+                                    String value = obj.optString("value");
+                                    Log.d(TAG,"comvalue: "+value);
+                                }
+                                //setComponenetItem();
+
+                                JSONObject obj1=new JSONObject();
+                                try {
+                                    obj1.put("ddltype", "16");
+                                    obj1.put("id1",pref.getEmpConId());
+                                    obj1.put("id2",pref.getEmpClintId());
+                                    obj1.put("id3",0);
+                                    obj1.put("SecurityCode",pref.getSecurityCode());
+                                    setComponenetItem(obj1);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                //"gcl_CommonDDL?ddltype=160&id1=" + pref.getEmpConId() + "&id2=" + pref.getEmpClintId() + "&id3=0&SecurityCode=" + pref.getSecurityCode();
+                            } else {
+                                hideAlert();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(NewClaimActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressBar.dismiss();
+                        Log.e(TAG, "GET_COMMON_DROP_DOWN_FILL: "+anError.getErrorBody());
+                    }
+                });
+    }
+
 
     private void setHideItem() {
+
         String surl = AppData.url+"gcl_CommonDDL?ddltype=16&id1=" + pref.getEmpConId() + "&id2=" + pref.getEmpClintId() + "&id3=0&SecurityCode=" + pref.getSecurityCode();
-        Log.d("compurl", surl);
+        Log.d("compurl_1", surl);
         final ProgressDialog progressBar = new ProgressDialog(this);
         progressBar.setCancelable(true);//you can cancel it by pressing back button
         progressBar.setMessage("Loading...");
@@ -570,6 +647,10 @@ public class NewClaimActivity extends AppCompatActivity {
 
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
+    }
+
+    private void setComponenetItem(JSONObject jsonObject) {
+
     }
 
     private void setComponenetItem() {
@@ -887,15 +968,9 @@ public class NewClaimActivity extends AppCompatActivity {
                     filePath = data.getData();
                     imgPDF.setVisibility(View.VISIBLE);
                     pdfflag = 1;
-
                 }
-
-
                 break;
-
-
             case LongImageCameraActivity.LONG_IMAGE_RESULT_CODE:
-
 
                 if (resultCode == RESULT_OK && requestCode == LongImageCameraActivity.LONG_IMAGE_RESULT_CODE) {
                     String imageFileName = data.getStringExtra(LongImageCameraActivity.IMAGE_PATH_KEY);
@@ -1322,8 +1397,6 @@ public class NewClaimActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 alertDialog1.dismiss();
-
-
             }
         });
 
@@ -1855,19 +1928,15 @@ public class NewClaimActivity extends AppCompatActivity {
     private void attachFileAPI(){
         if (pdfflag == 1) {
             uploadMultipart();
-        }else if (pdfflag==1 && galleryflagone.equals("1")){
+        } else if (pdfflag==1 && galleryflagone.equals("1")) {
             uploadMultipartwithfile();
-
-        }else if (pdfflag==1 && galleryflagone.equals("1")&& galleryflagtwo.equals("1")){
+        } else if (pdfflag==1 && galleryflagone.equals("1")&& galleryflagtwo.equals("1")) {
             uploadMultipartwithTwofile();
-
-        }else if (galleryflagone.equals("1")){
+        } else if (galleryflagone.equals("1")) {
             postoneimage();
-
-        }else if (galleryflagtwo.equals("1")){
+        } else if (galleryflagtwo.equals("1")) {
             posttwoimage();
-
-        }else {
+        } else {
             Toast.makeText(NewClaimActivity.this,"Please Attach Your Reimbusement File",Toast.LENGTH_LONG).show();
         }
     }

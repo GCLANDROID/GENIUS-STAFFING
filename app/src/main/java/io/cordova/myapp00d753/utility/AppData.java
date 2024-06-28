@@ -7,7 +7,6 @@ public class AppData {
 
     //http://gsppi.geniusconsultant.com/
 
-    //gcl_KYC
     public static String GCL_KYC=newv2url+"Profile/GetKYCDetails";
     public static String MENU=newv2url+"Dashboard/GetMobileAppMenuList";
     public static String EMPLOYEE_DOCUMENT_MANAGE=newv2url+"Document/EmployeeDocumentManage";
@@ -19,4 +18,5 @@ public class AppData {
 
     public static String GET_EMPLOYEE_SALARY = newv2url+"Payroll/GetEmpSalary";
     public static String GET_EMPLOYEE_DISBURSED_PAYOUT = newv2url+"Payroll/GetEmpDisbursedPayout";
+    public static String GET_COMMON_DROP_DOWN_FILL = newv2url+"Sales/GetCommonDropDownFill";
 }

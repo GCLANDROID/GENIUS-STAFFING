@@ -140,7 +140,6 @@ public class OthersPayoutActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     private void getOthersPayoutItem(JSONObject jsonObject) {
