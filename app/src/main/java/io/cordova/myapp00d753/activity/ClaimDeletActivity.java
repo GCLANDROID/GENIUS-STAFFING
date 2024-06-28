@@ -27,6 +27,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,6 +49,7 @@ import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
 
 public class ClaimDeletActivity extends AppCompatActivity {
+    private static final String TAG = "ClaimDeletActivity";
     RecyclerView rvItem;
     ArrayList<ClaimDeleteModule> itemList = new ArrayList<>();
     LinearLayout llLoder, llMain, llNodata, llAgain, llSearch;
@@ -68,7 +73,17 @@ public class ClaimDeletActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_claim_delet);
         initialize();
-        getItemList();
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("AEMEmployeeID", pref.getEmpId());
+            obj.put("Year", year);
+            obj.put("Month", month);
+            obj.put("SecurityCode", pref.getSecurityCode());
+            getItemList(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        //getItemList();
         setAdapter();
         onClick();
     }
@@ -119,6 +134,64 @@ public class ClaimDeletActivity extends AppCompatActivity {
         imgBack=(ImageView)findViewById(R.id.imgBack);
         llHome=(LinearLayout)findViewById(R.id.llHome);
         imgSearch=(ImageView)findViewById(R.id.imgSearch);
+    }
+
+    private void getItemList(JSONObject jsonObject) {
+        AndroidNetworking.post(AppData.GET_REIMBURSEMENT_CLAIM)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "REIMBURSEMENT_LIST: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject job = jsonArray.getJSONObject(i);
+                                    String ClaimedDate = job.optString("ClaimedDate");
+                                    String Amount = job.optString("Amount");
+                                    String ClaimID = job.optString("ClaimID");
+                                    String ProcessStaus = job.optString("ProcessStaus");
+                                    String Category = job.optString("CategoryComponent");
+                                    ClaimDeleteModule obj2 = new ClaimDeleteModule(ClaimedDate, Amount, Category, ProcessStaus, ClaimID);
+                                    itemList.add(obj2);
+                                }
+
+                                llLoder.setVisibility(View.GONE);
+                                llMain.setVisibility(View.VISIBLE);
+                                llNodata.setVisibility(View.GONE);
+                                llAgain.setVisibility(View.GONE);
+                                setAdapter();
+                            } else {
+                                llLoder.setVisibility(View.GONE);
+                                llMain.setVisibility(View.GONE);
+                                llNodata.setVisibility(View.VISIBLE);
+                                llAgain.setVisibility(View.GONE);
+                                Toast.makeText(getApplicationContext(), "No data found", Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(ClaimDeletActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "REIMBURSEMENT_LIST_error: "+anError.getErrorBody());
+                        llLoder.setVisibility(View.GONE);
+                        llMain.setVisibility(View.GONE);
+                        llNodata.setVisibility(View.GONE);
+                        llAgain.setVisibility(View.VISIBLE);
+                    }
+                });
     }
 
     private void getItemList() {
@@ -241,7 +314,18 @@ public class ClaimDeletActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         itemList.clear();
-                        getItemList();
+                        //getItemList();
+                        JSONObject obj = new JSONObject();
+                        try {
+                            obj.put("AEMEmployeeID", pref.getEmpId());
+                            obj.put("Year", year);
+                            obj.put("Month", month);
+                            obj.put("SecurityCode", pref.getSecurityCode());
+                            getItemList(obj);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                         alertDialog.dismiss();
                     }
                 });
@@ -580,7 +664,18 @@ public class ClaimDeletActivity extends AppCompatActivity {
             public void onClick(View view) {
                 alerDialog1.dismiss();
                 itemList.clear();
-                getItemList();
+                //getItemList();
+
+                JSONObject obj = new JSONObject();
+                try {
+                    obj.put("AEMEmployeeID", pref.getEmpId());
+                    obj.put("Year", year);
+                    obj.put("Month", month);
+                    obj.put("SecurityCode", pref.getSecurityCode());
+                    getItemList(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
