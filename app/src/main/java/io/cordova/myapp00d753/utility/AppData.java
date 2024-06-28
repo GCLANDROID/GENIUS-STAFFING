@@ -20,4 +20,5 @@ public class AppData {
     public static String GET_EMPLOYEE_DISBURSED_PAYOUT = newv2url+"Payroll/GetEmpDisbursedPayout";
     public static String GET_COMMON_DROP_DOWN_FILL = newv2url+"Sales/GetCommonDropDownFill";
     public static String SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT = newv2url+"Reimbursement/SaveReimbursementClaimByComponent";
+    public static String GET_REIMBURSEMENT_CLAIM = newv2url+"Reimbursement/GetReimbursementClaim";
 }

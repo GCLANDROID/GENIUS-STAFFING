@@ -530,7 +530,6 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                     }else {
                                         leaveFlag=0;
                                     }
-
                                     MenuItemModel itemModel=new MenuItemModel(MenuItem,MenuID);
                                     itemList.add(itemModel);
                                 }
