@@ -127,6 +127,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
     String ConsentFlag="1";
     String android_id;
     int leaveFlag;
+    ArrayList<String>menuID=new ArrayList<>();
 
 
     @Override
@@ -525,7 +526,8 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                     JSONObject obj = jsonArray.getJSONObject(i);
                                     String MenuID=obj.optString("MenuID");
                                     String MenuItem=obj.optString("MenuItem");
-                                    if (MenuID.equals("12")){
+                                    menuID.add(MenuID);
+                                    if (menuID.contains("12")){
                                         leaveFlag=1;
                                     }else {
                                         leaveFlag=0;
