@@ -22,4 +22,5 @@ public class AppData {
     public static String SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT = newv2url+"Reimbursement/SaveReimbursementClaimByComponent";
     public static String GET_REIMBURSEMENT_CLAIM = newv2url+"Reimbursement/GetReimbursementClaim";
     public static String SAVE_REIMBURSEMENT_CLAIM_METSO = newv2url+"Reimbursement/SaveReimbursementClaim_METSO";
+    public static String GET_REIMBURSEMENT_CLAIM_COMPONENT_RECKITT = newv2url+"Reimbursement/GetReimbursementComponent_Reckitt";
 }

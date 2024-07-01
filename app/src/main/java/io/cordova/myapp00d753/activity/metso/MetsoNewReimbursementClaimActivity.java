@@ -123,6 +123,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Part;
 
 public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
     private static final String TAG = "Metso_New_Reimbursement";
@@ -217,9 +218,9 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_metso_new_reimbursement_claim);
         initialize();
-        setHideItem();
+        //setHideItem();
 
-        /*JSONObject obj1=new JSONObject();
+        JSONObject obj1=new JSONObject();
         try {
             obj1.put("ddltype", "16");
             obj1.put("id1",pref.getEmpConId());
@@ -229,10 +230,8 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
             setHideItem(obj1);
         } catch (JSONException e) {
             e.printStackTrace();
-        }*/
-
+        }
         onClick();
-
     }
 
     private void initialize() {
@@ -666,7 +665,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                                                     //postthreeimage();
                                                     postThreeImage();
                                                 } else if (flag == 4) {
-                                                    postfourimage();
+                                                    //postfourimage();
                                                     postFourImage();
                                                 } else if (flag == 5) {
                                                     //postfiveimage();
@@ -3771,19 +3770,32 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                 +"\nConveyanceTypeId:"+componentId
                 +"\nLocationTypeID:"+"0"
                 +"\nReimbursementDate:"+"0"
+                +"\nCostCentreId:"+CostCentreId
+                +"\nWbsId:"+WbsId
+                +"\nSiteid:"+Siteid
+                +"\nSupervisorID:"+SupervisorID
+                +"\nStartDate:"+startDate
+                +"\nEndDate:"+endDate
                 +"\nfile: ");
+
         progressDialog.show();
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_METSO)
-                .addMultipartParameter("AEMEmployeeID", aempid)
+                .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
                 .addMultipartParameter("AEMComponentID", comeid)
                 .addMultipartParameter("Description", description)
-                .addMultipartParameter("ReimbursementAmount",amount)
-                .addMultipartParameter("Year",year)
-                .addMultipartParameter("Month",month)
-                .addMultipartParameter("SecurityCode",securitycode)
-                .addMultipartParameter("ConveyanceTypeId",componentId)
-                .addMultipartParameter("LocationTypeID","0")
-                .addMultipartParameter("ReimbursementDate","0")
+                .addMultipartParameter("ReimbursementAmount", amount)
+                .addMultipartParameter("Year", year)
+                .addMultipartParameter("Month", month)
+                .addMultipartParameter("SecurityCode", securitycode)
+                .addMultipartParameter("ConveyanceTypeId", componentId)
+                .addMultipartParameter("LocationTypeID", "0")
+                .addMultipartParameter("ReimbursementDate", "0")
+                .addMultipartParameter("CostCentreId", CostCentreId)
+                .addMultipartParameter("WbsId", WbsId)
+                .addMultipartParameter("Siteid", Siteid)
+                .addMultipartParameter("SupervisorID", SupervisorID)
+                .addMultipartParameter("StartDate", startDate)
+                .addMultipartParameter("EndDate", endDate)
                 .addMultipartFile("file",compressedImageFile)
                 .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
                 .setTag("uploadTest")
@@ -3818,16 +3830,22 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
     private void postTwoImage() {
         progressDialog.show();
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_METSO)
-                .addMultipartParameter("AEMEmployeeID", aempid)
+                .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
                 .addMultipartParameter("AEMComponentID", comeid)
                 .addMultipartParameter("Description", description)
-                .addMultipartParameter("ReimbursementAmount",amount)
-                .addMultipartParameter("Year",year)
-                .addMultipartParameter("Month",month)
-                .addMultipartParameter("SecurityCode",securitycode)
-                .addMultipartParameter("ConveyanceTypeId",componentId)
-                .addMultipartParameter("LocationTypeID","0")
-                .addMultipartParameter("ReimbursementDate","0")
+                .addMultipartParameter("ReimbursementAmount", amount)
+                .addMultipartParameter("Year", year)
+                .addMultipartParameter("Month", month)
+                .addMultipartParameter("SecurityCode", securitycode)
+                .addMultipartParameter("ConveyanceTypeId", componentId)
+                .addMultipartParameter("LocationTypeID", "0")
+                .addMultipartParameter("ReimbursementDate", "0")
+                .addMultipartParameter("CostCentreId", CostCentreId)
+                .addMultipartParameter("WbsId", WbsId)
+                .addMultipartParameter("Siteid", Siteid)
+                .addMultipartParameter("SupervisorID", SupervisorID)
+                .addMultipartParameter("StartDate", startDate)
+                .addMultipartParameter("EndDate", endDate)
                 .addMultipartFile("file",compressedImageFile)
                 .addMultipartFile("fil1",compressedImageFile1)
                 .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
@@ -3863,16 +3881,22 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
     private void postThreeImage() {
         progressDialog.show();
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_METSO)
-                .addMultipartParameter("AEMEmployeeID", aempid)
+                .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
                 .addMultipartParameter("AEMComponentID", comeid)
                 .addMultipartParameter("Description", description)
-                .addMultipartParameter("ReimbursementAmount",amount)
-                .addMultipartParameter("Year",year)
-                .addMultipartParameter("Month",month)
-                .addMultipartParameter("SecurityCode",securitycode)
-                .addMultipartParameter("ConveyanceTypeId",componentId)
-                .addMultipartParameter("LocationTypeID","0")
-                .addMultipartParameter("ReimbursementDate","0")
+                .addMultipartParameter("ReimbursementAmount", amount)
+                .addMultipartParameter("Year", year)
+                .addMultipartParameter("Month", month)
+                .addMultipartParameter("SecurityCode", securitycode)
+                .addMultipartParameter("ConveyanceTypeId", componentId)
+                .addMultipartParameter("LocationTypeID", "0")
+                .addMultipartParameter("ReimbursementDate", "0")
+                .addMultipartParameter("CostCentreId", CostCentreId)
+                .addMultipartParameter("WbsId", WbsId)
+                .addMultipartParameter("Siteid", Siteid)
+                .addMultipartParameter("SupervisorID", SupervisorID)
+                .addMultipartParameter("StartDate", startDate)
+                .addMultipartParameter("EndDate", endDate)
                 .addMultipartFile("file",compressedImageFile)
                 .addMultipartFile("fil1",compressedImageFile1)
                 .addMultipartFile("fil2",compressedImageFile2)
@@ -3909,16 +3933,22 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
     private void postFourImage() {
         progressDialog.show();
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_METSO)
-                .addMultipartParameter("AEMEmployeeID", aempid)
+                .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
                 .addMultipartParameter("AEMComponentID", comeid)
                 .addMultipartParameter("Description", description)
-                .addMultipartParameter("ReimbursementAmount",amount)
-                .addMultipartParameter("Year",year)
-                .addMultipartParameter("Month",month)
-                .addMultipartParameter("SecurityCode",securitycode)
-                .addMultipartParameter("ConveyanceTypeId",componentId)
-                .addMultipartParameter("LocationTypeID","0")
-                .addMultipartParameter("ReimbursementDate","0")
+                .addMultipartParameter("ReimbursementAmount", amount)
+                .addMultipartParameter("Year", year)
+                .addMultipartParameter("Month", month)
+                .addMultipartParameter("SecurityCode", securitycode)
+                .addMultipartParameter("ConveyanceTypeId", componentId)
+                .addMultipartParameter("LocationTypeID", "0")
+                .addMultipartParameter("ReimbursementDate", "0")
+                .addMultipartParameter("CostCentreId", CostCentreId)
+                .addMultipartParameter("WbsId", WbsId)
+                .addMultipartParameter("Siteid", Siteid)
+                .addMultipartParameter("SupervisorID", SupervisorID)
+                .addMultipartParameter("StartDate", startDate)
+                .addMultipartParameter("EndDate", endDate)
                 .addMultipartFile("file",compressedImageFile)
                 .addMultipartFile("fil1",compressedImageFile1)
                 .addMultipartFile("fil2",compressedImageFile2)
@@ -3956,16 +3986,22 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
     private void postFiveImage() {
         progressDialog.show();
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_METSO)
-                .addMultipartParameter("AEMEmployeeID", aempid)
+                .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
                 .addMultipartParameter("AEMComponentID", comeid)
                 .addMultipartParameter("Description", description)
-                .addMultipartParameter("ReimbursementAmount",amount)
-                .addMultipartParameter("Year",year)
-                .addMultipartParameter("Month",month)
-                .addMultipartParameter("SecurityCode",securitycode)
-                .addMultipartParameter("ConveyanceTypeId",componentId)
-                .addMultipartParameter("LocationTypeID","0")
-                .addMultipartParameter("ReimbursementDate","0")
+                .addMultipartParameter("ReimbursementAmount", amount)
+                .addMultipartParameter("Year", year)
+                .addMultipartParameter("Month", month)
+                .addMultipartParameter("SecurityCode", securitycode)
+                .addMultipartParameter("ConveyanceTypeId", componentId)
+                .addMultipartParameter("LocationTypeID", "0")
+                .addMultipartParameter("ReimbursementDate", "0")
+                .addMultipartParameter("CostCentreId", CostCentreId)
+                .addMultipartParameter("WbsId", WbsId)
+                .addMultipartParameter("Siteid", Siteid)
+                .addMultipartParameter("SupervisorID", SupervisorID)
+                .addMultipartParameter("StartDate", startDate)
+                .addMultipartParameter("EndDate", endDate)
                 .addMultipartFile("file",compressedImageFile)
                 .addMultipartFile("fil1",compressedImageFile1)
                 .addMultipartFile("fil2",compressedImageFile2)

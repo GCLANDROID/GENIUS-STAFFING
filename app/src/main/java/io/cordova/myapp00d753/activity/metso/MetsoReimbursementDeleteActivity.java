@@ -67,9 +67,9 @@ public class MetsoReimbursementDeleteActivity extends AppCompatActivity {
     LinearLayout llHome;
     ImageView imgBack;
     ImageView imgSearch;
-
     int flag = 0;
     ProgressDialog progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -313,7 +313,18 @@ public class MetsoReimbursementDeleteActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         itemList.clear();
-                        getItemList();
+                        //getItemList();
+
+                        JSONObject obj = new JSONObject();
+                        try {
+                            obj.put("AEMEmployeeID", pref.getEmpId());
+                            obj.put("Year", year);
+                            obj.put("Month", month);
+                            obj.put("SecurityCode", pref.getSecurityCode());
+                            getItemList(obj);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         alertDialog.dismiss();
                     }
                 });
@@ -666,7 +677,17 @@ public class MetsoReimbursementDeleteActivity extends AppCompatActivity {
             public void onClick(View view) {
                 alerDialog1.dismiss();
                 itemList.clear();
-                getItemList();
+                //getItemList();
+                JSONObject obj = new JSONObject();
+                try {
+                    obj.put("AEMEmployeeID", pref.getEmpId());
+                    obj.put("Year", year);
+                    obj.put("Month", month);
+                    obj.put("SecurityCode", pref.getSecurityCode());
+                    getItemList(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

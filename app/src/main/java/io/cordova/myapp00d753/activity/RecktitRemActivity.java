@@ -40,6 +40,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.android.cameraview.LongImageCameraActivity;
 
 
@@ -79,8 +83,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Part;
 
 public class RecktitRemActivity extends AppCompatActivity {
+    private static final String TAG = "Recktit_Rem_Activity";
     ImageView imgBack, imgHome;
     Spinner spComponent,spLocation;
     ArrayList<SpineerItemModel> modelLocationList = new ArrayList<>();
@@ -144,7 +150,18 @@ public class RecktitRemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recktit_rem);
         initialize();
-        setLocationItem();
+        //setLocationItem();
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("ddltype", "505");
+            obj.put("id1", pref.getEmpConId());
+            obj.put("id2", pref.getEmpClintId());
+            obj.put("id3", "0");
+            obj.put("SecurityCode", pref.getSecurityCode());
+            setLocationItem(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         onClick();
     }
 
@@ -352,7 +369,21 @@ public class RecktitRemActivity extends AppCompatActivity {
                 String compName=modelComponentList.get(position).getItemName();
                 if (componentId.equals("SAEMCM1110000524")) {
 
-                    setAmount(loactionId, componentId);
+                    //setAmount(loactionId, componentId);
+                    JSONObject obj = new JSONObject();
+                    try {
+                        obj.put("LocationType", loactionId);
+                        obj.put("Component", componentId);
+                        obj.put("Year", year);
+                        obj.put("Month", month);
+                        obj.put("AEMEmployeeID", pref.getEmpId());
+                        obj.put("SecurityCode", pref.getSecurityCode());
+                        //"get_ReimbursementCompValidation?LocationType="+loactionId+"&Component="+compid+"&Year="+year+"&Month="+month+"&AEMEmployeeID="+pref.getEmpId()+"&SecurityCode="+pref.getSecurityCode();
+                        setAmount(obj);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                 }else {
                     etAmount.setText("");
                     etAmount.setEnabled(true);
@@ -485,7 +516,18 @@ public class RecktitRemActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 loactionId=modelLocationList.get(position).getItemId();
                 Log.d("loactionid",loactionId);
-                setCompItem(loactionId);
+                //setCompItem(loactionId);
+
+                JSONObject obj = new JSONObject();
+                try {
+                    obj.put("ddltype", "506");
+                    obj.put("id1", loactionId);
+                    obj.put("id2", pref.getEmpClintId());
+                    obj.put("id3", "0");
+                    setCompItem(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -564,15 +606,20 @@ public class RecktitRemActivity extends AppCompatActivity {
                                 if (!spyear.equals("")){
                                     if (!spmonth.equals("")){
                                         if (flag == 1) {
-                                            postoneimage();
+                                            //postoneimage();
+                                            postOneImage();
                                         } else if (flag == 2) {
-                                            posttwoimage();
+                                            //posttwoimage();
+                                            postTwoImage();
                                         } else if (flag == 3) {
-                                            postthreeimage();
+                                            //postthreeimage();
+                                            postThreeImage();
                                         } else if (flag == 4) {
-                                            postfourimage();
+                                            //postfourimage();
+                                            postFourImage();
                                         } else if (flag == 5) {
-                                            postfiveimage();
+                                            //postfiveimage();
+                                            postFiveImage();
                                         }
 
                                     }else {
@@ -597,6 +644,236 @@ public class RecktitRemActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void postFiveImage() {
+        progressDialog.show();
+        AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
+                .addMultipartParameter("AEMEmployeeID", aempid)
+                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("Description", description)
+                .addMultipartParameter("ReimbursementAmount",amount)
+                .addMultipartParameter("Year",year)
+                .addMultipartParameter("Month",month)
+                .addMultipartParameter("SecurityCode",securitycode)
+                .addMultipartParameter("ConveyanceTypeId",componentId)
+                .addMultipartParameter("LocationTypeID","0")
+                .addMultipartParameter("ReimbursementDate","0")
+                .addMultipartFile("file",compressedImageFile)
+                .addMultipartFile("fil1",compressedImageFile1)
+                .addMultipartFile("fil2",compressedImageFile2)
+                .addMultipartFile("fil3",compressedImageFile3)
+                .addMultipartFile("fil4",compressedImageFile4)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressDialog.show();
+                            Log.e(TAG, "RECKTIT_POST_THREE_IMAGE: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                successAlert();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.show();
+                        Log.e(TAG, "RECKTIT_POST_THREE_IMAGE_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
+    private void postFourImage() {
+        progressDialog.show();
+        AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
+                .addMultipartParameter("AEMEmployeeID", aempid)
+                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("Description", description)
+                .addMultipartParameter("ReimbursementAmount",amount)
+                .addMultipartParameter("Year",year)
+                .addMultipartParameter("Month",month)
+                .addMultipartParameter("SecurityCode",securitycode)
+                .addMultipartParameter("ConveyanceTypeId",componentId)
+                .addMultipartParameter("LocationTypeID","0")
+                .addMultipartParameter("ReimbursementDate","0")
+                .addMultipartFile("file",compressedImageFile)
+                .addMultipartFile("fil1",compressedImageFile1)
+                .addMultipartFile("fil2",compressedImageFile2)
+                .addMultipartFile("fil3",compressedImageFile3)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressDialog.show();
+                            Log.e(TAG, "RECKTIT_POST_THREE_IMAGE: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                successAlert();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.show();
+                        Log.e(TAG, "RECKTIT_POST_THREE_IMAGE_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
+    private void postThreeImage() {
+        progressDialog.show();
+        AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
+                .addMultipartParameter("AEMEmployeeID", aempid)
+                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("Description", description)
+                .addMultipartParameter("ReimbursementAmount",amount)
+                .addMultipartParameter("Year",year)
+                .addMultipartParameter("Month",month)
+                .addMultipartParameter("SecurityCode",securitycode)
+                .addMultipartParameter("ConveyanceTypeId",componentId)
+                .addMultipartParameter("LocationTypeID","0")
+                .addMultipartParameter("ReimbursementDate","0")
+                .addMultipartFile("file",compressedImageFile)
+                .addMultipartFile("fil1",compressedImageFile1)
+                .addMultipartFile("fil2",compressedImageFile2)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressDialog.show();
+                            Log.e(TAG, "RECKTIT_POST_THREE_IMAGE: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                successAlert();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.show();
+                        Log.e(TAG, "RECKTIT_POST_THREE_IMAGE_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
+    private void postOneImage() {
+        progressDialog.show();
+        AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
+                .addMultipartParameter("AEMEmployeeID", aempid)
+                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("Description", description)
+                .addMultipartParameter("ReimbursementAmount",amount)
+                .addMultipartParameter("Year",year)
+                .addMultipartParameter("Month",month)
+                .addMultipartParameter("SecurityCode",securitycode)
+                .addMultipartParameter("ConveyanceTypeId",componentId)
+                .addMultipartParameter("LocationTypeID","0")
+                .addMultipartParameter("ReimbursementDate","0")
+                .addMultipartFile("file",compressedImageFile)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressDialog.show();
+                            Log.e(TAG, "RECKTIT_POST_ONE_IMAGE: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                successAlert();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.show();
+                        Log.e(TAG, "RECKTIT_POST_ONE_IMAGE: "+anError.getErrorBody());
+                    }
+                });
+    }
+
+    private void postTwoImage() {
+        progressDialog.show();
+        AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
+                .addMultipartParameter("AEMEmployeeID", aempid)
+                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("Description", description)
+                .addMultipartParameter("ReimbursementAmount",amount)
+                .addMultipartParameter("Year",year)
+                .addMultipartParameter("Month",month)
+                .addMultipartParameter("SecurityCode",securitycode)
+                .addMultipartParameter("ConveyanceTypeId",componentId)
+                .addMultipartParameter("LocationTypeID","0")
+                .addMultipartParameter("ReimbursementDate","0")
+                .addMultipartFile("file",compressedImageFile)
+                .addMultipartFile("fil1",compressedImageFile1)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressDialog.show();
+                            Log.e(TAG, "RECKTIT_POST_TWO_IMAGES: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                successAlert();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.show();
+                        Log.e(TAG, "RECKTIT_POST_TWO_IMAGES_error: "+anError.getErrorBody());
+                    }
+                });
     }
 
 
@@ -858,17 +1135,9 @@ public class RecktitRemActivity extends AppCompatActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
-
-
-
                 }
                 break;
-
-
         }
-
-
     }
 
 
@@ -1125,8 +1394,62 @@ public class RecktitRemActivity extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "Select Pdf"), PICK_PDF_REQUEST);
     }
 
-    private void setLocationItem() {
+    private void setLocationItem(JSONObject jsonObject) {
+        final ProgressDialog progressBar = new ProgressDialog(this);
+        progressBar.setCancelable(true);//you can cancel it by pressing back button
+        progressBar.setMessage("Loading...");
+        progressBar.show();
+        AndroidNetworking.post(AppData.GET_COMMON_DROP_DOWN_FILL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressBar.dismiss();
+                            Log.e(TAG, "Recktit_Location_List: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String comid = obj.optString("id");
+                                    Log.d("comid", comid);
+                                    String value = obj.optString("value");
+                                    locationList.add(value);
+                                    SpineerItemModel mainDocModule = new SpineerItemModel(value, comid);
+                                    modelLocationList.add(mainDocModule);
+                                }
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                        (RecktitRemActivity.this, android.R.layout.simple_spinner_item,
+                                                locationList); //selected item will look like a spinner set from XML
+                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                spLocation.setSelection(0);
+                                spLocation.setAdapter(spinnerArrayAdapter);
+                            } else {
 
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(RecktitRemActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressBar.dismiss();
+                        Log.e(TAG, "Recktit_Location_List: "+anError.getErrorBody());
+                    }
+                });
+    }
+
+    private void setLocationItem() {
         String surl = AppData.url+"gcl_CommonDDL?ddltype=505&id1=" + pref.getEmpConId() + "&id2=" + pref.getEmpClintId() + "&id3=0&SecurityCode=" + pref.getSecurityCode();
         Log.d("compurl", surl);
         final ProgressDialog progressBar = new ProgressDialog(this);
@@ -1156,7 +1479,6 @@ public class RecktitRemActivity extends AppCompatActivity {
                                     locationList.add(value);
                                     SpineerItemModel mainDocModule = new SpineerItemModel(value, comid);
                                     modelLocationList.add(mainDocModule);
-
                                 }
                                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
                                         (RecktitRemActivity.this, android.R.layout.simple_spinner_item,
@@ -1193,8 +1515,61 @@ public class RecktitRemActivity extends AppCompatActivity {
 
     }
 
-    private void setCompItem(String loactionId) {
+    private void setCompItem(JSONObject jsonObject) {
+        Log.e(TAG, "setCompItem: "+jsonObject);
+        final ProgressDialog progressBar = new ProgressDialog(this);
+        progressBar.setCancelable(true);//you can cancel it by pressing back button
+        progressBar.setMessage("Loading...");
+        progressBar.show();
+        AndroidNetworking.post(AppData.GET_COMMON_DROP_DOWN_FILL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "COMP_ITEM: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String comid = obj.optString("id");
+                                    Log.d("comid", comid);
+                                    String value = obj.optString("value");
+                                    componentList.add(value);
+                                    SpineerItemModel mainDocModule = new SpineerItemModel(value, comid);
+                                    modelComponentList.add(mainDocModule);
+                                }
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                        (RecktitRemActivity.this, android.R.layout.simple_spinner_item,
+                                                componentList); //selected item will look like a spinner set from XML
+                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                spComponent.setSelection(0);
+                                spComponent.setAdapter(spinnerArrayAdapter);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(RecktitRemActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
+                    @Override
+                    public void onError(ANError anError) {
+                        progressBar.dismiss();
+                        Log.e(TAG, "COMP_ITEM_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
+
+    private void setCompItem(String loactionId) {
         String surl = AppData.url+"gcl_CommonDDL?ddltype=506&id1=" + loactionId + "&id2=" + pref.getEmpClintId() + "&id3=0&SecurityCode=" + pref.getSecurityCode();
         Log.d("compurl", surl);
         final ProgressDialog progressBar = new ProgressDialog(this);
@@ -1263,6 +1638,50 @@ public class RecktitRemActivity extends AppCompatActivity {
 
     }
 
+    private void setAmount(JSONObject jsonObject) {
+        final ProgressDialog progressBar = new ProgressDialog(this);
+        progressBar.setCancelable(true);//you can cancel it by pressing back button
+        progressBar.setMessage("Loading...");
+        progressBar.show();
+        AndroidNetworking.post(AppData.GET_REIMBURSEMENT_CLAIM_COMPONENT_RECKITT)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressBar.dismiss();
+                            Log.e(TAG, "REAM_COMPONENT_RECKITT: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String Amount=obj.optString("Amount");
+                                    etAmount.setText(Amount);
+                                    etAmount.setEnabled(false);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(RecktitRemActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressBar.dismiss();
+                        Log.e(TAG, "REAM_COMPONENT_RECKITT_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
     private void setAmount(String loactionId,String compid) {
 
         String surl = AppData.url+"get_ReimbursementCompValidation?LocationType="+loactionId+"&Component="+compid+"&Year="+year+"&Month="+month+"&AEMEmployeeID="+pref.getEmpId()+"&SecurityCode="+pref.getSecurityCode();
@@ -1292,9 +1711,7 @@ public class RecktitRemActivity extends AppCompatActivity {
                                     String Amount=obj.optString("Amount");
                                     etAmount.setText(Amount);
                                     etAmount.setEnabled(false);
-
                                 }
-
                             } else {
 
 
@@ -1354,14 +1771,10 @@ public class RecktitRemActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<UploadObject> call, Throwable t) {
                 progressDialog.dismiss();
-
                 Log.e("error", "Error " + t.getMessage());
                 Toast.makeText(getApplicationContext(), "Something went wrong!Please try again", Toast.LENGTH_LONG).show();
-
             }
-
         });
-
     }
 
     private void posttwoimage() {

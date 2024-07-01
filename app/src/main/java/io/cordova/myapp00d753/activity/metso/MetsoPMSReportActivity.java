@@ -50,8 +50,6 @@ public class MetsoPMSReportActivity extends AppCompatActivity {
 
     private void initView(){
         pref=new Pref(MetsoPMSReportActivity.this);
-
-
         y= Calendar.getInstance().get(Calendar.YEAR);
         cuyear=String.valueOf(y);
         ly=y-1;
@@ -63,7 +61,6 @@ public class MetsoPMSReportActivity extends AppCompatActivity {
                         yearList);
         yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spYear.setAdapter(yearAdapter);
-
 
         binding.imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,13 +133,7 @@ public class MetsoPMSReportActivity extends AppCompatActivity {
                             binding.tvApproverAchievement.setText(A_Achv_Remarks);
                             String A_Achv_Rating = jsonObject.optString("A_Achv_Rating");
                             binding.tvApproverRating.setText(A_Achv_Rating);
-
-
-
-
                             // boolean _status = job1.getBoolean("status");
-
-
                         } catch (JSONException e) {
                             e.printStackTrace();
 
