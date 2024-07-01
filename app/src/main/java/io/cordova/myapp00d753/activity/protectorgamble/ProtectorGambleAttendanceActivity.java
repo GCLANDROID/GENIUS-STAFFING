@@ -202,6 +202,7 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 Log.e(TAG, "onResponse: Location: " + new Gson().toJson(response.body()));
+                progressDialog.dismiss();
                 try {
                     JSONObject object = new JSONObject(String.valueOf(response.body()));
                     if (object.getBoolean("responseStatus") == true) {
@@ -217,7 +218,7 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
                         Log.e(TAG, "onResponse: SIZE: " + metsoLocationArrayList.size());
                         locationSpinnerAdapter = new LocationSpinnerAdapter(ProtectorGambleAttendanceActivity.this, metsoLocationArrayList);
 
-                        progressDialog.cancel();
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
