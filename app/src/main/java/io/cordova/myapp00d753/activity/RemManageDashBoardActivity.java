@@ -57,11 +57,7 @@ public class RemManageDashBoardActivity extends AppCompatActivity {
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 } else {
-                    /*Intent intent = new Intent(RemManageDashBoardActivity.this, NewClaimActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);*/
-
-                    Intent intent = new Intent(RemManageDashBoardActivity.this, MetsoNewReimbursementClaimActivity.class);
+                    Intent intent = new Intent(RemManageDashBoardActivity.this, NewClaimActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 }
