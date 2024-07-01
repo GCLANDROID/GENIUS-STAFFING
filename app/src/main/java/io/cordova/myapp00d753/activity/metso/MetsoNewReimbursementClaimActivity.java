@@ -125,7 +125,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
-    private static final String TAG = "MetsoNewReimbursement";
+    private static final String TAG = "Metso_New_Reimbursement";
     private static final int DEFAULT_BUFFER_SIZE = 2048;
     ImageView imgBack, imgHome;
     Spinner spComponent;
@@ -219,7 +219,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         initialize();
         setHideItem();
 
-        JSONObject obj1=new JSONObject();
+        /*JSONObject obj1=new JSONObject();
         try {
             obj1.put("ddltype", "16");
             obj1.put("id1",pref.getEmpConId());
@@ -229,7 +229,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
             setHideItem(obj1);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
 
         onClick();
 
@@ -657,15 +657,20 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                                         if (etDescription.getText().toString().length() > 0) {
                                             if (etAmount.getText().toString().length() > 0) {
                                                 if (flag == 1) {
-                                                    postoneimage();
+                                                    //postoneimage();
+                                                    postOneImage();
                                                 } else if (flag == 2) {
-                                                    posttwoimage();
+                                                    //posttwoimage();
+                                                    postTwoImage();
                                                 } else if (flag == 3) {
-                                                    postthreeimage();
+                                                    //postthreeimage();
+                                                    postThreeImage();
                                                 } else if (flag == 4) {
                                                     postfourimage();
+                                                    postFourImage();
                                                 } else if (flag == 5) {
-                                                    postfiveimage();
+                                                    //postfiveimage();
+                                                    postFiveImage();
                                                 }
                                             } else {
                                                 Toast.makeText(getApplicationContext(), "Please enter Claim Amount", Toast.LENGTH_LONG).show();
@@ -1134,7 +1139,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
 
     private void setHideItem() {
         String surl = AppData.url + "gcl_CommonDDL?ddltype=16&id1=" + pref.getEmpConId() + "&id2=" + pref.getEmpClintId() + "&id3=0&SecurityCode=" + pref.getSecurityCode();
-        Log.d(TAG,"comp_url_1"+surl);
+        Log.d(TAG,"comp_url_1: "+surl);
         //final ProgressDialog progressBar = new ProgressDialog(this);
         progressBar.setCancelable(true);//you can cancel it by pressing back button
         progressBar.setMessage("Loading...");
@@ -1229,6 +1234,20 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
 
                                     }
                                 });
+
+                                JSONObject obj1=new JSONObject();
+                                try {
+                                    obj1.put("ddltype", "CLCOSTC");
+                                    obj1.put("id1","0");
+                                    obj1.put("id2",pref.getEmpClintId());
+                                    obj1.put("id3",0);
+                                    obj1.put("SecurityCode",pref.getSecurityCode());
+                                    getCostCenterList(obj1);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -1245,7 +1264,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
 
     private void setComponenetItem() {
         String surl = AppData.url + "gcl_CommonDDL?ddltype=160&id1=" + pref.getEmpConId() + "&id2=" + pref.getEmpClintId() + "&id3=0&SecurityCode=" + pref.getSecurityCode();
-        Log.d(TAG,"comp_url_2"+surl);
+        Log.d(TAG,"comp_url_2: "+surl);
         //final ProgressDialog progressBar = new ProgressDialog(this);
        /* progressBar.setCancelable(true);//you can cancel it by pressing back button
         progressBar.setMessage("Loading...");
@@ -1319,9 +1338,62 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
     }
 
+    private void getCostCenterList(JSONObject jsonObject) {
+        AndroidNetworking.post(AppData.GET_COMMON_DROP_DOWN_FILL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "COST_CENTER: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String comid = obj.optString("id");
+                                    Log.d("comid", comid);
+                                    String value = obj.optString("value");
+                                    SpineerItemModel mainDocModule = new SpineerItemModel(value, comid);
+                                    costCenterComponentList.add(mainDocModule);
+                                }
+
+                                JSONObject obj1=new JSONObject();
+                                try {
+                                    obj1.put("ddltype", "CLWBSM");
+                                    obj1.put("id1","0");
+                                    obj1.put("id2",pref.getEmpClintId());
+                                    obj1.put("id3",0);
+                                    obj1.put("SecurityCode",pref.getSecurityCode());
+                                    getWbsCode(obj1);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(MetsoNewReimbursementClaimActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressBar.dismiss();
+                        Log.e(TAG, "COST_CENTER_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
     private void getCostCenterList() {
         String surl = AppData.url + "gcl_CommonDDL?ddltype=CLCOSTC&id1=0&id2=" + pref.getEmpClintId() + "&id3=0&SecurityCode=" + pref.getSecurityCode();
-        Log.d(TAG,"costCenterUrl"+surl);
+        Log.d(TAG,"costCenterUrl: "+surl);
         //final ProgressDialog progressBar = new ProgressDialog(this);
        /* progressBar.setCancelable(true);//you can cancel it by pressing back button
         progressBar.setMessage("Loading...");
@@ -1387,9 +1459,61 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
     }
 
+    private void getWbsCode(JSONObject jsonObject) {
+        AndroidNetworking.post(AppData.GET_COMMON_DROP_DOWN_FILL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "WBS_CODE: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String comid = obj.optString("id");
+                                    Log.d("comid", comid);
+                                    String value = obj.optString("value");
+                                    SpineerItemModel mainDocModule = new SpineerItemModel(value, comid);
+                                    wbsCodeList.add(mainDocModule);
+                                }
+
+                                JSONObject obj1=new JSONObject();
+                                try {
+                                    obj1.put("ddltype", "CLSPM");
+                                    obj1.put("id1","0");
+                                    obj1.put("id2",pref.getEmpClintId());
+                                    obj1.put("id3",0);
+                                    obj1.put("SecurityCode",pref.getSecurityCode());
+                                    getSupervisorList(obj1);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(MetsoNewReimbursementClaimActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "WBS_CODE_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
     private void getWbsCode() {
         String surl = AppData.url + "gcl_CommonDDL?ddltype=CLWBSM&id1=0&id2=" + pref.getEmpClintId() + "&id3=0&SecurityCode=" + pref.getSecurityCode();
-        Log.d(TAG,"WbsCodeUrl"+surl);
+        Log.d(TAG,"WbsCodeUrl: "+surl);
         //final ProgressDialog progressBar = new ProgressDialog(this);
         /*progressBar.setCancelable(true);//you can cancel it by pressing back button
         progressBar.setMessage("Loading...");
@@ -1505,9 +1629,79 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                 });
     }
 
+    private void getSupervisorList(JSONObject jsonObject) {
+        AndroidNetworking.post(AppData.GET_COMMON_DROP_DOWN_FILL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "SUPERVISOR_LIST: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String comid = obj.optString("id");
+                                    Log.d("comid", comid);
+                                    String value = obj.optString("value");
+                                    SpineerItemModel mainDocModule = new SpineerItemModel(value, comid);
+                                    supervisorList.add(mainDocModule);
+                                }
+
+                                componentSpinnerAdapter = new ComponentSpinnerAdapter(MetsoNewReimbursementClaimActivity.this, supervisorList);
+                                spSupervisor.setAdapter(componentSpinnerAdapter);
+                                spSupervisor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                    @Override
+                                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                        SpineerItemModel clickedItem = (SpineerItemModel) adapterView.getItemAtPosition(i);
+                                        if (!clickedItem.getItemName().equals("Please Select Supervisor")) {
+                                            SupervisorID = clickedItem.getItemId();
+                                            Log.e(TAG, "SupervisorID: " + SupervisorID);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                                    }
+                                });
+
+                                JSONObject obj1=new JSONObject();
+                                try {
+                                    obj1.put("ddltype", "CLSITEM");
+                                    obj1.put("id1","0");
+                                    obj1.put("id2",pref.getEmpClintId());
+                                    obj1.put("id3",0);
+                                    obj1.put("SecurityCode",pref.getSecurityCode());
+                                    getSiteMasterList(obj1);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(MetsoNewReimbursementClaimActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "SUPERVISOR_LIST_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
     private void getSupervisorList() {
         String surl = AppData.url + "gcl_CommonDDL?ddltype=CLSPM&id1=0&id2=" + pref.getEmpClintId() + "&id3=0&SecurityCode=" + pref.getSecurityCode();
-        Log.d(TAG,"SupervisorUrl"+surl);
+        Log.d(TAG,"SupervisorUrl: "+surl);
         //final ProgressDialog progressBar = new ProgressDialog(this);
         /*progressBar.setCancelable(true);//you can cancel it by pressing back button
         progressBar.setMessage("Loading...");
@@ -1570,6 +1764,65 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         }) {
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
+    }
+
+    private void getSiteMasterList(JSONObject jsonObject) {
+        AndroidNetworking.post(AppData.GET_COMMON_DROP_DOWN_FILL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "SITE_MASTER_LIST: "+response.toString(4));
+                            progressBar.dismiss();
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String comid = obj.optString("id");
+                                    Log.d("comid", comid);
+                                    String value = obj.optString("value");
+                                    SpineerItemModel mainDocModule = new SpineerItemModel(value, comid);
+                                    siteMasterList.add(mainDocModule);
+                                }
+                                componentSpinnerAdapter = new ComponentSpinnerAdapter(MetsoNewReimbursementClaimActivity.this, siteMasterList);
+                                spSite.setAdapter(componentSpinnerAdapter);
+                                spSite.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                    @Override
+                                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                        SpineerItemModel clickedItem = (SpineerItemModel) adapterView.getItemAtPosition(i);
+                                        if (!clickedItem.getItemName().equals("Please Select Site")) {
+                                            Siteid = clickedItem.getItemId();
+                                            Log.e(TAG, "Siteid: " + Siteid);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                                    }
+                                });
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressBar.dismiss();
+                        Log.e(TAG, "SITE_MASTER_LIST_error: "+anError.getErrorBody());
+                    }
+                });
     }
 
     private void getSiteMasterList() {
@@ -2813,7 +3066,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
 
         //getting the actual path of the pdf
 
-        AndroidNetworking.upload(UPLOAD_URL)
+        AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_METSO)
                 .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
                 .addMultipartParameter("AEMComponentID", comeid)
                 .addMultipartParameter("Description", description)
@@ -2824,14 +3077,94 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                 .addMultipartParameter("ConveyanceTypeId", componentId)
                 .addMultipartParameter("LocationTypeID", "0")
                 .addMultipartParameter("ReimbursementDate", "0")
-
                 .addMultipartParameter("CostCentreId", CostCentreId) // CostCentreId,WbsId,Siteid,SupervisorID
                 .addMultipartParameter("WbsId", WbsId)
                 .addMultipartParameter("Siteid", Siteid)
                 .addMultipartParameter("SupervisorID", SupervisorID)
                 .addMultipartParameter("StartDate", startDate)
                 .addMultipartParameter("EndDate", endDate)
+                .addMultipartFile("SingleFile", pdfFile)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setPercentageThresholdForCancelling(60)
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                        progressDialog.show();
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        progressDialog.dismiss();
 
+                        try {
+                            Log.e(TAG, "MULTIPART_FILE_METSO: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                successAlert(Response_Message);
+                            } else {
+                                Toast.makeText(getApplicationContext(), Response_Message, Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                        /*JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        String responseText = job1.optString("responseText");
+                        boolean responseStatus = job1.optBoolean("responseStatus");
+
+                        if (responseStatus) {
+
+                            successAlert(responseText);
+
+                        } else {
+
+                            Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
+
+                        }*/
+
+
+                        // boolean _status = job1.getBoolean("status");
+
+
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        Log.e("errt", String.valueOf(error));
+                        Log.e("errt", error.getErrorBody());
+                        Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+
+
+
+        /*AndroidNetworking.upload(UPLOAD_URL)
+                .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
+                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("Description", description)
+                .addMultipartParameter("ReimbursementAmount", amount)
+                .addMultipartParameter("Year", year)
+                .addMultipartParameter("Month", month)
+                .addMultipartParameter("SecurityCode", securitycode)
+                .addMultipartParameter("ConveyanceTypeId", componentId)
+                .addMultipartParameter("LocationTypeID", "0")
+                .addMultipartParameter("ReimbursementDate", "0")
+                .addMultipartParameter("CostCentreId", CostCentreId) // CostCentreId,WbsId,Siteid,SupervisorID
+                .addMultipartParameter("WbsId", WbsId)
+                .addMultipartParameter("Siteid", Siteid)
+                .addMultipartParameter("SupervisorID", SupervisorID)
+                .addMultipartParameter("StartDate", startDate)
+                .addMultipartParameter("EndDate", endDate)
                 .addMultipartFile("SingleFile", pdfFile)
                 .setPercentageThresholdForCancelling(60)
                 .setTag("uploadTest")
@@ -2841,8 +3174,6 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                     @Override
                     public void onProgress(long bytesUploaded, long totalBytes) {
                         progressDialog.show();
-
-
                     }
                 })
                 .getAsJSONObject(new JSONObjectRequestListener() {
@@ -2879,17 +3210,13 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
 
                         Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                     }
-                });
-
-
+                });*/
     }
 
     public void uploadMultipartwithfile() {
         //getting name for the pdf
-
         //getting the actual path of the pdf
-
-        AndroidNetworking.upload(UPLOAD_URL)
+        AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_METSO)
                 .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
                 .addMultipartParameter("AEMComponentID", comeid)
                 .addMultipartParameter("Description", description)
@@ -2900,7 +3227,81 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                 .addMultipartParameter("ConveyanceTypeId", componentId)
                 .addMultipartParameter("LocationTypeID", "0")
                 .addMultipartParameter("ReimbursementDate", "0")
+                .addMultipartParameter("CostCentreId", CostCentreId)
+                .addMultipartParameter("WbsId", WbsId)
+                .addMultipartParameter("Siteid", Siteid)
+                .addMultipartParameter("SupervisorID", SupervisorID)
+                .addMultipartParameter("StartDate", startDate)
+                .addMultipartParameter("EndDate", endDate)
+                .addMultipartFile("SingleFile", pdfFile)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setPercentageThresholdForCancelling(60)
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                        progressDialog.show();
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        progressDialog.dismiss();
 
+                        try {
+                            Log.e(TAG, "MULTIPART_WITH_FILE: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                //successAlert(Response_Message);
+                                postOneImage();
+                            } else {
+                                Toast.makeText(getApplicationContext(), Response_Message, Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(MetsoNewReimbursementClaimActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+
+
+                       /* JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        String responseText = job1.optString("responseText");
+                        boolean responseStatus = job1.optBoolean("responseStatus");
+
+                        if (responseStatus) {
+                            postoneimage();
+                        } else {
+                            Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
+                        }*/
+
+
+                        // boolean _status = job1.getBoolean("status");
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        Log.e("errt", String.valueOf(error));
+                        Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        /*AndroidNetworking.upload(UPLOAD_URL)
+                .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
+                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("Description", description)
+                .addMultipartParameter("ReimbursementAmount", amount)
+                .addMultipartParameter("Year", year)
+                .addMultipartParameter("Month", month)
+                .addMultipartParameter("SecurityCode", securitycode)
+                .addMultipartParameter("ConveyanceTypeId", componentId)
+                .addMultipartParameter("LocationTypeID", "0")
+                .addMultipartParameter("ReimbursementDate", "0")
                 .addMultipartParameter("CostCentreId", CostCentreId)
                 .addMultipartParameter("WbsId", WbsId)
                 .addMultipartParameter("Siteid", Siteid)
@@ -2947,9 +3348,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                         Log.e("errt", String.valueOf(error));
                         Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                     }
-                });
-
-
+                });*/
     }
 
     public void uploadMultipartwithTwofile() {
@@ -2957,7 +3356,62 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
 
         //getting the actual path of the pdf
 
-        AndroidNetworking.upload(UPLOAD_URL)
+        AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_METSO)
+                .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
+                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("Description", description)
+                .addMultipartParameter("ReimbursementAmount", amount)
+                .addMultipartParameter("Year", year)
+                .addMultipartParameter("Month", month)
+                .addMultipartParameter("SecurityCode", securitycode)
+                .addMultipartParameter("ConveyanceTypeId", componentId)
+                .addMultipartParameter("LocationTypeID", "0")
+                .addMultipartParameter("ReimbursementDate", "0")
+                .addMultipartParameter("CostCentreId", CostCentreId)
+                .addMultipartParameter("WbsId", WbsId)
+                .addMultipartParameter("Siteid", Siteid)
+                .addMultipartParameter("SupervisorID", SupervisorID)
+                .addMultipartParameter("StartDate", startDate)
+                .addMultipartParameter("EndDate", endDate)
+                .addMultipartFile("SingleFile", pdfFile)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setPercentageThresholdForCancelling(60)
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                        progressDialog.show();
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        progressDialog.dismiss();
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        String responseText = job1.optString("responseText");
+                        boolean responseStatus = job1.optBoolean("responseStatus");
+                        if (responseStatus) {
+                            //postoneimage();
+                            postOneImage();
+                        } else {
+                            Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
+                        }
+                        // boolean _status = job1.getBoolean("status");
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        Log.e("errt", String.valueOf(error));
+                        Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+
+        /*AndroidNetworking.upload(UPLOAD_URL)
                 .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
                 .addMultipartParameter("AEMComponentID", comeid)
                 .addMultipartParameter("Description", description)
@@ -3008,7 +3462,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                         Log.e("errt", String.valueOf(error));
                         Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                     }
-                });
+                });*/
     }
 
 
@@ -3103,10 +3557,11 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
             uploadMultipartwithTwofile();
         } else if (galleryFlag == 1) {
             Log.e(TAG, "attachFileAPI: postoneimage");
-            postoneimage();
+            //postoneimage();
+            postOneImage();
         } else if (galleryFlag == 2) {
             Log.e(TAG, "attachFileAPI: posttwoimage");
-            posttwoimage();
+            postTwoImage();
         } else {
             Toast.makeText(MetsoNewReimbursementClaimActivity.this, "Please Attach Your Reimbursement File", Toast.LENGTH_LONG).show();
         }
@@ -3305,7 +3760,244 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
     }
 
 
+    private void postOneImage() {
+        Log.e(TAG, "postOneImage: \nAEMEmployeeID:"+aempid
+                +"\nAEMComponentID:"+comeid
+                +"\nDescription:"+description
+                +"\nReimbursementAmount:"+amount
+                +"\nYear:"+year
+                +"\nMonth:"+month
+                +"\nSecurityCode:"+securitycode
+                +"\nConveyanceTypeId:"+componentId
+                +"\nLocationTypeID:"+"0"
+                +"\nReimbursementDate:"+"0"
+                +"\nfile: ");
+        progressDialog.show();
+        AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_METSO)
+                .addMultipartParameter("AEMEmployeeID", aempid)
+                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("Description", description)
+                .addMultipartParameter("ReimbursementAmount",amount)
+                .addMultipartParameter("Year",year)
+                .addMultipartParameter("Month",month)
+                .addMultipartParameter("SecurityCode",securitycode)
+                .addMultipartParameter("ConveyanceTypeId",componentId)
+                .addMultipartParameter("LocationTypeID","0")
+                .addMultipartParameter("ReimbursementDate","0")
+                .addMultipartFile("file",compressedImageFile)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressDialog.show();
+                            Log.e(TAG, "METSO_POST_ONE_IMAGE: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                successAlert(Response_Message);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
 
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.show();
+                        Log.e(TAG, "MOTSO_POST_ONE_IMAGE: "+anError.getErrorBody());
+                    }
+                });
+    }
 
+    private void postTwoImage() {
+        progressDialog.show();
+        AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_METSO)
+                .addMultipartParameter("AEMEmployeeID", aempid)
+                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("Description", description)
+                .addMultipartParameter("ReimbursementAmount",amount)
+                .addMultipartParameter("Year",year)
+                .addMultipartParameter("Month",month)
+                .addMultipartParameter("SecurityCode",securitycode)
+                .addMultipartParameter("ConveyanceTypeId",componentId)
+                .addMultipartParameter("LocationTypeID","0")
+                .addMultipartParameter("ReimbursementDate","0")
+                .addMultipartFile("file",compressedImageFile)
+                .addMultipartFile("fil1",compressedImageFile1)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressDialog.show();
+                            Log.e(TAG, "METSO_POST_TWO_IMAGES: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                successAlert(Response_Message);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
 
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.show();
+                        Log.e(TAG, "METSO_POST_TWO_IMAGES_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
+    private void postThreeImage() {
+        progressDialog.show();
+        AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_METSO)
+                .addMultipartParameter("AEMEmployeeID", aempid)
+                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("Description", description)
+                .addMultipartParameter("ReimbursementAmount",amount)
+                .addMultipartParameter("Year",year)
+                .addMultipartParameter("Month",month)
+                .addMultipartParameter("SecurityCode",securitycode)
+                .addMultipartParameter("ConveyanceTypeId",componentId)
+                .addMultipartParameter("LocationTypeID","0")
+                .addMultipartParameter("ReimbursementDate","0")
+                .addMultipartFile("file",compressedImageFile)
+                .addMultipartFile("fil1",compressedImageFile1)
+                .addMultipartFile("fil2",compressedImageFile2)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressDialog.show();
+                            Log.e(TAG, "METSO_POST_THREE_IMAGE: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                successAlert(Response_Message);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.show();
+                        Log.e(TAG, "METSO_POST_THREE_IMAGE_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
+    private void postFourImage() {
+        progressDialog.show();
+        AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_METSO)
+                .addMultipartParameter("AEMEmployeeID", aempid)
+                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("Description", description)
+                .addMultipartParameter("ReimbursementAmount",amount)
+                .addMultipartParameter("Year",year)
+                .addMultipartParameter("Month",month)
+                .addMultipartParameter("SecurityCode",securitycode)
+                .addMultipartParameter("ConveyanceTypeId",componentId)
+                .addMultipartParameter("LocationTypeID","0")
+                .addMultipartParameter("ReimbursementDate","0")
+                .addMultipartFile("file",compressedImageFile)
+                .addMultipartFile("fil1",compressedImageFile1)
+                .addMultipartFile("fil2",compressedImageFile2)
+                .addMultipartFile("fil3",compressedImageFile3)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressDialog.show();
+                            Log.e(TAG, "METSO_POST_FOUR_IMAGES: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                successAlert(Response_Message);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.show();
+                        Log.e(TAG, "METSO_POST_FOUR_IMAGES_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
+    private void postFiveImage() {
+        progressDialog.show();
+        AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_METSO)
+                .addMultipartParameter("AEMEmployeeID", aempid)
+                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("Description", description)
+                .addMultipartParameter("ReimbursementAmount",amount)
+                .addMultipartParameter("Year",year)
+                .addMultipartParameter("Month",month)
+                .addMultipartParameter("SecurityCode",securitycode)
+                .addMultipartParameter("ConveyanceTypeId",componentId)
+                .addMultipartParameter("LocationTypeID","0")
+                .addMultipartParameter("ReimbursementDate","0")
+                .addMultipartFile("file",compressedImageFile)
+                .addMultipartFile("fil1",compressedImageFile1)
+                .addMultipartFile("fil2",compressedImageFile2)
+                .addMultipartFile("fil3",compressedImageFile3)
+                .addMultipartFile("fil4",compressedImageFile4)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressDialog.show();
+                            Log.e(TAG, "METSO_POST_FOUR_IMAGES: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                successAlert(Response_Message);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.show();
+                        Log.e(TAG, "METSO_POST_FOUR_IMAGES_error: "+anError.getErrorBody());
+                    }
+                });
+    }
 }

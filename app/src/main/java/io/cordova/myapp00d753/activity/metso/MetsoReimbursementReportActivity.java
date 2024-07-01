@@ -181,7 +181,8 @@ public class MetsoReimbursementReportActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(),"No data found",Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {
-                            throw new RuntimeException(e);
+                            e.printStackTrace();
+                            Toast.makeText(MetsoReimbursementReportActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 

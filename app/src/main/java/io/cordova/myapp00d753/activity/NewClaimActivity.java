@@ -491,7 +491,6 @@ public class NewClaimActivity extends AppCompatActivity {
                                 if (flag == 1) {
                                     //postoneimage();
                                     postOneImage();
-
                                 } else if (flag == 2) {
                                     //posttwoimage();
                                     postTwoImage();
@@ -947,7 +946,7 @@ public class NewClaimActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError anError) {
                         progressBar.dismiss();
-                        Log.e(TAG, "COMPONENT_ITEM: "+anError.getErrorBody());
+                        Log.e(TAG, "COMPONENT_ITEM_error: "+anError.getErrorBody());
                     }
                 });
     }
@@ -1968,11 +1967,11 @@ public class NewClaimActivity extends AppCompatActivity {
                             String Response_Message = job1.optString("Response_Message");
                             if (Response_Code.equals("101")) {
                                 String Response_Data = job1.optString("Response_Data");
-
                                 successAlert(Response_Message);
                             }
                         } catch (JSONException e) {
-                            throw new RuntimeException(e);
+                            e.printStackTrace();
+                            Toast.makeText(NewClaimActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
                         }
 
 
@@ -2004,7 +2003,6 @@ public class NewClaimActivity extends AppCompatActivity {
                     public void onError(ANError error) {
                         // handle error
                         Log.e("errt", String.valueOf(error));
-
                         Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                     }
                 });
@@ -2091,7 +2089,7 @@ public class NewClaimActivity extends AppCompatActivity {
                 .addMultipartParameter("LocationTypeID", "0")
                 .addMultipartParameter("ReimbursementDate", "0")
                 .addMultipartFile("SingleFile", pdfFile)
-
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
                 .setPercentageThresholdForCancelling(60)
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
@@ -2118,7 +2116,8 @@ public class NewClaimActivity extends AppCompatActivity {
                                 postOneImage();
                             }
                         } catch (JSONException e) {
-                            throw new RuntimeException(e);
+                            e.printStackTrace();
+                            Toast.makeText(NewClaimActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -2221,8 +2220,6 @@ public class NewClaimActivity extends AppCompatActivity {
                     @Override
                     public void onProgress(long bytesUploaded, long totalBytes) {
                         progressDialog.show();
-
-
                     }
                 })
                 .getAsJSONObject(new JSONObjectRequestListener() {
@@ -2236,8 +2233,10 @@ public class NewClaimActivity extends AppCompatActivity {
                             String Response_Message = job1.optString("Response_Message");
                             if (Response_Code.equals("101")) {
                                 String Response_Data = job1.optString("Response_Data");
-                                JSONArray jsonArray = new JSONArray(Response_Data);
-
+                                //JSONArray jsonArray = new JSONArray(Response_Data);
+                                postOneImage();
+                            } else {
+                                Toast.makeText(getApplicationContext(), Response_Message, Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
