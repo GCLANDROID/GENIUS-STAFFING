@@ -160,7 +160,11 @@ public class MetsoReimbursementReportActivity extends AppCompatActivity {
                                     String ClaimID=job.optString("ClaimID");
                                     String ProcessStaus=job.optString("ProcessStaus");
                                     String Category=job.optString("CategoryComponent");
-                                    ClaimModule obj2 = new ClaimModule(ClaimedDate,Amount,Category,ProcessStaus,ClaimID,ApprovedClaimAmount);
+                                    String costCenter = job.optString("CostCenter"),
+                                            wbsCode = job.optString("WBSCode"),
+                                            siteName=job.optString("SiteName"),
+                                            supervisor = job.optString("Supervisor");
+                                    ClaimModule obj2 = new ClaimModule(ClaimedDate,Amount,Category,ProcessStaus,ClaimID,ApprovedClaimAmount,costCenter,wbsCode,siteName,supervisor);
                                     itemList.add(obj2);
                                 }
 
@@ -574,13 +578,11 @@ public class MetsoReimbursementReportActivity extends AppCompatActivity {
             }
         });
 
-
         alertDialog2 = dialogBuilder.create();
         alertDialog2.setCancelable(true);
         Window window = alertDialog2.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.CENTER);
         alertDialog2.show();
-
     }
 }

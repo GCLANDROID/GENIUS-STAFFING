@@ -125,7 +125,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
-    private static final String TAG = "MetsoNewReimbursementCl";
+    private static final String TAG = "MetsoNewReimbursement";
     private static final int DEFAULT_BUFFER_SIZE = 2048;
     ImageView imgBack, imgHome;
     Spinner spComponent;
@@ -218,6 +218,19 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         setContentView(R.layout.activity_metso_new_reimbursement_claim);
         initialize();
         setHideItem();
+
+        JSONObject obj1=new JSONObject();
+        try {
+            obj1.put("ddltype", "16");
+            obj1.put("id1",pref.getEmpConId());
+            obj1.put("id2",pref.getEmpClintId());
+            obj1.put("id3",0);
+            obj1.put("SecurityCode",pref.getSecurityCode());
+            setHideItem(obj1);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         onClick();
 
     }
@@ -595,7 +608,6 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                                         if (etDescription.getText().toString().length() > 0) {
                                             if (etAmount.getText().toString().length() > 0) {
                                                 attachFileAPI();
-
                                             } else {
                                                 Toast.makeText(getApplicationContext(), "Please enter Claim Amount", Toast.LENGTH_LONG).show();
                                             }
@@ -1063,10 +1075,66 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         searchWbsCodeDialog.show();
     }
 
+    private void setHideItem(JSONObject jsonObject) {
+        progressBar.setCancelable(true);//you can cancel it by pressing back button
+        progressBar.setMessage("Loading...");
+        progressBar.show();
+        AndroidNetworking.post(AppData.GET_COMMON_DROP_DOWN_FILL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "GET_COMMON_DROP_DOWN_FILL: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    comeid = obj.optString("id");
+                                    Log.d("comeeid", comeid);
+                                    String value = obj.optString("value");
+                                    Log.d("comvalue", value);
+                                }
+
+                                JSONObject obj1=new JSONObject();
+                                try {
+                                    obj1.put("ddltype", "160");
+                                    obj1.put("id1",pref.getEmpConId());
+                                    obj1.put("id2",pref.getEmpClintId());
+                                    obj1.put("id3",0);
+                                    obj1.put("SecurityCode",pref.getSecurityCode());
+                                    setComponenetItem(obj1);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                hideAlert();
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressBar.dismiss();
+                        Log.e(TAG, "GET_COMMON_DROP_DOWN_FILL_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
 
     private void setHideItem() {
         String surl = AppData.url + "gcl_CommonDDL?ddltype=16&id1=" + pref.getEmpConId() + "&id2=" + pref.getEmpClintId() + "&id3=0&SecurityCode=" + pref.getSecurityCode();
-        Log.d("compurl", surl);
+        Log.d(TAG,"comp_url_1"+surl);
         //final ProgressDialog progressBar = new ProgressDialog(this);
         progressBar.setCancelable(true);//you can cancel it by pressing back button
         progressBar.setMessage("Loading...");
@@ -1117,9 +1185,67 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
     }
 
+    private void setComponenetItem(JSONObject jsonObject) {
+        AndroidNetworking.post(AppData.GET_COMMON_DROP_DOWN_FILL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "COMPONENT_ITEM: "+response.toString(4) );
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String comid = obj.optString("id");
+                                    Log.e(TAG,"comid: "+comid);
+                                    String value = obj.optString("value");
+                                    componentList.add(value);
+                                    SpineerItemModel mainDocModule = new SpineerItemModel(value, comid);
+                                    moduleComponentList.add(mainDocModule);
+                                }
+                                componentSpinnerAdapter = new ComponentSpinnerAdapter(MetsoNewReimbursementClaimActivity.this, moduleComponentList);
+                                spComponent.setAdapter(componentSpinnerAdapter);
+                                spComponent.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                    @Override
+                                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                        SpineerItemModel clickedItem = (SpineerItemModel) adapterView.getItemAtPosition(i);
+                                        if (!clickedItem.getItemName().equals("Please Select Cost Center")) {
+                                            comeid = clickedItem.getItemId();
+                                            Log.e(TAG, "CostCentreId: " + CostCentreId);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                                    }
+                                });
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(MetsoNewReimbursementClaimActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "COMPONENT_ITEM_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
     private void setComponenetItem() {
         String surl = AppData.url + "gcl_CommonDDL?ddltype=160&id1=" + pref.getEmpConId() + "&id2=" + pref.getEmpClintId() + "&id3=0&SecurityCode=" + pref.getSecurityCode();
-        Log.d("compurl", surl);
+        Log.d(TAG,"comp_url_2"+surl);
         //final ProgressDialog progressBar = new ProgressDialog(this);
        /* progressBar.setCancelable(true);//you can cancel it by pressing back button
         progressBar.setMessage("Loading...");
@@ -1195,7 +1321,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
 
     private void getCostCenterList() {
         String surl = AppData.url + "gcl_CommonDDL?ddltype=CLCOSTC&id1=0&id2=" + pref.getEmpClintId() + "&id3=0&SecurityCode=" + pref.getSecurityCode();
-        Log.d("costCenterUrl", surl);
+        Log.d(TAG,"costCenterUrl"+surl);
         //final ProgressDialog progressBar = new ProgressDialog(this);
        /* progressBar.setCancelable(true);//you can cancel it by pressing back button
         progressBar.setMessage("Loading...");
@@ -1263,7 +1389,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
 
     private void getWbsCode() {
         String surl = AppData.url + "gcl_CommonDDL?ddltype=CLWBSM&id1=0&id2=" + pref.getEmpClintId() + "&id3=0&SecurityCode=" + pref.getSecurityCode();
-        Log.d("WbsCodeUrl", surl);
+        Log.d(TAG,"WbsCodeUrl"+surl);
         //final ProgressDialog progressBar = new ProgressDialog(this);
         /*progressBar.setCancelable(true);//you can cancel it by pressing back button
         progressBar.setMessage("Loading...");
@@ -1381,7 +1507,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
 
     private void getSupervisorList() {
         String surl = AppData.url + "gcl_CommonDDL?ddltype=CLSPM&id1=0&id2=" + pref.getEmpClintId() + "&id3=0&SecurityCode=" + pref.getSecurityCode();
-        Log.d("SupervisorUrl", surl);
+        Log.d(TAG,"SupervisorUrl"+surl);
         //final ProgressDialog progressBar = new ProgressDialog(this);
         /*progressBar.setCancelable(true);//you can cancel it by pressing back button
         progressBar.setMessage("Loading...");
@@ -1448,7 +1574,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
 
     private void getSiteMasterList() {
         String surl = AppData.url + "gcl_CommonDDL?ddltype=CLSITEM&id1=0&id2=" + pref.getEmpClintId() + "&id3=0&SecurityCode=" + pref.getSecurityCode();
-        Log.d("SiteMasterUrl", surl);
+        Log.d(TAG,"SiteMasterUrl"+surl);
         //final ProgressDialog progressBar = new ProgressDialog(this);
         /*progressBar.setCancelable(true);//you can cancel it by pressing back button
         progressBar.setMessage("Loading...");
