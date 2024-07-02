@@ -752,11 +752,11 @@ public class LeaveAdjustmentFragment extends Fragment {
 
                         JSONObject job = response;
                         boolean responseStatus = job.optBoolean("responseStatus");
+                        String responseText=job.optString("responseText");
                         if (responseStatus) {
-
-                            successAlert();
+                               successAlert();
                         } else {
-                            Toast.makeText(getContext(), "False", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), responseText, Toast.LENGTH_LONG).show();
                         }
 
 
