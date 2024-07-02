@@ -53,17 +53,15 @@ import io.cordova.myapp00d753.utility.Pref;
  * A simple {@link Fragment} subclass.
  */
 public class DetailsFragment extends Fragment {
-
-
+    private static final String TAG = "DetailsFragment";
     View v;
-
     RecyclerView rvItem;
-    ArrayList<LeaveDetailsModel> itemList=new ArrayList<>();
-    LinearLayout llStrtDate,llEndDate;
-    TextView tvStrtDate,tvEndDate;
-    String startDate="1/1/1900",endDate="1/1/1900";
+    ArrayList<LeaveDetailsModel> itemList = new ArrayList<>();
+    LinearLayout llStrtDate, llEndDate;
+    TextView tvStrtDate, tvEndDate;
+    String startDate = "1/1/1900", endDate = "1/1/1900";
     Button btnShow;
-    LinearLayout llNoData,llLoader,llMain;
+    LinearLayout llNoData, llLoader, llMain;
     Pref pref;
     AlertDialog alerDialog1;
 
@@ -71,35 +69,46 @@ public class DetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        v= inflater.inflate(R.layout.fragment_details, container, false);
+        v = inflater.inflate(R.layout.fragment_details, container, false);
         initView();
-        getItem();
+        //getItem();
+        JSONObject obj=new JSONObject();
+        try {
+            obj.put("CompanyID",pref.getEmpClintId());
+            obj.put("EmployeeID",pref.getEmpId());
+            obj.put( "StartDate",startDate);
+            obj.put("EndDate",endDate);
+            obj.put("SecurityCode",pref.getSecurityCode());
+            getItem(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         onClick();
 
         return v;
     }
 
-    private void initView(){
-        pref=new Pref(getContext());
-        rvItem=(RecyclerView)v.findViewById(R.id.rvItem);
+    private void initView() {
+        pref = new Pref(getContext());
+        rvItem = (RecyclerView) v.findViewById(R.id.rvItem);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvItem.setLayoutManager(layoutManager);
-        llEndDate=(LinearLayout)v.findViewById(R.id.llEndDate);
-        llStrtDate=(LinearLayout)v.findViewById(R.id.llStrtDate);
-        llNoData=(LinearLayout)v.findViewById(R.id.llNoData);
-        llLoader=(LinearLayout)v.findViewById(R.id.llLoader);
-        llMain=(LinearLayout)v.findViewById(R.id.llMain);
+        llEndDate = (LinearLayout) v.findViewById(R.id.llEndDate);
+        llStrtDate = (LinearLayout) v.findViewById(R.id.llStrtDate);
+        llNoData = (LinearLayout) v.findViewById(R.id.llNoData);
+        llLoader = (LinearLayout) v.findViewById(R.id.llLoader);
+        llMain = (LinearLayout) v.findViewById(R.id.llMain);
 
-        tvStrtDate=(TextView)v.findViewById(R.id.tvStrtDate);
-        tvEndDate=(TextView)v.findViewById(R.id.tvEndDate);
-        btnShow=(Button)v.findViewById(R.id.btnShow);
+        tvStrtDate = (TextView) v.findViewById(R.id.tvStrtDate);
+        tvEndDate = (TextView) v.findViewById(R.id.tvEndDate);
+        btnShow = (Button) v.findViewById(R.id.btnShow);
 
-            btnShow.setText("Show");
+        btnShow.setText("Show");
 
     }
 
-    private void onClick(){
+    private void onClick() {
         llStrtDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,22 +126,98 @@ public class DetailsFragment extends Fragment {
             public void onClick(View v) {
                 if (!startDate.equals("")) {
                     if (!endDate.equals("")) {
-                        getItem();
-                    }else {
-                        Toast.makeText(getContext(),"Please select End Date",Toast.LENGTH_LONG).show();
+                        //getItem();
+                        JSONObject obj=new JSONObject();
+                        try {
+                            obj.put("CompanyID",pref.getEmpClintId());
+                            obj.put("EmployeeID",pref.getEmpId());
+                            obj.put( "StartDate",startDate);
+                            obj.put("EndDate",endDate);
+                            obj.put("SecurityCode",pref.getSecurityCode());
+                            getItem(obj);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Toast.makeText(getContext(), "Please select End Date", Toast.LENGTH_LONG).show();
                     }
-                }else {
-                    Toast.makeText(getContext(),"please select Start Date",Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getContext(), "please select Start Date", Toast.LENGTH_LONG).show();
                 }
             }
         });
 
     }
-    private void getItem(){
+
+    private void getItem(JSONObject jsonObject) {
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
         llNoData.setVisibility(View.GONE);
-        String surl = AppData.url +"Leave/LeaveApplicationDeatilsForApplicant?CompanyID="+pref.getEmpClintId()+"&EmployeeID="+pref.getEmpId()+"&StartDate="+startDate+"&EndDate="+endDate+"&SecurityCode="+pref.getSecurityCode();
+        AndroidNetworking.post(AppData.GET_APPLICANT_LEAVE_APPLICATION)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        itemList.clear();
+                        try {
+                            Log.e(TAG, "APPLICANT_LEAVE_APPLICATION: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String ApplicationMID = obj.optString("ApplicationMID");
+                                    String LeaveName = obj.optString("LeaveName");
+                                    String LeaveSDate = obj.optString("LeaveSDate");
+                                    String LeaveEDate = obj.optString("LeaveEDate");
+                                    String LeaveValue = obj.optString("LeaveValue");
+                                    String Reason = obj.optString("Reason");
+                                    String ApprovalRemarks = obj.optString("ApprovalRemarks");
+                                    String ApprovalStatus = obj.optString("ApprovalStatus");
+                                    String ApprovedDate = obj.optString("ApprovedDate");
+                                    String ApprovedBY = obj.optString("ApprovedBY");
+
+                                    LeaveDetailsModel obj2 = new LeaveDetailsModel(ApplicationMID, LeaveName, LeaveSDate, LeaveEDate, LeaveValue, Reason, ApprovalStatus, ApprovedDate, ApprovedBY, ApprovalRemarks);
+                                    itemList.add(obj2);
+                                }
+                                setAdapter();
+                                llLoader.setVisibility(View.GONE);
+                                llMain.setVisibility(View.VISIBLE);
+                                llNoData.setVisibility(View.GONE);
+                            } else {
+                                llLoader.setVisibility(View.GONE);
+                                llMain.setVisibility(View.GONE);
+                                llNoData.setVisibility(View.VISIBLE);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "APPLICANT_LEAVE_APPLICATION_error: "+anError.getErrorBody());
+                        llLoader.setVisibility(View.VISIBLE);
+                        llMain.setVisibility(View.GONE);
+                        llNoData.setVisibility(View.GONE);
+                        Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+    private void getItem() {
+        llLoader.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.GONE);
+        llNoData.setVisibility(View.GONE);
+        String surl = AppData.url + "Leave/LeaveApplicationDeatilsForApplicant?CompanyID=" + pref.getEmpClintId() + "&EmployeeID=" + pref.getEmpId() + "&StartDate=" + startDate + "&EndDate=" + endDate + "&SecurityCode=" + pref.getSecurityCode();
         Log.d("inputLeaveBlanace", surl);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
@@ -166,30 +251,24 @@ public class DetailsFragment extends Fragment {
                                     String ApprovedDate = obj.optString("ApprovedDate");
                                     String ApprovedBY = obj.optString("ApprovedBY");
 
-
-                                    LeaveDetailsModel obj2 = new LeaveDetailsModel(ApplicationMID,LeaveName,LeaveSDate,LeaveEDate,LeaveValue,Reason,ApprovalStatus,ApprovedDate,ApprovedBY,ApprovalRemarks);
+                                    LeaveDetailsModel obj2 = new LeaveDetailsModel(ApplicationMID, LeaveName, LeaveSDate, LeaveEDate, LeaveValue, Reason, ApprovalStatus, ApprovedDate, ApprovedBY, ApprovalRemarks);
                                     itemList.add(obj2);
-
-
                                 }
                                 setAdapter();
                                 llLoader.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
                                 llNoData.setVisibility(View.GONE);
-
                             } else {
                                 llLoader.setVisibility(View.GONE);
                                 llMain.setVisibility(View.GONE);
                                 llNoData.setVisibility(View.VISIBLE);
                                 //Toast.makeText(getApplicationContext(), "No data found", Toast.LENGTH_LONG).show();
-
                             }
 
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            // Toast.makeText(AttendanceReportActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
-
+                            //Toast.makeText(AttendanceReportActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
                         }
 
                     }
@@ -210,8 +289,9 @@ public class DetailsFragment extends Fragment {
         requestQueue.add(stringRequest);
 
     }
-    private void setAdapter(){
-        LeaveDetailsAdapter detailsAdpater=new LeaveDetailsAdapter(itemList,getContext(), DetailsFragment.this);
+
+    private void setAdapter() {
+        LeaveDetailsAdapter detailsAdpater = new LeaveDetailsAdapter(itemList, getContext(), DetailsFragment.this);
         rvItem.setAdapter(detailsAdpater);
     }
 
@@ -229,7 +309,6 @@ public class DetailsFragment extends Fragment {
                     @Override
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {
-
 
 
                         int month = (monthOfYear + 1);
@@ -259,7 +338,6 @@ public class DetailsFragment extends Fragment {
                                           int monthOfYear, int dayOfMonth) {
 
 
-
                         int month = (monthOfYear + 1);
                         endDate = month + "/" + dayOfMonth + "/" + year;
                         tvEndDate.setText(endDate);
@@ -272,10 +350,10 @@ public class DetailsFragment extends Fragment {
     }
 
     public void leaveDelete(String mid) {
-       final ProgressDialog pg=new ProgressDialog(getContext());
+        final ProgressDialog pg = new ProgressDialog(getContext());
         pg.setMessage("Loading..");
         pg.setCancelable(false);
-        AndroidNetworking.upload(AppData.url+"Leave/LeaveAppDelete")
+        AndroidNetworking.upload(AppData.url + "Leave/LeaveAppDelete")
                 .addMultipartParameter("CompanyID", pref.getEmpClintId())
                 .addMultipartParameter("ApplicationMID", mid)
                 .addMultipartParameter("SecurityCode", pref.getSecurityCode())
@@ -327,8 +405,7 @@ public class DetailsFragment extends Fragment {
         dialogBuilder.setView(dialogView);
         TextView tvInvalidDate = (TextView) dialogView.findViewById(R.id.tvSuccess);
 
-            tvInvalidDate.setText("Leave has been deleted successfully");
-
+        tvInvalidDate.setText("Leave has been deleted successfully");
 
 
         Button btnOk = (Button) dialogView.findViewById(R.id.btnOk);
@@ -336,7 +413,19 @@ public class DetailsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 alerDialog1.dismiss();
-                getItem();
+                //getItem();
+
+                JSONObject obj=new JSONObject();
+                try {
+                    obj.put("CompanyID",pref.getEmpClintId());
+                    obj.put("EmployeeID",pref.getEmpId());
+                    obj.put( "StartDate",startDate);
+                    obj.put("EndDate",endDate);
+                    obj.put("SecurityCode",pref.getSecurityCode());
+                    getItem(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
 
             }

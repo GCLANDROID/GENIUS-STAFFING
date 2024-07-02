@@ -51,8 +51,7 @@ import io.cordova.myapp00d753.utility.Pref;
  * A simple {@link Fragment} subclass.
  */
 public class ApproverFragment extends Fragment {
-
-
+    private static final String TAG = "ApproverFragment";
     LinearLayout llLoader, llMain, llNoData;
     RecyclerView rvItem;
     View view;
@@ -92,12 +91,81 @@ public class ApproverFragment extends Fragment {
         btnApprove = (Button) view.findViewById(R.id.btnApprove);
         btnDelete = (Button) view.findViewById(R.id.btnDelete);
         builder = new AlertDialog.Builder(getContext());
-        getItem();
+        //getItem();
 
-            btnReject.setText("Reject");
-            btnApprove.setText("Approve");
-            btnDelete.setText("Delete");
+        JSONObject obj=new JSONObject();
+        try {
+            obj.put("CompanyID" , pref.getEmpClintId() );
+            obj.put("ApproverID" , pref.getEmpId() );
+            obj.put("SecurityCode" , pref.getSecurityCode());
+            getItem(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
+        btnReject.setText("Reject");
+        btnApprove.setText("Approve");
+        btnDelete.setText("Delete");
+
+    }
+
+    private void getItem(JSONObject jsonObject) {
+        Log.e(TAG, "getItem: INPUT: "+jsonObject);
+        AndroidNetworking.post(AppData.GET_APPROVER_LEAVE_APPLICATION)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "APPROVER_LEAVE_APPLICATION: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String ApplicationMID = obj.optString("ApplicationMID");
+                                    String Name = obj.optString("Name");
+                                    String LeaveName = obj.optString("LeaveName");
+                                    String LeaveSDate = obj.optString("LeaveSDate");
+                                    String LeaveEDate = obj.optString("LeaveEDate");
+                                    String LeaveValue = obj.optString("LeaveValue");
+                                    String Reason = obj.optString("Reason");
+                                    String ApprovalStatus = obj.optString("ApprovalStatus");
+                                    ApprovalModel aModel = new ApprovalModel(ApplicationMID, Name, LeaveName, LeaveSDate, LeaveEDate, LeaveValue, Reason, ApprovalStatus);
+                                    itemList.add(aModel);
+                                }
+
+                                lAdaapter = new ApproverAdapter(itemList, ApproverFragment.this, getContext());
+                                rvItem.setAdapter(lAdaapter);
+                                llLoader.setVisibility(View.GONE);
+                                llMain.setVisibility(View.VISIBLE);
+                                llNoData.setVisibility(View.GONE);
+                            } else {
+                                llLoader.setVisibility(View.GONE);
+                                llMain.setVisibility(View.GONE);
+                                llNoData.setVisibility(View.VISIBLE);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getContext(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "APPROVER_LEAVE_APPLICATION_error: "+anError.getErrorBody());
+                        llLoader.setVisibility(View.VISIBLE);
+                        llMain.setVisibility(View.GONE);
+                        llNoData.setVisibility(View.GONE);
+                    }
+                });
     }
 
     private void getItem() {
@@ -205,6 +273,47 @@ public class ApproverFragment extends Fragment {
         lAdaapter.notifyDataSetChanged();
     }
 
+    private void approveFunction(JSONObject jsonObject) {
+        Log.e(TAG, "approveFunction: INPUT: "+jsonObject );
+        final ProgressDialog pd = new ProgressDialog(getContext());
+        pd.setMessage("Loading..");
+        pd.setCancelable(false);
+        pd.show();
+        AndroidNetworking.post(AppData.LEAVE_APPLICATION_APPROVAL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "LEAVE_APPROVE: "+response.toString(4));
+                            pd.dismiss();
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                approveAlert();
+                            } else {
+                                Toast.makeText(getContext(), Response_Message, Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getContext(), "something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "LEAVE_APPROVE: "+anError.getErrorBody());
+                        pd.dismiss();
+                    }
+                });
+    }
+
 
     private void approveFunction() {
         final ProgressDialog pd = new ProgressDialog(getContext());
@@ -261,6 +370,40 @@ public class ApproverFragment extends Fragment {
 
     }
 
+    private void rejectFunction(JSONObject jsonObject) {
+        AndroidNetworking.post(AppData.LEAVE_APPLICATION_APPROVAL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "LEAVE_REJECT: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                rejectAlert();
+                            } else {
+                                Toast.makeText(getContext(), Response_Message, Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getContext(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "LEAVE_REJECT_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
     private void rejectFunction() {
         final ProgressDialog pd = new ProgressDialog(getContext());
         pd.setMessage("Loading..");
@@ -314,6 +457,47 @@ public class ApproverFragment extends Fragment {
                 });
 
     }
+    private void deleteFunction(JSONObject jsonObject) {
+        Log.e(TAG, "deleteFunction: INPUT: "+jsonObject);
+        final ProgressDialog pd = new ProgressDialog(getContext());
+        pd.setMessage("Loading..");
+        pd.setCancelable(false);
+        pd.show();
+        AndroidNetworking.post(AppData.LEAVE_DELETE_BY_APPROVER)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            pd.dismiss();
+                            Log.e(TAG, "DELETE_FUNCTION: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                deleteAlert();
+                            }else {
+                                Toast.makeText(getContext(), Response_Message, Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        pd.dismiss();
+                        Log.e(TAG, "DELETE_FUNCTION_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+    
 
     private void deleteFunction() {
         final ProgressDialog pd = new ProgressDialog(getContext());
@@ -376,8 +560,7 @@ public class ApproverFragment extends Fragment {
         dialogBuilder.setView(dialogView);
         TextView tvInvalidDate = (TextView) dialogView.findViewById(R.id.tvSuccess);
 
-            tvInvalidDate.setText("Leave approved successfully");
-
+        tvInvalidDate.setText("Leave approved successfully");
 
 
         Button btnOk = (Button) dialogView.findViewById(R.id.btnOk);
@@ -385,7 +568,17 @@ public class ApproverFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 alerDialog1.dismiss();
-                getItem();
+                //getItem();
+
+                JSONObject obj = new JSONObject();
+                try {
+                    obj.put("CompanyID", pref.getEmpClintId());
+                    obj.put("ApproverID", pref.getEmpId());
+                    obj.put("SecurityCode", pref.getSecurityCode());
+                    getItem(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
             }
         });
@@ -414,8 +607,16 @@ public class ApproverFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 alerDialog1.dismiss();
-                getItem();
-
+                //getItem();
+                JSONObject obj=new JSONObject();
+                try {
+                    obj.put("CompanyID" , pref.getEmpClintId() );
+                    obj.put("ApproverID" , pref.getEmpId() );
+                    obj.put("SecurityCode" , pref.getSecurityCode());
+                    getItem(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -443,7 +644,16 @@ public class ApproverFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 alerDialog1.dismiss();
-                getItem();
+                //getItem();
+                JSONObject obj=new JSONObject();
+                try {
+                    obj.put("CompanyID" , pref.getEmpClintId() );
+                    obj.put("ApproverID" , pref.getEmpId() );
+                    obj.put("SecurityCode" , pref.getSecurityCode());
+                    getItem(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
             }
         });
@@ -460,7 +670,19 @@ public class ApproverFragment extends Fragment {
         btnApprove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                approveFunction();
+                //approveFunction();
+
+                JSONObject obj=new JSONObject();
+                try {
+                    obj.put("CompanyID" , pref.getEmpClintId());
+                    obj.put("StrAppMID", mId);
+                    obj.put("ApproverID", pref.getEmpId());
+                    obj.put("ApprovalStatus", "1");
+                    obj.put("SecurityCode" , pref.getSecurityCode());
+                    approveFunction(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -474,7 +696,18 @@ public class ApproverFragment extends Fragment {
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                rejectFunction();
+                                //rejectFunction();
+                                JSONObject obj=new JSONObject();
+                                try {
+                                    obj.put("CompanyID" , pref.getEmpClintId());
+                                    obj.put("StrAppMID", mId);
+                                    obj.put("ApproverID", pref.getEmpId());
+                                    obj.put("ApprovalStatus", "0");
+                                    obj.put("SecurityCode" , pref.getSecurityCode());
+                                    rejectFunction(obj);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                                 dialog.cancel();
 
                             }
@@ -504,8 +737,18 @@ public class ApproverFragment extends Fragment {
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                deleteFunction();
+                                //deleteFunction();
                                 dialog.cancel();
+                                JSONObject obj=new JSONObject();
+                                try {
+                                    obj.put("CompanyID" , pref.getEmpClintId());
+                                    obj.put("ApplicationMID", mId);
+                                    obj.put("ApproverID", pref.getEmpId());
+                                    obj.put("SecurityCode" , pref.getSecurityCode());
+                                    deleteFunction(obj);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
 
                             }
                         })

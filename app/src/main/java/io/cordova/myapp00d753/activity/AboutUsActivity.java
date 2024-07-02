@@ -33,14 +33,15 @@ import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 
 public class AboutUsActivity extends AppCompatActivity {
-     ImageView imgHome,imgBack;
-     LinearLayout llLoader,llMain;
-     RecyclerView rvAbout;
-     ArrayList<MenuModule>menuList=new ArrayList<>();
+    ImageView imgHome, imgBack;
+    LinearLayout llLoader, llMain;
+    RecyclerView rvAbout;
+    ArrayList<MenuModule> menuList = new ArrayList<>();
     MenuAdapter menuAdapter;
     NetworkConnectionCheck connectionCheck;
     ImageView imgAgain;
     LinearLayout llAgain;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,33 +49,35 @@ public class AboutUsActivity extends AppCompatActivity {
         initialize();
         if (connectionCheck.isNetworkAvailable()) {
             getAboutInformation();
-        }else {
+        } else {
             connectionCheck.getNetworkActiveAlert().show();
         }
         onClick();
     }
-    private void initialize(){
 
-        connectionCheck=new NetworkConnectionCheck(AboutUsActivity.this);
-        imgBack=(ImageView)findViewById(R.id.imgBack);
-        imgHome=(ImageView)findViewById(R.id.imgHome);
-        llLoader=(LinearLayout)findViewById(R.id.llLoader);
-        llMain=(LinearLayout)findViewById(R.id.llMain);
-        rvAbout=(RecyclerView)findViewById(R.id.rvAbout);
-        imgAgain=(ImageView)findViewById(R.id.imgAgain);
-        llAgain=(LinearLayout)findViewById(R.id.llAgain);
+    private void initialize() {
+
+        connectionCheck = new NetworkConnectionCheck(AboutUsActivity.this);
+        imgBack = (ImageView) findViewById(R.id.imgBack);
+        imgHome = (ImageView) findViewById(R.id.imgHome);
+        llLoader = (LinearLayout) findViewById(R.id.llLoader);
+        llMain = (LinearLayout) findViewById(R.id.llMain);
+        rvAbout = (RecyclerView) findViewById(R.id.rvAbout);
+        imgAgain = (ImageView) findViewById(R.id.imgAgain);
+        llAgain = (LinearLayout) findViewById(R.id.llAgain);
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(AboutUsActivity.this, LinearLayoutManager.VERTICAL, false);
         rvAbout.setLayoutManager(layoutManager);
 
     }
-    private void onClick(){
+
+    private void onClick() {
 
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(AboutUsActivity.this,DashBoardActivity.class);
+                Intent intent = new Intent(AboutUsActivity.this, DashBoardActivity.class);
                 startActivity(intent);
             }
         });
@@ -95,8 +98,8 @@ public class AboutUsActivity extends AppCompatActivity {
     }
 
 
-    private void getAboutInformation(){
-        String surl = AppData.url +"gcl_HomeScreen?MenuId=1&SecurityCode=0000";
+    private void getAboutInformation() {
+        String surl = AppData.url + "gcl_HomeScreen?MenuId=1&SecurityCode=0000";
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
         llAgain.setVisibility(View.GONE);
@@ -110,29 +113,27 @@ public class AboutUsActivity extends AppCompatActivity {
                         try {
                             JSONObject job1 = new JSONObject(response);
                             Log.e("response12", "@@@@@@" + job1);
-                            String responseText=job1.optString("responseText");
-                            boolean responseStatus=job1.optBoolean("responseStatus");
-                            if (responseStatus){
-                               // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
+                            String responseText = job1.optString("responseText");
+                            boolean responseStatus = job1.optBoolean("responseStatus");
+                            if (responseStatus) {
+                                // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
 
-                                JSONArray responseData=job1.optJSONArray("responseData");
-                                for (int i = 1; i < responseData.length(); i++){
-                                    JSONObject obj=responseData.getJSONObject(i);
-                                    String MenuName=obj.optString("MenuName");
-                                    String Description=obj.optString("Description").replaceAll("<br/>","").replaceAll("<b>","").replaceAll("</b>","");
-                                    MenuModule menuModule=new MenuModule(MenuName,Description,false);
+                                JSONArray responseData = job1.optJSONArray("responseData");
+                                for (int i = 1; i < responseData.length(); i++) {
+                                    JSONObject obj = responseData.getJSONObject(i);
+                                    String MenuName = obj.optString("MenuName");
+                                    String Description = obj.optString("Description").replaceAll("<br/>", "").replaceAll("<b>", "").replaceAll("</b>", "");
+                                    MenuModule menuModule = new MenuModule(MenuName, Description, false);
                                     menuList.add(menuModule);
-
 
 
                                 }
                                 llLoader.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
                                 llAgain.setVisibility(View.GONE);
-                                menuAdapter=new MenuAdapter(menuList,AboutUsActivity.this);
+                                menuAdapter = new MenuAdapter(menuList, AboutUsActivity.this);
                                 rvAbout.setAdapter(menuAdapter);
-                            }
-                            else {
+                            } else {
 
 
                             }
@@ -142,7 +143,7 @@ public class AboutUsActivity extends AppCompatActivity {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                          //  Toast.makeText(AboutUsActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
+                            //  Toast.makeText(AboutUsActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
                             llLoader.setVisibility(View.GONE);
                             llMain.setVisibility(View.GONE);
                             llAgain.setVisibility(View.VISIBLE);
@@ -155,7 +156,7 @@ public class AboutUsActivity extends AppCompatActivity {
 
                 //Toast.makeText(AboutUsActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
 
-                Log.e("ert",error.toString());
+                Log.e("ert", error.toString());
             }
         }) {
 
@@ -165,22 +166,16 @@ public class AboutUsActivity extends AppCompatActivity {
     }
 
 
-    public void updateStatus(int position,boolean status)
-    {
-        for (int i =0 ;i<menuList.size();i++)
-        {
-            if (i==position)
-            {
+    public void updateStatus(int position, boolean status) {
+        for (int i = 0; i < menuList.size(); i++) {
+            if (i == position) {
                 menuList.get(i).setExpanded(status);
-            }
-            else
-            {
+            } else {
                 menuList.get(i).setExpanded(false);
             }
         }
         menuAdapter.notifyDataSetChanged();
     }
-
 
 
 }

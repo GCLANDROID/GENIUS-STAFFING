@@ -30,4 +30,8 @@ public class AppData {
     public static String CHECK_LEAVE_START_DATE_STATUS = newv2url+"Leave/CheckLeaveStartDayStatus";
     public static String GET_DAY_DETAILS = newv2url+"Leave/GetDayDetails";
     public static String LEAVE_BIND_VIEW_SUMMARY= newv2url+"Leave/BindViewSummary";
+    public static String GET_APPLICANT_LEAVE_APPLICATION = newv2url+"Leave/GetApplicantLeaveApplication";
+    public static String GET_APPROVER_LEAVE_APPLICATION = newv2url+"Leave/GetApproverLeaveApplication";
+    public static String LEAVE_APPLICATION_APPROVAL = newv2url+"Leave/LeaveApplicationApproval";
+    public static String LEAVE_DELETE_BY_APPROVER = newv2url+"Leave/LeaveDeletebyApprover";
 }

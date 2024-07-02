@@ -391,6 +391,7 @@ public class ApplicationFragment extends Fragment {
     }
 
     private void getLeaveAllDetails(JSONObject jsonObject) {
+        Log.e(TAG, "getLeaveAllDetails: INPUT: "+jsonObject);
         AndroidNetworking.post(AppData.GET_LEAVE_APPLICATION_DETAILS)
                 .addJSONObjectBody(jsonObject)
                 .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
@@ -640,8 +641,8 @@ public class ApplicationFragment extends Fragment {
                                 ((LeaveApplicationActivity) getContext()).approverVisibility();
                             } else {
                                 applicantId = pref.getEmpId();
-                                getLeaveAllDetails();
-                               /* JSONObject obj=new JSONObject();
+                                //getLeaveAllDetails();
+                                JSONObject obj=new JSONObject();
                                 try {
                                     obj.put("CompanyID", pref.getEmpClintId());
                                     obj.put("EmployeeID",pref.getEmpId());
@@ -650,7 +651,7 @@ public class ApplicationFragment extends Fragment {
                                     getLeaveAllDetails(obj);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
-                                }*/
+                                }
                                 ((LeaveApplicationActivity) getContext()).approverHidden();
                             }
 
@@ -1324,7 +1325,6 @@ public class ApplicationFragment extends Fragment {
 
 
     private void showChooseFileDialog() {
-
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.choose_file_dialog, null);
@@ -1351,15 +1351,12 @@ public class ApplicationFragment extends Fragment {
             }
         });
 
-
         alert4 = dialogBuilder.create();
         alert4.setCancelable(true);
         Window window = alert4.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.CENTER);
         alert4.show();
-
-
     }
 
     private void getDayBreakUp(JSONObject jsonObject) {
