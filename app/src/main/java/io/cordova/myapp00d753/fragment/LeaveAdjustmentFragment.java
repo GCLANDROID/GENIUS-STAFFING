@@ -120,12 +120,12 @@ public class LeaveAdjustmentFragment extends Fragment {
     private void initView() {
         pref = new Pref(getContext());
         //getApproverList();
-        JSONObject obj=new JSONObject();
+        JSONObject obj1=new JSONObject();
         try {
-            obj.put("Mode", "3");
-            obj.put("CompanyID",pref.getEmpClintId());
-            obj.put("SecurityCode",pref.getSecurityCode());
-            getApproverList(obj);
+            obj1.put("Mode", "3");
+            obj1.put("CompanyID",pref.getEmpClintId());
+            obj1.put("SecurityCode",pref.getSecurityCode());
+            getApproverList(obj1);
         } catch (JSONException e) {
             e.printStackTrace();
         }
