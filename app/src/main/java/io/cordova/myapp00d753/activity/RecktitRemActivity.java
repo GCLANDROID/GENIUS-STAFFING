@@ -83,7 +83,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Part;
 
 public class RecktitRemActivity extends AppCompatActivity {
     private static final String TAG = "Recktit_Rem_Activity";
@@ -993,12 +992,8 @@ public class RecktitRemActivity extends AppCompatActivity {
                             imgDoc2.setImageBitmap(bm);
                             Log.d("images", encodedImage);
                             flag = 2;
-
-
                             // _pref.saveImage(encodedImage);
                             //saveImage(encodedImage);
-
-
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -1581,7 +1576,6 @@ public class RecktitRemActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Log.d("responseLogin", response);
-
                         progressBar.dismiss();
                         modelComponentList.clear();
                         componentList.clear();
@@ -1683,7 +1677,6 @@ public class RecktitRemActivity extends AppCompatActivity {
     }
 
     private void setAmount(String loactionId,String compid) {
-
         String surl = AppData.url+"get_ReimbursementCompValidation?LocationType="+loactionId+"&Component="+compid+"&Year="+year+"&Month="+month+"&AEMEmployeeID="+pref.getEmpId()+"&SecurityCode="+pref.getSecurityCode();
         Log.d("amounturl", surl);
         final ProgressDialog progressBar = new ProgressDialog(this);
@@ -1737,8 +1730,6 @@ public class RecktitRemActivity extends AppCompatActivity {
 
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
-
-
     }
 
 
@@ -1808,7 +1799,6 @@ public class RecktitRemActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<UploadObject> call, Throwable t) {
                 progressDialog.dismiss();
-
                 Log.e("error", "Error " + t.getMessage());
                 Toast.makeText(getApplicationContext(), "Something went wrong!Please try again", Toast.LENGTH_LONG).show();
 
@@ -2010,7 +2000,7 @@ public class RecktitRemActivity extends AppCompatActivity {
                 String uploadId = UUID.randomUUID().toString();
 
                 //Creating a multi part request
-                new MultipartUploadRequest(this, UPLOAD_URL)
+                /*new MultipartUploadRequest(this, UPLOAD_URL)
                         .addFileToUpload(path, "PDF") //Adding file
                         .addParameter("AEMEmployeeID", aempid)
                         .addParameter("AEMComponentID", componentId)
@@ -2024,12 +2014,58 @@ public class RecktitRemActivity extends AppCompatActivity {
                         .setNotificationConfig(new UploadNotificationConfig())
                         .setMaxRetries(2)
                         .startUpload();
-                successAlert();//Starting the upload
+                successAlert();//Starting the upload*/
+
+                UploadRequest(path);
 
             } catch (Exception exc) {
                 Toast.makeText(this, exc.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private void UploadRequest(String path) {
+        //SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT
+        progressDialog.show();
+        AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
+                .addMultipartParameter("AEMEmployeeID", aempid)
+                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("Description", description)
+                .addMultipartParameter("ReimbursementAmount",amount)
+                .addMultipartParameter("Year",year)
+                .addMultipartParameter("Month",month)
+                .addMultipartParameter("SecurityCode",securitycode)
+                .addMultipartParameter("ConveyanceTypeId",componentId)
+                .addMultipartParameter("LocationTypeID",loactionId)
+                .addMultipartParameter("ReimbursementDate","0")
+                .addMultipartFile("file", new File(path))
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "REIMBURSEMENT_CLAIM: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                successAlert();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(RecktitRemActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "REIMBURSEMENT_CLAIM_error: "+anError.getErrorBody());
+                    }
+                });
     }
 
 }

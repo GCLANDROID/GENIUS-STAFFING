@@ -98,7 +98,7 @@ import static android.app.Activity.RESULT_OK;
  */
 public class ApplicationFragment extends Fragment {
 
-
+    private static final String TAG = "ApplicationFragment";
     View v;
     RecyclerView rvItem;
     ArrayList<LeaveBalanceDetailsModel> itemList = new ArrayList<>();
@@ -195,7 +195,17 @@ public class ApplicationFragment extends Fragment {
         llApproved = (LinearLayout) v.findViewById(R.id.llApproved);
         llRequested = (LinearLayout) v.findViewById(R.id.llRequested);
         pref = new Pref(getContext());
-        getApproverOrNot();
+        //getApproverOrNot();
+
+        JSONObject obj=new JSONObject();
+        try {
+            obj.put("CompanyID", pref.getEmpClintId());
+            obj.put("EmployeeID",pref.getEmpId());
+            obj.put("SecurityCode",pref.getSecurityCode());
+            getApproverOrNot(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         tvEmpName = (TextView) v.findViewById(R.id.tvEmpName);
 
         tvApproverName = (TextView) v.findViewById(R.id.tvApproverName);
@@ -222,13 +232,10 @@ public class ApplicationFragment extends Fragment {
         pg = new ProgressDialog(getContext());
         pg.setMessage("Loading..");
         pg.setCancelable(false);
-
-
         color = "<font color='#EE0000'>*</font>";
       /*  String gender = "Gender";
         tvGenderTitle.setText(Html.fromHtml(gender + color));
 */
-
         tvRequestedName = (TextView) v.findViewById(R.id.tvRequestedName);
         tvApprovedName = (TextView) v.findViewById(R.id.tvApprovedName);
         tvRejectedName = (TextView) v.findViewById(R.id.tvRejectedName);
@@ -244,25 +251,20 @@ public class ApplicationFragment extends Fragment {
         tvBalance = (TextView) v.findViewById(R.id.tvBalance);
         tvDetail = (TextView) v.findViewById(R.id.tvDetail);
 
-            tvRequestedName.setText("Requested");
-            tvApprovedName.setText("Approved");
-            tvRejectedName.setText("Rejected");
-            tvLeaveModeName.setText("Pending");
-            tvContactName.setText("Emergency Contact");
-            tvStartDateName.setText(Html.fromHtml("Start date" + color));
-            tvEndDateName.setText(Html.fromHtml("End date" + color));
-            tvReasonName.setText(Html.fromHtml("Reason" + color));
-            tvDocName.setText("Upload document");
-            tvLeaveTypeName.setText(Html.fromHtml("Type" + color));
-            tvLeaveModeName.setText(Html.fromHtml("Mode" + color));
-            tvBalance.setText("Leave Balance Summary as on Date");
-            tvDetail.setText("Leave Request Summary as on Date");
-            tvPreviewName.setText("PREVIEW");
-
-
-
-
-
+        tvRequestedName.setText("Requested");
+        tvApprovedName.setText("Approved");
+        tvRejectedName.setText("Rejected");
+        tvLeaveModeName.setText("Pending");
+        tvContactName.setText("Emergency Contact");
+        tvStartDateName.setText(Html.fromHtml("Start date" + color));
+        tvEndDateName.setText(Html.fromHtml("End date" + color));
+        tvReasonName.setText(Html.fromHtml("Reason" + color));
+        tvDocName.setText("Upload document");
+        tvLeaveTypeName.setText(Html.fromHtml("Type" + color));
+        tvLeaveModeName.setText(Html.fromHtml("Mode" + color));
+        tvBalance.setText("Leave Balance Summary as on Date");
+        tvDetail.setText("Leave Request Summary as on Date");
+        tvPreviewName.setText("PREVIEW");
     }
 
 
@@ -280,10 +282,19 @@ public class ApplicationFragment extends Fragment {
                     String[] sep = lId.split("_");
                     typeId = sep[0];
                     category = sep[1];
-                    getLeaveMode();
+                    //getLeaveMode();
 
-
-
+                    JSONObject obj=new JSONObject();
+                    try {
+                        obj.put("CompanyID", pref.getEmpClintId());
+                        obj.put("EmployeeID",applicantId);
+                        obj.put("LeaveTypeID",typeId);
+                        obj.put("SecurityCode",pref.getSecurityCode());
+                        getLeaveMode(obj);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    //CompanyID=" + pref.getEmpClintId() + "&EmployeeID=" + applicantId + "&&LeaveTypeID=" + typeId + "&SecurityCode=" + pref.getSecurityCode();
                 }
             }
 
@@ -377,6 +388,41 @@ public class ApplicationFragment extends Fragment {
     private void setAdapter() {
         LeaveBalanceDetailsAdapter lAdaapter = new LeaveBalanceDetailsAdapter(itemList, getContext());
         rvItem.setAdapter(lAdaapter);
+    }
+
+    private void getLeaveAllDetails(JSONObject jsonObject) {
+        AndroidNetworking.post(AppData.GET_LEAVE_APPLICATION_DETAILS)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "LEAVE_ALL_DETAILS: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getContext(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "LEAVE_ALL_DETAILS_error: "+anError.getErrorBody());
+                    }
+                });
     }
 
 
@@ -554,6 +600,74 @@ public class ApplicationFragment extends Fragment {
 
     }
 
+    private void getApproverOrNot(JSONObject jsonObject){
+        final ProgressDialog pd = new ProgressDialog(getContext());
+        pd.setMessage("Loading...");
+        pd.setCancelable(true);
+        pd.show();
+        AndroidNetworking.post(AppData.GET_LEAVE_APPLICATION_APPROVER)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "LEAVE_APPLICATION_APPROVER: "+response.toString(4));
+
+                            pd.dismiss();
+                            mApplicantList.clear();
+                            applicantList.clear();
+                            applicantList.add("Please select");
+                            mApplicantList.add(new SpinnerModel("0", "0"));
+
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    final String Name = obj.optString("Name");
+                                    String ApplicantID = obj.optString("ApplicantID");
+                                    applicantList.add(Name);
+                                    SpinnerModel spModel = new SpinnerModel(Name, ApplicantID);
+                                    mApplicantList.add(spModel);
+                                }
+                                ((LeaveApplicationActivity) getContext()).approverVisibility();
+                            } else {
+                                applicantId = pref.getEmpId();
+                                getLeaveAllDetails();
+                               /* JSONObject obj=new JSONObject();
+                                try {
+                                    obj.put("CompanyID", pref.getEmpClintId());
+                                    obj.put("EmployeeID",pref.getEmpId());
+                                    obj.put("ApproverID",pref.getEmpId());
+                                    obj.put("SecurityCode",pref.getSecurityCode());
+                                    getLeaveAllDetails(obj);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }*/
+                                ((LeaveApplicationActivity) getContext()).approverHidden();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "LEAVE_APPLICATION_APPROVER_error: "+anError.getErrorBody());
+                        llLoader.setVisibility(View.GONE);
+                    }
+                });
+    }
+
     private void getApproverOrNot() {
         final ProgressDialog pd = new ProgressDialog(getContext());
         pd.setMessage("Loading...");
@@ -620,6 +734,7 @@ public class ApplicationFragment extends Fragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
                 llLoader.setVisibility(View.GONE);
 
 
@@ -632,6 +747,61 @@ public class ApplicationFragment extends Fragment {
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(stringRequest);
 
+    }
+
+    private void getLeaveMode(JSONObject jsonObject) {
+        Log.e(TAG, "getLeaveMode: INPUT: "+jsonObject);
+        final ProgressDialog pd = new ProgressDialog(getContext());
+        pd.setMessage("Loading...");
+        pd.setCancelable(true);
+        pd.show();
+        AndroidNetworking.post(AppData.GET_LEAVE_MODE)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            pd.dismiss();
+                            Log.e(TAG, "GET_LEAVE_MODE: "+response.toString(4));
+                            leaveMode.clear();
+                            mLeaveMode.clear();
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    final String VALUE = obj.optString("VALUE");
+                                    String ID = obj.optString("ID");
+                                    SpinnerModel spModel = new SpinnerModel(VALUE, ID);
+                                    mLeaveMode.add(spModel);
+                                    leaveMode.add(VALUE);
+                                }
+
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                        (getContext(), android.R.layout.simple_spinner_item,
+                                                leaveMode); //selected item will look like a spinner set from XML
+                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                spLeaveMode.setAdapter(spinnerArrayAdapter);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getContext(), "LEAVE MODE: something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        llLoader.setVisibility(View.GONE);
+                        Log.e(TAG, "GET_LEAVE_MODE_error: "+anError.getErrorBody());
+                    }
+                });
     }
 
 
@@ -789,6 +959,20 @@ public class ApplicationFragment extends Fragment {
                         }
                         if (striDate.getTime() > strDate.getTime() ||striDate.getTime() == strDate.getTime()) {
                             validationChecking();
+                            JSONObject obj=new JSONObject();
+                            try {
+                                obj.put("CompanyID", pref.getEmpClintId());
+                                obj.put("EmployeeID",applicantId);
+                                obj.put("StartDate",startDate);
+                                obj.put("EndDate",endDate);
+                                obj.put("LeaveTypeID",typeId);
+                                obj.put("LeaveMode",leaveModeId);
+                                obj.put("SecurityCode",pref.getSecurityCode());
+                                validationChecking(obj);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
                         }else {
                             showErrorDialog("End date should not before than Start date");
                         }
@@ -824,8 +1008,6 @@ public class ApplicationFragment extends Fragment {
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.CENTER);
         al1.show();
-
-
     }
 
 
@@ -905,6 +1087,52 @@ public class ApplicationFragment extends Fragment {
 
     }
 
+    private void validationChecking(JSONObject jsonObject) {
+        final ProgressDialog pd = new ProgressDialog(getContext());
+        pd.setMessage("Loading...");
+        pd.setCancelable(true);
+        pd.show();
+        AndroidNetworking.post(AppData.CHECK_LEAVE_START_DATE_STATUS)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            pd.dismiss();
+                            Log.e(TAG, "VALIDATION_CHECKING: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                tvEndDate.setText(endDate);
+                                if (leaveModeId.equals("0") || leaveModeId.equals("2")) {
+                                    dayBreakupListDetails.clear();
+                                    showDailyBrkUpDialog();
+                                } else if (leaveModeId.equals("1")){
+
+                                }else {
+                                    // showCompOffDialog();
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(), "VALIDATION_CHECKING: something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        pd.dismiss();
+                        Log.e(TAG, "VALIDATION_CHECKING_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
     private void validationChecking() {
         final ProgressDialog pd = new ProgressDialog(getContext());
         pd.setMessage("Loading...");
@@ -912,7 +1140,7 @@ public class ApplicationFragment extends Fragment {
         pd.show();
 
         String surl = AppData.url + "Leave/CheckLeaveStartDayStatus?CompanyID=" + pref.getEmpClintId() + "&EmployeeID=" + applicantId + "&StartDate=" + startDate + "&EndDate=" + endDate + "&LeaveTypeID=" + typeId + "&LeaveMode=" + leaveModeId + "&SecurityCode=" + pref.getSecurityCode();
-        Log.d("printurlbalance", surl);
+        Log.d("validationChecking", surl);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
                     @Override
@@ -981,7 +1209,6 @@ public class ApplicationFragment extends Fragment {
 
 
     private void showDailyBrkUpDialog() {
-
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.day_breakup_dialog, null);
@@ -990,7 +1217,20 @@ public class ApplicationFragment extends Fragment {
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvBrkupItem.setLayoutManager(layoutManager);
-        getDayBreakUp();
+        //getDayBreakUp();
+        JSONObject obj=new JSONObject();
+        try {
+            obj.put("CompanyID", pref.getEmpClintId());
+            obj.put("EmployeeID",applicantId);
+            obj.put("StartDate",startDate);
+            obj.put("EndDate",endDate);
+            obj.put("LeaveTypeID",typeId);
+            obj.put("SecurityCode",pref.getSecurityCode());
+            getDayBreakUp(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         Button btnSubmit = (Button) dialogView.findViewById(R.id.btnSubmit);
         btnSubmit.setText("Submit");
 
@@ -1018,15 +1258,12 @@ public class ApplicationFragment extends Fragment {
             }
         });
 
-
         alert2 = dialogBuilder.create();
         alert2.setCancelable(false);
         Window window = alert2.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.TOP);
         alert2.show();
-
-
     }
 
 
@@ -1125,6 +1362,63 @@ public class ApplicationFragment extends Fragment {
 
     }
 
+    private void getDayBreakUp(JSONObject jsonObject) {
+        Log.e(TAG, "getDayBreakUp: INPUT: "+jsonObject);
+        final ProgressDialog pd = new ProgressDialog(getContext());
+        pd.setMessage("Loading...");
+        pd.setCancelable(true);
+        pd.show();
+        Log.e(TAG, "getDayBreakUp: INPUT: "+jsonObject);
+        AndroidNetworking.post(AppData.GET_DAY_DETAILS)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "GET_DAY_BREAK_UP: "+response.toString(4));
+                            pd.dismiss();
+                            dayBreakupList.clear();
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String BreakDate = obj.optString("BreakDate");
+                                    String DateName = obj.optString("DateName");
+                                    String DayAccess = obj.optString("DayAccess");
+                                    String DayAccessDesc = obj.optString("DayAccessDesc");
+                                    if (DayAccess.equals("-1")) {
+                                        dayBreakupListDetails.add(BreakDate + "_" + "0" + "_" + "0");
+                                    } else {
+
+                                    }
+                                    DayBreakUpModel spModel = new DayBreakUpModel(BreakDate, DateName, DayAccess, DayAccessDesc);
+                                    dayBreakupList.add(spModel);
+                                }
+                                dayAdapter = new DayBreakUpAdapter(dayBreakupList, ApplicationFragment.this, getContext());
+                                rvBrkupItem.setAdapter(dayAdapter);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(), "DAY_BREAK_UP: Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        llLoader.setVisibility(View.GONE);
+                        Log.e(TAG, "GET_DAY_BREAK_UP_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
     private void getDayBreakUp() {
         final ProgressDialog pd = new ProgressDialog(getContext());
         pd.setMessage("Loading...");
@@ -1132,20 +1426,15 @@ public class ApplicationFragment extends Fragment {
         pd.show();
 
         String surl = AppData.url+ "Leave/DayDetails?CompanyID=" + pref.getEmpClintId() + "&EmployeeID=" + applicantId + "&StartDate=" + startDate + "&EndDate=" + endDate + "&LeaveTypeID=" + typeId + "&SecurityCode=" + pref.getSecurityCode();
-        Log.d("printurlbalance", surl);
+        Log.d("getDayBreakUp", surl);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
                         Log.d("responseAttendance", response);
-//                        llLoader.setVisibility(View.GONE);
-
+//                      llLoader.setVisibility(View.GONE);
                         pd.dismiss();
-
                         dayBreakupList.clear();
-
-
                         try {
                             JSONObject job1 = new JSONObject(response);
                             Log.e("response12", "@@@@@@" + job1);
@@ -1166,27 +1455,15 @@ public class ApplicationFragment extends Fragment {
                                     } else {
 
                                     }
-
                                     DayBreakUpModel spModel = new DayBreakUpModel(BreakDate, DateName, DayAccess, DayAccessDesc);
                                     dayBreakupList.add(spModel);
-
-
                                 }
-
                                 dayAdapter = new DayBreakUpAdapter(dayBreakupList, ApplicationFragment.this, getContext());
                                 rvBrkupItem.setAdapter(dayAdapter);
-
-
-                            } else {
-
-
-                            }
-
-
+                            } else {}
                         } catch (JSONException e) {
                             e.printStackTrace();
                             // Toast.makeText(AttendanceReportActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
-
                         }
 
                     }
@@ -1194,8 +1471,6 @@ public class ApplicationFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 llLoader.setVisibility(View.GONE);
-
-
                 // Toast.makeText(AttendanceReportActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
                 Log.e("ert", error.toString());
             }
@@ -1406,7 +1681,6 @@ public class ApplicationFragment extends Fragment {
 
 
     private void showPreviewDialog() {
-
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.preview_dialog, null);
@@ -1415,7 +1689,25 @@ public class ApplicationFragment extends Fragment {
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvPreviewItem.setLayoutManager(layoutManager);
-        getPreviewItem();
+        //getPreviewItem();
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("CompanyID", pref.getEmpClintId());
+            obj.put("EmployeeID", applicantId);
+            obj.put("StartDate", startDate);
+            obj.put("EndDate", endDate);
+            obj.put("StrDayBreakUp", dayBreakUpDetails);
+            obj.put("LeaveType", leaveType);
+            obj.put("Reason", etReason.getText().toString().replaceAll("\\s+", "%20"));
+            obj.put("IsAttachment", attachmentFlag);
+            obj.put("SecurityCode", pref.getSecurityCode());
+            getPreviewItem(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
         TextView tvReason = (TextView) dialogView.findViewById(R.id.tvReason);
         TextView tvValue = (TextView) dialogView.findViewById(R.id.tvValue);
         TextView tvEndDate = (TextView) dialogView.findViewById(R.id.tvEndDate);
@@ -1438,14 +1730,13 @@ public class ApplicationFragment extends Fragment {
         });
 
 
-            tvReason.setText("Reason");
-            tvValue.setText("No. of day(s)");
-            tvEndDate.setText("End date");
-            tvStrtDate.setText("Start date");
-            tvType.setText("Type");
-            btnDiscard.setText("Discard");
-            btnSubmit.setText("Submit");
-
+        tvReason.setText("Reason");
+        tvValue.setText("No. of day(s)");
+        tvEndDate.setText("End date");
+        tvStrtDate.setText("Start date");
+        tvType.setText("Type");
+        btnDiscard.setText("Discard");
+        btnSubmit.setText("Submit");
 
 
         alert3 = dialogBuilder.create();
@@ -1455,6 +1746,59 @@ public class ApplicationFragment extends Fragment {
         window.setGravity(Gravity.TOP);
         alert3.show();
 
+
+    }
+
+    private void getPreviewItem(JSONObject jsonObject) {
+        final ProgressDialog pd = new ProgressDialog(getContext());
+        pd.setMessage("Loading...");
+        pd.setCancelable(true);
+        pd.show();
+        AndroidNetworking.post(AppData.LEAVE_BIND_VIEW_SUMMARY)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            pd.dismiss();
+                            previewItem.clear();
+                            Log.e(TAG, "BIND_VIEW_SUMMARY: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String LeaveType = obj.optString("LeaveType");
+                                    String StartDate = obj.optString("StartDate");
+                                    String EndDate = obj.optString("EndDate");
+                                    LeaveValue = obj.optString("LeaveValue");
+                                    String Reason = obj.optString("Reason");
+                                    
+                                    PrevieModel spModel = new PrevieModel(LeaveType, StartDate, EndDate, LeaveValue, Reason);
+                                    previewItem.add(spModel);
+                                }
+                                PreviewAdapter preAdapter = new PreviewAdapter(previewItem, getContext());
+                                rvPreviewItem.setAdapter(preAdapter);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getContext(), "something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "onError: "+anError.getErrorBody());
+                        Toast.makeText(getContext(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
     }
 
@@ -1552,7 +1896,6 @@ public class ApplicationFragment extends Fragment {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
         String encoded = Base64.encodeToString(bytes, Base64.NO_WRAP);
         return encoded;
     }
@@ -1563,8 +1906,6 @@ public class ApplicationFragment extends Fragment {
         intent.setType("application/pdf");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Pdf"), PDF_REQUEST);
-
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -1620,11 +1961,7 @@ public class ApplicationFragment extends Fragment {
                         } else {
 
                         }
-
-
                         // boolean _status = job1.getBoolean("status");
-
-
                         // do anything with response
                     }
 
@@ -1633,7 +1970,6 @@ public class ApplicationFragment extends Fragment {
                         // handle error
                         pg.dismiss();
                         Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
-
                     }
                 });
     }
@@ -1646,8 +1982,6 @@ public class ApplicationFragment extends Fragment {
         dialogBuilder.setView(dialogView);
         TextView tvInvalidDate = (TextView) dialogView.findViewById(R.id.tvSuccess);
         tvInvalidDate.setText("Your leave has been applied successfully");
-
-
 
         Button btnOk = (Button) dialogView.findViewById(R.id.btnOk);
         btnOk.setOnClickListener(new View.OnClickListener() {

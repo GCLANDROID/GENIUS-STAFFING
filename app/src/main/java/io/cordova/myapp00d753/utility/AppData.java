@@ -23,4 +23,11 @@ public class AppData {
     public static String GET_REIMBURSEMENT_CLAIM = newv2url+"Reimbursement/GetReimbursementClaim";
     public static String SAVE_REIMBURSEMENT_CLAIM_METSO = newv2url+"Reimbursement/SaveReimbursementClaim_METSO";
     public static String GET_REIMBURSEMENT_CLAIM_COMPONENT_RECKITT = newv2url+"Reimbursement/GetReimbursementComponent_Reckitt";
+
+    public static String GET_LEAVE_APPLICATION_APPROVER = newv2url+"Leave/GetLeaveApplicationApprover";
+    public static String GET_LEAVE_APPLICATION_DETAILS = newv2url+"Leave/GetLeaveApplicationDetails";
+    public static String GET_LEAVE_MODE = newv2url+"Leave/GetLeaveMode";
+    public static String CHECK_LEAVE_START_DATE_STATUS = newv2url+"Leave/CheckLeaveStartDayStatus";
+    public static String GET_DAY_DETAILS = newv2url+"Leave/GetDayDetails";
+    public static String LEAVE_BIND_VIEW_SUMMARY= newv2url+"Leave/BindViewSummary";
 }

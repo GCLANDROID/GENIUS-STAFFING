@@ -196,10 +196,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                     Intent intent=new Intent(mContex, VoiceAssistantActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
-                }
-
-                else if (itemList.get(i).getMenuId().equals("12")){
-
+                } else if (itemList.get(i).getMenuId().equals("12")){
                     //leave
                     Intent intent=new Intent(mContex, LeaveApplicationActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
