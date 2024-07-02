@@ -34,4 +34,7 @@ public class AppData {
     public static String GET_APPROVER_LEAVE_APPLICATION = newv2url+"Leave/GetApproverLeaveApplication";
     public static String LEAVE_APPLICATION_APPROVAL = newv2url+"Leave/LeaveApplicationApproval";
     public static String LEAVE_DELETE_BY_APPROVER = newv2url+"Leave/LeaveDeletebyApprover";
+    public static String GET_OD_AND_OT_OTHER_APPLICATION = newv2url+"Leave/GetODAndOTOtherApplication";
+    public static String ATT_SAVE_EMPLOYEE_DIGITAL_DOCUMENT = newv2url+"Attendance/SaveEmployeeDigitalDocument";
+    public static String GET_METSO_ATTENDANCE_DATA = newv2url+"Attendance/GetMetsoAttendanceData";
 }

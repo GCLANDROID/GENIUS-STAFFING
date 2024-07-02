@@ -73,6 +73,7 @@ import io.cordova.myapp00d753.utility.Pref;
 
 
 public class LeaveAdjustmentFragment extends Fragment {
+    private static final String TAG = "LeaveAdjustmentFragment";
     LinearLayout lnAddApplication;
     View view;
     AlertDialog alerDialog1, successDialog;
@@ -118,7 +119,16 @@ public class LeaveAdjustmentFragment extends Fragment {
 
     private void initView() {
         pref = new Pref(getContext());
-        getApproverList();
+        //getApproverList();
+        JSONObject obj=new JSONObject();
+        try {
+            obj.put("Mode", "3");
+            obj.put("CompanyID",pref.getEmpClintId());
+            obj.put("SecurityCode",pref.getSecurityCode());
+            getApproverList(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         lnAddApplication = (LinearLayout) view.findViewById(R.id.lnAddApplication);
         next = "<font color='#EE0000'>*</font>";
         if (pref.getEmpClintId().equals("AEMCLI2110001671")) {
@@ -196,7 +206,16 @@ public class LeaveAdjustmentFragment extends Fragment {
         Log.d("effectiveDate", effectiveDate);
         int m = Calendar.getInstance().get(Calendar.MONTH) + 1;
         month = String.valueOf(m);
-        getOtherApplicationComponentItem();
+        //getOtherApplicationComponentItem();
+        JSONObject obj=new JSONObject();
+        try {
+            obj.put("p_companyid", pref.getEmpClintId());
+            obj.put("p_mode","");
+            obj.put("SecurityCode",pref.getSecurityCode());
+            getOtherApplicationComponentItem(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void onclick() {
@@ -237,9 +256,56 @@ public class LeaveAdjustmentFragment extends Fragment {
         });
     }
 
+    public void getOtherApplicationComponentItem(JSONObject jsonObject) {
+        Log.e(TAG, "getOtherApplicationComponentItem: "+jsonObject);
+        final ProgressDialog pd = new ProgressDialog(getContext());
+        pd.setMessage("Loading.....");
+        pd.show();
+        AndroidNetworking.post(AppData.GET_OD_AND_OT_OTHER_APPLICATION)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            pd.dismiss();
+                            Log.e(TAG, "OD_AND_OT_OTHER: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.optJSONObject(i);
+                                    String AdjusmentName = obj.optString("AdjusmentName");
+                                    String Aid = obj.optString("Aid");
+                                    otApplicationComponentList.add(AdjusmentName);
+                                    SpineerItemModel itemModule = new SpineerItemModel(AdjusmentName, Aid);
+                                    otApplicationComponentModuleList.add(itemModule);
+                                }
+                            } else {
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getContext(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        pd.dismiss();
+                        Log.e(TAG, "OD_AND_OT_OTHER_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
 
     public void getOtherApplicationComponentItem() {
-
         String surl = AppData.url + "gcl_ODAndOTOtherApplication?p_companyid=" + pref.getEmpClintId() + "&p_mode=&SecurityCode=" + pref.getSecurityCode();
         Log.d("inputLogin", surl);
 
@@ -271,15 +337,9 @@ public class LeaveAdjustmentFragment extends Fragment {
                                     SpineerItemModel itemModule = new SpineerItemModel(AdjusmentName, Aid);
                                     otApplicationComponentModuleList.add(itemModule);
                                 }
-
                             } else {
 
                             }
-
-
-                            // boolean _status = job1.getBoolean("status");
-
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(getContext(), "Volly Error", Toast.LENGTH_LONG).show();
@@ -460,7 +520,6 @@ public class LeaveAdjustmentFragment extends Fragment {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (applicationComponent.equalsIgnoreCase("On Duty")) {
                     postDataOD(etReason.getText().toString());
                 } else if (applicationComponent.equalsIgnoreCase("Comp Off")) {
@@ -468,7 +527,6 @@ public class LeaveAdjustmentFragment extends Fragment {
                 } else {
                     postData(etReason.getText().toString(), tvInTime.getText().toString(), tvOutTime.getText().toString());
                 }
-
             }
         });
 
@@ -500,8 +558,7 @@ public class LeaveAdjustmentFragment extends Fragment {
                 new DatePickerDialog.OnDateSetListener() {
 
                     @Override
-                    public void onDateSet(DatePicker view, int year,
-                                          int monthOfYear, int dayOfMonth) {
+                    public void onDateSet(DatePicker view, int year,int monthOfYear, int dayOfMonth) {
 
 
                         int month = (monthOfYear + 1);
@@ -580,7 +637,7 @@ public class LeaveAdjustmentFragment extends Fragment {
         pd.setMessage("Loading");
         pd.setCancelable(false);
         pd.show();
-        AndroidNetworking.upload(AppData.url + "Post_EmployeeOTandODAdjustment")
+        AndroidNetworking.upload(AppData.ATT_SAVE_EMPLOYEE_DIGITAL_DOCUMENT)
                 .addMultipartParameter("CompanyID", pref.getEmpClintId())
                 .addMultipartParameter("EmployeeID", pref.getEmpId())
                 .addMultipartParameter("YearId", "19")
@@ -600,6 +657,7 @@ public class LeaveAdjustmentFragment extends Fragment {
                 .addMultipartParameter("refdate", effectiveDate + " 00:00:00.000")
                 .addMultipartParameter("LtMin", "0")
                 .addMultipartParameter("SecurityCode", pref.getSecurityCode())
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
@@ -638,6 +696,66 @@ public class LeaveAdjustmentFragment extends Fragment {
 
                     }
                 });
+
+        /*AndroidNetworking.upload(AppData.url + "Post_EmployeeOTandODAdjustment")
+                .addMultipartParameter("CompanyID", pref.getEmpClintId())
+                .addMultipartParameter("EmployeeID", pref.getEmpId())
+                .addMultipartParameter("YearId", "19")
+                .addMultipartParameter("MonthId", month)
+                .addMultipartParameter("GatePassDate", effectiveDate + " 00:00:00.000")
+                .addMultipartParameter("EndDate", endDate + " 00:00:00.000")
+                .addMultipartParameter("Remarks", remarks)
+                .addMultipartParameter("StartTime", effectiveDate + " " + intime + ":00.000")
+                .addMultipartParameter("EndTime", effectiveDate + " " + outtime + ":00.000")
+                .addMultipartParameter("GatePassType", applicationComponentID)
+                .addMultipartParameter("clinetname", "")
+                .addMultipartParameter("clinetphn", "")
+                .addMultipartParameter("CreatedBy", pref.getEmpId())
+                .addMultipartParameter("AID", "0")
+                .addMultipartParameter("Oddaytype", mode)
+                .addMultipartParameter("OtMin", "0")
+                .addMultipartParameter("refdate", effectiveDate + " 00:00:00.000")
+                .addMultipartParameter("LtMin", "0")
+                .addMultipartParameter("SecurityCode", pref.getSecurityCode())
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+
+
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        pd.dismiss();
+
+
+                        JSONObject job = response;
+                        boolean responseStatus = job.optBoolean("responseStatus");
+                        if (responseStatus) {
+
+                            successAlert();
+                        }
+
+
+                        // boolean _status = job1.getBoolean("status");
+
+
+                        // do anything with response
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        pd.dismiss();
+                        Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
+
+                    }
+                });*/
     }
 
     private void postDataOD(String remarks) {
@@ -645,7 +763,64 @@ public class LeaveAdjustmentFragment extends Fragment {
         pd.setMessage("Loading");
         pd.setCancelable(false);
         pd.show();
-        AndroidNetworking.upload(AppData.url + "Post_EmployeeOTandODAdjustment")
+        AndroidNetworking.upload(AppData.ATT_SAVE_EMPLOYEE_DIGITAL_DOCUMENT)
+                .addMultipartParameter("CompanyID", pref.getEmpClintId())
+                .addMultipartParameter("EmployeeID", pref.getEmpId())
+                .addMultipartParameter("YearId", "19")
+                .addMultipartParameter("MonthId", month)
+                .addMultipartParameter("GatePassDate", startDate + " 00:00:00.000")
+                .addMultipartParameter("EndDate", endDate + " 00:00:00.000")
+                .addMultipartParameter("Remarks", remarks)
+                .addMultipartParameter("StartTime", startDate + " 00:00:00.000")
+                .addMultipartParameter("EndTime", startDate + " 00:00:00.000")
+                .addMultipartParameter("GatePassType", applicationComponentID)
+                .addMultipartParameter("clinetname", "")
+                .addMultipartParameter("clinetphn", "")
+                .addMultipartParameter("CreatedBy", pref.getEmpId())
+                .addMultipartParameter("AID", "0")
+                .addMultipartParameter("Oddaytype", mode)
+                .addMultipartParameter("OtMin", "0")
+                .addMultipartParameter("refdate", effectiveDate + " 00:00:00.000")
+                .addMultipartParameter("LtMin", "0")
+                .addMultipartParameter("SecurityCode", pref.getSecurityCode())
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+
+
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        pd.dismiss();
+
+                        JSONObject job = response;
+                        boolean responseStatus = job.optBoolean("responseStatus");
+                        if (responseStatus) {
+                            successAlert();
+                        } else {
+                            Toast.makeText(getContext(), "False", Toast.LENGTH_LONG).show();
+                        }
+
+                        // boolean _status = job1.getBoolean("status");
+                        // do anything with response
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        pd.dismiss();
+                        Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
+
+                    }
+                });
+
+        /*AndroidNetworking.upload(AppData.url + "Post_EmployeeOTandODAdjustment")
                 .addMultipartParameter("CompanyID", pref.getEmpClintId())
                 .addMultipartParameter("EmployeeID", pref.getEmpId())
                 .addMultipartParameter("YearId", "19")
@@ -680,11 +855,9 @@ public class LeaveAdjustmentFragment extends Fragment {
                     public void onResponse(JSONObject response) {
                         pd.dismiss();
 
-
                         JSONObject job = response;
                         boolean responseStatus = job.optBoolean("responseStatus");
                         if (responseStatus) {
-
                             successAlert();
                         } else {
                             Toast.makeText(getContext(), "False", Toast.LENGTH_LONG).show();
@@ -704,7 +877,7 @@ public class LeaveAdjustmentFragment extends Fragment {
                         Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
 
                     }
-                });
+                });*/
     }
 
 
@@ -713,7 +886,68 @@ public class LeaveAdjustmentFragment extends Fragment {
         pd.setMessage("Loading");
         pd.setCancelable(false);
         pd.show();
-        AndroidNetworking.upload(AppData.url + "Post_EmployeeOTandODAdjustment")
+        AndroidNetworking.upload(AppData.ATT_SAVE_EMPLOYEE_DIGITAL_DOCUMENT)
+                .addMultipartParameter("CompanyID", pref.getEmpClintId())
+                .addMultipartParameter("EmployeeID", pref.getEmpId())
+                .addMultipartParameter("YearId", "20")
+                .addMultipartParameter("MonthId", month)
+                .addMultipartParameter("GatePassDate", effectiveDate + " 00:00:00.000")
+                .addMultipartParameter("EndDate", effectiveDate + " 00:00:00.000")
+                .addMultipartParameter("Remarks", remarks)
+                .addMultipartParameter("StartTime", effectiveDate + " 00:00:00.000")
+                .addMultipartParameter("EndTime", effectiveDate + " 00:00:00.000")
+                .addMultipartParameter("GatePassType", applicationComponentID)
+                .addMultipartParameter("clinetname", "")
+                .addMultipartParameter("clinetphn", "")
+                .addMultipartParameter("CreatedBy", pref.getEmpId())
+                .addMultipartParameter("AID", "0")
+                .addMultipartParameter("Oddaytype", mode)
+                .addMultipartParameter("OtMin", "0")
+                .addMultipartParameter("Approverid", approverID)
+                .addMultipartParameter("refdate", startDate + " 00:00:00.000")
+                .addMultipartParameter("LtMin", "0")
+                .addMultipartParameter("SecurityCode", pref.getSecurityCode())
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+
+
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        pd.dismiss();
+
+                        JSONObject job = response;
+                        boolean responseStatus = job.optBoolean("responseStatus");
+                        String responseText=job.optString("responseText");
+                        if (responseStatus) {
+                               successAlert();
+                        } else {
+                            Toast.makeText(getContext(), responseText, Toast.LENGTH_LONG).show();
+                        }
+
+
+                        // boolean _status = job1.getBoolean("status");
+
+
+                        // do anything with response
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        pd.dismiss();
+                        Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        /*AndroidNetworking.upload(AppData.url + "Post_EmployeeOTandODAdjustment")
                 .addMultipartParameter("CompanyID", pref.getEmpClintId())
                 .addMultipartParameter("EmployeeID", pref.getEmpId())
                 .addMultipartParameter("YearId", "20")
@@ -749,12 +983,11 @@ public class LeaveAdjustmentFragment extends Fragment {
                     public void onResponse(JSONObject response) {
                         pd.dismiss();
 
-
                         JSONObject job = response;
                         boolean responseStatus = job.optBoolean("responseStatus");
                         String responseText=job.optString("responseText");
                         if (responseStatus) {
-                               successAlert();
+                            successAlert();
                         } else {
                             Toast.makeText(getContext(), responseText, Toast.LENGTH_LONG).show();
                         }
@@ -771,9 +1004,8 @@ public class LeaveAdjustmentFragment extends Fragment {
                         // handle error
                         pd.dismiss();
                         Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
-
                     }
-                });
+                });*/
     }
 
 
@@ -805,6 +1037,49 @@ public class LeaveAdjustmentFragment extends Fragment {
         successDialog.show();
     }
 
+    private void getApproverList(JSONObject jsonObject) {
+        ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Loading");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        AndroidNetworking.post(AppData.GET_METSO_ATTENDANCE_DATA)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "APPROVER_LIST: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject objectResponse = jsonArray.getJSONObject(i);
+                                    approverList.add(new ApproverModel(objectResponse.getInt("UserId"),
+                                            objectResponse.getString("UserName")));
+                                }
+                                approverAutoCompleteAdapter = new ApproverAutoCompleteAdapter(getContext(), approverList);
+                                progressDialog.cancel();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(), "something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "APPROVER_LIST_error: "+anError.getErrorBody());
+                        progressDialog.cancel();
+                    }
+                });
+    }
 
     private void getApproverList() {
         ProgressDialog progressDialog = new ProgressDialog(getContext());
