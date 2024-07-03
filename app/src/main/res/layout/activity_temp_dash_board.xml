@@ -179,6 +179,7 @@
             </LinearLayout>
 
             <LinearLayout
+
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="2dp"
@@ -186,6 +187,7 @@
                 android:orientation="vertical"
                 android:weightSum="3">
                 <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/llDocument"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"

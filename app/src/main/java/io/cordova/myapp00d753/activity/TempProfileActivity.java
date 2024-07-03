@@ -232,7 +232,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
         llMain = (LinearLayout) findViewById(R.id.llMain);
 
-        JSONObject obj=new JSONObject();
+        /*JSONObject obj=new JSONObject();
         try {
             obj.put("AEMConsultantID", pref.getEmpConId());
             obj.put("AEMClientID",pref.getEmpClintId());
@@ -244,9 +244,9 @@ public class TempProfileActivity extends AppCompatActivity {
             profileFunction(obj);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
 
-        //profileFunction();
+        profileFunction();
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
