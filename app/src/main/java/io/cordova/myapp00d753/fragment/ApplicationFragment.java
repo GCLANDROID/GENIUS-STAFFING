@@ -195,9 +195,9 @@ public class ApplicationFragment extends Fragment {
         llApproved = (LinearLayout) v.findViewById(R.id.llApproved);
         llRequested = (LinearLayout) v.findViewById(R.id.llRequested);
         pref = new Pref(getContext());
-        //getApproverOrNot();
+        getApproverOrNot();
 
-        JSONObject obj=new JSONObject();
+       /* JSONObject obj=new JSONObject();
         try {
             obj.put("CompanyID", pref.getEmpClintId());
             obj.put("EmployeeID",pref.getEmpId());
@@ -205,7 +205,7 @@ public class ApplicationFragment extends Fragment {
             getApproverOrNot(obj);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
         tvEmpName = (TextView) v.findViewById(R.id.tvEmpName);
 
         tvApproverName = (TextView) v.findViewById(R.id.tvApproverName);
@@ -282,9 +282,9 @@ public class ApplicationFragment extends Fragment {
                     String[] sep = lId.split("_");
                     typeId = sep[0];
                     category = sep[1];
-                    //getLeaveMode();
+                    getLeaveMode();
 
-                    JSONObject obj=new JSONObject();
+                    /*JSONObject obj=new JSONObject();
                     try {
                         obj.put("CompanyID", pref.getEmpClintId());
                         obj.put("EmployeeID",applicantId);
@@ -293,7 +293,7 @@ public class ApplicationFragment extends Fragment {
                         getLeaveMode(obj);
                     } catch (JSONException e) {
                         e.printStackTrace();
-                    }
+                    }*/
                     //CompanyID=" + pref.getEmpClintId() + "&EmployeeID=" + applicantId + "&&LeaveTypeID=" + typeId + "&SecurityCode=" + pref.getSecurityCode();
                 }
             }
@@ -364,7 +364,7 @@ public class ApplicationFragment extends Fragment {
             public void onClick(View v) {
                 if (dayBreakupListDetails != null) {
                     if (!tvEndDate.getText().toString().equals("")) {
-                        JSONObject obj=new JSONObject();
+                        /*JSONObject obj=new JSONObject();
                         try {
                             obj.put("CompanyID",pref.getEmpClintId());
                             obj.put("EmployeeID",applicantId);
@@ -379,8 +379,8 @@ public class ApplicationFragment extends Fragment {
                             preView(obj);
                         } catch (JSONException e) {
                             e.printStackTrace();
-                        }
-                        //preView();
+                        }*/
+                        preView();
                     }else {
                         Toast.makeText(getContext(),"End date not selected",Toast.LENGTH_LONG).show();
                     }
@@ -657,8 +657,8 @@ public class ApplicationFragment extends Fragment {
                                 ((LeaveApplicationActivity) getContext()).approverVisibility();
                             } else {
                                 applicantId = pref.getEmpId();
-                                //getLeaveAllDetails();
-                                JSONObject obj=new JSONObject();
+                                getLeaveAllDetails();
+                               /* JSONObject obj=new JSONObject();
                                 try {
                                     obj.put("CompanyID", pref.getEmpClintId());
                                     obj.put("EmployeeID",pref.getEmpId());
@@ -667,7 +667,7 @@ public class ApplicationFragment extends Fragment {
                                     getLeaveAllDetails(obj);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
-                                }
+                                }*/
                                 ((LeaveApplicationActivity) getContext()).approverHidden();
                             }
 
@@ -975,8 +975,8 @@ public class ApplicationFragment extends Fragment {
                             e.printStackTrace();
                         }
                         if (striDate.getTime() > strDate.getTime() ||striDate.getTime() == strDate.getTime()) {
-                            //validationChecking();
-                            JSONObject obj=new JSONObject();
+                            validationChecking();
+                           /* JSONObject obj=new JSONObject();
                             try {
                                 obj.put("CompanyID", pref.getEmpClintId());
                                 obj.put("EmployeeID",applicantId);
@@ -988,7 +988,7 @@ public class ApplicationFragment extends Fragment {
                                 validationChecking(obj);
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                            }
+                            }*/
 
                         }else {
                             showErrorDialog("End date should not before than Start date");
@@ -1234,8 +1234,8 @@ public class ApplicationFragment extends Fragment {
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvBrkupItem.setLayoutManager(layoutManager);
-        //getDayBreakUp();
-        JSONObject obj=new JSONObject();
+        getDayBreakUp();
+        /*JSONObject obj=new JSONObject();
         try {
             obj.put("CompanyID", pref.getEmpClintId());
             obj.put("EmployeeID",applicantId);
@@ -1246,7 +1246,7 @@ public class ApplicationFragment extends Fragment {
             getDayBreakUp(obj);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
 
         Button btnSubmit = (Button) dialogView.findViewById(R.id.btnSubmit);
         btnSubmit.setText("Submit");
@@ -1743,9 +1743,9 @@ public class ApplicationFragment extends Fragment {
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvPreviewItem.setLayoutManager(layoutManager);
-        //getPreviewItem();
+        getPreviewItem();
 
-        JSONObject obj = new JSONObject();
+       /* JSONObject obj = new JSONObject();
         try {
             obj.put("CompanyID", pref.getEmpClintId());
             obj.put("EmployeeID", applicantId);
@@ -1759,7 +1759,7 @@ public class ApplicationFragment extends Fragment {
             getPreviewItem(obj);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
 
 
         TextView tvReason = (TextView) dialogView.findViewById(R.id.tvReason);

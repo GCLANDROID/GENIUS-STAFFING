@@ -91,9 +91,9 @@ public class ApproverFragment extends Fragment {
         btnApprove = (Button) view.findViewById(R.id.btnApprove);
         btnDelete = (Button) view.findViewById(R.id.btnDelete);
         builder = new AlertDialog.Builder(getContext());
-        //getItem();
+        getItem();
 
-        JSONObject obj=new JSONObject();
+        /*JSONObject obj=new JSONObject();
         try {
             obj.put("CompanyID" , pref.getEmpClintId() );
             obj.put("ApproverID" , pref.getEmpId() );
@@ -101,7 +101,7 @@ public class ApproverFragment extends Fragment {
             getItem(obj);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
 
         btnReject.setText("Reject");
         btnApprove.setText("Approve");
@@ -568,9 +568,9 @@ public class ApproverFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 alerDialog1.dismiss();
-                //getItem();
+                getItem();
 
-                JSONObject obj = new JSONObject();
+               /* JSONObject obj = new JSONObject();
                 try {
                     obj.put("CompanyID", pref.getEmpClintId());
                     obj.put("ApproverID", pref.getEmpId());
@@ -578,7 +578,7 @@ public class ApproverFragment extends Fragment {
                     getItem(obj);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
+                }*/
 
             }
         });
@@ -607,8 +607,8 @@ public class ApproverFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 alerDialog1.dismiss();
-                //getItem();
-                JSONObject obj=new JSONObject();
+                getItem();
+               /* JSONObject obj=new JSONObject();
                 try {
                     obj.put("CompanyID" , pref.getEmpClintId() );
                     obj.put("ApproverID" , pref.getEmpId() );
@@ -616,7 +616,7 @@ public class ApproverFragment extends Fragment {
                     getItem(obj);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
+                }*/
             }
         });
 
@@ -644,8 +644,8 @@ public class ApproverFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 alerDialog1.dismiss();
-                //getItem();
-                JSONObject obj=new JSONObject();
+                getItem();
+                /*JSONObject obj=new JSONObject();
                 try {
                     obj.put("CompanyID" , pref.getEmpClintId() );
                     obj.put("ApproverID" , pref.getEmpId() );
@@ -653,7 +653,7 @@ public class ApproverFragment extends Fragment {
                     getItem(obj);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
+                }*/
 
             }
         });
@@ -670,9 +670,9 @@ public class ApproverFragment extends Fragment {
         btnApprove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //approveFunction();
+                approveFunction();
 
-                JSONObject obj=new JSONObject();
+               /* JSONObject obj=new JSONObject();
                 try {
                     obj.put("CompanyID" , pref.getEmpClintId());
                     obj.put("StrAppMID", mId);
@@ -682,7 +682,7 @@ public class ApproverFragment extends Fragment {
                     approveFunction(obj);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
+                }*/
             }
         });
 
@@ -696,8 +696,8 @@ public class ApproverFragment extends Fragment {
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                //rejectFunction();
-                                JSONObject obj=new JSONObject();
+                                rejectFunction();
+                               /* JSONObject obj=new JSONObject();
                                 try {
                                     obj.put("CompanyID" , pref.getEmpClintId());
                                     obj.put("StrAppMID", mId);
@@ -707,7 +707,7 @@ public class ApproverFragment extends Fragment {
                                     rejectFunction(obj);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
-                                }
+                                }*/
                                 dialog.cancel();
 
                             }
@@ -737,9 +737,9 @@ public class ApproverFragment extends Fragment {
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                //deleteFunction();
+                                deleteFunction();
                                 dialog.cancel();
-                                JSONObject obj=new JSONObject();
+                               /* JSONObject obj=new JSONObject();
                                 try {
                                     obj.put("CompanyID" , pref.getEmpClintId());
                                     obj.put("ApplicationMID", mId);
@@ -748,7 +748,7 @@ public class ApproverFragment extends Fragment {
                                     deleteFunction(obj);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
-                                }
+                                }*/
 
                             }
                         })

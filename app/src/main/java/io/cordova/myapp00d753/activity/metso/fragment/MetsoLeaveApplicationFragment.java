@@ -203,8 +203,8 @@ public class MetsoLeaveApplicationFragment extends Fragment {
         llApproved = (LinearLayout) v.findViewById(R.id.llApproved);
         llRequested = (LinearLayout) v.findViewById(R.id.llRequested);
         pref = new Pref(getContext());
-        //getApproverOrNot();
-        JSONObject obj=new JSONObject();
+        getApproverOrNot();
+     /*   JSONObject obj=new JSONObject();
         try {
             obj.put("CompanyID", pref.getEmpClintId());
             obj.put("EmployeeID",pref.getEmpId());
@@ -212,7 +212,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
             getApproverOrNot(obj);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
         tvEmpName = (TextView) v.findViewById(R.id.tvEmpName);
 
         tvApproverName = (TextView) v.findViewById(R.id.tvApproverName);
@@ -289,9 +289,9 @@ public class MetsoLeaveApplicationFragment extends Fragment {
                     String[] sep = lId.split("_");
                     typeId = sep[0];
                     category = sep[1];
-                    //getLeaveMode();
+                    getLeaveMode();
 
-                    JSONObject obj=new JSONObject();
+                   /* JSONObject obj=new JSONObject();
                     try {
                         obj.put("CompanyID", pref.getEmpClintId());
                         obj.put("EmployeeID",applicantId);
@@ -300,7 +300,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
                         getLeaveMode(obj);
                     } catch (JSONException e) {
                         e.printStackTrace();
-                    }
+                    }*/
                 }
             }
 
@@ -370,7 +370,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
             public void onClick(View v) {
                 if (dayBreakupListDetails != null) {
                     if (!tvEndDate.getText().toString().equals("")) {
-                        JSONObject obj=new JSONObject();
+                        /*JSONObject obj=new JSONObject();
                         try {
                             obj.put("CompanyID",pref.getEmpClintId());
                             obj.put("EmployeeID",applicantId);
@@ -385,8 +385,8 @@ public class MetsoLeaveApplicationFragment extends Fragment {
                             preView(obj);
                         } catch (JSONException e) {
                             e.printStackTrace();
-                        }
-                        //preView();
+                        }*/
+                        preView();
                     }else {
                         Toast.makeText(getContext(),"End date not selected",Toast.LENGTH_LONG).show();
                     }
@@ -677,8 +677,8 @@ public class MetsoLeaveApplicationFragment extends Fragment {
                                 ((LeaveApplicationActivity) getContext()).approverVisibility();
                             } else {
                                 applicantId = pref.getEmpId();
-                                //getLeaveAllDetails();
-                                JSONObject obj=new JSONObject();
+                                getLeaveAllDetails();
+                                /*JSONObject obj=new JSONObject();
                                 try {
                                     obj.put("CompanyID", pref.getEmpClintId());
                                     obj.put("EmployeeID",pref.getEmpId());
@@ -687,7 +687,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
                                     getLeaveAllDetails(obj);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
-                                }
+                                }*/
                                 ((LeaveApplicationActivity) getContext()).approverHidden();
                             }
                         } catch (JSONException e) {
@@ -981,8 +981,8 @@ public class MetsoLeaveApplicationFragment extends Fragment {
                             e.printStackTrace();
                         }
                         if (striDate.getTime() > strDate.getTime() ||striDate.getTime() == strDate.getTime()) {
-                            //validationChecking();
-                            JSONObject obj=new JSONObject();
+                            validationChecking();
+                           /* JSONObject obj=new JSONObject();
                             try {
                                 obj.put("CompanyID", pref.getEmpClintId());
                                 obj.put("EmployeeID",applicantId);
@@ -994,7 +994,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
                                 validationChecking(obj);
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                            }
+                            }*/
                         }else {
                             showErrorDialog("End date should not before than Start date");
                         }
@@ -1075,8 +1075,8 @@ public class MetsoLeaveApplicationFragment extends Fragment {
 
                     applicantId = appid;
                     alert1.dismiss();
-                    //getLeaveAllDetails();
-                    JSONObject obj = new JSONObject();
+                    getLeaveAllDetails();
+                   /* JSONObject obj = new JSONObject();
                     try {
                         obj.put("CompanyID", pref.getEmpClintId());
                         obj.put("EmployeeID", pref.getEmpId());
@@ -1085,7 +1085,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
                         getLeaveAllDetails(obj);
                     } catch (JSONException e) {
                         e.printStackTrace();
-                    }
+                    }*/
                     tvEmpName.setText("Leave application of " + applicantName);
 
 
@@ -1099,8 +1099,8 @@ public class MetsoLeaveApplicationFragment extends Fragment {
             public void onClick(View view) {
                 applicantId = pref.getEmpId();
                 alert1.dismiss();
-                //getLeaveAllDetails();
-                JSONObject obj = new JSONObject();
+                getLeaveAllDetails();
+                /*JSONObject obj = new JSONObject();
                 try {
                     obj.put("CompanyID", pref.getEmpClintId());
                     obj.put("EmployeeID", pref.getEmpId());
@@ -1109,7 +1109,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
                     getLeaveAllDetails(obj);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
+                }*/
                 tvEmpName.setText("Leave application of " + pref.getEmpName());
 
             }
@@ -1247,9 +1247,9 @@ public class MetsoLeaveApplicationFragment extends Fragment {
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvBrkupItem.setLayoutManager(layoutManager);
-        //getDayBreakUp();
+        getDayBreakUp();
 
-        JSONObject obj=new JSONObject();
+        /*JSONObject obj=new JSONObject();
         try {
             obj.put("CompanyID", pref.getEmpClintId());
             obj.put("EmployeeID",applicantId);
@@ -1260,7 +1260,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
             getDayBreakUp(obj);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
 
 
         Button btnSubmit = (Button) dialogView.findViewById(R.id.btnSubmit);
@@ -1777,9 +1777,9 @@ public class MetsoLeaveApplicationFragment extends Fragment {
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvPreviewItem.setLayoutManager(layoutManager);
-        //getPreviewItem();
+        getPreviewItem();
 
-        JSONObject obj = new JSONObject();
+       /* JSONObject obj = new JSONObject();
         try {
             obj.put("CompanyID", pref.getEmpClintId());
             obj.put("EmployeeID", applicantId);
@@ -1793,7 +1793,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
             getPreviewItem(obj);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
 
         TextView tvReason = (TextView) dialogView.findViewById(R.id.tvReason);
         TextView tvValue = (TextView) dialogView.findViewById(R.id.tvValue);
@@ -2003,7 +2003,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
         pd.show();
         //String reason = etReason.getText().toString().trim();
 
-        AndroidNetworking.upload(AppData.ADD_LEAVE_METSO)
+       /* AndroidNetworking.upload(AppData.ADD_LEAVE_METSO)
                 .addMultipartParameter("CompanyID", pref.getEmpClintId())
                 .addMultipartParameter("EmployeeId", applicantId)
                 .addMultipartParameter("StartDate", startDate)
@@ -2057,9 +2057,9 @@ public class MetsoLeaveApplicationFragment extends Fragment {
                         pg.dismiss();
                         Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
                     }
-                });
+                });*/
 
-        /*AndroidNetworking.upload(AppData.url + "Leave/LeaveAdd_metso")
+        AndroidNetworking.upload(AppData.url + "Leave/LeaveAdd_metso")
                 .addMultipartParameter("CompanyID", pref.getEmpClintId())
                 .addMultipartParameter("EmployeeId", applicantId)
                 .addMultipartParameter("StartDate", startDate)
@@ -2110,7 +2110,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
                         pg.dismiss();
                         Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
                     }
-                });*/
+                });
     }
 
 

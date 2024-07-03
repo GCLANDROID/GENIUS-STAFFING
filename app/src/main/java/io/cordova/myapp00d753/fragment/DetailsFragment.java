@@ -71,8 +71,8 @@ public class DetailsFragment extends Fragment {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_details, container, false);
         initView();
-        //getItem();
-        JSONObject obj=new JSONObject();
+        getItem();
+      /*  JSONObject obj=new JSONObject();
         try {
             obj.put("CompanyID",pref.getEmpClintId());
             obj.put("EmployeeID",pref.getEmpId());
@@ -82,7 +82,7 @@ public class DetailsFragment extends Fragment {
             getItem(obj);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
         onClick();
 
         return v;
@@ -126,8 +126,8 @@ public class DetailsFragment extends Fragment {
             public void onClick(View v) {
                 if (!startDate.equals("")) {
                     if (!endDate.equals("")) {
-                        //getItem();
-                        JSONObject obj=new JSONObject();
+                        getItem();
+                       /* JSONObject obj=new JSONObject();
                         try {
                             obj.put("CompanyID",pref.getEmpClintId());
                             obj.put("EmployeeID",pref.getEmpId());
@@ -137,7 +137,7 @@ public class DetailsFragment extends Fragment {
                             getItem(obj);
                         } catch (JSONException e) {
                             e.printStackTrace();
-                        }
+                        }*/
                     } else {
                         Toast.makeText(getContext(), "Please select End Date", Toast.LENGTH_LONG).show();
                     }
@@ -413,9 +413,9 @@ public class DetailsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 alerDialog1.dismiss();
-                //getItem();
+                getItem();
 
-                JSONObject obj=new JSONObject();
+               /* JSONObject obj=new JSONObject();
                 try {
                     obj.put("CompanyID",pref.getEmpClintId());
                     obj.put("EmployeeID",pref.getEmpId());
@@ -425,7 +425,7 @@ public class DetailsFragment extends Fragment {
                     getItem(obj);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
+                }*/
 
 
             }

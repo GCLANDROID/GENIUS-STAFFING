@@ -119,8 +119,8 @@ public class LeaveAdjustmentFragment extends Fragment {
 
     private void initView() {
         pref = new Pref(getContext());
-        //getApproverList();
-        JSONObject obj1=new JSONObject();
+        getApproverList();
+      /*  JSONObject obj1=new JSONObject();
         try {
             obj1.put("Mode", "3");
             obj1.put("CompanyID",pref.getEmpClintId());
@@ -128,7 +128,7 @@ public class LeaveAdjustmentFragment extends Fragment {
             getApproverList(obj1);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
         lnAddApplication = (LinearLayout) view.findViewById(R.id.lnAddApplication);
         next = "<font color='#EE0000'>*</font>";
         if (pref.getEmpClintId().equals("AEMCLI2110001671")) {
@@ -206,8 +206,8 @@ public class LeaveAdjustmentFragment extends Fragment {
         Log.d("effectiveDate", effectiveDate);
         int m = Calendar.getInstance().get(Calendar.MONTH) + 1;
         month = String.valueOf(m);
-        //getOtherApplicationComponentItem();
-        JSONObject obj=new JSONObject();
+        getOtherApplicationComponentItem();
+       /* JSONObject obj=new JSONObject();
         try {
             obj.put("p_companyid", pref.getEmpClintId());
             obj.put("p_mode","");
@@ -215,7 +215,7 @@ public class LeaveAdjustmentFragment extends Fragment {
             getOtherApplicationComponentItem(obj);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     private void onclick() {
