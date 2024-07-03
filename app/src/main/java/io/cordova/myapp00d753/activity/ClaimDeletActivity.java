@@ -73,7 +73,8 @@ public class ClaimDeletActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_claim_delet);
         initialize();
-        JSONObject obj = new JSONObject();
+        //TODO: new api
+        /*JSONObject obj = new JSONObject();
         try {
             obj.put("AEMEmployeeID", pref.getEmpId());
             obj.put("Year", year);
@@ -82,8 +83,8 @@ public class ClaimDeletActivity extends AppCompatActivity {
             getItemList(obj);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-        //getItemList();
+        }*/
+        getItemList();
         setAdapter();
         onClick();
     }

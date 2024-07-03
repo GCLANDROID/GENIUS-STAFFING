@@ -75,8 +75,9 @@ public class MetsoReimbursementDeleteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_metso_reimbursement_delete);
         initialize();
-        //getItemList();
-        JSONObject obj = new JSONObject();
+        getItemList();
+        //TODO: new api
+        /*JSONObject obj = new JSONObject();
         try {
             obj.put("AEMEmployeeID", pref.getEmpId());
             obj.put("Year", year);
@@ -85,7 +86,7 @@ public class MetsoReimbursementDeleteActivity extends AppCompatActivity {
             getItemList(obj);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
         setAdapter();
         onClick();
     }

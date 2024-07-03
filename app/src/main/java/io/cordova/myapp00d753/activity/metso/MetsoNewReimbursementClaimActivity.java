@@ -3069,8 +3069,8 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         //getting name for the pdf
 
         //getting the actual path of the pdf
-
-        AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_METSO)
+        //TODO: new api
+       /* AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_METSO)
                 .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
                 .addMultipartParameter("AEMComponentID", comeid)
                 .addMultipartParameter("Description", description)
@@ -3119,7 +3119,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                             throw new RuntimeException(e);
                         }
 
-                        /*JSONObject job1 = response;
+                        *//*JSONObject job1 = response;
                         Log.e("response12", "@@@@@@" + job1);
                         String responseText = job1.optString("responseText");
                         boolean responseStatus = job1.optBoolean("responseStatus");
@@ -3132,7 +3132,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
 
                             Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
 
-                        }*/
+                        }*//*
 
 
                         // boolean _status = job1.getBoolean("status");
@@ -3147,12 +3147,9 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                         Log.e("errt", error.getErrorBody());
                         Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                     }
-                });
+                });*/
 
-
-
-
-        /*AndroidNetworking.upload(UPLOAD_URL)
+        AndroidNetworking.upload(UPLOAD_URL)
                 .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
                 .addMultipartParameter("AEMComponentID", comeid)
                 .addMultipartParameter("Description", description)
@@ -3214,13 +3211,14 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
 
                         Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                     }
-                });*/
+                });
     }
 
     public void uploadMultipartwithfile() {
         //getting name for the pdf
         //getting the actual path of the pdf
-        AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_METSO)
+        //TODO: new api
+        /*AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_METSO)
                 .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
                 .addMultipartParameter("AEMComponentID", comeid)
                 .addMultipartParameter("Description", description)
@@ -3272,7 +3270,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                         }
 
 
-                       /* JSONObject job1 = response;
+                       *//* JSONObject job1 = response;
                         Log.e("response12", "@@@@@@" + job1);
                         String responseText = job1.optString("responseText");
                         boolean responseStatus = job1.optBoolean("responseStatus");
@@ -3281,7 +3279,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                             postoneimage();
                         } else {
                             Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
-                        }*/
+                        }*//*
 
 
                         // boolean _status = job1.getBoolean("status");
@@ -3293,9 +3291,9 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                         Log.e("errt", String.valueOf(error));
                         Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                     }
-                });
+                });*/
 
-        /*AndroidNetworking.upload(UPLOAD_URL)
+        AndroidNetworking.upload(UPLOAD_URL)
                 .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
                 .addMultipartParameter("AEMComponentID", comeid)
                 .addMultipartParameter("Description", description)
@@ -3352,15 +3350,15 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                         Log.e("errt", String.valueOf(error));
                         Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                     }
-                });*/
+                });
     }
 
     public void uploadMultipartwithTwofile() {
         //getting name for the pdf
 
         //getting the actual path of the pdf
-
-        AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_METSO)
+        //TODO: new api
+        /*AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_METSO)
                 .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
                 .addMultipartParameter("AEMComponentID", comeid)
                 .addMultipartParameter("Description", description)
@@ -3412,10 +3410,10 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                         Log.e("errt", String.valueOf(error));
                         Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                     }
-                });
+                });*/
 
 
-        /*AndroidNetworking.upload(UPLOAD_URL)
+        AndroidNetworking.upload(UPLOAD_URL)
                 .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
                 .addMultipartParameter("AEMComponentID", comeid)
                 .addMultipartParameter("Description", description)
@@ -3466,7 +3464,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                         Log.e("errt", String.valueOf(error));
                         Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                     }
-                });*/
+                });
     }
 
 
@@ -3561,11 +3559,14 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
             uploadMultipartwithTwofile();
         } else if (galleryFlag == 1) {
             Log.e(TAG, "attachFileAPI: postoneimage");
-            //postoneimage();
-            postOneImage();
+            postoneimage();
+            //TODO: new api
+            //postOneImage();
         } else if (galleryFlag == 2) {
             Log.e(TAG, "attachFileAPI: posttwoimage");
-            postTwoImage();
+            posttwoimage();
+            //TODO: new api
+            //postTwoImage();
         } else {
             Toast.makeText(MetsoNewReimbursementClaimActivity.this, "Please Attach Your Reimbursement File", Toast.LENGTH_LONG).show();
         }

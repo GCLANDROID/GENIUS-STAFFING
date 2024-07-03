@@ -150,7 +150,8 @@ public class RecktitRemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recktit_rem);
         initialize();
         setLocationItem();
-        JSONObject obj = new JSONObject();
+        //TODO: new api
+        /*JSONObject obj = new JSONObject();
         try {
             obj.put("ddltype", "505");
             obj.put("id1", pref.getEmpConId());
@@ -160,7 +161,7 @@ public class RecktitRemActivity extends AppCompatActivity {
             setLocationItem(obj);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
         onClick();
     }
 
@@ -368,8 +369,9 @@ public class RecktitRemActivity extends AppCompatActivity {
                 String compName=modelComponentList.get(position).getItemName();
                 if (componentId.equals("SAEMCM1110000524")) {
 
-                    //setAmount(loactionId, componentId);
-                    JSONObject obj = new JSONObject();
+                    setAmount(loactionId, componentId);
+                    //TODO: new api
+                   /* JSONObject obj = new JSONObject();
                     try {
                         obj.put("LocationType", loactionId);
                         obj.put("Component", componentId);
@@ -381,7 +383,7 @@ public class RecktitRemActivity extends AppCompatActivity {
                         setAmount(obj);
                     } catch (JSONException e) {
                         e.printStackTrace();
-                    }
+                    }*/
 
                 }else {
                     etAmount.setText("");
@@ -515,9 +517,9 @@ public class RecktitRemActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 loactionId=modelLocationList.get(position).getItemId();
                 Log.d("loactionid",loactionId);
-                //setCompItem(loactionId);
-
-                JSONObject obj = new JSONObject();
+                setCompItem(loactionId);
+                //TODO: new api
+                /*JSONObject obj = new JSONObject();
                 try {
                     obj.put("ddltype", "506");
                     obj.put("id1", loactionId);
@@ -526,7 +528,7 @@ public class RecktitRemActivity extends AppCompatActivity {
                     setCompItem(obj);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
+                }*/
             }
 
             @Override
@@ -605,20 +607,25 @@ public class RecktitRemActivity extends AppCompatActivity {
                                 if (!spyear.equals("")){
                                     if (!spmonth.equals("")){
                                         if (flag == 1) {
-                                            //postoneimage();
-                                            postOneImage();
+                                            postoneimage();
+                                            //TODO: new api
+                                            //postOneImage();
                                         } else if (flag == 2) {
-                                            //posttwoimage();
-                                            postTwoImage();
+                                            posttwoimage();
+                                            //TODO: new api
+                                            //postTwoImage();
                                         } else if (flag == 3) {
-                                            //postthreeimage();
-                                            postThreeImage();
+                                            postthreeimage();
+                                            //TODO: new api
+                                            //postThreeImage();
                                         } else if (flag == 4) {
-                                            //postfourimage();
-                                            postFourImage();
+                                            postfourimage();
+                                            //TODO: new api
+                                            //postFourImage();
                                         } else if (flag == 5) {
-                                            //postfiveimage();
-                                            postFiveImage();
+                                            postfiveimage();
+                                            //TODO: new api
+                                            //postFiveImage();
                                         }
 
                                     }else {
@@ -2000,7 +2007,7 @@ public class RecktitRemActivity extends AppCompatActivity {
                 String uploadId = UUID.randomUUID().toString();
 
                 //Creating a multi part request
-                /*new MultipartUploadRequest(this, UPLOAD_URL)
+                new MultipartUploadRequest(this, UPLOAD_URL)
                         .addFileToUpload(path, "PDF") //Adding file
                         .addParameter("AEMEmployeeID", aempid)
                         .addParameter("AEMComponentID", componentId)
@@ -2014,9 +2021,9 @@ public class RecktitRemActivity extends AppCompatActivity {
                         .setNotificationConfig(new UploadNotificationConfig())
                         .setMaxRetries(2)
                         .startUpload();
-                successAlert();//Starting the upload*/
-
-                UploadRequest(path);
+                successAlert();//Starting the upload
+                //TODO: new api
+                //UploadRequest(path);
 
             } catch (Exception exc) {
                 Toast.makeText(this, exc.getMessage(), Toast.LENGTH_SHORT).show();

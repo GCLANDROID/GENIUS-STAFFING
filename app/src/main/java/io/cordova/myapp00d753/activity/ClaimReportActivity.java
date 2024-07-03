@@ -67,8 +67,8 @@ public class ClaimReportActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_claim_report);
         initialize();
-
-        JSONObject obj = new JSONObject();
+        //TODO: new api
+        /*JSONObject obj = new JSONObject();
         try {
             obj.put("AEMEmployeeID", pref.getEmpId());
             obj.put("Year", year);
@@ -77,9 +77,9 @@ public class ClaimReportActivity extends AppCompatActivity {
             getItemList(obj);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
 
-        //getItemList();
+        getItemList();
         //GET_REIMBURSEMENT_CLAIM
         onClick();
 
