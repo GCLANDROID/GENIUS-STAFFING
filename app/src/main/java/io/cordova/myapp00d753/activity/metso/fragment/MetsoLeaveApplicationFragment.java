@@ -101,7 +101,7 @@ import io.cordova.myapp00d753.utility.TimeDateString;
  * A simple {@link Fragment} subclass.
  */
 public class MetsoLeaveApplicationFragment extends Fragment {
-
+    private static final String TAG = "Metso_Leave_Application";
 
     View v;
     RecyclerView rvItem;
@@ -203,7 +203,16 @@ public class MetsoLeaveApplicationFragment extends Fragment {
         llApproved = (LinearLayout) v.findViewById(R.id.llApproved);
         llRequested = (LinearLayout) v.findViewById(R.id.llRequested);
         pref = new Pref(getContext());
-        getApproverOrNot();
+        //getApproverOrNot();
+        JSONObject obj=new JSONObject();
+        try {
+            obj.put("CompanyID", pref.getEmpClintId());
+            obj.put("EmployeeID",pref.getEmpId());
+            obj.put("SecurityCode",pref.getSecurityCode());
+            getApproverOrNot(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         tvEmpName = (TextView) v.findViewById(R.id.tvEmpName);
 
         tvApproverName = (TextView) v.findViewById(R.id.tvApproverName);
@@ -280,7 +289,18 @@ public class MetsoLeaveApplicationFragment extends Fragment {
                     String[] sep = lId.split("_");
                     typeId = sep[0];
                     category = sep[1];
-                    getLeaveMode();
+                    //getLeaveMode();
+
+                    JSONObject obj=new JSONObject();
+                    try {
+                        obj.put("CompanyID", pref.getEmpClintId());
+                        obj.put("EmployeeID",applicantId);
+                        obj.put("LeaveTypeID",typeId);
+                        obj.put("SecurityCode",pref.getSecurityCode());
+                        getLeaveMode(obj);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
@@ -350,7 +370,23 @@ public class MetsoLeaveApplicationFragment extends Fragment {
             public void onClick(View v) {
                 if (dayBreakupListDetails != null) {
                     if (!tvEndDate.getText().toString().equals("")) {
-                        preView();
+                        JSONObject obj=new JSONObject();
+                        try {
+                            obj.put("CompanyID",pref.getEmpClintId());
+                            obj.put("EmployeeID",applicantId);
+                            obj.put("StartDate",startDate);
+                            obj.put("EndDate",endDate);
+                            obj.put("LeaveTypeID",typeId);
+                            obj.put("LeaveMode",leaveModeId);
+                            obj.put("StrAvailableBalance",typeAvailable);
+                            obj.put("StrDayBreakUp",dayBreakUpDetails);
+                            obj.put("IsAttachment",attachmentFlag);
+                            obj.put("SecurityCode",pref.getSecurityCode());
+                            preView(obj);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        //preView();
                     }else {
                         Toast.makeText(getContext(),"End date not selected",Toast.LENGTH_LONG).show();
                     }
@@ -374,6 +410,62 @@ public class MetsoLeaveApplicationFragment extends Fragment {
     private void setAdapter() {
         LeaveBalanceDetailsAdapter lAdaapter = new LeaveBalanceDetailsAdapter(itemList, getContext());
         rvItem.setAdapter(lAdaapter);
+    }
+
+    private void getLeaveAllDetails(JSONObject jsonObject) {
+        Log.e(TAG, "getLeaveAllDetails: INPUT: "+jsonObject);
+        llLoader.setVisibility(View.VISIBLE);
+        llRejected.setEnabled(false);
+        llPending.setEnabled(false);
+        llApproved.setEnabled(false);
+        llRequested.setEnabled(false);
+        AndroidNetworking.post(AppData.GET_LEAVE_APPLICATION_DETAILS)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "LEAVE_ALL_DETAILS: "+response.toString(4));
+                            leaveTypeList.add("Please select");
+                            mLeaveTypeList.add(new SpinnerModel("0", "0"));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject requestObject = jsonArray.optJSONObject(i);
+                                    String Request = requestObject.optString("Request");
+                                    tvRequested.setText(Request);
+                                    String Approve = requestObject.optString("Approve");
+                                    String Reject = requestObject.optString("Reject");
+                                    String Pending = requestObject.optString("Pending");
+                                    tvApporved.setText(Approve);
+                                    tvRejected.setText(Reject);
+                                    tvPending.setText(Pending);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "LEAVE_ALL_DETAILS_error: "+anError.getErrorBody());
+                        llLoader.setVisibility(View.GONE);
+                        llRejected.setEnabled(false);
+                        llPending.setEnabled(false);
+                        llApproved.setEnabled(false);
+                        llRequested.setEnabled(false);
+                    }
+                });
     }
 
 
@@ -544,8 +636,72 @@ public class MetsoLeaveApplicationFragment extends Fragment {
                 10000000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+    }
 
+    private void getApproverOrNot(JSONObject jsonObject) {
+        final ProgressDialog pd = new ProgressDialog(getContext());
+        pd.setMessage("Loading...");
+        pd.setCancelable(true);
+        pd.show();
+        AndroidNetworking.post(AppData.GET_LEAVE_APPLICATION_APPROVER)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            pd.dismiss();
+                            mApplicantList.clear();
+                            applicantList.clear();
+                            applicantList.add("Please select");
+                            mApplicantList.add(new SpinnerModel("0", "0"));
+                            Log.e(TAG, "LEAVE_APPLICATION_APPROVER: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                showApproverDialog();
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    final String Name = obj.optString("Name");
+                                    String ApplicantID = obj.optString("ApplicantID");
+                                    applicantList.add(Name);
+                                    SpinnerModel spModel = new SpinnerModel(Name, ApplicantID);
+                                    mApplicantList.add(spModel);
+                                }
+                                ((LeaveApplicationActivity) getContext()).approverVisibility();
+                            } else {
+                                applicantId = pref.getEmpId();
+                                //getLeaveAllDetails();
+                                JSONObject obj=new JSONObject();
+                                try {
+                                    obj.put("CompanyID", pref.getEmpClintId());
+                                    obj.put("EmployeeID",pref.getEmpId());
+                                    obj.put("ApproverID",pref.getEmpId());
+                                    obj.put("SecurityCode",pref.getSecurityCode());
+                                    getLeaveAllDetails(obj);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                ((LeaveApplicationActivity) getContext()).approverHidden();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
+                    @Override
+                    public void onError(ANError anError) {
+                        llLoader.setVisibility(View.GONE);
+                        Log.e(TAG, "LEAVE_APPLICATION_APPROVER_error: "+anError.getErrorBody());
+                    }
+                });
     }
 
     private void getApproverOrNot() {
@@ -588,8 +744,6 @@ public class MetsoLeaveApplicationFragment extends Fragment {
                                     applicantList.add(Name);
                                     SpinnerModel spModel = new SpinnerModel(Name, ApplicantID);
                                     mApplicantList.add(spModel);
-
-
                                 }
 
                                 ((LeaveApplicationActivity) getContext()).approverVisibility();
@@ -628,10 +782,61 @@ public class MetsoLeaveApplicationFragment extends Fragment {
 
     }
 
+    private void getLeaveMode(JSONObject jsonObject) {
+        Log.e(TAG, "getLeaveMode: INPUT: "+jsonObject);
+        final ProgressDialog pd = new ProgressDialog(getContext());
+        pd.setMessage("Loading...");
+        pd.setCancelable(true);
+        pd.show();
+        AndroidNetworking.post(AppData.GET_LEAVE_MODE)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            pd.dismiss();
+                            Log.e(TAG, "GET_LEAVE_MODE: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    final String VALUE = obj.optString("VALUE");
+                                    String ID = obj.optString("ID");
+
+                                    SpinnerModel spModel = new SpinnerModel(VALUE, ID);
+                                    mLeaveMode.add(spModel);
+                                    leaveMode.add(VALUE);
+                                }
+
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                        (getContext(), android.R.layout.simple_spinner_item,
+                                                leaveMode); //selected item will look like a spinner set from XML
+                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                spLeaveMode.setAdapter(spinnerArrayAdapter);
+                            }
+                        } catch (JSONException e) {
+                           e.printStackTrace();
+                            Toast.makeText(getActivity(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        llLoader.setVisibility(View.GONE);
+                        Log.e(TAG, "GET_LEAVE_MODE_error: "+anError.getErrorBody());
+                    }
+                });
+    }
 
     private void getLeaveMode() {
-
-
         //names.clear();
 //        llLoader.setVisibility(View.VISIBLE);
 
@@ -712,8 +917,6 @@ public class MetsoLeaveApplicationFragment extends Fragment {
                 10000000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-
     }
 
 
@@ -778,13 +981,23 @@ public class MetsoLeaveApplicationFragment extends Fragment {
                             e.printStackTrace();
                         }
                         if (striDate.getTime() > strDate.getTime() ||striDate.getTime() == strDate.getTime()) {
-                            validationChecking();
+                            //validationChecking();
+                            JSONObject obj=new JSONObject();
+                            try {
+                                obj.put("CompanyID", pref.getEmpClintId());
+                                obj.put("EmployeeID",applicantId);
+                                obj.put("StartDate",startDate);
+                                obj.put("EndDate",endDate);
+                                obj.put("LeaveTypeID",typeId);
+                                obj.put("LeaveMode",leaveModeId);
+                                obj.put("SecurityCode",pref.getSecurityCode());
+                                validationChecking(obj);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }else {
                             showErrorDialog("End date should not before than Start date");
                         }
-
-
-
                     }
                 }, mYear, mMonth, mDay);
         datePickerDialog.getDatePicker();
@@ -814,8 +1027,6 @@ public class MetsoLeaveApplicationFragment extends Fragment {
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.CENTER);
         al1.show();
-
-
     }
 
 
@@ -851,11 +1062,11 @@ public class MetsoLeaveApplicationFragment extends Fragment {
         });
         Button btnSubmit = (Button) dialogView.findViewById(R.id.btnSubmit);
 
-            btnSubmit.setText("Submit");
+        btnSubmit.setText("Submit");
 
         Button btnSelf = (Button) dialogView.findViewById(R.id.btnSelf);
 
-            btnSelf.setText("Self");
+        btnSelf.setText("Self");
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -864,7 +1075,17 @@ public class MetsoLeaveApplicationFragment extends Fragment {
 
                     applicantId = appid;
                     alert1.dismiss();
-                    getLeaveAllDetails();
+                    //getLeaveAllDetails();
+                    JSONObject obj = new JSONObject();
+                    try {
+                        obj.put("CompanyID", pref.getEmpClintId());
+                        obj.put("EmployeeID", pref.getEmpId());
+                        obj.put("ApproverID", pref.getEmpId());
+                        obj.put("SecurityCode", pref.getSecurityCode());
+                        getLeaveAllDetails(obj);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     tvEmpName.setText("Leave application of " + applicantName);
 
 
@@ -878,7 +1099,17 @@ public class MetsoLeaveApplicationFragment extends Fragment {
             public void onClick(View view) {
                 applicantId = pref.getEmpId();
                 alert1.dismiss();
-                getLeaveAllDetails();
+                //getLeaveAllDetails();
+                JSONObject obj = new JSONObject();
+                try {
+                    obj.put("CompanyID", pref.getEmpClintId());
+                    obj.put("EmployeeID", pref.getEmpId());
+                    obj.put("ApproverID", pref.getEmpId());
+                    obj.put("SecurityCode", pref.getSecurityCode());
+                    getLeaveAllDetails(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 tvEmpName.setText("Leave application of " + pref.getEmpName());
 
             }
@@ -890,6 +1121,56 @@ public class MetsoLeaveApplicationFragment extends Fragment {
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.TOP);
         alert1.show();
+    }
+
+    private void validationChecking(JSONObject jsonObject) {
+        Log.e(TAG, "validationChecking: INPUT: "+jsonObject);
+        final ProgressDialog pd = new ProgressDialog(getContext());
+        pd.setMessage("Loading...");
+        pd.setCancelable(true);
+        pd.show();
+        AndroidNetworking.post(AppData.CHECK_LEAVE_START_DATE_STATUS)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "VALIDATION_CHECKING: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                tvEndDate.setText(TimeDateString.changeDateStringToIndianDateFormatAndMonthInSpellingSortFrom(endDate));
+                                if (leaveModeId.equals("0") || leaveModeId.equals("2")) {
+                                    dayBreakupListDetails.clear();
+                                    showDailyBrkUpDialog();
+                                } else if (leaveModeId.equals("1")){
+
+                                } else {
+                                    // showCompOffDialog();
+                                }
+                            } else {
+                                endDate = "";
+                                tvEndDate.setText("");
+                                showErrorDialog(Response_Message);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "VALIDATION_CHECKING_error: "+anError.getErrorBody());
+                        pd.dismiss();
+                    }
+                });
     }
 
     private void validationChecking() {
@@ -966,7 +1247,22 @@ public class MetsoLeaveApplicationFragment extends Fragment {
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvBrkupItem.setLayoutManager(layoutManager);
-        getDayBreakUp();
+        //getDayBreakUp();
+
+        JSONObject obj=new JSONObject();
+        try {
+            obj.put("CompanyID", pref.getEmpClintId());
+            obj.put("EmployeeID",applicantId);
+            obj.put("StartDate",startDate);
+            obj.put("EndDate",endDate);
+            obj.put("LeaveTypeID",typeId);
+            obj.put("SecurityCode",pref.getSecurityCode());
+            getDayBreakUp(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
         Button btnSubmit = (Button) dialogView.findViewById(R.id.btnSubmit);
         btnSubmit.setText("Submit");
 
@@ -994,15 +1290,12 @@ public class MetsoLeaveApplicationFragment extends Fragment {
             }
         });
 
-
         alert2 = dialogBuilder.create();
         alert2.setCancelable(false);
         Window window = alert2.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.TOP);
         alert2.show();
-
-
     }
 
 
@@ -1103,7 +1396,61 @@ public class MetsoLeaveApplicationFragment extends Fragment {
         window.setGravity(Gravity.CENTER);
         alert4.show();
 
+    }
 
+    private void getDayBreakUp(JSONObject jsonObject) {
+        Log.e(TAG, "getDayBreakUp: "+jsonObject);
+        final ProgressDialog pd = new ProgressDialog(getContext());
+        pd.setMessage("Loading...");
+        pd.setCancelable(true);
+        pd.show();
+        AndroidNetworking.post(AppData.GET_DAY_DETAILS)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "GET_DAY_DETAILS: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String BreakDate = obj.optString("BreakDate");
+                                    String DateName = obj.optString("DateName");
+                                    String DayAccess = obj.optString("DayAccess");
+                                    String DayAccessDesc = obj.optString("DayAccessDesc");
+                                    if (DayAccess.equals("-1")) {
+                                        dayBreakupListDetails.add(BreakDate + "_" + "0" + "_" + "0");
+                                    } else {
+
+                                    }
+
+                                    DayBreakUpModel spModel = new DayBreakUpModel(BreakDate, DateName, DayAccess, DayAccessDesc);
+                                    dayBreakupList.add(spModel);
+                                }
+                                dayAdapter = new MetsoDayBreakUpAdapter(dayBreakupList, MetsoLeaveApplicationFragment.this, getContext());
+                                rvBrkupItem.setAdapter(dayAdapter);
+                            } else {}
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        llLoader.setVisibility(View.GONE);
+                        Log.e(TAG, "GET_DAY_DETAILS_error: "+anError.getErrorBody());
+                    }
+                });
     }
 
     private void getDayBreakUp() {
@@ -1150,8 +1497,6 @@ public class MetsoLeaveApplicationFragment extends Fragment {
 
                                     DayBreakUpModel spModel = new DayBreakUpModel(BreakDate, DateName, DayAccess, DayAccessDesc);
                                     dayBreakupList.add(spModel);
-
-
                                 }
 
                                 dayAdapter = new MetsoDayBreakUpAdapter(dayBreakupList, MetsoLeaveApplicationFragment.this, getContext());
@@ -1218,9 +1563,51 @@ public class MetsoLeaveApplicationFragment extends Fragment {
         dayAdapter.notifyDataSetChanged();
     }
 
+    private void preView(JSONObject jsonObject) {
+        Log.e(TAG, "preView: INPUT: "+jsonObject);
+        final ProgressDialog pd = new ProgressDialog(getContext());
+        pd.setMessage("Loading...");
+        pd.setCancelable(true);
+        pd.show();
+        AndroidNetworking.post(AppData.CHECK_LEAVE_VIEW_SUMMARY)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "PRE_VIEW_RESPONSE: "+response.toString(4));
+                            pd.dismiss();
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                if (leaveModeId.equals("1")) {
+                                    dayBreakUpDetails = Response_Data;
+                                } else {
 
+                                }
+                                showPreviewDialog();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
+                    @Override
+                    public void onError(ANError anError) {
+                        llLoader.setVisibility(View.GONE);
+                        Log.e(TAG, "CHECK_LEAVE_VIEW_SUMMARY_error: "+anError.getErrorBody());
+                    }
+                });
+    }
 
+    
     private void preView() {
         final ProgressDialog pd = new ProgressDialog(getContext());
         pd.setMessage("Loading...");
@@ -1390,7 +1777,24 @@ public class MetsoLeaveApplicationFragment extends Fragment {
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvPreviewItem.setLayoutManager(layoutManager);
-        getPreviewItem();
+        //getPreviewItem();
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("CompanyID", pref.getEmpClintId());
+            obj.put("EmployeeID", applicantId);
+            obj.put("StartDate", startDate);
+            obj.put("EndDate", endDate);
+            obj.put("StrDayBreakUp", dayBreakUpDetails);
+            obj.put("LeaveType", leaveType);
+            obj.put("Reason", etReason.getText().toString().replaceAll("\\s+", "%20"));
+            obj.put("IsAttachment", attachmentFlag);
+            obj.put("SecurityCode", pref.getSecurityCode());
+            getPreviewItem(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         TextView tvReason = (TextView) dialogView.findViewById(R.id.tvReason);
         TextView tvValue = (TextView) dialogView.findViewById(R.id.tvValue);
         TextView tvEndDate = (TextView) dialogView.findViewById(R.id.tvEndDate);
@@ -1404,6 +1808,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
                 leaveSave();
             }
         });
+
         Button btnDiscard = (Button) dialogView.findViewById(R.id.btnDiscard);
         btnDiscard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1426,6 +1831,60 @@ public class MetsoLeaveApplicationFragment extends Fragment {
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.TOP);
         alert3.show();
+    }
+
+    private void getPreviewItem(JSONObject jsonObject) {
+        final ProgressDialog pd = new ProgressDialog(getContext());
+        pd.setMessage("Loading...");
+        pd.setCancelable(true);
+        pd.show();
+        AndroidNetworking.post(AppData.LEAVE_BIND_VIEW_SUMMARY)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "BIND_VIEW_SUMMARY: "+response.toString(4));
+                            pd.dismiss();
+                            previewItem.clear();
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String LeaveType = obj.optString("LeaveType");
+                                    String StartDate = obj.optString("StartDate");
+                                    String EndDate = obj.optString("EndDate");
+                                    LeaveValue = obj.optString("LeaveValue");
+                                    String Reason = obj.optString("Reason");
+
+                                    PrevieModel spModel = new PrevieModel(LeaveType, StartDate, EndDate, LeaveValue, Reason);
+                                    previewItem.add(spModel);
+                                }
+                                PreviewAdapter preAdapter = new PreviewAdapter(previewItem, getContext());
+                                rvPreviewItem.setAdapter(preAdapter);
+                            } else {
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        pd.dismiss();
+                        Log.e(TAG, "BIND_VIEW_SUMMARY_error: "+anError.getErrorBody());
+                    }
+                });
     }
 
     private void getPreviewItem() {
@@ -1544,7 +2003,63 @@ public class MetsoLeaveApplicationFragment extends Fragment {
         pd.show();
         //String reason = etReason.getText().toString().trim();
 
-        AndroidNetworking.upload(AppData.url + "Leave/LeaveAdd_metso")
+        AndroidNetworking.upload(AppData.ADD_LEAVE_METSO)
+                .addMultipartParameter("CompanyID", pref.getEmpClintId())
+                .addMultipartParameter("EmployeeId", applicantId)
+                .addMultipartParameter("StartDate", startDate)
+                .addMultipartParameter("EndDate", endDate)
+                .addMultipartParameter("LeaveTypeID", typeId)
+                .addMultipartParameter("LeaveMode", leaveModeId)
+                .addMultipartParameter("AppliedLeave", LeaveValue)
+                .addMultipartParameter("Reasons", etReason.getText().toString().trim())
+                .addMultipartParameter("LeaveCategory", category)
+                .addMultipartParameter("StrDayBreakUp", dayBreakUpDetails)
+                .addMultipartParameter("StrCompOff",compOffDetails)
+                .addMultipartParameter("StrFile", stringFile)
+                .addMultipartParameter("createdby", pref.getEmpId())
+                .addMultipartParameter("Approval", String.valueOf(approverID))
+                .addMultipartParameter("SecurityCode", pref.getSecurityCode())
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                        pd.show();
+
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "LEAVE_ADD_METSO: "+response.toString(4) );
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                successAlert();
+                            } else {
+                                Toast.makeText(getActivity(), Response_Message, Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        Log.e(TAG, "LEAVE_ADD_METSO_error: "+error.getErrorBody());
+                        pg.dismiss();
+                        Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        /*AndroidNetworking.upload(AppData.url + "Leave/LeaveAdd_metso")
                 .addMultipartParameter("CompanyID", pref.getEmpClintId())
                 .addMultipartParameter("EmployeeId", applicantId)
                 .addMultipartParameter("StartDate", startDate)
@@ -1595,7 +2110,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
                         pg.dismiss();
                         Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
                     }
-                });
+                });*/
     }
 
 

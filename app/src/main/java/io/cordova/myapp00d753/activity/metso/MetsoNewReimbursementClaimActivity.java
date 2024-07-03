@@ -218,9 +218,9 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_metso_new_reimbursement_claim);
         initialize();
-        //setHideItem();
+        setHideItem();
 
-        JSONObject obj1=new JSONObject();
+        /*JSONObject obj1=new JSONObject();
         try {
             obj1.put("ddltype", "16");
             obj1.put("id1",pref.getEmpConId());
@@ -230,7 +230,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
             setHideItem(obj1);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
         onClick();
     }
 
@@ -656,20 +656,25 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                                         if (etDescription.getText().toString().length() > 0) {
                                             if (etAmount.getText().toString().length() > 0) {
                                                 if (flag == 1) {
-                                                    //postoneimage();
-                                                    postOneImage();
+                                                    postoneimage();
+                                                    //TODO: new api
+                                                    //postOneImage();
                                                 } else if (flag == 2) {
-                                                    //posttwoimage();
-                                                    postTwoImage();
+                                                    posttwoimage();
+                                                    //TODO: new api
+                                                    //postTwoImage();
                                                 } else if (flag == 3) {
-                                                    //postthreeimage();
-                                                    postThreeImage();
+                                                    postthreeimage();
+                                                    //TODO: new api
+                                                    //postThreeImage();
                                                 } else if (flag == 4) {
-                                                    //postfourimage();
-                                                    postFourImage();
+                                                    postfourimage();
+                                                    //TODO: new api
+                                                    //postFourImage();
                                                 } else if (flag == 5) {
-                                                    //postfiveimage();
-                                                    postFiveImage();
+                                                    postfiveimage();
+                                                    //TODO: new api
+                                                    //postFiveImage();
                                                 }
                                             } else {
                                                 Toast.makeText(getApplicationContext(), "Please enter Claim Amount", Toast.LENGTH_LONG).show();

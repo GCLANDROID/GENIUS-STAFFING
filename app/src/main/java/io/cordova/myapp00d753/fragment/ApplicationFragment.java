@@ -364,7 +364,23 @@ public class ApplicationFragment extends Fragment {
             public void onClick(View v) {
                 if (dayBreakupListDetails != null) {
                     if (!tvEndDate.getText().toString().equals("")) {
-                        preView();
+                        JSONObject obj=new JSONObject();
+                        try {
+                            obj.put("CompanyID",pref.getEmpClintId());
+                            obj.put("EmployeeID",applicantId);
+                            obj.put("StartDate",startDate);
+                            obj.put("EndDate",endDate);
+                            obj.put("LeaveTypeID",typeId);
+                            obj.put("LeaveMode",leaveModeId);
+                            obj.put("StrAvailableBalance",typeAvailable);
+                            obj.put("StrDayBreakUp",dayBreakUpDetails);
+                            obj.put("IsAttachment",attachmentFlag);
+                            obj.put("SecurityCode",pref.getSecurityCode());
+                            preView(obj);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        //preView();
                     }else {
                         Toast.makeText(getContext(),"End date not selected",Toast.LENGTH_LONG).show();
                     }
@@ -959,7 +975,7 @@ public class ApplicationFragment extends Fragment {
                             e.printStackTrace();
                         }
                         if (striDate.getTime() > strDate.getTime() ||striDate.getTime() == strDate.getTime()) {
-                            validationChecking();
+                            //validationChecking();
                             JSONObject obj=new JSONObject();
                             try {
                                 obj.put("CompanyID", pref.getEmpClintId());
@@ -1510,7 +1526,48 @@ public class ApplicationFragment extends Fragment {
     }
 
 
+    private void preView(JSONObject jsonObject) {
+        final ProgressDialog pd = new ProgressDialog(getContext());
+        pd.setMessage("Loading...");
+        pd.setCancelable(true);
+        pd.show();
+        AndroidNetworking.post(AppData.CHECK_LEAVE_VIEW_SUMMARY)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "CHECK_LEAVE_VIEW_SUMMARY: "+response.toString(4));
+                            pd.dismiss();
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                if (leaveModeId.equals("1")) {
+                                    dayBreakUpDetails = Response_Data;
+                                } else {
 
+                                }
+                                showPreviewDialog();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        llLoader.setVisibility(View.GONE);
+                        Log.e(TAG, "CHECK_LEAVE_VIEW_SUMMARY: "+anError.getErrorBody());
+                    }
+                });
+    }
 
     private void preView() {
         final ProgressDialog pd = new ProgressDialog(getContext());

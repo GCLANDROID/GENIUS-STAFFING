@@ -79,7 +79,8 @@ public class SalaryActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_salary);
         initialize();
         if (connectionCheck.isNetworkAvailable()) {
-            JSONObject obj=new JSONObject();
+            //TODO: new api
+           /* JSONObject obj=new JSONObject();
             try {
                 obj.put("AEMConsultantID", "0");
                 obj.put("AEMClientID",JSONObject.NULL);
@@ -93,8 +94,9 @@ public class SalaryActivity extends AppCompatActivity  {
                 getSalaryList(obj);
             } catch (JSONException e) {
                 e.printStackTrace();
-            }
-            //getSalaryList();
+            }*/
+
+            getSalaryList();
         }else {
 
         }
@@ -127,8 +129,9 @@ public class SalaryActivity extends AppCompatActivity  {
         imgAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //getSalaryList();
-                JSONObject obj=new JSONObject();
+                getSalaryList();
+                //TODO: new api
+                /*JSONObject obj=new JSONObject();
                 try {
                     obj.put("AEMConsultantID", "0");
                     obj.put("AEMClientID",JSONObject.NULL);
@@ -142,13 +145,12 @@ public class SalaryActivity extends AppCompatActivity  {
                     getSalaryList(obj);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
+                }*/
             }
         });
         imgSearch=(ImageView)findViewById(R.id.imgSearch);
         tvToolBar=(TextView) findViewById(R.id.tvToolBar);
         tvToolBar.setText("Monthly Salary - \n"+year);
-
     }
 
     private void getSalaryList(JSONObject jsonObject) {
@@ -228,7 +230,6 @@ public class SalaryActivity extends AppCompatActivity  {
                     @Override
                     public void onResponse(String response) {
                         Log.d("responseLogin", response);
-
 
                         try {
                             JSONObject job1 = new JSONObject(response);
@@ -370,8 +371,9 @@ public class SalaryActivity extends AppCompatActivity  {
                 Log.d("yrtrr", year);
                 tvYear.setText(year);
                 salaryList.clear();
-                //getSalaryList();
-                JSONObject obj=new JSONObject();
+                getSalaryList();
+                //TODO: new api
+               /* JSONObject obj=new JSONObject();
                 try {
                     obj.put("AEMConsultantID", "0");
                     obj.put("AEMClientID",JSONObject.NULL);
@@ -385,7 +387,7 @@ public class SalaryActivity extends AppCompatActivity  {
                     getSalaryList(obj);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
+                }*/
                 alertDialog.dismiss();
             }
         });
@@ -397,9 +399,9 @@ public class SalaryActivity extends AppCompatActivity  {
                 alertDialog.dismiss();
                 tvYear.setText(year);
                 salaryList.clear();
-                //getSalaryList();
-
-                JSONObject obj=new JSONObject();
+                getSalaryList();
+                //TODO: new api
+               /* JSONObject obj=new JSONObject();
                 try {
                     obj.put("AEMConsultantID", "0");
                     obj.put("AEMClientID",JSONObject.NULL);
@@ -413,7 +415,7 @@ public class SalaryActivity extends AppCompatActivity  {
                     getSalaryList(obj);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
+                }*/
                 alertDialog.dismiss();
                 Log.d("ttt", year);
             }
@@ -426,8 +428,9 @@ public class SalaryActivity extends AppCompatActivity  {
                 alertDialog.dismiss();
                 tvYear.setText(year);
                 salaryList.clear();
-                //getSalaryList();
-                JSONObject obj=new JSONObject();
+                getSalaryList();
+                //TODO: new api
+                /*JSONObject obj=new JSONObject();
                 try {
                     obj.put("AEMConsultantID", "0");
                     obj.put("AEMClientID",JSONObject.NULL);
@@ -441,7 +444,7 @@ public class SalaryActivity extends AppCompatActivity  {
                     getSalaryList(obj);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
+                }*/
                 alertDialog.dismiss();
                 Log.d("ttt", year);
             }

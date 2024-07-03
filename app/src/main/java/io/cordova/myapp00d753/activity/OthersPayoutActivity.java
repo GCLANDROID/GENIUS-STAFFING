@@ -126,18 +126,17 @@ public class OthersPayoutActivity extends AppCompatActivity {
         btnView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //getOthersPayoutItem();
-
-                JSONObject obj=new JSONObject();
+                getOthersPayoutItem();
+                //TODO: new api
+                /*JSONObject obj=new JSONObject();
                 try {
                     obj.put("AEMEmployeeID", pref.getEmpId());
                     obj.put("FinancialYear", finYear);
                     obj.put("SecurityCode",pref.getSecurityCode());
                     getOthersPayoutItem(obj);
-                    //"gcl_EmployeeOtherDisbursedPayout?AEMEmployeeID="+pref.getEmpId()+"&FinancialYear="+finYear+"&SecurityCode="+pref.getSecurityCode();
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
+                }*/
             }
         });
     }

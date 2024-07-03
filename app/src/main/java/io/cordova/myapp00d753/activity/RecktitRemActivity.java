@@ -149,7 +149,7 @@ public class RecktitRemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recktit_rem);
         initialize();
-        //setLocationItem();
+        setLocationItem();
         JSONObject obj = new JSONObject();
         try {
             obj.put("ddltype", "505");

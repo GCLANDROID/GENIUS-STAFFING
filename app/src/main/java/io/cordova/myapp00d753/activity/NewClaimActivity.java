@@ -159,8 +159,8 @@ public class NewClaimActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_claim);
         initialize();
 
-
-        JSONObject obj1=new JSONObject();
+        //TODO: new api
+        /*JSONObject obj1=new JSONObject();
         try {
             obj1.put("ddltype", "16");
             obj1.put("id1",pref.getEmpConId());
@@ -170,7 +170,7 @@ public class NewClaimActivity extends AppCompatActivity {
             setHideItem(obj1);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
         setHideItem();
         onClick();
     }
@@ -489,20 +489,25 @@ public class NewClaimActivity extends AppCompatActivity {
                         if (etDescription.getText().toString().length() > 0) {
                             if (etAmount.getText().toString().length() > 0) {
                                 if (flag == 1) {
-                                    //postoneimage();
-                                    postOneImage();
+                                    postoneimage();
+                                    //TODO: new api
+                                    //postOneImage();
                                 } else if (flag == 2) {
-                                    //posttwoimage();
-                                    postTwoImage();
+                                    posttwoimage();
+                                    //TODO: new api
+                                    //postTwoImage();
                                 } else if (flag == 3) {
-                                    //postthreeimage();
-                                    postThreeImage();
+                                    postthreeimage();
+                                    //TODO: new api
+                                    //postThreeImage();
                                 } else if (flag == 4) {
-                                    //postfourimage();
-                                    postFourImage();
+                                    postfourimage();
+                                    //TODO: new api
+                                    //postFourImage();
                                 } else if (flag == 5) {
-                                    //postfiveimage();
-                                    postFiveImage();
+                                    postfiveimage();
+                                    //TODO: new api
+                                    //postFiveImage();
                                 }
                             } else {
                                 Toast.makeText(getApplicationContext(), "Please enter Claim Amount", Toast.LENGTH_LONG).show();
@@ -863,8 +868,8 @@ public class NewClaimActivity extends AppCompatActivity {
                                     String value = obj.optString("value");
                                     Log.d("comvalue", value);
                                 }
-                                setComponenetItem();
 
+                                setComponenetItem();
                             } else {
                                     hideAlert();
 
@@ -1932,7 +1937,7 @@ public class NewClaimActivity extends AppCompatActivity {
         //getting name for the pdf
 
         //getting the actual path of the pdf
-
+        //TODO: new api
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
                 .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
                 .addMultipartParameter("AEMComponentID", comeid)
@@ -2076,7 +2081,7 @@ public class NewClaimActivity extends AppCompatActivity {
         //getting the actual path of the pdf
 
         //.addHeaders("Authorization", "Bearer "+pref.getAccessToken())
-
+        //TODO: new api
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
                 .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
                 .addMultipartParameter("AEMComponentID", comeid)
@@ -2113,6 +2118,7 @@ public class NewClaimActivity extends AppCompatActivity {
                             String Response_Message = job1.optString("Response_Message");
                             if (Response_Code.equals("101")) {
                                 String Response_Data = job1.optString("Response_Data");
+                                //TODO: new api
                                 postOneImage();
                             }
                         } catch (JSONException e) {
@@ -2198,7 +2204,7 @@ public class NewClaimActivity extends AppCompatActivity {
         //getting name for the pdf
 
         //getting the actual path of the pdf
-
+        //TODO: new api
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
                 .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
                 .addMultipartParameter("AEMComponentID", comeid)
@@ -2234,6 +2240,7 @@ public class NewClaimActivity extends AppCompatActivity {
                             if (Response_Code.equals("101")) {
                                 String Response_Data = job1.optString("Response_Data");
                                 //JSONArray jsonArray = new JSONArray(Response_Data);
+                                //TODO: api new
                                 postOneImage();
                             } else {
                                 Toast.makeText(getApplicationContext(), Response_Message, Toast.LENGTH_LONG).show();
@@ -2407,11 +2414,13 @@ public class NewClaimActivity extends AppCompatActivity {
         } else if (pdfflag==1 && galleryflagone.equals("1")&& galleryflagtwo.equals("1")) {
             uploadMultipartwithTwofile();
         } else if (galleryflagone.equals("1")) {
-            //postoneimage();
-            postOneImage();
+            postoneimage();
+            //TODO: new api
+            //postOneImage();
         } else if (galleryflagtwo.equals("1")) {
-            //posttwoimage();
-            postTwoImage();
+            posttwoimage();
+            //TODO: new api
+            //postTwoImage();
         } else {
             Toast.makeText(NewClaimActivity.this,"Please Attach Your Reimbursement File",Toast.LENGTH_LONG).show();
         }
