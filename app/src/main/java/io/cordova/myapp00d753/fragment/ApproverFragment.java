@@ -154,7 +154,7 @@ public class ApproverFragment extends Fragment {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getContext(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -302,7 +302,7 @@ public class ApproverFragment extends Fragment {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getContext(), "something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -393,7 +393,7 @@ public class ApproverFragment extends Fragment {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getContext(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -486,7 +486,7 @@ public class ApproverFragment extends Fragment {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getActivity(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 

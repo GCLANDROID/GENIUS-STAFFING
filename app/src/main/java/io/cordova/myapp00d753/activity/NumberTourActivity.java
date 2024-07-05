@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,6 +20,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -35,6 +40,7 @@ import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
 
 public class NumberTourActivity extends AppCompatActivity {
+    private static final String TAG = "NumberTourActivity";
     RecyclerView rvItem;
     LinearLayout llLoader,llMain,llNodata;
     ArrayList<NumberTourModel>itemList=new ArrayList<>();
@@ -47,6 +53,19 @@ public class NumberTourActivity extends AppCompatActivity {
         setContentView(R.layout.activity_numer_tour);
         initView();
         getItem();
+        //TODO: new api
+       /* JSONObject obj=new JSONObject();
+        try {
+            obj.put("AEMEmployeeID" , pref.getEmpId() );
+            obj.put("Year","0");
+            obj.put("Month","0");
+            obj.put("SecurityCode" , pref.getSecurityCode());
+            obj.put("AttendanceDate","0");
+            obj.put("Operation","2"	);
+            getItem(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }*/
         onClick();
     }
     private void initView(){
@@ -77,6 +96,65 @@ public class NumberTourActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+   }
+
+   private void getItem(JSONObject jsonObject){
+       llLoader.setVisibility(View.VISIBLE);
+       llMain.setVisibility(View.GONE);
+       llNodata.setVisibility(View.GONE);
+       AndroidNetworking.post(AppData.GET_OFFLINE_DAILY_LOG_ACTIVITY)
+               .addJSONObjectBody(jsonObject)
+               .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+               .setTag("uploadTest")
+               .setPriority(Priority.HIGH)
+               .build()
+               .getAsJSONObject(new JSONObjectRequestListener() {
+                   @Override
+                   public void onResponse(JSONObject response) {
+                       try {
+                           Log.e(TAG, "GET_TOUR_LIST: "+response.toString(4));
+                           JSONObject job1 = response;
+                           String Response_Code = job1.optString("Response_Code");
+                           String Response_Message = job1.optString("Response_Message");
+                           if (Response_Code.equals("101")) {
+                               String Response_Data = job1.optString("Response_Data");
+                               JSONArray jsonArray = new JSONArray(Response_Data);
+                               for (int i = 0; i < jsonArray.length(); i++) {
+                                   JSONObject obj = jsonArray.getJSONObject(i);
+                                   String PunchIn = obj.optString("PunchIn");
+                                   String TotalActivity = obj.optString("TotalActivity");
+                                   String Min_LatitudeIN=obj.optString("Min_LatitudeIN");
+                                   String Min_LongitudeIN=obj.optString("Min_LongitudeIN");
+                                   String Max_LatitudeOUT=obj.optString("Max_LatitudeOUT");
+                                   String Max_LongitudeOUT=obj.optString("Max_LongitudeOUT");
+
+                                   NumberTourModel obj2 = new NumberTourModel(PunchIn,TotalActivity,Min_LatitudeIN,Min_LongitudeIN,Max_LatitudeOUT,Max_LongitudeOUT);
+                                   itemList.add(obj2);
+                               }
+                               setAdapter();
+                               llLoader.setVisibility(View.GONE);
+                               llMain.setVisibility(View.VISIBLE);
+                               llNodata.setVisibility(View.GONE);
+                           } else {
+                               llLoader.setVisibility(View.GONE);
+                               llMain.setVisibility(View.GONE);
+                               llNodata.setVisibility(View.VISIBLE);
+                           }
+                       } catch (JSONException e) {
+                           e.printStackTrace();
+                           Toast.makeText(NumberTourActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                       }
+                   }
+
+                   @Override
+                   public void onError(ANError anError) {
+                       Log.e(TAG, "GET_TOUR_LIST_error: "+anError.getErrorBody());
+                       llLoader.setVisibility(View.VISIBLE);
+                       llMain.setVisibility(View.GONE);
+                       llNodata.setVisibility(View.GONE);
+                   }
+               });
+
    }
 
     private void getItem(){
@@ -122,22 +200,15 @@ public class NumberTourActivity extends AppCompatActivity {
                                 llLoader.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
                                 llNodata.setVisibility(View.GONE);
-
                             } else {
-
                                 llLoader.setVisibility(View.GONE);
                                 llMain.setVisibility(View.GONE);
                                 llNodata.setVisibility(View.VISIBLE);
-
                             }
-
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                             // Toast.makeText(AttendanceReportActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
-
                         }
-
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -195,10 +266,4 @@ public class NumberTourActivity extends AppCompatActivity {
                 + " Meter   " + meterInDec);
         return Radius * c;
     }
-
-
-
-
-
-
 }

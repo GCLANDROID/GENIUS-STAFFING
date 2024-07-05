@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +21,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -36,6 +41,7 @@ import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
 
 public class TourViewReportActivity extends AppCompatActivity {
+    private static final String TAG = "TourViewReportActivity";
     RecyclerView rvItem;
     ArrayList<VisitingLocationModel> itemList=new ArrayList<>();
     LinearLayout llLoader,llMain,llNoData;
@@ -70,10 +76,83 @@ public class TourViewReportActivity extends AppCompatActivity {
         tvDate=(TextView)findViewById(R.id.tvDate);
         tvDate.setText(formattedDate);
         getItem(formattedDate);
+
+        //TODO: new api
+
+        /* JSONObject obj=new JSONObject();
+        try {
+            obj.put("AEMEmployeeID" , pref.getEmpId() );
+            obj.put("Year","0");
+            obj.put("Month","0");
+            obj.put("SecurityCode" , pref.getSecurityCode());
+            obj.put("AttendanceDate",formattedDate);
+            obj.put("Operation","1");
+            getItem(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }*/
         imgBack=(ImageView)findViewById(R.id.imgBack);
         imgHome=(ImageView)findViewById(R.id.imgHome);
         tvDistance=(TextView)findViewById(R.id.tvDistance);
 
+    }
+
+    private void getItem(JSONObject jsonObject){
+        llLoader.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.GONE);
+        llNoData.setVisibility(View.GONE);
+        AndroidNetworking.post(AppData.GET_OFFLINE_DAILY_LOG_ACTIVITY)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "OFFLINE_DAILY_LOG: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String PunchInTime = obj.optString("PunchInTime");
+                                    String AddressIN = obj.optString("AddressIN");
+                                    String LongitudeIN=obj.optString("LongitudeIN");
+                                    String LatitudeIN=obj.optString("LatitudeIN");
+                                    VisitingLocationModel obj2 = new VisitingLocationModel(AddressIN,PunchInTime,LatitudeIN,LongitudeIN);
+                                    itemList.add(obj2);
+                                }
+                                setAdapter();
+                                llLoader.setVisibility(View.GONE);
+                                llMain.setVisibility(View.VISIBLE);
+                                llNoData.setVisibility(View.GONE);
+                                double distance=distance();
+                                String sDisttance=String.format("%.3f", distance);
+                                tvDistance.setText("Total Distance:"+sDisttance+"KM");
+                            } else {
+                                llLoader.setVisibility(View.GONE);
+                                llMain.setVisibility(View.GONE);
+                                llNoData.setVisibility(View.VISIBLE);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(TourViewReportActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "OFFLINE_DAILY_LOG_error: "+anError.getErrorBody());
+                        llLoader.setVisibility(View.VISIBLE);
+                        llMain.setVisibility(View.GONE);
+                        llNoData.setVisibility(View.GONE);
+                    }
+                });
     }
 
     private void getItem(String date){
@@ -150,9 +229,7 @@ public class TourViewReportActivity extends AppCompatActivity {
                 // Toast.makeText(AttendanceReportActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
                 Log.e("ert", error.toString());
             }
-        }) {
-
-        };
+        }) {};
         RequestQueue requestQueue = Volley.newRequestQueue(TourViewReportActivity.this);
         requestQueue.add(stringRequest);
     }

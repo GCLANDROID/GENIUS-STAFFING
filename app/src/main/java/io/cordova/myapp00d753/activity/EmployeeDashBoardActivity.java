@@ -409,8 +409,6 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                 if (responseCode.equals("1")){
                                     shoeDialog(DocLink);
                                 }
-
-
                             }
 
 

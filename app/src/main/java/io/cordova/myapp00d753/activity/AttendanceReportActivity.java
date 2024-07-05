@@ -85,8 +85,42 @@ public class AttendanceReportActivity extends AppCompatActivity {
         onClick();
         if (connectionCheck.isNetworkAvailable()) {
             getAttendanceList();
-        }
-        else {
+
+            /*JSONObject obj=new JSONObject();
+            try {
+                obj.put();
+                obj.put();
+                obj.put();
+                obj.put();
+                obj.put();
+                obj.put();
+                obj.put();
+                obj.put();
+                obj.put();
+                obj.put();
+                obj.put();
+                obj.put();
+                obj.put();
+                getAttendanceList(obj);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }*/
+
+            /*"AEMConsultantID",pref.getEmpConId()
+            "AEMClientID",pref.getEmpClintId()
+            "AEMClientOfficeID",pref.getEmpClintOffId()
+            "AEMEmployeeID",pref.getEmpId()
+            "CurrentPage","0"
+            "AID","0"
+            "ApproverStatus","4"
+            "YearVal",year
+            "MonthName",month
+            "WorkingStatus","1"
+            "SecurityCode",pref.getSecurityCode()
+            "DbOperation","8"
+            "AttIds","null"
+            **/
+        } else {
             connectionCheck.getNetworkActiveAlert().show();
         }
     }
@@ -95,8 +129,7 @@ public class AttendanceReportActivity extends AppCompatActivity {
         pref=new Pref(AttendanceReportActivity.this);
         connectionCheck=new NetworkConnectionCheck(AttendanceReportActivity.this);
         rvAttendanceReport=(RecyclerView)findViewById(R.id.rvAttendanceReport);
-         layoutManager
-                = new LinearLayoutManager(AttendanceReportActivity.this, LinearLayoutManager.VERTICAL, false);
+        layoutManager = new LinearLayoutManager(AttendanceReportActivity.this, LinearLayoutManager.VERTICAL, false);
         rvAttendanceReport.setLayoutManager(layoutManager);
         imgBack=(ImageView)findViewById(R.id.imgBack);
         imgHome=(ImageView)findViewById(R.id.imgHome);
@@ -129,7 +162,7 @@ public class AttendanceReportActivity extends AppCompatActivity {
             }
         });*/
         setAdapter();
-         y= Calendar.getInstance().get(Calendar.YEAR);
+        y= Calendar.getInstance().get(Calendar.YEAR);
         year=String.valueOf(y);
         Log.d("year", year);
 

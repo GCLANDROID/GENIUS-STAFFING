@@ -29,11 +29,8 @@ public class RemDashBoardActivity extends AppCompatActivity {
         pref=new Pref(getApplicationContext());
         imgBack=(ImageView)findViewById(R.id.imgBack);
         imgHome=(ImageView)findViewById(R.id.imhHome);
-
         llManage=(LinearLayout)findViewById(R.id.llManage);
-
         llReport=(LinearLayout)findViewById(R.id.llReport);
-
     }
 
     private void onClick(){

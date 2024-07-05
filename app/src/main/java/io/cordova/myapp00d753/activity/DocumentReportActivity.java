@@ -248,8 +248,6 @@ public class DocumentReportActivity extends AppCompatActivity  {
                     @Override
                     public void onResponse(String response) {
                         Log.d("responseLogin", response);
-
-
                         try {
                             JSONObject job1 = new JSONObject(response);
                             Log.e("responsedocumentreport", "@@@@@@" + job1);
@@ -271,8 +269,6 @@ public class DocumentReportActivity extends AppCompatActivity  {
                                         DocumentManageModule dmodule = new DocumentManageModule(DocumentName, DocumentType, ApprovalRemarks, CreatedOn, AEMStatusName, DocLink);
                                         documentList.add(dmodule);
                                     }
-
-
                                 }
 
 
@@ -356,7 +352,6 @@ public class DocumentReportActivity extends AppCompatActivity  {
                                         documentList.add(dmodule);
                                     }
                                 }
-
                                 llLoader.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
                                 llNoadata.setVisibility(View.GONE);
@@ -371,7 +366,7 @@ public class DocumentReportActivity extends AppCompatActivity  {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(DocumentReportActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DocumentReportActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -399,8 +394,6 @@ public class DocumentReportActivity extends AppCompatActivity  {
                     @Override
                     public void onResponse(String response) {
                         Log.d("responseLogin", response);
-
-
                         try {
                             JSONObject job1 = new JSONObject(response);
                             Log.e("responsedocumentreport", "@@@@@@" + job1);
@@ -421,10 +414,7 @@ public class DocumentReportActivity extends AppCompatActivity  {
                                         DocumentManageModule dmodule = new DocumentManageModule(DocumentName, DocumentType, ApprovalRemarks, CreatedOn, AEMStatusName, DocLink);
                                         documentList.add(dmodule);
                                     }
-
-
                                 }
-
 
                                 llLoader.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
@@ -432,8 +422,6 @@ public class DocumentReportActivity extends AppCompatActivity  {
                                 llAgain.setVisibility(View.GONE);
                                 documentAdapter = new DocumentAdapter(documentList,DocumentReportActivity.this);
                                 rvDocument.setAdapter(documentAdapter);
-
-
                             } else {
                                 llLoader.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
@@ -516,7 +504,7 @@ public class DocumentReportActivity extends AppCompatActivity  {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(DocumentReportActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DocumentReportActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 

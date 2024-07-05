@@ -637,7 +637,7 @@ public class TempProfileActivity extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(TempProfileActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TempProfileActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -891,7 +891,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(TempProfileActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TempProfileActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }, new Response.ErrorListener() {

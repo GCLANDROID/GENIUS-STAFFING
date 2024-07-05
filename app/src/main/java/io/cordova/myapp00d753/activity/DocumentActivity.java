@@ -91,7 +91,6 @@ public class DocumentActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (connectionCheck.isNetworkAvailable()) {
-
                     Intent intent = new Intent(DocumentActivity.this, DocumentReportActivity.class);
                     intent.putExtra("status","All");
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

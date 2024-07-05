@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,6 +22,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
@@ -40,6 +45,7 @@ import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
 
 public class VisitLocationActivity extends AppCompatActivity {
+    private static final String TAG = "VisitLocationActivity";
     RecyclerView rvItem;
     ArrayList<VisitingLocationModel>itemList=new ArrayList<>();
     Button btnAdd;
@@ -57,34 +63,103 @@ public class VisitLocationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visit_location);
         initView();
+
         getItem();
+        //TODO: new api
+       /* JSONObject obj=new JSONObject();
+        try {
+            obj.put("AEMEmployeeID",pref.getEmpId() );
+            obj.put("Year","0");
+            obj.put("Month","0");
+            obj.put("SecurityCode",pref.getSecurityCode());
+            obj.put("AttendanceDate",formattedDate);
+            obj.put("Operation","1");
+            getItem(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }*/
         onClick();
     }
 
-    private void initView(){
-        pref=new Pref(getApplicationContext());
-        rvItem=(RecyclerView)findViewById(R.id.rvItem);
+    private void initView() {
+        pref = new Pref(getApplicationContext());
+        rvItem = (RecyclerView) findViewById(R.id.rvItem);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(VisitLocationActivity.this, LinearLayoutManager.VERTICAL, false);
         rvItem.setLayoutManager(layoutManager);
 
-        btnAdd=(Button)findViewById(R.id.btnAdd);
-        llMain=(LinearLayout)findViewById(R.id.llMain);
-        llLoader=(LinearLayout)findViewById(R.id.llLoader);
-        llNoData=(LinearLayout)findViewById(R.id.llNoData);
-        pd=new ProgressDialog(this);
+        btnAdd = (Button) findViewById(R.id.btnAdd);
+        llMain = (LinearLayout) findViewById(R.id.llMain);
+        llLoader = (LinearLayout) findViewById(R.id.llLoader);
+        llNoData = (LinearLayout) findViewById(R.id.llNoData);
+        pd = new ProgressDialog(this);
         Date c = Calendar.getInstance().getTime();
         System.out.println("Current time => " + c);
 
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-         formattedDate = df.format(c);
-        Log.d("formattedDate",formattedDate);
-        tvDate=(TextView)findViewById(R.id.tvDate);
+        formattedDate = df.format(c);
+        Log.d("formattedDate", formattedDate);
+        tvDate = (TextView) findViewById(R.id.tvDate);
         tvDate.setText(formattedDate);
-        pd1=new ProgressDialog(this);
-        fbAdd=(FloatingActionButton)findViewById(R.id.fbAdd);
-        imgBack=(ImageView)findViewById(R.id.imgBack);
-        imgHome=(ImageView)findViewById(R.id.imgHome);
+        pd1 = new ProgressDialog(this);
+        fbAdd = (FloatingActionButton) findViewById(R.id.fbAdd);
+        imgBack = (ImageView) findViewById(R.id.imgBack);
+        imgHome = (ImageView) findViewById(R.id.imgHome);
+    }
+
+    private void getItem(JSONObject jsonObject){
+        llLoader.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.GONE);
+        llNoData.setVisibility(View.GONE);
+        AndroidNetworking.post(AppData.GET_OFFLINE_DAILY_LOG_ACTIVITY)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "OFFLINE_DAILY_LOG: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String PunchInTime = obj.optString("PunchInTime");
+                                    String AddressIN = obj.optString("AddressIN");
+                                    String LongitudeIN=obj.optString("LongitudeIN");
+                                    String LatitudeIN=obj.optString("LatitudeIN");
+                                    VisitingLocationModel obj2 = new VisitingLocationModel(AddressIN,PunchInTime,LatitudeIN,LongitudeIN);
+                                    itemList.add(obj2);
+                                }
+                                setAdapter();
+                                llLoader.setVisibility(View.GONE);
+                                llMain.setVisibility(View.VISIBLE);
+                                llNoData.setVisibility(View.GONE);
+                            } else {
+                                llLoader.setVisibility(View.GONE);
+                                llMain.setVisibility(View.GONE);
+                                llNoData.setVisibility(View.VISIBLE);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(VisitLocationActivity.this, "", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "OFFLINE_DAILY_LOG_error: "+anError.getErrorBody());
+                        llLoader.setVisibility(View.VISIBLE);
+                        llMain.setVisibility(View.GONE);
+                        llNoData.setVisibility(View.GONE);
+                    }
+                });
     }
 
     private void getItem(){
@@ -121,20 +196,15 @@ public class VisitLocationActivity extends AppCompatActivity {
 
                                     VisitingLocationModel obj2 = new VisitingLocationModel(AddressIN,PunchInTime,LatitudeIN,LongitudeIN);
                                     itemList.add(obj2);
-
-
                                 }
                                 setAdapter();
                                 llLoader.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
                                 llNoData.setVisibility(View.GONE);
-
                             } else {
-
                                 llLoader.setVisibility(View.GONE);
                                 llMain.setVisibility(View.GONE);
                                 llNoData.setVisibility(View.VISIBLE);
-
                             }
 
 

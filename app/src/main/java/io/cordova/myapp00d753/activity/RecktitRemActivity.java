@@ -1439,7 +1439,7 @@ public class RecktitRemActivity extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(RecktitRemActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RecktitRemActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -1558,7 +1558,7 @@ public class RecktitRemActivity extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(RecktitRemActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RecktitRemActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -1671,7 +1671,7 @@ public class RecktitRemActivity extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(RecktitRemActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RecktitRemActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -2064,7 +2064,7 @@ public class RecktitRemActivity extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(RecktitRemActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RecktitRemActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 

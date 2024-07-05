@@ -197,7 +197,7 @@ public class ApplicationFragment extends Fragment {
         pref = new Pref(getContext());
         getApproverOrNot();
 
-       /* JSONObject obj=new JSONObject();
+        /*JSONObject obj=new JSONObject();
         try {
             obj.put("CompanyID", pref.getEmpClintId());
             obj.put("EmployeeID",pref.getEmpId());
@@ -284,7 +284,7 @@ public class ApplicationFragment extends Fragment {
                     category = sep[1];
                     getLeaveMode();
 
-                    /*JSONObject obj=new JSONObject();
+                   /* JSONObject obj=new JSONObject();
                     try {
                         obj.put("CompanyID", pref.getEmpClintId());
                         obj.put("EmployeeID",applicantId);
@@ -355,7 +355,6 @@ public class ApplicationFragment extends Fragment {
                 } else {
                     llPreview.setVisibility(View.GONE);
                 }
-
             }
         });
 
@@ -424,14 +423,31 @@ public class ApplicationFragment extends Fragment {
                             String Response_Message = job1.optString("Response_Message");
                             if (Response_Code.equals("101")) {
                                 String Response_Data = job1.optString("Response_Data");
-                                JSONArray jsonArray = new JSONArray(Response_Data);
-                                for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject TableObject = new JSONObject(Response_Data);
+                                String Table1=TableObject.optString("Table1");
+                                JSONArray leaveBalanceArray = new JSONArray(Table1);
+                                Log.e(TAG, "Table1 length: "+leaveBalanceArray.length() );
+                                for (int i = 0; i < leaveBalanceArray.length(); i++) {
+                                    Log.e(TAG, "Called: "+i );
+                                    JSONObject balanceObject = leaveBalanceArray.optJSONObject(i);
+                                    final String Code = balanceObject.optString("Code");
+                                    final String Opening = balanceObject.optString("Opening");
+                                    final String LeaveAvailed = balanceObject.optString("LeaveAvailed");
+                                    final String Avaliable = balanceObject.optString("Avaliable");
+                                    String LeaveTypeID = balanceObject.optString("LeaveTypeID");
+                                    typeAvaild.add(LeaveTypeID + "_" + Avaliable);
 
+                                    LeaveBalanceDetailsModel model = new LeaveBalanceDetailsModel(Code, Opening, LeaveAvailed);
+                                    itemList.add(model);
                                 }
+
+                                typeAvailable = typeAvaild.toString().replace("]", "").replace("[", "").replaceAll("\\s+", "");
+                                Log.d("availd", typeAvaild.toString());
+                                setAdapter();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getContext(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -658,7 +674,7 @@ public class ApplicationFragment extends Fragment {
                             } else {
                                 applicantId = pref.getEmpId();
                                 getLeaveAllDetails();
-                               /* JSONObject obj=new JSONObject();
+                                /*JSONObject obj=new JSONObject();
                                 try {
                                     obj.put("CompanyID", pref.getEmpClintId());
                                     obj.put("EmployeeID",pref.getEmpId());
@@ -673,7 +689,7 @@ public class ApplicationFragment extends Fragment {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getActivity(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -809,7 +825,7 @@ public class ApplicationFragment extends Fragment {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getContext(), "LEAVE MODE: something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "LEAVE MODE: something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -976,7 +992,7 @@ public class ApplicationFragment extends Fragment {
                         }
                         if (striDate.getTime() > strDate.getTime() ||striDate.getTime() == strDate.getTime()) {
                             validationChecking();
-                           /* JSONObject obj=new JSONObject();
+                            /*JSONObject obj=new JSONObject();
                             try {
                                 obj.put("CompanyID", pref.getEmpClintId());
                                 obj.put("EmployeeID",applicantId);
@@ -1105,6 +1121,7 @@ public class ApplicationFragment extends Fragment {
     }
 
     private void validationChecking(JSONObject jsonObject) {
+        Log.e(TAG, "VALIDATION_CHECKING: "+jsonObject);
         final ProgressDialog pd = new ProgressDialog(getContext());
         pd.setMessage("Loading...");
         pd.setCancelable(true);
@@ -1138,7 +1155,7 @@ public class ApplicationFragment extends Fragment {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getActivity(), "VALIDATION_CHECKING: something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "VALIDATION_CHECKING: something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -1177,6 +1194,7 @@ public class ApplicationFragment extends Fragment {
                             boolean responseStatus = job1.optBoolean("responseStatus");
                             if (responseStatus) {
                                 tvEndDate.setText(endDate);
+                                Log.e(TAG, "leaveModeId: "+leaveModeId);
                                 if (leaveModeId.equals("0") || leaveModeId.equals("2")) {
                                     dayBreakupListDetails.clear();
                                     showDailyBrkUpDialog();
@@ -1420,7 +1438,7 @@ public class ApplicationFragment extends Fragment {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getActivity(), "DAY_BREAK_UP: Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "DAY_BREAK_UP: Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -1526,7 +1544,8 @@ public class ApplicationFragment extends Fragment {
     }
 
 
-    private void preView(JSONObject jsonObject) {
+    private void  preView(JSONObject jsonObject) {
+        Log.e(TAG, "preView: INPUT: "+jsonObject);
         final ProgressDialog pd = new ProgressDialog(getContext());
         pd.setMessage("Loading...");
         pd.setCancelable(true);
@@ -1541,7 +1560,7 @@ public class ApplicationFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            Log.e(TAG, "CHECK_LEAVE_VIEW_SUMMARY: "+response.toString(4));
+                            Log.e(TAG, "PRE_VIEW: "+response.toString(4));
                             pd.dismiss();
                             JSONObject job1 = response;
                             String Response_Code = job1.optString("Response_Code");
@@ -1557,7 +1576,7 @@ public class ApplicationFragment extends Fragment {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getActivity(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -1744,8 +1763,8 @@ public class ApplicationFragment extends Fragment {
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvPreviewItem.setLayoutManager(layoutManager);
         getPreviewItem();
-
-       /* JSONObject obj = new JSONObject();
+        //TODO: new api
+        /*JSONObject obj = new JSONObject();
         try {
             obj.put("CompanyID", pref.getEmpClintId());
             obj.put("EmployeeID", applicantId);
@@ -1843,14 +1862,14 @@ public class ApplicationFragment extends Fragment {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getContext(), "something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onError(ANError anError) {
                         Log.e(TAG, "onError: "+anError.getErrorBody());
-                        Toast.makeText(getContext(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Something went to wrong", Toast.LENGTH_SHORT).show();
                     }
                 });
 

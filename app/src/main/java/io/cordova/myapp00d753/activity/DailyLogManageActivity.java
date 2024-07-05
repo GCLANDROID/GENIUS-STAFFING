@@ -41,6 +41,10 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.developers.imagezipper.ImageZipper;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -57,6 +61,9 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.snackbar.Snackbar;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -81,6 +88,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Part;
 
 public class DailyLogManageActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     public static final String TAG = AttendanceManageActivity.class.getSimpleName();
@@ -265,6 +273,8 @@ public class DailyLogManageActivity extends AppCompatActivity implements OnMapRe
         });
     }
 
+
+
     @Override
     public void onPause() {
         super.onPause();
@@ -288,7 +298,6 @@ public class DailyLogManageActivity extends AppCompatActivity implements OnMapRe
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
         mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
@@ -352,7 +361,6 @@ public class DailyLogManageActivity extends AppCompatActivity implements OnMapRe
 
     @Override
     public void onConnected(Bundle bundle) {
-
         if (ContextCompat.checkSelfPermission(DailyLogManageActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -554,11 +562,9 @@ public class DailyLogManageActivity extends AppCompatActivity implements OnMapRe
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case CAMERA_REQUEST:
-
                 if (resultCode == Activity.RESULT_OK) {
                     try {
                         try {
-
                             //messageAlert();
                             String imageurl = /*"file://" +*/ getRealPathFromURIPath(imageUri);
                             file = new File(imageurl);
@@ -572,7 +578,6 @@ public class DailyLogManageActivity extends AppCompatActivity implements OnMapRe
                             imageSize=String.valueOf(getReadableFileSize(imageZipperFile.length()));
                             tvSize.setText("Size: "+imageSize);
 
-
                             BitmapFactory.Options o = new BitmapFactory.Options();
                             o.inSampleSize = 6;
                             //Bitmap bm = cropToSquare(BitmapFactory.decodeFile(imageurl, o));
@@ -584,22 +589,15 @@ public class DailyLogManageActivity extends AppCompatActivity implements OnMapRe
                             imgEmp.setImageBitmap(bm);
                             addflag=1;
                             cameraflag=1;
-
-
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     } catch (OutOfMemoryError e) {
                         e.printStackTrace();
                     }
-
                 }
                 break;
-
-
         }
-
-
     }
 
 
@@ -628,22 +626,82 @@ public class DailyLogManageActivity extends AppCompatActivity implements OnMapRe
 
     private void dailyActivity() {
         String aemid = pref.getEmpId();
-       String security = pref.getSecurityCode();
-       String remarks=etRemarks.getText().toString();
+        String security = pref.getSecurityCode();
+        String remarks = etRemarks.getText().toString();
 
         progressDialog.show();
+
+        AndroidNetworking.upload(AppData.POST_EMPLOYEE_DAILY_ACTIVITY)
+                .addMultipartParameter("AEMEmployeeID", aemid)
+                .addMultipartParameter("ApprovalStatus", "0")
+                .addMultipartParameter("Remarks", remarks)
+                .addMultipartParameter("Longitude", currlong)
+                .addMultipartParameter("Latitude", currlat)
+                .addMultipartParameter("Address", cuuaddress)
+                .addMultipartParameter("Year", "0")
+                .addMultipartParameter("Month", "0")
+                .addMultipartParameter("SecurityCode", security)
+                .addMultipartParameter("FName", "0")
+                .addMultipartFile("file", imageZipperFile)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setPercentageThresholdForCancelling(60)
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "POST_EMPLOYEE_DAILY_ACTIVITY: " + response.toString(0));
+                            progressDialog.show();
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                successAlert();
+                            } else {
+                                Toast.makeText(DailyLogManageActivity.this, Response_Message, Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(DailyLogManageActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.show();
+                        Log.e(TAG, "POST_EMPLOYEE_DAILY_ACTIVITY_error: " + anError.getErrorBody());
+                        errorshowing();
+                    }
+                });
+
+
+
         RequestBody mFile = RequestBody.create(MediaType.parse(".png"), imageZipperFile);
         MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", imageZipperFile.getName(), mFile);
         RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), imageZipperFile.getName());
 
-        Call<UploadObject> fileUpload = uploadService.dailyactivityTATAGY(fileToUpload, aemid,"0",remarks,currlong,currlat,cuuaddress,"0","0",security,"0" );
+        Call<UploadObject> fileUpload = uploadService.dailyactivityTATAGY(
+                fileToUpload,
+                aemid,
+                "0",
+                remarks,
+                currlong,
+                currlat,
+                cuuaddress,
+                "0",
+                "0",
+                security,
+                "0");
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
                 progressDialog.dismiss();
                 UploadObject extraWorkingDayModel = response.body();
                 if (extraWorkingDayModel.isResponseStatus()) {
-                      successAlert();
+                    successAlert();
 
 
                 } else {
@@ -657,7 +715,6 @@ public class DailyLogManageActivity extends AppCompatActivity implements OnMapRe
                 errorshowing();
 
                 Log.e("error", "Error " + t.getMessage());
-
 
 
                 //   Toast.makeText(AttendanceManageActivity.this,"attendance saved without image",Toast.LENGTH_LONG).show();
@@ -728,9 +785,4 @@ public class DailyLogManageActivity extends AppCompatActivity implements OnMapRe
         int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
         return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
     }
-
-
-
-
-
 }
