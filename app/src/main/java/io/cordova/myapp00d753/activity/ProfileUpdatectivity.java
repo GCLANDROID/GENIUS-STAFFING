@@ -445,7 +445,7 @@ public class ProfileUpdatectivity extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(ProfileUpdatectivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProfileUpdatectivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 

@@ -452,7 +452,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getActivity(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -692,7 +692,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getActivity(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -824,7 +824,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
                             }
                         } catch (JSONException e) {
                            e.printStackTrace();
-                            Toast.makeText(getActivity(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -1161,7 +1161,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getActivity(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -1441,7 +1441,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
                             } else {}
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getActivity(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -1595,7 +1595,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getActivity(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -1875,7 +1875,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getActivity(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 

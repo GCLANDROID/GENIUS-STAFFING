@@ -32,7 +32,6 @@ public class DailyDashBoardActivity extends AppCompatActivity {
     }
 
     private void initialize() {
-
         connectionCheck = new NetworkConnectionCheck(DailyDashBoardActivity.this);
         llManage = (LinearLayout) findViewById(R.id.llManage);
         llReport = (LinearLayout) findViewById(R.id.llReport);
@@ -89,7 +88,6 @@ public class DailyDashBoardActivity extends AppCompatActivity {
                 llLogD.setVisibility(View.GONE);
                 llLogD1.setVisibility(View.VISIBLE);
                 if (connectionCheck.isNetworkAvailable()) {
-
                     Intent intent = new Intent(DailyDashBoardActivity.this, NumberTourActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);

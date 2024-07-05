@@ -27,6 +27,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
 
 import org.json.JSONArray;
@@ -48,6 +52,7 @@ import io.cordova.myapp00d753.utility.Pref;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class OfflineDailyLogReportActivity extends AppCompatActivity {
+    private static final String TAG = "OfflineDailyLogReportAc";
     RecyclerView rvReport;
     ArrayList<OfflineDailyModel> activityList = new ArrayList<>();
     ImageView imgBack, imgHome;
@@ -124,6 +129,82 @@ public class OfflineDailyLogReportActivity extends AppCompatActivity {
         imgAgain = (ImageView) findViewById(R.id.imgAgain);
         String attDate=getIntent().getStringExtra("attdate").replaceAll("\\s+", "-");
         getItemList(attDate);
+        /*JSONObject obj=new JSONObject();
+        try {
+            obj.put("AEMEmployeeID", pref.getEmpId() );
+            obj.put("Year","0");
+            obj.put("Month","0");
+            obj.put("SecurityCode",pref.getSecurityCode());
+            obj.put("AttendanceDate",attDate);
+            obj.put("Operation","1");
+            getItemList(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }*/
+    }
+
+    private void getItemList(JSONObject jsonObject) {
+        llLoder.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.GONE);
+        llNodata.setVisibility(View.GONE);
+        llAgain.setVisibility(View.GONE);
+        AndroidNetworking.post(AppData.GET_LEAVE_APPLICATION_DETAILS)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "LEAVE_APPLICATION_DETAILS: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String PunchIn = obj.optString("PunchIn");
+                                    String PunchInTime = obj.optString("PunchInTime");
+                                    String PunchOutTime = obj.optString("PunchOutTime");
+                                    String AddressIN = obj.optString("AddressIN");
+                                    String AddressOUT = obj.optString("AddressOUT");
+                                    String RemarksIN = obj.optString("RemarksIN");
+                                    String RemarksOUT = obj.optString("RemarksOUT");
+
+                                    OfflineDailyModel obj2 = new OfflineDailyModel(PunchIn, PunchInTime, PunchOutTime, AddressIN, AddressOUT, RemarksIN, RemarksOUT);
+                                    activityList.add(obj2);
+                                }
+                                setAdapter();
+                                llLoder.setVisibility(View.GONE);
+                                llMain.setVisibility(View.VISIBLE);
+                                llNodata.setVisibility(View.GONE);
+                                llAgain.setVisibility(View.GONE);
+                            } else {
+                                llLoder.setVisibility(View.GONE);
+                                llMain.setVisibility(View.GONE);
+                                llNodata.setVisibility(View.VISIBLE);
+                                llAgain.setVisibility(View.GONE);
+                                Toast.makeText(getApplicationContext(), "No data found", Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(OfflineDailyLogReportActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "LEAVE_APPLICATION_DETAILS_error: "+anError.getErrorBody());
+                        llLoder.setVisibility(View.VISIBLE);
+                        llMain.setVisibility(View.GONE);
+                        llNodata.setVisibility(View.GONE);
+                        llAgain.setVisibility(View.GONE);
+                    }
+                });
     }
 
     private void getItemList(String date) {
@@ -163,11 +244,8 @@ public class OfflineDailyLogReportActivity extends AppCompatActivity {
                                     String RemarksOUT = obj.optString("RemarksOUT");
 
 
-
                                     OfflineDailyModel obj2 = new OfflineDailyModel(PunchIn, PunchInTime, PunchOutTime, AddressIN, AddressOUT, RemarksIN, RemarksOUT);
                                     activityList.add(obj2);
-
-
                                 }
                                 setAdapter();
                                 llLoder.setVisibility(View.GONE);
@@ -182,14 +260,10 @@ public class OfflineDailyLogReportActivity extends AppCompatActivity {
                                 llNodata.setVisibility(View.VISIBLE);
                                 llAgain.setVisibility(View.GONE);
                                 Toast.makeText(getApplicationContext(), "No data found", Toast.LENGTH_LONG).show();
-
                             }
-
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                             // Toast.makeText(AttendanceReportActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
-
                         }
 
                     }
@@ -245,8 +319,6 @@ public class OfflineDailyLogReportActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 alertDialog1.dismiss();
-
-
             }
         });
 
@@ -258,7 +330,6 @@ public class OfflineDailyLogReportActivity extends AppCompatActivity {
                 Log.d("yrtrr", year);
                 tvYear.setText(year);
                 alertDialog1.dismiss();
-
             }
         });
 
@@ -348,6 +419,7 @@ public class OfflineDailyLogReportActivity extends AppCompatActivity {
                 alertDialog2.dismiss();
             }
         });
+
         llM4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -373,6 +445,7 @@ public class OfflineDailyLogReportActivity extends AppCompatActivity {
                 alertDialog2.dismiss();
             }
         });
+
         llM7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -436,7 +509,6 @@ public class OfflineDailyLogReportActivity extends AppCompatActivity {
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.CENTER);
         alertDialog2.show();
-
     }
 
     private void onClick() {
@@ -514,8 +586,6 @@ public class OfflineDailyLogReportActivity extends AppCompatActivity {
 
             }
         });
-
-
     }
 
     private int calculateTime(String intime, String outtime){

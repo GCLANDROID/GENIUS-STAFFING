@@ -183,7 +183,7 @@ public class MetsoReimbursementReportActivity extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(MetsoReimbursementReportActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MetsoReimbursementReportActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 

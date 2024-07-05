@@ -165,7 +165,7 @@ public class NewClaimActivity extends AppCompatActivity {
             obj1.put("ddltype", "16");
             obj1.put("id1",pref.getEmpConId());
             obj1.put("id2",pref.getEmpClintId());
-            obj1.put("id3",0);
+            obj1.put("id3","0");
             obj1.put("SecurityCode",pref.getSecurityCode());
             setHideItem(obj1);
         } catch (JSONException e) {
@@ -462,7 +462,6 @@ public class NewClaimActivity extends AppCompatActivity {
                     if (etDescription.getText().toString().length() > 0) {
                         if (etAmount.getText().toString().length() > 0) {
                             attachFileAPI();
-
                         } else {
                             Toast.makeText(getApplicationContext(), "Please enter Claim Amount", Toast.LENGTH_LONG).show();
                         }
@@ -825,7 +824,7 @@ public class NewClaimActivity extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(NewClaimActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NewClaimActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -839,7 +838,6 @@ public class NewClaimActivity extends AppCompatActivity {
 
 
     private void setHideItem() {
-
         String surl = AppData.url+"gcl_CommonDDL?ddltype=16&id1=" + pref.getEmpConId() + "&id2=" + pref.getEmpClintId() + "&id3=0&SecurityCode=" + pref.getSecurityCode();
         Log.d("compurl_1", surl);
         final ProgressDialog progressBar = new ProgressDialog(this);
@@ -902,7 +900,7 @@ public class NewClaimActivity extends AppCompatActivity {
     private void setComponenetItem(JSONObject jsonObject) {
         Log.e(TAG, "setComponenetItem: "+jsonObject);
         final ProgressDialog progressBar = new ProgressDialog(this);
-        progressBar.setCancelable(true);//you can cancel it by pressing back button
+        progressBar.setCancelable(true); //you can cancel it by pressing back button
         progressBar.setMessage("Loading...");
         progressBar.show();
         AndroidNetworking.post(AppData.GET_COMMON_DROP_DOWN_FILL)
@@ -944,7 +942,7 @@ public class NewClaimActivity extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(NewClaimActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NewClaimActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -1935,7 +1933,6 @@ public class NewClaimActivity extends AppCompatActivity {
 
     public void uploadMultipart() {
         //getting name for the pdf
-
         //getting the actual path of the pdf
         //TODO: new api
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
@@ -1976,7 +1973,7 @@ public class NewClaimActivity extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(NewClaimActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NewClaimActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
 
 
@@ -1999,8 +1996,6 @@ public class NewClaimActivity extends AppCompatActivity {
 
 
                         // boolean _status = job1.getBoolean("status");
-
-
 
                     }
 
@@ -2123,7 +2118,7 @@ public class NewClaimActivity extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(NewClaimActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NewClaimActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 

@@ -80,7 +80,7 @@ public class SalaryActivity extends AppCompatActivity  {
         initialize();
         if (connectionCheck.isNetworkAvailable()) {
             //TODO: new api
-           /* JSONObject obj=new JSONObject();
+            JSONObject obj=new JSONObject();
             try {
                 obj.put("AEMConsultantID", "0");
                 obj.put("AEMClientID",JSONObject.NULL);
@@ -94,9 +94,9 @@ public class SalaryActivity extends AppCompatActivity  {
                 getSalaryList(obj);
             } catch (JSONException e) {
                 e.printStackTrace();
-            }*/
+            }
 
-            getSalaryList();
+            //getSalaryList();
         }else {
 
         }
@@ -202,7 +202,7 @@ public class SalaryActivity extends AppCompatActivity  {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(SalaryActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SalaryActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 

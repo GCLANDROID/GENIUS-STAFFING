@@ -1,5 +1,6 @@
 package io.cordova.myapp00d753.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -63,7 +64,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
+    public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, @SuppressLint("RecyclerView") final int i) {
 
         pref=new Pref(mContex);
         myViewHolder.tvMenuItem.setText(itemList.get(i).getMenuName());
@@ -174,7 +175,6 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                     Intent intent = new Intent(mContex, FeedBackRatingActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
-
                 } else if (itemList.get(i).getMenuId().equals("9")){
                     //geofence
                     Intent intent=new Intent(mContex, GeoFenceManageDashBoardActivity.class);
@@ -185,7 +185,6 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                     Intent intent = new Intent(mContex, DailyDashBoardActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
-
                 } else if (itemList.get(i).getMenuId().equals("11")) {
                     //Chanepassword
                     Intent intent=new Intent(mContex, ChangePasswordActivity.class);

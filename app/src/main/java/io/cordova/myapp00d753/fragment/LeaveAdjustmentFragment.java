@@ -292,7 +292,7 @@ public class LeaveAdjustmentFragment extends Fragment {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getContext(), "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -953,7 +953,7 @@ public class LeaveAdjustmentFragment extends Fragment {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getActivity(), "something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 

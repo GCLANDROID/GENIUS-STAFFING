@@ -15,6 +15,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 172
         versionName "90.1"
+        versionCode 166
+        versionName "90.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true

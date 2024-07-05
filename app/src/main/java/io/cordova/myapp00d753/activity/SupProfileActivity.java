@@ -235,7 +235,7 @@ public class SupProfileActivity extends AppCompatActivity {
                                 llAgain.setVisibility(View.GONE);
                             }
                         } catch (JSONException e) {
-                            Toast.makeText(SupProfileActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SupProfileActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 

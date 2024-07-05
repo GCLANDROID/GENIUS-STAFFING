@@ -39,12 +39,6 @@ public class OffDailyLogAdapter extends RecyclerView.Adapter<OffDailyLogAdapter.
         myViewHolder.tvRemarksIn.setText(activityList.get(i).getInRemarks());
         myViewHolder.tvRemarksOut.setText(activityList.get(i).getOutRemarks());
 
-
-
-
-
-
-
         if (activityList.get(i).getInRemarks().equals("")){
             myViewHolder.llInRemark.setVisibility(View.GONE);
         }else {

@@ -39,4 +39,7 @@ public class AppData {
     public static String CHECK_LEAVE_VIEW_SUMMARY = newv2url+"Attendance/CheckLeaveViewSummary";
     public static String GET_METSO_ATTENDANCE_DATA = newv2url+"Attendance/GetMetsoAttendanceData";
     public static String ADD_LEAVE_METSO = newv2url+"Attendance/AddLeaveMetso";
+    public static String GET_SELF_ATTENDANCE_WO_LEAVE = newv2url+"Attendance/GetSelfAttendanceWoLeave";
+    public static String GET_OFFLINE_DAILY_LOG_ACTIVITY = newv2url+"Attendance/GetOfflineDailyLogActivity";
+    public static String POST_EMPLOYEE_DAILY_ACTIVITY = newv2url+"FileUpload/PostEmployeeDailyActivity";
 }

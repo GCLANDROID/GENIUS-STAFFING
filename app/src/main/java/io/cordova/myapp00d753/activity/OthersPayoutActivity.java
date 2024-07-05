@@ -196,7 +196,7 @@ public class OthersPayoutActivity extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(OthersPayoutActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(OthersPayoutActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 

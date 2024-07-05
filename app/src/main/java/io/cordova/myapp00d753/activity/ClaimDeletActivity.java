@@ -180,7 +180,7 @@ public class ClaimDeletActivity extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(ClaimDeletActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ClaimDeletActivity.this, "went", Toast.LENGTH_SHORT).show();
                         }
                     }
 

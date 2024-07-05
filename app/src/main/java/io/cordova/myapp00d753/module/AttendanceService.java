@@ -147,7 +147,17 @@ import retrofit2.http.Part;
 
     @Multipart
     @POST("post_EmployeeDailyActivity")
-    Call<UploadObject> dailyactivityTATAGY(@Part MultipartBody.Part file, @Part("AEMEmployeeID") String AEMEmployeeID, @Part("ApprovalStatus") String ApprovalStatus, @Part("Remarks") String Remarks, @Part("Longitude") String Longitude, @Part("Latitude") String Latitude, @Part("Address") String Address, @Part("Year") String Year, @Part("Month") String Month, @Part("SecurityCode") String SecurityCode, @Part("FName") String FName);
+    Call<UploadObject> dailyactivityTATAGY(@Part MultipartBody.Part file,
+                                           @Part("AEMEmployeeID") String AEMEmployeeID,
+                                           @Part("ApprovalStatus") String ApprovalStatus,
+                                           @Part("Remarks") String Remarks,
+                                           @Part("Longitude") String Longitude,
+                                           @Part("Latitude") String Latitude,
+                                           @Part("Address") String Address,
+                                           @Part("Year") String Year,
+                                           @Part("Month") String Month,
+                                           @Part("SecurityCode") String SecurityCode,
+                                           @Part("FName") String FName);
 
     @Multipart
     @POST("post_reimbursementClaimFMS_SEC")

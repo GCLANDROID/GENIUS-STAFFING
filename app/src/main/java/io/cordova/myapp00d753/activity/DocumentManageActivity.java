@@ -346,7 +346,7 @@ public class DocumentManageActivity extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(DocumentManageActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DocumentManageActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -390,7 +390,7 @@ public class DocumentManageActivity extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(DocumentManageActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DocumentManageActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -434,7 +434,7 @@ public class DocumentManageActivity extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(DocumentManageActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DocumentManageActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -770,7 +770,7 @@ public class DocumentManageActivity extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(DocumentManageActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DocumentManageActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 

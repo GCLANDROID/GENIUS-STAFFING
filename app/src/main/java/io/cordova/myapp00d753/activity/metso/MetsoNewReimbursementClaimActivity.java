@@ -1255,7 +1255,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(MetsoNewReimbursementClaimActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MetsoNewReimbursementClaimActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -1383,7 +1383,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(MetsoNewReimbursementClaimActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MetsoNewReimbursementClaimActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -1504,7 +1504,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(MetsoNewReimbursementClaimActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MetsoNewReimbursementClaimActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -1692,7 +1692,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(MetsoNewReimbursementClaimActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MetsoNewReimbursementClaimActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -3067,6 +3067,22 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
 
     public void uploadMultipart() {
         //getting name for the pdf
+        Log.e(TAG, "uploadMultipart: \nAEMEmployeeID"+ pref.getEmpId()
+                +"\nAEMComponentID"+ comeid
+                +"\nDescription"+ description
+                +"\nReimbursementAmount"+ amount
+                +"\nYear"+ year
+                +"\nMonth"+ month
+                +"\nSecurityCode"+ securitycode
+                +"\nConveyanceTypeId"+ componentId
+                +"\nLocationTypeID"+ "0"
+                +"\nReimbursementDate"+ "0"
+                +"\nCostCentreId"+ CostCentreId
+                +"\nWbsId"+ WbsId
+                +"\nSiteid"+ Siteid
+                +"\nSupervisorID"+ SupervisorID
+                +"\nStartDate"+ startDate
+                +"\nEndDate"+ endDate);
 
         //getting the actual path of the pdf
         //TODO: new api
@@ -3149,7 +3165,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                     }
                 });*/
 
-        AndroidNetworking.upload(UPLOAD_URL)
+        /*AndroidNetworking.upload(UPLOAD_URL)
                 .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
                 .addMultipartParameter("AEMComponentID", comeid)
                 .addMultipartParameter("Description", description)
@@ -3211,7 +3227,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
 
                         Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                     }
-                });
+                });*/
     }
 
     public void uploadMultipartwithfile() {
@@ -3266,7 +3282,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(MetsoNewReimbursementClaimActivity.this, "Something want to wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MetsoNewReimbursementClaimActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
 
 

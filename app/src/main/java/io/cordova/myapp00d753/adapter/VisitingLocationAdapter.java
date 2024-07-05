@@ -31,8 +31,6 @@ public class VisitingLocationAdapter extends RecyclerView.Adapter<VisitingLocati
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         myViewHolder.tvLocation.setText(itemList.get(i).getLocation());
         myViewHolder.tvTime.setText(itemList.get(i).getTime());
-
-
     }
 
     @Override
@@ -47,8 +45,6 @@ public class VisitingLocationAdapter extends RecyclerView.Adapter<VisitingLocati
             super(itemView);
             tvLocation=(TextView)itemView.findViewById(R.id.tvLocation);
             tvTime=(TextView)itemView.findViewById(R.id.tvTime);
-
-
         }
     }
 
