@@ -150,8 +150,9 @@ public class DocumentManageActivity extends AppCompatActivity {
         llSp = (LinearLayout) findViewById(R.id.llSp);
         etReferenceNumber = (EditText) findViewById(R.id.etReferenceNumber);
         llSave = (LinearLayout) findViewById(R.id.llSave);
-        //setMainDoc();
-        JSONObject obj=new JSONObject();
+        setMainDoc();
+        //TODO: new api
+        /*JSONObject obj=new JSONObject();
         try {
             obj.put("DocID", "0");
             obj.put("DocumentID", "0");
@@ -160,7 +161,7 @@ public class DocumentManageActivity extends AppCompatActivity {
             setMainDoc(obj);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
         securityCode = pref.getSecurityCode();
 
 
@@ -221,9 +222,9 @@ public class DocumentManageActivity extends AppCompatActivity {
 
                 mainDocument = mainDocType.get(i).getDocID();
 
-                //setSubDocType();
-
-                JSONObject obj=new JSONObject();
+                setSubDocType();
+                //TODO: new api
+               /* JSONObject obj=new JSONObject();
                 try {
                     obj.put("DocID", "1");
                     obj.put("DocumentID", mainDocument);
@@ -233,7 +234,7 @@ public class DocumentManageActivity extends AppCompatActivity {
                     //DocID=1&DocumentID=" + mainDocument + "&DbOperation=2&SecurityCode=" + pref.getSecurityCode();
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
+                }*/
 
 
             }
@@ -272,39 +273,38 @@ public class DocumentManageActivity extends AppCompatActivity {
                 if (flag1 == 1) {
                     if (document.equals("Aadhar Card")) {
                         if (etReferenceNumber.getText().toString().length() == 12) {
-                            //cameraImageDoc();
-                            cameraImageDoc2();
+                            cameraImageDoc();
+                            //cameraImageDoc2();
                         } else {
                             Toast.makeText(DocumentManageActivity.this, "Please enter valid Aadhaar Number", Toast.LENGTH_LONG).show();
                         }
                     } else if (document.equals("PAN Card")) {
                         if (etReferenceNumber.getText().toString().length() == 12) {
-                            //cameraImageDoc();
-                            cameraImageDoc2();
+                            cameraImageDoc();
+                            //cameraImageDoc2();
                         } else {
                             Toast.makeText(DocumentManageActivity.this, "Please enter valid PAN number", Toast.LENGTH_LONG).show();
                         }
                     } else {
                         if (etReferenceNumber.getText().toString().length() > 0) {
-                            //cameraImageDoc();
-                            cameraImageDoc2();
+                            cameraImageDoc();
+                            //cameraImageDoc2();
                         } else {
                             Toast.makeText(DocumentManageActivity.this, "Please enter reference  number", Toast.LENGTH_LONG).show();
-
                         }
                     }
                 } else if (flag1 == 2) {
                     if (etReferenceNumber.getText().toString().length() > 0) {
-                        //saveAttachDoc();
-                        saveAttachDoc2();
+                        saveAttachDoc();
+                        //saveAttachDoc2();
                     } else {
                         Toast.makeText(DocumentManageActivity.this, "please enter refernce number", Toast.LENGTH_LONG).show();
 
                     }
                 } else if (flag1 == 3) {
                     if (etReferenceNumber.getText().toString().length() > 0) {
-                        //pdfFileSend();
-                        pdfFileSend2();
+                        pdfFileSend();
+                        //pdfFileSend2();
                     } else {
                         Toast.makeText(DocumentManageActivity.this, "please enter refernce number", Toast.LENGTH_LONG).show();
 
@@ -470,7 +470,6 @@ public class DocumentManageActivity extends AppCompatActivity {
                 if (resultCode == Activity.RESULT_OK) {
                     try {
                         try {
-
                             String imageurl = "file://" + getRealPathFromURI(imageUri);
                             file = new File(imageurl);
                             compressedImageFile =new ImageZipper(DocumentManageActivity.this)
@@ -968,11 +967,11 @@ public class DocumentManageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 alertDialog.dismiss();
                 if (flag1 == 1) {
-                    //cameraImageDoc();
-                    cameraImageDoc2();
+                    cameraImageDoc();
+                    //cameraImageDoc2();
                 } else if (flag1 == 2) {
-                    //saveAttachDoc();
-                    saveAttachDoc2();
+                    saveAttachDoc();
+                    //saveAttachDoc2();
                 }
 
 
@@ -1128,8 +1127,5 @@ public class DocumentManageActivity extends AppCompatActivity {
         int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         cursor.moveToFirst();
         return cursor.getString(column_index);
-
     }
-
-
 }
