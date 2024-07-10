@@ -712,8 +712,13 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
                         JSONObject job = response;
                         responseText = job.optString("responseText");
                         boolean responseStatus = job.optBoolean("responseStatus");
+                        if (responseStatus){
+                            successAlert();
+                        }else {
+                            Toast.makeText(AttendanceManageActivity.this,responseText,Toast.LENGTH_LONG).show();
+                        }
 
-                        successAlert();
+
 
 
                         // boolean _status = job1.getBoolean("status");
