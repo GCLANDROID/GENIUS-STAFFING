@@ -1227,7 +1227,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
 
 
         consnetdialog = dialogBuilder.create();
-        consnetdialog.setCancelable(true);
+        consnetdialog.setCancelable(false);
         Window window = consnetdialog.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.CENTER);
