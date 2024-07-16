@@ -48,6 +48,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.adapter.BackLogAdapter;
@@ -57,6 +59,7 @@ import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.Util;
 
 public class BacklogAttendanceActivity extends AppCompatActivity {
+    private static final String TAG = "BacklogAttendanceActivi";
     TextView tvToolBar;
     RecyclerView rvItem;
     public static ArrayList<BackLogAttendanceModel> newBacklogArray = new ArrayList<BackLogAttendanceModel>();
@@ -83,7 +86,10 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
     ArrayList<String>item1=new ArrayList<>();
     int allclick;
     TextView tvCount;
-
+    int itemSelectCount=0;
+    public boolean isSelectedAll = false;
+    ProgressDialog globleProgressDialog;
+    int startYear,startMonth,startDay,endYear,endMonth,endDay;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,6 +131,15 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
         llTick=(LinearLayout) findViewById(R.id.llTick);
         imgLike=(ImageView) findViewById(R.id.imgLike);
 
+        final Calendar c = Calendar.getInstance();
+        startYear = c.get(Calendar.YEAR);
+        startMonth = c.get(Calendar.MONTH);
+        startDay = c.get(Calendar.DAY_OF_MONTH);
+
+        endYear = c.get(Calendar.YEAR);
+        endMonth = c.get(Calendar.MONTH);
+        endDay = c.get(Calendar.DAY_OF_MONTH);
+
 
     }
 
@@ -134,14 +149,14 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (imgLike.getVisibility()==View.GONE){
                     imgLike.setVisibility(View.VISIBLE);
+                    isSelectedAll = true;
                     backLogAdapter.selectAll();
                     allclick=1;
                 }else {
                     imgLike.setVisibility(View.GONE);
+                    isSelectedAll = false;
                     backLogAdapter.unselectall();
                     allclick=0;
-
-
                 }
             }
         });
@@ -149,10 +164,8 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-                if (backLogItem.size()>0 ||allclick==1) {
-                    backlogSave();
+                if (itemSelectCount > 0 ||allclick==1) {
+                    submitOperation();
                 }else {
                     Toast.makeText(getApplicationContext(),"Please Select Your Date(s)",Toast.LENGTH_LONG).show();
                 }
@@ -179,13 +192,22 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (!strtDate.equals("")){
                     if (!endDate.equals("")){
-                        getBackLogData();
-
-                    }else {
+                        //getBackLogData();
+                        JSONObject obj=new JSONObject();
+                        try {
+                            obj.put("DbOperation","1");
+                            obj.put("empid",pref.getEmpId());
+                            obj.put("clientid",pref.getEmpClintId());
+                            obj.put("fromdate",strtDate);
+                            obj.put("todate",endDate);
+                            obj.put("SecurityCode",pref.getSecurityCode());
+                            getBackLogData(obj);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         Toast.makeText(BacklogAttendanceActivity.this,"Please Enter End Date",Toast.LENGTH_LONG).show();
-
                     }
-
                 }else {
                     Toast.makeText(BacklogAttendanceActivity.this,"Please Enter Start Date",Toast.LENGTH_LONG).show();
                 }
@@ -218,6 +240,108 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
         });
     }
 
+    private void submitOperation() {
+        globleProgressDialog = new ProgressDialog(BacklogAttendanceActivity.this);
+        globleProgressDialog.setMessage("Loading..");
+        globleProgressDialog.setCancelable(false);
+        globleProgressDialog.show();
+        StringBuilder regularizationSubmitString= new StringBuilder();
+        for (int i = 0; i < blockLogList.size(); i++) {
+            if (isSelectedAll){
+                if (regularizationSubmitString.length() == 0){
+                    regularizationSubmitString = new StringBuilder(pref.getEmpId() + "_" + pref.getEmpClintId() + "_" + blockLogList.get(i).getDate() + "_" + blockLogList.get(i).getInTime() + "_" + blockLogList.get(i).getOutTime() + "_" + blockLogList.get(i).getRemarks());
+                } else {
+                    regularizationSubmitString.append(",").append(pref.getEmpId()).append("_").append(pref.getEmpClintId()).append("_").append(blockLogList.get(i).getDate()).append("_").append(blockLogList.get(i).getInTime()).append("_").append(blockLogList.get(i).getOutTime()).append("_").append(blockLogList.get(i).getRemarks());
+                }
+            } else {
+                if (blockLogList.get(i).isSelected()){
+                    if (regularizationSubmitString.length() == 0){
+                        regularizationSubmitString = new StringBuilder(pref.getEmpId() + "_" + pref.getEmpClintId() + "_" + blockLogList.get(i).getDate() + "_" + blockLogList.get(i).getInTime() + "_" + blockLogList.get(i).getOutTime() + "_" + blockLogList.get(i).getRemarks());
+                    } else {
+                        regularizationSubmitString.append(",").append(pref.getEmpId()).append("_").append(pref.getEmpClintId()).append("_").append(blockLogList.get(i).getDate()).append("_").append(blockLogList.get(i).getInTime()).append("_").append(blockLogList.get(i).getOutTime()).append("_").append(blockLogList.get(i).getRemarks());
+                    }
+                }
+            }
+        }
+
+        //backlogSave(String.valueOf(regularizationSubmitString));
+
+        JSONObject obj=new JSONObject();
+        try {
+            obj.put("StrDayBreakUp", regularizationSubmitString);
+            obj.put("SetMsg","");
+            obj.put("SecurityCode", securityCode);
+            backlogSave2(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void getBackLogData(JSONObject jsonObject) {
+        Log.e(TAG, "getBackLogData: INPUT"+jsonObject);
+        llLoader.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.GONE);
+        llNodata.setVisibility(View.GONE);
+        blockLogList.clear();
+        AndroidNetworking.post(AppData.GET_ATTENDANCE_REGULARIZATION)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "GET_BACK_LOG_DATA: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String AttDate = obj.optString("Dates");
+                                    String InTime = obj.optString("Intime");
+                                    String OutTime = obj.optString("Outtime");
+                                    String Daytype=obj.optString("Daytype");
+                                    String Remarks=obj.optString("Remarks");
+
+                                    //Log.e(TAG, "Remarks: "+Remarks);
+
+                                    BackLogAttendanceModel blockModule = new BackLogAttendanceModel(AttDate, InTime, OutTime);
+                                    blockModule.setDayType(Daytype);
+                                    blockModule.setRemarks(Remarks);
+                                    blockLogList.add(blockModule);
+                                    item1.add(pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+AttDate + "_" + InTime + "_" + OutTime + "_"+Remarks);
+                                }
+                                llLoader.setVisibility(View.GONE);
+                                llMain.setVisibility(View.VISIBLE);
+                                llNodata.setVisibility(View.GONE);
+                                backLogAdapter = new BackLogAdapter(blockLogList, BacklogAttendanceActivity.this,item1);
+                                rvItem.setAdapter(backLogAdapter);
+                                tvCount.setText("Total Day(s) Count : "+jsonArray.length());
+                            } else {
+                                llLoader.setVisibility(View.GONE);
+                                llMain.setVisibility(View.GONE);
+                                llNodata.setVisibility(View.VISIBLE);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "GET_BACK_LOG_DATA_error: "+anError.getErrorBody());
+                        llLoader.setVisibility(View.VISIBLE);
+                        llMain.setVisibility(View.GONE);
+                        llNodata.setVisibility(View.GONE);
+                    }
+                });
+    }
+
     private void getBackLogData() {
         String surl = AppData.url + "gcl_AttendanceRegularization/Get?DbOperation=1&empid="+pref.getEmpId()+"&clientid="+pref.getEmpClintId()+"&fromdate="+strtDate+"&todate="+endDate+"&SecurityCode="+pref.getSecurityCode() ;
         Log.d("backlogURL",surl);
@@ -230,7 +354,6 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Log.d("blockActivityData", response);
-
                         try {
                             JSONObject job1 = new JSONObject(response);
                             Log.e("response12", "@@@@@@" + job1);
@@ -248,13 +371,13 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
                                     String Daytype=obj.optString("Daytype");
                                     String Remarks=obj.optString("Remarks");
 
+                                    Log.e(TAG, "Remarks: "+Remarks);
+
                                     BackLogAttendanceModel blockModule = new BackLogAttendanceModel(AttDate, InTime, OutTime);
                                     blockModule.setDayType(Daytype);
                                     blockModule.setRemarks(Remarks);
                                     blockLogList.add(blockModule);
                                     item1.add(pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+AttDate + "_" + InTime + "_" + OutTime + "_"+Remarks);
-
-
                                 }
                                 llLoader.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
@@ -301,7 +424,7 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
 
     }
 
-    public void updateItemStatus(int position,boolean status) {
+    /*public void updateItemStatus(int position,boolean status) {
 
         item1.clear();
 
@@ -315,49 +438,90 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
 
 
         backLogAdapter.notifyDataSetChanged();
-    }
+    }*/
 
     public void removeItem(int position) {
-
+       Log.e(TAG, "removeItem: "+item1.remove(position));
+       Log.e(TAG, "LIST SIZE: "+item1.size());
+       Log.e(TAG, "position: "+position);
        item1.remove(position);
 
     }
 
-    public void backlogSave() {
-        etFocus.clearFocus();
-        if (allclick==1){
-            backlogDetails=item1.toString().replace("[","").replace("]","").replaceAll("\\s+", "");
+    public void backlogSave2(JSONObject jsonObject) {
+        Log.e(TAG, "backlogSave2: "+jsonObject);
+        AndroidNetworking.post(AppData.SAVE_ATTENDANCE_REGULARIZATION)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            globleProgressDialog.dismiss();
+                            Log.e(TAG, "SAVE_REGULARIZATION: " + response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                successAlert();
+                            } else {
+                                Toast.makeText(BacklogAttendanceActivity.this,Response_Message,Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(BacklogAttendanceActivity.this, "Something went to wrong, please try again", Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
+                    @Override
+                    public void onError(ANError anError) {
+                        globleProgressDialog.dismiss();
+                        Log.e(TAG, "SAVE_REGULARIZATION_error: "+anError.getErrorBody());
+                        Toast.makeText(BacklogAttendanceActivity.this, "Something went to wrong, please try again", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    public void backlogSave(String regularizationSubmitString) {
+        etFocus.clearFocus();
+       /* if (allclick==1){
+            backlogDetails=item1.toString().replace("[","").replace("]","").replaceAll("\\s+", "");
         }else {
             backlogDetails=backLogItem.toString().replace("[","").replace("]","").replaceAll("\\s+", "");
 
-        }
-        Log.d("backlogDetails",backlogDetails);
+        }*/
+        //Log.e("backlogDetails",backlogDetails);
+        Log.e("backlogDetails",regularizationSubmitString);
 
-        final ProgressDialog pg=new ProgressDialog(BacklogAttendanceActivity.this);
+        /*final ProgressDialog pg=new ProgressDialog(BacklogAttendanceActivity.this);
         pg.setMessage("Loading..");
         pg.setCancelable(false);
-        pg.show();
+        pg.show();*/
+        Log.e(TAG, "\nStrDayBreakUp: "+regularizationSubmitString
+                +"\nSetMsg: \nSecurityCode:"+securityCode);
         AndroidNetworking.upload( AppData.url+"gcl_AttendanceRegularization/Save")
-                .addMultipartParameter("StrDayBreakUp", backlogDetails)
+                .addMultipartParameter("StrDayBreakUp", regularizationSubmitString)
                 .addMultipartParameter("SetMsg","")
                 .addMultipartParameter("SecurityCode", securityCode)
-
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
                 .setUploadProgressListener(new UploadProgressListener() {
                     @Override
                     public void onProgress(long bytesUploaded, long totalBytes) {
-                        pg.show();
+                        //pg.show();
 
                     }
                 })
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-
-                        pg.dismiss();
+                        //pg.dismiss();
+                        globleProgressDialog.dismiss();
                         JSONObject job = response;
                         String responseText=job.optString("responseText");
                         boolean responseStatus = job.optBoolean("responseStatus");
@@ -370,8 +534,6 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
 
 
                         // boolean _status = job1.getBoolean("status");
-
-
                         // do anything with response
                     }
 
@@ -379,7 +541,8 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
                     public void onError(ANError error) {
                         // handle error
                         Log.e("error",error.toString());
-                        pg.dismiss();
+                        //pg.dismiss();
+                        globleProgressDialog.dismiss();
                         Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_LONG).show();
 
                     }
@@ -394,23 +557,33 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
         dialogBuilder.setView(dialogView);
         TextView tvInvalidDate = (TextView) dialogView.findViewById(R.id.tvSuccess);
 
-        tvInvalidDate.setText("Backlog Attendance saved successfully");
-
-
-
+        tvInvalidDate.setText("Your backlog attendance was saved successfully");
 
         Button btnOk = (Button) dialogView.findViewById(R.id.btnOk);
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (imgLike.getVisibility()==View.VISIBLE){
+                if (imgLike.getVisibility() == View.VISIBLE) {
                     imgLike.setVisibility(View.GONE);
                 }
                 alerDialog1.dismiss();
 
                 backLogItem.clear();
-                backlogDetails="";
-               getBackLogData();
+                backlogDetails = "";
+                //getBackLogData();
+
+                JSONObject obj=new JSONObject();
+                try {
+                    obj.put("DbOperation","1");
+                    obj.put("empid",pref.getEmpId());
+                    obj.put("clientid",pref.getEmpClintId());
+                    obj.put("fromdate",strtDate);
+                    obj.put("todate",endDate);
+                    obj.put("SecurityCode",pref.getSecurityCode());
+                    getBackLogData(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
             }
         });
@@ -430,6 +603,8 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
         int mDay = c.get(Calendar.DAY_OF_MONTH);
 
 
+
+
         DatePickerDialog datePickerDialog = new DatePickerDialog(BacklogAttendanceActivity.this,
                 new DatePickerDialog.OnDateSetListener() {
 
@@ -437,14 +612,16 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {
 
-
+                        startYear = year;
+                        startMonth = monthOfYear;
+                        startDay = dayOfMonth;
 
                         int month = (monthOfYear + 1);
                         strtDate =  year +"-"+month+"-"+dayOfMonth;
                         tvStrtDate.setText(Util.changeAnyDateFormat(strtDate,"yyyy-MM-dd","dd MMM yyyy"));
 
                     }
-                }, mYear, mMonth, mDay);
+                }, startYear, startMonth, startDay);
         datePickerDialog.getDatePicker().setMaxDate((long) (System.currentTimeMillis() - 1000));
         datePickerDialog.show();
 
@@ -464,18 +641,29 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
                     @Override
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {
+
+                        endYear = year;
+                        endMonth = monthOfYear;
+                        endDay = dayOfMonth;
+
                         int enddate = dayOfMonth + monthOfYear + year;
                         int month = (monthOfYear + 1);
                         endDate = year +"-"+month+"-"+dayOfMonth;
                         tvEndDate.setText(Util.changeAnyDateFormat(endDate,"yyyy-MM-dd","dd MMM yyyy"));
 
                     }
-                }, mYear, mMonth, mDay);
+                }, endYear, endMonth, endDay);
 
         datePickerDialog.getDatePicker().setMaxDate((long) (System.currentTimeMillis() - 1000));
         datePickerDialog.show();
 
     }
 
+    public void updateItemStatus(int position,boolean status) {
+        if (status)
+            itemSelectCount++;
+        else
+            itemSelectCount--;
+    }
 
 }

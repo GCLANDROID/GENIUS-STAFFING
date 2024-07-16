@@ -30,10 +30,12 @@ import io.cordova.myapp00d753.activity.AttenApprovalActivity;
 import io.cordova.myapp00d753.activity.BacklogAttendanceActivity;
 import io.cordova.myapp00d753.module.AttendanceApprovalModule;
 import io.cordova.myapp00d753.module.BackLogAttendanceModel;
+import io.cordova.myapp00d753.utility.TimeConversion;
 import io.cordova.myapp00d753.utility.Util;
 
 
 public class BackLogAdapter extends RecyclerView.Adapter<BackLogAdapter.MyViewHolder> {
+    private static final String TAG = "BackLogAdapter";
     ArrayList<BackLogAttendanceModel> itemList = new ArrayList<>();
     Context mContex;
     ArrayList<String> item = new ArrayList<>();
@@ -56,9 +58,13 @@ public class BackLogAdapter extends RecyclerView.Adapter<BackLogAdapter.MyViewHo
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, @SuppressLint("RecyclerView") final int i) {
         final BackLogAttendanceModel attandanceModel = itemList.get(i);
 
+        if (((BacklogAttendanceActivity) mContex).isSelectedAll){
+            myViewHolder.imgLike.setVisibility(View.VISIBLE);
+        } else {
+            myViewHolder.imgLike.setVisibility(View.GONE);
+        }
 
-
-        if (isAll) {
+        /*if (isAll) {
             if (isSelectedAll) {
 
                 myViewHolder.imgLike.setVisibility(View.VISIBLE);
@@ -71,12 +77,12 @@ public class BackLogAdapter extends RecyclerView.Adapter<BackLogAdapter.MyViewHo
 
             }
         }else {
-            /*if (itemList.get(i).isSelected()) {
+            *//*if (itemList.get(i).isSelected()) {
                 myViewHolder.imgLike.setVisibility(View.VISIBLE);
             } else {
                 myViewHolder.imgLike.setVisibility(View.GONE);
-            }*/
-        }
+            }*//*
+        }*/
 
         myViewHolder.tvDate.setText(Util.changeAnyDateFormat(itemList.get(i).getDate(),"MM/dd/yyyy","dd MMM yyyy"));
         myViewHolder.tvInTime.setText(itemList.get(i).getInTime());
@@ -100,17 +106,12 @@ public class BackLogAdapter extends RecyclerView.Adapter<BackLogAdapter.MyViewHo
                 // Launch Time Picker Dialog
                 TimePickerDialog timePickerDialog = new TimePickerDialog(mContex,
                         new TimePickerDialog.OnTimeSetListener() {
-
                             @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay,
-                                                  int minute) {
-
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                                 //txtTime.setText(hourOfDay + ":" + minute);
-                                String intime = hourOfDay + ":" + minute;
+                                String intime = TimeConversion.convert_HH_mm_To_HH_mm_ss(hourOfDay + ":" + minute);
                                 itemList.get(i).setInTime(intime);
                                 myViewHolder.tvInTime.setText(itemList.get(i).getInTime());
-
-
                             }
                         }, mHour, mMinute, false);
                 timePickerDialog.show();
@@ -133,8 +134,8 @@ public class BackLogAdapter extends RecyclerView.Adapter<BackLogAdapter.MyViewHo
                                                   int minute) {
 
                                 //txtTime.setText(hourOfDay + ":" + minute);
-                                String intime = hourOfDay + ":" + minute;
-                                itemList.get(i).setOutTime(intime);
+                                String outTime = TimeConversion.convert_HH_mm_To_HH_mm_ss(hourOfDay + ":" + minute);
+                                itemList.get(i).setOutTime(outTime);
                                 myViewHolder.tvOutTime.setText(itemList.get(i).getOutTime());
 
 
@@ -150,15 +151,24 @@ public class BackLogAdapter extends RecyclerView.Adapter<BackLogAdapter.MyViewHo
             public void onClick(View view) {
                 attandanceModel.setSelected(!attandanceModel.isSelected());
                 // holder.view.setBackgroundColor(attandanceModel.isSelected() ? Color.CYAN : Color.WHITE);
-                   if (isSelectedAll){
+                //Log.e(TAG, "isSelectedAll: "+isSelectedAll);
+                if (attandanceModel.isSelected()){
+                    myViewHolder.imgLike.setVisibility(View.VISIBLE);
+                    itemList.get(i).setSelected(true);
+                    ((BacklogAttendanceActivity) mContex).updateItemStatus(i, true );
+                } else {
+                    myViewHolder.imgLike.setVisibility(View.GONE);
+                    itemList.get(i).setSelected(false);
+                    ((BacklogAttendanceActivity) mContex).updateItemStatus(i, false);
+                }
+                   /*if (isSelectedAll){
                        if (myViewHolder.imgLike.getVisibility()==View.VISIBLE){
                            myViewHolder.imgLike.setVisibility(View.GONE);
-                           ((BacklogAttendanceActivity) mContex).removeItem(i );
+                           ((BacklogAttendanceActivity) mContex).removeItem(i);
                        }else {
                            myViewHolder.imgLike.setVisibility(View.VISIBLE);
                        }
-
-                   }else {
+                   } else {
                        if (attandanceModel.isSelected()) {
 
                            myViewHolder.imgLike.setVisibility(View.VISIBLE);
@@ -166,9 +176,6 @@ public class BackLogAdapter extends RecyclerView.Adapter<BackLogAdapter.MyViewHo
                            notifyDataSetChanged();
 
                            ((BacklogAttendanceActivity) mContex).updateItemStatus(i, true );
-
-
-
                        } else {
 
                            myViewHolder.imgLike.setVisibility(View.GONE);
@@ -178,9 +185,7 @@ public class BackLogAdapter extends RecyclerView.Adapter<BackLogAdapter.MyViewHo
                            itemList.get(i).setSelected(false);
                            notifyDataSetChanged();
                        }
-                   }
-
-
+                   }*/
             }
         });
 
@@ -214,20 +219,14 @@ public class BackLogAdapter extends RecyclerView.Adapter<BackLogAdapter.MyViewHo
 
 
     public void selectAll(){
-        isSelectedAll=true;
-        isAll=true;
-
+        //isSelectedAll=true;
+        //isAll=true;
         notifyDataSetChanged();
 
     }
     public void unselectall(){
-        isSelectedAll=false;
-        isAll=true;
+        //isSelectedAll=false;
+        //isAll=true;
         notifyDataSetChanged();
     }
-
-
-
-
-
 }

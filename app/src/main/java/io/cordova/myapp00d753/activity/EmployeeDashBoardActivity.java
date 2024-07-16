@@ -500,7 +500,6 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
 
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
-
     }
 
     public void getMenu(JSONObject jsonObject) {
@@ -561,6 +560,12 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError anError) {
                         Log.e(TAG, "GET_MENU_error: "+anError.getErrorBody());
+                        if (anError.getErrorCode()==401){
+                            Toast.makeText(EmployeeDashBoardActivity.this, "Session expired, please login", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(EmployeeDashBoardActivity.this, LoginActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }
                     }
                 });
     }
@@ -614,7 +619,8 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
 
                                 }
 
-
+                                MenuItemAdapter menuItemAdapter=new MenuItemAdapter(itemList,getApplicationContext(),PFLink,leaveFlag);
+                                rvItem.setAdapter(menuItemAdapter);
 
                                 getFeedbackChecking();
                             }
