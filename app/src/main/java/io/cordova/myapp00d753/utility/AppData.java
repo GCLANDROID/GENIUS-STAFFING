@@ -42,4 +42,8 @@ public class AppData {
     public static String GET_SELF_ATTENDANCE_WO_LEAVE = newv2url+"Attendance/GetSelfAttendanceWoLeave";
     public static String GET_OFFLINE_DAILY_LOG_ACTIVITY = newv2url+"Attendance/GetOfflineDailyLogActivity";
     public static String POST_EMPLOYEE_DAILY_ACTIVITY = newv2url+"FileUpload/PostEmployeeDailyActivity";
+
+    public static String GET_ATTENDANCE_REGULARIZATION = newv2url+"Attendance/GetAttendanceRegularization";
+    public static String SAVE_ATTENDANCE_REGULARIZATION = newv2url+"Attendance/SaveAttendanceRegularization";
+    public static String GET_SHIFT = newv2url+"Attendance/GetShift";
 }
