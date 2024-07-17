@@ -544,7 +544,7 @@ public class TempPanActivity extends AppCompatActivity {
                     public void onError(ANError error) {
                         // handle error
                         Log.e("errt", String.valueOf(error));
-
+                        progressDialog.dismiss();
                         Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                     }
                 });
@@ -662,7 +662,7 @@ public class TempPanActivity extends AppCompatActivity {
                     public void onError(ANError error) {
                         // handle error
                         Log.e("errt", String.valueOf(error));
-
+                        progressDialog.dismiss();
                         Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                     }
                 });
@@ -726,6 +726,7 @@ public class TempPanActivity extends AppCompatActivity {
                     public void onError(ANError error) {
                         // handle error
                         Log.e("errt", String.valueOf(error));
+                        progressDialog.dismiss();
 
                         Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                     }
