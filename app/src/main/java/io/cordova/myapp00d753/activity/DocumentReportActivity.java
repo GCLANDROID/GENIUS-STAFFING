@@ -167,7 +167,20 @@ public class DocumentReportActivity extends AppCompatActivity  {
         imgAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getDocList();
+                //getDocList();
+                JSONObject obj=new JSONObject();
+                try {
+                    obj.put("AEMEmployeeID", pref.getEmpId());
+                    obj.put("FileName",JSONObject.NULL);
+                    obj.put("FileType","0");
+                    obj.put("DocumentID","0");
+                    obj.put("ReferenceNo","0");
+                    obj.put("DbOperation","1");
+                    obj.put("SecurityCode",pref.getSecurityCode());
+                    getDocList(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -194,13 +207,15 @@ public class DocumentReportActivity extends AppCompatActivity  {
                                 String Response_Data = job1.optString("Response_Data");
                                 JSONArray jsonArray = new JSONArray(Response_Data);
                                 for (int i = 0; i < jsonArray.length(); i++) {
+                                    Log.e(TAG, "onResponse: called");
                                     JSONObject obj = jsonArray.getJSONObject(i);
                                     String DocumentName = obj.optString("DocumentName");
                                     String DocumentType = obj.optString("DocumentType");
                                     String AEMStatusName = obj.optString("AEMStatusName");
                                     String CreatedOn = obj.optString("CreatedOn");
                                     String ApprovalRemarks = obj.optString("ApprovalRemarks");
-                                    String DocLink = obj.optString("DocLink");
+                                    String DocLink = obj.optString("Mobilelink");
+                                    //Log.e(TAG, "DocLink: "+DocLink );
                                     if (AEMStatusName.equals("Pending")) {
                                         DocumentManageModule dmodule = new DocumentManageModule(DocumentName, DocumentType, ApprovalRemarks, CreatedOn, AEMStatusName, DocLink);
                                         documentList.add(dmodule);
@@ -346,7 +361,7 @@ public class DocumentReportActivity extends AppCompatActivity  {
                                     String AEMStatusName = obj.optString("AEMStatusName");
                                     String CreatedOn = obj.optString("CreatedOn");
                                     String ApprovalRemarks = obj.optString("ApprovalRemarks");
-                                    String DocLink = obj.optString("DocLink");
+                                    String DocLink = obj.optString("Mobilelink");
                                     if (AEMStatusName.equals("Approved")) {
                                         DocumentManageModule dmodule = new DocumentManageModule(DocumentName, DocumentType, ApprovalRemarks, CreatedOn, AEMStatusName, DocLink);
                                         documentList.add(dmodule);
@@ -486,7 +501,7 @@ public class DocumentReportActivity extends AppCompatActivity  {
                                     String AEMStatusName = obj.optString("AEMStatusName");
                                     String CreatedOn = obj.optString("CreatedOn");
                                     String ApprovalRemarks = obj.optString("ApprovalRemarks");
-                                    String DocLink = obj.optString("DocLink");
+                                    String DocLink = obj.optString("Mobilelink");
                                     DocumentManageModule dmodule = new DocumentManageModule(DocumentName, DocumentType, ApprovalRemarks, CreatedOn, AEMStatusName, DocLink);
                                     documentList.add(dmodule);
                                 }

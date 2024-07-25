@@ -218,19 +218,19 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_metso_new_reimbursement_claim);
         initialize();
-        setHideItem();
+        //setHideItem();
 
-        /*JSONObject obj1=new JSONObject();
+        JSONObject obj1=new JSONObject();
         try {
-            obj1.put("ddltype", "16");
-            obj1.put("id1",pref.getEmpConId());
-            obj1.put("id2",pref.getEmpClintId());
-            obj1.put("id3",0);
+            obj1.put("DDL_Type", "16");
+            obj1.put("ID1",pref.getEmpConId());
+            obj1.put("ID2",pref.getEmpClintId());
+            obj1.put("ID3","0");
             obj1.put("SecurityCode",pref.getSecurityCode());
             setHideItem(obj1);
         } catch (JSONException e) {
             e.printStackTrace();
-        }*/
+        }
         onClick();
     }
 
@@ -598,6 +598,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.e(TAG, "onClick: called");
                 if (pdfflag != 0 || galleryFlag != 0 || (pdfflag != 0 && galleryFlag != 0)) {
                     if (componentId != "") {
                         if (!CostCentreId.isEmpty()) {
@@ -1107,18 +1108,18 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                                 JSONArray jsonArray = new JSONArray(Response_Data);
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject obj = jsonArray.getJSONObject(i);
-                                    comeid = obj.optString("id");
+                                    comeid = obj.optString("ID");
                                     Log.d("comeeid", comeid);
-                                    String value = obj.optString("value");
+                                    String value = obj.optString("VALUE");
                                     Log.d("comvalue", value);
                                 }
 
                                 JSONObject obj1=new JSONObject();
                                 try {
-                                    obj1.put("ddltype", "160");
-                                    obj1.put("id1",pref.getEmpConId());
-                                    obj1.put("id2",pref.getEmpClintId());
-                                    obj1.put("id3",0);
+                                    obj1.put("DDL_Type", "160");
+                                    obj1.put("ID1",pref.getEmpConId());
+                                    obj1.put("ID2",pref.getEmpClintId());
+                                    obj1.put("ID3",0);
                                     obj1.put("SecurityCode",pref.getSecurityCode());
                                     setComponenetItem(obj1);
                                 } catch (JSONException e) {
@@ -1214,9 +1215,9 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                                 JSONArray jsonArray = new JSONArray(Response_Data);
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject obj = jsonArray.getJSONObject(i);
-                                    String comid = obj.optString("id");
-                                    Log.e(TAG,"comid: "+comid);
-                                    String value = obj.optString("value");
+                                    String comid = obj.optString("ID");
+                                    //Log.e(TAG,"comid: "+comid);
+                                    String value = obj.optString("VALUE");
                                     componentList.add(value);
                                     SpineerItemModel mainDocModule = new SpineerItemModel(value, comid);
                                     moduleComponentList.add(mainDocModule);
@@ -1241,17 +1242,15 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
 
                                 JSONObject obj1=new JSONObject();
                                 try {
-                                    obj1.put("ddltype", "CLCOSTC");
-                                    obj1.put("id1","0");
-                                    obj1.put("id2",pref.getEmpClintId());
-                                    obj1.put("id3",0);
+                                    obj1.put("DDL_Type", "CLCOSTC");
+                                    obj1.put("ID1","0");
+                                    obj1.put("ID2",pref.getEmpClintId());
+                                    obj1.put("ID3",0);
                                     obj1.put("SecurityCode",pref.getSecurityCode());
                                     getCostCenterList(obj1);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-
-
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -1362,19 +1361,19 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                                 JSONArray jsonArray = new JSONArray(Response_Data);
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject obj = jsonArray.getJSONObject(i);
-                                    String comid = obj.optString("id");
+                                    String comid = obj.optString("ID");
                                     Log.d("comid", comid);
-                                    String value = obj.optString("value");
+                                    String value = obj.optString("VALUE");
                                     SpineerItemModel mainDocModule = new SpineerItemModel(value, comid);
                                     costCenterComponentList.add(mainDocModule);
                                 }
 
                                 JSONObject obj1=new JSONObject();
                                 try {
-                                    obj1.put("ddltype", "CLWBSM");
-                                    obj1.put("id1","0");
-                                    obj1.put("id2",pref.getEmpClintId());
-                                    obj1.put("id3",0);
+                                    obj1.put("DDL_Type", "CLWBSM");
+                                    obj1.put("ID1","0");
+                                    obj1.put("ID2",pref.getEmpClintId());
+                                    obj1.put("ID3",0);
                                     obj1.put("SecurityCode",pref.getSecurityCode());
                                     getWbsCode(obj1);
                                 } catch (JSONException e) {
@@ -1483,19 +1482,19 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                                 JSONArray jsonArray = new JSONArray(Response_Data);
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject obj = jsonArray.getJSONObject(i);
-                                    String comid = obj.optString("id");
+                                    String comid = obj.optString("ID");
                                     Log.d("comid", comid);
-                                    String value = obj.optString("value");
+                                    String value = obj.optString("VALUE");
                                     SpineerItemModel mainDocModule = new SpineerItemModel(value, comid);
                                     wbsCodeList.add(mainDocModule);
                                 }
 
                                 JSONObject obj1=new JSONObject();
                                 try {
-                                    obj1.put("ddltype", "CLSPM");
-                                    obj1.put("id1","0");
-                                    obj1.put("id2",pref.getEmpClintId());
-                                    obj1.put("id3",0);
+                                    obj1.put("DDL_Type", "CLSPM");
+                                    obj1.put("ID1","0");
+                                    obj1.put("ID2",pref.getEmpClintId());
+                                    obj1.put("ID3",0);
                                     obj1.put("SecurityCode",pref.getSecurityCode());
                                     getSupervisorList(obj1);
                                 } catch (JSONException e) {
@@ -1653,9 +1652,9 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                                 JSONArray jsonArray = new JSONArray(Response_Data);
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject obj = jsonArray.getJSONObject(i);
-                                    String comid = obj.optString("id");
+                                    String comid = obj.optString("ID");
                                     Log.d("comid", comid);
-                                    String value = obj.optString("value");
+                                    String value = obj.optString("VALUE");
                                     SpineerItemModel mainDocModule = new SpineerItemModel(value, comid);
                                     supervisorList.add(mainDocModule);
                                 }
@@ -1680,10 +1679,10 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
 
                                 JSONObject obj1=new JSONObject();
                                 try {
-                                    obj1.put("ddltype", "CLSITEM");
-                                    obj1.put("id1","0");
-                                    obj1.put("id2",pref.getEmpClintId());
-                                    obj1.put("id3",0);
+                                    obj1.put("DDL_Type", "CLSITEM");
+                                    obj1.put("ID1","0");
+                                    obj1.put("ID2",pref.getEmpClintId());
+                                    obj1.put("ID3",0);
                                     obj1.put("SecurityCode",pref.getSecurityCode());
                                     getSiteMasterList(obj1);
                                 } catch (JSONException e) {
@@ -1791,9 +1790,9 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                                 JSONArray jsonArray = new JSONArray(Response_Data);
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject obj = jsonArray.getJSONObject(i);
-                                    String comid = obj.optString("id");
+                                    String comid = obj.optString("ID");
                                     Log.d("comid", comid);
-                                    String value = obj.optString("value");
+                                    String value = obj.optString("VALUE");
                                     SpineerItemModel mainDocModule = new SpineerItemModel(value, comid);
                                     siteMasterList.add(mainDocModule);
                                 }
@@ -2461,17 +2460,28 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
             case REQUEST_SELECT_PDF:
                 if (resultCode == Activity.RESULT_OK) {
                     Uri uri = data.getData();
-                    String realPath2 = getRealPathFromURI(uri);
-                    Log.e(TAG, "onActivityResult: " + uri.getPath());
+                    Log.e(TAG, "onActivityResult: "+uri.getPath());
                     String imagePath = uri.getPath();
-
-                    pdfFilePath = getRealPath(MetsoNewReimbursementClaimActivity.this, uri);
-                    pdfFileName = FindDocumentInformation.FileNameFromURL(pdfFilePath);
-                    pdfFile = convertInputStreamToFile(uri, pdfFileName);
-                    Log.e(TAG, "onActivityResult: Real Path: " + pdfFilePath);
-                    Log.e(TAG, "onActivityResult: PDF name " + pdfFileName);
-                    Log.e(TAG, "onActivityResult: Real Path 2: " + realPath2);
-                    Log.e(TAG, "onActivityResult: Final PDF path" + pdfFile);
+                    if (imagePath.contains("all_external")){
+                        pdfFileName = FindDocumentInformation.FileNameFromURL(imagePath);
+                        pdfFile = convertInputStreamToFile(uri,pdfFileName);
+                        Log.e(TAG, "onActivityResult: "+pdfFile.getAbsolutePath());
+                    } else {
+                        try {
+                            pdfFilePath = getRealPath(MetsoNewReimbursementClaimActivity.this,uri);
+                            Log.e(TAG, "onActivityResult: ================== "+pdfFilePath);
+                            pdfFileName = FindDocumentInformation.FileNameFromURL(pdfFilePath);
+                        } catch (IllegalArgumentException e){
+                            //Todo: from WPS office document select
+                            pdfFileName = FindDocumentInformation.FileNameFromURL(imagePath);
+                            pdfFile = convertInputStreamToFile(uri,pdfFileName);
+                            Log.e(TAG, "onActivityResult: "+pdfFile.getAbsolutePath());
+                        }
+                        pdfFile = convertInputStreamToFile(uri,pdfFileName);
+                        Log.e(TAG, "onActivityResult: Real Path: "+pdfFilePath);
+                        Log.e(TAG, "onActivityResult: PDF name "+pdfFileName);
+                        Log.e(TAG, "onActivityResult: Final PDF path"+pdfFile);
+                    }
                     imgPDF.setVisibility(View.VISIBLE);
                     imgUnselectPdf.setVisibility(View.VISIBLE);
                     pdfflag = 1;
@@ -3165,7 +3175,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                     }
                 });*/
 
-        /*AndroidNetworking.upload(UPLOAD_URL)
+        AndroidNetworking.upload(UPLOAD_URL)
                 .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
                 .addMultipartParameter("AEMComponentID", comeid)
                 .addMultipartParameter("Description", description)
@@ -3227,7 +3237,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
 
                         Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                     }
-                });*/
+                });
     }
 
     public void uploadMultipartwithfile() {
