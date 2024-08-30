@@ -285,11 +285,7 @@ public class TempDashBoardActivity extends AppCompatActivity {
 
 
                                 }
-                                if (pref.getIntentFlag().equals("1")){
-                                    loginFunction();
-                                }else {
 
-                                }
 
 
 
