@@ -43,7 +43,7 @@ public class HanasaSalesAdapter extends RecyclerView.Adapter<HanasaSalesAdapter.
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.txtProductName.setText(viewSalesList.get(position).productName);
         holder.txtStockInHand.setText(String.valueOf(viewSalesList.get(position).inStock));
-        Log.e(TAG, "onBindViewHolder: "+viewSalesList.get(position).productValue);
+        Log.e(TAG, viewSalesList.get(position).productName+" : "+viewSalesList.get(position).productValue);
         holder.txtReceivingStock.setText("");
         holder.txtSalesDone.setText("");
         holder.txtSalesValues.setText("");
@@ -75,6 +75,21 @@ public class HanasaSalesAdapter extends RecyclerView.Adapter<HanasaSalesAdapter.
                         holder.txtClosingStock.setText(String.valueOf(sum));
                     }
                     viewSalesList.get(position).setReceivingStock(holder.txtReceivingStock.getText().toString().trim());
+                } else {
+                    if (!holder.txtSalesDone.getText().toString().isEmpty()){
+                        Log.e(TAG, "afterTextChanged: 1.1");
+                        /*int sum = (Integer.parseInt(holder.txtStockInHand.getText().toString().trim())+
+                                Integer.parseInt(holder.txtReceivingStock.getText().toString()))-Integer.parseInt(holder.txtSalesDone.getText().toString());*/
+
+                        int sum = (Integer.parseInt(holder.txtStockInHand.getText().toString().trim())+
+                                0)-Integer.parseInt(holder.txtSalesDone.getText().toString());
+                        holder.txtClosingStock.setText(String.valueOf(sum));
+                    } else {
+                        Log.e(TAG, "afterTextChanged: 1.2");
+                        //int sum = Integer.parseInt(holder.txtStockInHand.getText().toString().trim()) + 0;
+                        holder.txtClosingStock.setText("");
+                    }
+                    viewSalesList.get(position).setReceivingStock(holder.txtReceivingStock.getText().toString().trim());
                 }
             }
         });
@@ -94,7 +109,7 @@ public class HanasaSalesAdapter extends RecyclerView.Adapter<HanasaSalesAdapter.
             public void afterTextChanged(Editable editable) {
                 if (!holder.txtSalesDone.getText().toString().isEmpty()){
                     Log.e(TAG, "afterTextChanged: 2");
-                    if (!holder.txtSalesDone.getText().toString().isEmpty()){
+                    if (!holder.txtReceivingStock.getText().toString().isEmpty()){
                         Log.e(TAG, "afterTextChanged: 2.1");
                         int sum = (Integer.parseInt(holder.txtStockInHand.getText().toString().trim()) +
                                 Integer.parseInt(holder.txtReceivingStock.getText().toString()))-Integer.parseInt(holder.txtSalesDone.getText().toString());
@@ -117,9 +132,12 @@ public class HanasaSalesAdapter extends RecyclerView.Adapter<HanasaSalesAdapter.
                         viewSalesList.get(position).setSalesDone(holder.txtSalesDone.getText().toString().trim());
                     } else {
                         Log.e(TAG, "afterTextChanged: 2.2");
-                        int sum = Integer.parseInt(holder.txtStockInHand.getText().toString().trim())+Integer.parseInt(holder.txtReceivingStock.getText().toString().trim());
+                        //int sum = Integer.parseInt(holder.txtStockInHand.getText().toString().trim())+Integer.parseInt(holder.txtReceivingStock.getText().toString().trim());
+                        int sum = (Integer.parseInt(holder.txtStockInHand.getText().toString().trim()) + 0)-Integer.parseInt(holder.txtSalesDone.getText().toString());
+
                         holder.txtClosingStock.setText(String.valueOf(sum));
                         viewSalesList.get(position).setClosingStock(String.valueOf(sum));
+
 
                         double salesValue = Double.valueOf(viewSalesList.get(position).productValue) * Integer.parseInt(holder.txtSalesDone.getText().toString().trim());
                         holder.txtSalesValues.setText(String.valueOf(salesValue));
@@ -127,6 +145,18 @@ public class HanasaSalesAdapter extends RecyclerView.Adapter<HanasaSalesAdapter.
                         viewSalesList.get(position).setSalesValues(String.valueOf(salesValue));
                         viewSalesList.get(position).setSalesDone(holder.txtSalesDone.getText().toString().trim());
                     }
+
+                } else {
+                    int sum = (Integer.parseInt(holder.txtStockInHand.getText().toString().trim()) + Integer.parseInt((holder.txtReceivingStock.getText().toString().isEmpty()) ? "0":  holder.txtReceivingStock.getText().toString() ))-0;
+
+                    holder.txtClosingStock.setText((String.valueOf(sum).toString().equals("0")?"":String.valueOf(sum)));
+                    viewSalesList.get(position).setClosingStock(String.valueOf(sum));
+
+                    //double salesValue = Double.valueOf(viewSalesList.get(position).productValue) * Integer.parseInt(holder.txtSalesDone.getText().toString().trim());
+                    holder.txtSalesValues.setText("");
+
+                    viewSalesList.get(position).setSalesValues(String.valueOf(0));
+                    viewSalesList.get(position).setSalesDone(holder.txtSalesDone.getText().toString().trim());
                 }
             }
         });
