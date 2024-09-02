@@ -25,6 +25,7 @@ import com.google.android.gms.location.LocationRequest;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
@@ -125,6 +126,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
     String address1;
     String address = "N/A";
     LinearLayout llLoading,llSubmit;
+    TextView tvTimer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -268,6 +270,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BETWEEN_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, locationListener);*/
         llLoading = findViewById(R.id.llLoading);
         llSubmit = findViewById(R.id.llSubmit);
+        tvTimer = findViewById(R.id.tvTimer);
         btnSubmit = findViewById(R.id.btnSubmit);
         txtCurrentLocation = findViewById(R.id.txtCurrentLocation);
         imgBack = findViewById(R.id.imgBack);
@@ -630,6 +633,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
         if (llLoading.getVisibility() == View.VISIBLE){
             llLoading.setVisibility(View.GONE);
             llSubmit.setVisibility(View.VISIBLE);
+            startTimer();
         }
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -642,6 +646,30 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
         mMap.addMarker(options);
+    }
+
+    private void startTimer() {
+        int timerInMillis = 120 * 1000;
+        CountDownTimer countDownTimer = new CountDownTimer(timerInMillis,1000) {
+            @Override
+            public void onTick(long l) {
+                long seconds = l / 1000;
+                long hours = seconds / 3600;
+                seconds %= 3600;
+                long minutes = seconds / 60;
+                seconds %= 60;
+
+                String timeFormatted = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+                tvTimer.setText(timeFormatted);
+            }
+
+            @Override
+            public void onFinish() {
+                finish();
+            }
+        };
+
+        countDownTimer.start();
     }
 
     @Override
@@ -798,10 +826,25 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
     public void onPause() {
         super.onPause();
         // mapView.onPause();
+        //finish();
+        Log.e(TAG, "Called: onPause");
         if (mGoogleClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleClient, this);
             mGoogleClient.disconnect();
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.e(TAG, "Called: onStop");
+        finish();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.e(TAG, "called: onRestart");
     }
 
     private String getCompleteAddressString(double LATITUDE, double LONGITUDE) {
@@ -827,4 +870,6 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
         }
         return strAdd;
     }
+
+
 }

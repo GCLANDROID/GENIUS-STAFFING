@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -13,8 +15,10 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import androidx.appcompat.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -76,7 +80,8 @@ public class HonasaSalesActivity extends AppCompatActivity {
     ImageView imgBack,imgHome;
     AlertDialog alerDialog1;
     ProgressDialog pdSave;
-
+    SearchView edtSearch;
+    //EditText edtSearch;
     public boolean isSalesDoneIsLessThenClosingStock = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,6 +150,7 @@ public class HonasaSalesActivity extends AppCompatActivity {
         imgBack  = findViewById(R.id.imgBack);
         imgHome = findViewById(R.id.imgHome);
         llHome = findViewById(R.id.llHome);
+        edtSearch = findViewById(R.id.edtSearch);
 
         rvSales =  findViewById(R.id.rvSales);
         rvSales.setLayoutManager(new LinearLayoutManager(this));
@@ -488,6 +494,36 @@ public class HonasaSalesActivity extends AppCompatActivity {
                                 Log.e(TAG, "viewSalesList.size(): "+viewSalesList.size());
                                 HanasaSalesAdapter hanasaSalesAdapter = new HanasaSalesAdapter(HonasaSalesActivity.this,viewSalesList);
                                 rvSales.setAdapter(hanasaSalesAdapter);
+
+                               /* edtSearch.addTextChangedListener(new TextWatcher() {
+                                    @Override
+                                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                                    }
+
+                                    @Override
+                                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                                        hanasaSalesAdapter.getFilter().filter(charSequence);
+                                    }
+
+                                    @Override
+                                    public void afterTextChanged(Editable editable) {
+
+                                    }
+                                });*/
+
+                                edtSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                                    @Override
+                                    public boolean onQueryTextSubmit(String s) {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean onQueryTextChange(String s) {
+                                        hanasaSalesAdapter.getFilter().filter(s);
+                                        return false;
+                                    }
+                                });
 
                                 llSearchPanel.setVisibility(View.GONE);
                                 llLoading.setVisibility(View.GONE);
