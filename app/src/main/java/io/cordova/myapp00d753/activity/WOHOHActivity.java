@@ -83,7 +83,6 @@ public class WOHOHActivity extends AppCompatActivity {
                 int day = c.get(Calendar.DAY_OF_MONTH);
                 c.add(Calendar.DAY_OF_MONTH, -7);
 
-
                 final DatePickerDialog dialog = new DatePickerDialog(WOHOHActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int y, int m, int d) {

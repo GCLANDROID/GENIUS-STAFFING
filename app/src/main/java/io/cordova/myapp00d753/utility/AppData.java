@@ -50,4 +50,6 @@ public class AppData {
     public static String SAVE_EMPLOYEE_SALES_WITHOUT_INVOICE = newv2url+"Sales/SaveEmpSalesWithoutInvoice";
     public static String GET_EMPLOYEE_SALES_REPORT = newv2url+"Sales/GetEmpSalesReport";
     public static String GET_EMPLOYEE_DAILY_VISIT_MANAGE = newv2url+"Sales/GetEmployeeDailyVisitManage";
+
+
 }
