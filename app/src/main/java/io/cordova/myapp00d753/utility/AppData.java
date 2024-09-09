@@ -46,4 +46,8 @@ public class AppData {
     public static String GET_ATTENDANCE_REGULARIZATION = newv2url+"Attendance/GetAttendanceRegularization";
     public static String SAVE_ATTENDANCE_REGULARIZATION = newv2url+"Attendance/SaveAttendanceRegularization";
     public static String GET_SHIFT = newv2url+"Attendance/GetShift";
+
+    public static String SAVE_EMPLOYEE_SALES_WITHOUT_INVOICE = newv2url+"Sales/SaveEmpSalesWithoutInvoice";
+    public static String GET_EMPLOYEE_SALES_REPORT = newv2url+"Sales/GetEmpSalesReport";
+    public static String GET_EMPLOYEE_DAILY_VISIT_MANAGE = newv2url+"Sales/GetEmployeeDailyVisitManage";
 }
