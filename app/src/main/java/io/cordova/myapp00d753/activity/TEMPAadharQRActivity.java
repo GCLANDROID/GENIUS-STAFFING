@@ -1,0 +1,356 @@
+package io.cordova.myapp00d753.activity;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Random;
+
+import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.databinding.ActivityTempaadharQractivityBinding;
+import io.cordova.myapp00d753.utility.AppData;
+import io.cordova.myapp00d753.utility.Pref;
+
+public class TEMPAadharQRActivity extends AppCompatActivity {
+    ActivityTempaadharQractivityBinding binding;
+    Pref pref;
+    String sessionId;
+    AlertDialog al1;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding= DataBindingUtil.setContentView(this,R.layout.activity_tempaadhar_qractivity);
+        initView();
+    }
+
+    private void initView(){
+        pref=new Pref(TEMPAadharQRActivity.this);
+        captchagebneration();
+        binding.btnValidate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (binding.etAadhar.getText().toString().length()==12){
+                    if (binding.etCapctha.getText().toString().length()>0){
+                        JSONObject jsonObject=new JSONObject();
+                        try {
+                            jsonObject.put("sessionId",sessionId);
+                            jsonObject.put("aadhaar",binding.etAadhar.getText().toString());
+                            jsonObject.put("securityCode",binding.etCapctha.getText().toString());
+                            validateCaptcha(jsonObject);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }else {
+                        Toast.makeText(TEMPAadharQRActivity.this,"Please Enter Captcha",Toast.LENGTH_LONG).show();
+                    }
+
+                }else {
+                    Toast.makeText(TEMPAadharQRActivity.this,"Please Enter Valid Aadhar Number",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+
+
+        binding.btnOTPValidate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (binding.etOTP.getText().toString().length()>0){
+
+                        JSONObject jsonObject=new JSONObject();
+                        try {
+                            jsonObject.put("sessionId",sessionId);
+                            jsonObject.put("otp",binding.etOTP.getText().toString());
+                            jsonObject.put("shareCode",GetPassword(4));
+                            jsonObject.put("fileUrl",false);
+                            validateOTP(jsonObject);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+                }else {
+                    Toast.makeText(TEMPAadharQRActivity.this,"Please Enter OTP",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+    }
+
+    private void captchagebneration() {
+        ProgressDialog pd=new ProgressDialog(this);
+        pd.setMessage("Loading");
+        pd.show();
+        pd.setCancelable(false);
+        AndroidNetworking.get("https://india-vcip-aadhaarxml-demo.hyperverge.co/api/v1/captcha")
+                .addHeaders("appId", AppData.APPID)
+                .addHeaders("appKey", AppData.APPKEY)
+                .addHeaders("transactionId", pref.getMasterId())
+                .addHeaders("content-type", "application/json")
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        pd.dismiss();
+
+                        int statusCode = job1.optInt("statusCode");
+                        if (statusCode == 200) {
+
+
+                            sessionId=job1.optString("sessionId");
+                            String captchaImage=job1.optString("captchaImage");
+                            byte[] decodedString = Base64.decode(captchaImage, Base64.DEFAULT);
+                            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                            binding.imgCaptcha.setImageBitmap(decodedByte);
+
+                        }else {
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+
+                        showErrorDialog("Technical issue with UIDAI, please try after some time");
+
+                    }
+                });
+    }
+
+    private void validateCaptcha(JSONObject jsonObject) {
+        ProgressDialog pd=new ProgressDialog(this);
+        pd.setMessage("Loading");
+        pd.show();
+        pd.setCancelable(false);
+        AndroidNetworking.post("https://india-vcip-aadhaarxml-demo.hyperverge.co/api/v1/captcha")
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("appId", AppData.APPID)
+                .addHeaders("appKey", AppData.APPKEY)
+                .addHeaders("transactionId", pref.getMasterId())
+                .addHeaders("content-type", "application/json")
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        pd.dismiss();
+
+                        int statusCode = job1.optInt("statusCode");
+                        if (statusCode == 200) {
+                            String message=job1.optString("message");
+                            binding.tvOTPText.setText(message);
+
+                            binding.llOTp.setVisibility(View.VISIBLE);
+                            binding.btnValidate.setVisibility(View.GONE);
+                            binding.etAadhar.setEnabled(false);
+                            binding.etCapctha.setEnabled(false);
+
+
+
+
+                        }else {
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+
+                        showErrorDialog("Technical issue with UIDAI, please try after some time");
+
+                    }
+                });
+    }
+
+    private void validateOTP(JSONObject jsonObject) {
+        ProgressDialog pd=new ProgressDialog(this);
+        pd.setMessage("Loading");
+        pd.show();
+        pd.setCancelable(false);
+        AndroidNetworking.post("https://india-vcip-aadhaarxml-demo.hyperverge.co/api/v1/otp")
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("appId", AppData.APPID)
+                .addHeaders("appKey", AppData.APPKEY)
+                .addHeaders("transactionId", pref.getMasterId())
+                .addHeaders("content-type", "application/json")
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        pd.dismiss();
+
+                        int statusCode = job1.optInt("statusCode");
+                        if (statusCode == 200) {
+                            JSONObject details=job1.optJSONObject("details");
+                            //name
+                            JSONObject name=details.optJSONObject("name");
+                            String namevalue=name.optString("value");
+
+                            //dob
+
+                            JSONObject dob=details.optJSONObject("dob");
+                            String dobvalue=dob.optString("value");
+                            AppData.ADHARDOB=dobvalue;
+
+
+                            //gender
+
+                            JSONObject gender=details.optJSONObject("gender");
+                            String gendervalue=gender.optString("value");
+
+
+                            //address
+
+                            JSONObject address=details.optJSONObject("address");
+                            String careof=address.optString("careof").replace("S/O:","").trim();
+                            String state=address.optString("state");
+                            String pin=address.optString("pin");
+                            String street=address.optString("street");
+                            String locality=address.optString("locality");
+                            String house=address.optString("house");
+                            String postoffice=address.optString("postoffice");
+                            String subDistrict=address.optString("subDistrict");
+                            String district=address.optString("district");
+                            String vtc=address.optString("vtc");
+                            String landmark=address.optString("landmark");
+
+
+                            //image
+
+                            JSONObject photo=details.optJSONObject("photo");
+                            String photoval=photo.optString("value").trim();
+                            AppData.ADHARIMAGE=photoval;
+                            AppData.AADAHARNUMBER=binding.etAadhar.getText().toString();
+
+                            Intent intent=new Intent(TEMPAadharQRActivity.this,TempProfileActivity.class);
+                            intent.putExtra("namevalue",namevalue);
+                            intent.putExtra("dobvalue",dobvalue);
+                            intent.putExtra("gendervalue",gendervalue);
+                            intent.putExtra("careof",careof);
+                            intent.putExtra("state",state);
+                            intent.putExtra("pin",pin);
+                            intent.putExtra("street",street);
+                            intent.putExtra("locality",locality);
+                            intent.putExtra("house",house);
+                            intent.putExtra("postoffice",postoffice);
+                            intent.putExtra("subDistrict",subDistrict);
+                            intent.putExtra("district",district);
+                            intent.putExtra("vtc",vtc);
+                            intent.putExtra("landmark",landmark);
+                            startActivity(intent);
+                            finish();
+
+
+
+
+
+
+                        }else {
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+
+                       showErrorDialog("Technical issue with UIDAI, please try after some time");
+
+                    }
+                });
+    }
+
+    public String GetPassword(int length){
+        char[] chars = "0123456789".toCharArray();
+        StringBuilder stringBuilder = new StringBuilder();
+
+        Random rand = new Random();
+
+        for(int i = 0; i < length; i++){
+            char c = chars[rand.nextInt(chars.length)];
+            stringBuilder.append(c);
+        }
+
+        return stringBuilder.toString();
+    }
+
+
+    private void showErrorDialog(String text) {
+        android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(TEMPAadharQRActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.error_ayput, null);
+        dialogBuilder.setView(dialogView);
+        TextView tvError = (TextView) dialogView.findViewById(R.id.tvError);
+        tvError.setText(text);
+        ImageView imgCancel = (ImageView) dialogView.findViewById(R.id.imgCancel);
+        imgCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                al1.dismiss();
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+            }
+        });
+
+        al1 = dialogBuilder.create();
+        al1.setCancelable(false);
+        Window window = al1.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        al1.show();
+    }
+
+
+}

@@ -84,6 +84,14 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
 
     private void initView(){
         pref=new Pref(TempOtherDocumentActivity.this);
+        if (!AppData.ADHARIMAGE.equals("")){
+            flag=1;
+            byte[] decodedString = Base64.decode(AppData.ADHARIMAGE, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            binding.imgPassportDocument.setImageBitmap(decodedByte);
+        }
+
+
         binding.btnSaveForm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

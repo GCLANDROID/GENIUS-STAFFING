@@ -757,6 +757,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 /////
+
             }
         } else if (view == llBackAttendance) {
             if (pref.getEmpClintId().equals("AEMCLI2110001671")) {
@@ -783,26 +784,11 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, WeeklyOffAttendanceActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-            } else {
-                /*JSONObject obj=new JSONObject();
-                try {
-                    obj.put("AEMConsultantID", pref.getEmpConId());
-                    obj.put("AEMClientID",pref.getEmpClintId());
-                    obj.put("AEMClientOfficeID",pref.getEmpClintOffId());
-                    obj.put("AEMEmployeeID",pref.getEmpId());
-                    obj.put("CurrentPage",1);
-                    obj.put("AID",0);
-                    obj.put("ApproverStatus",4);
-                    obj.put("YearVal",year);
-                    obj.put("MonthName",(month == null)?JSONObject.NULL:month);
-                    obj.put("WorkingStatus","1");
-                    obj.put("SecurityCode",pref.getSecurityCode());
-                    obj.put("DbOperation","6");
-                    obj.put("AttIds","0");
-                    weeklyfunction(obj);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }*/
+            }else if( pref.getEmpClintId().equals("AEMCLI1110000502"))  {  //WO APplication with location ->SKF PUNE
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, WOHOHActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }else {
                 weeklyfunction();
             }
         } else if (view == imgSearch) {

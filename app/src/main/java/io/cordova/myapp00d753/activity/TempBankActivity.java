@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,6 +30,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,6 +55,7 @@ import io.cordova.myapp00d753.module.UploadObject;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
+import io.cordova.myapp00d753.utility.Util;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -91,7 +97,9 @@ public class TempBankActivity extends AppCompatActivity {
     String pan_pattern;
     String getbankname;
     ImageView imgHome,imgBack;
-
+    LinearLayout llBankVALBtn,llBankVAL;
+    Button btnBankVal;
+    int bankflag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,12 +112,16 @@ public class TempBankActivity extends AppCompatActivity {
     private void initialize() {
         pref = new Pref(getApplicationContext());
         llSubmit = (LinearLayout) findViewById(R.id.llSubmit);
+        llBankVALBtn = (LinearLayout) findViewById(R.id.llBankVALBtn);
+        llBankVAL = (LinearLayout) findViewById(R.id.llBankVAL);
 
         spBankName = (Spinner) findViewById(R.id.spBankName);
         spDocType = (Spinner) findViewById(R.id.spDocType);
 
         llLoader = (LinearLayout) findViewById(R.id.llLoader);
         llMain = (LinearLayout) findViewById(R.id.llMain);
+
+        btnBankVal=(Button)findViewById(R.id.btnBankVal);
 
         setBank();
 
@@ -166,7 +178,12 @@ public class TempBankActivity extends AppCompatActivity {
                         if (etIFSC.getText().toString().length()>10){
                                 if (etFName.getText().toString().length()>0){
                                     if (etLName.getText().toString().length()>0){
-                                        BankDetailsSubmit();
+                                        if (bankflag==1){
+                                            BankDetailsSubmit();
+                                        }else {
+                                            Toast.makeText(TempBankActivity.this,"Please verify your Bank Account Details",Toast.LENGTH_LONG).show();
+                                        }
+
 
                                     }else {
                                         Toast.makeText(getApplicationContext(),"Please enter Last Name as per Bank ",Toast.LENGTH_LONG).show();
@@ -241,6 +258,30 @@ public class TempBankActivity extends AppCompatActivity {
                 Intent intent=new Intent(TempBankActivity.this,TempDashBoardActivity.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+
+        btnBankVal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (etAccNumber.getText().toString().length()>0){
+                    if (etIFSC.getText().toString().length()>0){
+                        JSONObject jsonObject=new JSONObject();
+                        try {
+                            jsonObject.put("accountNumber",etAccNumber.getText().toString());
+                            jsonObject.put("ifsc",etIFSC.getText().toString());
+                            validateBank(jsonObject);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }else {
+                        Toast.makeText(TempBankActivity.this,"Please Enter IFSC Code",Toast.LENGTH_LONG).show();
+                    }
+
+                }else {
+                    Toast.makeText(TempBankActivity.this,"Please enter Bank Account Number",Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -501,6 +542,65 @@ public class TempBankActivity extends AppCompatActivity {
         final String[] units = new String[]{"B", "KB", "MB", "GB", "TB"};
         int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
         return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
+    }
+
+
+    private void validateBank(JSONObject jsonObject) {
+        ProgressDialog pd=new ProgressDialog(this);
+        pd.setMessage("Loading");
+        pd.show();
+        pd.setCancelable(false);
+        AndroidNetworking.post("https://ind-verify.hyperverge.co/api/checkBankAccount")
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("appId", AppData.APPID)
+                .addHeaders("appKey", AppData.APPKEY)
+                .addHeaders("transactionId", pref.getMasterId())
+                .addHeaders("content-type", "application/json")
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        pd.dismiss();
+
+                        int statusCode = job1.optInt("statusCode");
+                        if (statusCode == 200) {
+                            JSONObject result=job1.optJSONObject("result");
+                            String accountName= result.optString("accountName");
+                            etFName.setText(accountName);
+
+                            llBankVALBtn.setVisibility(View.GONE);
+                            llBankVAL.setVisibility(View.VISIBLE);
+
+                            bankflag=1;
+                            etAccNumber.setEnabled(false);
+                            etIFSC.setEnabled(false);
+
+
+
+
+
+
+                        }else {
+
+                            bankflag=0;
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        bankflag=0;
+
+
+
+                    }
+                });
     }
 
 

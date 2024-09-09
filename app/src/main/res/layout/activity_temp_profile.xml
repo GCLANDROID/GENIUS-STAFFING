@@ -1055,11 +1055,10 @@
                                 <EditText
                                     android:id="@+id/etPreAddr"
                                     android:layout_width="match_parent"
-                                    android:layout_height="60dp"
+                                    android:layout_height="80dp"
                                     android:layout_marginLeft="10dp"
                                     android:background="@drawable/lldesign9"
                                     android:paddingLeft="5dp"
-                                    android:singleLine="true"
                                     android:textSize="12sp"
                                     android:textColor="@android:color/black" />
                             </LinearLayout>
@@ -1222,7 +1221,7 @@
                                 <EditText
                                     android:id="@+id/etPerAddr"
                                     android:layout_width="match_parent"
-                                    android:layout_height="60dp"
+                                    android:layout_height="80dp"
                                     android:layout_marginLeft="10dp"
                                     android:background="@drawable/lldesign9"
                                     android:paddingLeft="10dp"
