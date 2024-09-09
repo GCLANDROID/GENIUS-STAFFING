@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="?android:actionBarSize"
+            android:orientation="horizontal"
+            android:background="@color/colorPrimary">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5">
+
+                <ImageView
+                    android:id="@+id/imgBack"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/backimg" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tvToolBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="2dp"
+                    android:text="Onboarding KYC"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:gravity="right">
+
+                <ImageView
+                    android:id="@+id/imgHome"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/homeimg" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:id="@+id/lnCaptcha"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_marginTop="10dp"
+                            android:layout_width="200dp"
+                            android:layout_height="100dp"
+                            android:id="@+id/imgCaptcha"></ImageView>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:textColor="@color/black"
+                            android:text="Please Enter the Captcha"></TextView>
+                        <EditText
+                            android:singleLine="true"
+                            android:padding="5dp"
+                            android:textSize="16sp"
+                            android:id="@+id/etCapctha"
+                            android:layout_marginTop="10dp"
+                            android:layout_width="250dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/lldesign9"></EditText>
+                        <TextView
+                            android:layout_marginTop="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:textColor="@color/black"
+                            android:text="Please Enter Your Aadhar number"></TextView>
+                        <EditText
+                            android:singleLine="true"
+                            android:padding="5dp"
+                            android:textSize="16sp"
+                            android:id="@+id/etAadhar"
+                            android:layout_marginTop="10dp"
+                            android:layout_width="250dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/lldesign9"></EditText>
+                        <LinearLayout
+                            android:layout_width="250dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:layout_marginTop="10dp">
+                            <Button
+                                android:layout_width="100dp"
+                                android:layout_height="40dp"
+                                android:background="@drawable/lldesign9"
+                                android:backgroundTint="@color/blue"
+                                android:textColor="@color/white"
+                                android:textSize="14sp"
+                                android:text="Get OTP"
+                                android:id="@+id/btnValidate"></Button>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:visibility="gone"
+                            android:layout_marginTop="10dp"
+                            android:orientation="vertical"
+                            android:layout_width="250dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/llOTp">
+                            <TextView
+                                android:textAlignment="center"
+                                android:textSize="14sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/tvOTPText"
+                                android:textColor="@color/misscolor"></TextView>
+                            <TextView
+                                android:layout_marginTop="10dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="14sp"
+                                android:textColor="@color/black"
+                                android:text="Please Enter OTP"></TextView>
+                            <EditText
+                                android:singleLine="true"
+                                android:padding="5dp"
+                                android:textSize="16sp"
+                                android:id="@+id/etOTP"
+                                android:layout_marginTop="10dp"
+                                android:layout_width="250dp"
+                                android:layout_height="40dp"
+                                android:background="@drawable/lldesign9"></EditText>
+                            <LinearLayout
+                                android:layout_width="250dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="right"
+                                android:layout_marginTop="10dp">
+                                <Button
+                                    android:layout_width="130dp"
+                                    android:layout_height="40dp"
+                                    android:background="@drawable/lldesign9"
+                                    android:backgroundTint="@color/blue"
+                                    android:textColor="@color/white"
+                                    android:textSize="14sp"
+                                    android:text="Validate OTP"
+                                    android:id="@+id/btnOTPValidate"></Button>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+</layout>

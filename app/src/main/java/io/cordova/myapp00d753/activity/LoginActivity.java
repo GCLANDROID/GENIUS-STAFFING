@@ -229,7 +229,7 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     etPassword.setText("");
                 }
-                if (etUserId.getText().toString().contains("AEM") || etUserId.getText().toString().contains("FMS")|| etUserId.getText().toString().contains("ITS")|| etUserId.getText().toString().contains("SEC")|| etUserId.getText().toString().contains("NAPS")|| etUserId.getText().toString().contains("GMSP")){
+                if (etUserId.getText().toString().contains("AEM") || etUserId.getText().toString().contains("FMS")|| etUserId.getText().toString().contains("ITS")|| etUserId.getText().toString().contains("SEC")|| etUserId.getText().toString().contains("NAPS")|| etUserId.getText().toString().contains("GMSP")|| etUserId.getText().toString().contains("FSS")|| etUserId.getText().toString().contains("NPS")){
                     llSecurityCode.setVisibility(View.GONE);
 
                 }else {
@@ -256,8 +256,14 @@ public class LoginActivity extends AppCompatActivity {
                                 security_code="333";
                             }else if (etUserId.getText().toString().contains("NAPS")){
                                 security_code="444";
+                            }else if (etUserId.getText().toString().contains("NPS")){
+                                security_code="444";
                             }else if (etUserId.getText().toString().contains("GMSP")){
                                 security_code="666";
+                            }else if (etUserId.getText().toString().contains("MSP")){
+                                security_code="666";
+                            }else if (etUserId.getText().toString().contains("FSS")){
+                                security_code="0000";
                             }else {
                                 if (etSecurityCode.getText().toString().length()>0){
                                     security_code=etSecurityCode.getText().toString();

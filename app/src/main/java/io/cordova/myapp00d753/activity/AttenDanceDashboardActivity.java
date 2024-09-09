@@ -438,8 +438,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
 
                             }
                         } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(AttenDanceDashboardActivity.this, "Something went wrong,Please try again", Toast.LENGTH_SHORT).show();
+                            throw new RuntimeException(e);
                         }
                     }
 
@@ -479,7 +478,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
 
                         try {
                             JSONObject job1 = new JSONObject(response);
-                            Log.e(TAG, "CAL_@@@@@@" + job1);
+                            Log.e("response12", "@@@@@@" + job1);
                             String responseText = job1.optString("responseText");
 
                             boolean responseStatus = job1.optBoolean("responseStatus");
@@ -719,20 +718,8 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             dlMain.openDrawer(Gravity.LEFT);
         } else if (view == llAttandanceManage) {
             if (pref.getShiftFlag().equals("1")) {
-                Log.e(TAG, "onClick: called 1");
                 getShift();
-               /* JSONObject obj=new JSONObject();
-                try {
-                    obj.put("CompanyID","AEMCLI1410000807");
-                    obj.put("EmployeeID",pref.getEmpId());
-                    obj.put("AttendanceDate",currentDate);
-                    obj.put("&SecurityCode",pref.getSecurityCode());
-                    getShift(obj);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }*/
             } else {
-                Log.e(TAG, "onClick: called 2");
                 turnGPSOn();
                 /*if (pref.getEmpClintId().equals("AEMCLI2210001697") || pref.getEmpClintId().equals("AEMCLI2210001698")) {
                     Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceManageWithoutLocActivity.class);
@@ -758,20 +745,19 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             }
         } else if (view == llAttendanceReport) {
             if (pref.getEmpClintId().equals("AEMCLI2110001671")) {
-                Log.e(TAG, "onClick: Report 1");
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, MetsoAttendanceReportActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-            } else if (pref.getEmpClintId().equals("AEMCLI1110000593")) {
-                Log.e(TAG, "onClick: Report 2");
+            } else if (pref.getEmpClintId().equals("AEMCLI1110000593")){
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, BoschAttendanceReportActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-            } else {
-                Log.e(TAG, "onClick: Report 3");
+            }else {
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceReportActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                /////
+
             }
         } else if (view == llBackAttendance) {
             if (pref.getEmpClintId().equals("AEMCLI2110001671")) {
@@ -798,27 +784,12 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, WeeklyOffAttendanceActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-            } else {
-                JSONObject obj=new JSONObject();
-                try {
-                    obj.put("AEMConsultantID", pref.getEmpConId());
-                    obj.put("AEMClientID",pref.getEmpClintId());
-                    obj.put("AEMClientOfficeID",pref.getEmpClintOffId());
-                    obj.put("AEMEmployeeID",pref.getEmpId());
-                    obj.put("CurrentPage",1);
-                    obj.put("AID",0);
-                    obj.put("ApproverStatus",4);
-                    obj.put("YearVal",year);
-                    obj.put("MonthName",(month == null)?JSONObject.NULL:month);
-                    obj.put("WorkingStatus","1");
-                    obj.put("SecurityCode",pref.getSecurityCode());
-                    obj.put("DbOperation","6");
-                    obj.put("AttIds","0");
-                    weeklyfunction(obj);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                //weeklyfunction();
+            }else if( pref.getEmpClintId().equals("AEMCLI1110000502"))  {  //WO APplication with location ->SKF PUNE
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, WOHOHActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }else {
+                weeklyfunction();
             }
         } else if (view == imgSearch) {
             searchAlert();
@@ -924,10 +895,13 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
 
 
                             // boolean _status = job1.getBoolean("status");
+
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(AttenDanceDashboardActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
                         }
+
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -937,7 +911,9 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
 
                 Log.e("ert", error.toString());
             }
-        }) {};
+        }) {
+
+        };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
 
     }
@@ -1080,7 +1056,6 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     @Override
     protected void onResume() {
         super.onResume();
-        //getAttendanceList(y, m);
         JSONObject obj=new JSONObject();
         try {
             obj.put("AemEmployeeid", pref.getEmpId());
@@ -1092,57 +1067,6 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    private void getShift(JSONObject jsonObject) {
-        final ProgressDialog progressBar = new ProgressDialog(this);
-        progressBar.setCancelable(true);//you can cancel it by pressing back button
-        progressBar.setMessage("Loading...");
-        progressBar.show();
-        AndroidNetworking.post(AppData.GET_SHIFT)
-                .addJSONObjectBody(jsonObject)
-                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
-                .setTag("uploadTest")
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            Log.e(TAG, "ATTENDANCE_GET_SHIFT: "+response.toString(4));
-                            progressBar.dismiss();
-                            JSONObject job1 = response;
-                            String Response_Code = job1.optString("Response_Code");
-                            String Response_Message = job1.optString("Response_Message");
-                            if (Response_Code.equals("101")) {
-                                String Response_Data = job1.optString("Response_Data");
-
-                                String toastText = job1.optString("responseText");
-                                JSONArray responseData = job1.optJSONArray(Response_Data);
-                                JSONArray shiftStatusArray = responseData.optJSONArray(0);
-                                JSONObject shiftStatusOBJ = shiftStatusArray.optJSONObject(0);
-                                String ShiftStatus = shiftStatusOBJ.optString("ShiftStatus");
-
-                                JSONArray shiftArray = responseData.optJSONArray(1);
-
-                                Intent intent = new Intent(AttenDanceDashboardActivity.this, AttenDanceManageWithShiftActivity.class);
-                                intent.putExtra("intt", "2");
-                                intent.putExtra("shiftStatus", ShiftStatus);
-                                intent.putExtra("shiftArray", shiftArray.toString());
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-                        progressBar.dismiss();
-                        Log.e(TAG, "ATTENDANCE_GET_SHIFT_error: "+anError.getErrorBody());
-                    }
-                });
     }
 
     private void getShift() {
@@ -1491,37 +1415,34 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
 
     private void openMarkAttendanceActivities() {
         if (pref.getEmpClintId().equals("AEMCLI2210001697") || pref.getEmpClintId().equals("AEMCLI2210001698")) {
-            Log.e(TAG, "Mark Attendance: 1");
             Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceManageWithoutLocActivity.class);
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else if (pref.getEmpClintId().equals("AEMCLI1910001556")||pref.getEmpClintId().equals("AEMCLI2410001861")) {
-            Log.e(TAG, "Mark Attendance: 2");
             Intent intent = new Intent(AttenDanceDashboardActivity.this, DailyDashBoardActivity.class);
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else if (pref.getEmpClintId().equals("AEMCLI2110001671")) {
-            Log.e(TAG, "Mark Attendance: 3");
+            //
             Intent intent = new Intent(AttenDanceDashboardActivity.this, MetsoAttendanceActivity.class);
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }else if (pref.getEmpClintId().equals("AEMCLI1110000593")) {
-            Log.e(TAG, "Mark Attendance: 4");
+            //
             Intent intent = new Intent(AttenDanceDashboardActivity.this, BoschAttendanceActivity.class);
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }else if (pref.getEmpClintId().equals("AEMCLI1310000776") || pref.getEmpClintId().equals("AEMCLI1110000502")) {
-            Log.e(TAG, "Mark Attendance: 5");
+            //
             Intent intent = new Intent(AttenDanceDashboardActivity.this, ProtectorGambleAttendanceActivity.class);
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else {
-            Log.e(TAG, "Mark Attendance: 6");
             Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceManageActivity.class);
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

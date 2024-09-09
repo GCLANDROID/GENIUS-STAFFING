@@ -47,6 +47,7 @@ import com.google.android.gms.vision.text.TextRecognizer;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -66,6 +67,7 @@ import io.cordova.myapp00d753.module.AttendanceService;
 import io.cordova.myapp00d753.module.UploadObject;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
+import io.cordova.myapp00d753.utility.Util;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -110,6 +112,8 @@ public class TempPanActivity extends AppCompatActivity {
     Button btnAadharSave;
     EditText etAddaharNo;
     int responseflag=0;
+    int panvalflag=0;
+    LinearLayout llPANVAL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +125,7 @@ public class TempPanActivity extends AppCompatActivity {
 
     private void initialize(){
         pref = new Pref(TempPanActivity.this);
+        llPANVAL=(LinearLayout)findViewById(R.id.llPANVAL);
         etAddaharNo=(EditText)findViewById(R.id.etAddaharNo);
         btnPanSave=(Button)findViewById(R.id.btnPanSave);
 
@@ -172,9 +177,33 @@ public class TempPanActivity extends AppCompatActivity {
         imgAadharDocument=(ImageView)findViewById(R.id.imgAadharDocument);
         btnAadharSave=(Button) findViewById(R.id.btnAadharSave);
 
+        etAddaharNo.setText(AppData.AADAHARNUMBER);
+        etAddaharNo.setEnabled(false);
+
+
+
     }
 
     private void onClick(){
+        etPanNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (etPanNumber.getText().toString().length()==10){
+
+                }
+
+            }
+        });
         btnAadharSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -208,11 +237,11 @@ public class TempPanActivity extends AppCompatActivity {
                     if (etPanNumber.getText().toString().length()>9){
                         if (flag==1){
 
-                            Pattern r = Pattern.compile(pan_pattern);
-                            if (regex_matcher(r, etPanNumber.getText().toString())) {
+
+                            if (panvalflag==1) {
                                 panUpload();
                             }else {
-                                Toast.makeText(getApplicationContext(),"Invalid PAN number",Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(),"Please Enter Valid PAN Number",Toast.LENGTH_LONG).show();
                             }
                         }else {
                             Toast.makeText(getApplicationContext(),"Please upload PAN document",Toast.LENGTH_LONG).show();
@@ -240,6 +269,15 @@ public class TempPanActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (etPanNumber.getText().toString().length()==10){
+                    JSONObject jsonObject=new JSONObject();
+                    try {
+                        jsonObject.put("pan",etPanNumber.getText().toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    validatePAN(jsonObject);
+                }
 
             }
         });
@@ -732,5 +770,68 @@ public class TempPanActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    private void validatePAN(JSONObject jsonObject) {
+        ProgressDialog pd=new ProgressDialog(this);
+        pd.setMessage("Loading");
+        pd.show();
+        pd.setCancelable(false);
+        AndroidNetworking.post("https://ind-thomas.hyperverge.co/v1/PANDetailedFetchWithoutPhoneNumber")
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("appId", AppData.APPID)
+                .addHeaders("appKey", AppData.APPKEY)
+                .addHeaders("transactionId", pref.getMasterId())
+                .addHeaders("content-type", "application/json")
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        pd.dismiss();
+
+                        int statusCode = job1.optInt("statusCode");
+                        if (statusCode == 200) {
+                            JSONObject result=job1.optJSONObject("result");
+                            JSONObject data=result.optJSONObject("data");
+                            JSONObject panData=data.optJSONObject("panData");
+                            String dateOfBirth= Util.changeAnyDateFormat(panData.optString("dateOfBirth"),"yyyy-MM-dd","dd-MM-yyyy");
+                            if (!dateOfBirth.equals("")){
+                                if (dateOfBirth.equals(AppData.ADHARDOB)) {
+                                    panvalflag=1;
+                                    llPANVAL.setVisibility(View.VISIBLE);
+                                }else {
+                                    panvalflag=0;
+                                }
+                            }else {
+                                panvalflag=1;
+                            }
+
+
+
+
+
+
+
+                        }else {
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        panvalflag=0;
+
+
+
+                    }
+                });
     }
 }

@@ -155,7 +155,7 @@ public class TempDashBoardActivity extends AppCompatActivity {
         llProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(TempDashBoardActivity.this,TempProfileActivity.class);
+                Intent intent=new Intent(TempDashBoardActivity.this,TEMPAadharQRActivity.class);
                 startActivity(intent);
             }
         });

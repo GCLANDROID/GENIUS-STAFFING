@@ -85,6 +85,7 @@ import io.cordova.myapp00d753.utility.ApiClient;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
+import io.cordova.myapp00d753.utility.Util;
 import io.cordova.myapp00d753.utility.ValidUtils;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -183,6 +184,7 @@ public class TempProfileActivity extends AppCompatActivity {
     ArrayList<String> uanPercentage = new ArrayList<>();
     String esicDOB="",uanDOB="",esicGender="",esicRltionshp="",uanRltionshp="",residingIP="",pfPercantage="";
     ProgressDialog pd;
+    String namevalue,dobvalue,gendervalue,careof,state,pin,street,locality,house,postoffice,subDistrict,vtc,district,landmark;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,6 +196,22 @@ public class TempProfileActivity extends AppCompatActivity {
     }
 
     private void initialize() {
+        namevalue=getIntent().getStringExtra("namevalue");
+        dobvalue=getIntent().getStringExtra("dobvalue");
+        gendervalue=getIntent().getStringExtra("gendervalue");
+        careof=getIntent().getStringExtra("careof");
+        state=getIntent().getStringExtra("state");
+        locality=getIntent().getStringExtra("locality");
+        house=getIntent().getStringExtra("house");
+        postoffice=getIntent().getStringExtra("postoffice");
+        subDistrict=getIntent().getStringExtra("subDistrict");
+        vtc=getIntent().getStringExtra("vtc");
+        pin=getIntent().getStringExtra("pin");
+        street=getIntent().getStringExtra("street");
+        district=getIntent().getStringExtra("district");
+        landmark=getIntent().getStringExtra("landmark");
+
+
         pref = new Pref(TempProfileActivity.this);
         pd=new ProgressDialog(TempProfileActivity.this);
         pd.setMessage("Loading");
@@ -201,12 +219,14 @@ public class TempProfileActivity extends AppCompatActivity {
         tvEmplId = (TextView) findViewById(R.id.tvEmplId);
         tvEmpCode = (TextView) findViewById(R.id.tvEmpCode);
         tvEmpName = (TextView) findViewById(R.id.tvEmpName);
+        tvEmpName.setText(namevalue);
         tvDOJ = (TextView) findViewById(R.id.tvDOJ);
         tvDepartment = (TextView) findViewById(R.id.tvDepartment);
         tvDesignation = (TextView) findViewById(R.id.tvDesignation);
         tvLocation = (TextView) findViewById(R.id.tvLocation);
         tvGender = (TextView) findViewById(R.id.tvGender);
         tvEmpCodeDOB = (TextView) findViewById(R.id.tvEmpCodeDOB);
+        tvEmpCodeDOB.setText(Util.changeAnyDateFormat(dobvalue,"dd-MM-yyyy","dd MMM yyyy"));
         tvRealtionShip = (TextView) findViewById(R.id.tvRealtionShip);
         tvQualification = (TextView) findViewById(R.id.tvQualification);
         tvMarital = (TextView) findViewById(R.id.tvMarital);
@@ -225,6 +245,7 @@ public class TempProfileActivity extends AppCompatActivity {
         etMobNumber = (EditText) findViewById(R.id.etMobNumber);
         etEmailId = (EditText) findViewById(R.id.etEmail);
         etGurdianName = (EditText) findViewById(R.id.etGurdianName);
+        etGurdianName.setText(careof);
         etESI = (EditText) findViewById(R.id.etESI);
         etUAN = (EditText) findViewById(R.id.etUAN);
 
@@ -302,12 +323,10 @@ public class TempProfileActivity extends AppCompatActivity {
         tvEmailTitle.setText(email);
 
         tvPreAddr = (TextView) findViewById(R.id.tvPreAddr);
-        String preaddr = "Present Address";
-        tvPreAddr.setText(Html.fromHtml(preaddr + color));
+        tvPreAddr.setText(Html.fromHtml("Present Address" + color));
 
         tvPrePin = (TextView) findViewById(R.id.tvPrePin);
-        String prepin = "Present Pincode";
-        tvPrePin.setText(Html.fromHtml(prepin + color));
+        tvPrePin.setText(Html.fromHtml("Present Pincode" + color));
 
         tvDOBTitle = (TextView) findViewById(R.id.tvDOBTitle);
         String dob = "Date of Birth";
@@ -318,8 +337,7 @@ public class TempProfileActivity extends AppCompatActivity {
         tvPerAddr.setText(Html.fromHtml(peradddr + color));
 
         tvPerPin = (TextView) findViewById(R.id.tvPerPin);
-        String perpin = "Permanent Pincode";
-        tvPerPin.setText(Html.fromHtml(perpin + color));
+        tvPerPin.setText(Html.fromHtml("Permanent Pincode" + color));
 
         tvPreState = (TextView) findViewById(R.id.tvPreState);
         String prestate = "Present State";
@@ -350,11 +368,23 @@ public class TempProfileActivity extends AppCompatActivity {
 
         etPreAddr = (EditText) findViewById(R.id.etPreAddr);
         etPrePinCode = (EditText) findViewById(R.id.etPrePinCode);
+        prepin=pin;
+        etPrePinCode.setText(prepin);
+
+        preaddr=house+" "+street+" "+landmark+" "+vtc+" "+district;
+        etPreAddr.setText(preaddr);
+
         etBankFirstName = (EditText) findViewById(R.id.etBankFirstName);
         etLastBank = (EditText) findViewById(R.id.etLastBank);
         etAddaharNo = (EditText) findViewById(R.id.etAddaharNo);
         etPerAddr = (EditText) findViewById(R.id.etPerAddr);
+
+        peraddr=house+" "+street+" "+landmark+" "+vtc+" "+district;
+        etPerAddr.setText(peraddr);
+
         etPerPinCode = (EditText) findViewById(R.id.etPerPinCode);
+        perpin=pin;
+        etPerPinCode.setText(perpin);
 
         spPresentState = (Spinner) findViewById(R.id.spPresentState);
         spPresentCity = (Spinner) findViewById(R.id.spPresentCity);
@@ -431,7 +461,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                     tvEmpCode.setText(Code);
 
                                     Name = obj.optString("Name");
-                                    tvEmpName.setText(Name);
+                                  //  tvEmpName.setText(Name);
 
                                     DateOfJoining = obj.optString("DOJ");
                                     tvDOJ.setText(DateOfJoining);
@@ -454,18 +484,18 @@ public class TempProfileActivity extends AppCompatActivity {
                                     }
 
                                     DateOfBirth = obj.optString("DateOfBirth");
-                                    if (!DateOfBirth.equals("")) {
+                                   /* if (!DateOfBirth.equals("")) {
                                         tvEmpCodeDOB.setText(DateOfBirth);
                                     } else {
                                         tvEmpCodeDOB.setText("");
-                                    }
+                                    }*/
 
                                     GuardianName = obj.optString("GuardianName");
-                                    if (!GuardianName.equals("")) {
+                                   /* if (!GuardianName.equals("")) {
                                         etGurdianName.setText(GuardianName);
                                     } else {
                                         etGurdianName.setText("");
-                                    }
+                                    }*/
 
                                     RelationShip = obj.optString("RelationShip").toUpperCase();
                                     if (!RelationShip.equals("")) {
@@ -543,11 +573,11 @@ public class TempProfileActivity extends AppCompatActivity {
 
                                     String PresentPincode = obj.optString("PresentPincode");
                                     Log.d("rikusaga", PresentPincode);
-                                    etPrePinCode.setText(PresentPincode);
+                                    //etPrePinCode.setText(PresentPincode);
 
 
                                     PresentAddress = obj.optString("PresentAddress");
-                                    etPreAddr.setText(PresentAddress);
+                                    //etPreAddr.setText(PresentAddress);
 
                                     FirstNameAsperBank = obj.optString("FirstNameAsperBank");
                                     if (FirstNameAsperBank.equals("null")) {
@@ -567,14 +597,14 @@ public class TempProfileActivity extends AppCompatActivity {
                                     etAddaharNo.setText(AadharCard);
 
                                     String PermanentAddress = obj.optString("PermanentAddress");
-                                    etPerAddr.setText(PermanentAddress);
+                                    //etPerAddr.setText(PermanentAddress);
 
                                     String PermanentPinCode = obj.optString("PermanentPinCode");
-                                    if (PermanentPinCode.equals("null")) {
+                                   /* if (PermanentPinCode.equals("null")) {
                                         etPerPinCode.setText("");
                                     } else {
                                         etPerPinCode.setText(PermanentPinCode);
-                                    }
+                                    }*/
 
                                     PermanentState = obj.optString("PermanentState");
                                     PermanentCity = obj.optString("PermanentCity");
@@ -678,7 +708,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                     tvEmpCode.setText(Code);
 
                                     Name = obj.optString("Name");
-                                    tvEmpName.setText(Name);
+                                   // tvEmpName.setText(Name);
 
                                     DateOfJoining = obj.optString("DateOfJoining");
                                     tvDOJ.setText(DateOfJoining);
@@ -701,18 +731,18 @@ public class TempProfileActivity extends AppCompatActivity {
                                     }
 
                                     DateOfBirth = obj.optString("DateOfBirth");
-                                    if (!DateOfBirth.equals("")) {
+                                    /*if (!DateOfBirth.equals("")) {
                                         tvEmpCodeDOB.setText(DateOfBirth);
                                     } else {
                                         tvEmpCodeDOB.setText("");
-                                    }
+                                    }*/
 
                                     GuardianName = obj.optString("GuardianName");
-                                    if (!GuardianName.equals("")) {
+                                   /* if (!GuardianName.equals("")) {
                                         etGurdianName.setText(GuardianName);
                                     } else {
                                         etGurdianName.setText("");
-                                    }
+                                    }*/
 
                                     RelationShip = obj.optString("RelationShip").toUpperCase();
                                     if (!RelationShip.equals("")) {
@@ -790,11 +820,11 @@ public class TempProfileActivity extends AppCompatActivity {
 
                                     String PresentPincode = obj.optString("PresentPincode");
                                     Log.d("rikusaga", PresentPincode);
-                                    etPrePinCode.setText(PresentPincode);
+                                    //etPrePinCode.setText(PresentPincode);
 
 
                                     PresentAddress = obj.optString("PresentAddress");
-                                    etPreAddr.setText(PresentAddress);
+                                    //etPreAddr.setText(PresentAddress);
 
                                     FirstNameAsperBank = obj.optString("FirstNameAsperBank");
                                     if (FirstNameAsperBank.equals("null")) {
@@ -814,14 +844,14 @@ public class TempProfileActivity extends AppCompatActivity {
                                     etAddaharNo.setText(AadharCard);
 
                                     String PermanentAddress = obj.optString("PermanentAddress");
-                                    etPerAddr.setText(PermanentAddress);
+                                   // etPerAddr.setText(PermanentAddress);
 
                                     String PermanentPinCode = obj.optString("PermanentPinCode");
-                                    if (PermanentPinCode.equals("null")) {
+                                    /*if (PermanentPinCode.equals("null")) {
                                         etPerPinCode.setText("");
                                     } else {
                                         etPerPinCode.setText(PermanentPinCode);
-                                    }
+                                    }*/
 
                                     PermanentState = obj.optString("PermanentState");
                                     PermanentCity = obj.optString("PermanentCity");
@@ -1092,9 +1122,14 @@ public class TempProfileActivity extends AppCompatActivity {
                                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 spGender.setAdapter(spinnerArrayAdapter);
                                 binding.spESICGender.setAdapter(spinnerArrayAdapter);
-                                int index = gender.indexOf(Sex);
-                                Log.d("indexr", String.valueOf(index));
-                                spGender.setSelection(index);
+
+                                if (gendervalue.equalsIgnoreCase("M")){
+                                    spGender.setSelection(0);
+                                }else {
+                                    spGender.setSelection(1);
+                                }
+
+
                                 setRealation();
 
                             } else {
@@ -1514,7 +1549,9 @@ public class TempProfileActivity extends AppCompatActivity {
         etPerAddr.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                if (etPerAddr.getText().toString().length() > 0) {
+                    peraddr = etPerAddr.getText().toString();
+                }
             }
 
             @Override
@@ -1534,7 +1571,9 @@ public class TempProfileActivity extends AppCompatActivity {
         etPreAddr.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                if (etPreAddr.getText().toString().length() > 0) {
+                    preaddr = etPreAddr.getText().toString();
+                }
             }
 
             @Override
@@ -1553,7 +1592,9 @@ public class TempProfileActivity extends AppCompatActivity {
         etPerPinCode.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                if (etPerPinCode.getText().toString().length() > 0) {
+                    perpin = etPerPinCode.getText().toString();
+                }
             }
 
             @Override
@@ -1572,7 +1613,9 @@ public class TempProfileActivity extends AppCompatActivity {
         etPrePinCode.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                if (etPrePinCode.getText().toString().length() > 0) {
+                    prepin = etPrePinCode.getText().toString();
+                }
             }
 
             @Override
@@ -2159,7 +2202,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                                 percity); //selected item will look like a spinner set from XML
                                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 spPermanentCity.setAdapter(spinnerArrayAdapter);
-                                int index = percity.indexOf(PermanentCity);
+                                int index = percity.indexOf(vtc);
                                 Log.d("indexr", String.valueOf(index));
                                 spPermanentCity.setSelection(index);
                                 serPreCity();
@@ -2234,7 +2277,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                                 precity); //selected item will look like a spinner set from XML
                                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 spPresentCity.setAdapter(spinnerArrayAdapter);
-                                int index = percity.indexOf(PresentCity);
+                                int index = percity.indexOf(vtc);
                                 Log.d("indexr", String.valueOf(index));
                                 spPresentCity.setSelection(index);
                                 setprestate();
@@ -2312,7 +2355,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                                 prestate); //selected item will look like a spinner set from XML
                                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 spPresentState.setAdapter(spinnerArrayAdapter);
-                                int index = prestate.indexOf(PresentState);
+                                int index = prestate.indexOf(state);
                                 Log.d("indexr", String.valueOf(index));
                                 spPresentState.setSelection(index);
                                 setperstate();
@@ -2390,7 +2433,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                                 perstate); //selected item will look like a spinner set from XML
                                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 spPermanentState.setAdapter(spinnerArrayAdapter);
-                                int index = perstate.indexOf(PermanentState);
+                                int index = perstate.indexOf(state);
                                 Log.d("indexr", String.valueOf(index));
                                 spPermanentState.setSelection(index);
 
