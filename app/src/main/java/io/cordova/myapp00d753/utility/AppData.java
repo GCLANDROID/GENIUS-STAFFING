@@ -52,4 +52,5 @@ public class AppData {
     public static String AADAHARNUMBER = "";
     public static String ADHARIMAGE = "";
     public static String ADHARDOB = "";
+    //
 }
