@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,12 +36,14 @@ import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.databinding.ActivityTempaadharQractivityBinding;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
+import io.cordova.myapp00d753.utility.Util;
 
 public class TEMPAadharQRActivity extends AppCompatActivity {
     ActivityTempaadharQractivityBinding binding;
     Pref pref;
     String sessionId;
     AlertDialog al1;
+    androidx.appcompat.app.AlertDialog alerDialog1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -273,23 +276,9 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                             AppData.ADHARIMAGE=photoval;
                             AppData.AADAHARNUMBER=binding.etAadhar.getText().toString();
 
-                            Intent intent=new Intent(TEMPAadharQRActivity.this,TempProfileActivity.class);
-                            intent.putExtra("namevalue",namevalue);
-                            intent.putExtra("dobvalue",dobvalue);
-                            intent.putExtra("gendervalue",gendervalue);
-                            intent.putExtra("careof",careof);
-                            intent.putExtra("state",state);
-                            intent.putExtra("pin",pin);
-                            intent.putExtra("street",street);
-                            intent.putExtra("locality",locality);
-                            intent.putExtra("house",house);
-                            intent.putExtra("postoffice",postoffice);
-                            intent.putExtra("subDistrict",subDistrict);
-                            intent.putExtra("district",district);
-                            intent.putExtra("vtc",vtc);
-                            intent.putExtra("landmark",landmark);
-                            startActivity(intent);
-                            finish();
+                            adharAlert(namevalue,dobvalue,AppData.AADAHARNUMBER,gendervalue,careof,state,pin,street,locality,house,postoffice,subDistrict,district,vtc,landmark);
+
+
 
 
 
@@ -350,6 +339,61 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.CENTER);
         al1.show();
+    }
+
+    private void adharAlert(String name,String dob,String aadhar,String gendervalue,String careof,String state,String pin,String street,String locality,String house,String postoffice,String subDistrict,String district,String vtc,String landmark) {
+        androidx.appcompat.app.AlertDialog.Builder dialogBuilder = new androidx.appcompat.app.AlertDialog.Builder(TEMPAadharQRActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.dialog_kyc, null);
+        dialogBuilder.setView(dialogView);
+        TextView tvName = (TextView) dialogView.findViewById(R.id.tvName);
+
+        tvName.setText(name);
+
+        TextView tvDOB = (TextView) dialogView.findViewById(R.id.tvDOB);
+        tvDOB.setText(Util.changeAnyDateFormat(dob,"dd-MM-yyyy","dd MMM yyyy"));
+
+        TextView tvAadhar = (TextView) dialogView.findViewById(R.id.tvAadhar);
+        tvAadhar.setText(aadhar);
+
+        ImageView imgAdhar=(ImageView)dialogView.findViewById(R.id.imgAdhar);
+
+        byte[] decodedString = Base64.decode(AppData.ADHARIMAGE, Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        imgAdhar.setImageBitmap(decodedByte);
+        LinearLayout llKYC = (LinearLayout) dialogView.findViewById(R.id.llKYC);
+        llKYC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alerDialog1.dismiss();
+
+                Intent intent=new Intent(TEMPAadharQRActivity.this,TempProfileActivity.class);
+                intent.putExtra("namevalue",name);
+                intent.putExtra("dobvalue",dob);
+                intent.putExtra("gendervalue",gendervalue);
+                intent.putExtra("careof",careof);
+                intent.putExtra("state",state);
+                intent.putExtra("pin",pin);
+                intent.putExtra("street",street);
+                intent.putExtra("locality",locality);
+                intent.putExtra("house",house);
+                intent.putExtra("postoffice",postoffice);
+                intent.putExtra("subDistrict",subDistrict);
+                intent.putExtra("district",district);
+                intent.putExtra("vtc",vtc);
+                intent.putExtra("landmark",landmark);
+                startActivity(intent);
+                finish();
+
+            }
+        });
+
+        alerDialog1 = dialogBuilder.create();
+        alerDialog1.setCancelable(true);
+        Window window = alerDialog1.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        alerDialog1.show();
     }
 
 

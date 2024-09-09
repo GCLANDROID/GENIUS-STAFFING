@@ -80,6 +80,7 @@ public class TempDashBoardActivity extends AppCompatActivity {
     File consetfile;
     private static final String IMAGE_DIRECTORY = "/signdemo";
     String android_id="1234556";
+    Button btnAadhar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +92,7 @@ public class TempDashBoardActivity extends AppCompatActivity {
     }
     private  void initialize(){
         pref = new Pref(TempDashBoardActivity.this);
+        btnAadhar=(Button)findViewById(R.id.btnAadhar);
         android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
         if (android_id.equals("")) {
@@ -152,7 +154,7 @@ public class TempDashBoardActivity extends AppCompatActivity {
 
     }
     private void onClick(){
-        llProfile.setOnClickListener(new View.OnClickListener() {
+        btnAadhar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(TempDashBoardActivity.this,TEMPAadharQRActivity.class);
