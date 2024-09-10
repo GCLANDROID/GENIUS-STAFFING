@@ -140,7 +140,6 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         dlMain = (DrawerLayout) findViewById(R.id.dlMain);
         rvItem = (RecyclerView) findViewById(R.id.rvItem);
 
-
         pref = new Pref(AttenDanceDashboardActivity.this);
         rvItem.setLayoutManager(new GridLayoutManager(this, 3));
         imgMenu = (ImageView) findViewById(R.id.imgMenu);
@@ -154,13 +153,11 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             @Override
             public void onDrawerOpened(@NonNull View view) {
                 mslideState = true;
-
             }
 
             @Override
             public void onDrawerClosed(@NonNull View view) {
                 mslideState = false;
-
             }
 
             @Override
@@ -242,8 +239,6 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             public void onClick(View v2) {
                 if (tooltip.isShowing())
                     tooltip.dismiss();
-
-
             }
         });
 
@@ -372,7 +367,6 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                     lnStatus.setVisibility(View.VISIBLE);
                     lnStatus.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#F20A75F6")));
                     tvDetails.setText(date + " : " + PunchTiming + "-" + "Weekly Off");
-
                 }
             }
         });
