@@ -177,7 +177,7 @@ public class TempBankActivity extends AppCompatActivity {
                     if (flag==1){
                         if (etIFSC.getText().toString().length()>10){
                                 if (etFName.getText().toString().length()>0){
-                                    if (etLName.getText().toString().length()>0){
+
                                         if (bankflag==1){
                                             BankDetailsSubmit();
                                         }else {
@@ -185,9 +185,7 @@ public class TempBankActivity extends AppCompatActivity {
                                         }
 
 
-                                    }else {
-                                        Toast.makeText(getApplicationContext(),"Please enter Last Name as per Bank ",Toast.LENGTH_LONG).show();
-                                    }
+
 
                                 }else {
                                     Toast.makeText(getApplicationContext(),"Please enter First Name as per Bank ",Toast.LENGTH_LONG).show();
@@ -499,11 +497,11 @@ public class TempBankActivity extends AppCompatActivity {
         String lname = etLName.getText().toString();
         String ifsc = etIFSC.getText().toString();
         String masterid = pref.getMasterId();
-        Call<UploadObject> fileUpload = uploadService.uploadbankdetails(fileToUpload, masterid, fname, lname, bankname, accnumbet, ifsc, security, bankdocid);
+        Call<UploadObject> fileUpload = uploadService.uploadbankdetails(fileToUpload, masterid, fname, "", bankname, accnumbet, ifsc, security, bankdocid);
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
-                progressDialog.dismiss();
+
                 UploadObject extraWorkingDayModel = response.body();
                 if (extraWorkingDayModel.isResponseStatus()) {
                     //  Toast.makeText(getApplicationContext(), extraWorkingDayModel.getResponseText(), Toast.LENGTH_SHORT).show();
@@ -511,7 +509,19 @@ public class TempBankActivity extends AppCompatActivity {
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
 
+
+                    JSONObject jsonObject=new JSONObject();
+                    try {
+                        jsonObject.put("AEMEMPLOYEEID",pref.getEmpId());
+                        jsonObject.put("Type",3);
+                        jsonObject.put("Status",1);
+                        bankvalidFlag(jsonObject,progressDialog);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                 } else {
+                    progressDialog.dismiss();
                     Toast.makeText(getApplicationContext(), extraWorkingDayModel.getResponseText(), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -599,6 +609,38 @@ public class TempBankActivity extends AppCompatActivity {
                         pd.dismiss();
                         Toast.makeText(TempBankActivity.this,"Sorry Bank Account details not found",Toast.LENGTH_LONG).show();
 
+
+                    }
+                });
+    }
+
+
+    private void bankvalidFlag(JSONObject jsonObject,ProgressDialog pd) {
+        pd.show();
+        AndroidNetworking.post(AppData.newv2url+"KYC/UpdateVerifyManage")
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        pd.dismiss();
+
+
+
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+
+                        pd.dismiss();
 
                     }
                 });

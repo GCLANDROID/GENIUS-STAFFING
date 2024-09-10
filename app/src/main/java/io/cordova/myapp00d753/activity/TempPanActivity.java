@@ -552,7 +552,7 @@ public class TempPanActivity extends AppCompatActivity {
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        progressDialog.dismiss();
+
 
 
                         JSONObject job1 = response;
@@ -561,12 +561,20 @@ public class TempPanActivity extends AppCompatActivity {
                         boolean responseStatus = job1.optBoolean("responseStatus");
 
                         if (responseStatus) {
-
+                            JSONObject jsonObject=new JSONObject();
+                            try {
+                                jsonObject.put("AEMEMPLOYEEID",pref.getEmpId());
+                                jsonObject.put("Type",2);
+                                jsonObject.put("Status",1);
+                                panAadharvalidFlag(jsonObject,progressDialog);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                             btnPanSave.setVisibility(View.GONE);
                             Toast.makeText(getApplicationContext(), "Your PAN details has been updated Successfully", Toast.LENGTH_LONG).show();
 
                         } else {
-
+                            progressDialog.dismiss();
                             Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
 
                         }
@@ -733,7 +741,7 @@ public class TempPanActivity extends AppCompatActivity {
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        progressDialog.dismiss();
+
 
 
                         JSONObject job1 = response;
@@ -742,13 +750,22 @@ public class TempPanActivity extends AppCompatActivity {
                         boolean responseStatus = job1.optBoolean("responseStatus");
 
                         if (responseStatus) {
+                            JSONObject jsonObject=new JSONObject();
+                            try {
+                                jsonObject.put("AEMEMPLOYEEID",pref.getEmpId());
+                                jsonObject.put("Type",1);
+                                jsonObject.put("Status",1);
+                                panAadharvalidFlag(jsonObject,progressDialog);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
 
                             btnAadharSave.setVisibility(View.GONE);
                             responseflag=1;
                             Toast.makeText(getApplicationContext(), "Your Aadhar details has been updated Successfully", Toast.LENGTH_LONG).show();
 
                         } else {
-
+                            progressDialog.dismiss();
                             Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
 
                         }
@@ -837,6 +854,38 @@ public class TempPanActivity extends AppCompatActivity {
                         etPanNumber.setText("");
 
 
+
+                    }
+                });
+    }
+
+
+    private void panAadharvalidFlag(JSONObject jsonObject,ProgressDialog pd) {
+        pd.show();
+        AndroidNetworking.post(AppData.newv2url+"KYC/UpdateVerifyManage")
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        pd.dismiss();
+
+
+
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+
+                        pd.dismiss();
 
                     }
                 });
