@@ -112,7 +112,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     ArrayList<String> dateList = new ArrayList<>();
 
     TextView tvPresent, tvDetails, tvOK;
-    LinearLayout lnStatus, llAdjustment;
+    LinearLayout lnStatus, llAdjustment,llHoliday;
     int date;
     GPSTracker gps;
     int leaveFlag;
@@ -174,6 +174,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         llBackAttendance = (LinearLayout) findViewById(R.id.llBackAttendance);
         llAttenRegularize = (LinearLayout) findViewById(R.id.llAttenRegularize);
         llWeekly = (LinearLayout) findViewById(R.id.llWeekly);
+        llHoliday = (LinearLayout) findViewById(R.id.llHoliday);
         tvCancel = (TextView) findViewById(R.id.tvCancel);
         llBottom = (LinearLayout) findViewById(R.id.llBottom);
         if (pref.getEmpClintId().equals("AEMCLI0910000315")) {
@@ -188,6 +189,12 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             llWeekly.setVisibility(View.GONE);
         }
 
+        if (pref.getEmpClintId().equals("AEMCLI1110000502")){
+            llHoliday.setVisibility(View.VISIBLE);
+        } else {
+            llHoliday.setVisibility(View.GONE);
+        }
+
         if (pref.getBackAttd().equals("1")) {
             llBackAttendance.setVisibility(View.VISIBLE);
             llAttenRegularize.setVisibility(View.VISIBLE);
@@ -195,12 +202,13 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         } else {
             llBackAttendance.setVisibility(View.GONE);
             llAttenRegularize.setVisibility(View.GONE);
-//
+
         }
 
         llAttandanceManage.setOnClickListener(this);
         llAttendanceReport.setOnClickListener(this);
         llWeekly.setOnClickListener(this);
+        llHoliday.setOnClickListener(this);
         llBackAttendance.setOnClickListener(this);
         llAttenRegularize.setOnClickListener(this);
         llAdjustment.setOnClickListener(this);
@@ -317,8 +325,11 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                         + "/" + (selectedDate.get(Calendar.MONTH) + 1)
                         + "/" + selectedDate.get(Calendar.YEAR);
 
-
                 String date = Util.changeAnyDateFormat(sDate, "dd/MM/yyyy", "dd MMM yy");
+                if (date.contains("Sept")){
+                    date = date.replace("Sept","Sep");
+
+                }
                 int pos = dateList.indexOf(date);
                 Log.d("position", String.valueOf(pos));
                 JSONObject object = attendanceArray.optJSONObject(pos);
@@ -510,10 +521,8 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                                     if (Status.equalsIgnoreCase("present")) {
                                         presentDays.add(Day);
                                     }
-
                                     dateHashmap.put(date, Status);
                                 }
-
                                 customCalendar.setDate(calendar, dateHashmap);
                                 tvPresent.setText("" + presentDays.size());
                                 setAdapter();
@@ -757,7 +766,6 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 /////
-
             }
         } else if (view == llBackAttendance) {
             if (pref.getEmpClintId().equals("AEMCLI2110001671")) {
@@ -791,6 +799,10 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             }else {
                 weeklyfunction();
             }
+        } else if (view == llHoliday) {
+            Intent intent = new Intent(AttenDanceDashboardActivity.this, HolidayMarkingActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         } else if (view == imgSearch) {
             searchAlert();
         } else if (view == tvCancel) {
