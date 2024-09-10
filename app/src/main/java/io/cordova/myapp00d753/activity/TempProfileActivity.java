@@ -198,6 +198,7 @@ public class TempProfileActivity extends AppCompatActivity {
     private void initialize() {
         namevalue=getIntent().getStringExtra("namevalue");
         dobvalue=getIntent().getStringExtra("dobvalue");
+        DateOfBirth=Util.changeAnyDateFormat(dobvalue,"dd-MM-yyyy","dd MMM yyyy");
         gendervalue=getIntent().getStringExtra("gendervalue");
         careof=getIntent().getStringExtra("careof");
         state=getIntent().getStringExtra("state");
@@ -407,12 +408,6 @@ public class TempProfileActivity extends AppCompatActivity {
 
         imgForward = (ImageView) findViewById(R.id.imgForward);
         tvSkip = (TextView) findViewById(R.id.tvSkip);
-        nessecary = Integer.parseInt(pref.getNesPer());
-        Log.d("nessecary", String.valueOf(nessecary));
-        Contact = Integer.parseInt(pref.getContactPer());
-        FamilyMember = Integer.parseInt(pref.getFamilyPer());
-        DocumentUpload = Integer.parseInt(pref.getDocPer());
-        Miscellanneous = Integer.parseInt(pref.getMisPer());
         tv1=(TextView)findViewById(R.id.tv1);
         tv2=(TextView)findViewById(R.id.tv2);
         final Handler handler = new Handler();
@@ -483,7 +478,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                         tvGender.setText("");
                                     }
 
-                                    DateOfBirth = obj.optString("DateOfBirth");
+                                   // DateOfBirth = obj.optString("DateOfBirth");
                                    /* if (!DateOfBirth.equals("")) {
                                         tvEmpCodeDOB.setText(DateOfBirth);
                                     } else {
@@ -730,7 +725,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                         tvGender.setText("");
                                     }
 
-                                    DateOfBirth = obj.optString("DateOfBirth");
+                                    //DateOfBirth = obj.optString("DateOfBirth");
                                     /*if (!DateOfBirth.equals("")) {
                                         tvEmpCodeDOB.setText(DateOfBirth);
                                     } else {
@@ -1758,69 +1753,7 @@ public class TempProfileActivity extends AppCompatActivity {
             }
         });
 
-        imgCal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar now = Calendar.getInstance();
-                System.out.println("Current date : " + (now.get(Calendar.MONTH) + 1) + "-"
-                        + now.get(Calendar.DATE) + "-" + now.get(Calendar.YEAR));
 
-                now = Calendar.getInstance();
-                now.add(Calendar.YEAR, -18);
-                int dyear = now.get(Calendar.YEAR);
-                final int dmonth = now.get(Calendar.MONTH);
-                int dday = now.get(DAY_OF_MONTH);
-                Calendar c1 = Calendar.getInstance();
-                /*final int syear = year - 18;
-
-                final int month1 = c1.get(Calendar.MONTH);
-                final int sday1 = c1.get(DAY_OF_MONTH);*/
-
-
-                final DatePickerDialog dialog = new DatePickerDialog(TempProfileActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int y, int m, int d) {
-
-                        int mm = (m + 1);
-                        int s = (m + 1) + d + y;
-                        if (mm == 1) {
-                            month = "January";
-                        } else if (mm == 2) {
-                            month = "February";
-                        } else if (mm == 3) {
-                            month = "March";
-                        } else if (mm == 4) {
-                            month = "April";
-                        } else if (mm == 5) {
-                            month = "May";
-                        } else if (mm == 6) {
-                            month = "June";
-                        } else if (mm == 7) {
-                            month = "July";
-                        } else if (mm == 8) {
-                            month = "August";
-                        } else if (mm == 9) {
-                            month = "September";
-                        } else if (mm == 10) {
-                            month = "October";
-                        } else if (mm == 11) {
-                            month = "November";
-                        } else if (mm == 12) {
-                            month = "December";
-                        }
-                        DateOfBirth = d + " " + month + " " + y;
-
-                        tvEmpCodeDOB.setText(DateOfBirth);
-
-
-                    }
-                }, dyear, dmonth, dday);
-                dialog.getDatePicker().setMaxDate((long) (System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 365.25 * 18)));
-                dialog.getDatePicker().setMinDate((long) (System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 365.25 * 80)));
-                dialog.show();
-
-            }
-        });
 
 
         binding.imgESICCal.setOnClickListener(new View.OnClickListener() {
@@ -1983,7 +1916,9 @@ public class TempProfileActivity extends AppCompatActivity {
                                                             personalOBJ.put("DateOfBirth",DateOfBirth);
                                                             personalOBJ.put("Qualification",education);
                                                             personalOBJ.put("MaritalStatus",martialstatus);
+                                                            personalOBJ.put("EmployeeName",tvEmpName.getText().toString());
                                                             mainobject.put("PersonalDetails",personalOBJ);
+
                                                             uploadOfficalDetails(mainobject);
                                                         } catch (JSONException e) {
                                                             e.printStackTrace();

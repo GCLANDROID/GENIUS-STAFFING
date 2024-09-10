@@ -130,9 +130,9 @@ public class TempBankActivity extends AppCompatActivity {
         etIFSC = (EditText) findViewById(R.id.etIFSC);
         etIFSC.setText(pref.getIFSC());
         etFName = (EditText) findViewById(R.id.etFName);
-        etFName.setText(pref.getBFName());
+       // etFName.setText(pref.getBFName());
         etLName = (EditText) findViewById(R.id.etLName);
-        etLName.setText(pref.getBLName());
+       // etLName.setText(pref.getBLName());
 
         imgCamera = (ImageView) findViewById(R.id.imgCamera);
         imgDoc = (ImageView) findViewById(R.id.imgDoc);
@@ -596,7 +596,8 @@ public class TempBankActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError error) {
                         bankflag=0;
-
+                        pd.dismiss();
+                        Toast.makeText(TempBankActivity.this,"Sorry Bank Account details not found",Toast.LENGTH_LONG).show();
 
 
                     }

@@ -805,12 +805,16 @@ public class TempPanActivity extends AppCompatActivity {
                             if (!dateOfBirth.equals("")){
                                 if (dateOfBirth.equals(AppData.ADHARDOB)) {
                                     panvalflag=1;
+                                    etPanNumber.setEnabled(false);
                                     llPANVAL.setVisibility(View.VISIBLE);
                                 }else {
                                     panvalflag=0;
+                                    Toast.makeText(TempPanActivity.this,"Sorry PAN validation failed",Toast.LENGTH_LONG).show();
+                                    etPanNumber.setText("");
                                 }
                             }else {
                                 panvalflag=1;
+                                etPanNumber.setEnabled(false);
                             }
 
 
@@ -827,7 +831,10 @@ public class TempPanActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError error) {
+                        pd.dismiss();
                         panvalflag=0;
+                        Toast.makeText(TempPanActivity.this,"Sorry PAN validation failed",Toast.LENGTH_LONG).show();
+                        etPanNumber.setText("");
 
 
 

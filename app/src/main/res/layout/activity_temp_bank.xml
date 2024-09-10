@@ -281,7 +281,7 @@
                           android:layout_height="30dp"
                           android:backgroundTint="@color/blue"
                           android:background="@drawable/lldesign9"
-                          android:text="Vrify Bank A/C"></Button>
+                          android:text="Verify Bank A/C"></Button>
 
                     </LinearLayout>
                 </LinearLayout>
