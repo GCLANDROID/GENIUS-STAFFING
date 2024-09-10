@@ -52,5 +52,11 @@ public class AppData {
     public static String AADAHARNUMBER = "";
     public static String ADHARIMAGE = "";
     public static String ADHARDOB = "";
+
+    public static String SAVE_EMPLOYEE_SALES_WITHOUT_INVOICE = newv2url+"Sales/SaveEmpSalesWithoutInvoice";
+    public static String GET_EMPLOYEE_SALES_REPORT = newv2url+"Sales/GetEmpSalesReport";
+    public static String GET_EMPLOYEE_DAILY_VISIT_MANAGE = newv2url+"Sales/GetEmployeeDailyVisitManage";
+
     //
+    public static String SKF_GET_HOLIDAY_DETAILS = "http://171.16.2.67/GSPPI_API_V2/api/SKF/GetHolidayDetails";
 }
