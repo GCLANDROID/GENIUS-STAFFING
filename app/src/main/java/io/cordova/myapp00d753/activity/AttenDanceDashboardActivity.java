@@ -806,7 +806,6 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }*/
-
                 weeklyfunction();
             }
         } else if (view == llHoliday) {
