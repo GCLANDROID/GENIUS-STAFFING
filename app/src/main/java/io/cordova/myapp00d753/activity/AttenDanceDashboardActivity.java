@@ -460,10 +460,8 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         presentDays = new ArrayList<>();
         dateList = new ArrayList<>();
         HashMap<Integer, Object> dateHashmap = new HashMap<>();
-
         // initialize calendar
         Calendar calendar = Calendar.getInstance();
-
 
         ProgressDialog pd = new ProgressDialog(AttenDanceDashboardActivity.this);
         pd.setMessage("Loading...");
@@ -551,6 +549,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         HashMap<Integer, Object> dateHashmap = new HashMap<>();
         presentDays = new ArrayList<>();
         dateList = new ArrayList<>();
+
         ProgressDialog pd = new ProgressDialog(AttenDanceDashboardActivity.this);
         pd.setMessage("Loading...");
         pd.setCancelable(false);
@@ -671,41 +670,28 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                                         presentDays.add(Day);
                                     }
                                     dateHashmap.put(date, Status);
-
-
                                 }
 
                                 customCalendar.setDate(calendar, dateHashmap);
                                 tvPresent.setText("" + presentDays.size());
 
                                 setAdapter();
-
-
                             } else {
-
                                 //   Toast.makeText(getApplicationContext(),"No data found",Toast.LENGTH_LONG).show();
-
                             }
-
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                             // Toast.makeText(AttendanceReportActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
-
                         }
-
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 pd.dismiss();
-
                 // Toast.makeText(AttendanceReportActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
                 Log.e("ert", error.toString());
             }
-        }) {
-
-        };
+        }) {};
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
     }
 
@@ -722,6 +708,16 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         } else if (view == llAttandanceManage) {
             if (pref.getShiftFlag().equals("1")) {
                 getShift();
+                /*JSONObject obj = new JSONObject();
+                try {
+                    obj.put("CompanyID", "AEMCLI1410000807");
+                    obj.put("EmployeeID", pref.getEmpId());
+                    obj.put("AttendanceDate", currentDate);
+                    obj.put("&SecurityCode", pref.getSecurityCode());
+                    getShift(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }*/
             } else {
                 turnGPSOn();
                 /*if (pref.getEmpClintId().equals("AEMCLI2210001697") || pref.getEmpClintId().equals("AEMCLI2210001698")) {
@@ -791,6 +787,26 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }else {
+                /*JSONObject obj=new JSONObject();
+                try {
+                    obj.put("AEMConsultantID", pref.getEmpConId());
+                    obj.put("AEMClientID",pref.getEmpClintId());
+                    obj.put("AEMClientOfficeID",pref.getEmpClintOffId());
+                    obj.put("AEMEmployeeID",pref.getEmpId());
+                    obj.put("CurrentPage",1);
+                    obj.put("AID",0);
+                    obj.put("ApproverStatus",4);
+                    obj.put("YearVal",year);
+                    obj.put("MonthName",(month == null)?JSONObject.NULL:month);
+                    obj.put("WorkingStatus","1");
+                    obj.put("SecurityCode",pref.getSecurityCode());
+                    obj.put("DbOperation","6");
+                    obj.put("AttIds","0");
+                    weeklyfunction(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }*/
+
                 weeklyfunction();
             }
         } else if (view == llHoliday) {
@@ -1073,6 +1089,57 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private void getShift(JSONObject jsonObject) {
+        final ProgressDialog progressBar = new ProgressDialog(this);
+        progressBar.setCancelable(true);//you can cancel it by pressing back button
+        progressBar.setMessage("Loading...");
+        progressBar.show();
+        AndroidNetworking.post(AppData.GET_SHIFT)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "ATTENDANCE_GET_SHIFT: "+response.toString(4));
+                            progressBar.dismiss();
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+
+                                String toastText = job1.optString("responseText");
+                                JSONArray responseData = job1.optJSONArray(Response_Data);
+                                JSONArray shiftStatusArray = responseData.optJSONArray(0);
+                                JSONObject shiftStatusOBJ = shiftStatusArray.optJSONObject(0);
+                                String ShiftStatus = shiftStatusOBJ.optString("ShiftStatus");
+
+                                JSONArray shiftArray = responseData.optJSONArray(1);
+
+                                Intent intent = new Intent(AttenDanceDashboardActivity.this, AttenDanceManageWithShiftActivity.class);
+                                intent.putExtra("intt", "2");
+                                intent.putExtra("shiftStatus", ShiftStatus);
+                                intent.putExtra("shiftArray", shiftArray.toString());
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressBar.dismiss();
+                        Log.e(TAG, "ATTENDANCE_GET_SHIFT_error: "+anError.getErrorBody());
+                    }
+                });
     }
 
     private void getShift() {
