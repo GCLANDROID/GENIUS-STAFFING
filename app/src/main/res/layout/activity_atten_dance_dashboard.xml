@@ -569,10 +569,7 @@
                         android:text="CLOSE"></TextView>
                 </LinearLayout>
             </LinearLayout>
-
         </FrameLayout>
-
-
 
     </LinearLayout>
     <include
