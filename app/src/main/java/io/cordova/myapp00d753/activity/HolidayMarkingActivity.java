@@ -51,6 +51,7 @@ import io.cordova.myapp00d753.activity.metso.model.MetsoLocationModel;
 import io.cordova.myapp00d753.adapter.HolidayCustomAdapter;
 import io.cordova.myapp00d753.adapter.HolidayFilterAdapter;
 import io.cordova.myapp00d753.databinding.ActivityHolidayMarkingBinding;
+import io.cordova.myapp00d753.module.HolidayMarkModel;
 import io.cordova.myapp00d753.module.SpineerItemModel;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
@@ -66,7 +67,7 @@ public class HolidayMarkingActivity extends AppCompatActivity {
     Spinner spHoliday;
     LinearLayout llSubmit;
     TextView tvDate;
-    ArrayList<String> holidayList;
+    ArrayList<HolidayMarkModel> holidayList;
     HolidayCustomAdapter holidayCustomAdapter;
     String holidayDate="";
     private Dialog shiftAndLocationDialog;
@@ -77,6 +78,7 @@ public class HolidayMarkingActivity extends AppCompatActivity {
     android.app.AlertDialog al1;
     ProgressDialog pd;
     Dialog searchHolidayDialog;
+    int leaveFlag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +89,7 @@ public class HolidayMarkingActivity extends AppCompatActivity {
 
     private void initView() {
         pref = new Pref(HolidayMarkingActivity.this);
+        leaveFlag=getIntent().getIntExtra("leaveFlag",1);
         searchHolidayDialog = new Dialog(HolidayMarkingActivity.this, R.style.CustomDialogNew2);
         spHoliday = findViewById(R.id.spHoliday);
         llSubmit = findViewById(R.id.llSubmit);
@@ -154,8 +157,7 @@ public class HolidayMarkingActivity extends AppCompatActivity {
         txtPopupHeadline.setText("Select Holiday");
         rvWbsCode.setLayoutManager(new LinearLayoutManager(HolidayMarkingActivity.this));
 
-        ArrayList<String> holidayListCopy = new ArrayList<>();
-        holidayListCopy = (ArrayList<String>) holidayList.clone();
+        ArrayList<HolidayMarkModel>  holidayListCopy = (ArrayList<HolidayMarkModel>) holidayList.clone();
         HolidayFilterAdapter holidayFilterAdapter = new HolidayFilterAdapter(HolidayMarkingActivity.this,holidayListCopy);
         rvWbsCode.setAdapter(holidayFilterAdapter);
 
@@ -211,8 +213,9 @@ public class HolidayMarkingActivity extends AppCompatActivity {
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject obj = jsonArray.getJSONObject(i);
                                     String holiDay = obj.optString("HOLIDAY");
+                                    String holidayDate = obj.optString("HolidayDate");
 
-                                    holidayList.add(holiDay);
+                                    holidayList.add(new HolidayMarkModel(holiDay,holidayDate));
                                 }
 
                                 /*holidayCustomAdapter = new HolidayCustomAdapter(HolidayMarkingActivity.this, holidayList);
@@ -245,12 +248,10 @@ public class HolidayMarkingActivity extends AppCompatActivity {
                 });
     }
 
-    public void dateFormat(String selectedDate) {
+    public void dateFormat(String selectedDate,String reqDate) {
         searchHolidayDialog.dismiss();
         tvDate.setText(selectedDate);
-        String[] date = selectedDate.split("-",2);
-        //holidayDate = date[0];
-        holidayDate = Util.changeAnyDateFormat(date[0], "dd MMM yyyy", "MM/dd/yyyy");
+        holidayDate = Util.changeAnyDateFormat(reqDate, "yyyy-MM-dd'T'HH:mm:ss", "MM/dd/yyyy");
         Log.e(TAG, "dateFormat: "+holidayDate);
     }
 
@@ -424,7 +425,6 @@ public class HolidayMarkingActivity extends AppCompatActivity {
                         // handle error
                         progressDialog.dismiss();
                         Toast.makeText(HolidayMarkingActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
-
                     }
                 });
     }
@@ -444,6 +444,7 @@ public class HolidayMarkingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 alerDialog1.dismiss();
                 Intent intent = new Intent(HolidayMarkingActivity.this, AttenDanceDashboardActivity.class);
+                intent.putExtra("leaveFlag",leaveFlag);
                 startActivity(intent);
                 finish();
             }

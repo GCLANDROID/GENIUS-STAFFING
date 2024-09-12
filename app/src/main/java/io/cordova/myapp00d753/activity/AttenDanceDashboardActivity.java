@@ -341,7 +341,6 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                     tvDetails.setTextColor(Color.parseColor("#000000"));
                     tvOK.setTextColor(Color.parseColor("#000000"));
 
-
                 } else if (Status.equalsIgnoreCase("ABSENT")) {
                     lnStatus.setVisibility(View.VISIBLE);
                     lnStatus.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#F2FA0209")));
@@ -810,6 +809,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             }
         } else if (view == llHoliday) {
             Intent intent = new Intent(AttenDanceDashboardActivity.this, HolidayMarkingActivity.class);
+            intent.putExtra("leaveFlag",leaveFlag);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else if (view == imgSearch) {
