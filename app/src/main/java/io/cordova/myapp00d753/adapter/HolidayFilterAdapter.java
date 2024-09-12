@@ -17,17 +17,18 @@ import java.util.Collection;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.HolidayMarkingActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.SupervisorFilterAdapter;
+import io.cordova.myapp00d753.module.HolidayMarkModel;
 import io.cordova.myapp00d753.module.SpineerItemModel;
 
 public class HolidayFilterAdapter extends RecyclerView.Adapter<HolidayFilterAdapter.MyViewHolder>{
 
     Context context;
-    ArrayList<String> holidayList;
-    ArrayList<String> holidayListAll;
-    public HolidayFilterAdapter(Context context, ArrayList<String> holidayList) {
+    ArrayList<HolidayMarkModel> holidayList;
+    ArrayList<HolidayMarkModel> holidayListAll;
+    public HolidayFilterAdapter(Context context, ArrayList<HolidayMarkModel> holidayList) {
         this.context = context;
         this.holidayList = holidayList;
-        this.holidayListAll = new ArrayList<String>(holidayList);
+        this.holidayListAll = new ArrayList<HolidayMarkModel>(holidayList);
     }
 
     @NonNull
@@ -39,12 +40,12 @@ public class HolidayFilterAdapter extends RecyclerView.Adapter<HolidayFilterAdap
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        holder.txtFilterItem.setText(holidayList.get(position));
+        holder.txtFilterItem.setText(holidayList.get(position).getHoliday());
 
         holder.txtFilterItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((HolidayMarkingActivity) context).dateFormat(holidayList.get(position));
+                ((HolidayMarkingActivity) context).dateFormat(holidayList.get(position).getHoliday(),holidayList.get(position).getHolidayDate());
             }
         });
     }
@@ -61,12 +62,12 @@ public class HolidayFilterAdapter extends RecyclerView.Adapter<HolidayFilterAdap
     Filter filter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
-            ArrayList<String> filteredList = new ArrayList<>();
+            ArrayList<HolidayMarkModel> filteredList = new ArrayList<>();
             if (charSequence.toString().isEmpty()){
                 filteredList.addAll(holidayListAll);
             }else {
-                for (String  holiday: holidayListAll){
-                    if (holiday.toLowerCase().contains(charSequence.toString().toLowerCase())){
+                for (HolidayMarkModel  holiday: holidayListAll){
+                    if (holiday.getHoliday().toLowerCase().contains(charSequence.toString().toLowerCase())){
                         filteredList.add(holiday);
                     }
                 }
@@ -79,7 +80,7 @@ public class HolidayFilterAdapter extends RecyclerView.Adapter<HolidayFilterAdap
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
             holidayList.clear();
-            holidayList.addAll((Collection<? extends String>)filterResults.values);
+            holidayList.addAll((Collection<? extends HolidayMarkModel>)filterResults.values);
             notifyDataSetChanged();
         }
     };
