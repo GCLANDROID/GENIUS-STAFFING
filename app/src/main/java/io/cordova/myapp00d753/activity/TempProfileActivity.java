@@ -177,44 +177,44 @@ public class TempProfileActivity extends AppCompatActivity {
     AlertDialog alerDialog3;
     AlertDialog alert1;
     int errflag = 0;
-    TextView tv1,tv2;
+    TextView tv1, tv2;
     ActivityTempProfileBinding binding;
 
     ArrayList<String> residing = new ArrayList<>();
     ArrayList<String> uanPercentage = new ArrayList<>();
-    String esicDOB="",uanDOB="",esicGender="",esicRltionshp="",uanRltionshp="",residingIP="",pfPercantage="";
+    String esicDOB = "", uanDOB = "", esicGender = "", esicRltionshp = "", uanRltionshp = "", residingIP = "", pfPercantage = "";
     ProgressDialog pd;
-    String namevalue,dobvalue,gendervalue,careof,state,pin,street,locality,house,postoffice,subDistrict,vtc,district,landmark;
+    String namevalue, dobvalue, gendervalue, careof, state, pin, street, locality, house, postoffice, subDistrict, vtc, district, landmark;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding= DataBindingUtil.setContentView(this,R.layout.activity_temp_profile);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_temp_profile);
         initialize();
-       // completedialog();
+        // completedialog();
         onClick();
     }
 
     private void initialize() {
-        namevalue=getIntent().getStringExtra("namevalue");
-        dobvalue=getIntent().getStringExtra("dobvalue");
-        DateOfBirth=Util.changeAnyDateFormat(dobvalue,"dd-MM-yyyy","dd MMM yyyy");
-        gendervalue=getIntent().getStringExtra("gendervalue");
-        careof=getIntent().getStringExtra("careof");
-        state=getIntent().getStringExtra("state");
-        locality=getIntent().getStringExtra("locality");
-        house=getIntent().getStringExtra("house");
-        postoffice=getIntent().getStringExtra("postoffice");
-        subDistrict=getIntent().getStringExtra("subDistrict");
-        vtc=getIntent().getStringExtra("vtc");
-        pin=getIntent().getStringExtra("pin");
-        street=getIntent().getStringExtra("street");
-        district=getIntent().getStringExtra("district");
-        landmark=getIntent().getStringExtra("landmark");
+        namevalue = getIntent().getStringExtra("namevalue");
+        dobvalue = getIntent().getStringExtra("dobvalue");
+        DateOfBirth = Util.changeAnyDateFormat(dobvalue, "dd-MM-yyyy", "dd MMM yyyy");
+        gendervalue = getIntent().getStringExtra("gendervalue");
+        careof = getIntent().getStringExtra("careof");
+        state = getIntent().getStringExtra("state");
+        locality = getIntent().getStringExtra("locality");
+        house = getIntent().getStringExtra("house");
+        postoffice = getIntent().getStringExtra("postoffice");
+        subDistrict = getIntent().getStringExtra("subDistrict");
+        vtc = getIntent().getStringExtra("vtc");
+        pin = getIntent().getStringExtra("pin");
+        street = getIntent().getStringExtra("street");
+        district = getIntent().getStringExtra("district");
+        landmark = getIntent().getStringExtra("landmark");
 
 
         pref = new Pref(TempProfileActivity.this);
-        pd=new ProgressDialog(TempProfileActivity.this);
+        pd = new ProgressDialog(TempProfileActivity.this);
         pd.setMessage("Loading");
         pd.setCancelable(false);
         tvEmplId = (TextView) findViewById(R.id.tvEmplId);
@@ -227,7 +227,7 @@ public class TempProfileActivity extends AppCompatActivity {
         tvLocation = (TextView) findViewById(R.id.tvLocation);
         tvGender = (TextView) findViewById(R.id.tvGender);
         tvEmpCodeDOB = (TextView) findViewById(R.id.tvEmpCodeDOB);
-        tvEmpCodeDOB.setText(Util.changeAnyDateFormat(dobvalue,"dd-MM-yyyy","dd MMM yyyy"));
+        tvEmpCodeDOB.setText(Util.changeAnyDateFormat(dobvalue, "dd-MM-yyyy", "dd MMM yyyy"));
         tvRealtionShip = (TextView) findViewById(R.id.tvRealtionShip);
         tvQualification = (TextView) findViewById(R.id.tvQualification);
         tvMarital = (TextView) findViewById(R.id.tvMarital);
@@ -246,7 +246,14 @@ public class TempProfileActivity extends AppCompatActivity {
         etMobNumber = (EditText) findViewById(R.id.etMobNumber);
         etEmailId = (EditText) findViewById(R.id.etEmail);
         etGurdianName = (EditText) findViewById(R.id.etGurdianName);
+
         etGurdianName.setText(careof);
+
+        if (!careof.equals("")) {
+            etGurdianName.setEnabled(false);
+        } else {
+            etGurdianName.setEnabled(true);
+        }
         etESI = (EditText) findViewById(R.id.etESI);
         etUAN = (EditText) findViewById(R.id.etUAN);
 
@@ -303,7 +310,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
 
         tvQualificationtitle = (TextView) findViewById(R.id.tvQualificationtitle);
-        String qualification = "Qualification";
+        String qualification = "Highest Qualification";
         tvQualificationtitle.setText(Html.fromHtml(qualification + color));
 
 
@@ -369,10 +376,11 @@ public class TempProfileActivity extends AppCompatActivity {
 
         etPreAddr = (EditText) findViewById(R.id.etPreAddr);
         etPrePinCode = (EditText) findViewById(R.id.etPrePinCode);
-        prepin=pin;
+        prepin = pin;
         etPrePinCode.setText(prepin);
 
-        preaddr=house+" "+street+" "+landmark+" "+vtc+" "+district;
+        preaddr = house + " " + street + " " + landmark + " " + vtc + " " + district;
+        AppData.PERMANENTADDRESS=preaddr;
         etPreAddr.setText(preaddr);
 
         etBankFirstName = (EditText) findViewById(R.id.etBankFirstName);
@@ -380,11 +388,11 @@ public class TempProfileActivity extends AppCompatActivity {
         etAddaharNo = (EditText) findViewById(R.id.etAddaharNo);
         etPerAddr = (EditText) findViewById(R.id.etPerAddr);
 
-        peraddr=house+" "+street+" "+landmark+" "+vtc+" "+district;
+        peraddr = house + " " + street + " " + landmark + " " + vtc + " " + district;
         etPerAddr.setText(peraddr);
 
         etPerPinCode = (EditText) findViewById(R.id.etPerPinCode);
-        perpin=pin;
+        perpin = pin;
         etPerPinCode.setText(perpin);
 
         spPresentState = (Spinner) findViewById(R.id.spPresentState);
@@ -408,8 +416,8 @@ public class TempProfileActivity extends AppCompatActivity {
 
         imgForward = (ImageView) findViewById(R.id.imgForward);
         tvSkip = (TextView) findViewById(R.id.tvSkip);
-        tv1=(TextView)findViewById(R.id.tv1);
-        tv2=(TextView)findViewById(R.id.tv2);
+        tv1 = (TextView) findViewById(R.id.tv1);
+        tv2 = (TextView) findViewById(R.id.tv2);
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -422,16 +430,15 @@ public class TempProfileActivity extends AppCompatActivity {
         }, 50000);
 
 
-
     }
 
     public void profileFunction(JSONObject jsonObject) {
-        Log.e(TAG, "profileFunction: "+jsonObject);
+        Log.e(TAG, "profileFunction: " + jsonObject);
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
         AndroidNetworking.post(AppData.GCL_KYC)
                 .addJSONObjectBody(jsonObject)
-                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
@@ -439,7 +446,7 @@ public class TempProfileActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            Log.e(TAG, "PROFILE: "+response.toString(4));
+                            Log.e(TAG, "PROFILE: " + response.toString(4));
                             JSONObject job1 = response;
                             String Response_Code = job1.optString("Response_Code");
                             if (Response_Code.equals("101")) {
@@ -456,7 +463,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                     tvEmpCode.setText(Code);
 
                                     Name = obj.optString("Name");
-                                  //  tvEmpName.setText(Name);
+                                    //  tvEmpName.setText(Name);
 
                                     DateOfJoining = obj.optString("DOJ");
                                     tvDOJ.setText(DateOfJoining);
@@ -478,7 +485,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                         tvGender.setText("");
                                     }
 
-                                   // DateOfBirth = obj.optString("DateOfBirth");
+                                    // DateOfBirth = obj.optString("DateOfBirth");
                                    /* if (!DateOfBirth.equals("")) {
                                         tvEmpCodeDOB.setText(DateOfBirth);
                                     } else {
@@ -486,11 +493,9 @@ public class TempProfileActivity extends AppCompatActivity {
                                     }*/
 
                                     GuardianName = obj.optString("GuardianName");
-                                   /* if (!GuardianName.equals("")) {
+                                    if (careof.equals("")) {
                                         etGurdianName.setText(GuardianName);
-                                    } else {
-                                        etGurdianName.setText("");
-                                    }*/
+                                    }
 
                                     RelationShip = obj.optString("RelationShip").toUpperCase();
                                     if (!RelationShip.equals("")) {
@@ -658,7 +663,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                 llLoader.setVisibility(View.VISIBLE);
                                 setQualification();
                             } else {
-                                
+
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -675,7 +680,7 @@ public class TempProfileActivity extends AppCompatActivity {
     }
 
     public void profileFunction() {
-        String surl = AppData.url+"gcl_KYC?AEMConsultantID=" + pref.getEmpConId() + "&AEMClientID=" + pref.getEmpClintId() + "&AEMClientOfficeID=" + pref.getEmpClintOffId() + "&AEMEmployeeID=" + pref.getMasterId() + "&SecurityCode=" + pref.getSecurityCode() + "&WorkingStatus=1&CurrentPage=0";
+        String surl = AppData.url + "gcl_KYC?AEMConsultantID=" + pref.getEmpConId() + "&AEMClientID=" + pref.getEmpClintId() + "&AEMClientOfficeID=" + pref.getEmpClintOffId() + "&AEMEmployeeID=" + pref.getMasterId() + "&SecurityCode=" + pref.getSecurityCode() + "&WorkingStatus=1&CurrentPage=0";
         Log.d("kyc", surl);
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
@@ -703,7 +708,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                     tvEmpCode.setText(Code);
 
                                     Name = obj.optString("Name");
-                                   // tvEmpName.setText(Name);
+                                    // tvEmpName.setText(Name);
 
                                     DateOfJoining = obj.optString("DateOfJoining");
                                     tvDOJ.setText(DateOfJoining);
@@ -733,11 +738,9 @@ public class TempProfileActivity extends AppCompatActivity {
                                     }*/
 
                                     GuardianName = obj.optString("GuardianName");
-                                   /* if (!GuardianName.equals("")) {
+                                    if (careof.equals("")) {
                                         etGurdianName.setText(GuardianName);
-                                    } else {
-                                        etGurdianName.setText("");
-                                    }*/
+                                    }
 
                                     RelationShip = obj.optString("RelationShip").toUpperCase();
                                     if (!RelationShip.equals("")) {
@@ -839,7 +842,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                     etAddaharNo.setText(AadharCard);
 
                                     String PermanentAddress = obj.optString("PermanentAddress");
-                                   // etPerAddr.setText(PermanentAddress);
+                                    // etPerAddr.setText(PermanentAddress);
 
                                     String PermanentPinCode = obj.optString("PermanentPinCode");
                                     /*if (PermanentPinCode.equals("null")) {
@@ -936,7 +939,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
     private void setQualification() {
 
-        String surl = AppData.url+"gcl_CommonDDL?ddltype=6&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
+        String surl = AppData.url + "gcl_CommonDDL?ddltype=6&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
@@ -995,7 +998,7 @@ public class TempProfileActivity extends AppCompatActivity {
                 llMain.setVisibility(View.GONE);
                 //   Toast.makeText(DocumentManageActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
                 Log.e("ert", error.toString());
-                errflag=2;
+                errflag = 2;
                 showInternetDialog();
             }
         }) {
@@ -1007,7 +1010,7 @@ public class TempProfileActivity extends AppCompatActivity {
     }
 
     private void setMartial() {
-        String surl = AppData.url+"gcl_CommonDDL?ddltype=8&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
+        String surl = AppData.url + "gcl_CommonDDL?ddltype=8&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
@@ -1068,7 +1071,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
                 //   Toast.makeText(DocumentManageActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
                 Log.e("ert", error.toString());
-                errflag=3;
+                errflag = 3;
                 showInternetDialog();
             }
         }) {
@@ -1081,7 +1084,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
     private void setGender() {
 
-        String surl = AppData.url+"gcl_CommonDDL?ddltype=10&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
+        String surl = AppData.url + "gcl_CommonDDL?ddltype=10&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
@@ -1118,9 +1121,9 @@ public class TempProfileActivity extends AppCompatActivity {
                                 spGender.setAdapter(spinnerArrayAdapter);
                                 binding.spESICGender.setAdapter(spinnerArrayAdapter);
 
-                                if (gendervalue.equalsIgnoreCase("M")){
+                                if (gendervalue.equalsIgnoreCase("M")) {
                                     spGender.setSelection(0);
-                                }else {
+                                } else {
                                     spGender.setSelection(1);
                                 }
 
@@ -1149,7 +1152,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
                 //   Toast.makeText(DocumentManageActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
                 Log.e("ert", error.toString());
-                errflag=4;
+                errflag = 4;
                 showInternetDialog();
             }
         }) {
@@ -1197,7 +1200,6 @@ public class TempProfileActivity extends AppCompatActivity {
         uanPercentage.add("25");
 
 
-
         ArrayAdapter<String> uanspinnerArrayAdapter = new ArrayAdapter<String>
                 (TempProfileActivity.this, android.R.layout.simple_spinner_item,
                         uanPercentage); //selected item will look like a spinner set from XML
@@ -1213,7 +1215,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
     private void setNomineeRelation() {
 
-        String surl = AppData.url+"gcl_CommonDDL?ddltype=7&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
+        String surl = AppData.url + "gcl_CommonDDL?ddltype=7&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
@@ -1226,7 +1228,7 @@ public class TempProfileActivity extends AppCompatActivity {
                         realation.clear();
                         mainRealation.clear();
                         realation.add("Please Select");
-                        mainRealation.add(new MainDocModule("0",""));
+                        mainRealation.add(new MainDocModule("0", ""));
 
                         try {
                             JSONObject job1 = new JSONObject(response);
@@ -1276,7 +1278,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
                 //   Toast.makeText(DocumentManageActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
                 Log.e("ert", error.toString());
-                errflag=5;
+                errflag = 5;
                 showInternetDialog();
             }
         }) {
@@ -1289,7 +1291,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
     private void setBlood() {
 
-        String surl = AppData.url+"gcl_CommonDDL?ddltype=9&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
+        String surl = AppData.url + "gcl_CommonDDL?ddltype=9&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
@@ -1351,7 +1353,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
                 //   Toast.makeText(DocumentManageActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
                 Log.e("ert", error.toString());
-                errflag=5;
+                errflag = 5;
                 showInternetDialog();
             }
         }) {
@@ -1390,7 +1392,9 @@ public class TempProfileActivity extends AppCompatActivity {
         spPermanentCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                permanentcity = mainPerCity.get(position).getDocID();
+                if (position > 0) {
+                    permanentcity = mainPerCity.get(position).getDocID();
+                }
             }
 
             @Override
@@ -1426,7 +1430,7 @@ public class TempProfileActivity extends AppCompatActivity {
         binding.spResiding.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position>0){
+                if (position > 0) {
                     residingIP = residing.get(position);
                 }
 
@@ -1441,7 +1445,7 @@ public class TempProfileActivity extends AppCompatActivity {
         binding.spTotalAmt.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position>0){
+                if (position > 0) {
                     pfPercantage = uanPercentage.get(position);
                 }
 
@@ -1512,7 +1516,7 @@ public class TempProfileActivity extends AppCompatActivity {
         binding.spESICRealation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position>0){
+                if (position > 0) {
                     esicRltionshp = mainRealation.get(position).getDocID();
 
                 }
@@ -1529,7 +1533,7 @@ public class TempProfileActivity extends AppCompatActivity {
         binding.spUANRealation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position>0){
+                if (position > 0) {
                     uanRltionshp = mainRealation.get(position).getDocID();
 
                 }
@@ -1737,7 +1741,9 @@ public class TempProfileActivity extends AppCompatActivity {
         spPresentCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                presentcity = mainPreCity.get(position).getDocID();
+                if (position > 0) {
+                    presentcity = mainPreCity.get(position).getDocID();
+                }
             }
 
             @Override
@@ -1752,8 +1758,6 @@ public class TempProfileActivity extends AppCompatActivity {
                 openCameraDialog();
             }
         });
-
-
 
 
         binding.imgESICCal.setOnClickListener(new View.OnClickListener() {
@@ -1807,7 +1811,7 @@ public class TempProfileActivity extends AppCompatActivity {
                             month = "December";
                         }
                         esicDOB = d + " " + month + " " + y;
-                        uanDOB=d + " " + month + " " + y;
+                        uanDOB = d + " " + month + " " + y;
 
                         binding.tvESICDOB.setText(esicDOB);
                         binding.tvUANDOB.setText(uanDOB);
@@ -1897,57 +1901,54 @@ public class TempProfileActivity extends AppCompatActivity {
                         if (etGurdianName.getText().toString().length() > 0) {
 
 
-                                    if (etPerAddr.getText().toString().length() > 0) {
-                                        if (etPrePinCode.getText().toString().length() > 0) {
-                                            if (etESI.getText().toString().equals("") || etESI.getText().toString().length() > 9) {
-                                                if (etUAN.getText().toString().equals("") || etUAN.getText().toString().length() > 11) {
-                                                    if (etPhnNumber.getText().toString().equals("") || etPhnNumber.getText().toString().length() > 9) {
+                            if (etPerAddr.getText().toString().length() > 0) {
+                                if (etPrePinCode.getText().toString().length() > 0) {
+                                    if (etESI.getText().toString().equals("") || etESI.getText().toString().length() > 9) {
+                                        if (etUAN.getText().toString().equals("") || etUAN.getText().toString().length() > 11) {
+                                            if (etPhnNumber.getText().toString().equals("") || etPhnNumber.getText().toString().length() > 9) {
 
-                                                        JSONObject mainobject=new JSONObject();
-                                                        try {
-                                                            mainobject.put("DbOperation","1");
-                                                            mainobject.put("SecurityCode",pref.getSecurityCode());
-                                                            JSONObject personalOBJ=new JSONObject();
-                                                            personalOBJ.put("AEMEMPLOYEEID",AEMEmployeeID);
-                                                            personalOBJ.put("Sex",sexGender);
-                                                            personalOBJ.put("GuardianName",etGurdianName.getText().toString());
-                                                            personalOBJ.put("RelationShip",realationship);
-                                                            personalOBJ.put("BloodGroup",bloodgrp);
-                                                            personalOBJ.put("DateOfBirth",DateOfBirth);
-                                                            personalOBJ.put("Qualification",education);
-                                                            personalOBJ.put("MaritalStatus",martialstatus);
-                                                            personalOBJ.put("EmployeeName",tvEmpName.getText().toString());
-                                                            mainobject.put("PersonalDetails",personalOBJ);
+                                                JSONObject mainobject = new JSONObject();
+                                                try {
+                                                    mainobject.put("DbOperation", "1");
+                                                    mainobject.put("SecurityCode", pref.getSecurityCode());
+                                                    JSONObject personalOBJ = new JSONObject();
+                                                    personalOBJ.put("AEMEMPLOYEEID", AEMEmployeeID);
+                                                    personalOBJ.put("Sex", sexGender);
+                                                    personalOBJ.put("GuardianName", etGurdianName.getText().toString());
+                                                    personalOBJ.put("RelationShip", realationship);
+                                                    personalOBJ.put("BloodGroup", bloodgrp);
+                                                    personalOBJ.put("DateOfBirth", DateOfBirth);
+                                                    personalOBJ.put("Qualification", education);
+                                                    personalOBJ.put("MaritalStatus", martialstatus);
+                                                    personalOBJ.put("EmployeeName", tvEmpName.getText().toString());
+                                                    mainobject.put("PersonalDetails", personalOBJ);
 
-                                                            uploadOfficalDetails(mainobject);
-                                                        } catch (JSONException e) {
-                                                            e.printStackTrace();
-                                                        }
-                                                    } else {
-                                                        Toast.makeText(getApplicationContext(), "Please enter valid Phone number", Toast.LENGTH_LONG).show();
-                                                    }
-                                                } else {
-                                                    Toast.makeText(getApplicationContext(), "Please enter valid UAN number", Toast.LENGTH_LONG).show();
-
+                                                    uploadOfficalDetails(mainobject);
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
                                                 }
                                             } else {
-                                                Toast.makeText(getApplicationContext(), "Please enter valid ESI number", Toast.LENGTH_LONG).show();
-
+                                                Toast.makeText(getApplicationContext(), "Please enter valid Phone number", Toast.LENGTH_LONG).show();
                                             }
-
-
                                         } else {
-                                            Toast.makeText(getApplicationContext(), "Please update your permanent pincode", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(getApplicationContext(), "Please enter valid UAN number", Toast.LENGTH_LONG).show();
 
                                         }
-
                                     } else {
-                                        Toast.makeText(getApplicationContext(), "Please update your permanent address", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getApplicationContext(), "Please enter valid ESI number", Toast.LENGTH_LONG).show();
 
                                     }
 
 
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Please update your permanent pincode", Toast.LENGTH_LONG).show();
 
+                                }
+
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Please update your permanent address", Toast.LENGTH_LONG).show();
+
+                            }
 
 
                         } else {
@@ -2102,7 +2103,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
     private void setPerCity() {
 
-        String surl = AppData.url+"gcl_CommonDDL?ddltype=4&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
+        String surl = AppData.url + "gcl_CommonDDL?ddltype=4&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
@@ -2114,6 +2115,8 @@ public class TempProfileActivity extends AppCompatActivity {
                         llMain.setVisibility(View.GONE);
                         percity.clear();
                         mainPerCity.clear();
+                        percity.add("Please Select");
+                        mainPerCity.add(new MainDocModule("", ""));
 
                         try {
                             JSONObject job1 = new JSONObject(response);
@@ -2140,6 +2143,10 @@ public class TempProfileActivity extends AppCompatActivity {
                                 int index = percity.indexOf(vtc);
                                 Log.d("indexr", String.valueOf(index));
                                 spPermanentCity.setSelection(index);
+                                if (index == -1) {
+                                    int indexp = percity.indexOf(district);
+                                    spPermanentCity.setSelection(indexp);
+                                }
                                 serPreCity();
 
                             } else {
@@ -2161,7 +2168,7 @@ public class TempProfileActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 llLoader.setVisibility(View.VISIBLE);
                 llMain.setVisibility(View.GONE);
-                errflag=6;
+                errflag = 6;
                 showInternetDialog();
 
                 //   Toast.makeText(DocumentManageActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
@@ -2177,7 +2184,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
     private void serPreCity() {
 
-        String surl = AppData.url+"gcl_CommonDDL?ddltype=4&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
+        String surl = AppData.url + "gcl_CommonDDL?ddltype=4&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
@@ -2189,6 +2196,8 @@ public class TempProfileActivity extends AppCompatActivity {
                         llMain.setVisibility(View.GONE);
                         precity.clear();
                         mainPreCity.clear();
+                        precity.add("Please Select");
+                        mainPreCity.add(new MainDocModule("", ""));
 
                         try {
                             JSONObject job1 = new JSONObject(response);
@@ -2212,9 +2221,14 @@ public class TempProfileActivity extends AppCompatActivity {
                                                 precity); //selected item will look like a spinner set from XML
                                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 spPresentCity.setAdapter(spinnerArrayAdapter);
-                                int index = percity.indexOf(vtc);
+                                int index = precity.indexOf(vtc);
                                 Log.d("indexr", String.valueOf(index));
                                 spPresentCity.setSelection(index);
+                                if (index == -1) {
+                                    int indexp = precity.indexOf(district);
+                                    spPresentCity.setSelection(indexp);
+                                }
+
                                 setprestate();
 
                             } else {
@@ -2236,7 +2250,7 @@ public class TempProfileActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 llLoader.setVisibility(View.VISIBLE);
                 llMain.setVisibility(View.GONE);
-                errflag=7;
+                errflag = 7;
                 showInternetDialog();
 
                 //   Toast.makeText(DocumentManageActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
@@ -2252,7 +2266,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
     private void setprestate() {
 
-        String surl = AppData.url+"gcl_CommonDDL?ddltype=3&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
+        String surl = AppData.url + "gcl_CommonDDL?ddltype=3&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
         Log.d("deptname", surl);
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
@@ -2315,7 +2329,7 @@ public class TempProfileActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 llLoader.setVisibility(View.VISIBLE);
                 llMain.setVisibility(View.GONE);
-                errflag=8;
+                errflag = 8;
                 showInternetDialog();
 
                 //   Toast.makeText(DocumentManageActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
@@ -2331,7 +2345,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
     private void setperstate() {
 
-        String surl = AppData.url+"gcl_CommonDDL?ddltype=3&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
+        String surl = AppData.url + "gcl_CommonDDL?ddltype=3&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
         Log.d("deptname", surl);
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
@@ -2392,7 +2406,7 @@ public class TempProfileActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 llLoader.setVisibility(View.VISIBLE);
                 llMain.setVisibility(View.GONE);
-                errflag=9;
+                errflag = 9;
                 showInternetDialog();
 
                 //   Toast.makeText(DocumentManageActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
@@ -2579,34 +2593,28 @@ public class TempProfileActivity extends AppCompatActivity {
                 if (errflag == 1) {
                     profileFunction();
                     alert1.dismiss();
-                }else if (errflag==2){
+                } else if (errflag == 2) {
                     setQualification();
                     alert1.dismiss();
-                }
-                else if (errflag==3){
+                } else if (errflag == 3) {
                     setMartial();
                     alert1.dismiss();
-                }
-                else if (errflag==4){
+                } else if (errflag == 4) {
                     setGender();
                     alert1.dismiss();
-                }
-                else if (errflag==5){
+                } else if (errflag == 5) {
                     setBlood();
                     alert1.dismiss();
-                }
-                else if (errflag==6){
+                } else if (errflag == 6) {
                     setPerCity();
                     alert1.dismiss();
-                }
-
-                else if (errflag==7){
+                } else if (errflag == 7) {
                     serPreCity();
                     alert1.dismiss();
-                }else if (errflag==8){
+                } else if (errflag == 8) {
                     setprestate();
                     alert1.dismiss();
-                }else if(errflag==9){
+                } else if (errflag == 9) {
                     setperstate();
                     alert1.dismiss();
                 }
@@ -2627,9 +2635,9 @@ public class TempProfileActivity extends AppCompatActivity {
 
     private void uploadOfficalDetails(JSONObject jsonObject) {
         pd.show();
-        AndroidNetworking.post(AppData.newv2url+"KYC/UpdateKYCDetails")
+        AndroidNetworking.post(AppData.newv2url + "KYC/UpdateKYCDetails")
                 .addJSONObjectBody(jsonObject)
-                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
@@ -2646,32 +2654,32 @@ public class TempProfileActivity extends AppCompatActivity {
                         int Response_Code = job1.optInt("Response_Code");
                         if (Response_Code == 101) {
                             pd.show();
-                            JSONObject mainobject=new JSONObject();
+                            JSONObject mainobject = new JSONObject();
                             try {
-                                mainobject.put("DbOperation","2");
-                                mainobject.put("SecurityCode",pref.getSecurityCode());
-                                JSONObject innerobj=new JSONObject();
-                                innerobj.put("AEMEMPLOYEEID",AEMEmployeeID);
-                                innerobj.put("PermanentAddress",etPerAddr.getText().toString());
-                                innerobj.put("PermanentStateID",permanentstate);
-                                innerobj.put("PermanentCityID",permanentcity);
-                                innerobj.put("PermanentPinCode",etPerPinCode.getText().toString());
-                                innerobj.put("PresentAddress",etPreAddr.getText().toString());
-                                innerobj.put("PresentStateID",presentstate);
-                                innerobj.put("PresentCityID",presentcity);
-                                innerobj.put("PresentPincode",etPrePinCode.getText().toString());
-                                innerobj.put("Phone",binding.etPhnNumber.getText().toString());
-                                innerobj.put("Mobile",etMobNumber.getText().toString());
-                                innerobj.put("EmailID",etEmailId.getText().toString());
-                                innerobj.put("RefContact",binding.etRefNumber.getText().toString());
-                                mainobject.put("ContactDetails",innerobj);
+                                mainobject.put("DbOperation", "2");
+                                mainobject.put("SecurityCode", pref.getSecurityCode());
+                                JSONObject innerobj = new JSONObject();
+                                innerobj.put("AEMEMPLOYEEID", AEMEmployeeID);
+                                innerobj.put("PermanentAddress", etPerAddr.getText().toString());
+                                innerobj.put("PermanentStateID", permanentstate);
+                                innerobj.put("PermanentCityID", permanentcity);
+                                innerobj.put("PermanentPinCode", etPerPinCode.getText().toString());
+                                innerobj.put("PresentAddress", etPreAddr.getText().toString());
+                                innerobj.put("PresentStateID", presentstate);
+                                innerobj.put("PresentCityID", presentcity);
+                                innerobj.put("PresentPincode", etPrePinCode.getText().toString());
+                                innerobj.put("Phone", binding.etPhnNumber.getText().toString());
+                                innerobj.put("Mobile", etMobNumber.getText().toString());
+                                innerobj.put("EmailID", etEmailId.getText().toString());
+                                innerobj.put("RefContact", binding.etRefNumber.getText().toString());
+                                mainobject.put("ContactDetails", innerobj);
                                 uploadContactDetails(mainobject);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            Toast.makeText(TempProfileActivity.this,"Personal Details has been updated Successfully",Toast.LENGTH_LONG).show();
+                           // Toast.makeText(TempProfileActivity.this, "Personal Details has been updated Successfully", Toast.LENGTH_LONG).show();
 
-                        }else {
+                        } else {
                             pd.dismiss();
                         }
                     }
@@ -2679,9 +2687,9 @@ public class TempProfileActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError error) {
 
-                            Intent intent=new Intent(TempProfileActivity.this,LoginActivity.class);
-                            startActivity(intent);
-                            finish();
+                        Intent intent = new Intent(TempProfileActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
 
                     }
                 });
@@ -2690,9 +2698,9 @@ public class TempProfileActivity extends AppCompatActivity {
 
     private void uploadContactDetails(JSONObject jsonObject) {
         pd.show();
-        AndroidNetworking.post(AppData.newv2url+"KYC/UpdateKYCDetails")
+        AndroidNetworking.post(AppData.newv2url + "KYC/UpdateKYCDetails")
                 .addJSONObjectBody(jsonObject)
-                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
@@ -2709,26 +2717,26 @@ public class TempProfileActivity extends AppCompatActivity {
                         int Response_Code = job1.optInt("Response_Code");
                         if (Response_Code == 101) {
                             pd.show();
-                            JSONObject mainobject=new JSONObject();
+                            JSONObject mainobject = new JSONObject();
                             try {
-                                mainobject.put("DbOperation","3");
-                                mainobject.put("SecurityCode",pref.getSecurityCode());
-                                JSONObject innerobj=new JSONObject();
-                                innerobj.put("AEMEMPLOYEEID",AEMEmployeeID);
-                                innerobj.put("OldESINo",etESI.getText().toString());
-                                innerobj.put("NomineeName",binding.etESINominee.getText().toString());
-                                innerobj.put("NomineeDOB",esicDOB);
-                                innerobj.put("NomineeGender",esicGender);
-                                innerobj.put("NomineeRelation",esicRltionshp);
-                                innerobj.put("ResidingIP",residingIP);
-                                mainobject.put("OLDESICDetails",innerobj);
+                                mainobject.put("DbOperation", "3");
+                                mainobject.put("SecurityCode", pref.getSecurityCode());
+                                JSONObject innerobj = new JSONObject();
+                                innerobj.put("AEMEMPLOYEEID", AEMEmployeeID);
+                                innerobj.put("OldESINo", etESI.getText().toString());
+                                innerobj.put("NomineeName", binding.etESINominee.getText().toString());
+                                innerobj.put("NomineeDOB", esicDOB);
+                                innerobj.put("NomineeGender", esicGender);
+                                innerobj.put("NomineeRelation", esicRltionshp);
+                                innerobj.put("ResidingIP", residingIP);
+                                mainobject.put("OLDESICDetails", innerobj);
                                 uploadesicDetails(mainobject);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            Toast.makeText(TempProfileActivity.this,"Contact Details has been updated Successfully",Toast.LENGTH_LONG).show();
+                           // Toast.makeText(TempProfileActivity.this, "Contact Details has been updated Successfully", Toast.LENGTH_LONG).show();
 
-                        }else {
+                        } else {
                             pd.dismiss();
                         }
                     }
@@ -2736,9 +2744,9 @@ public class TempProfileActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError error) {
 
-                            Intent intent=new Intent(TempProfileActivity.this,LoginActivity.class);
-                            startActivity(intent);
-                            finish();
+                        Intent intent = new Intent(TempProfileActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
 
                     }
                 });
@@ -2746,9 +2754,9 @@ public class TempProfileActivity extends AppCompatActivity {
 
     private void uploadesicDetails(JSONObject jsonObject) {
         pd.show();
-        AndroidNetworking.post(AppData.newv2url+"KYC/UpdateKYCDetails")
+        AndroidNetworking.post(AppData.newv2url + "KYC/UpdateKYCDetails")
                 .addJSONObjectBody(jsonObject)
-                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
@@ -2766,30 +2774,30 @@ public class TempProfileActivity extends AppCompatActivity {
                         if (Response_Code == 101) {
                             pd.show();
 
-                            JSONObject mainobject=new JSONObject();
+                            JSONObject mainobject = new JSONObject();
                             try {
-                                mainobject.put("DbOperation","4");
-                                mainobject.put("SecurityCode",pref.getSecurityCode());
-                                JSONObject innerobj=new JSONObject();
-                                innerobj.put("AEMEMPLOYEEID",AEMEmployeeID);
-                                innerobj.put("OldUANNo",etUAN.getText().toString());
-                                innerobj.put("MemberName",binding.etUANNominee.getText().toString());
-                                innerobj.put("RelationID",uanRltionshp);
-                                innerobj.put("MemberDateOfBirth",uanDOB);
-                                innerobj.put("Sex",esicGender);
-                                innerobj.put("PFPercentage",pfPercantage);
-                                innerobj.put("PFNumber",binding.etPFNumber.getText().toString());
-                                innerobj.put("NomineeAddress",binding.etUANNomineeAddress.getText().toString());
-                                innerobj.put("PrevEmprName",binding.etPreviousEmployer.getText().toString());
-                                mainobject.put("OLDUANDetails",innerobj);
+                                mainobject.put("DbOperation", "4");
+                                mainobject.put("SecurityCode", pref.getSecurityCode());
+                                JSONObject innerobj = new JSONObject();
+                                innerobj.put("AEMEMPLOYEEID", AEMEmployeeID);
+                                innerobj.put("OldUANNo", etUAN.getText().toString());
+                                innerobj.put("MemberName", binding.etUANNominee.getText().toString());
+                                innerobj.put("RelationID", uanRltionshp);
+                                innerobj.put("MemberDateOfBirth", uanDOB);
+                                innerobj.put("Sex", esicGender);
+                                innerobj.put("PFPercentage", pfPercantage);
+                                innerobj.put("PFNumber", binding.etPFNumber.getText().toString());
+                                innerobj.put("NomineeAddress", binding.etUANNomineeAddress.getText().toString());
+                                innerobj.put("PrevEmprName", binding.etPreviousEmployer.getText().toString());
+                                mainobject.put("OLDUANDetails", innerobj);
                                 uploaduanDetails(mainobject);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
 
-                            Toast.makeText(TempProfileActivity.this,"ESIC Details has been updated Successfully",Toast.LENGTH_LONG).show();
+                            //Toast.makeText(TempProfileActivity.this, "ESIC Details has been updated Successfully", Toast.LENGTH_LONG).show();
 
-                        }else {
+                        } else {
                             pd.dismiss();
                         }
                     }
@@ -2797,9 +2805,9 @@ public class TempProfileActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError error) {
 
-                            Intent intent=new Intent(TempProfileActivity.this,LoginActivity.class);
-                            startActivity(intent);
-                            finish();
+                        Intent intent = new Intent(TempProfileActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
 
                     }
                 });
@@ -2807,9 +2815,9 @@ public class TempProfileActivity extends AppCompatActivity {
 
     private void uploaduanDetails(JSONObject jsonObject) {
         pd.show();
-        AndroidNetworking.post(AppData.newv2url+"KYC/UpdateKYCDetails")
+        AndroidNetworking.post(AppData.newv2url + "KYC/UpdateKYCDetails")
                 .addJSONObjectBody(jsonObject)
-                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
@@ -2829,9 +2837,9 @@ public class TempProfileActivity extends AppCompatActivity {
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
 
-                            Toast.makeText(TempProfileActivity.this,"UAN Details has been updated Successfully",Toast.LENGTH_LONG).show();
+                            Toast.makeText(TempProfileActivity.this, "Your Details has been updated Successfully", Toast.LENGTH_LONG).show();
 
-                        }else {
+                        } else {
 
                         }
                     }
@@ -2839,9 +2847,9 @@ public class TempProfileActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError error) {
 
-                            Intent intent=new Intent(TempProfileActivity.this,LoginActivity.class);
-                            startActivity(intent);
-                            finish();
+                        Intent intent = new Intent(TempProfileActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
 
                     }
                 });

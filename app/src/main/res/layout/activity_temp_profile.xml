@@ -733,6 +733,7 @@
                             </LinearLayout>
                         </LinearLayout>
 
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1219,6 +1220,7 @@
                                 android:layout_weight="1">
 
                                 <EditText
+                                    android:enabled="false"
                                     android:id="@+id/etPerAddr"
                                     android:layout_width="match_parent"
                                     android:layout_height="80dp"
@@ -1260,6 +1262,7 @@
                                 android:layout_weight="1">
 
                                 <EditText
+                                    android:enabled="false"
                                     android:id="@+id/etPerPinCode"
                                     android:layout_width="match_parent"
                                     android:layout_height="30dp"
@@ -1313,6 +1316,7 @@
                                     android:background="@drawable/lldesign9">
 
                                     <Spinner
+                                        android:enabled="false"
                                         android:id="@+id/spPermanentState"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"></Spinner>
