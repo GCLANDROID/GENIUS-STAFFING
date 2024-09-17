@@ -77,6 +77,18 @@ public class GratuityNominationActivity extends AppCompatActivity {
                 = new LinearLayoutManager(GratuityNominationActivity.this, LinearLayoutManager.VERTICAL, false);
         binding.rvData.setLayoutManager(layoutManager);
 
+        binding.llTick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (binding.imgTick.getVisibility()==View.GONE){
+                    binding.imgTick.setVisibility(View.VISIBLE);
+                    binding.etAddress.setText(AppData.PERMANENTADDRESS);
+                }else {
+                    binding.imgTick.setVisibility(View.GONE);
+                    binding.etAddress.setText("");
+                }
+            }
+        });
 
         binding.spRealation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -162,6 +174,7 @@ public class GratuityNominationActivity extends AppCompatActivity {
                     JSONObject jsonObject=new JSONObject();
                     try {
                         jsonObject.put("Name",binding.etName.getText().toString());
+                        jsonObject.put("Aadhar",binding.etAadharNominee.getText().toString());
                         jsonObject.put("Address",binding.etAddress.getText().toString());
                         jsonObject.put("Relationship",relationshipID);
                         jsonObject.put("RelationshipID",relationship);
@@ -210,6 +223,7 @@ public class GratuityNominationActivity extends AppCompatActivity {
         binding.etAddress.setText("");
         binding.tvUANDOB.setText("");
         dob="";
+        binding.etAadharNominee.setText("");
         binding.spRealation.setSelection(0);
         binding.etProportion.setText("");
         binding.llData.setVisibility(View.VISIBLE);

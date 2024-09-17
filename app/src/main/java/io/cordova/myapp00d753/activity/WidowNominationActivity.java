@@ -89,6 +89,18 @@ public class WidowNominationActivity extends AppCompatActivity {
 
             }
         });
+        binding.llTick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (binding.imgTick.getVisibility()==View.GONE){
+                    binding.imgTick.setVisibility(View.VISIBLE);
+                    binding.etAddress.setText(AppData.PERMANENTADDRESS);
+                }else {
+                    binding.imgTick.setVisibility(View.GONE);
+                    binding.etAddress.setText("");
+                }
+            }
+        });
         binding.imgUANCal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -160,6 +172,7 @@ public class WidowNominationActivity extends AppCompatActivity {
                     try {
                         jsonObject.put("Name",binding.etName.getText().toString());
                         jsonObject.put("Address",binding.etAddress.getText().toString());
+                        jsonObject.put("Aadhar",binding.etAadharNominee.getText().toString());
                         jsonObject.put("Relationship",relationshipID);
                         jsonObject.put("DOB",dob);
                         jsonObject.put("AEMEMPLOYEEID",pref.getEmpId());

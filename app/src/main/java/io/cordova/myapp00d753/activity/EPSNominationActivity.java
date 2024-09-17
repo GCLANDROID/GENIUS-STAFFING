@@ -85,6 +85,7 @@ public class EPSNominationActivity extends AppCompatActivity {
                         jsonObject.put("Relationship",relationshipID);
                         jsonObject.put("RelationshipID",relationship);
                         jsonObject.put("DOB",dob);
+                        jsonObject.put("Aadhar",binding.etAadharNominee.getText().toString());
                         jsonObject.put("AEMEMPLOYEEID",pref.getEmpId());
                         nominationarray.put(jsonObject);
                         nominationobject.put("epsDetails",nominationarray);
@@ -102,6 +103,18 @@ public class EPSNominationActivity extends AppCompatActivity {
 
             }
         });
+        binding.llTick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (binding.imgTick.getVisibility()==View.GONE){
+                    binding.imgTick.setVisibility(View.VISIBLE);
+                    binding.etAddress.setText(AppData.PERMANENTADDRESS);
+                }else {
+                    binding.imgTick.setVisibility(View.GONE);
+                    binding.etAddress.setText("");
+                }
+            }
+        });
     }
 
     private void getItemList(JSONObject object){
@@ -109,6 +122,7 @@ public class EPSNominationActivity extends AppCompatActivity {
         binding.etAddress.setText("");
         binding.spRealation.setSelection(0);
         dob="";
+        binding.etAadharNominee.setText("");
         binding.tvUANDOB.setText("");
         binding.llData.setVisibility(View.VISIBLE);
         itemList.clear();
