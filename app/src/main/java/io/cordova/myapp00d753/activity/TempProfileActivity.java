@@ -2,6 +2,7 @@ package io.cordova.myapp00d753.activity;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,7 +10,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -38,7 +39,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -48,15 +52,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
-import com.github.mikephil.charting.animation.Easing;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
 
-import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.cameraview.LongImageCameraActivity;
 import com.intrusoft.scatter.ChartData;
 import com.intrusoft.scatter.PieChart;
@@ -68,7 +64,6 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -77,16 +72,15 @@ import java.util.List;
 
 import id.zelory.compressor.Compressor;
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.adapter.TempCommonFilterAdapter;
 import io.cordova.myapp00d753.databinding.ActivityTempProfileBinding;
 import io.cordova.myapp00d753.module.AttendanceService;
 import io.cordova.myapp00d753.module.MainDocModule;
 import io.cordova.myapp00d753.module.UploadObject;
-import io.cordova.myapp00d753.utility.ApiClient;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.Util;
-import io.cordova.myapp00d753.utility.ValidUtils;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -123,7 +117,7 @@ public class TempProfileActivity extends AppCompatActivity {
     String RelationShip;
     String BloodGroup;
     EditText etESI, etUAN;
-    TextView tvCity;
+    TextView tvCity,txtPresentCity,txtPermanentCity;
     String PresentCity, AEMEmployeeID, Code, Name, DateOfJoining, Department, Designation, Location, DateOfBirth, GuardianName, PermanentAddress, Mobile, EmailID, Phone, AEMClientName;
     private static final String SERVER_PATH = AppData.url;
     private AttendanceService uploadService;
@@ -185,7 +179,7 @@ public class TempProfileActivity extends AppCompatActivity {
     String esicDOB = "", uanDOB = "", esicGender = "", esicRltionshp = "", uanRltionshp = "", residingIP = "", pfPercantage = "";
     ProgressDialog pd;
     String namevalue, dobvalue, gendervalue, careof, state, pin, street, locality, house, postoffice, subDistrict, vtc, district, landmark;
-
+    Dialog searchHolidayDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -196,6 +190,7 @@ public class TempProfileActivity extends AppCompatActivity {
     }
 
     private void initialize() {
+        searchHolidayDialog = new Dialog(TempProfileActivity.this, R.style.CustomDialogNew2);
         namevalue = getIntent().getStringExtra("namevalue");
         dobvalue = getIntent().getStringExtra("dobvalue");
         DateOfBirth = Util.changeAnyDateFormat(dobvalue, "dd-MM-yyyy", "dd MMM yyyy");
@@ -232,6 +227,8 @@ public class TempProfileActivity extends AppCompatActivity {
         tvQualification = (TextView) findViewById(R.id.tvQualification);
         tvMarital = (TextView) findViewById(R.id.tvMarital);
         tvBloodGroup = (TextView) findViewById(R.id.tvBloodGroup);
+        txtPresentCity = (TextView) findViewById(R.id.txtPresentCity);
+        txtPermanentCity = (TextView) findViewById(R.id.txtPermanentCity);
         //tvParAddr = (TextView) findViewById(R.id.tvParAddr);
         tvComName = (TextView) findViewById(R.id.tvComName);
 
@@ -1899,8 +1896,6 @@ public class TempProfileActivity extends AppCompatActivity {
                 if (!preaddr.equals("")) {
                     if (!prepin.equals("")) {
                         if (etGurdianName.getText().toString().length() > 0) {
-
-
                             if (etPerAddr.getText().toString().length() > 0) {
                                 if (etPrePinCode.getText().toString().length() > 0) {
                                     if (etESI.getText().toString().equals("") || etESI.getText().toString().length() > 9) {
@@ -1949,8 +1944,6 @@ public class TempProfileActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "Please update your permanent address", Toast.LENGTH_LONG).show();
 
                             }
-
-
                         } else {
                             Toast.makeText(getApplicationContext(), "Please update your fathers or husband name", Toast.LENGTH_LONG).show();
                         }
@@ -1962,7 +1955,6 @@ public class TempProfileActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(getApplicationContext(), "Please update your present address", Toast.LENGTH_LONG).show();
                 }
-
             }
         });
 
@@ -1979,6 +1971,21 @@ public class TempProfileActivity extends AppCompatActivity {
                 Intent intent = new Intent(TempProfileActivity.this, TempDashBoardActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+            }
+        });
+
+
+        txtPresentCity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openSearchCityDialog("present_city");
+            }
+        });
+
+        txtPermanentCity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openSearchCityDialog("permanent_city");
             }
         });
     }
@@ -2021,8 +2028,6 @@ public class TempProfileActivity extends AppCompatActivity {
                     Intent intent = new Intent(TempProfileActivity.this, TempPanActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
-
-
                 } else {
                     Toast.makeText(getApplicationContext(), extraWorkingDayModel.getResponseText(), Toast.LENGTH_SHORT).show();
                 }
@@ -2102,7 +2107,6 @@ public class TempProfileActivity extends AppCompatActivity {
     }
 
     private void setPerCity() {
-
         String surl = AppData.url + "gcl_CommonDDL?ddltype=4&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
@@ -2133,22 +2137,30 @@ public class TempProfileActivity extends AppCompatActivity {
                                     percity.add(qualivalue);
                                     MainDocModule mainDocModule = new MainDocModule(qualiid, qualivalue);
                                     mainPerCity.add(mainDocModule);
-
                                 }
                                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
                                         (TempProfileActivity.this, android.R.layout.simple_spinner_item,
                                                 percity); //selected item will look like a spinner set from XML
                                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 spPermanentCity.setAdapter(spinnerArrayAdapter);
-                                int index = percity.indexOf(vtc);
-                                Log.d("indexr", String.valueOf(index));
-                                spPermanentCity.setSelection(index);
-                                if (index == -1) {
-                                    int indexp = percity.indexOf(district);
-                                    spPermanentCity.setSelection(indexp);
-                                }
-                                serPreCity();
+                                try {
+                                    int index = percity.indexOf(vtc);
+                                    Log.d("indexr", String.valueOf(index));
+                                    permanentcity = mainPerCity.get(index).getDocID();
+                                    txtPermanentCity.setText(percity.get(index));
+                                    //spPermanentCity.setSelection(index);
+                                    if (index == -1) {
+                                        int indexp = percity.indexOf(district);
+                                        //spPermanentCity.setSelection(indexp);
+                                        txtPermanentCity.setText(percity.get(indexp));
+                                        permanentcity = mainPerCity.get(indexp).getDocID();
+                                    }
+                                    Log.e(TAG, "CITY: permanentcity: "+permanentcity);
+                                } catch (Exception e){
 
+                                }
+
+                                serPreCity();
                             } else {
 
 
@@ -2183,7 +2195,6 @@ public class TempProfileActivity extends AppCompatActivity {
     }
 
     private void serPreCity() {
-
         String surl = AppData.url + "gcl_CommonDDL?ddltype=4&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
@@ -2221,14 +2232,23 @@ public class TempProfileActivity extends AppCompatActivity {
                                                 precity); //selected item will look like a spinner set from XML
                                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 spPresentCity.setAdapter(spinnerArrayAdapter);
-                                int index = precity.indexOf(vtc);
-                                Log.d("indexr", String.valueOf(index));
-                                spPresentCity.setSelection(index);
-                                if (index == -1) {
-                                    int indexp = precity.indexOf(district);
-                                    spPresentCity.setSelection(indexp);
-                                }
+                                //
+                                try {
+                                    int index = precity.indexOf(vtc);
+                                    Log.d("indexr", String.valueOf(index));
+                                    txtPresentCity.setText(precity.get(index));
+                                    presentcity = mainPreCity.get(index).getDocID();
+                                    //spPresentCity.setSelection(index);
+                                    if (index == -1) {
+                                        int indexp = precity.indexOf(district);
+                                        txtPresentCity.setText(precity.get(indexp));
+                                        presentcity = mainPreCity.get(indexp).getDocID();
+                                        //spPresentCity.setSelection(indexp);
+                                    }
+                                    Log.e(TAG, "CITY present: "+presentcity);
+                                } catch (Exception e){
 
+                                }
                                 setprestate();
 
                             } else {
@@ -2308,8 +2328,6 @@ public class TempProfileActivity extends AppCompatActivity {
                                 Log.d("indexr", String.valueOf(index));
                                 spPresentState.setSelection(index);
                                 setperstate();
-
-
                             } else {
 
 
@@ -2456,12 +2474,8 @@ public class TempProfileActivity extends AppCompatActivity {
                             Log.d("images", encodedImage);
                             flag = 1;
                             alerDialog3.dismiss();
-
-
-                            // _pref.saveImage(encodedImage);
+                            //_pref.saveImage(encodedImage);
                             //saveImage(encodedImage);
-
-
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -2473,8 +2487,6 @@ public class TempProfileActivity extends AppCompatActivity {
                 break;
 
             case LongImageCameraActivity.LONG_IMAGE_RESULT_CODE:
-
-
                 if (resultCode == RESULT_OK && requestCode == LongImageCameraActivity.LONG_IMAGE_RESULT_CODE) {
                     String imageFileName = data.getStringExtra(LongImageCameraActivity.IMAGE_PATH_KEY);
                     Log.d("imageFileName", imageFileName);
@@ -2493,12 +2505,8 @@ public class TempProfileActivity extends AppCompatActivity {
                     Log.d("imageSixw", String.valueOf(getReadableFileSize(pictureFile.length())));
 
                     alerDialog3.dismiss();
-
-
                 }
                 break;
-
-
         }
 
     }
@@ -2645,11 +2653,8 @@ public class TempProfileActivity extends AppCompatActivity {
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-
-
                         JSONObject job1 = response;
                         Log.e("response12", "@@@@@@" + job1);
-
 
                         int Response_Code = job1.optInt("Response_Code");
                         if (Response_Code == 101) {
@@ -2838,7 +2843,6 @@ public class TempProfileActivity extends AppCompatActivity {
                             startActivity(intent);
 
                             Toast.makeText(TempProfileActivity.this, "Your Details has been updated Successfully", Toast.LENGTH_LONG).show();
-
                         } else {
 
                         }
@@ -2853,5 +2857,73 @@ public class TempProfileActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+
+    private void openSearchCityDialog(String from) {
+        searchHolidayDialog.setContentView(R.layout.wbs_code_search_layout);
+        searchHolidayDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        searchHolidayDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        searchHolidayDialog.setCancelable(true);
+
+        TextView txtPopupHeadline = searchHolidayDialog.findViewById(R.id.txtPopupHeadline);
+        SearchView wbsCodeSearchView = (SearchView) searchHolidayDialog.findViewById(R.id.wbsCodeSearchView);
+        ImageView imgCancel = searchHolidayDialog.findViewById(R.id.imgCancel);
+        RecyclerView rvWbsCode = searchHolidayDialog.findViewById(R.id.rvWbsCode);
+        rvWbsCode.setLayoutManager(new LinearLayoutManager(TempProfileActivity.this));
+        TempCommonFilterAdapter tempCommonFilterAdapter;
+        if (from.equals("present_city")){
+            wbsCodeSearchView.setQueryHint("Search Present city");
+            txtPopupHeadline.setText("Select Present City");
+
+            ArrayList<MainDocModule>  mainPreCityCopy = (ArrayList<MainDocModule>) mainPreCity.clone();
+            tempCommonFilterAdapter = new TempCommonFilterAdapter(TempProfileActivity.this,mainPreCityCopy,from);
+            rvWbsCode.setAdapter(tempCommonFilterAdapter);
+        } else {
+            wbsCodeSearchView.setQueryHint("Search Permanent city");
+            txtPopupHeadline.setText("Select Permanent City");
+
+            ArrayList<MainDocModule>  mainPerCityCopy = (ArrayList<MainDocModule>) mainPerCity.clone();
+            tempCommonFilterAdapter = new TempCommonFilterAdapter(TempProfileActivity.this,mainPerCityCopy,from);
+            rvWbsCode.setAdapter(tempCommonFilterAdapter);
+        }
+
+
+
+
+
+
+        wbsCodeSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                tempCommonFilterAdapter.getFilter().filter(s);
+                return false;
+            }
+        });
+
+
+        imgCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchHolidayDialog.dismiss();
+            }
+        });
+        searchHolidayDialog.show();
+    }
+
+    public void setText(String cityID,String selectedItem, String selectFor){
+        if (selectFor.equals("present_city")){
+            txtPresentCity.setText(selectedItem);
+            presentcity = cityID;
+        } else  {
+            txtPermanentCity.setText(selectedItem);
+            permanentcity = cityID;
+        }
+        searchHolidayDialog.dismiss();
     }
 }
