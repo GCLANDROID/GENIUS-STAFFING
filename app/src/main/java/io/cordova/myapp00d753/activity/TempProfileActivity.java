@@ -426,6 +426,19 @@ public class TempProfileActivity extends AppCompatActivity {
             }
         }, 50000);
 
+        binding.llTick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (binding.imgTick.getVisibility()==View.GONE){
+                    binding.imgTick.setVisibility(View.VISIBLE);
+                    binding.etWhatssappNumber.setText(etMobNumber.getText().toString());
+                }else {
+                    binding.imgTick.setVisibility(View.GONE);
+                    binding.etWhatssappNumber.setText("");
+                }
+            }
+        });
+
 
     }
 

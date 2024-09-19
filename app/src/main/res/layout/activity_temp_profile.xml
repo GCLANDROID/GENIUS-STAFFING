@@ -845,6 +845,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
                         <LinearLayout
+
                             android:layout_marginTop="20dp"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
@@ -901,6 +902,80 @@
                                     android:textColor="@android:color/black" />
                             </LinearLayout>
                         </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:text="Whatsapp Number"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/textcolor" />
+                                <LinearLayout
+                                    android:layout_marginTop="5dp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    >
+
+                                    <LinearLayout
+                                        android:id="@+id/llTick"
+                                        android:layout_width="16dp"
+                                        android:layout_height="16dp"
+                                        android:background="@drawable/lldesign9"
+                                        android:gravity="center">
+                                        <ImageView
+                                            android:id="@+id/imgTick"
+                                            android:visibility="gone"
+                                            android:layout_width="8dp"
+                                            android:layout_height="8dp"
+                                            android:src="@drawable/tick"></ImageView>
+                                    </LinearLayout>
+                                    <TextView
+                                        android:layout_gravity="center"
+                                        android:layout_marginLeft="5dp"
+                                        android:textSize="10sp"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/textcolor"
+                                        android:text="Same as Mobile Number"></TextView>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <EditText
+                                    android:background="@drawable/lldesign9"
+                                    android:id="@+id/etWhatssappNumber"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:digits="1234567890"
+                                    android:enabled="false"
+                                    android:inputType="number"
+                                    android:maxLength="10"
+                                    android:paddingLeft="10dp"
+                                    android:text="--"
+                                    android:textSize="12sp"
+                                    android:textColor="@android:color/black" />
+                            </LinearLayout>
+                        </LinearLayout>
+
 
                         <LinearLayout
                             android:layout_width="match_parent"
