@@ -187,7 +187,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         }
 
         if (pref.getEmpClintId().equals("AEMCLI1110000502")){
-            llHoliday.setVisibility(View.VISIBLE);
+            llHoliday.setVisibility(View.GONE);
         } else {
             llHoliday.setVisibility(View.GONE);
         }

@@ -127,7 +127,7 @@ public class TempEducationaActivity extends AppCompatActivity {
         binding.btnSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(TempEducationaActivity.this,TempPanActivity.class);
+                Intent intent=new Intent(TempEducationaActivity.this,TempExperinceActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
@@ -262,7 +262,7 @@ public class TempEducationaActivity extends AppCompatActivity {
 
                         int Response_Code = job1.optInt("Response_Code");
                         if (Response_Code == 101) {
-                            Intent intent = new Intent(TempEducationaActivity.this, TempPanActivity.class);
+                            Intent intent = new Intent(TempEducationaActivity.this, TempExperinceActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
 

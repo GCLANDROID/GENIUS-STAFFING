@@ -93,7 +93,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                             jsonObject.put("sessionId",sessionId);
                             jsonObject.put("otp",binding.etOTP.getText().toString());
                             jsonObject.put("shareCode",GetPassword(4));
-                            jsonObject.put("fileUrl",false);
+                            jsonObject.put("fileUrl",true);
                             validateOTP(jsonObject);
 
                         } catch (JSONException e) {
