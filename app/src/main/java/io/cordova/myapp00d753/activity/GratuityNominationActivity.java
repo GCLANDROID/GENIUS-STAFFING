@@ -10,6 +10,8 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -216,6 +218,33 @@ public class GratuityNominationActivity extends AppCompatActivity {
                 }
             }
         });
+        binding.etAadharNominee.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (binding.etAadharNominee.getText().length()==12){
+                    JSONObject jsonObject=new JSONObject();
+                    try {
+                        jsonObject.put("aadhaarNumber",binding.etAadharNominee.getText().toString());
+                        jsonObject.put("consent","Y");
+                        validateAadhar(jsonObject);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        });
     }
 
     private void getItemList(JSONObject object){
@@ -371,6 +400,54 @@ public class GratuityNominationActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
 
 
+    }
+
+    private void validateAadhar(JSONObject jsonObject) {
+        ProgressDialog pd=new ProgressDialog(this);
+        pd.setMessage("Loading");
+        pd.show();
+        pd.setCancelable(false);
+        AndroidNetworking.post("https://ind.thomas.hyperverge.co/v1/verifyAadhaar")
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("appId", AppData.APPID)
+                .addHeaders("appKey", AppData.APPKEY)
+                .addHeaders("transactionId", pref.getMasterId())
+                .addHeaders("content-type", "application/json")
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        pd.dismiss();
+
+                        int statusCode = job1.optInt("statusCode");
+                        if (statusCode == 200) {
+
+                            binding.llAadharVerified.setVisibility(View.VISIBLE);
+                            binding.etAadharNominee.setEnabled(false);
+                        }else {
+
+                            binding.etAadharNominee.setText("");
+                            Toast.makeText(GratuityNominationActivity.this,"Sorry!Invalid Aadhar Number",Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        pd.dismiss();
+
+                        Toast.makeText(GratuityNominationActivity.this,"Sorry!Invalid Aadhar Number",Toast.LENGTH_LONG).show();
+                        binding.etAadharNominee.setText("");
+
+
+                    }
+                });
     }
 
 }

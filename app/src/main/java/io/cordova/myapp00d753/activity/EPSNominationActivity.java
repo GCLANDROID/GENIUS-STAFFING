@@ -10,6 +10,8 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,6 +43,7 @@ import io.cordova.myapp00d753.module.MainDocModule;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
+import io.cordova.myapp00d753.utility.Util;
 
 public class EPSNominationActivity extends AppCompatActivity {
     ActivityEpsnominationBinding binding;
@@ -78,25 +81,31 @@ public class EPSNominationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (binding.etName.getText().toString().length()>0){
-                    JSONObject jsonObject=new JSONObject();
-                    try {
-                        jsonObject.put("Name",binding.etName.getText().toString());
-                        jsonObject.put("Address",binding.etAddress.getText().toString());
-                        jsonObject.put("Relationship",relationshipID);
-                        jsonObject.put("RelationshipID",relationship);
-                        jsonObject.put("DOB",dob);
-                        jsonObject.put("Aadhar",binding.etAadharNominee.getText().toString());
-                        jsonObject.put("AEMEMPLOYEEID",pref.getEmpId());
-                        nominationarray.put(jsonObject);
-                        nominationobject.put("epsDetails",nominationarray);
-                        nominationobject.put("DbOperation","7");
-                        nominationobject.put("SecurityCode",pref.getSecurityCode());
-                        Log.d("nomination",nominationobject.toString());
-                        getItemList(nominationobject);
+                    if (binding.etAadharNominee.getText().toString().length()>0){
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        JSONObject jsonObject=new JSONObject();
+                        try {
+                            jsonObject.put("Name",binding.etName.getText().toString());
+                            jsonObject.put("Address",binding.etAddress.getText().toString());
+                            jsonObject.put("Relationship",relationshipID);
+                            jsonObject.put("RelationshipID",relationship);
+                            jsonObject.put("DOB",dob);
+                            jsonObject.put("Aadhar",binding.etAadharNominee.getText().toString());
+                            jsonObject.put("AEMEMPLOYEEID",pref.getEmpId());
+                            nominationarray.put(jsonObject);
+                            nominationobject.put("epsDetails",nominationarray);
+                            nominationobject.put("DbOperation","7");
+                            nominationobject.put("SecurityCode",pref.getSecurityCode());
+                            Log.d("nomination",nominationobject.toString());
+                            getItemList(nominationobject);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }else {
+                        Toast.makeText(EPSNominationActivity.this,"Please Enter Nominee's Aadhar Card No.",Toast.LENGTH_LONG).show();
                     }
+
                 }else {
                     Toast.makeText(EPSNominationActivity.this,"Please Enter Family Member's Name",Toast.LENGTH_LONG).show();
                 }
@@ -246,6 +255,33 @@ public class EPSNominationActivity extends AppCompatActivity {
                 }
             }
         });
+        binding.etAadharNominee.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (binding.etAadharNominee.getText().length()==12){
+                    JSONObject jsonObject=new JSONObject();
+                    try {
+                        jsonObject.put("aadhaarNumber",binding.etAadharNominee.getText().toString());
+                        jsonObject.put("consent","Y");
+                        validateAadhar(jsonObject);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        });
     }
 
     private void setNomineeRelation() {
@@ -360,6 +396,57 @@ public class EPSNominationActivity extends AppCompatActivity {
                             Intent intent=new Intent(EPSNominationActivity.this,LoginActivity.class);
                             startActivity(intent);
                             finish();
+
+                    }
+                });
+    }
+
+
+
+    private void validateAadhar(JSONObject jsonObject) {
+        ProgressDialog pd=new ProgressDialog(this);
+        pd.setMessage("Loading");
+        pd.show();
+        pd.setCancelable(false);
+        AndroidNetworking.post("https://ind.thomas.hyperverge.co/v1/verifyAadhaar")
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("appId", AppData.APPID)
+                .addHeaders("appKey", AppData.APPKEY)
+                .addHeaders("transactionId", pref.getMasterId())
+                .addHeaders("content-type", "application/json")
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        pd.dismiss();
+
+                        int statusCode = job1.optInt("statusCode");
+                        if (statusCode == 200) {
+
+                            binding.llAadharVerified.setVisibility(View.VISIBLE);
+                            binding.etAadharNominee.setEnabled(false);
+                        }else {
+
+                            binding.etAadharNominee.setText("");
+                            Toast.makeText(EPSNominationActivity.this,"Sorry!Invalid Aadhar Number",Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        pd.dismiss();
+
+                        Toast.makeText(EPSNominationActivity.this,"Sorry!Invalid Aadhar Number",Toast.LENGTH_LONG).show();
+                        binding.etAadharNominee.setText("");
+
+
 
                     }
                 });

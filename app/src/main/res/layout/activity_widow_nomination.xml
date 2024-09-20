@@ -141,7 +141,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/textcolor"
-                            android:text="Same as Member Address"></TextView>
+                            android:text="Same as Candidate's Address"></TextView>
 
                     </LinearLayout>
                     <LinearLayout
@@ -186,6 +186,45 @@
                                 android:background="@drawable/lldesign9"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"></EditText>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_marginTop="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:visibility="gone"
+                            android:id="@+id/llAadharVerified"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="right">
+                            <ImageView
+                                android:layout_marginRight="2dp"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/mark"></ImageView>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="14sp"
+                                android:textColor="@color/purple"
+                                android:textStyle="bold"
+                                android:text="Aadhar Verified"></TextView>
+
+
                         </LinearLayout>
                     </LinearLayout>
                     <LinearLayout
