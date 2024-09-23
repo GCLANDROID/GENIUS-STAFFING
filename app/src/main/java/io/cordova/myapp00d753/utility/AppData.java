@@ -47,11 +47,11 @@ public class AppData {
     public static String SAVE_ATTENDANCE_REGULARIZATION = newv2url+"Attendance/SaveAttendanceRegularization";
     public static String GET_SHIFT = newv2url+"Attendance/GetShift";
     public static String SaveHolidayleave = localurl+"SKF/SaveHolidayleave";
-   // public static String APPID = "umanjv";
-    //public static String APPKEY = "qf3mcm6156t1e0z006q2";
+    public static String APPID = "umanjv";
+    public static String APPKEY = "qf3mcm6156t1e0z006q2";
 
-    public static String APPID = "89gnhe";
-    public static String APPKEY = "x1xndaf7txgkxvl4vr1g";
+   /* public static String APPID = "89gnhe";
+    public static String APPKEY = "x1xndaf7txgkxvl4vr1g";*/
 
 
     public static String AADAHARNUMBER = "";
