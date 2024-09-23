@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
@@ -27,6 +29,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -54,7 +57,33 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
 
     private void initView(){
         pref=new Pref(TEMPAadharQRActivity.this);
-        captchagebneration();
+
+        binding.etAadhar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (binding.etAadhar.getText().toString().length()==12){
+                    JSONObject jsonObject=new JSONObject();
+                    try {
+                        jsonObject.put("Id",binding.etAadhar.getText().toString());
+                        checkAddahrDetails(jsonObject);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        });
+
         binding.btnValidate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -135,7 +164,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                         int statusCode = job1.optInt("statusCode");
                         if (statusCode == 200) {
 
-
+                            binding.llCaptcha.setVisibility(View.VISIBLE);
                             sessionId=job1.optString("sessionId");
                             String captchaImage=job1.optString("captchaImage");
                             byte[] decodedString = Base64.decode(captchaImage, Base64.DEFAULT);
@@ -276,7 +305,23 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                             AppData.ADHARIMAGE=photoval;
                             AppData.AADAHARNUMBER=binding.etAadhar.getText().toString();
 
-                            adharAlert(namevalue,dobvalue,AppData.AADAHARNUMBER,gendervalue,careof,state,pin,street,locality,house,postoffice,subDistrict,district,vtc,landmark);
+                             JSONObject cardnoobj=new JSONObject();
+                            JSONObject mainobj=new JSONObject();
+                            try {
+                                cardnoobj.put("Aadhar",binding.etAadhar.getText().toString());
+                                JSONArray jar=new JSONArray();
+                                jar.put(job1);
+                                jar.put(cardnoobj);
+
+
+                                mainobj.put("aadhardetails",jar);
+                                Log.d("mainobj", String.valueOf(mainobj));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+
+                            adharAlert(namevalue,dobvalue,AppData.AADAHARNUMBER,gendervalue,careof,state,pin,street,locality,house,postoffice,subDistrict,district,vtc,landmark,mainobj,0);
 
 
 
@@ -341,7 +386,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
         al1.show();
     }
 
-    private void adharAlert(String name,String dob,String aadhar,String gendervalue,String careof,String state,String pin,String street,String locality,String house,String postoffice,String subDistrict,String district,String vtc,String landmark) {
+    private void adharAlert(String name,String dob,String aadhar,String gendervalue,String careof,String state,String pin,String street,String locality,String house,String postoffice,String subDistrict,String district,String vtc,String landmark,JSONObject mainobj,int flag) {
         androidx.appcompat.app.AlertDialog.Builder dialogBuilder = new androidx.appcompat.app.AlertDialog.Builder(TEMPAadharQRActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_kyc, null);
@@ -358,32 +403,43 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
 
         ImageView imgAdhar=(ImageView)dialogView.findViewById(R.id.imgAdhar);
 
-        byte[] decodedString = Base64.decode(AppData.ADHARIMAGE, Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        imgAdhar.setImageBitmap(decodedByte);
+        if (!AppData.ADHARIMAGE.equals("")){
+            byte[] decodedString = Base64.decode(AppData.ADHARIMAGE, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            imgAdhar.setImageBitmap(decodedByte);
+        }else {
+            imgAdhar.setImageDrawable(getResources().getDrawable(R.drawable.man));
+        }
+
+
         LinearLayout llKYC = (LinearLayout) dialogView.findViewById(R.id.llKYC);
         llKYC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                alerDialog1.dismiss();
 
-                Intent intent=new Intent(TEMPAadharQRActivity.this,TempProfileActivity.class);
-                intent.putExtra("namevalue",name);
-                intent.putExtra("dobvalue",dob);
-                intent.putExtra("gendervalue",gendervalue);
-                intent.putExtra("careof",careof);
-                intent.putExtra("state",state);
-                intent.putExtra("pin",pin);
-                intent.putExtra("street",street);
-                intent.putExtra("locality",locality);
-                intent.putExtra("house",house);
-                intent.putExtra("postoffice",postoffice);
-                intent.putExtra("subDistrict",subDistrict);
-                intent.putExtra("district",district);
-                intent.putExtra("vtc",vtc);
-                intent.putExtra("landmark",landmark);
-                startActivity(intent);
-                finish();
+                alerDialog1.dismiss();
+                if (flag==0) {
+                    uploadAddharDetails(mainobj, name, dob, gendervalue, careof, state, pin, street, locality, house, postoffice, subDistrict, district, vtc, landmark);
+                }else {
+                    Intent intent=new Intent(TEMPAadharQRActivity.this,TempProfileActivity.class);
+                    intent.putExtra("namevalue",name);
+                    intent.putExtra("dobvalue",dob);
+                    intent.putExtra("gendervalue",gendervalue);
+                    intent.putExtra("careof",careof);
+                    intent.putExtra("state",state);
+                    intent.putExtra("pin",pin);
+                    intent.putExtra("street",street);
+                    intent.putExtra("locality",locality);
+                    intent.putExtra("house",house);
+                    intent.putExtra("postoffice",postoffice);
+                    intent.putExtra("subDistrict",subDistrict);
+                    intent.putExtra("district",district);
+                    intent.putExtra("vtc",vtc);
+                    intent.putExtra("landmark",landmark);
+                    startActivity(intent);
+                    finish();
+                }
+
 
             }
         });
@@ -396,5 +452,175 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
         alerDialog1.show();
     }
 
+
+    private void uploadAddharDetails(JSONObject jsonObject,String name,String dob,String gendervalue,String careof,String state,String pin,String street,String locality,String house,String postoffice,String subDistrict,String district,String vtc,String landmark) {
+        ProgressDialog pd=new ProgressDialog(TEMPAadharQRActivity.this);
+        pd.setMessage("Loading");
+        pd.show();
+        pd.setCancelable(false);
+        AndroidNetworking.post(AppData.newv2url + "Profile/SaveEmployeeAadharDetails")
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        pd.dismiss();
+
+                        int Response_Code = job1.optInt("Response_Code");
+                        if (Response_Code == 101) {
+                            Intent intent=new Intent(TEMPAadharQRActivity.this,TempProfileActivity.class);
+                            intent.putExtra("namevalue",name);
+                            intent.putExtra("dobvalue",dob);
+                            intent.putExtra("gendervalue",gendervalue);
+                            intent.putExtra("careof",careof);
+                            intent.putExtra("state",state);
+                            intent.putExtra("pin",pin);
+                            intent.putExtra("street",street);
+                            intent.putExtra("locality",locality);
+                            intent.putExtra("house",house);
+                            intent.putExtra("postoffice",postoffice);
+                            intent.putExtra("subDistrict",subDistrict);
+                            intent.putExtra("district",district);
+                            intent.putExtra("vtc",vtc);
+                            intent.putExtra("landmark",landmark);
+                            startActivity(intent);
+                            finish();
+
+                        } else {
+                            Intent intent=new Intent(TEMPAadharQRActivity.this,TempProfileActivity.class);
+                            intent.putExtra("namevalue",name);
+                            intent.putExtra("dobvalue",dob);
+                            intent.putExtra("gendervalue",gendervalue);
+                            intent.putExtra("careof",careof);
+                            intent.putExtra("state",state);
+                            intent.putExtra("pin",pin);
+                            intent.putExtra("street",street);
+                            intent.putExtra("locality",locality);
+                            intent.putExtra("house",house);
+                            intent.putExtra("postoffice",postoffice);
+                            intent.putExtra("subDistrict",subDistrict);
+                            intent.putExtra("district",district);
+                            intent.putExtra("vtc",vtc);
+                            intent.putExtra("landmark",landmark);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+
+                        Intent intent=new Intent(TEMPAadharQRActivity.this,TempProfileActivity.class);
+                        intent.putExtra("namevalue",name);
+                        intent.putExtra("dobvalue",dob);
+                        intent.putExtra("gendervalue",gendervalue);
+                        intent.putExtra("careof",careof);
+                        intent.putExtra("state",state);
+                        intent.putExtra("pin",pin);
+                        intent.putExtra("street",street);
+                        intent.putExtra("locality",locality);
+                        intent.putExtra("house",house);
+                        intent.putExtra("postoffice",postoffice);
+                        intent.putExtra("subDistrict",subDistrict);
+                        intent.putExtra("district",district);
+                        intent.putExtra("vtc",vtc);
+                        intent.putExtra("landmark",landmark);
+                        startActivity(intent);
+                        finish();
+
+                    }
+                });
+    }
+
+
+    private void checkAddahrDetails(JSONObject jsonObject) {
+        ProgressDialog pd=new ProgressDialog(TEMPAadharQRActivity.this);
+        pd.setMessage("Loading");
+        pd.show();
+        pd.setCancelable(false);
+        AndroidNetworking.post(AppData.newv2url + "Profile/GetEmployeeAllDetails")
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        pd.dismiss();
+
+                        int Response_Code = job1.optInt("Response_Code");
+                        JSONObject Response_Data=job1.optJSONObject("Response_Data");
+                        if (Response_Data!=null){
+                            JSONObject details=Response_Data.optJSONObject("details");
+                            JSONObject name=details.optJSONObject("name");
+                            String namevalue=name.optString("value");
+
+                            //dob
+
+                            JSONObject dob=details.optJSONObject("dob");
+                            String dobvalue=dob.optString("value");
+                            AppData.ADHARDOB=dobvalue;
+
+
+                            //gender
+
+                            JSONObject gender=details.optJSONObject("gender");
+                            String gendervalue=gender.optString("value");
+
+
+                            //address
+
+                            JSONObject address=details.optJSONObject("address");
+                            String careof=address.optString("careof").replace("S/O:","").trim();
+                            String state=address.optString("state");
+                            String pin=address.optString("pin");
+                            String street=address.optString("street");
+                            String locality=address.optString("locality");
+                            String house=address.optString("house");
+                            String postoffice=address.optString("postoffice");
+                            String subDistrict=address.optString("subDistrict");
+                            String district=address.optString("district");
+                            String vtc=address.optString("vtc");
+                            String landmark=address.optString("landmark");
+
+
+                            //image
+
+
+                            AppData.AADAHARNUMBER=binding.etAadhar.getText().toString();
+
+
+
+                            adharAlert(namevalue,dobvalue,AppData.AADAHARNUMBER,gendervalue,careof,state,pin,street,locality,house,postoffice,subDistrict,district,vtc,landmark,null,1);
+
+
+                        }else {
+                            captchagebneration();
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+
+                        captchagebneration();
+
+                    }
+                });
+    }
 
 }
