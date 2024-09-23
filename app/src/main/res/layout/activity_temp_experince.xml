@@ -88,6 +88,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp">
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/blue"
+                        android:text="Are you ? "
+                        android:layout_marginRight="5dp"></TextView>
                     <LinearLayout
                         android:id="@+id/llFreshers"
                         android:layout_width="20dp"
@@ -109,9 +117,18 @@
                         android:layout_marginLeft="5dp"
                         android:textColor="@color/black"
                         ></TextView>
+                    <TextView
+                        android:textStyle="bold"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/blue"
+                        android:text="OR"
+                        ></TextView>
 
                     <LinearLayout
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginLeft="10dp"
                         android:id="@+id/llExperienced"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
@@ -134,6 +151,7 @@
                         ></TextView>
                 </LinearLayout>
                 <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/llExpericedForm"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -407,6 +425,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"></View>
                     <Button
+                        android:visibility="gone"
                         android:id="@+id/btnSkip"
                         android:layout_width="120dp"
                         android:layout_height="40dp"

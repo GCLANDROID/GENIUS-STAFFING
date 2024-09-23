@@ -264,15 +264,14 @@ public class TempBankActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (etAccNumber.getText().toString().length()>0){
                     if (etIFSC.getText().toString().length()>0){
+
                         JSONObject jsonObject=new JSONObject();
                         try {
-                            jsonObject.put("accountNumber",etAccNumber.getText().toString());
-                            jsonObject.put("ifsc",etIFSC.getText().toString());
-                            validateBank(jsonObject);
+                            jsonObject.put("Id",etAccNumber.getText().toString());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
+                        checkBankDetails(jsonObject);
                     }else {
                         Toast.makeText(TempBankActivity.this,"Please Enter IFSC Code",Toast.LENGTH_LONG).show();
                     }
@@ -665,7 +664,7 @@ public class TempBankActivity extends AppCompatActivity {
         pd.setMessage("Loading");
         pd.show();
         pd.setCancelable(false);
-        AndroidNetworking.post(AppData.newv2url + "Profile/SaveEmployeePanDetails")
+        AndroidNetworking.post(AppData.newv2url + "Profile/SaveEmployeeBankDetails")
                 .addJSONObjectBody(jsonObject)
                 .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
@@ -695,6 +694,72 @@ public class TempBankActivity extends AppCompatActivity {
                         pd.dismiss();
 
 
+                    }
+                });
+    }
+
+
+    private void checkBankDetails(JSONObject jsonObject) {
+        ProgressDialog pd=new ProgressDialog(TempBankActivity.this);
+        pd.setMessage("Loading");
+        pd.show();
+        pd.setCancelable(false);
+        AndroidNetworking.post(AppData.newv2url + "Profile/GetEmployeeAllDetails")
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        pd.dismiss();
+
+                        int Response_Code = job1.optInt("Response_Code");
+                        JSONObject Response_Data=job1.optJSONObject("Response_Data");
+                        if (Response_Data!=null){
+                            JSONObject details=Response_Data.optJSONObject("details");
+                            JSONObject result=details.optJSONObject("result");
+                            String accountName= result.optString("accountName");
+                            etFName.setText(accountName);
+
+                            llBankVALBtn.setVisibility(View.GONE);
+                            llBankVAL.setVisibility(View.VISIBLE);
+
+                            bankflag=1;
+                            etAccNumber.setEnabled(false);
+                            etIFSC.setEnabled(false);
+
+                        }else {
+                            JSONObject jsonObject=new JSONObject();
+                            try {
+                                jsonObject.put("accountNumber",etAccNumber.getText().toString());
+                                jsonObject.put("ifsc",etIFSC.getText().toString());
+                                validateBank(jsonObject);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+
+                        pd.dismiss();
+                        JSONObject jsonObject=new JSONObject();
+                        try {
+                            jsonObject.put("accountNumber",etAccNumber.getText().toString());
+                            jsonObject.put("ifsc",etIFSC.getText().toString());
+                            validateBank(jsonObject);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
     }

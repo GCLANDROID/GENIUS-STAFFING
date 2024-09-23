@@ -1914,27 +1914,37 @@ public class TempProfileActivity extends AppCompatActivity {
                                     if (etESI.getText().toString().equals("") || etESI.getText().toString().length() > 9) {
                                         if (etUAN.getText().toString().equals("") || etUAN.getText().toString().length() > 11) {
                                             if (etPhnNumber.getText().toString().equals("") || etPhnNumber.getText().toString().length() > 9) {
+                                                if (!permanentcity.equals("")){
+                                                    if (!presentcity.equals("")) {
+                                                        JSONObject mainobject = new JSONObject();
+                                                        try {
+                                                            mainobject.put("DbOperation", "1");
+                                                            mainobject.put("SecurityCode", pref.getSecurityCode());
+                                                            JSONObject personalOBJ = new JSONObject();
+                                                            personalOBJ.put("AEMEMPLOYEEID", AEMEmployeeID);
+                                                            personalOBJ.put("Sex", sexGender);
+                                                            personalOBJ.put("GuardianName", etGurdianName.getText().toString());
+                                                            personalOBJ.put("RelationShip", realationship);
+                                                            personalOBJ.put("BloodGroup", bloodgrp);
+                                                            personalOBJ.put("DateOfBirth", DateOfBirth);
+                                                            personalOBJ.put("Qualification", education);
+                                                            personalOBJ.put("MaritalStatus", martialstatus);
+                                                            personalOBJ.put("EmployeeName", tvEmpName.getText().toString());
+                                                            mainobject.put("PersonalDetails", personalOBJ);
 
-                                                JSONObject mainobject = new JSONObject();
-                                                try {
-                                                    mainobject.put("DbOperation", "1");
-                                                    mainobject.put("SecurityCode", pref.getSecurityCode());
-                                                    JSONObject personalOBJ = new JSONObject();
-                                                    personalOBJ.put("AEMEMPLOYEEID", AEMEmployeeID);
-                                                    personalOBJ.put("Sex", sexGender);
-                                                    personalOBJ.put("GuardianName", etGurdianName.getText().toString());
-                                                    personalOBJ.put("RelationShip", realationship);
-                                                    personalOBJ.put("BloodGroup", bloodgrp);
-                                                    personalOBJ.put("DateOfBirth", DateOfBirth);
-                                                    personalOBJ.put("Qualification", education);
-                                                    personalOBJ.put("MaritalStatus", martialstatus);
-                                                    personalOBJ.put("EmployeeName", tvEmpName.getText().toString());
-                                                    mainobject.put("PersonalDetails", personalOBJ);
+                                                            uploadOfficalDetails(mainobject);
+                                                        } catch (JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }else {
+                                                        Toast.makeText(getApplicationContext(), "Please Select Present City", Toast.LENGTH_LONG).show();
 
-                                                    uploadOfficalDetails(mainobject);
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
+                                                    }
+                                                }else {
+                                                    Toast.makeText(getApplicationContext(), "Please Select Permanent City", Toast.LENGTH_LONG).show();
                                                 }
+
+
                                             } else {
                                                 Toast.makeText(getApplicationContext(), "Please enter valid Phone number", Toast.LENGTH_LONG).show();
                                             }
