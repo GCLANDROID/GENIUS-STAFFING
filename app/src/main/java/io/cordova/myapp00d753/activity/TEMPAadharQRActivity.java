@@ -616,7 +616,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError error) {
-
+                        pd.dismiss();
                         captchagebneration();
 
                     }

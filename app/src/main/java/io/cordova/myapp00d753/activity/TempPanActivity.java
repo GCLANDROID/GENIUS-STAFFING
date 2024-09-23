@@ -47,6 +47,7 @@ import com.google.android.gms.vision.text.TextRecognizer;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -272,11 +273,11 @@ public class TempPanActivity extends AppCompatActivity {
                 if (etPanNumber.getText().toString().length()==10){
                     JSONObject jsonObject=new JSONObject();
                     try {
-                        jsonObject.put("pan",etPanNumber.getText().toString());
+                        jsonObject.put("Id",etPanNumber.getText().toString());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    validatePAN(jsonObject);
+                    checkPANDetails(jsonObject);
                 }
 
             }
@@ -835,6 +836,22 @@ public class TempPanActivity extends AppCompatActivity {
                             }
 
 
+                            JSONObject cardnoobj=new JSONObject();
+                            JSONObject mainobj=new JSONObject();
+                            try {
+                                cardnoobj.put("cardno",etPanNumber.getText().toString());
+                                JSONArray jar=new JSONArray();
+                                jar.put(job1);
+                                jar.put(cardnoobj);
+                                mainobj.put("details",jar);
+                                mainobj.put("Document","PAN");
+                                Log.d("mainobj", String.valueOf(mainobj));
+                                uploadPANDetails(mainobj);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+
 
 
 
@@ -890,4 +907,119 @@ public class TempPanActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
+    private void uploadPANDetails(JSONObject jsonObject) {
+        ProgressDialog pd=new ProgressDialog(TempPanActivity.this);
+        pd.setMessage("Loading");
+        pd.show();
+        pd.setCancelable(false);
+        AndroidNetworking.post(AppData.newv2url + "Profile/SaveEmployeePanDetails")
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        pd.dismiss();
+
+                        int Response_Code = job1.optInt("Response_Code");
+                        if (Response_Code == 101) {
+
+
+                        } else {
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        pd.dismiss();
+
+
+                    }
+                });
+    }
+
+
+    private void checkPANDetails(JSONObject jsonObject) {
+        ProgressDialog pd=new ProgressDialog(TempPanActivity.this);
+        pd.setMessage("Loading");
+        pd.show();
+        pd.setCancelable(false);
+        AndroidNetworking.post(AppData.newv2url + "Profile/GetEmployeeAllDetails")
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        pd.dismiss();
+
+                        int Response_Code = job1.optInt("Response_Code");
+                        JSONObject Response_Data=job1.optJSONObject("Response_Data");
+                        if (Response_Data!=null){
+                            JSONObject details=Response_Data.optJSONObject("details");
+                            JSONObject result=details.optJSONObject("result");
+                            JSONObject data=result.optJSONObject("data");
+                            JSONObject panData=data.optJSONObject("panData");
+                            String dateOfBirth= Util.changeAnyDateFormat(panData.optString("dateOfBirth"),"yyyy-MM-dd","dd-MM-yyyy");
+                            if (!dateOfBirth.equals("")){
+                                if (dateOfBirth.equals(AppData.ADHARDOB)) {
+                                    panvalflag=1;
+                                    etPanNumber.setEnabled(false);
+                                    llPANVAL.setVisibility(View.VISIBLE);
+                                }else {
+                                    panvalflag=0;
+                                    Toast.makeText(TempPanActivity.this,"Sorry PAN validation failed",Toast.LENGTH_LONG).show();
+                                    etPanNumber.setText("");
+                                }
+                            }else {
+                                panvalflag=1;
+                                etPanNumber.setEnabled(false);
+                            }
+
+                        }else {
+                            JSONObject jsonObject=new JSONObject();
+                            try {
+                                jsonObject.put("pan",etPanNumber.getText().toString());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            validatePAN(jsonObject);
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+
+                        pd.dismiss();
+                        JSONObject jsonObject=new JSONObject();
+                        try {
+                            jsonObject.put("pan",etPanNumber.getText().toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        validatePAN(jsonObject);
+                    }
+                });
+    }
+
+
+
 }

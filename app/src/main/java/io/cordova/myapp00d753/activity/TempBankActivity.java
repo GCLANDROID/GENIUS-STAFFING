@@ -591,7 +591,20 @@ public class TempBankActivity extends AppCompatActivity {
                             bankflag=1;
                             etAccNumber.setEnabled(false);
                             etIFSC.setEnabled(false);
-
+                            JSONObject cardnoobj=new JSONObject();
+                            JSONObject mainobj=new JSONObject();
+                            try {
+                                cardnoobj.put("cardno",etAccNumber.getText().toString());
+                                JSONArray jar=new JSONArray();
+                                jar.put(job1);
+                                jar.put(cardnoobj);
+                                mainobj.put("details",jar);
+                                mainobj.put("Document","Bank");
+                                Log.d("mainobj", String.valueOf(mainobj));
+                                uploadBankDetails(mainobj);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
 
 
 
@@ -641,6 +654,46 @@ public class TempBankActivity extends AppCompatActivity {
                     public void onError(ANError error) {
 
                         pd.dismiss();
+
+                    }
+                });
+    }
+
+
+    private void uploadBankDetails(JSONObject jsonObject) {
+        ProgressDialog pd=new ProgressDialog(TempBankActivity.this);
+        pd.setMessage("Loading");
+        pd.show();
+        pd.setCancelable(false);
+        AndroidNetworking.post(AppData.newv2url + "Profile/SaveEmployeePanDetails")
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        pd.dismiss();
+
+                        int Response_Code = job1.optInt("Response_Code");
+                        if (Response_Code == 101) {
+
+
+                        } else {
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        pd.dismiss();
+
 
                     }
                 });

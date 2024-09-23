@@ -148,26 +148,27 @@
                                         android:id="@+id/imgCaptcha"></ImageView>
                                 </LinearLayout>
                             </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="250dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="right"
+                                android:layout_marginTop="10dp">
+                                <Button
+                                    android:layout_width="100dp"
+                                    android:layout_height="40dp"
+                                    android:background="@drawable/lldesign9"
+                                    android:backgroundTint="@color/blue"
+                                    android:textColor="@color/white"
+                                    android:textSize="14sp"
+                                    android:text="Get OTP"
+                                    android:id="@+id/btnValidate"></Button>
+                            </LinearLayout>
                         </LinearLayout>
 
 
 
 
-                        <LinearLayout
-                            android:layout_width="250dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="right"
-                            android:layout_marginTop="10dp">
-                            <Button
-                                android:layout_width="100dp"
-                                android:layout_height="40dp"
-                                android:background="@drawable/lldesign9"
-                                android:backgroundTint="@color/blue"
-                                android:textColor="@color/white"
-                                android:textSize="14sp"
-                                android:text="Get OTP"
-                                android:id="@+id/btnValidate"></Button>
-                        </LinearLayout>
+
                         <LinearLayout
                             android:visibility="gone"
                             android:layout_marginTop="10dp"
