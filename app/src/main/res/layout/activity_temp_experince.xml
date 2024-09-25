@@ -94,7 +94,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
                         android:textColor="@color/blue"
-                        android:text="Are you ? "
+                        android:text="Are you "
                         android:layout_marginRight="5dp"></TextView>
                     <LinearLayout
                         android:id="@+id/llFreshers"
@@ -145,7 +145,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
-                        android:text="Experience"
+                        android:text="Experienced"
                         android:layout_marginLeft="5dp"
                         android:textColor="@color/black"
                         ></TextView>
@@ -158,11 +158,12 @@
                     android:orientation="vertical"
                     android:layout_marginTop="20dp">
                     <LinearLayout
+                        android:id="@+id/llSBIEXP"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_gravity="center"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
@@ -182,12 +183,13 @@
                             android:layout_weight="0.5"></EditText>
                     </LinearLayout>
                     <LinearLayout
+                        android:id="@+id/llNonSBIEXP"
                         android:layout_marginTop="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_gravity="center"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
@@ -212,7 +214,7 @@
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_gravity="center"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
@@ -236,7 +238,7 @@
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_gravity="center"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
@@ -260,7 +262,7 @@
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_gravity="center"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
@@ -284,7 +286,7 @@
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_gravity="center"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
@@ -308,7 +310,7 @@
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_gravity="center"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
@@ -334,7 +336,7 @@
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_gravity="center"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
@@ -356,7 +358,7 @@
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_gravity="center"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
@@ -378,7 +380,7 @@
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_gravity="center"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
@@ -403,6 +405,391 @@
                                ></ImageView>
                        </LinearLayout>
                     </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:textColor="@color/black"
+                            android:text="Do you have any existing PF Account? "></TextView>
+                        <LinearLayout
+                            android:id="@+id/llYes"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:background="@drawable/lldesign9"
+                            android:gravity="center">
+                            <ImageView
+                                android:visibility="gone"
+                                android:id="@+id/imgYes"
+                                android:layout_width="10dp"
+                                android:layout_height="10dp"
+                                android:src="@drawable/tick"></ImageView>
+                        </LinearLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:text="Yes"
+                            android:layout_marginLeft="5dp"
+                            android:textColor="@color/black"
+                            ></TextView>
+                        <LinearLayout
+                            android:layout_marginLeft="10dp"
+                            android:id="@+id/llNo"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:background="@drawable/lldesign9"
+                            android:gravity="center">
+                            <ImageView
+                                android:visibility="gone"
+                                android:id="@+id/imgNo"
+                                android:layout_width="10dp"
+                                android:layout_height="10dp"
+                                android:src="@drawable/tick"></ImageView>
+                        </LinearLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:text="No"
+                            android:layout_marginLeft="5dp"
+                            android:textColor="@color/black"
+                            ></TextView>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/llUAN">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        >
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="UAN Number:"
+                                android:textSize="12sp"
+                                android:textColor="@color/black" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <EditText
+                                android:inputType="number"
+                                android:maxLength="12"
+                                android:id="@+id/etUAN"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="10dp"
+                                android:background="@drawable/lldesign9"
+                                android:digits="1234567890"
+                                android:paddingLeft="10dp"
+                                android:text="--"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/black" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!--PF Number-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                       >
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="PF Number:"
+                                android:textSize="12sp"
+                                android:textColor="@color/black" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <EditText
+                                android:id="@+id/etPFNumber"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="10dp"
+                                android:background="@drawable/lldesign9"
+                                android:paddingLeft="10dp"
+                                android:text="--"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/black" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+
+                    <!--nominee name-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        >
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Name of the Nominee:"
+                                android:textSize="12sp"
+                                android:textColor="@color/black" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <EditText
+                                android:id="@+id/etUANNominee"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="10dp"
+                                android:background="@drawable/lldesign9"
+                                android:paddingLeft="10dp"
+                                android:text="--"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/black" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!--nominee address-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        >
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Address of the Nominee:"
+                                android:textSize="12sp"
+                                android:textColor="@color/black" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <EditText
+                                android:id="@+id/etUANNomineeAddress"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_marginLeft="10dp"
+                                android:background="@drawable/lldesign9"
+                                android:paddingLeft="10dp"
+                                android:text="--"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/black" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!--ralationship-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        >
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Relationship with Member:"
+                                android:textSize="12sp"
+                                android:textColor="@color/black" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="10dp"
+                                android:background="@drawable/lldesign9">
+
+                                <Spinner
+                                    android:id="@+id/spUANRealation"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"></Spinner>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!--dob-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        >
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Date of Birth of Nominee:"
+                                android:textSize="12sp"
+                                android:textColor="@color/black" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tvUANDOB"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:text="--"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/black" />
+
+                            <ImageView
+                                android:id="@+id/imgUANCal"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="5dp"
+                                android:src="@drawable/calendar" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        >
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Total amount or share of accumulations in Provident Funds to be paid to each nominee:"
+                                android:textSize="12sp"
+                                android:textColor="@color/black" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_marginLeft="10dp"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:background="@drawable/lldesign9">
+
+                            <Spinner
+
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:id="@+id/spTotalAmt"></Spinner>
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+                    <!--nimor-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        >
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="If the nominee is minor, name and address of the guardian who may receive the amount during the minority of the nominee:"
+                                android:textSize="12sp"
+                                android:textColor="@color/black" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <EditText
+                                android:id="@+id/etUANMinorNameAddress"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_marginLeft="10dp"
+                                android:background="@drawable/lldesign9"
+                                android:paddingLeft="10dp"
+                                android:text="--"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/black" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"

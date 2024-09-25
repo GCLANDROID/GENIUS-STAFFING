@@ -116,7 +116,7 @@ public class TempProfileActivity extends AppCompatActivity {
     String Sex;
     String RelationShip;
     String BloodGroup;
-    EditText etESI, etUAN;
+    EditText etESI;
     TextView tvCity,txtPresentCity,txtPermanentCity;
     String PresentCity, AEMEmployeeID, Code, Name, DateOfJoining, Department, Designation, Location, DateOfBirth, GuardianName, PermanentAddress, Mobile, EmailID, Phone, AEMClientName;
     private static final String SERVER_PATH = AppData.url;
@@ -175,7 +175,7 @@ public class TempProfileActivity extends AppCompatActivity {
     ActivityTempProfileBinding binding;
 
     ArrayList<String> residing = new ArrayList<>();
-    ArrayList<String> uanPercentage = new ArrayList<>();
+
     String esicDOB = "", uanDOB = "", esicGender = "", esicRltionshp = "", uanRltionshp = "", residingIP = "", pfPercantage = "";
     ProgressDialog pd;
     String namevalue, dobvalue, gendervalue, careof, state, pin, street, locality, house, postoffice, subDistrict, vtc, district, landmark;
@@ -252,7 +252,7 @@ public class TempProfileActivity extends AppCompatActivity {
             etGurdianName.setEnabled(true);
         }
         etESI = (EditText) findViewById(R.id.etESI);
-        etUAN = (EditText) findViewById(R.id.etUAN);
+
 
         llLoader = (LinearLayout) findViewById(R.id.llLoader);
 
@@ -567,6 +567,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                     }
                                     AEMClientName = obj.optString("AEMClientName");
                                     tvComName.setText(AEMClientName);
+                                    AppData.COMPANYNAME=AEMClientName;
                                     String ESINumber = obj.optString("ESINumber");
                                     if (!ESINumber.equals("")) {
                                         etESI.setText(ESINumber);
@@ -574,11 +575,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                         etESI.setText("");
                                     }
                                     String UanNo = obj.optString("UANNumber");
-                                    if (!UanNo.equals("")) {
-                                        etUAN.setText(UanNo);
-                                    } else {
-                                        etUAN.setText("");
-                                    }
+
                                     PresentCity = obj.optString("PresentCity");
 
                                     String PresentPincode = obj.optString("PresentPincode");
@@ -812,6 +809,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                     }
                                     AEMClientName = obj.optString("AEMClientName");
                                     tvComName.setText(AEMClientName);
+                                    AppData.COMPANYNAME=AEMClientName;
                                     String ESINumber = obj.optString("ESINumber");
                                     if (!ESINumber.equals("")) {
                                         etESI.setText(ESINumber);
@@ -819,11 +817,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                         etESI.setText("");
                                     }
                                     String UanNo = obj.optString("UANNumber");
-                                    if (!UanNo.equals("")) {
-                                        etUAN.setText(UanNo);
-                                    } else {
-                                        etUAN.setText("");
-                                    }
+
                                     PresentCity = obj.optString("PresentCity");
 
                                     String PresentPincode = obj.optString("PresentPincode");
@@ -1203,18 +1197,7 @@ public class TempProfileActivity extends AppCompatActivity {
         binding.spResiding.setAdapter(residingspinnerArrayAdapter);
 
 
-        uanPercentage.add("Please Select");
-        uanPercentage.add("100");
-        uanPercentage.add("75");
-        uanPercentage.add("50");
-        uanPercentage.add("25");
 
-
-        ArrayAdapter<String> uanspinnerArrayAdapter = new ArrayAdapter<String>
-                (TempProfileActivity.this, android.R.layout.simple_spinner_item,
-                        uanPercentage); //selected item will look like a spinner set from XML
-        uanspinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        binding.spTotalAmt.setAdapter(uanspinnerArrayAdapter);
 
 
         setNomineeRelation();
@@ -1262,7 +1245,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                                 realation); //selected item will look like a spinner set from XML
                                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 binding.spESICRealation.setAdapter(spinnerArrayAdapter);
-                                binding.spUANRealation.setAdapter(spinnerArrayAdapter);
+
 
                                 setBlood();
 
@@ -1452,20 +1435,7 @@ public class TempProfileActivity extends AppCompatActivity {
             }
         });
 
-        binding.spTotalAmt.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position > 0) {
-                    pfPercantage = uanPercentage.get(position);
-                }
 
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
         tvSkip.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1540,21 +1510,7 @@ public class TempProfileActivity extends AppCompatActivity {
         });
 
 
-        binding.spUANRealation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position > 0) {
-                    uanRltionshp = mainRealation.get(position).getDocID();
 
-                }
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
         etPerAddr.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -1694,25 +1650,7 @@ public class TempProfileActivity extends AppCompatActivity {
             }
         });
 
-        etUAN.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (etUAN.getText().toString().length() > 0) {
-                    uan = etUAN.getText().toString();
-                }
-
-            }
-        });
 
         etPhnNumber.addTextChangedListener(new TextWatcher() {
             @Override
@@ -1824,7 +1762,7 @@ public class TempProfileActivity extends AppCompatActivity {
                         uanDOB = d + " " + month + " " + y;
 
                         binding.tvESICDOB.setText(esicDOB);
-                        binding.tvUANDOB.setText(uanDOB);
+
 
 
                     }
@@ -1837,69 +1775,7 @@ public class TempProfileActivity extends AppCompatActivity {
         });
 
 
-        binding.imgUANCal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar now = Calendar.getInstance();
-                System.out.println("Current date : " + (now.get(Calendar.MONTH) + 1) + "-"
-                        + now.get(Calendar.DATE) + "-" + now.get(Calendar.YEAR));
 
-                now = Calendar.getInstance();
-                now.add(Calendar.YEAR, -18);
-                int dyear = now.get(Calendar.YEAR);
-                final int dmonth = now.get(Calendar.MONTH);
-                int dday = now.get(DAY_OF_MONTH);
-                Calendar c1 = Calendar.getInstance();
-                /*final int syear = year - 18;
-
-                final int month1 = c1.get(Calendar.MONTH);
-                final int sday1 = c1.get(DAY_OF_MONTH);*/
-
-
-                final DatePickerDialog dialog = new DatePickerDialog(TempProfileActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int y, int m, int d) {
-
-                        int mm = (m + 1);
-                        int s = (m + 1) + d + y;
-                        if (mm == 1) {
-                            month = "January";
-                        } else if (mm == 2) {
-                            month = "February";
-                        } else if (mm == 3) {
-                            month = "March";
-                        } else if (mm == 4) {
-                            month = "April";
-                        } else if (mm == 5) {
-                            month = "May";
-                        } else if (mm == 6) {
-                            month = "June";
-                        } else if (mm == 7) {
-                            month = "July";
-                        } else if (mm == 8) {
-                            month = "August";
-                        } else if (mm == 9) {
-                            month = "September";
-                        } else if (mm == 10) {
-                            month = "October";
-                        } else if (mm == 11) {
-                            month = "November";
-                        } else if (mm == 12) {
-                            month = "December";
-                        }
-                        uanDOB = d + " " + month + " " + y;
-
-                        binding.tvUANDOB.setText(uanDOB);
-
-
-                    }
-                }, dyear, dmonth, dday);
-                dialog.getDatePicker().setMaxDate((long) (System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 365.25 * 18)));
-                dialog.getDatePicker().setMinDate((long) (System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 365.25 * 90)));
-                dialog.show();
-
-            }
-        });
 
 
         tvSubmit.setOnClickListener(new View.OnClickListener() {
@@ -1912,7 +1788,7 @@ public class TempProfileActivity extends AppCompatActivity {
                             if (etPerAddr.getText().toString().length() > 0) {
                                 if (etPrePinCode.getText().toString().length() > 0) {
                                     if (etESI.getText().toString().equals("") || etESI.getText().toString().length() > 9) {
-                                        if (etUAN.getText().toString().equals("") || etUAN.getText().toString().length() > 11) {
+
                                             if (etPhnNumber.getText().toString().equals("") || etPhnNumber.getText().toString().length() > 9) {
                                                 if (!permanentcity.equals("")){
                                                     if (!presentcity.equals("")) {
@@ -1948,10 +1824,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                             } else {
                                                 Toast.makeText(getApplicationContext(), "Please enter valid Phone number", Toast.LENGTH_LONG).show();
                                             }
-                                        } else {
-                                            Toast.makeText(getApplicationContext(), "Please enter valid UAN number", Toast.LENGTH_LONG).show();
 
-                                        }
                                     } else {
                                         Toast.makeText(getApplicationContext(), "Please enter valid ESI number", Toast.LENGTH_LONG).show();
 
@@ -2021,11 +1894,7 @@ public class TempProfileActivity extends AppCompatActivity {
             esi = etESI.getText().toString();
         }
 
-        if (etUAN.getText().toString().equals("")) {
-            uan = "";
-        } else {
-            uan = etUAN.getText().toString();
-        }
+
 
         if (etPhnNumber.getText().equals("")) {
             phnnumber = "";
@@ -2800,28 +2669,15 @@ public class TempProfileActivity extends AppCompatActivity {
 
                         int Response_Code = job1.optInt("Response_Code");
                         if (Response_Code == 101) {
-                            pd.show();
+                            pd.dismiss();
 
-                            JSONObject mainobject = new JSONObject();
-                            try {
-                                mainobject.put("DbOperation", "4");
-                                mainobject.put("SecurityCode", pref.getSecurityCode());
-                                JSONObject innerobj = new JSONObject();
-                                innerobj.put("AEMEMPLOYEEID", AEMEmployeeID);
-                                innerobj.put("OldUANNo", etUAN.getText().toString());
-                                innerobj.put("MemberName", binding.etUANNominee.getText().toString());
-                                innerobj.put("RelationID", uanRltionshp);
-                                innerobj.put("MemberDateOfBirth", uanDOB);
-                                innerobj.put("Sex", esicGender);
-                                innerobj.put("PFPercentage", pfPercantage);
-                                innerobj.put("PFNumber", binding.etPFNumber.getText().toString());
-                                innerobj.put("NomineeAddress", binding.etUANNomineeAddress.getText().toString());
-                                innerobj.put("PrevEmprName", binding.etPreviousEmployer.getText().toString());
-                                mainobject.put("OLDUANDetails", innerobj);
-                                uploaduanDetails(mainobject);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                            Intent intent = new Intent(TempProfileActivity.this, KYCFamilyActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+
+                            Toast.makeText(TempProfileActivity.this, "Your Details has been updated Successfully", Toast.LENGTH_LONG).show();
+
+
 
                             //Toast.makeText(TempProfileActivity.this, "ESIC Details has been updated Successfully", Toast.LENGTH_LONG).show();
 
@@ -2841,46 +2697,7 @@ public class TempProfileActivity extends AppCompatActivity {
                 });
     }
 
-    private void uploaduanDetails(JSONObject jsonObject) {
-        pd.show();
-        AndroidNetworking.post(AppData.newv2url + "KYC/UpdateKYCDetails")
-                .addJSONObjectBody(jsonObject)
-                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
-                .setTag("uploadTest")
-                .setPriority(Priority.HIGH)
-                .build()
 
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-
-                        JSONObject job1 = response;
-                        Log.e("response12", "@@@@@@" + job1);
-                        pd.dismiss();
-
-                        int Response_Code = job1.optInt("Response_Code");
-                        if (Response_Code == 101) {
-                            Intent intent = new Intent(TempProfileActivity.this, KYCFamilyActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-
-                            Toast.makeText(TempProfileActivity.this, "Your Details has been updated Successfully", Toast.LENGTH_LONG).show();
-                        } else {
-
-                        }
-                    }
-
-                    @Override
-                    public void onError(ANError error) {
-
-                        Intent intent = new Intent(TempProfileActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish();
-
-                    }
-                });
-    }
 
 
     private void openSearchCityDialog(String from) {

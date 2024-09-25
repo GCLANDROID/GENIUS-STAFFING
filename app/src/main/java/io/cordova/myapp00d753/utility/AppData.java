@@ -58,6 +58,7 @@ public class AppData {
     public static String ADHARIMAGE = "";
     public static String ADHARDOB = "";
     public static String PERMANENTADDRESS = "";
+    public static String COMPANYNAME = "";
 
     public static String SAVE_EMPLOYEE_SALES_WITHOUT_INVOICE = newv2url+"Sales/SaveEmpSalesWithoutInvoice";
     public static String GET_EMPLOYEE_SALES_REPORT = newv2url+"Sales/GetEmpSalesReport";

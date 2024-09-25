@@ -22,17 +22,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -41,11 +49,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import io.cordova.myapp00d753.AndroidXCamera.AndroidXCameraActivity;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.databinding.ActivityTempExperinceBinding;
+import io.cordova.myapp00d753.module.MainDocModule;
+import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.FindDocumentInformation;
 import io.cordova.myapp00d753.utility.Pref;
@@ -64,6 +75,13 @@ public class TempExperinceActivity extends AppCompatActivity {
     private static final int DEFAULT_BUFFER_SIZE = 2048;
     int imageflag=0;
     Pref pref;
+    String uanDOB="";
+    ArrayList<MainDocModule> mainRealation = new ArrayList<>();
+    ArrayList<String> realation = new ArrayList<>();
+    ArrayList<String> uanPercentage = new ArrayList<>();
+    String pfPercantage="";
+    String uanRltionshp="";
+    int pfflag=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +91,26 @@ public class TempExperinceActivity extends AppCompatActivity {
 
     private void initView(){
         pref=new Pref(TempExperinceActivity.this);
+        setNomineeRelation();
+        uanPercentage.add("Please Select");
+        uanPercentage.add("100");
+        uanPercentage.add("75");
+        uanPercentage.add("50");
+        uanPercentage.add("25");
+        if (AppData.COMPANYNAME.contains("SBI")){
+            binding.llNonSBIEXP.setVisibility(View.VISIBLE);
+            binding.llSBIEXP.setVisibility(View.VISIBLE);
+        }else {
+            binding.llNonSBIEXP.setVisibility(View.GONE);
+            binding.llSBIEXP.setVisibility(View.GONE);
+        }
+
+
+        ArrayAdapter<String> uanspinnerArrayAdapter = new ArrayAdapter<String>
+                (TempExperinceActivity.this, android.R.layout.simple_spinner_item,
+                        uanPercentage); //selected item will look like a spinner set from XML
+        uanspinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spTotalAmt.setAdapter(uanspinnerArrayAdapter);
         binding.llFreshers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,6 +139,40 @@ public class TempExperinceActivity extends AppCompatActivity {
                     binding.imgFreshersTick.setVisibility(View.GONE);
                     binding.imgExperience.setVisibility(View.GONE);
                     binding.llExpericedForm.setVisibility(View.GONE);
+                }
+            }
+        });
+
+
+        binding.llYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (binding.imgYes.getVisibility()==View.GONE){
+                    binding.imgNo.setVisibility(View.GONE);
+                    binding.imgYes.setVisibility(View.VISIBLE);
+                    binding.llUAN.setVisibility(View.VISIBLE);
+                    pfflag=1;
+                }else {
+                    binding.imgNo.setVisibility(View.GONE);
+                    binding.imgYes.setVisibility(View.GONE);
+                    binding.llUAN.setVisibility(View.GONE);
+                }
+            }
+        });
+
+
+        binding.llNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (binding.imgNo.getVisibility()==View.GONE){
+                    binding.imgNo.setVisibility(View.VISIBLE);
+                    binding.imgYes.setVisibility(View.GONE);
+                    binding.llUAN.setVisibility(View.GONE);
+                    pfflag=0;
+                }else {
+                    binding.imgNo.setVisibility(View.GONE);
+                    binding.imgYes.setVisibility(View.GONE);
+                    binding.llUAN.setVisibility(View.GONE);
                 }
             }
         });
@@ -245,6 +317,100 @@ public class TempExperinceActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
+
+
+        binding.imgUANCal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar now = Calendar.getInstance();
+                System.out.println("Current date : " + (now.get(Calendar.MONTH) + 1) + "-"
+                        + now.get(Calendar.DATE) + "-" + now.get(Calendar.YEAR));
+
+                now = Calendar.getInstance();
+                now.add(Calendar.YEAR, -18);
+                int dyear = now.get(Calendar.YEAR);
+                final int dmonth = now.get(Calendar.MONTH);
+                int dday = now.get(DAY_OF_MONTH);
+                Calendar c1 = Calendar.getInstance();
+                /*final int syear = year - 18;
+
+                final int month1 = c1.get(Calendar.MONTH);
+                final int sday1 = c1.get(DAY_OF_MONTH);*/
+
+
+                final DatePickerDialog dialog = new DatePickerDialog(TempExperinceActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int y, int m, int d) {
+
+                        int mm = (m + 1);
+                        int s = (m + 1) + d + y;
+                        if (mm == 1) {
+                            month = "January";
+                        } else if (mm == 2) {
+                            month = "February";
+                        } else if (mm == 3) {
+                            month = "March";
+                        } else if (mm == 4) {
+                            month = "April";
+                        } else if (mm == 5) {
+                            month = "May";
+                        } else if (mm == 6) {
+                            month = "June";
+                        } else if (mm == 7) {
+                            month = "July";
+                        } else if (mm == 8) {
+                            month = "August";
+                        } else if (mm == 9) {
+                            month = "September";
+                        } else if (mm == 10) {
+                            month = "October";
+                        } else if (mm == 11) {
+                            month = "November";
+                        } else if (mm == 12) {
+                            month = "December";
+                        }
+                        uanDOB = d + " " + month + " " + y;
+
+                        binding.tvUANDOB.setText(uanDOB);
+
+
+                    }
+                }, dyear, dmonth, dday);
+                dialog.getDatePicker().setMaxDate((long) (System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 365.25 * 18)));
+                dialog.getDatePicker().setMinDate((long) (System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 365.25 * 90)));
+                dialog.show();
+
+            }
+        });
+        binding.spUANRealation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position > 0) {
+                    uanRltionshp = mainRealation.get(position).getDocID();
+
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        binding.spTotalAmt.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position > 0) {
+                    pfPercantage = uanPercentage.get(position);
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         binding.btnSaveForm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -259,7 +425,12 @@ public class TempExperinceActivity extends AppCompatActivity {
                                         if (binding.etManagerContact.getText().toString().length()==10){
                                             if (!doj.equals("")){
                                                 if (!doe.equals("")){
-                                                    experiencesubmit("1");
+                                                    if (pfflag==1){
+                                                        UANValidation();
+                                                    }else {
+                                                        experiencesubmit("1");
+                                                    }
+
 
                                                 }else {
                                                     Toast.makeText(TempExperinceActivity.this,"Please Enter Previous Company’s DOE",Toast.LENGTH_LONG).show();
@@ -487,7 +658,7 @@ public class TempExperinceActivity extends AppCompatActivity {
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        progressDialog.dismiss();
+
 
 
                         JSONObject job1 = response;
@@ -495,11 +666,38 @@ public class TempExperinceActivity extends AppCompatActivity {
 
                         int Response_Code = job1.optInt("Response_Code");
                         if (Response_Code == 101) {
-                            Intent intent = new Intent(TempExperinceActivity.this, TempPanActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
 
-                            Toast.makeText(TempExperinceActivity.this,"Experience Details has been updated Successfully",Toast.LENGTH_LONG).show();
+                            if (pfflag==1){
+                                progressDialog.show();
+                                JSONObject mainobject = new JSONObject();
+                                try {
+                                    mainobject.put("DbOperation", "4");
+                                    mainobject.put("SecurityCode", pref.getSecurityCode());
+                                    JSONObject innerobj = new JSONObject();
+                                    innerobj.put("AEMEMPLOYEEID", pref.getEmpId());
+                                    innerobj.put("OldUANNo", binding.etUAN.getText().toString());
+                                    innerobj.put("MemberName", binding.etUANNominee.getText().toString());
+                                    innerobj.put("RelationID", uanRltionshp);
+                                    innerobj.put("MemberDateOfBirth", uanDOB);
+                                    innerobj.put("Sex", "MALE");
+                                    innerobj.put("PFPercentage", pfPercantage);
+                                    innerobj.put("PFNumber", binding.etPFNumber.getText().toString());
+                                    innerobj.put("NomineeAddress", binding.etUANNomineeAddress.getText().toString());
+                                    innerobj.put("PrevEmprName", binding.etcompany.getText().toString());
+                                    mainobject.put("OLDUANDetails", innerobj);
+                                    uploaduanDetails(mainobject,progressDialog);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }else {
+                                progressDialog.dismiss();
+                                Intent intent = new Intent(TempExperinceActivity.this, TempPanActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+
+                                Toast.makeText(TempExperinceActivity.this,"Experience Details has been updated Successfully",Toast.LENGTH_LONG).show();
+
+                            }
 
                         }else {
 
@@ -521,6 +719,137 @@ public class TempExperinceActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+    private void setNomineeRelation() {
+
+        String surl = AppData.url + "gcl_CommonDDL?ddltype=7&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
+        ProgressDialog pd=new ProgressDialog(TempExperinceActivity.this);
+        pd.setMessage("Laoding");
+        pd.show();
+        pd.setCancelable(false);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("responseLogin", response);
+                        pd.dismiss();
+                        realation.clear();
+                        mainRealation.clear();
+                        realation.add("Please Select");
+                        mainRealation.add(new MainDocModule("0", ""));
+
+                        try {
+                            JSONObject job1 = new JSONObject(response);
+                            Log.e("response12", "@@@@@@" + job1);
+                            String responseText = job1.optString("responseText");
+                            boolean responseStatus = job1.optBoolean("responseStatus");
+                            if (responseStatus) {
+                                //Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
+                                JSONArray responseData = job1.optJSONArray("responseData");
+                                for (int i = 0; i < responseData.length(); i++) {
+                                    JSONObject obj = responseData.getJSONObject(i);
+                                    String value = obj.optString("value");
+                                    String id = obj.optString("id");
+                                    realation.add(value);
+                                    MainDocModule mainDocModule = new MainDocModule(id, value);
+                                    mainRealation.add(mainDocModule);
+
+                                }
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                        (TempExperinceActivity.this, android.R.layout.simple_spinner_item,
+                                                realation); //selected item will look like a spinner set from XML
+                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                binding.spUANRealation.setAdapter(spinnerArrayAdapter);
+
+
+
+                            } else {
+
+
+                            }
+
+                            // boolean _status = job1.getBoolean("status");
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(TempExperinceActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+               pd.dismiss();
+
+                //   Toast.makeText(DocumentManageActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
+                Log.e("ert", error.toString());
+
+            }
+        }) {
+
+        };
+        AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
+
+
+    }
+
+
+    private void uploaduanDetails(JSONObject jsonObject,ProgressDialog pd) {
+        pd.show();
+        AndroidNetworking.post(AppData.newv2url + "KYC/UpdateKYCDetails")
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        pd.dismiss();
+
+                        int Response_Code = job1.optInt("Response_Code");
+                        if (Response_Code == 101) {
+                            Intent intent = new Intent(TempExperinceActivity.this, TempPanActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+
+                            Toast.makeText(TempExperinceActivity.this,"Experience Details has been updated Successfully",Toast.LENGTH_LONG).show();
+
+                        } else {
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+
+                        Intent intent = new Intent(TempExperinceActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+
+                    }
+                });
+    }
+
+    private void UANValidation(){
+        if (binding.etUAN.getText().toString().length()==12){
+            if (binding.etPFNumber.getText().toString().length()>5){
+                experiencesubmit("1");
+
+            }else {
+                Toast.makeText(TempExperinceActivity.this,"Please Enter your PF number",Toast.LENGTH_LONG).show();
+
+            }
+
+        }else {
+            Toast.makeText(TempExperinceActivity.this,"Please Enter your UAN number",Toast.LENGTH_LONG).show();
+        }
     }
 
 }
