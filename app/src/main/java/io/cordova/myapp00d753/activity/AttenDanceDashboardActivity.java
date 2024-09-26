@@ -187,7 +187,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         }
 
         if (pref.getEmpClintId().equals("AEMCLI1110000502")){
-            llHoliday.setVisibility(View.GONE);
+            llHoliday.setVisibility(View.VISIBLE);
         } else {
             llHoliday.setVisibility(View.GONE);
         }
@@ -195,11 +195,9 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         if (pref.getBackAttd().equals("1")) {
             llBackAttendance.setVisibility(View.VISIBLE);
             llAttenRegularize.setVisibility(View.VISIBLE);
-
         } else {
             llBackAttendance.setVisibility(View.GONE);
             llAttenRegularize.setVisibility(View.GONE);
-
         }
 
         llAttandanceManage.setOnClickListener(this);
@@ -783,6 +781,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 startActivity(intent);
             }else if( pref.getEmpClintId().equals("AEMCLI1110000502"))  {  //WO APplication with location ->SKF PUNE
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, WOHOHActivity.class);
+                intent.putExtra("leaveFlag",leaveFlag);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }else {

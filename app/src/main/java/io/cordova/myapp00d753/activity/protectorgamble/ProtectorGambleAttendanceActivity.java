@@ -14,6 +14,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
@@ -113,7 +114,7 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
     double currentLatitude, currentLongitude;
     Pref pref;
     LatLng latLng;
-
+    TextView tvTimer;
     private GoogleMap mMap;
     ArrayList<MetsoLocationModel> metsoLocationArrayList;
     ProgressDialog progressDialog;
@@ -124,6 +125,8 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
     String address1;
     String address = "N/A";
     LinearLayout llLoading,llSubmit;
+    public static String SKF_PUNE_CLIENT_OFFICE_ID = "AEMCLO1110001277";
+    public static String SKF_OTHER_CLIENT_OFFICE_ID = "AEMCLO1110001478";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,8 +141,11 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openShiftAndLocationPopup();
-                //openShiftAndLocationPopup2();
+                if (SKF_PUNE_CLIENT_OFFICE_ID.equals(pref.getEmpClintOffId())){
+                    openShiftAndLocationPopup();
+                } else {
+                    submitAttendance();
+                }
             }
         });
 
@@ -217,13 +223,10 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
                         }
                         Log.e(TAG, "onResponse: SIZE: " + metsoLocationArrayList.size());
                         locationSpinnerAdapter = new LocationSpinnerAdapter(ProtectorGambleAttendanceActivity.this, metsoLocationArrayList);
-
-
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
 
             @Override
@@ -249,6 +252,7 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
     }
 
     private void intiView() {
+        shiftAndLocationDialog = new Dialog(ProtectorGambleAttendanceActivity.this);
         mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(10 * 1000)        // 10 seconds, in milliseconds
@@ -269,6 +273,7 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
         llLoading = findViewById(R.id.llLoading);
         llSubmit = findViewById(R.id.llSubmit);
         btnSubmit = findViewById(R.id.btnSubmit);
+        tvTimer = findViewById(R.id.tvTimer);
         txtCurrentLocation = findViewById(R.id.txtCurrentLocation);
         imgBack = findViewById(R.id.imgBack);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
@@ -283,6 +288,8 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
         progressDialog = new ProgressDialog(ProtectorGambleAttendanceActivity.this);
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
+
+        Log.e(TAG, "intiView: ClintOfficeId:  "+pref.getEmpClintOffId());
     }
 
     private void settingToGetLocation() {
@@ -305,7 +312,6 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
     }
 
     private void openShiftAndLocationPopup() {
-        shiftAndLocationDialog = new Dialog(ProtectorGambleAttendanceActivity.this);
         shiftAndLocationDialog.setContentView(R.layout.shift_location_popup);
         shiftAndLocationDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         shiftAndLocationDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -330,7 +336,6 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
                     Shiftid = String.valueOf(clickedItem.getWorkingShiftID());
                     txtErrorShift.setVisibility(View.GONE);
                 }
-
             }
 
             @Override
@@ -399,55 +404,14 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
 
     private void submitAttendance() {
         progressDialog.show();
+        Siteid = (SKF_PUNE_CLIENT_OFFICE_ID.equals(pref.getEmpClintOffId()))?Siteid:"";
+
         Log.e(TAG, "submitAttendance: MasterID: " + MasterID
                 + "\ncurrentAddresses: " + currentAddresses
                 + "\nShiftid: " + Shiftid
                 + "\nSiteid: " + Siteid
                 + "\nlongitude: " + longitude
                 + "\nlatitude: " + latitude);
-
-        /* //TODO: Also working
-        RequestBody AEMEmployeeID = RequestBody.create(MasterID, MediaType.parse("text/plain"));
-        RequestBody mShiftid = RequestBody.create(Shiftid, MediaType.parse("text/plain"));
-        RequestBody mSiteid = RequestBody.create(Siteid, MediaType.parse("text/plain"));
-        RequestBody mLatitude = RequestBody.create(latitude,MediaType.parse("text/plain"));
-        RequestBody mLongitude = RequestBody.create(longitude,MediaType.parse("text/plain"));
-        RequestBody mCurrentAddresses = RequestBody.create(currentAddresses,MediaType.parse("text/plain"));
-        RequestBody mSecurityCode = RequestBody.create("0000",MediaType.parse("text/plain"));
-
-
-        Call<JsonObject> call = RetrofitClient
-                .getInstance()
-                .getApi()
-                .MetsoAttendancePunch(AEMEmployeeID,mCurrentAddresses,mShiftid,mSiteid,mLongitude,mLatitude,mSecurityCode);
-
-        call.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                Log.e(TAG, "onResponse: Attendance Submit: "+new Gson().toJson(response.body()));
-                progressDialog.cancel();
-                try {
-                    JSONObject object = new JSONObject(String.valueOf(response.body()));
-                    if (object.getBoolean("responseStatus") == true){
-                        shiftAndLocationDialog.cancel();
-
-                        successAlert(object.getString("responseText"));
-                        //Toast.makeText(MetsoAttendanceActivity.this, object.getString("responseText"), Toast.LENGTH_SHORT).show();
-                    } else {
-                        progressDialog.cancel();
-                        Toast.makeText(MetsoAttendanceActivity.this, "Attendance not updated", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                Log.e(TAG, "METSO_ATTENDANCE_SUBMIT_onFailure: "+t.getMessage());
-                progressDialog.cancel();
-            }
-        });*/
 
 
         AndroidNetworking.upload(AppData.url+"gcl_post_attedanceGeofenceMetso")
@@ -469,6 +433,7 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
                         try {
                             JSONObject object = new JSONObject(String.valueOf(response));
                             if (object.getBoolean("responseStatus") == true) {
+
                                 shiftAndLocationDialog.cancel();
                                 successAlert(object.getString("responseText"));
                             } else {
@@ -629,6 +594,7 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
         if (llLoading.getVisibility() == View.VISIBLE){
             llLoading.setVisibility(View.GONE);
             llSubmit.setVisibility(View.VISIBLE);
+            startTimer();
         }
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -825,5 +791,28 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
             Log.w("My Current", "Canont get Address!");
         }
         return strAdd;
+    }
+
+    private void startTimer() {
+        int timerInMillis = 120 * 1000;
+        CountDownTimer countDownTimer = new CountDownTimer(timerInMillis,1000) {
+            @Override
+            public void onTick(long l) {
+                long seconds = l / 1000;
+                long hours = seconds / 3600;
+                seconds %= 3600;
+                long minutes = seconds / 60;
+                seconds %= 60;
+
+                String timeFormatted = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+                tvTimer.setText(timeFormatted);
+            }
+
+            @Override
+            public void onFinish() {
+                finish();
+            }
+        };
+        countDownTimer.start();
     }
 }

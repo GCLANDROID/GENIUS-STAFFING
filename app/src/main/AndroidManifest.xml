@@ -582,6 +582,8 @@
         <activity android:name=".activity.metso.MetsoAttendanceRegularizationActivity" />
         <activity android:name=".activity.metso.MetsoAttendanceReportActivity" />
         <activity android:name=".AndroidXCamera.AndroidXCameraActivity" />
+        <activity android:name=".activity.HolidayMarkingActivity" />
+        <activity android:name=".AndroidXCamera.FrontBackAndroidXCameraActivity" />
 
         <service
             android:name=".FirebaseNotification.MyFirebaseMessagingService"

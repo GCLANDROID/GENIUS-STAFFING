@@ -1,5 +1,7 @@
 package io.cordova.myapp00d753.activity;
 
+import static io.cordova.myapp00d753.activity.protectorgamble.ProtectorGambleAttendanceActivity.SKF_PUNE_CLIENT_OFFICE_ID;
+
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -40,6 +42,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.Retrofit.RetrofitClient;
@@ -67,7 +70,7 @@ public class HolidayMarkingActivity extends AppCompatActivity {
     Spinner spHoliday;
     LinearLayout llSubmit;
     TextView tvDate;
-    ArrayList<HolidayMarkModel> holidayList;
+    ArrayList<HolidayMarkModel> holidayList= new ArrayList<>();;
     HolidayCustomAdapter holidayCustomAdapter;
     String holidayDate="";
     private Dialog shiftAndLocationDialog;
@@ -94,12 +97,15 @@ public class HolidayMarkingActivity extends AppCompatActivity {
         spHoliday = findViewById(R.id.spHoliday);
         llSubmit = findViewById(R.id.llSubmit);
         tvDate = findViewById(R.id.tvDate);
+
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+
         JSONObject obj=new JSONObject();
         try {
-            obj.put("ClientID" , pref.getEmpClintId() );
+            obj.put("ClientID" , pref.getEmpClintId());
             obj.put("EmployeeID",pref.getEmpId());
             obj.put("Type","1");
-            obj.put("Year" , "");
+            obj.put("Year" , currentYear);
             getHolidayData(obj);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -125,7 +131,25 @@ public class HolidayMarkingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (!holidayDate.equals("")) {
-                    openShiftAndLocationPopup();
+                    if (SKF_PUNE_CLIENT_OFFICE_ID.equals(pref.getEmpClintOffId())){
+                        openShiftAndLocationPopup();
+                    } else {
+                        JSONObject jsonObject = new JSONObject();
+                        try {
+                            jsonObject.put("ClientID", pref.getEmpClintId());
+                            jsonObject.put("EmployeeID", pref.getEmpId());
+                            jsonObject.put("Type", "3");
+                            jsonObject.put("StartDate", holidayDate);
+                            jsonObject.put("DbOperation", "3");
+                            jsonObject.put("Shiftid", "");
+                            jsonObject.put("SiteId", "");
+                            jsonObject.put("SecurityCode", "0000");
+                            attendance(jsonObject);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
                     binding.tvMan.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(HolidayMarkingActivity.this, "please select date", Toast.LENGTH_LONG).show();
@@ -157,8 +181,9 @@ public class HolidayMarkingActivity extends AppCompatActivity {
         txtPopupHeadline.setText("Select Holiday");
         rvWbsCode.setLayoutManager(new LinearLayoutManager(HolidayMarkingActivity.this));
 
-        ArrayList<HolidayMarkModel>  holidayListCopy = (ArrayList<HolidayMarkModel>) holidayList.clone();
-        HolidayFilterAdapter holidayFilterAdapter = new HolidayFilterAdapter(HolidayMarkingActivity.this,holidayListCopy);
+
+        ArrayList<HolidayMarkModel> holidayListCopy = (ArrayList<HolidayMarkModel>) holidayList.clone();
+        HolidayFilterAdapter holidayFilterAdapter = new HolidayFilterAdapter(HolidayMarkingActivity.this, holidayListCopy);
         rvWbsCode.setAdapter(holidayFilterAdapter);
 
 
@@ -207,7 +232,7 @@ public class HolidayMarkingActivity extends AppCompatActivity {
                             String Response_Code = job1.optString("Response_Code");
                             String Response_Message = job1.optString("Response_Message");
                             if (Response_Code.equals("101")) {
-                                holidayList = new ArrayList<>();
+                                holidayList.clear();
                                 String Response_Data = job1.optString("Response_Data");
                                 JSONArray jsonArray = new JSONArray(Response_Data);
                                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -389,6 +414,7 @@ public class HolidayMarkingActivity extends AppCompatActivity {
     }
 
     private void attendance(JSONObject jsonObject) {
+        Log.e(TAG, "attendance: "+jsonObject);
         ProgressDialog progressDialog = new ProgressDialog(HolidayMarkingActivity.this);
         progressDialog.setMessage("Loading");
         progressDialog.setCancelable(false);
@@ -445,8 +471,8 @@ public class HolidayMarkingActivity extends AppCompatActivity {
                 alerDialog1.dismiss();
                 Intent intent = new Intent(HolidayMarkingActivity.this, AttenDanceDashboardActivity.class);
                 intent.putExtra("leaveFlag",leaveFlag);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish();
             }
         });
 

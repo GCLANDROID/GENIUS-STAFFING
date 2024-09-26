@@ -1,5 +1,7 @@
 package io.cordova.myapp00d753.activity;
 
+import static io.cordova.myapp00d753.activity.protectorgamble.ProtectorGambleAttendanceActivity.SKF_PUNE_CLIENT_OFFICE_ID;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
@@ -11,6 +13,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,25 +57,29 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class WOHOHActivity extends AppCompatActivity {
-     ActivityWohohactivityBinding binding;
-     String newdate="";
-     Pref pref;
+    private static final String TAG = "WOHOHActivity";
+    ActivityWohohactivityBinding binding;
+    String newdate = "";
+    Pref pref;
     ArrayList<MetsoLocationModel> metsoLocationArrayList;
     LocationSpinnerAdapter locationSpinnerAdapter;
     private Dialog shiftAndLocationDialog;
     ShiftSpinnerAdapter shiftSpinnerAdapter;
-    String Siteid="";
+    String Siteid = "";
     AlertDialog alerDialog1;
     android.app.AlertDialog al1;
+    int leaveFlag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding= DataBindingUtil.setContentView(this,R.layout.activity_wohohactivity);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_wohohactivity);
         initView();
     }
 
-    private void initView(){
-        pref=new Pref(WOHOHActivity.this);
+    private void initView() {
+        pref = new Pref(WOHOHActivity.this);
+        shiftAndLocationDialog = new Dialog(WOHOHActivity.this);
+        leaveFlag=getIntent().getIntExtra("leaveFlag",1);
         getLocationData();
         binding.llDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,14 +93,10 @@ public class WOHOHActivity extends AppCompatActivity {
                 final DatePickerDialog dialog = new DatePickerDialog(WOHOHActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int y, int m, int d) {
-
-
-                        newdate = (m + 1) + "/" + d+ "/" + y;
-
-
+                        newdate = (m + 1) + "/" + d + "/" + y;
+                        Log.e( "onDateSet: ", newdate);
                         binding.tvDate.setVisibility(View.VISIBLE);
-                        binding.tvDate.setText(Util.changeAnyDateFormat(newdate,"MM/dd/yyyy","dd MMM yyyy"));
-
+                        binding.tvDate.setText(Util.changeAnyDateFormat(newdate, "MM/dd/yyyy", "dd MMM yyyy"));
                     }
                 }, year, month, day);
                 dialog.getDatePicker();
@@ -122,58 +125,64 @@ public class WOHOHActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (!newdate.equals("")) {
-
+                    if (SKF_PUNE_CLIENT_OFFICE_ID.equals(pref.getEmpClintOffId())){
                         openShiftAndLocationPopup();
-                        binding.tvMan.setVisibility(View.GONE);
+                    } else {
 
-
+                        JSONObject jsonObject = new JSONObject();
+                        try {
+                            jsonObject.put("ClientID", pref.getEmpClintId());
+                            jsonObject.put("EmployeeID", pref.getEmpId());
+                            jsonObject.put("Type", "3");
+                            jsonObject.put("StartDate", newdate);
+                            jsonObject.put("DbOperation", "3");
+                            jsonObject.put("Shiftid", "");
+                            jsonObject.put("SiteId", "");
+                            jsonObject.put("SecurityCode", "0000");
+                            attendance(jsonObject);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    binding.tvMan.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(WOHOHActivity.this, "please select date", Toast.LENGTH_LONG).show();
                 }
-
-
             }
         });
     }
 
 
     private void attendance(JSONObject jsonObject) {
+        Log.e(TAG, "attendance: "+jsonObject);
         ProgressDialog progressDialog = new ProgressDialog(WOHOHActivity.this);
         progressDialog.setMessage("Loading");
         progressDialog.setCancelable(false);
         progressDialog.show();
         AndroidNetworking.post(AppData.SaveHolidayleave)
                 .addJSONObjectBody(jsonObject)
-                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
                 .setUploadProgressListener(new UploadProgressListener() {
                     @Override
-                    public void onProgress(long bytesUploaded, long totalBytes) {
-
-
-                    }
+                    public void onProgress(long bytesUploaded, long totalBytes) {}
                 })
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-
                         progressDialog.dismiss();
+                        shiftAndLocationDialog.dismiss();
                         JSONObject job = response;
-                        String Response_Message=job.optString("Response_Message");
-                        String Response_Code=job.optString("Response_Code");
-                        if (Response_Code.equals("101")){
+                        String Response_Message = job.optString("Response_Message");
+                        String Response_Code = job.optString("Response_Code");
+                        if (Response_Code.equals("101")) {
                             successAlert(Response_Message);
-
-                        }else {
+                        } else {
                             showErrorDialog(Response_Message);
                         }
-
-
                         // boolean _status = job1.getBoolean("status");
-
-
                         // do anything with response
                     }
 
@@ -181,6 +190,7 @@ public class WOHOHActivity extends AppCompatActivity {
                     public void onError(ANError error) {
                         // handle error
                         progressDialog.dismiss();
+                        shiftAndLocationDialog.dismiss();
                         Toast.makeText(WOHOHActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
 
                     }
@@ -189,7 +199,7 @@ public class WOHOHActivity extends AppCompatActivity {
 
 
     private void getLocationData() {
-        ProgressDialog progressDialog=new ProgressDialog(WOHOHActivity.this);
+        ProgressDialog progressDialog = new ProgressDialog(WOHOHActivity.this);
         progressDialog.setMessage("Loading");
         progressDialog.show();
         progressDialog.setCancelable(false);
@@ -235,7 +245,6 @@ public class WOHOHActivity extends AppCompatActivity {
 
 
     private void openShiftAndLocationPopup() {
-        shiftAndLocationDialog = new Dialog(WOHOHActivity.this);
         shiftAndLocationDialog.setContentView(R.layout.shift_location_popup);
         shiftAndLocationDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         shiftAndLocationDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -249,7 +258,7 @@ public class WOHOHActivity extends AppCompatActivity {
         Spinner spShift = shiftAndLocationDialog.findViewById(R.id.spShift);
         Spinner spLocation = shiftAndLocationDialog.findViewById(R.id.spLocation);
         AppCompatButton btnMarkedYourAttendance = shiftAndLocationDialog.findViewById(R.id.btnMarkedYourAttendance);
-        TextView textView=shiftAndLocationDialog.findViewById(R.id.textView);
+        TextView textView = shiftAndLocationDialog.findViewById(R.id.textView);
         textView.setText("Select location");
 
         spLocation.setAdapter(locationSpinnerAdapter);
@@ -298,21 +307,20 @@ public class WOHOHActivity extends AppCompatActivity {
                     txtErrorLocation.setVisibility(View.VISIBLE);
                 } else {
                     txtErrorLocation.setVisibility(View.GONE);
-                    JSONObject jsonObject=new JSONObject();
+                    JSONObject jsonObject = new JSONObject();
                     try {
-                        jsonObject.put("ClientID",pref.getEmpClintId());
-                        jsonObject.put("EmployeeID",pref.getEmpId());
-                        jsonObject.put("Type","3");
-                        jsonObject.put("StartDate",newdate);
-                        jsonObject.put("DbOperation","3");
-                        jsonObject.put("Shiftid","");
-                        jsonObject.put("SiteId",Siteid);
-                        jsonObject.put("SecurityCode","0000");
+                        jsonObject.put("ClientID", pref.getEmpClintId());
+                        jsonObject.put("EmployeeID", pref.getEmpId());
+                        jsonObject.put("Type", "3");
+                        jsonObject.put("StartDate", newdate);
+                        jsonObject.put("DbOperation", "3");
+                        jsonObject.put("Shiftid", "");
+                        jsonObject.put("SiteId", Siteid);
+                        jsonObject.put("SecurityCode", "0000");
                         attendance(jsonObject);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 }
             }
         });
@@ -332,7 +340,7 @@ public class WOHOHActivity extends AppCompatActivity {
         dialogBuilder.setView(dialogView);
         TextView tvInvalidDate = (TextView) dialogView.findViewById(R.id.tvSuccess);
 
-            tvInvalidDate.setText(msg);
+        tvInvalidDate.setText(msg);
 
         Button btnOk = (Button) dialogView.findViewById(R.id.btnOk);
         btnOk.setOnClickListener(new View.OnClickListener() {
@@ -340,8 +348,9 @@ public class WOHOHActivity extends AppCompatActivity {
             public void onClick(View view) {
                 alerDialog1.dismiss();
                 Intent intent = new Intent(WOHOHActivity.this, AttenDanceDashboardActivity.class);
+                intent.putExtra("leaveFlag",leaveFlag);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish();
             }
         });
 
