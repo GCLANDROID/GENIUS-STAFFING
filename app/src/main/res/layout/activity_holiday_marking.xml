@@ -36,7 +36,8 @@
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/toolbartextsize"
-                    android:text="Holiday Mark"/>
+                    android:gravity="center"
+                    android:text="Holiday Mark / Optional Holiday Mark"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="0dp"
@@ -109,14 +110,29 @@
                 android:layout_height="40dp"
                 android:background="@drawable/gradientdesign2"
                 android:gravity="center"
-                android:id="@+id/llSubmit"
+                android:id="@+id/llHolidayMark"
                 android:layout_marginTop="20dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/white"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:text="Submit"/>
+                    android:text="Holiday Mark"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:background="@drawable/gradientdesign2"
+                android:gravity="center"
+                android:id="@+id/llOptionalHolidayMark"
+                android:layout_marginTop="20dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:textAppearance="?android:textAppearanceSmall"
+                    android:gravity="center"
+                    android:text="Optional Holiday \nMark"/>
             </LinearLayout>
             <TextView
                 android:id="@+id/tvMan"

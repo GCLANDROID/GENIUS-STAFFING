@@ -68,7 +68,7 @@ public class HolidayMarkingActivity extends AppCompatActivity {
     ActivityHolidayMarkingBinding binding;
     Pref pref;
     Spinner spHoliday;
-    LinearLayout llSubmit;
+    LinearLayout llHolidayMark,llOptionalHolidayMark;
     TextView tvDate;
     ArrayList<HolidayMarkModel> holidayList= new ArrayList<>();;
     HolidayCustomAdapter holidayCustomAdapter;
@@ -95,7 +95,8 @@ public class HolidayMarkingActivity extends AppCompatActivity {
         leaveFlag=getIntent().getIntExtra("leaveFlag",1);
         searchHolidayDialog = new Dialog(HolidayMarkingActivity.this, R.style.CustomDialogNew2);
         spHoliday = findViewById(R.id.spHoliday);
-        llSubmit = findViewById(R.id.llSubmit);
+        llHolidayMark = findViewById(R.id.llHolidayMark);
+        llOptionalHolidayMark = findViewById(R.id.llOptionalHolidayMark);
         tvDate = findViewById(R.id.tvDate);
 
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
@@ -127,18 +128,48 @@ public class HolidayMarkingActivity extends AppCompatActivity {
             }
         });
 
-        llSubmit.setOnClickListener(new View.OnClickListener() {
+        llHolidayMark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!holidayDate.equals("")) {
                     if (SKF_PUNE_CLIENT_OFFICE_ID.equals(pref.getEmpClintOffId())){
-                        openShiftAndLocationPopup();
+                        openShiftAndLocationPopup("1");
                     } else {
                         JSONObject jsonObject = new JSONObject();
                         try {
                             jsonObject.put("ClientID", pref.getEmpClintId());
                             jsonObject.put("EmployeeID", pref.getEmpId());
-                            jsonObject.put("Type", "3");
+                            jsonObject.put("Type", "1");
+                            jsonObject.put("StartDate", holidayDate);
+                            jsonObject.put("DbOperation", "3");
+                            jsonObject.put("Shiftid", "");
+                            jsonObject.put("SiteId", "");
+                            jsonObject.put("SecurityCode", "0000");
+                            attendance(jsonObject);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    binding.tvMan.setVisibility(View.GONE);
+                } else {
+                    Toast.makeText(HolidayMarkingActivity.this, "please select date", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        llOptionalHolidayMark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!holidayDate.equals("")) {
+                    if (SKF_PUNE_CLIENT_OFFICE_ID.equals(pref.getEmpClintOffId())){
+                        openShiftAndLocationPopup("2");
+                    } else {
+                        JSONObject jsonObject = new JSONObject();
+                        try {
+                            jsonObject.put("ClientID", pref.getEmpClintId());
+                            jsonObject.put("EmployeeID", pref.getEmpId());
+                            jsonObject.put("Type", "2");
                             jsonObject.put("StartDate", holidayDate);
                             jsonObject.put("DbOperation", "3");
                             jsonObject.put("Shiftid", "");
@@ -280,7 +311,7 @@ public class HolidayMarkingActivity extends AppCompatActivity {
         Log.e(TAG, "dateFormat: "+holidayDate);
     }
 
-    private void openShiftAndLocationPopup() {
+    private void openShiftAndLocationPopup(String holidayType) {
         shiftAndLocationDialog = new Dialog(HolidayMarkingActivity.this);
         shiftAndLocationDialog.setContentView(R.layout.shift_location_popup);
         shiftAndLocationDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -349,7 +380,7 @@ public class HolidayMarkingActivity extends AppCompatActivity {
                     try {
                         jsonObject.put("ClientID", pref.getEmpClintId());
                         jsonObject.put("EmployeeID", pref.getEmpId());
-                        jsonObject.put("Type", "3");
+                        jsonObject.put("Type", holidayType);
                         jsonObject.put("StartDate", holidayDate);
                         jsonObject.put("DbOperation", "3");
                         jsonObject.put("Shiftid", "");
