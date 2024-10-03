@@ -68,6 +68,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.SKF.SKF_AttendanceRegularizationActivity;
 import io.cordova.myapp00d753.activity.bosch.BoschAttendanceActivity;
 import io.cordova.myapp00d753.activity.bosch.BoschAttendanceReportActivity;
 import io.cordova.myapp00d753.activity.metso.MetsoAttendanceActivity;
@@ -755,8 +756,13 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 /////
             }
         } else if (view == llBackAttendance) {
+            Log.e(TAG, "onClick: llBackAttendance");
             if (pref.getEmpClintId().equals("AEMCLI2110001671")) {
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, MetsoAttendanceRegularizationActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }  else if(pref.getEmpClintId().equals("AEMCLI1110000502")) { // SKF Attendance Regularization
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, SKF_AttendanceRegularizationActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             } else {
@@ -765,11 +771,12 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 startActivity(intent);
             }
         } else if (view == llAttenRegularize) {
+            Log.e(TAG, "onClick: llAttenRegularize");
             if (pref.getEmpClintId().equals("AEMCLI2110001671")) {
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, MetsoAttendanceRegularizationActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-            } else {
+            }else {
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, BacklogAttendanceActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -1501,6 +1508,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+
         }else if (pref.getEmpClintId().equals("AEMCLI1110000593")) {
             //
             Intent intent = new Intent(AttenDanceDashboardActivity.this, BoschAttendanceActivity.class);
