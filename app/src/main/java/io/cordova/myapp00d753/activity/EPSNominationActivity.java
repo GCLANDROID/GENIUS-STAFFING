@@ -273,7 +273,7 @@ public class EPSNominationActivity extends AppCompatActivity {
                     try {
                         jsonObject.put("aadhaarNumber",binding.etAadharNominee.getText().toString());
                         jsonObject.put("consent","Y");
-                        validateAadhar(jsonObject);
+                        //validateAadhar(jsonObject);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
