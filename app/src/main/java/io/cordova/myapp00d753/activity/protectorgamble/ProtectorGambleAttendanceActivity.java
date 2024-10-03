@@ -125,7 +125,7 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
     String address1;
     String address = "N/A";
     LinearLayout llLoading,llSubmit;
-    public static String SKF_PUNE_CLIENT_OFFICE_ID = "AEMCLO1110001277";
+    public static String SKF_PUNE_CLIENT_OFFICE_ID = "AEMCLO2410007373";
     public static String SKF_OTHER_CLIENT_OFFICE_ID = "AEMCLO1110001478";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
