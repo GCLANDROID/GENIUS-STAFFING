@@ -86,6 +86,7 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
     String Siteid = "";
     ProgressDialog progressDialog;
     AlertDialog alerDialog1;
+    android.app.AlertDialog al1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,7 +133,6 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
                     } else {
                         submitOperation();
                     }
-
                 } else {
                     Toast.makeText(getApplicationContext(),"Please Select Your Date(s)",Toast.LENGTH_LONG).show();
                 }
@@ -225,14 +225,14 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
                 //Log.e(TAG, "submitOperation: "+i);
                 if (regularizationSubmitString.isEmpty()){
                     if (SKF_PUNE_CLIENT_OFFICE_ID.equals(pref.getEmpClintOffId()))
-                        regularizationSubmitString = pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(i).getDate()+"_"+blockLogList.get(i).getInTime()+"_"+blockLogList.get(i).getOutTime()+"_"+blockLogList.get(i).getRemarks()+"_"+Siteid+"_0";
+                        regularizationSubmitString = pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(i).getDate()+"_"+blockLogList.get(i).getInTime()+"_"+blockLogList.get(i).getOutTime()+"_"+blockLogList.get(i).getDayType()+"_"+Siteid+"_0";
                     else
-                        regularizationSubmitString = pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(i).getDate()+"_"+blockLogList.get(i).getInTime()+"_"+blockLogList.get(i).getOutTime()+"_"+blockLogList.get(i).getRemarks()+"_0_0";
+                        regularizationSubmitString = pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(i).getDate()+"_"+blockLogList.get(i).getInTime()+"_"+blockLogList.get(i).getOutTime()+"_"+blockLogList.get(i).getDayType()+"_0_0";
                 } else {
                     if (SKF_PUNE_CLIENT_OFFICE_ID.equals(pref.getEmpClintOffId()))
-                        regularizationSubmitString += ","+pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(i).getDate()+"_"+blockLogList.get(i).getInTime()+"_"+blockLogList.get(i).getOutTime()+"_"+blockLogList.get(i).getRemarks()+"_"+Siteid+"_0";
+                        regularizationSubmitString += ","+pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(i).getDate()+"_"+blockLogList.get(i).getInTime()+"_"+blockLogList.get(i).getOutTime()+"_"+blockLogList.get(i).getDayType()+"_"+Siteid+"_0";
                     else
-                        regularizationSubmitString += ","+pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(i).getDate()+"_"+blockLogList.get(i).getInTime()+"_"+blockLogList.get(i).getOutTime()+"_"+blockLogList.get(i).getRemarks()+"_0_0";
+                        regularizationSubmitString += ","+pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(i).getDate()+"_"+blockLogList.get(i).getInTime()+"_"+blockLogList.get(i).getOutTime()+"_"+blockLogList.get(i).getDayType()+"_0_0";
                 }
             }
         }
@@ -243,6 +243,7 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
             obj.put("StrDayBreakUp", regularizationSubmitString);
             obj.put("SetMsg","");
             obj.put("SecurityCode", pref.getSecurityCode());
+            //Log.e(TAG, "BACKLOG_SAVE_INPUT: "+obj);
             regularizationSaveApiCall(obj);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -270,9 +271,9 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
                                 String Response_Data = job1.optString("Response_Data");
                                 successAlert();
                             } else {
-                                Toast.makeText(SKF_AttendanceRegularizationActivity.this,Response_Message,Toast.LENGTH_LONG).show();
+                                showErrorDialog(Response_Message);
+                                //Toast.makeText(SKF_AttendanceRegularizationActivity.this,Response_Message,Toast.LENGTH_LONG).show();
                             }
-
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
@@ -585,4 +586,26 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
         alerDialog1.show();
     }
 
+    private void showErrorDialog(String text) {
+        android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(SKF_AttendanceRegularizationActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.error_ayput, null);
+        dialogBuilder.setView(dialogView);
+        TextView tvError = (TextView) dialogView.findViewById(R.id.tvError);
+        tvError.setText(text);
+        ImageView imgCancel = (ImageView) dialogView.findViewById(R.id.imgCancel);
+        imgCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                al1.dismiss();
+            }
+        });
+
+        al1 = dialogBuilder.create();
+        al1.setCancelable(false);
+        Window window = al1.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        al1.show();
+    }
 }
