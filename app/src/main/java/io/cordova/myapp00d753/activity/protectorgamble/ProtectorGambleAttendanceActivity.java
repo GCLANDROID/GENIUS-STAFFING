@@ -141,11 +141,17 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (SKF_PUNE_CLIENT_OFFICE_ID.equals(pref.getEmpClintOffId())){
+                if (pref.getEmpClintId().equals(AppData.PROTACTORGAMBLEID)){
                     openShiftAndLocationPopup();
-                } else {
-                    submitAttendance();
+                }else {
+                    if (SKF_PUNE_CLIENT_OFFICE_ID.equals(pref.getEmpClintOffId())){
+                        openShiftAndLocationPopup();
+                    } else {
+                        submitAttendance();
+                    }
                 }
+
+
             }
         });
 
@@ -404,7 +410,7 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
 
     private void submitAttendance() {
         progressDialog.show();
-        Siteid = (SKF_PUNE_CLIENT_OFFICE_ID.equals(pref.getEmpClintOffId()))?Siteid:"";
+
 
         Log.e(TAG, "submitAttendance: MasterID: " + MasterID
                 + "\ncurrentAddresses: " + currentAddresses

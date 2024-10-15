@@ -99,7 +99,7 @@ public class TempBankActivity extends AppCompatActivity {
     ImageView imgHome,imgBack;
     LinearLayout llBankVALBtn,llBankVAL;
     Button btnBankVal;
-    int bankflag;
+    int bankflag=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,11 +178,9 @@ public class TempBankActivity extends AppCompatActivity {
                         if (etIFSC.getText().toString().length()>10){
                                 if (etFName.getText().toString().length()>0){
 
-                                        if (bankflag==1){
+
                                             BankDetailsSubmit();
-                                        }else {
-                                            Toast.makeText(TempBankActivity.this,"Please verify your Bank Account Details",Toast.LENGTH_LONG).show();
-                                        }
+
 
 
 

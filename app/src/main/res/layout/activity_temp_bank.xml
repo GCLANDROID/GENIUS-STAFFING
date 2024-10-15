@@ -274,6 +274,7 @@
                         android:layout_weight="1"
                         android:gravity="right">
                       <Button
+                          android:visibility="gone"
                           android:id="@+id/btnBankVal"
                           android:textColor="@color/white"
                           android:padding="5dp"
