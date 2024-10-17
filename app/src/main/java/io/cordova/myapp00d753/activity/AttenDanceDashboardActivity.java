@@ -302,6 +302,19 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         hdlProperty.dateTextViewResource = R.id.text_view;
         descHashMap.put("hdl", hdlProperty);
 
+        //TODO: Optional Holiday
+        Property OH_Property = new Property();
+        OH_Property.layoutResource = R.layout.oh_view;
+        OH_Property.dateTextViewResource = R.id.text_view;
+        descHashMap.put("oh", OH_Property);
+
+        //TODO: Half day
+        Property HD_Property = new Property();
+        HD_Property.layoutResource = R.layout.hd_view;
+        HD_Property.dateTextViewResource = R.id.text_view;
+        descHashMap.put("hd", HD_Property);
+
+
         // set desc hashmap on custom calendar
         customCalendar.setMapDescToProp(descHashMap);
         customCalendar.setOnNavigationButtonClickedListener(CustomCalendar.PREVIOUS, this);
@@ -361,6 +374,21 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                     tvDetails.setText(date + " : " + PunchTiming + " - " + "Holiday");
                     tvDetails.setTextColor(Color.parseColor("#000000"));
                     tvOK.setTextColor(Color.parseColor("#000000"));
+                } else if (Status.equalsIgnoreCase("OH")) {
+
+                    lnStatus.setVisibility(View.VISIBLE);
+                    lnStatus.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#ABBC04")));
+                    tvDetails.setText(date + " : " + PunchTiming + " - " + "Optional Holiday");
+                    tvDetails.setTextColor(Color.parseColor("#000000"));
+                    tvOK.setTextColor(Color.parseColor("#000000"));
+
+                } else if (Status.equalsIgnoreCase("HD")) {
+                    lnStatus.setVisibility(View.VISIBLE);
+                    lnStatus.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#F87AA5")));
+                    tvDetails.setText(date + " : " + PunchTiming + " - " + "Half Day");
+                    tvDetails.setTextColor(Color.parseColor("#000000"));
+                    tvOK.setTextColor(Color.parseColor("#000000"));
+
                 } else if (Status.equalsIgnoreCase("WO")) {
                     lnStatus.setVisibility(View.VISIBLE);
                     lnStatus.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#F20A75F6")));
@@ -432,7 +460,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                                     if (Status.equalsIgnoreCase("present")) {
                                         presentDays.add(Day);
                                     }
-                                    dateHashmap.put(date, Status);
+                                    dateHashmap.put(date, Status.toLowerCase());
                                 }
                                 customCalendar.setDate(calendar, dateHashmap);
                                 tvPresent.setText("" + presentDays.size());
@@ -511,7 +539,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                                     if (Status.equalsIgnoreCase("present")) {
                                         presentDays.add(Day);
                                     }
-                                    dateHashmap.put(date, Status);
+                                    dateHashmap.put(date, Status.toLowerCase());
                                 }
                                 customCalendar.setDate(calendar, dateHashmap);
                                 tvPresent.setText("" + presentDays.size());
@@ -591,7 +619,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                                     if (Status.equalsIgnoreCase("present")) {
                                         presentDays.add(Day);
                                     }
-                                    dateHashmap.put(date, Status);
+                                    dateHashmap.put(date, Status.toLowerCase());
                                 }
 
                                 customCalendar.setDate(calendar, dateHashmap);
@@ -667,7 +695,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                                     if (Status.equalsIgnoreCase("present")) {
                                         presentDays.add(Day);
                                     }
-                                    dateHashmap.put(date, Status);
+                                    dateHashmap.put(date, Status.toLowerCase());
                                 }
 
                                 customCalendar.setDate(calendar, dateHashmap);

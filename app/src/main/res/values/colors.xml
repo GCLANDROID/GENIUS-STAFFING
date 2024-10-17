@@ -26,8 +26,7 @@
     <color name="blue">#F20A75F6</color>
     <color name="purple">#AD9951</color>
     <color name="bar2">#FFE7E7</color>
-
-
-
+    <color name="half_day">#F87AA5</color>
+    <color name="optional_holiday">#ABBC04</color>
 
 </resources>
