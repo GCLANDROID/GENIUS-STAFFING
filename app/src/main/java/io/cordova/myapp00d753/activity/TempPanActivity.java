@@ -132,16 +132,16 @@ public class TempPanActivity extends AppCompatActivity {
 
         color = "<font color='#EE0000'>*</font>";
         tvAddaharNo = (TextView) findViewById(R.id.tvAddaharNo);
-        String aadaharno = "Aadhar Number";
+        String aadaharno = "Aadhaar Number";
         tvAddaharNo.setText(Html.fromHtml(aadaharno + color));
 
         tvAddaharImg = (TextView) findViewById(R.id.tvAddaharImg);
-        String aadharimg = "Aadhar Front Image";
+        String aadharimg = "Aadhaar Front Image";
         tvAddaharImg.setText(Html.fromHtml(aadharimg + color));
 
 
         tvAddaharBackImg = (TextView) findViewById(R.id.tvAddaharBackImg);
-        String aadharbackimg = "Aadhar Back Image";
+        String aadharbackimg = "Aadhaar Back Image";
         tvAddaharBackImg.setText(Html.fromHtml(aadharbackimg + color));
 
 
@@ -216,15 +216,15 @@ public class TempPanActivity extends AppCompatActivity {
                             if (regex_matcher(r, etAddaharNo.getText().toString())) {
                                 aadharFrontUpload();
                             }else {
-                                Toast.makeText(getApplicationContext(),"Invalid Aadhar number",Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(),"Invalid Aadhaar number",Toast.LENGTH_LONG).show();
                             }
                         }else {
-                            Toast.makeText(getApplicationContext(),"Please upload Aadhar Front and Back Image",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(),"Please upload Aadhaar Front and Back Image",Toast.LENGTH_LONG).show();
                         }
 
 
                 }else {
-                    Toast.makeText(getApplicationContext(),"Please enter valid Aadhar number",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"Please enter valid Aadhaar number",Toast.LENGTH_LONG).show();
 
                 }
             }
@@ -690,12 +690,9 @@ public class TempPanActivity extends AppCompatActivity {
                         boolean responseStatus = job1.optBoolean("responseStatus");
 
                         if (responseStatus) {
-
                            aadharBackUpload();
                         } else {
-
-                            Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
-
+                           Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
                         }
 
 
@@ -763,7 +760,7 @@ public class TempPanActivity extends AppCompatActivity {
 
                             btnAadharSave.setVisibility(View.GONE);
                             responseflag=1;
-                            Toast.makeText(getApplicationContext(), "Your Aadhar details has been updated Successfully", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Your Aadhaar details has been updated Successfully", Toast.LENGTH_LONG).show();
 
                         } else {
                             progressDialog.dismiss();

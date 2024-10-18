@@ -1583,7 +1583,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Aadhar Number"
+                                android:text="Aadhaar Number"
                                 android:textAppearance="?android:textAppearanceSmall"
                                 android:textColor="@color/textcolor" />
                         </LinearLayout>

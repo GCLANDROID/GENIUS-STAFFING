@@ -364,11 +364,11 @@ public class TempProfileActivity extends AppCompatActivity {
 
 
         tvAddaharNo = (TextView) findViewById(R.id.tvAddaharNo);
-        String aadaharno = "Aadhar Number";
+        String aadaharno = "Aadhaar Number";
         tvAddaharNo.setText(Html.fromHtml(aadaharno + color));
 
         tvAddaharImg = (TextView) findViewById(R.id.tvAddaharImg);
-        String aadharimg = "Aadhar Document";
+        String aadharimg = "Aadhaar Document";
         tvAddaharImg.setText(Html.fromHtml(aadharimg + color));
 
         etPreAddr = (EditText) findViewById(R.id.etPreAddr);

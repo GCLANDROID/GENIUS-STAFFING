@@ -17,7 +17,7 @@
             android:textStyle="bold"
             android:textSize="12sp"
             android:textColor="@color/white"
-            android:text="Your Aadhar has been verified"></TextView>
+            android:text="Your Aadhaar has been verified"></TextView>
     </LinearLayout>
     <LinearLayout
         android:padding="10dp"
@@ -90,7 +90,7 @@
                         android:layout_weight="0.3"
                         android:textSize="12sp"
                         android:textColor="@color/blue"
-                        android:text="Aadhar No."></TextView>
+                        android:text="Aadhaar No."></TextView>
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"

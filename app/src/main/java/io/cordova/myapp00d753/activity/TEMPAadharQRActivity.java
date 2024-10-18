@@ -107,7 +107,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                     }
 
                 }else {
-                    Toast.makeText(TEMPAadharQRActivity.this,"Please Enter Valid Aadhar Number",Toast.LENGTH_LONG).show();
+                    Toast.makeText(TEMPAadharQRActivity.this,"Please Enter Valid Aadhaar Number",Toast.LENGTH_LONG).show();
                 }
             }
         });
