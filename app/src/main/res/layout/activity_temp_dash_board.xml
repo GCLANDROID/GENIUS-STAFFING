@@ -247,17 +247,18 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="top|center">
+
             <Button
-                android:textSize="18sp"
                 android:id="@+id/btnAadhar"
-                android:textAllCaps="false"
-                android:background="@drawable/lldesign9"
-                android:backgroundTint="@color/maincolor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/lldesign9"
+                android:backgroundTint="@color/maincolor"
                 android:padding="10dp"
+                android:text="Start Your KYC with Aadhaar Verification"
+                android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:text="Start Your KYC with Aadhar Verification"></Button>
+                android:textSize="18sp"></Button>
         </LinearLayout>
 
 

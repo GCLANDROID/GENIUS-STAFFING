@@ -41,7 +41,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="2dp"
-                    android:text="KYC with Aadhar Verification"
+                    android:text="KYC with Aadhaar Verification"
                     android:textSize="12sp"
                     android:textColor="@android:color/white" />
             </LinearLayout>
@@ -89,14 +89,14 @@
                             android:layout_height="wrap_content"
                             android:textSize="16sp"
                             android:textColor="@color/blue"
-                            android:text="Please Enter Your Aadhar Number and Captcha below for auto Aadhar Verification"></TextView>
+                            android:text="Please Enter Your Aadhaar Number and Captcha below for auto Aadhaar Verification"></TextView>
                         <TextView
                             android:layout_marginTop="10dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
                             android:textColor="@color/black"
-                            android:text="Please Enter Your Aadhar number"></TextView>
+                            android:text="Please Enter Your Aadhaar number"></TextView>
                         <EditText
                             android:singleLine="true"
                             android:padding="5dp"
