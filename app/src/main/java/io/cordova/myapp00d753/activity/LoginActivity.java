@@ -134,9 +134,8 @@ public class LoginActivity extends AppCompatActivity {
 
         if (pref.getCheckFlag().equals("1")) {
             ckRemember.setChecked(true);
-            etUserId.setText(pref.getMasterId());
+            etUserId.setText(pref.getUserLoginId());
             etPassword.setText(pref.getPassword());
-
         }
 
         if (pref.getCheckFlag().equals("2")) {
@@ -231,11 +230,11 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 if (etUserId.getText().toString().contains("AEM") || etUserId.getText().toString().contains("FMS")|| etUserId.getText().toString().contains("ITS")|| etUserId.getText().toString().contains("SEC")|| etUserId.getText().toString().contains("NAPS")|| etUserId.getText().toString().contains("GMSP")|| etUserId.getText().toString().contains("FSS")|| etUserId.getText().toString().contains("NPS")){
                     llSecurityCode.setVisibility(View.GONE);
-
-                }else {
+                } else if (etUserId.getText().toString().isEmpty()) {
+                    llSecurityCode.setVisibility(View.GONE);
+                } else {
                     llSecurityCode.setVisibility(View.VISIBLE);
                 }
-
             }
         });
         llSignIn.setOnClickListener(new View.OnClickListener() {
@@ -575,6 +574,9 @@ public class LoginActivity extends AppCompatActivity {
                         if (Response_Code.equals("101")) {
                             // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
 
+                            pref.saveUserLoginID(etUserId.getText().toString().trim());
+                            Log.e("UserLoginId", "UserLoginId: "+pref.getUserLoginId());
+
                             String responseData = job1.optString("Response_Data");
                             try {
                                 JSONArray jarr = new JSONArray(responseData);
@@ -652,7 +654,7 @@ public class LoginActivity extends AppCompatActivity {
                                     pref.savePFNotificationURL(PF_Notify_URL);
                                     String Genius_Access_Token=obj.optString("Genius_Access_Token").trim();
                                     pref.saveAccessToken(Genius_Access_Token);
-                                     ConsentFlag=obj.optString("ConsentFlag");
+                                    ConsentFlag=obj.optString("ConsentFlag");
 
 
 

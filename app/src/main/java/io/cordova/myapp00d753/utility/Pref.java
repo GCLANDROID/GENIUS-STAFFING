@@ -1011,7 +1011,14 @@ public class Pref {
         return _pref.getString("AccessToken","");
     }
 
+    public void saveUserLoginID(String userLoginId){
+        _editorPref.putString("UserLoginId", userLoginId);
+        _editorPref.commit();
+    }
 
+    public String getUserLoginId(){
+        return _pref.getString("UserLoginId","");
+    }
 
 
 }
