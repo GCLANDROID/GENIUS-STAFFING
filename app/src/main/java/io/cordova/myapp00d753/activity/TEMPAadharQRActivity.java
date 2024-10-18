@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -72,6 +73,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (binding.etAadhar.getText().toString().length()==12){
+                    hideKeyboard();
                     JSONObject jsonObject=new JSONObject();
                     try {
                         jsonObject.put("Id",binding.etAadhar.getText().toString());
@@ -621,6 +623,13 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
     }
 
 }
