@@ -96,7 +96,7 @@ import static java.util.Calendar.DAY_OF_MONTH;
 public class TempProfileActivity extends AppCompatActivity {
     private static final String TAG = "TempProfileActivity";
     TextView tvEmplId, tvEmpCode, tvEmpName, tvDOJ, tvDepartment, tvDesignation, tvLocation, tvGender, tvEmpCodeDOB, tvRealtionShip, tvQualification, tvMarital, tvBloodGroup, tvParAddr, tvDOB, tvComName;
-    Spinner spGender, spRealation, spQualification, spMartial, spBloodGrp;
+    Spinner spGender, spRealation, spQualification, spMartial, spBloodGrp,spESICGender;
     EditText etPhnNumber, etMobNumber, etEmailId, etGurdianName;
     LinearLayout llLoader, llMain;
     Pref pref;
@@ -118,7 +118,7 @@ public class TempProfileActivity extends AppCompatActivity {
     String BloodGroup;
     EditText etESI;
     TextView tvCity,txtPresentCity,txtPermanentCity;
-    String PresentCity, AEMEmployeeID, Code, Name, DateOfJoining, Department, Designation, Location, DateOfBirth, GuardianName, PermanentAddress, Mobile, EmailID, Phone, AEMClientName;
+    String PresentCity="", AEMEmployeeID, Code, Name, DateOfJoining, Department, Designation, Location, DateOfBirth, GuardianName, PermanentAddress, Mobile, EmailID, Phone, AEMClientName;
     private static final String SERVER_PATH = AppData.url;
     private AttendanceService uploadService;
     ProgressDialog progressDialog;
@@ -127,7 +127,7 @@ public class TempProfileActivity extends AppCompatActivity {
     ImageView imgBack, imgHome;
     AlertDialog alerDialog1;
     TextView tvGenderTitle, tvGurdianTitle, tvRealationTitle, tvQualificationtitle, tvMartialTitle, tvBloodTitle, tvMobTitle, tvEmailTitle;
-    String color, PresentAddress, FirstNameAsperBank, LastNameAsperBank, PermanentState, PermanentCity, PresentState;
+    String color, PresentAddress, FirstNameAsperBank, LastNameAsperBank, PermanentState, PermanentCity="", PresentState;
     TextView tvPreAddr, tvPrePin, tvDOBTitle, tvPerAddr, tvPerPin, tvPreState, tvPreCity, tvPerState, tvPerCity, tvAddaharNo, tvAddaharImg;
     EditText etPreAddr, etPrePinCode, etBankFirstName, etLastBank, etAddaharNo, etPerAddr, etPerPinCode;
     ArrayList<String> percity = new ArrayList<>();
@@ -178,7 +178,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
     String esicDOB = "", uanDOB = "", esicGender = "", esicRltionshp = "", uanRltionshp = "", residingIP = "", pfPercantage = "";
     ProgressDialog pd;
-    String namevalue, dobvalue, gendervalue, careof, state, pin, street, locality, house, postoffice, subDistrict, vtc, district, landmark;
+    String namevalue, dobvalue, gendervalue="", careof, state, pin, street, locality, house, postoffice, subDistrict, vtc, district, landmark;
     Dialog searchHolidayDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,6 +195,7 @@ public class TempProfileActivity extends AppCompatActivity {
         dobvalue = getIntent().getStringExtra("dobvalue");
         DateOfBirth = Util.changeAnyDateFormat(dobvalue, "dd-MM-yyyy", "dd MMM yyyy");
         gendervalue = getIntent().getStringExtra("gendervalue");
+        Log.e(TAG, "initialize: gendervalue: "+gendervalue);
         careof = getIntent().getStringExtra("careof");
         state = getIntent().getStringExtra("state");
         locality = getIntent().getStringExtra("locality");
@@ -202,6 +203,7 @@ public class TempProfileActivity extends AppCompatActivity {
         postoffice = getIntent().getStringExtra("postoffice");
         subDistrict = getIntent().getStringExtra("subDistrict");
         vtc = getIntent().getStringExtra("vtc");
+        Log.e(TAG, "initialize: vtc: "+vtc);
         pin = getIntent().getStringExtra("pin");
         street = getIntent().getStringExtra("street");
         district = getIntent().getStringExtra("district");
@@ -234,6 +236,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
 
         spGender = (Spinner) findViewById(R.id.spGender);
+        spESICGender = (Spinner) findViewById(R.id.spESICGender);
         spRealation = (Spinner) findViewById(R.id.spRealation);
         spQualification = (Spinner) findViewById(R.id.spQualification);
         spMartial = (Spinner) findViewById(R.id.spMartial);
@@ -772,12 +775,14 @@ public class TempProfileActivity extends AppCompatActivity {
                                         tvMarital.setText("");
                                     }
 
+
                                     BloodGroup = obj.optString("BloodGroup");
                                     if (!BloodGroup.equals("")) {
                                         tvBloodGroup.setText(BloodGroup);
                                     } else {
                                         tvBloodGroup.setText("");
                                     }
+                                    Log.e(TAG, "BloodGroup: "+BloodGroup);
 
                                     PermanentAddress = obj.optString("PresentAddress");
                                    /* if (!PermanentAddress.equals("")) {
@@ -858,6 +863,14 @@ public class TempProfileActivity extends AppCompatActivity {
                                     PermanentState = obj.optString("PermanentState");
                                     PermanentCity = obj.optString("PermanentCity");
                                     PresentState = obj.optString("PresentState");
+                                    PresentCity = obj.optString("PresentCity");
+                                    //presentcity = p
+                                    Log.e(TAG, "PermanentState: "+PermanentState
+                                            +"\nPermanentCity: "+PermanentCity
+                                            +"\nPresentState: "+PresentState);
+
+                                    txtPresentCity.setText(PresentCity);
+                                    txtPermanentCity.setText(PermanentCity);
 
                                     String PAN = obj.optString("PAN");
                                     Log.d("pan", PAN);
@@ -960,8 +973,11 @@ public class TempProfileActivity extends AppCompatActivity {
                             Log.e("response12", "@@@@@@" + job1);
                             String responseText = job1.optString("responseText");
                             boolean responseStatus = job1.optBoolean("responseStatus");
+                            qualification.add("Please select");
+                            mainQualification.add(new MainDocModule("",""));
                             if (responseStatus) {
                                 //Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
+
                                 JSONArray responseData = job1.optJSONArray("responseData");
                                 for (int i = 0; i < responseData.length(); i++) {
                                     JSONObject obj = responseData.getJSONObject(i);
@@ -977,9 +993,12 @@ public class TempProfileActivity extends AppCompatActivity {
                                                 qualification); //selected item will look like a spinner set from XML
                                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 spQualification.setAdapter(spinnerArrayAdapter);
-                                int index = qualification.indexOf(Qualification);
-                                Log.d("indexr", String.valueOf(index));
-                                spQualification.setSelection(index);
+                                if (!Qualification.isEmpty()){
+                                    int index = qualification.indexOf(Qualification);
+                                    Log.d("indexr", String.valueOf(index));
+                                    spQualification.setSelection(index);
+                                }
+
                                 setMartial();
                             } else {
 
@@ -1106,6 +1125,8 @@ public class TempProfileActivity extends AppCompatActivity {
                             Log.e("response12", "@@@@@@" + job1);
                             String responseText = job1.optString("responseText");
                             boolean responseStatus = job1.optBoolean("responseStatus");
+                            gender.add("Please select");
+                            mainGender.add(new MainDocModule("",""));
                             if (responseStatus) {
                                 //Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
                                 JSONArray responseData = job1.optJSONArray("responseData");
@@ -1125,11 +1146,22 @@ public class TempProfileActivity extends AppCompatActivity {
                                 spGender.setAdapter(spinnerArrayAdapter);
                                 binding.spESICGender.setAdapter(spinnerArrayAdapter);
 
-                                if (gendervalue.equalsIgnoreCase("M")) {
-                                    spGender.setSelection(0);
+                                if (!gendervalue.isEmpty()){
+                                    if (gendervalue.equalsIgnoreCase("M")) {
+                                        spGender.setSelection(1);
+                                        spESICGender.setSelection(1);
+                                    } else {
+                                        spGender.setSelection(2);
+                                        spESICGender.setSelection(2);
+                                    }
+                                    spGender.setEnabled(false);
+                                    binding.spESICGender.setEnabled(false);
                                 } else {
-                                    spGender.setSelection(1);
+                                    spGender.setSelection(0);
+                                    spESICGender.setSelection(0);
                                 }
+
+
 
 
                                 setRealation();
@@ -1302,6 +1334,8 @@ public class TempProfileActivity extends AppCompatActivity {
                             Log.e("response12", "@@@@@@" + job1);
                             String responseText = job1.optString("responseText");
                             boolean responseStatus = job1.optBoolean("responseStatus");
+                            blood.add("Please select");
+                            mainBlood.add(new MainDocModule("",""));
                             if (responseStatus) {
                                 //Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
                                 JSONArray responseData = job1.optJSONArray("responseData");
@@ -1319,9 +1353,11 @@ public class TempProfileActivity extends AppCompatActivity {
                                                 blood); //selected item will look like a spinner set from XML
                                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 spBloodGrp.setAdapter(spinnerArrayAdapter);
-                                int index = blood.indexOf(BloodGroup);
-                                Log.d("indexr", String.valueOf(index));
-                                spBloodGrp.setSelection(index);
+                                if (!BloodGroup.isEmpty()){
+                                    int index = blood.indexOf(BloodGroup);
+                                    Log.d("indexr", String.valueOf(index));
+                                    spBloodGrp.setSelection(index);
+                                }
                                 setPerCity();
 
                             } else {
@@ -1412,6 +1448,7 @@ public class TempProfileActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 presentstate = mainPerState.get(position).getDocID();
+
             }
 
             @Override
@@ -1469,6 +1506,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
                 sexGender = mainGender.get(position).getDocID();
                 Log.d("sexgender", sexGender);
+                spESICGender.setSelection(position);
             }
 
             @Override
@@ -1484,6 +1522,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
                 esicGender = mainGender.get(position).getDocID();
                 Log.d("sexgender", sexGender);
+                spGender.setSelection(position);
             }
 
             @Override
@@ -1677,6 +1716,7 @@ public class TempProfileActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+                //bloodgrp = mainBlood.get(position).getDocID();
                 bloodgrp = mainBlood.get(position).getDocID();
             }
 
@@ -1788,52 +1828,63 @@ public class TempProfileActivity extends AppCompatActivity {
                             if (etPerAddr.getText().toString().length() > 0) {
                                 if (etPrePinCode.getText().toString().length() > 0) {
                                     if (etESI.getText().toString().equals("") || etESI.getText().toString().length() > 9) {
+                                        if (etPhnNumber.getText().toString().equals("") || etPhnNumber.getText().toString().length() > 9) {
+                                            if (!sexGender.equals("") && !esicGender.equals("")) {
+                                                if (!education.equals("")) {
+                                                    if (!bloodgrp.equals("")) {
+                                                        if (!presentstate.equals("")) {
+                                                            if (!presentcity.equals("")) {
+                                                                if (!permanentstate.equals("")) {
+                                                                    if (!permanentcity.equals("")) {
+                                                                        JSONObject mainobject = new JSONObject();
+                                                                        try {
+                                                                            mainobject.put("DbOperation", "1");
+                                                                            mainobject.put("SecurityCode", pref.getSecurityCode());
+                                                                            JSONObject personalOBJ = new JSONObject();
+                                                                            personalOBJ.put("AEMEMPLOYEEID", AEMEmployeeID);
+                                                                            personalOBJ.put("Sex", sexGender);
+                                                                            personalOBJ.put("GuardianName", etGurdianName.getText().toString());
+                                                                            personalOBJ.put("RelationShip", realationship);
+                                                                            personalOBJ.put("BloodGroup", bloodgrp);
+                                                                            personalOBJ.put("DateOfBirth", DateOfBirth);
+                                                                            personalOBJ.put("Qualification", education);
+                                                                            personalOBJ.put("MaritalStatus", martialstatus);
+                                                                            personalOBJ.put("EmployeeName", tvEmpName.getText().toString());
+                                                                            mainobject.put("PersonalDetails", personalOBJ);
 
-                                            if (etPhnNumber.getText().toString().equals("") || etPhnNumber.getText().toString().length() > 9) {
-                                                if (!permanentcity.equals("")){
-                                                    if (!presentcity.equals("")) {
-                                                        JSONObject mainobject = new JSONObject();
-                                                        try {
-                                                            mainobject.put("DbOperation", "1");
-                                                            mainobject.put("SecurityCode", pref.getSecurityCode());
-                                                            JSONObject personalOBJ = new JSONObject();
-                                                            personalOBJ.put("AEMEMPLOYEEID", AEMEmployeeID);
-                                                            personalOBJ.put("Sex", sexGender);
-                                                            personalOBJ.put("GuardianName", etGurdianName.getText().toString());
-                                                            personalOBJ.put("RelationShip", realationship);
-                                                            personalOBJ.put("BloodGroup", bloodgrp);
-                                                            personalOBJ.put("DateOfBirth", DateOfBirth);
-                                                            personalOBJ.put("Qualification", education);
-                                                            personalOBJ.put("MaritalStatus", martialstatus);
-                                                            personalOBJ.put("EmployeeName", tvEmpName.getText().toString());
-                                                            mainobject.put("PersonalDetails", personalOBJ);
-
-                                                            uploadOfficalDetails(mainobject);
-                                                        } catch (JSONException e) {
-                                                            e.printStackTrace();
+                                                                            uploadOfficalDetails(mainobject);
+                                                                        } catch (JSONException e) {
+                                                                            e.printStackTrace();
+                                                                        }
+                                                                    } else {
+                                                                        Toast.makeText(getApplicationContext(), "Please Select Permanent City", Toast.LENGTH_LONG).show();
+                                                                    }
+                                                                } else {
+                                                                    Toast.makeText(getApplicationContext(), "Please Select Permanent State", Toast.LENGTH_LONG).show();
+                                                                }
+                                                            } else {
+                                                                Toast.makeText(getApplicationContext(), "Please Select Present City", Toast.LENGTH_LONG).show();
+                                                            }
+                                                        } else {
+                                                            Toast.makeText(getApplicationContext(), "Please Select Present State", Toast.LENGTH_LONG).show();
                                                         }
-                                                    }else {
-                                                        Toast.makeText(getApplicationContext(), "Please Select Present City", Toast.LENGTH_LONG).show();
-
+                                                    } else {
+                                                        Toast.makeText(getApplicationContext(), "Please Select Blood Group", Toast.LENGTH_LONG).show();
                                                     }
-                                                }else {
-                                                    Toast.makeText(getApplicationContext(), "Please Select Permanent City", Toast.LENGTH_LONG).show();
+                                                } else {
+                                                    Toast.makeText(getApplicationContext(), "Please Select Highest Qualification", Toast.LENGTH_LONG).show();
                                                 }
-
-
                                             } else {
-                                                Toast.makeText(getApplicationContext(), "Please enter valid Phone number", Toast.LENGTH_LONG).show();
+                                                Toast.makeText(getApplicationContext(), "Please Select Gender", Toast.LENGTH_LONG).show();
                                             }
-
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "Please enter valid Phone number", Toast.LENGTH_LONG).show();
+                                        }
                                     } else {
                                         Toast.makeText(getApplicationContext(), "Please enter valid ESI number", Toast.LENGTH_LONG).show();
-
                                     }
-
-
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Please update your permanent pincode", Toast.LENGTH_LONG).show();
-
                                 }
 
                             } else {
@@ -2035,6 +2086,8 @@ public class TempProfileActivity extends AppCompatActivity {
                                                 percity); //selected item will look like a spinner set from XML
                                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 spPermanentCity.setAdapter(spinnerArrayAdapter);
+
+
                                 try {
                                     int index = percity.indexOf(vtc);
                                     Log.d("indexr", String.valueOf(index));
@@ -2049,9 +2102,15 @@ public class TempProfileActivity extends AppCompatActivity {
                                     }
                                     Log.e(TAG, "CITY: permanentcity: "+permanentcity);
                                 } catch (Exception e){
+                                    //IndexOutOfBoundsException
+                                    if(!PermanentCity.isEmpty()){
+                                        int index = percity.indexOf(PermanentCity);
+                                        Log.d("indexr", String.valueOf(index));
+                                        permanentcity = mainPerCity.get(index).getDocID();
+                                        txtPermanentCity.setText(percity.get(index));
+                                    }
 
                                 }
-
                                 serPreCity();
                             } else {
 
@@ -2139,7 +2198,12 @@ public class TempProfileActivity extends AppCompatActivity {
                                     }
                                     Log.e(TAG, "CITY present: "+presentcity);
                                 } catch (Exception e){
-
+                                    if (!PresentCity.isEmpty()){
+                                        int index = precity.indexOf(PresentCity);
+                                        Log.d("indexr", String.valueOf(index));
+                                        txtPresentCity.setText(precity.get(index));
+                                        presentcity = mainPreCity.get(index).getDocID();
+                                    }
                                 }
                                 setprestate();
 
@@ -2198,6 +2262,8 @@ public class TempProfileActivity extends AppCompatActivity {
                             Log.e("response12", "@@@@@@" + job1);
                             String responseText = job1.optString("responseText");
                             boolean responseStatus = job1.optBoolean("responseStatus");
+                            prestate.add("Please Select");
+                            mainPreState.add(new MainDocModule("",""));
                             if (responseStatus) {
                                 //Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
                                 JSONArray responseData = job1.optJSONArray("responseData");
@@ -2206,7 +2272,6 @@ public class TempProfileActivity extends AppCompatActivity {
                                     String deptvalue = obj.optString("value");
                                     String id = obj.optString("id");
                                     prestate.add(deptvalue);
-
                                     MainDocModule mainDocModule = new MainDocModule(id, deptvalue);
                                     mainPreState.add(mainDocModule);
                                     // clientname.add(value);
@@ -2216,9 +2281,13 @@ public class TempProfileActivity extends AppCompatActivity {
                                                 prestate); //selected item will look like a spinner set from XML
                                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 spPresentState.setAdapter(spinnerArrayAdapter);
-                                int index = prestate.indexOf(state);
-                                Log.d("indexr", String.valueOf(index));
-                                spPresentState.setSelection(index);
+
+                                if (!state.isEmpty()){
+                                    int index = prestate.indexOf(state);
+                                    Log.d("indexr", String.valueOf(index));
+                                    spPresentState.setSelection(index);
+                                }
+
                                 setperstate();
                             } else {
 
@@ -2275,6 +2344,8 @@ public class TempProfileActivity extends AppCompatActivity {
                             Log.e("response12", "@@@@@@" + job1);
                             String responseText = job1.optString("responseText");
                             boolean responseStatus = job1.optBoolean("responseStatus");
+                            perstate.add("Please Select");
+                            mainPerState.add(new MainDocModule("",""));
                             if (responseStatus) {
                                 //Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
                                 JSONArray responseData = job1.optJSONArray("responseData");
@@ -2292,11 +2363,11 @@ public class TempProfileActivity extends AppCompatActivity {
                                                 perstate); //selected item will look like a spinner set from XML
                                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 spPermanentState.setAdapter(spinnerArrayAdapter);
-                                int index = perstate.indexOf(state);
-                                Log.d("indexr", String.valueOf(index));
-                                spPermanentState.setSelection(index);
-
-
+                                if (!state.isEmpty()){
+                                    int index = perstate.indexOf(state);
+                                    Log.d("indexr", String.valueOf(index));
+                                    spPermanentState.setSelection(index);
+                                }
                             } else {
 
 
