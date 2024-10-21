@@ -130,6 +130,7 @@ public class EPSNominationActivity extends AppCompatActivity {
         binding.etName.setText("");
         binding.etAddress.setText("");
         binding.spRealation.setSelection(0);
+        binding.imgTick.setVisibility(View.GONE);
         dob="";
         binding.etAadharNominee.setText("");
         binding.tvUANDOB.setText("");

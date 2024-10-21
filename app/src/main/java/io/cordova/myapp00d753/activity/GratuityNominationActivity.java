@@ -250,6 +250,7 @@ public class GratuityNominationActivity extends AppCompatActivity {
     private void getItemList(JSONObject object){
         binding.etName.setText("");
         binding.etAddress.setText("");
+        binding.imgTick.setVisibility(View.GONE);
         binding.tvUANDOB.setText("");
         dob="";
         binding.etAadharNominee.setText("");
