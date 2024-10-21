@@ -27,6 +27,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.adapter.EPSNominationAdapter;
@@ -52,6 +54,8 @@ public class TempEducationaActivity extends AppCompatActivity {
     Pref pref;
     ArrayList<MainDocModule>mainQualification=new ArrayList<>();
     ProgressDialog pd;
+    ArrayList<String>yearlist=new ArrayList<>();
+    String passingyear="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +69,22 @@ public class TempEducationaActivity extends AppCompatActivity {
         pd.setMessage("Loading");
         pd.setCancelable(false);
         pref=new Pref(TempEducationaActivity.this);
+
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+
+        // Create a list of years from 1947 to the current year
+        yearlist.add("Please Select");
+
+        for (int year = 1974; year <= currentYear; year++) {
+            yearlist.add(String.valueOf(year));
+        }
+
+        ArrayAdapter yearAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, yearlist);
+        yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spYear.setAdapter(yearAdapter);
+
+
+
         layoutManager
                 = new LinearLayoutManager(TempEducationaActivity.this, LinearLayoutManager.VERTICAL, false);
         binding.rvData.setLayoutManager(layoutManager);
@@ -96,32 +116,69 @@ public class TempEducationaActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+        binding.spYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i>0){
+                    passingyear=yearlist.get(i);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+
+            }
+        });
 
 
         binding.imgAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!qualification.equals("")) {
+                    if (!passingyear.equals("")){
+                        if (binding.etUniversity.getText().toString().length()>0){
+                            if (binding.etPercentage.getText().length()>0){
+                                if (Integer.parseInt(binding.etPercentage.getText().toString())>0 && Integer.parseInt(binding.etPercentage.getText().toString())<101 ){
+                                    JSONObject jsonObject = new JSONObject();
+                                    try {
+                                        jsonObject.put("Qualification", qualification);
+                                        jsonObject.put("AEMEMPLOYEEID", pref.getEmpId());
+                                        jsonObject.put("qualificationid", qualificationid);
+                                        jsonObject.put("Board", binding.etUniversity.getText().toString());
+                                        jsonObject.put("Percentage", binding.etPercentage.getText().toString());
+                                        jsonObject.put("PassingYear", passingyear);
+                                        educationarray.put(jsonObject);
+                                        educationobj.put("qualificationDetails", educationarray);
+                                        educationobj.put("DbOperation", "5");
+                                        educationobj.put("SecurityCode",pref.getSecurityCode());
+                                        Log.d("educationobj", educationobj.toString());
+                                        getItemList(educationobj);
 
-                    JSONObject jsonObject = new JSONObject();
-                    try {
-                        jsonObject.put("Qualification", qualification);
-                        jsonObject.put("AEMEMPLOYEEID", pref.getEmpId());
-                        jsonObject.put("qualificationid", qualificationid);
-                        jsonObject.put("Board", binding.etUniversity.getText().toString());
-                        jsonObject.put("Percentage", binding.etPercentage.getText().toString());
-                        jsonObject.put("PassingYear", binding.etPassingYear.getText().toString());
-                        educationarray.put(jsonObject);
-                        educationobj.put("qualificationDetails", educationarray);
-                        educationobj.put("DbOperation", "5");
-                        educationobj.put("SecurityCode",pref.getSecurityCode());
-                        Log.d("educationobj", educationobj.toString());
-                        getItemList(educationobj);
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }else {
+                                    Toast.makeText(TempEducationaActivity.this,"Please Enter valid Percentage",Toast.LENGTH_LONG).show();
+
+                                }
+                            }else {
+                                Toast.makeText(TempEducationaActivity.this,"Please Enter Percentage",Toast.LENGTH_LONG).show();
+
+                            }
 
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        }else {
+                            Toast.makeText(TempEducationaActivity.this,"Please Enter Your Name of university or Board",Toast.LENGTH_LONG).show();
+                        }
+
+                    }else {
+                        Toast.makeText(TempEducationaActivity.this,"Please Select Passing Year",Toast.LENGTH_LONG).show();
+
                     }
+
+
                 }else {
                     Toast.makeText(TempEducationaActivity.this,"Please Select Education Details",Toast.LENGTH_LONG).show();
                 }
@@ -157,6 +214,7 @@ public class TempEducationaActivity extends AppCompatActivity {
         binding.etPercentage.setText("");
         binding.etPassingYear.setText("");
         binding.llData.setVisibility(View.VISIBLE);
+        binding.spYear.setSelection(0);
         itemList.clear();
 
 

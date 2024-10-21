@@ -150,13 +150,15 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:textColor="@color/textcolor"
-                            android:text="Passig Year :"></TextView>
+                            android:text="Passing Year :"></TextView>
                         <LinearLayout
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="40dp"
                             >
                             <EditText
+                                android:visibility="gone"
+                                android:maxLength="4"
                                 android:inputType="number"
                                 android:id="@+id/etPassingYear"
                                 android:textSize="12sp"
@@ -165,6 +167,16 @@
                                 android:background="@drawable/lldesign9"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"></EditText>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:background="@drawable/lldesign9"
+                                >
+                                <Spinner
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:id="@+id/spYear"></Spinner>
+                            </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
                     <LinearLayout
