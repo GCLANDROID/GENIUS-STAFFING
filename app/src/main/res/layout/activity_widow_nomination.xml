@@ -178,6 +178,7 @@
                             android:layout_height="40dp"
                             >
                             <EditText
+                                android:maxLength="12"
                                 android:inputType="number"
                                 android:id="@+id/etAadharNominee"
                                 android:textSize="12sp"

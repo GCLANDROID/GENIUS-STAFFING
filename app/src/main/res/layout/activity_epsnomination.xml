@@ -178,6 +178,7 @@
                             android:layout_height="40dp"
                             >
                             <EditText
+                                android:maxLength="12"
                                 android:inputType="number"
                                 android:id="@+id/etAadharNominee"
                                 android:textSize="12sp"
@@ -366,7 +367,7 @@
                             android:layout_weight="0.3"
                             android:gravity="center"
                             android:textSize="12sp"
-                            android:text="Age"
+                            android:text="DOB"
                             android:layout_gravity="center"></TextView>
                         <View
                             android:layout_width="1dp"
@@ -379,7 +380,7 @@
                             android:layout_weight="0.5"
                             android:gravity="center"
                             android:textSize="12sp"
-                            android:text="Relationship"
+                            android:text="Relationship with Member"
                             android:layout_gravity="center"></TextView>
                     </LinearLayout>
                     <androidx.recyclerview.widget.RecyclerView
