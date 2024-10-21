@@ -90,6 +90,12 @@ public class TempEducationaActivity extends AppCompatActivity {
 
             }
         });
+        binding.imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
 
         binding.imgAdd.setOnClickListener(new View.OnClickListener() {

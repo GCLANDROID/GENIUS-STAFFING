@@ -75,6 +75,12 @@ public class WidowNominationActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        binding.imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
 
         binding.spRealation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

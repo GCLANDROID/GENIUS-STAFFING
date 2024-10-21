@@ -104,6 +104,12 @@ public class TempExperinceActivity extends AppCompatActivity {
             binding.llNonSBIEXP.setVisibility(View.GONE);
             binding.llSBIEXP.setVisibility(View.GONE);
         }
+        binding.imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
 
         ArrayAdapter<String> uanspinnerArrayAdapter = new ArrayAdapter<String>
