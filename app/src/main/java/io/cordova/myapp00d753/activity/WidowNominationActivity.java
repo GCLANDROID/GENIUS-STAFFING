@@ -73,6 +73,12 @@ public class WidowNominationActivity extends AppCompatActivity {
                 Intent intent=new Intent(WidowNominationActivity.this,GratuityNominationActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                binding.etName.setText("");
+                binding.etAadharNominee.setText("");
+                binding.etAddress.setVisibility(View.GONE);
+                binding.imgTick.setVisibility(View.GONE);
+                binding.spRealation.setSelection(0);
+
             }
         });
         binding.imgBack.setOnClickListener(new View.OnClickListener() {

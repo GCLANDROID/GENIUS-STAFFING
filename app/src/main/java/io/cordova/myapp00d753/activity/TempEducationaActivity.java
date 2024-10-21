@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -41,6 +42,7 @@ import io.cordova.myapp00d753.module.MainDocModule;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
+import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip;
 
 public class TempEducationaActivity extends AppCompatActivity {
     ActivityTempEducationaBinding binding;
@@ -131,6 +133,29 @@ public class TempEducationaActivity extends AppCompatActivity {
             }
         });
 
+        final SimpleTooltip tooltip = new SimpleTooltip.Builder(TempEducationaActivity.this)
+                .anchorView(binding.imgAdd)
+                .text("Fill in the fields, then press the \"+\" icon to add your data to the list.")
+                .gravity(Gravity.BOTTOM)
+                .dismissOnOutsideTouch(true)
+                .dismissOnInsideTouch(true)
+                .modal(true)
+                .animated(true)
+                .animationDuration(2000)
+                .contentView(R.layout.custom_tooltip, R.id.tv_text)
+                .focusable(true)
+                .build();
+
+        tooltip.findViewById(R.id.btn_next).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v2) {
+                if (tooltip.isShowing())
+                    tooltip.dismiss();
+            }
+        });
+
+        tooltip.show();
+
 
         binding.imgAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,6 +215,8 @@ public class TempEducationaActivity extends AppCompatActivity {
         binding.btnSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                binding.llData.setVisibility(View.GONE);
+                itemList.clear();
                 Intent intent=new Intent(TempEducationaActivity.this,TempExperinceActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
