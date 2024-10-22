@@ -49,8 +49,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import io.cordova.myapp00d753.AndroidXCamera.AndroidXCameraActivity;
 import io.cordova.myapp00d753.R;
@@ -66,6 +69,7 @@ public class TempExperinceActivity extends AppCompatActivity {
     ActivityTempExperinceBinding binding;
     String month;
     String doj="";
+    String strtdate;
     String doe="";
     int flag=0;
     AlertDialog attachAlert;
@@ -248,6 +252,7 @@ public class TempExperinceActivity extends AppCompatActivity {
                             month = "December";
                         }
                         doj = d + " " + month + " " + y;
+                        strtdate=d + "/" + mm + "/" + y;
 
                         binding.etDOJ.setText(doj);
 
@@ -311,8 +316,33 @@ public class TempExperinceActivity extends AppCompatActivity {
                             month = "December";
                         }
                         doe = d + " " + month + " " + y;
+                        String enddate=d + "/" + mm + "/" + y;
 
-                        binding.etDOE.setText(doe);
+
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        Date strDate = null;
+                        try {
+                            strDate = sdf.parse(strtdate);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                        Date striDate = null;
+                        try {
+                            striDate = df.parse(enddate);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        if (striDate.getTime() > strDate.getTime() ||striDate.getTime() == strDate.getTime()) {
+
+                            binding.etDOE.setText(doe);
+
+                        }else {
+                            Toast.makeText(TempExperinceActivity.this,"DOE Can Not be before than DOJ",Toast.LENGTH_LONG).show();
+                        }
+
+
 
 
                     }

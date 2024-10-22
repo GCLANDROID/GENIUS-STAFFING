@@ -62,6 +62,12 @@
             android:textSize="12sp"
             android:text="Relationship"
             android:layout_gravity="center"></TextView>
+        <ImageView
+            android:id="@+id/imgDelete"
+            android:layout_gravity="center"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/deleteicon"></ImageView>
 
     </LinearLayout>
 </LinearLayout>

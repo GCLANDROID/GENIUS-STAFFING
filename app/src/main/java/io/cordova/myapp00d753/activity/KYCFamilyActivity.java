@@ -195,7 +195,7 @@ public class KYCFamilyActivity extends AppCompatActivity {
             epSmodel.setRealationship(Relationship);
             itemList.add(epSmodel);
         }
-        KYCFamilyAdapter nominationAdapter=new KYCFamilyAdapter(itemList);
+        KYCFamilyAdapter nominationAdapter=new KYCFamilyAdapter(itemList,KYCFamilyActivity.this);
         binding.rvData.setAdapter(nominationAdapter);
 
 
@@ -422,6 +422,14 @@ public class KYCFamilyActivity extends AppCompatActivity {
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
 
+
+    }
+
+    public void deleteItem(int pos){
+        itemList.remove(pos);
+        if (itemList.size()==0){
+            binding.llData.setVisibility(View.GONE);
+        }
 
     }
 
