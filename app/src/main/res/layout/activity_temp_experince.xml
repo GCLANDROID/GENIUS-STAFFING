@@ -41,7 +41,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="2dp"
-                    android:text="Workilng Experience Details"
+                    android:text="Working Experience Details"
                     android:textAlignment="center"
                     android:textAppearance="?android:textAppearanceMedium"
                     android:textColor="@android:color/white"
@@ -219,7 +219,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:textColor="@color/black"
-                            android:text="Previous Company’s Name: "></TextView>
+                            android:text="Previous Company’s Name*: "></TextView>
                         <EditText
                             android:singleLine="true"
                             android:imeOptions="actionNext"
@@ -243,7 +243,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:textColor="@color/black"
-                            android:text="Previous Employee’s Designation: "></TextView>
+                            android:text="Previous Employee’s Designation*: "></TextView>
                         <EditText
                             android:singleLine="true"
                             android:imeOptions="actionNext"
@@ -267,7 +267,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:textColor="@color/black"
-                            android:text="Previous Reporting Manager’s Name: "></TextView>
+                            android:text="Previous Reporting Manager’s Name*: "></TextView>
                         <EditText
                             android:singleLine="true"
                             android:imeOptions="actionNext"
@@ -291,7 +291,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:textColor="@color/black"
-                            android:text="Previous Reporting Manager’s Designation: "></TextView>
+                            android:text="Previous Reporting Manager’s Designation*: "></TextView>
                         <EditText
                             android:singleLine="true"
                             android:imeOptions="actionNext"
@@ -315,7 +315,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:textColor="@color/black"
-                            android:text="Previous Reporting Manager’s Contact Details: "></TextView>
+                            android:text="Previous Reporting Manager’s Contact Details*: "></TextView>
                         <EditText
                             android:singleLine="true"
                             android:imeOptions="actionNext"
@@ -341,7 +341,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:textColor="@color/black"
-                            android:text="Previous Company’s DOJ: "></TextView>
+                            android:text="Previous Company’s DOJ*: "></TextView>
                         <TextView
                             android:padding="5dp"
                             android:textSize="14sp"
@@ -363,7 +363,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:textColor="@color/black"
-                            android:text="Previous Company’s DOE: "></TextView>
+                            android:text="Previous Company’s DOE*: "></TextView>
                         <TextView
                             android:padding="5dp"
                             android:textSize="14sp"
@@ -385,7 +385,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:textColor="@color/black"
-                            android:text="Experience Letter: "></TextView>
+                            android:text="Experience Letter*: "></TextView>
                        <LinearLayout
                            android:layout_width="0dp"
                            android:layout_weight="0.5"
@@ -414,7 +414,7 @@
                             android:layout_height="wrap_content"
                             android:textSize="12sp"
                             android:textColor="@color/black"
-                            android:text="Do you have any existing PF Account? "></TextView>
+                            android:text="Do you have any existing PF Account?* "></TextView>
                         <LinearLayout
                             android:id="@+id/llYes"
                             android:layout_width="20dp"
@@ -480,7 +480,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="UAN Number:"
+                                    android:text="UAN Number*:"
                                     android:textSize="12sp"
                                     android:textColor="@color/black" />
                             </LinearLayout>

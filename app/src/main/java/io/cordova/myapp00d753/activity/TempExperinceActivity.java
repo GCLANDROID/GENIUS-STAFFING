@@ -255,8 +255,7 @@ public class TempExperinceActivity extends AppCompatActivity {
 
                     }
                 }, dyear, dmonth, dday);
-                dialog.getDatePicker();
-                dialog.getDatePicker();
+                dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
                 dialog.show();
             }
         });
@@ -318,8 +317,7 @@ public class TempExperinceActivity extends AppCompatActivity {
 
                     }
                 }, dyear, dmonth, dday);
-                dialog.getDatePicker();
-                dialog.getDatePicker();
+                dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
                 dialog.show();
             }
         });
