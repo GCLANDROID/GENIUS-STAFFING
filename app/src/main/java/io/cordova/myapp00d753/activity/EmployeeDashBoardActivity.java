@@ -544,7 +544,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                 }else if (pref.getEmpClintId().equals("AEMCLI2310001780")){
                                     itemList.add(new MenuItemModel("Sales Management","4"));
                                 }else {
-                                    itemList.add(new MenuItemModel("Leave Management","12"));
+                                    //itemList.add(new MenuItemModel("Leave Management","12"));
                                 }
 
                                 MenuItemAdapter menuItemAdapter=new MenuItemAdapter(itemList,getApplicationContext(),PFLink,leaveFlag);

@@ -184,7 +184,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         if (pref.getOnLeave().equals("1")) {
             llWeekly.setVisibility(View.VISIBLE);
         } else {
-            llWeekly.setVisibility(View.VISIBLE);
+            llWeekly.setVisibility(View.GONE);
         }
 
         if (pref.getEmpClintId().equals("AEMCLI1110000502")){
@@ -342,7 +342,6 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 JSONObject object = attendanceArray.optJSONObject(pos);
                 String PunchTiming = object.optString("PunchTiming");
                 String Status = object.optString("Status").toUpperCase();
-
 
                 if (Status.equalsIgnoreCase("DEFAULT")) {
                     lnStatus.setVisibility(View.GONE);
