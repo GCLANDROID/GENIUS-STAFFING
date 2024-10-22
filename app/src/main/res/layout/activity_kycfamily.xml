@@ -140,7 +140,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:textColor="@color/textcolor"
-                            android:text="DOB as per Aadhar :"></TextView>
+                            android:text="DOB as per Aadhaar :"></TextView>
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"

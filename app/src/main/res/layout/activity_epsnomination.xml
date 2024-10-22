@@ -171,7 +171,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:textColor="@color/textcolor"
-                            android:text="Aadhar of Nominee :"></TextView>
+                            android:text="Aadhaar of Nominee :"></TextView>
                         <LinearLayout
                             android:layout_weight="1"
                             android:layout_width="0dp"
@@ -223,7 +223,7 @@
                                 android:textSize="14sp"
                                 android:textColor="@color/purple"
                                 android:textStyle="bold"
-                                android:text="Aadhar Verified"></TextView>
+                                android:text="Aadhaar Verified"></TextView>
 
 
                         </LinearLayout>
@@ -239,7 +239,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:textColor="@color/textcolor"
-                            android:text="DOB as Per Aadhar of Nominee :"></TextView>
+                            android:text="DOB as Per Aadhaar of Nominee :"></TextView>
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
