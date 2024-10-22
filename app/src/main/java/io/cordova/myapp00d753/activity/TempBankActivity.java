@@ -167,6 +167,8 @@ public class TempBankActivity extends AppCompatActivity {
             getbankname=pref.getBankName();
         }else {
 
+
+
         }
         imgHome=(ImageView)findViewById(R.id.imgHome);
         imgBack=(ImageView)findViewById(R.id.imgBack);
@@ -183,28 +185,30 @@ public class TempBankActivity extends AppCompatActivity {
         llSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (etAccNumber.getText().toString().length()>0){
-                    if (flag==1){
-                        if (etIFSC.getText().toString().length()>10){
+                if (!bankname.isEmpty()){
+                    if (etAccNumber.getText().toString().length()>0){
+                        if (flag==1){
+                            if (etIFSC.getText().toString().length()>10){
                                 if (etFName.getText().toString().length()>0){
 
-                                            BankDetailsSubmit();
+                                    BankDetailsSubmit();
 
                                 } else {
                                     Toast.makeText(getApplicationContext(),"Please enter First Name as per Bank ",Toast.LENGTH_LONG).show();
                                 }
-                        } else {
-                            Toast.makeText(getApplicationContext(),"Please enter IFSC code",Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(),"Please enter IFSC code",Toast.LENGTH_LONG).show();
+                            }
+
+                        }else {
+                            Toast.makeText(getApplicationContext(),"Please upload Bank Document",Toast.LENGTH_LONG).show();
                         }
-
                     }else {
-                        Toast.makeText(getApplicationContext(),"Please upload Bank Document",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(),"Please enter Account Number",Toast.LENGTH_LONG).show();
                     }
-
-                }else {
-                    Toast.makeText(getApplicationContext(),"Please enter Account Number",Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(),"Please Select Bank Name",Toast.LENGTH_LONG).show();
                 }
-
             }
         });
         spBankName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
