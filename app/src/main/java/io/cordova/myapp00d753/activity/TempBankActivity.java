@@ -503,7 +503,9 @@ public class TempBankActivity extends AppCompatActivity {
                 if (extraWorkingDayModel.isResponseStatus()) {
                     //  Toast.makeText(getApplicationContext(), extraWorkingDayModel.getResponseText(), Toast.LENGTH_SHORT).show();
 
-
+                    Intent intent = new Intent(TempBankActivity.this, TempOtherDocumentActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
 
                     JSONObject jsonObject=new JSONObject();
                     try {
@@ -640,9 +642,7 @@ public class TempBankActivity extends AppCompatActivity {
                         JSONObject job1 = response;
                         Log.e("response12", "@@@@@@" + job1);
                         pd.dismiss();
-                        Intent intent = new Intent(TempBankActivity.this, TempOtherDocumentActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
+
 
 
                     }
