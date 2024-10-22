@@ -106,10 +106,24 @@
                             android:layout_width="match_parent"
                             android:layout_height="30dp"
                             android:background="@drawable/lldesign9">
+
                             <Spinner
+                                android:visibility="gone"
                                 android:id="@+id/spBankName"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"></Spinner>
+
+                            <TextView
+                                android:id="@+id/txtBankName"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="Select Bank"
+                                android:gravity="center_vertical"
+                                android:paddingStart="5dp"
+                                android:textColor="@color/black"
+                                android:textSize="13sp"
+                                android:maxLines="1"
+                                android:ellipsize="end"/>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>

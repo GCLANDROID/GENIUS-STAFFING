@@ -1,6 +1,7 @@
 package io.cordova.myapp00d753.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -14,17 +15,22 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -49,6 +55,7 @@ import java.util.regex.Pattern;
 import id.zelory.compressor.Compressor;
 import io.cordova.myapp00d753.AndroidXCamera.AndroidXCameraActivity;
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.adapter.TempCommonFilterAdapter;
 import io.cordova.myapp00d753.module.AttendanceService;
 import io.cordova.myapp00d753.module.MainDocModule;
 import io.cordova.myapp00d753.module.UploadObject;
@@ -67,6 +74,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class TempBankActivity extends AppCompatActivity {
+    private static final String TAG = "TempBankActivity";
     LinearLayout llSubmit;
     Spinner spBankName, spDocType;
     ArrayList<MainDocModule> mainBankName = new ArrayList<>();
@@ -93,14 +101,14 @@ public class TempBankActivity extends AppCompatActivity {
     private AttendanceService uploadService;
     int flag;
     String security;
-    TextView tvSkip;
+    TextView tvSkip,txtBankName;
     String pan_pattern;
     String getbankname;
     ImageView imgHome,imgBack;
     LinearLayout llBankVALBtn,llBankVAL;
     Button btnBankVal;
     int bankflag=1;
-
+    Dialog searchHolidayDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,7 +130,7 @@ public class TempBankActivity extends AppCompatActivity {
         llMain = (LinearLayout) findViewById(R.id.llMain);
 
         btnBankVal=(Button)findViewById(R.id.btnBankVal);
-
+        txtBankName=(TextView) findViewById(R.id.txtBankName);
         setBank();
 
         etAccNumber = (EditText) findViewById(R.id.etAccNumber);
@@ -130,9 +138,9 @@ public class TempBankActivity extends AppCompatActivity {
         etIFSC = (EditText) findViewById(R.id.etIFSC);
         etIFSC.setText(pref.getIFSC());
         etFName = (EditText) findViewById(R.id.etFName);
-       // etFName.setText(pref.getBFName());
+        // etFName.setText(pref.getBFName());
         etLName = (EditText) findViewById(R.id.etLName);
-       // etLName.setText(pref.getBLName());
+        // etLName.setText(pref.getBLName());
 
         imgCamera = (ImageView) findViewById(R.id.imgCamera);
         imgDoc = (ImageView) findViewById(R.id.imgDoc);
@@ -163,10 +171,12 @@ public class TempBankActivity extends AppCompatActivity {
         imgHome=(ImageView)findViewById(R.id.imgHome);
         imgBack=(ImageView)findViewById(R.id.imgBack);
 
-
-
-
-
+        txtBankName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openSearchBankDialog();
+            }
+        });
     }
 
     private void onClick() {
@@ -178,20 +188,12 @@ public class TempBankActivity extends AppCompatActivity {
                         if (etIFSC.getText().toString().length()>10){
                                 if (etFName.getText().toString().length()>0){
 
-
                                             BankDetailsSubmit();
 
-
-
-
-
-                                }else {
+                                } else {
                                     Toast.makeText(getApplicationContext(),"Please enter First Name as per Bank ",Toast.LENGTH_LONG).show();
                                 }
-
-
-
-                        }else {
+                        } else {
                             Toast.makeText(getApplicationContext(),"Please enter IFSC code",Toast.LENGTH_LONG).show();
                         }
 
@@ -765,5 +767,56 @@ public class TempBankActivity extends AppCompatActivity {
                 });
     }
 
+    private void openSearchBankDialog() {
+        searchHolidayDialog = new Dialog(TempBankActivity.this);
+        searchHolidayDialog.setContentView(R.layout.wbs_code_search_layout);
+        searchHolidayDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        searchHolidayDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        searchHolidayDialog.setCancelable(true);
 
+        TextView txtPopupHeadline = searchHolidayDialog.findViewById(R.id.txtPopupHeadline);
+        SearchView wbsCodeSearchView = (SearchView) searchHolidayDialog.findViewById(R.id.wbsCodeSearchView);
+        ImageView imgCancel = searchHolidayDialog.findViewById(R.id.imgCancel);
+        RecyclerView rvWbsCode = searchHolidayDialog.findViewById(R.id.rvWbsCode);
+        rvWbsCode.setLayoutManager(new LinearLayoutManager(TempBankActivity.this));
+        TempCommonFilterAdapter tempCommonFilterAdapter;
+
+        wbsCodeSearchView.setQueryHint("Search Bank Name");
+        txtPopupHeadline.setText("Select Bank Name");
+
+        ArrayList<MainDocModule>  mainBankListCopy = (ArrayList<MainDocModule>) mainBankName.clone();
+        tempCommonFilterAdapter = new TempCommonFilterAdapter(TempBankActivity.this,mainBankListCopy,"bank_name");
+        rvWbsCode.setAdapter(tempCommonFilterAdapter);
+
+
+
+        wbsCodeSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                tempCommonFilterAdapter.getFilter().filter(s);
+                return false;
+            }
+        });
+
+
+        imgCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchHolidayDialog.dismiss();
+            }
+        });
+        searchHolidayDialog.show();
+    }
+
+    public void setText(String bankId,String selectedItem, String selectFor){
+        txtBankName.setText(selectedItem);
+        bankname = bankId;
+        Log.e(TAG, "bankname: "+bankname);
+        searchHolidayDialog.dismiss();
+    }
 }

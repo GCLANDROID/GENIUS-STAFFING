@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.TempBankActivity;
 import io.cordova.myapp00d753.activity.TempProfileActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.ComponentrFilterAdapter;
 import io.cordova.myapp00d753.module.MainDocModule;
@@ -48,7 +49,12 @@ public class TempCommonFilterAdapter extends RecyclerView.Adapter<TempCommonFilt
         holder.txtFilterItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((TempProfileActivity) context).setText(itemList.get(position).getDocID(),itemList.get(position).getDocumentType(),selectFor);
+                if (selectFor.equalsIgnoreCase("bank_name")){
+                    ((TempBankActivity) context).setText(itemList.get(position).getDocID(),itemList.get(position).getDocumentType(),selectFor);
+                } else {
+                    ((TempProfileActivity) context).setText(itemList.get(position).getDocID(),itemList.get(position).getDocumentType(),selectFor);
+                }
+
             }
         });
     }
