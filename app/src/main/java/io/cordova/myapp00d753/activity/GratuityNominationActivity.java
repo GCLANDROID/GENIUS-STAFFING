@@ -310,7 +310,7 @@ public class GratuityNominationActivity extends AppCompatActivity {
 
             itemList.add(epSmodel);
         }
-        GratuityNominationAdapter nominationAdapter=new GratuityNominationAdapter(itemList);
+        GratuityNominationAdapter nominationAdapter=new GratuityNominationAdapter(itemList,GratuityNominationActivity.this);
         binding.rvData.setAdapter(nominationAdapter);
 
 
@@ -482,6 +482,16 @@ public class GratuityNominationActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+
+    public void deleteItem(int pos){
+        itemList.remove(pos);
+        nominationarray.remove(pos);
+        if (itemList.size()==0){
+            binding.llData.setVisibility(View.GONE);
+        }
+
     }
 
 }

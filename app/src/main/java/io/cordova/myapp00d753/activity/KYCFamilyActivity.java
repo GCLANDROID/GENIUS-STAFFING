@@ -93,6 +93,7 @@ public class KYCFamilyActivity extends AppCompatActivity {
     ArrayList<String> realation = new ArrayList<>();
     String relationship="";
     String relationshipID="";
+    KYCFamilyAdapter nominationAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -195,7 +196,7 @@ public class KYCFamilyActivity extends AppCompatActivity {
             epSmodel.setRealationship(Relationship);
             itemList.add(epSmodel);
         }
-        KYCFamilyAdapter nominationAdapter=new KYCFamilyAdapter(itemList,KYCFamilyActivity.this);
+         nominationAdapter=new KYCFamilyAdapter(itemList,KYCFamilyActivity.this);
         binding.rvData.setAdapter(nominationAdapter);
 
 
@@ -427,6 +428,7 @@ public class KYCFamilyActivity extends AppCompatActivity {
 
     public void deleteItem(int pos){
         itemList.remove(pos);
+        nominationarray.remove(pos);
         if (itemList.size()==0){
             binding.llData.setVisibility(View.GONE);
         }
