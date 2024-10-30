@@ -500,7 +500,17 @@ public class TempBankActivity extends AppCompatActivity {
         String lname = etLName.getText().toString();
         String ifsc = etIFSC.getText().toString();
         String masterid = pref.getMasterId();
-        Call<UploadObject> fileUpload = uploadService.uploadbankdetails(fileToUpload, masterid, fname, "", bankname, accnumbet, ifsc, security, bankdocid);
+        String AEMEmployeeID = pref.getEmpId();
+        Log.e(TAG, "BankDetailsSubmit: \nfile: IMAGE"
+                +"\nAEMEmployeeID: "+masterid
+                +"\nFirstNameAsperBank: "+fname
+                +"\nLastNameAsperBank: "
+                +"\nBankName: "+bankname
+                +"\nAccountNumber: "+accnumbet
+                +"\nIFSCode: "+ifsc
+                +"\nSecurityCode: "+security
+                +"\nDocumentID: "+bankdocid);
+        Call<UploadObject> fileUpload = uploadService.uploadbankdetails(fileToUpload, AEMEmployeeID, fname, lname, bankname, accnumbet, ifsc, security, bankdocid);
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
@@ -535,9 +545,7 @@ public class TempBankActivity extends AppCompatActivity {
 
                 Log.e("error", "Error " + t.getMessage());
                 Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
-
             }
-
         });
 
     }
