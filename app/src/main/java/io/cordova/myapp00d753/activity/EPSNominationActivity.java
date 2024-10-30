@@ -182,7 +182,7 @@ public class EPSNominationActivity extends AppCompatActivity {
             epSmodel.setRelationship(Relationship);
             itemList.add(epSmodel);
         }
-        EPSNominationAdapter nominationAdapter=new EPSNominationAdapter(itemList);
+        EPSNominationAdapter nominationAdapter=new EPSNominationAdapter(itemList,EPSNominationActivity.this);
         binding.rvData.setAdapter(nominationAdapter);
 
 
@@ -483,6 +483,16 @@ public class EPSNominationActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+
+    public void deleteItem(int pos){
+        itemList.remove(pos);
+        nominationarray.remove(pos);
+        if (itemList.size()==0){
+            binding.llData.setVisibility(View.GONE);
+        }
+
     }
 
 

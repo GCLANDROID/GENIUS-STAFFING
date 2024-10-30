@@ -401,6 +401,12 @@
                             android:textSize="12sp"
                             android:text="Proportion Shared"
                             android:layout_gravity="center"></TextView>
+                        <View
+                            android:id="@+id/imgDelete"
+                            android:layout_gravity="center"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            ></View>
                     </LinearLayout>
                     <androidx.recyclerview.widget.RecyclerView
                         android:nestedScrollingEnabled="false"

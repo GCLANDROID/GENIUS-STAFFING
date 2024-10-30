@@ -1,9 +1,11 @@
 package io.cordova.myapp00d753.adapter;
 
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,11 +14,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.EPSNominationActivity;
+import io.cordova.myapp00d753.activity.GratuityNominationActivity;
 import io.cordova.myapp00d753.module.EPSmodel;
 import io.cordova.myapp00d753.module.GratuityModel;
 
 public class GratuityNominationAdapter extends RecyclerView.Adapter<GratuityNominationAdapter.MyViewHolder> {
     ArrayList<GratuityModel>itemList=new ArrayList<>();
+    Context context;
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -32,7 +37,13 @@ public class GratuityNominationAdapter extends RecyclerView.Adapter<GratuityNomi
         myViewHolder.tvAge.setText(itemList.get(i).getAge());
         myViewHolder.tvRealtionShip.setText(itemList.get(i).getRelationship());
         myViewHolder.tvProportion.setText(itemList.get(i).getPortion());
-
+        myViewHolder.imgDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((GratuityNominationActivity)context).deleteItem(i);
+                notifyDataSetChanged();
+            }
+        });
 
 
 
@@ -45,6 +56,7 @@ public class GratuityNominationAdapter extends RecyclerView.Adapter<GratuityNomi
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvName,tvAddress,tvAge,tvRealtionShip,tvProportion;
+        ImageView imgDelete;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName=(TextView)itemView.findViewById(R.id.tvName);
@@ -52,11 +64,12 @@ public class GratuityNominationAdapter extends RecyclerView.Adapter<GratuityNomi
             tvAge=(TextView)itemView.findViewById(R.id.tvAge);
             tvRealtionShip=(TextView)itemView.findViewById(R.id.tvRealtionShip);
             tvProportion=(TextView) itemView.findViewById(R.id.tvProportion);
-
+            imgDelete=(ImageView) itemView.findViewById(R.id.imgDelete);
         }
     }
 
-    public GratuityNominationAdapter(ArrayList<GratuityModel> itemList) {
+    public GratuityNominationAdapter(ArrayList<GratuityModel> itemList,Context context) {
         this.itemList = itemList;
+        this.context=context;
     }
 }

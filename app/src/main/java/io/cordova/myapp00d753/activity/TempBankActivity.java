@@ -188,7 +188,7 @@ public class TempBankActivity extends AppCompatActivity {
                 if (!bankname.isEmpty()){
                     if (etAccNumber.getText().toString().length()>0){
                         if (flag==1){
-                            if (etIFSC.getText().toString().length()>10){
+                            if (etIFSC.getText().toString().length()==11){
                                 if (etFName.getText().toString().length()>0){
 
                                     BankDetailsSubmit();
@@ -197,7 +197,7 @@ public class TempBankActivity extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(),"Please enter First Name as per Bank ",Toast.LENGTH_LONG).show();
                                 }
                             } else {
-                                Toast.makeText(getApplicationContext(),"Please enter IFSC code",Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(),"Please enter 11 digits IFSC code",Toast.LENGTH_LONG).show();
                             }
 
                         }else {
