@@ -40,6 +40,7 @@ import io.cordova.myapp00d753.module.MainDocModule;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
+import io.cordova.myapp00d753.utility.Util;
 
 public class WidowNominationActivity extends AppCompatActivity {
     ActivityWidowNominationBinding binding;
@@ -165,17 +166,14 @@ public class WidowNominationActivity extends AppCompatActivity {
                         } else if (mm == 12) {
                             month = "December";
                         }
+
                         dob = d + " " + month + " " + y;
-
-                        binding.tvUANDOB.setText(dob);
-
-
+                        binding.tvUANDOB.setText(Util.changeAnyDateFormat(dob,"dd MMMM yyyy","dd MMM yy"));
                     }
                 }, dyear, dmonth, dday);
                 dialog.getDatePicker().setMaxDate((long) (System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 365.25 * 18)));
                 dialog.getDatePicker().setMinDate((long) (System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 365.25 * 90)));
                 dialog.show();
-
             }
         });
         binding.btnSaveForm.setOnClickListener(new View.OnClickListener() {

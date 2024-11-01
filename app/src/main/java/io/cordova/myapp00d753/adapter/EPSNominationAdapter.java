@@ -17,6 +17,7 @@ import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.EPSNominationActivity;
 import io.cordova.myapp00d753.activity.KYCFamilyActivity;
 import io.cordova.myapp00d753.module.EPSmodel;
+import io.cordova.myapp00d753.utility.Util;
 
 public class EPSNominationAdapter extends RecyclerView.Adapter<EPSNominationAdapter.MyViewHolder> {
     ArrayList<EPSmodel>itemList=new ArrayList<>();
@@ -33,7 +34,8 @@ public class EPSNominationAdapter extends RecyclerView.Adapter<EPSNominationAdap
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         myViewHolder.tvName.setText(itemList.get(i).getName());
         myViewHolder.tvAddress.setText(itemList.get(i).getAddress());
-        myViewHolder.tvAge.setText(itemList.get(i).getAge());
+        //myViewHolder.tvAge.setText(itemList.get(i).getAge());
+        myViewHolder.tvAge.setText(Util.changeAnyDateFormat(itemList.get(i).getAge(),"dd MMMM yyyy","dd MMM yy"));
         myViewHolder.tvRealtionShip.setText(itemList.get(i).getRelationship());
 
         myViewHolder.imgDelete.setOnClickListener(new View.OnClickListener() {

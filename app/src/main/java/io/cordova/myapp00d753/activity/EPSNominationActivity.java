@@ -100,18 +100,15 @@ public class EPSNominationActivity extends AppCompatActivity {
                             nominationobject.put("SecurityCode",pref.getSecurityCode());
                             Log.d("nomination",nominationobject.toString());
                             getItemList(nominationobject);
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                    }else {
+                    } else {
                         Toast.makeText(EPSNominationActivity.this,"Please Enter Nominee's Aadhar Card No.",Toast.LENGTH_LONG).show();
                     }
-
                 }else {
                     Toast.makeText(EPSNominationActivity.this,"Please Enter Family Member's Name",Toast.LENGTH_LONG).show();
                 }
-
             }
         });
         binding.llTick.setOnClickListener(new View.OnClickListener() {
@@ -182,7 +179,7 @@ public class EPSNominationActivity extends AppCompatActivity {
             epSmodel.setRelationship(Relationship);
             itemList.add(epSmodel);
         }
-        EPSNominationAdapter nominationAdapter=new EPSNominationAdapter(itemList,EPSNominationActivity.this);
+        EPSNominationAdapter nominationAdapter = new EPSNominationAdapter(itemList,EPSNominationActivity.this);
         binding.rvData.setAdapter(nominationAdapter);
 
 
@@ -255,11 +252,10 @@ public class EPSNominationActivity extends AppCompatActivity {
                         } else if (mm == 12) {
                             month = "December";
                         }
+
                         dob = d + " " + month + " " + y;
 
-                        binding.tvUANDOB.setText(dob);
-
-
+                        binding.tvUANDOB.setText(Util.changeAnyDateFormat(dob,"dd MMMM yyyy","dd MMM yy"));
                     }
                 }, dyear, dmonth, dday);
                 dialog.getDatePicker().setMaxDate((long) (System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 365.25 * 18)));
@@ -418,7 +414,7 @@ public class EPSNominationActivity extends AppCompatActivity {
 
                             Toast.makeText(EPSNominationActivity.this,"EPS Details has been updated Successfully",Toast.LENGTH_LONG).show();
 
-                        }else {
+                        } else {
 
                         }
                     }

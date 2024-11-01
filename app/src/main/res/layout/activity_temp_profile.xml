@@ -1677,7 +1677,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Relationship:"
+                                android:text="Relationship with member:"
                                 android:textSize="12sp"
                                 android:textColor="@color/textcolor" />
                         </LinearLayout>
@@ -1686,8 +1686,6 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1">
-
-
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -2121,7 +2119,7 @@
                                 android:layout_width="1dp"
                                 android:layout_height="20dp"
                                 android:background="@android:color/white"
-                                android:layout_marginLeft="10dp"></LinearLayout>
+                                android:layout_marginLeft="10dp"/>
                             <TextView
                                 android:visibility="gone"
                                 android:layout_marginLeft="10dp"
@@ -2147,13 +2145,8 @@
                         </LinearLayout>
                     </LinearLayout>
 
-
                 </LinearLayout>
             </ScrollView>
         </LinearLayout>
     </LinearLayout>
-
-
-
-
 </layout>
