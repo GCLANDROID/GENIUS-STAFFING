@@ -88,7 +88,14 @@ public class WidowNominationActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
+        binding.imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(WidowNominationActivity.this, TempDashBoardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
 
         binding.spRealation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

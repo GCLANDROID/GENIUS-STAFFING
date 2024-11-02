@@ -58,7 +58,14 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
 
     private void initView(){
         pref=new Pref(TEMPAadharQRActivity.this);
-
+        binding.imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(TEMPAadharQRActivity.this,TempDashBoardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
         binding.etAadhar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -127,7 +134,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                }else {
+                } else {
                     Toast.makeText(TEMPAadharQRActivity.this,"Please Enter OTP",Toast.LENGTH_LONG).show();
                 }
             }
@@ -168,7 +175,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                             binding.imgCaptcha.setImageBitmap(decodedByte);
 
-                        }else {
+                        } else {
 
 
                         }
@@ -245,7 +252,6 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
-
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -431,8 +437,6 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
-
-
             }
         });
 
@@ -587,13 +591,14 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
 
                             //image
 
-
                             AppData.AADAHARNUMBER=binding.etAadhar.getText().toString();
 
                             adharAlert(namevalue,dobvalue,AppData.AADAHARNUMBER,gendervalue,careof,state,pin,street,locality,house,postoffice,subDistrict,district,vtc,landmark,null,1);
 
                         }else {
+
                             captchagebneration();
+
                         }
                     }
 

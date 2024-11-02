@@ -195,6 +195,16 @@ public class TempExperinceActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        binding.imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TempExperinceActivity.this, TempDashBoardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+
         binding.imgAttach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -341,10 +351,6 @@ public class TempExperinceActivity extends AppCompatActivity {
                         }else {
                             Toast.makeText(TempExperinceActivity.this,"DOE Can Not be before than DOJ",Toast.LENGTH_LONG).show();
                         }
-
-
-
-
                     }
                 }, dyear, dmonth, dday);
                 dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
@@ -406,8 +412,6 @@ public class TempExperinceActivity extends AppCompatActivity {
                         uanDOB = d + " " + month + " " + y;
 
                         binding.tvUANDOB.setText(uanDOB);
-
-
                     }
                 }, dyear, dmonth, dday);
                 dialog.getDatePicker().setMaxDate((long) (System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 365.25 * 18)));
@@ -437,7 +441,6 @@ public class TempExperinceActivity extends AppCompatActivity {
                 if (position > 0) {
                     pfPercantage = uanPercentage.get(position);
                 }
-
             }
 
             @Override
@@ -493,14 +496,10 @@ public class TempExperinceActivity extends AppCompatActivity {
 
                             }else {
                                 Toast.makeText(TempExperinceActivity.this,"Please Enter Previous Employee’s Designation",Toast.LENGTH_LONG).show();
-
                             }
-
-
                         }else {
                             Toast.makeText(TempExperinceActivity.this,"Please Enter Previous Company's Name",Toast.LENGTH_LONG).show();
                         }
-
                     }
                 }else {
                     Toast.makeText(TempExperinceActivity.this,"Please select Freshers/Experienced option",Toast.LENGTH_LONG).show();
@@ -605,11 +604,6 @@ public class TempExperinceActivity extends AppCompatActivity {
              imageflag = 1;
             //flag++;
         }
-
-
-
-
-
     }
 
     public static String getRealPath(Context context, Uri fileUri) {

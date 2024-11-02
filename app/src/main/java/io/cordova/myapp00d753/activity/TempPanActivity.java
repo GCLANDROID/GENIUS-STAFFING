@@ -352,6 +352,7 @@ public class TempPanActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
     }
 
     private void cameraIntent() {

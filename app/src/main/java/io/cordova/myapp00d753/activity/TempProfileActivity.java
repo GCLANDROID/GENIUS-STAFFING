@@ -1012,7 +1012,6 @@ public class TempProfileActivity extends AppCompatActivity {
                             e.printStackTrace();
                             Toast.makeText(TempProfileActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
                         }
-
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -1106,7 +1105,6 @@ public class TempProfileActivity extends AppCompatActivity {
     }
 
     private void setGender() {
-
         String surl = AppData.url + "gcl_CommonDDL?ddltype=10&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
@@ -1161,9 +1159,6 @@ public class TempProfileActivity extends AppCompatActivity {
                                     spESICGender.setSelection(0);
                                 }
 
-
-
-
                                 setRealation();
 
                             } else {
@@ -1195,8 +1190,6 @@ public class TempProfileActivity extends AppCompatActivity {
 
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
-
-
     }
 
     private void setRealation() {
@@ -1239,7 +1232,6 @@ public class TempProfileActivity extends AppCompatActivity {
 
 
     private void setNomineeRelation() {
-
         String surl = AppData.url + "gcl_CommonDDL?ddltype=7&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
@@ -1403,6 +1395,7 @@ public class TempProfileActivity extends AppCompatActivity {
                 finish();
             }
         });
+
         spQualification.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -1418,6 +1411,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
             }
         });
+
         spPermanentCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -1490,8 +1484,6 @@ public class TempProfileActivity extends AppCompatActivity {
 
                 martialstatus = mainMartial.get(position).getDocID();
                 Log.d("martial", martialstatus);
-
-
             }
 
             @Override
@@ -1858,6 +1850,8 @@ public class TempProfileActivity extends AppCompatActivity {
                                                                         }
                                                                     } else {
                                                                         Toast.makeText(getApplicationContext(), "Please Select Permanent City", Toast.LENGTH_LONG).show();
+                                                                        txtPermanentCity.requestFocus();
+                                                                        //txtPermanentCity.setBackgroundColor();
                                                                     }
                                                                 } else {
                                                                     Toast.makeText(getApplicationContext(), "Please Select Permanent State", Toast.LENGTH_LONG).show();
@@ -1889,16 +1883,13 @@ public class TempProfileActivity extends AppCompatActivity {
 
                             } else {
                                 Toast.makeText(getApplicationContext(), "Please update your permanent address", Toast.LENGTH_LONG).show();
-
                             }
                         } else {
                             Toast.makeText(getApplicationContext(), "Please update your fathers or husband name", Toast.LENGTH_LONG).show();
                         }
-
                     } else {
                         Toast.makeText(getApplicationContext(), "Please update your present pincode", Toast.LENGTH_LONG).show();
                     }
-
                 } else {
                     Toast.makeText(getApplicationContext(), "Please update your present address", Toast.LENGTH_LONG).show();
                 }
@@ -2109,7 +2100,6 @@ public class TempProfileActivity extends AppCompatActivity {
                                         permanentcity = mainPerCity.get(index).getDocID();
                                         txtPermanentCity.setText(percity.get(index));
                                     }
-
                                 }
                                 serPreCity();
                             } else {
@@ -2236,8 +2226,6 @@ public class TempProfileActivity extends AppCompatActivity {
 
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
-
-
     }
 
     private void setprestate() {
@@ -2318,8 +2306,6 @@ public class TempProfileActivity extends AppCompatActivity {
 
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
-
-
     }
 
     private void setperstate() {
@@ -2599,8 +2585,6 @@ public class TempProfileActivity extends AppCompatActivity {
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.CENTER);
         alert1.show();
-
-
     }
 
 

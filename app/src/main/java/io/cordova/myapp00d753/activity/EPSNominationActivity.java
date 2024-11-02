@@ -129,6 +129,15 @@ public class EPSNominationActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        binding.imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EPSNominationActivity.this, TempDashBoardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
         final SimpleTooltip tooltip = new SimpleTooltip.Builder(EPSNominationActivity.this)
                 .anchorView(binding.imgAdd)
                 .text("Fill in the fields, then press the \"+\" icon to add your data to the list.")
