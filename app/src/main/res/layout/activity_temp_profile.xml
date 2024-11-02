@@ -122,10 +122,12 @@
             android:background="@drawable/lldesign">
 
             <ScrollView
+                android:id="@+id/mainScrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <LinearLayout
+                    android:id="@+id/llInsideMain"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
@@ -470,6 +472,7 @@
 
                     <!--personal-->
                     <LinearLayout
+                        android:id="@+id/llPersonalDetails"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
@@ -613,6 +616,7 @@
                                     android:visibility="gone" />
 
                                 <LinearLayout
+                                    android:id="@+id/llRelationship"
                                     android:layout_width="match_parent"
                                     android:layout_height="30dp"
                                     android:layout_marginLeft="10dp"
@@ -666,6 +670,7 @@
                                     android:visibility="gone" />
 
                                 <LinearLayout
+                                    android:id="@+id/llGender"
                                     android:layout_width="match_parent"
                                     android:layout_height="30dp"
                                     android:layout_marginLeft="10dp"
@@ -720,6 +725,7 @@
                                     android:visibility="gone" />
 
                                 <LinearLayout
+                                    android:id="@+id/llQualification"
                                     android:layout_width="match_parent"
                                     android:layout_height="30dp"
                                     android:layout_marginLeft="10dp"
@@ -728,7 +734,10 @@
                                     <Spinner
                                         android:id="@+id/spQualification"
                                         android:layout_width="match_parent"
-                                        android:layout_height="match_parent"></Spinner>
+                                        android:layout_height="match_parent"
+                                        android:focusable="true"
+                                        android:focusableInTouchMode="true"/>
+
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
@@ -822,6 +831,7 @@
                                     android:visibility="gone" />
 
                                 <LinearLayout
+                                    android:id="@+id/llBloodGrp"
                                     android:layout_width="match_parent"
                                     android:layout_height="30dp"
                                     android:layout_marginLeft="10dp"
@@ -836,7 +846,10 @@
                         </LinearLayout>
                     </LinearLayout>
 
-
+                    <View
+                        android:id="@+id/scrollingPointPersonalDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
 
                     <!--  contact-->
 
@@ -1019,6 +1032,11 @@
                             </LinearLayout>
                         </LinearLayout>
 
+                        <View
+                            android:id="@+id/scrollViewPoint"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1026,6 +1044,8 @@
                             android:orientation="horizontal"
                             android:paddingLeft="10dp"
                             android:paddingRight="10dp">
+
+
 
                             <LinearLayout
                                 android:layout_width="0dp"
@@ -1139,6 +1159,11 @@
                                     android:textColor="@android:color/black" />
                             </LinearLayout>
                         </LinearLayout>
+
+                        <View
+                            android:id="@+id/scrollingViewPoint2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
 
                         <LinearLayout
                             android:visibility="visible"
@@ -1396,6 +1421,7 @@
 
 
                                 <LinearLayout
+                                    android:id="@+id/llPermanentState"
                                     android:layout_width="match_parent"
                                     android:layout_height="30dp"
                                     android:layout_marginLeft="10dp"
@@ -1439,6 +1465,7 @@
 
 
                                 <LinearLayout
+                                    android:id="@+id/llPermanentCity"
                                     android:layout_width="match_parent"
                                     android:layout_height="30dp"
                                     android:layout_marginLeft="10dp"
