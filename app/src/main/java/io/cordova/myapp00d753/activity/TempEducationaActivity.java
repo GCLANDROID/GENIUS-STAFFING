@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -104,6 +106,7 @@ public class TempEducationaActivity extends AppCompatActivity {
                 if (i>0) {
                     qualificationid = mainQualification.get(i).getDocID();
                     qualification=mainQualification.get(i).getDocumentType();
+                    binding.llQualification.setBackgroundResource(R.drawable.lldesign9);
                 }
             }
 
@@ -131,6 +134,7 @@ public class TempEducationaActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i>0){
                     passingyear=yearlist.get(i);
+                    binding.llPassingyear.setBackgroundResource(R.drawable.lldesign9);
                 }
             }
 
@@ -169,10 +173,10 @@ public class TempEducationaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (!qualification.equals("")) {
-                    if (!passingyear.equals("")){
-                        if (binding.etUniversity.getText().toString().length()>0){
-                            if (binding.etPercentage.getText().length()>0){
-                                if (Integer.parseInt(binding.etPercentage.getText().toString())>0 && Integer.parseInt(binding.etPercentage.getText().toString())<101 ){
+                    if (binding.etUniversity.getText().toString().length() > 0) {
+                        if (!passingyear.equals("")) {
+                            if (binding.etPercentage.getText().length() > 0) {
+                                if (Integer.parseInt(binding.etPercentage.getText().toString()) > 0 && Integer.parseInt(binding.etPercentage.getText().toString()) < 101) {
                                     JSONObject jsonObject = new JSONObject();
                                     try {
                                         jsonObject.put("Qualification", qualification);
@@ -184,39 +188,31 @@ public class TempEducationaActivity extends AppCompatActivity {
                                         educationarray.put(jsonObject);
                                         educationobj.put("qualificationDetails", educationarray);
                                         educationobj.put("DbOperation", "5");
-                                        educationobj.put("SecurityCode",pref.getSecurityCode());
+                                        educationobj.put("SecurityCode", pref.getSecurityCode());
                                         Log.d("educationobj", educationobj.toString());
                                         getItemList(educationobj);
-
-
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
-                                }else {
-                                    Toast.makeText(TempEducationaActivity.this,"Please Enter valid Percentage",Toast.LENGTH_LONG).show();
-
+                                } else {
+                                    Toast.makeText(TempEducationaActivity.this, "Please Enter valid Percentage", Toast.LENGTH_LONG).show();
                                 }
-                            }else {
-                                Toast.makeText(TempEducationaActivity.this,"Please Enter Percentage",Toast.LENGTH_LONG).show();
-
+                            } else {
+                                Toast.makeText(TempEducationaActivity.this, "Please Enter Percentage", Toast.LENGTH_LONG).show();
+                                binding.etPercentage.setBackgroundResource(R.drawable.lldesign_error);
                             }
-
-
-                        }else {
-                            Toast.makeText(TempEducationaActivity.this,"Please Enter Your Name of university or Board",Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(TempEducationaActivity.this, "Please Select Passing Year", Toast.LENGTH_LONG).show();
+                            binding.llPassingyear.setBackgroundResource(R.drawable.lldesign_error);
                         }
-
-                    }else {
-                        Toast.makeText(TempEducationaActivity.this,"Please Select Passing Year",Toast.LENGTH_LONG).show();
-
+                    } else {
+                        Toast.makeText(TempEducationaActivity.this, "Please Enter Your Name of university or Board", Toast.LENGTH_LONG).show();
+                        binding.etUniversity.setBackgroundResource(R.drawable.lldesign_error);
                     }
-
-
-                }else {
-                    Toast.makeText(TempEducationaActivity.this,"Please Select Education Details",Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(TempEducationaActivity.this, "Please Select Education Details", Toast.LENGTH_LONG).show();
+                    binding.llQualification.setBackgroundResource(R.drawable.lldesign_error);
                 }
-
-
             }
         });
 
@@ -238,6 +234,44 @@ public class TempEducationaActivity extends AppCompatActivity {
                     uploadfamilydetails(educationobj);
                 }else {
                     Toast.makeText(TempEducationaActivity.this,"Please Add Education Details",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        binding.etUniversity.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().length() > 0){
+                    binding.etUniversity.setBackgroundResource(R.drawable.lldesign9);
+                }
+            }
+        });
+
+        binding.etPercentage.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().length() > 0){
+                    binding.etPercentage.setBackgroundResource(R.drawable.lldesign9);
                 }
             }
         });
