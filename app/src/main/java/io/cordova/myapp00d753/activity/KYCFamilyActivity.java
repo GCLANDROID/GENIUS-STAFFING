@@ -164,15 +164,18 @@ public class KYCFamilyActivity extends AppCompatActivity {
                                 }
                             } else {
                                 Toast.makeText(KYCFamilyActivity.this, "Please Select Relationship with Family Member", Toast.LENGTH_LONG).show();
+                                binding.llRelationship.setBackgroundResource(R.drawable.lldesign_error);
                             }
                         } else {
                             Toast.makeText(KYCFamilyActivity.this, "Please Select Family Member's Date of Birth", Toast.LENGTH_LONG).show();
                         }
                     } else {
                         Toast.makeText(KYCFamilyActivity.this, "Please Select Family Member's Gender", Toast.LENGTH_LONG).show();
+                        binding.llGender.setBackgroundResource(R.drawable.lldesign_error);
                     }
                 }else {
                     Toast.makeText(KYCFamilyActivity.this,"Please Enter Family Member's Name",Toast.LENGTH_LONG).show();
+                    binding.etName.setBackgroundResource(R.drawable.lldesign_error);
                 }
 
             }
@@ -234,6 +237,7 @@ public class KYCFamilyActivity extends AppCompatActivity {
                 if (i>0){
                     relationshipID=mainRealation.get(i).getDocID();
                     relationship=mainRealation.get(i).getDocumentType();
+                    binding.llRelationship.setBackgroundResource(R.drawable.lldesign9);
                 }
             }
 
@@ -335,6 +339,7 @@ public class KYCFamilyActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (!mainGender.get(position).getDocumentType().isEmpty()){
                     sexGender = mainGender.get(position).getDocumentType();
+                    binding.llGender.setBackgroundResource(R.drawable.lldesign9);
                 }
 
                 //sexGender = mainGender.get(position).getDocID();
@@ -348,6 +353,24 @@ public class KYCFamilyActivity extends AppCompatActivity {
             }
         });
 
+        binding.etName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().length() > 0){
+                    binding.etName.setBackgroundResource(R.drawable.lldesign9);
+                }
+            }
+        });
     }
 
 

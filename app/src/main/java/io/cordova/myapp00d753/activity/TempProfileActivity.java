@@ -181,9 +181,10 @@ public class TempProfileActivity extends AppCompatActivity {
     ProgressDialog pd;
     String namevalue, dobvalue, gendervalue="", careof, state, pin, street, locality, house, postoffice, subDistrict, vtc, district, landmark;
     Dialog searchHolidayDialog;
-    LinearLayout llPermanentCity,llQualification,llInsideMain,llPersonalDetails,llBloodGrp,llGender,llRelationship,llPermanentState;
+    LinearLayout llPermanentCity,llQualification,llInsideMain,llPersonalDetails,llBloodGrp,
+            llGender,llRelationship,llPermanentState,llPresentState,llPresentCity,llContactDetails;
     ScrollView mainScrollView;
-    View scrollingPointPersonalDetails,scrollViewPoint,scrollingViewPoint2;
+    View scrollingPointPersonalDetails,scrollViewPoint,scrollingViewPoint2,scrollinViewPoint3,scrollingViewPoint4,llIldEsic;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -242,11 +243,17 @@ public class TempProfileActivity extends AppCompatActivity {
         llGender = (LinearLayout) findViewById(R.id.llGender);
         llRelationship = (LinearLayout) findViewById(R.id.llRelationship);
         llPermanentState = (LinearLayout) findViewById(R.id.llPermanentState);
+        llPresentState = (LinearLayout) findViewById(R.id.llPresentState);
+        llPresentCity = (LinearLayout) findViewById(R.id.llPresentCity);
+        llContactDetails = (LinearLayout) findViewById(R.id.llContactDetails);
         mainScrollView = (ScrollView) findViewById(R.id.mainScrollView);
         llInsideMain = (LinearLayout) findViewById(R.id.llInsideMain);
         scrollingPointPersonalDetails = (View) findViewById(R.id.scrollingPointPersonalDetails);
         scrollViewPoint = (View) findViewById(R.id.scrollViewPoint);
         scrollingViewPoint2 = (View) findViewById(R.id.scrollingViewPoint2);
+        scrollinViewPoint3 = (View) findViewById(R.id.scrollinViewPoint3);
+        scrollingViewPoint4 = (View) findViewById(R.id.scrollingViewPoint4);
+        llIldEsic = (View) findViewById(R.id.llIldEsic);
         //tvParAddr = (TextView) findViewById(R.id.tvParAddr);
         tvComName = (TextView) findViewById(R.id.tvComName);
 
@@ -936,8 +943,6 @@ public class TempProfileActivity extends AppCompatActivity {
                                     pref.saveBankName(BankName);
                                     String AccountNumber = obj.optString("AccountNumber");
                                     pref.saveAccNumber(AccountNumber);
-
-
                                 }
                                 llMain.setVisibility(View.GONE);
                                 llLoader.setVisibility(View.VISIBLE);
@@ -1478,7 +1483,7 @@ public class TempProfileActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 presentstate = mainPerState.get(position).getDocID();
-
+                llPresentState.setBackgroundResource(R.drawable.lldesign9);
             }
 
             @Override
@@ -1596,6 +1601,7 @@ public class TempProfileActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 if (etPerAddr.getText().toString().length() > 0) {
                     peraddr = etPerAddr.getText().toString();
+                    etPerAddr.setBackgroundResource(R.drawable.lldesign9);
                 }
 
             }
@@ -1735,6 +1741,7 @@ public class TempProfileActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 if (etPhnNumber.getText().toString().length() > 0) {
                     phnnumber = etPhnNumber.getText().toString();
+                    etPhnNumber.setBackgroundResource(R.drawable.lldesign9);
                 }
 
             }
@@ -1893,10 +1900,11 @@ public class TempProfileActivity extends AppCompatActivity {
                 if (!preaddr.equals("")) {
                     if (!prepin.equals("")) {
                         if (etGurdianName.getText().toString().length() > 0) {
+                            if (etPreAddr.getText().toString().length() > 0) {
                             if (etPerAddr.getText().toString().length() > 0) {
                                 if (etPrePinCode.getText().toString().length() > 0) {
                                     if (!etESI.getText().toString().equals("") || etESI.getText().toString().length() > 9) {
-                                        if (etPhnNumber.getText().toString().equals("") || etPhnNumber.getText().toString().length() > 9) {
+                                        if (!etPhnNumber.getText().toString().equals("") || etPhnNumber.getText().toString().length() > 9) {
                                             if (!sexGender.equals("") && !esicGender.equals("")) {
                                                 if (!education.equals("")) {
                                                     if (!bloodgrp.equals("")) {
@@ -1926,7 +1934,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                                                         }
                                                                     } else {
                                                                         Toast.makeText(getApplicationContext(), "Please Select Permanent City", Toast.LENGTH_LONG).show();
-                                                                        txtPermanentCity.setBackgroundColor(R.drawable.lldesign_error);
+                                                                        llPermanentCity.setBackgroundColor(R.drawable.lldesign_error);
                                                                         mainScrollView.post(new Runnable() {
                                                                             @Override
                                                                             public void run() {
@@ -1948,9 +1956,25 @@ public class TempProfileActivity extends AppCompatActivity {
                                                                 }
                                                             } else {
                                                                 Toast.makeText(getApplicationContext(), "Please Select Present City", Toast.LENGTH_LONG).show();
+                                                                llPresentCity.setBackgroundResource(R.drawable.lldesign_error);
+                                                                mainScrollView.post(new Runnable() {
+                                                                    @Override
+                                                                    public void run() {
+                                                                        int y = scrollingViewPoint2.getTop();
+                                                                        mainScrollView.smoothScrollTo(0, y);
+                                                                    }
+                                                                });
                                                             }
                                                         } else {
                                                             Toast.makeText(getApplicationContext(), "Please Select Present State", Toast.LENGTH_LONG).show();
+                                                            llPresentState.setBackgroundResource(R.drawable.lldesign_error);
+                                                            mainScrollView.post(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    int y = scrollingViewPoint2.getTop();
+                                                                    mainScrollView.smoothScrollTo(0, y);
+                                                                }
+                                                            });
                                                         }
                                                     } else {
                                                         Toast.makeText(getApplicationContext(), "Please Select Blood Group", Toast.LENGTH_LONG).show();
@@ -1987,25 +2011,52 @@ public class TempProfileActivity extends AppCompatActivity {
                                             }
                                         } else {
                                             Toast.makeText(getApplicationContext(), "Please enter valid Phone number", Toast.LENGTH_LONG).show();
-
+                                            etPhnNumber.setBackgroundResource(R.drawable.lldesign_error);
+                                            mainScrollView.post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    int y = scrollinViewPoint3.getTop();
+                                                    mainScrollView.smoothScrollTo(0, y);
+                                                }
+                                            });
                                         }
                                     } else {
                                         Toast.makeText(getApplicationContext(), "Please enter valid ESI number", Toast.LENGTH_LONG).show();
                                         etESI.setBackgroundResource(R.drawable.lldesign_error);
                                     }
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "Please update your permanent pincode", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), "Please update your present pincode", Toast.LENGTH_LONG).show();
                                     etPrePinCode.setBackgroundResource(R.drawable.lldesign_error);
                                     mainScrollView.post(new Runnable() {
                                         @Override
                                         public void run() {
-                                            int y = llPersonalDetails.getTop();
+                                            int y = scrollViewPoint.getTop();
                                             mainScrollView.smoothScrollTo(0, y);
                                         }
                                     });
                                 }
+
                             } else {
                                 Toast.makeText(getApplicationContext(), "Please update your permanent address", Toast.LENGTH_LONG).show();
+                                etPerAddr.setBackgroundResource(R.drawable.lldesign_error);
+                                mainScrollView.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        int y = scrollingViewPoint2.getTop();
+                                        mainScrollView.smoothScrollTo(0, y);
+                                    }
+                                });
+                            }
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Please update your present address", Toast.LENGTH_LONG).show();
+                                etPreAddr.setBackgroundResource(R.drawable.lldesign_error);
+                                mainScrollView.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        int y = scrollingViewPoint2.getTop();
+                                        mainScrollView.smoothScrollTo(0, y);
+                                    }
+                                });
                             }
                         } else {
                             Toast.makeText(getApplicationContext(), "Please update your fathers or husband name", Toast.LENGTH_LONG).show();
@@ -2035,7 +2086,7 @@ public class TempProfileActivity extends AppCompatActivity {
                     mainScrollView.post(new Runnable() {
                         @Override
                         public void run() {
-                            int y = scrollViewPoint.getTop();
+                            int y = tvPerPin.getTop();
                             mainScrollView.smoothScrollTo(0, y);
                         }
                     });
@@ -2261,7 +2312,6 @@ public class TempProfileActivity extends AppCompatActivity {
                             e.printStackTrace();
                             Toast.makeText(TempProfileActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
                         }
-
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -2278,8 +2328,6 @@ public class TempProfileActivity extends AppCompatActivity {
 
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
-
-
     }
 
     private void serPreCity() {
@@ -2350,13 +2398,10 @@ public class TempProfileActivity extends AppCompatActivity {
                             }
 
                             // boolean _status = job1.getBoolean("status");
-
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(TempProfileActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
                         }
-
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -2530,8 +2575,6 @@ public class TempProfileActivity extends AppCompatActivity {
 
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
-
-
     }
 
     private void cameraIntent() {
@@ -2960,10 +3003,11 @@ public class TempProfileActivity extends AppCompatActivity {
 
     public void setText(String cityID,String selectedItem, String selectFor){
         if (selectFor.equals("present_city")){
+            llPresentCity.setBackgroundResource(R.drawable.lldesign9);
             txtPresentCity.setText(selectedItem);
             presentcity = cityID;
         } else  {
-            txtPermanentCity.setBackgroundColor(R.drawable.lldesign9);
+            llPermanentCity.setBackgroundResource(R.drawable.lldesign9);
             txtPermanentCity.setText(selectedItem);
             permanentcity = cityID;
         }
