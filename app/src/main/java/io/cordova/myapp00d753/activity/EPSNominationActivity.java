@@ -206,10 +206,6 @@ public class EPSNominationActivity extends AppCompatActivity {
         }
         EPSNominationAdapter nominationAdapter = new EPSNominationAdapter(itemList,EPSNominationActivity.this);
         binding.rvData.setAdapter(nominationAdapter);
-
-
-
-
     }
 
     private void onClick(){
