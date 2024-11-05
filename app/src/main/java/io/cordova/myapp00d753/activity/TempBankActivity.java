@@ -12,6 +12,8 @@ import android.net.Uri;
 import android.provider.MediaStore;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -105,7 +107,7 @@ public class TempBankActivity extends AppCompatActivity {
     String pan_pattern;
     String getbankname;
     ImageView imgHome,imgBack;
-    LinearLayout llBankVALBtn,llBankVAL;
+    LinearLayout llBankVALBtn,llBankVAL,llBankName,llDocumentType;
     Button btnBankVal;
     int bankflag=1;
     Dialog searchHolidayDialog;
@@ -122,6 +124,8 @@ public class TempBankActivity extends AppCompatActivity {
         llSubmit = (LinearLayout) findViewById(R.id.llSubmit);
         llBankVALBtn = (LinearLayout) findViewById(R.id.llBankVALBtn);
         llBankVAL = (LinearLayout) findViewById(R.id.llBankVAL);
+        llBankName = (LinearLayout) findViewById(R.id.llBankName);
+        llDocumentType = (LinearLayout) findViewById(R.id.llDocumentType);
 
         spBankName = (Spinner) findViewById(R.id.spBankName);
         spDocType = (Spinner) findViewById(R.id.spDocType);
@@ -185,29 +189,36 @@ public class TempBankActivity extends AppCompatActivity {
         llSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!bankname.isEmpty()){
-                    if (etAccNumber.getText().toString().length()>0){
-                        if (flag==1){
-                            if (etIFSC.getText().toString().length()==11){
-                                if (etFName.getText().toString().length()>0){
-
-                                    BankDetailsSubmit();
-
+                if (!bankname.isEmpty()) {
+                    if (etAccNumber.getText().toString().length() > 0) {
+                        if (flag == 1) {
+                            if (etIFSC.getText().toString().length() == 11) {
+                                if (etFName.getText().toString().length() > 0) {
+                                    if (etLName.getText().toString().length() > 0) {
+                                        BankDetailsSubmit();
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "Please enter Last Name as per Bank ", Toast.LENGTH_LONG).show();
+                                        etLName.setBackgroundResource(R.drawable.lldesign_error);
+                                    }
                                 } else {
-                                    Toast.makeText(getApplicationContext(),"Please enter First Name as per Bank ",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), "Please enter First Name as per Bank", Toast.LENGTH_LONG).show();
+                                    etFName.setBackgroundResource(R.drawable.lldesign_error);
                                 }
                             } else {
-                                Toast.makeText(getApplicationContext(),"Please enter 11 digits IFSC code",Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "Please enter 11 digits IFSC code", Toast.LENGTH_LONG).show();
+                                etIFSC.setBackgroundResource(R.drawable.lldesign_error);
                             }
-
-                        }else {
-                            Toast.makeText(getApplicationContext(),"Please upload Bank Document",Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Please upload Bank Document", Toast.LENGTH_LONG).show();
+                            //llDocumentType.setBackgroundResource(R.drawable.lldesign_error);
                         }
-                    }else {
-                        Toast.makeText(getApplicationContext(),"Please enter Account Number",Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Please enter Account Number", Toast.LENGTH_LONG).show();
+                        etAccNumber.setBackgroundResource(R.drawable.lldesign_error);
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(),"Please Select Bank Name",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Please Select Bank Name", Toast.LENGTH_LONG).show();
+                    llBankName.setBackgroundResource(R.drawable.lldesign_error);
                 }
             }
         });
@@ -226,6 +237,7 @@ public class TempBankActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 bankdocid = mainDocType.get(position).getDocID();
+                llDocumentType.setBackgroundResource(R.drawable.lldesign9);
             }
 
             @Override
@@ -282,6 +294,82 @@ public class TempBankActivity extends AppCompatActivity {
 
                 }else {
                     Toast.makeText(TempBankActivity.this,"Please enter Bank Account Number",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        etAccNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().length() > 0){
+                    etAccNumber.setBackgroundResource(R.drawable.lldesign9);
+                }
+            }
+        });
+
+        etIFSC.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().length() > 0){
+                    etIFSC.setBackgroundResource(R.drawable.lldesign9);
+                }
+            }
+        });
+
+        etFName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().length() > 0){
+                    etFName.setBackgroundResource(R.drawable.lldesign9);
+                }
+            }
+        });
+
+        etLName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().length() > 0){
+                    etLName.setBackgroundResource(R.drawable.lldesign9);
                 }
             }
         });
@@ -828,6 +916,7 @@ public class TempBankActivity extends AppCompatActivity {
     public void setText(String bankId,String selectedItem, String selectFor){
         txtBankName.setText(selectedItem);
         bankname = bankId;
+        llBankName.setBackgroundResource(R.drawable.lldesign9);
         Log.e(TAG, "bankname: "+bankname);
         searchHolidayDialog.dismiss();
     }
