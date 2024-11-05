@@ -114,8 +114,8 @@ public class TempPanActivity extends AppCompatActivity {
     EditText etAddaharNo;
     int responseflag=0;
     int panvalflag=0;
-    LinearLayout llPANVAL;
-
+    LinearLayout llPANVAL,llPanDoc,llAadharFront,llAadharBack;
+    //boolean is_Pan_Document_selected = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,6 +127,7 @@ public class TempPanActivity extends AppCompatActivity {
     private void initialize(){
         pref = new Pref(TempPanActivity.this);
         llPANVAL=(LinearLayout)findViewById(R.id.llPANVAL);
+        llPanDoc=(LinearLayout)findViewById(R.id.llPanDoc);
         etAddaharNo=(EditText)findViewById(R.id.etAddaharNo);
         btnPanSave=(Button)findViewById(R.id.btnPanSave);
 
@@ -146,6 +147,8 @@ public class TempPanActivity extends AppCompatActivity {
 
 
         llSubmit=(LinearLayout)findViewById(R.id.llSubmit);
+        llAadharFront=(LinearLayout)findViewById(R.id.llAadharFront);
+        llAadharBack=(LinearLayout)findViewById(R.id.llAadharBack);
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
@@ -186,25 +189,6 @@ public class TempPanActivity extends AppCompatActivity {
     }
 
     private void onClick(){
-        etPanNumber.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (etPanNumber.getText().toString().length()==10){
-
-                }
-
-            }
-        });
         btnAadharSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -220,6 +204,8 @@ public class TempPanActivity extends AppCompatActivity {
                             }
                         }else {
                             Toast.makeText(getApplicationContext(),"Please upload Aadhaar Front and Back Image",Toast.LENGTH_LONG).show();
+                            llAadharFront.setBackgroundResource(R.drawable.lldesign_error);
+                            llAadharBack.setBackgroundResource(R.drawable.lldesign_error);
                         }
 
 
@@ -237,8 +223,6 @@ public class TempPanActivity extends AppCompatActivity {
                 if (etPanNumber.getText().toString().length()>0){
                     if (etPanNumber.getText().toString().length()>9){
                         if (flag==1){
-
-
                             if (panvalflag==1) {
                                 panUpload();
                             }else {
@@ -246,14 +230,15 @@ public class TempPanActivity extends AppCompatActivity {
                             }
                         }else {
                             Toast.makeText(getApplicationContext(),"Please upload PAN document",Toast.LENGTH_LONG).show();
+                            llPanDoc.setBackgroundResource(R.drawable.lldesign_error);
                         }
-
                     }else {
                         Toast.makeText(getApplicationContext(),"Please enter valid PAN number",Toast.LENGTH_LONG).show();
+                        etPanNumber.setBackgroundResource(R.drawable.lldesign_error);
                     }
                 }else {
                     Toast.makeText(getApplicationContext(),"Please enter valid PAN number",Toast.LENGTH_LONG).show();
-
+                    etPanNumber.setBackgroundResource(R.drawable.lldesign_error);
                 }
             }
         });
@@ -325,7 +310,6 @@ public class TempPanActivity extends AppCompatActivity {
                 Intent intent=new Intent(TempPanActivity.this,TempProfileActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-
             }
         });
 
@@ -381,6 +365,7 @@ public class TempPanActivity extends AppCompatActivity {
                 imgDoc.setImageURI(image_uri);
                 flag=1;
 
+                llPanDoc.setBackgroundResource(R.drawable.lldesign9);
             }
         }else if ((requestCode == 200 )) {
             InputStream imageStream = null;
@@ -401,7 +386,7 @@ public class TempPanActivity extends AppCompatActivity {
 
                     flag = 1;
 
-
+                    llPanDoc.setBackgroundResource(R.drawable.lldesign9);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -419,6 +404,7 @@ public class TempPanActivity extends AppCompatActivity {
             if (image_uri != null){
                 imgAadharDocument.setImageURI(image_uri);
                 frontflag=1;
+                llAadharFront.setBackgroundResource(R.drawable.lldesign9);
 
             }
         }else if ((requestCode == 300 )) {
@@ -439,7 +425,7 @@ public class TempPanActivity extends AppCompatActivity {
                     imgAadharDocument.setImageBitmap(bm);
 
                     frontflag=1;
-
+                    llAadharFront.setBackgroundResource(R.drawable.lldesign9);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -448,7 +434,7 @@ public class TempPanActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-        }else if (requestCode == 2000 && resultCode == 3001){
+        } else if (requestCode == 2000 && resultCode == 3001) {
             Log.e("TAG", "onActivityResult: "+data.getExtras().get("picture"));
             Log.e("TAG", "onActivityResult: "+data.getExtras().get(AndroidXCameraActivity.IMAGE_PATH_KEY));
             image_uri =  Uri.parse(String.valueOf(data.getExtras().get("picture")));
@@ -458,7 +444,7 @@ public class TempPanActivity extends AppCompatActivity {
             if (image_uri != null){
                 imgAadharBackDocument.setImageURI(image_uri);
                 backflag=1;
-
+                llAadharBack.setBackgroundResource(R.drawable.lldesign9);
             }
         }else if ((requestCode == 400 )) {
             InputStream imageStream = null;
@@ -479,17 +465,14 @@ public class TempPanActivity extends AppCompatActivity {
 
                     backflag=1;
 
-
+                    llAadharBack.setBackgroundResource(R.drawable.lldesign9);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } catch (OutOfMemoryError e) {
                 e.printStackTrace();
             }
-
         }
-
-
     }
 
 
@@ -981,10 +964,12 @@ public class TempPanActivity extends AppCompatActivity {
                                     panvalflag=1;
                                     etPanNumber.setEnabled(false);
                                     llPANVAL.setVisibility(View.VISIBLE);
+                                    etPanNumber.setBackgroundResource(R.drawable.lldesign9);
                                 }else {
                                     panvalflag=0;
                                     Toast.makeText(TempPanActivity.this,"Sorry PAN validation failed",Toast.LENGTH_LONG).show();
                                     etPanNumber.setText("");
+                                    etPanNumber.setBackgroundResource(R.drawable.lldesign_error);
                                 }
                             }else {
                                 panvalflag=1;
