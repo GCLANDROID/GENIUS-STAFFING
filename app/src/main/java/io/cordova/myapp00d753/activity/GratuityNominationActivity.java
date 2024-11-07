@@ -420,10 +420,6 @@ public class GratuityNominationActivity extends AppCompatActivity {
         }
         GratuityNominationAdapter nominationAdapter=new GratuityNominationAdapter(itemList,GratuityNominationActivity.this);
         binding.rvData.setAdapter(nominationAdapter);
-
-
-
-
     }
 
 
