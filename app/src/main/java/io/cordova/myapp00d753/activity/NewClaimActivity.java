@@ -1413,6 +1413,7 @@ public class NewClaimActivity extends AppCompatActivity {
 
 
                 } else {
+                    
                     Toast.makeText(getApplicationContext(), extraWorkingDayModel.getResponseText(), Toast.LENGTH_SHORT).show();
                 }
             }
