@@ -100,11 +100,11 @@ public class WidowNominationActivity extends AppCompatActivity {
         binding.spRealation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i>0){
+                //if (i>0){
                     relationshipID=mainRealation.get(i).getDocID();
                     relationship=mainRealation.get(i).getDocumentType();
                     binding.llRelationship.setBackgroundResource(R.drawable.lldesign9);
-                }
+                //}
             }
 
             @Override
@@ -375,8 +375,8 @@ public class WidowNominationActivity extends AppCompatActivity {
                         pd.dismiss();
                         realation.clear();
                         mainRealation.clear();
-                        realation.add("Please Select");
-                        mainRealation.add(new MainDocModule("0",""));
+                        //realation.add("Please Select");
+                        //mainRealation.add(new MainDocModule("0",""));
 
                         try {
                             JSONObject job1 = new JSONObject(response);
@@ -388,21 +388,20 @@ public class WidowNominationActivity extends AppCompatActivity {
                                 JSONArray responseData = job1.optJSONArray("responseData");
                                 for (int i = 0; i < responseData.length(); i++) {
                                     JSONObject obj = responseData.getJSONObject(i);
-                                    String value = obj.optString("value");
-                                    String id = obj.optString("id");
-                                    realation.add(value);
-                                    MainDocModule mainDocModule = new MainDocModule(id, value);
-                                    mainRealation.add(mainDocModule);
-
+                                    if (obj.optString("value").equalsIgnoreCase("Wife")){
+                                        String value = obj.optString("value");
+                                        String id = obj.optString("id");
+                                        realation.add(value);
+                                        MainDocModule mainDocModule = new MainDocModule(id, value);
+                                        mainRealation.add(mainDocModule);
+                                    }
                                 }
                                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
                                         (WidowNominationActivity.this, android.R.layout.simple_spinner_item,
                                                 realation); //selected item will look like a spinner set from XML
                                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 binding.spRealation.setAdapter(spinnerArrayAdapter);
-
-
-
+                                //binding.spRealation.setSelection(0);
                             } else {
 
 

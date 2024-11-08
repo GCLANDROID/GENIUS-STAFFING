@@ -123,7 +123,7 @@ public class TempProfileActivity extends AppCompatActivity {
     private static final String SERVER_PATH = AppData.url;
     private AttendanceService uploadService;
     ProgressDialog progressDialog;
-    String sexGender, realationship, education, martialstatus, bloodgrp;
+    String sexGender="", realationship="", education="", martialstatus="", bloodgrp="";
     Button btnUpdate;
     ImageView imgBack, imgHome;
     AlertDialog alerDialog1;
@@ -182,7 +182,7 @@ public class TempProfileActivity extends AppCompatActivity {
     String namevalue, dobvalue, gendervalue="", careof, state, pin, street, locality, house, postoffice, subDistrict, vtc, district, landmark;
     Dialog searchHolidayDialog;
     LinearLayout llPermanentCity,llQualification,llInsideMain,llPersonalDetails,llBloodGrp,
-            llGender,llRelationship,llPermanentState,llPresentState,llPresentCity,llContactDetails;
+            llGender,llRelationship,llPermanentState,llPresentState,llPresentCity,llContactDetails,llMartialStatus;
     ScrollView mainScrollView;
     View scrollingPointPersonalDetails,scrollViewPoint,scrollingViewPoint2,scrollinViewPoint3,scrollingViewPoint4,llIldEsic;
     @Override
@@ -246,6 +246,7 @@ public class TempProfileActivity extends AppCompatActivity {
         llPresentState = (LinearLayout) findViewById(R.id.llPresentState);
         llPresentCity = (LinearLayout) findViewById(R.id.llPresentCity);
         llContactDetails = (LinearLayout) findViewById(R.id.llContactDetails);
+        llMartialStatus = (LinearLayout) findViewById(R.id.llMartialStatus);
         mainScrollView = (ScrollView) findViewById(R.id.mainScrollView);
         llInsideMain = (LinearLayout) findViewById(R.id.llInsideMain);
         scrollingPointPersonalDetails = (View) findViewById(R.id.scrollingPointPersonalDetails);
@@ -976,7 +977,6 @@ public class TempProfileActivity extends AppCompatActivity {
     }
 
     private void setQualification() {
-
         String surl = AppData.url + "gcl_CommonDDL?ddltype=6&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
@@ -998,7 +998,6 @@ public class TempProfileActivity extends AppCompatActivity {
                             mainQualification.add(new MainDocModule("",""));
                             if (responseStatus) {
                                 //Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
-
                                 JSONArray responseData = job1.optJSONArray("responseData");
                                 for (int i = 0; i < responseData.length(); i++) {
                                     JSONObject obj = responseData.getJSONObject(i);
@@ -1007,7 +1006,6 @@ public class TempProfileActivity extends AppCompatActivity {
                                     qualification.add(qualivalue);
                                     MainDocModule mainDocModule = new MainDocModule(qualiid, qualivalue);
                                     mainQualification.add(mainDocModule);
-
                                 }
                                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
                                         (TempProfileActivity.this, android.R.layout.simple_spinner_item,
@@ -1073,6 +1071,8 @@ public class TempProfileActivity extends AppCompatActivity {
                             boolean responseStatus = job1.optBoolean("responseStatus");
                             if (responseStatus) {
                                 //Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
+                                martial.add("Please Select");
+                                mainMartial.add(new MainDocModule("",""));
                                 JSONArray responseData = job1.optJSONArray("responseData");
                                 for (int i = 0; i < responseData.length(); i++) {
                                     JSONObject obj = responseData.getJSONObject(i);
@@ -1094,12 +1094,8 @@ public class TempProfileActivity extends AppCompatActivity {
                                 setGender();
                             } else {
 
-
                             }
-
                             // boolean _status = job1.getBoolean("status");
-
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(TempProfileActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
@@ -1522,9 +1518,13 @@ public class TempProfileActivity extends AppCompatActivity {
         spMartial.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                martialstatus = mainMartial.get(position).getDocID();
-                Log.d("martial", martialstatus);
+                if (!mainMartial.get(position).getDocID().isEmpty()){
+                    martialstatus = mainMartial.get(position).getDocID();
+                    Log.d("martial", martialstatus);
+                    llMartialStatus.setBackgroundResource(R.drawable.lldesign9);
+                } else {
+                    martialstatus = "";
+                }
             }
 
             @Override
@@ -1901,40 +1901,53 @@ public class TempProfileActivity extends AppCompatActivity {
                     if (!prepin.equals("")) {
                         if (etGurdianName.getText().toString().length() > 0) {
                             if (etPreAddr.getText().toString().length() > 0) {
-                            if (etPerAddr.getText().toString().length() > 0) {
-                                if (etPrePinCode.getText().toString().length() > 0) {
-                                    if (!etESI.getText().toString().equals("") || etESI.getText().toString().length() > 9) {
-                                        if (!etPhnNumber.getText().toString().equals("") || etPhnNumber.getText().toString().length() > 9) {
-                                            if (!sexGender.equals("") && !esicGender.equals("")) {
-                                                if (!education.equals("")) {
-                                                    if (!bloodgrp.equals("")) {
-                                                        if (!presentstate.equals("")) {
-                                                            if (!presentcity.equals("")) {
-                                                                if (!permanentstate.equals("")) {
-                                                                    if (!permanentcity.equals("")) {
-                                                                        JSONObject mainobject = new JSONObject();
-                                                                        try {
-                                                                            mainobject.put("DbOperation", "1");
-                                                                            mainobject.put("SecurityCode", pref.getSecurityCode());
-                                                                            JSONObject personalOBJ = new JSONObject();
-                                                                            personalOBJ.put("AEMEMPLOYEEID", AEMEmployeeID);
-                                                                            personalOBJ.put("Sex", sexGender);
-                                                                            personalOBJ.put("GuardianName", etGurdianName.getText().toString());
-                                                                            personalOBJ.put("RelationShip", realationship);
-                                                                            personalOBJ.put("BloodGroup", bloodgrp);
-                                                                            personalOBJ.put("DateOfBirth", DateOfBirth);
-                                                                            personalOBJ.put("Qualification", education);
-                                                                            personalOBJ.put("MaritalStatus", martialstatus);
-                                                                            personalOBJ.put("EmployeeName", tvEmpName.getText().toString());
-                                                                            mainobject.put("PersonalDetails", personalOBJ);
+                                if (etPerAddr.getText().toString().length() > 0) {
+                                    if (etPrePinCode.getText().toString().length() > 0) {
+                                        if (!etESI.getText().toString().equals("") || etESI.getText().toString().length() > 9) {
+                                            if (!etPhnNumber.getText().toString().equals("") || etPhnNumber.getText().toString().length() > 9) {
+                                                if (!sexGender.equals("") && !esicGender.equals("")) {
+                                                if (!martialstatus.equals("") ) {
+                                                    if (!education.equals("")) {
+                                                        if (!bloodgrp.equals("")) {
+                                                            if (!presentstate.equals("")) {
+                                                                if (!presentcity.equals("")) {
+                                                                    if (!permanentstate.equals("")) {
+                                                                        if (!permanentcity.equals("")) {
+                                                                            JSONObject mainobject = new JSONObject();
+                                                                            try {
+                                                                                mainobject.put("DbOperation", "1");
+                                                                                mainobject.put("SecurityCode", pref.getSecurityCode());
+                                                                                JSONObject personalOBJ = new JSONObject();
+                                                                                personalOBJ.put("AEMEMPLOYEEID", AEMEmployeeID);
+                                                                                personalOBJ.put("Sex", sexGender);
+                                                                                personalOBJ.put("GuardianName", etGurdianName.getText().toString());
+                                                                                personalOBJ.put("RelationShip", realationship);
+                                                                                personalOBJ.put("BloodGroup", bloodgrp);
+                                                                                personalOBJ.put("DateOfBirth", DateOfBirth);
+                                                                                personalOBJ.put("Qualification", education);
+                                                                                personalOBJ.put("MaritalStatus", martialstatus);
+                                                                                personalOBJ.put("EmployeeName", tvEmpName.getText().toString());
+                                                                                mainobject.put("PersonalDetails", personalOBJ);
 
-                                                                            uploadOfficalDetails(mainobject);
-                                                                        } catch (JSONException e) {
-                                                                            e.printStackTrace();
+                                                                                uploadOfficalDetails(mainobject);
+                                                                            } catch (
+                                                                                    JSONException e) {
+                                                                                e.printStackTrace();
+                                                                            }
+                                                                        } else {
+                                                                            Toast.makeText(getApplicationContext(), "Please Select Permanent City", Toast.LENGTH_LONG).show();
+                                                                            llPermanentCity.setBackgroundColor(R.drawable.lldesign_error);
+                                                                            mainScrollView.post(new Runnable() {
+                                                                                @Override
+                                                                                public void run() {
+                                                                                    int y = scrollingViewPoint2.getTop();
+                                                                                    mainScrollView.smoothScrollTo(0, y);
+                                                                                }
+                                                                            });
                                                                         }
                                                                     } else {
-                                                                        Toast.makeText(getApplicationContext(), "Please Select Permanent City", Toast.LENGTH_LONG).show();
-                                                                        llPermanentCity.setBackgroundColor(R.drawable.lldesign_error);
+                                                                        Toast.makeText(getApplicationContext(), "Please Select Permanent State", Toast.LENGTH_LONG).show();
+                                                                        llPermanentState.setBackgroundResource(R.drawable.lldesign_error);
                                                                         mainScrollView.post(new Runnable() {
                                                                             @Override
                                                                             public void run() {
@@ -1944,8 +1957,8 @@ public class TempProfileActivity extends AppCompatActivity {
                                                                         });
                                                                     }
                                                                 } else {
-                                                                    Toast.makeText(getApplicationContext(), "Please Select Permanent State", Toast.LENGTH_LONG).show();
-                                                                    llPermanentState.setBackgroundResource(R.drawable.lldesign_error);
+                                                                    Toast.makeText(getApplicationContext(), "Please Select Present City", Toast.LENGTH_LONG).show();
+                                                                    llPresentCity.setBackgroundResource(R.drawable.lldesign_error);
                                                                     mainScrollView.post(new Runnable() {
                                                                         @Override
                                                                         public void run() {
@@ -1955,8 +1968,8 @@ public class TempProfileActivity extends AppCompatActivity {
                                                                     });
                                                                 }
                                                             } else {
-                                                                Toast.makeText(getApplicationContext(), "Please Select Present City", Toast.LENGTH_LONG).show();
-                                                                llPresentCity.setBackgroundResource(R.drawable.lldesign_error);
+                                                                Toast.makeText(getApplicationContext(), "Please Select Present State", Toast.LENGTH_LONG).show();
+                                                                llPresentState.setBackgroundResource(R.drawable.lldesign_error);
                                                                 mainScrollView.post(new Runnable() {
                                                                     @Override
                                                                     public void run() {
@@ -1966,19 +1979,19 @@ public class TempProfileActivity extends AppCompatActivity {
                                                                 });
                                                             }
                                                         } else {
-                                                            Toast.makeText(getApplicationContext(), "Please Select Present State", Toast.LENGTH_LONG).show();
-                                                            llPresentState.setBackgroundResource(R.drawable.lldesign_error);
+                                                            Toast.makeText(getApplicationContext(), "Please Select Blood Group", Toast.LENGTH_LONG).show();
+                                                            llBloodGrp.setBackgroundResource(R.drawable.lldesign_error);
                                                             mainScrollView.post(new Runnable() {
                                                                 @Override
                                                                 public void run() {
-                                                                    int y = scrollingViewPoint2.getTop();
+                                                                    int y = llPersonalDetails.getTop();
                                                                     mainScrollView.smoothScrollTo(0, y);
                                                                 }
                                                             });
                                                         }
                                                     } else {
-                                                        Toast.makeText(getApplicationContext(), "Please Select Blood Group", Toast.LENGTH_LONG).show();
-                                                        llBloodGrp.setBackgroundResource(R.drawable.lldesign_error);
+                                                        Toast.makeText(getApplicationContext(), "Please Select Highest Qualification", Toast.LENGTH_LONG).show();
+                                                        llQualification.setBackgroundResource(R.drawable.lldesign_error);
                                                         mainScrollView.post(new Runnable() {
                                                             @Override
                                                             public void run() {
@@ -1988,8 +2001,19 @@ public class TempProfileActivity extends AppCompatActivity {
                                                         });
                                                     }
                                                 } else {
-                                                    Toast.makeText(getApplicationContext(), "Please Select Highest Qualification", Toast.LENGTH_LONG).show();
-                                                    llQualification.setBackgroundResource(R.drawable.lldesign_error);
+                                                    Toast.makeText(getApplicationContext(), "Please Select Marital Status", Toast.LENGTH_LONG).show();
+                                                    llMartialStatus.setBackgroundResource(R.drawable.lldesign_error);
+                                                    mainScrollView.post(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            int y = llPersonalDetails.getTop();
+                                                            mainScrollView.smoothScrollTo(0, y);
+                                                        }
+                                                    });
+                                                }
+                                                } else {
+                                                    Toast.makeText(getApplicationContext(), "Please Select Gender", Toast.LENGTH_LONG).show();
+                                                    llGender.setBackgroundResource(R.drawable.lldesign_error);
                                                     mainScrollView.post(new Runnable() {
                                                         @Override
                                                         public void run() {
@@ -1999,54 +2023,43 @@ public class TempProfileActivity extends AppCompatActivity {
                                                     });
                                                 }
                                             } else {
-                                                Toast.makeText(getApplicationContext(), "Please Select Gender", Toast.LENGTH_LONG).show();
-                                                llGender.setBackgroundResource(R.drawable.lldesign_error);
+                                                Toast.makeText(getApplicationContext(), "Please enter valid Phone number", Toast.LENGTH_LONG).show();
+                                                etPhnNumber.setBackgroundResource(R.drawable.lldesign_error);
                                                 mainScrollView.post(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        int y = llPersonalDetails.getTop();
+                                                        int y = scrollinViewPoint3.getTop();
                                                         mainScrollView.smoothScrollTo(0, y);
                                                     }
                                                 });
                                             }
                                         } else {
-                                            Toast.makeText(getApplicationContext(), "Please enter valid Phone number", Toast.LENGTH_LONG).show();
-                                            etPhnNumber.setBackgroundResource(R.drawable.lldesign_error);
-                                            mainScrollView.post(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    int y = scrollinViewPoint3.getTop();
-                                                    mainScrollView.smoothScrollTo(0, y);
-                                                }
-                                            });
+                                            Toast.makeText(getApplicationContext(), "Please enter valid ESI number", Toast.LENGTH_LONG).show();
+                                            etESI.setBackgroundResource(R.drawable.lldesign_error);
                                         }
                                     } else {
-                                        Toast.makeText(getApplicationContext(), "Please enter valid ESI number", Toast.LENGTH_LONG).show();
-                                        etESI.setBackgroundResource(R.drawable.lldesign_error);
+                                        Toast.makeText(getApplicationContext(), "Please update your present pincode", Toast.LENGTH_LONG).show();
+                                        etPrePinCode.setBackgroundResource(R.drawable.lldesign_error);
+                                        mainScrollView.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                int y = scrollViewPoint.getTop();
+                                                mainScrollView.smoothScrollTo(0, y);
+                                            }
+                                        });
                                     }
+
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "Please update your present pincode", Toast.LENGTH_LONG).show();
-                                    etPrePinCode.setBackgroundResource(R.drawable.lldesign_error);
+                                    Toast.makeText(getApplicationContext(), "Please update your permanent address", Toast.LENGTH_LONG).show();
+                                    etPerAddr.setBackgroundResource(R.drawable.lldesign_error);
                                     mainScrollView.post(new Runnable() {
                                         @Override
                                         public void run() {
-                                            int y = scrollViewPoint.getTop();
+                                            int y = scrollingViewPoint2.getTop();
                                             mainScrollView.smoothScrollTo(0, y);
                                         }
                                     });
                                 }
-
-                            } else {
-                                Toast.makeText(getApplicationContext(), "Please update your permanent address", Toast.LENGTH_LONG).show();
-                                etPerAddr.setBackgroundResource(R.drawable.lldesign_error);
-                                mainScrollView.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        int y = scrollingViewPoint2.getTop();
-                                        mainScrollView.smoothScrollTo(0, y);
-                                    }
-                                });
-                            }
                             } else {
                                 Toast.makeText(getApplicationContext(), "Please update your present address", Toast.LENGTH_LONG).show();
                                 etPreAddr.setBackgroundResource(R.drawable.lldesign_error);
@@ -2086,7 +2099,7 @@ public class TempProfileActivity extends AppCompatActivity {
                     mainScrollView.post(new Runnable() {
                         @Override
                         public void run() {
-                            int y = tvPerPin.getTop();
+                            int y = llIldEsic.getBottom();
                             mainScrollView.smoothScrollTo(0, y);
                         }
                     });
@@ -2779,6 +2792,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
 
     private void uploadOfficalDetails(JSONObject jsonObject) {
+        Log.e(TAG, "AADHER: Offical Details: "+jsonObject);
         pd.show();
         AndroidNetworking.post(AppData.newv2url + "KYC/UpdateKYCDetails")
                 .addJSONObjectBody(jsonObject)
@@ -2839,6 +2853,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
 
     private void uploadContactDetails(JSONObject jsonObject) {
+        Log.e(TAG, "AADHER: Contact Details: "+jsonObject);
         pd.show();
         AndroidNetworking.post(AppData.newv2url + "KYC/UpdateKYCDetails")
                 .addJSONObjectBody(jsonObject)
@@ -2895,6 +2910,7 @@ public class TempProfileActivity extends AppCompatActivity {
     }
 
     private void uploadesicDetails(JSONObject jsonObject) {
+        Log.e(TAG, "AADHER: Esic Details: "+jsonObject);
         pd.show();
         AndroidNetworking.post(AppData.newv2url + "KYC/UpdateKYCDetails")
                 .addJSONObjectBody(jsonObject)

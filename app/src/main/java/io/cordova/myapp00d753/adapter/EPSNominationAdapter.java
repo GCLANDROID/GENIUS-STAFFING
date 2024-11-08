@@ -45,8 +45,6 @@ public class EPSNominationAdapter extends RecyclerView.Adapter<EPSNominationAdap
                 notifyDataSetChanged();
             }
         });
-
-
     }
 
     @Override

@@ -447,6 +447,7 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
         dialogBuilder.setView(dialogView);
         LinearLayout lnCamera=(LinearLayout)dialogView.findViewById(R.id.lnCamera);
         LinearLayout lnGallery=(LinearLayout)dialogView.findViewById(R.id.lnGallery);
+        LinearLayout lnCancel=(LinearLayout)dialogView.findViewById(R.id.lnCancel);
         lnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -455,9 +456,9 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
             }
         });
 
-        if (gallerycode==100){
+        /*if (gallerycode==100){
             lnGallery.setVisibility(View.GONE);
-        }
+        }*/
 
 
         lnGallery.setOnClickListener(new View.OnClickListener() {
@@ -473,6 +474,12 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
             }
         });
 
+        lnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attachAlert.cancel();
+            }
+        });
 
 
 
