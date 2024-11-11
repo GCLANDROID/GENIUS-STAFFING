@@ -604,6 +604,7 @@ public class TempPanActivity extends AppCompatActivity {
         dialogBuilder.setView(dialogView);
         LinearLayout lnCamera=(LinearLayout)dialogView.findViewById(R.id.lnCamera);
         LinearLayout lnGallery=(LinearLayout)dialogView.findViewById(R.id.lnGallery);
+        LinearLayout lnCancel=(LinearLayout)dialogView.findViewById(R.id.lnCancel);
         lnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -621,6 +622,12 @@ public class TempPanActivity extends AppCompatActivity {
             }
         });
 
+        lnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alerDialog1.cancel();
+            }
+        });
 
 
 

@@ -169,12 +169,11 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.5"
                                 android:textColor="@color/textcolor"
-                                android:text="Aadhar of Nominee :"></TextView>
+                                android:text="Aadhaar of Nominee :"></TextView>
                             <LinearLayout
                                 android:layout_weight="1"
                                 android:layout_width="0dp"
-                                android:layout_height="40dp"
-                                >
+                                android:layout_height="40dp">
                                 <EditText
                                     android:maxLength="12"
                                     android:inputType="number"
