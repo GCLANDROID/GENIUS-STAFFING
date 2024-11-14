@@ -89,6 +89,7 @@ import io.cordova.myapp00d753.module.LeaveBalanceDetailsModel;
 import io.cordova.myapp00d753.module.PrevieModel;
 import io.cordova.myapp00d753.module.SpinnerModel;
 import io.cordova.myapp00d753.utility.AppData;
+import io.cordova.myapp00d753.utility.ClientID;
 import io.cordova.myapp00d753.utility.Pref;
 
 import static android.app.Activity.RESULT_OK;
@@ -991,7 +992,13 @@ public class ApplicationFragment extends Fragment {
                             e.printStackTrace();
                         }
                         if (striDate.getTime() > strDate.getTime() ||striDate.getTime() == strDate.getTime()) {
-                            validationChecking();
+
+                            if (pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID)){
+                                SKF_ValidationCheck();
+                            } else {
+                                validationChecking();
+                            }
+
                             /*JSONObject obj=new JSONObject();
                             try {
                                 obj.put("CompanyID", pref.getEmpClintId());
@@ -1017,6 +1024,80 @@ public class ApplicationFragment extends Fragment {
         datePickerDialog.getDatePicker();
         datePickerDialog.show();
 
+    }
+
+    private void SKF_ValidationCheck() {
+        final ProgressDialog pd = new ProgressDialog(getContext());
+        pd.setMessage("Loading...");
+        pd.setCancelable(true);
+        pd.show();
+
+        String surl = AppData.url + "Leave/CheckLeaveStartDayStatus_ELCA?CompanyID=" + pref.getEmpClintId() + "&EmployeeID=" + applicantId + "&StartDate=" + startDate + "&EndDate=" + endDate + "&LeaveTypeID=" + typeId + "&LeaveMode=" + leaveModeId + "&SecurityCode=" + pref.getSecurityCode();
+        Log.d("validationChecking", surl);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+
+                        llLoader.setVisibility(View.GONE);
+
+                        pd.dismiss();
+                        try {
+                            Log.e(TAG, "SKF_VALIDATION_CHECK: "+ response);
+                            JSONObject job1 = new JSONObject(response);
+
+                            String responseText = job1.optString("responseText");
+
+                            boolean responseStatus = job1.optBoolean("responseStatus");
+                            if (responseStatus) {
+                                tvEndDate.setText(endDate);
+                                Log.e(TAG, "leaveModeId: " + leaveModeId);
+                                if (leaveModeId.equals("0") || leaveModeId.equals("2")) {
+                                    dayBreakupListDetails.clear();
+                                    showDailyBrkUpDialog();
+
+                                } else if (leaveModeId.equals("1")) {
+
+
+                                } else {
+                                    // showCompOffDialog();
+                                }
+
+
+                            } else {
+                                endDate = "";
+                                tvEndDate.setText("");
+                                showErrorDialog(responseText);
+
+                            }
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            // Toast.makeText(AttendanceReportActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
+
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                pd.dismiss();
+
+
+                // Toast.makeText(AttendanceReportActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
+                Log.e("ert", error.toString());
+            }
+        }) {
+
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue.add(stringRequest);
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                100000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     }
 
 
@@ -1066,7 +1147,6 @@ public class ApplicationFragment extends Fragment {
                 if (i > 0) {
                     appid = mApplicantList.get(i).getItemId();
                     applicantName = mApplicantList.get(i).getItem();
-
                 }
             }
 
@@ -1997,6 +2077,21 @@ public class ApplicationFragment extends Fragment {
 
 
     private void leaveSave() {
+        Log.e(TAG, "leaveSave: \nCompanyID:"+pref.getEmpClintId()
+                +"\nEmployeeId:"+applicantId
+                +"\nStartDate:"+startDate
+                +"\nEndDate:"+endDate
+                +"\nLeaveTypeID:"+typeId
+                +"\nLeaveMode:"+leaveModeId
+                +"\nAppliedLeave:"+LeaveValue
+                +"\nReasons:"+etReason.getText().toString()
+                +"\nLeaveCategory:"+category
+                +"\nStrDayBreakUp:"+dayBreakUpDetails
+                +"\nStrCompOff:"+compOffDetails
+                +"\nStrFile:File"
+                +"\ncreatedby:"+pref.getEmpId()
+                +"\nSecurityCode:"+pref.getSecurityCode()
+                );
         AndroidNetworking.upload(AppData.url + "Leave/LeaveAdd")
                 .addMultipartParameter("CompanyID", pref.getEmpClintId())
                 .addMultipartParameter("EmployeeId", applicantId)
