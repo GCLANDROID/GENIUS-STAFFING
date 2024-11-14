@@ -40,6 +40,7 @@ import io.cordova.myapp00d753.module.MainDocModule;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
+import io.cordova.myapp00d753.utility.Util;
 
 public class WidowNominationActivity extends AppCompatActivity {
     ActivityWidowNominationBinding binding;
@@ -87,15 +88,23 @@ public class WidowNominationActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
+        binding.imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(WidowNominationActivity.this, TempDashBoardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
 
         binding.spRealation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i>0){
+                //if (i>0){
                     relationshipID=mainRealation.get(i).getDocID();
                     relationship=mainRealation.get(i).getDocumentType();
-                }
+                    binding.llRelationship.setBackgroundResource(R.drawable.lldesign9);
+                //}
             }
 
             @Override
@@ -109,6 +118,7 @@ public class WidowNominationActivity extends AppCompatActivity {
                 if (binding.imgTick.getVisibility()==View.GONE){
                     binding.imgTick.setVisibility(View.VISIBLE);
                     binding.etAddress.setText(AppData.PERMANENTADDRESS);
+                    binding.etAddress.setBackgroundResource(R.drawable.lldesign9);
                 }else {
                     binding.imgTick.setVisibility(View.GONE);
                     binding.etAddress.setText("");
@@ -165,44 +175,58 @@ public class WidowNominationActivity extends AppCompatActivity {
                         } else if (mm == 12) {
                             month = "December";
                         }
+
                         dob = d + " " + month + " " + y;
-
-                        binding.tvUANDOB.setText(dob);
-
-
+                        binding.tvUANDOB.setText(Util.changeAnyDateFormat(dob,"dd MMMM yyyy","dd MMM yy"));
                     }
                 }, dyear, dmonth, dday);
                 dialog.getDatePicker().setMaxDate((long) (System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 365.25 * 18)));
                 dialog.getDatePicker().setMinDate((long) (System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 365.25 * 90)));
                 dialog.show();
-
             }
         });
         binding.btnSaveForm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (binding.etName.getText().toString().length()>0){
-                    JSONObject jsonObject=new JSONObject();
-                    try {
-                        jsonObject.put("Name",binding.etName.getText().toString());
-                        jsonObject.put("Address",binding.etAddress.getText().toString());
-                        jsonObject.put("Aadhar",binding.etAadharNominee.getText().toString());
-                        jsonObject.put("Relationship",relationshipID);
-                        jsonObject.put("DOB",dob);
-                        jsonObject.put("AEMEMPLOYEEID",pref.getEmpId());
-                        nominationarray.put(jsonObject);
-                        nominationobject.put("widowDetails",nominationarray);
-                        nominationobject.put("DbOperation","8");
-                        nominationobject.put("SecurityCode",pref.getSecurityCode());
-                        uploadfamilydetails(nominationobject);
-
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    if (binding.etAddress.getText().toString().length()>0){
+                        if (binding.etAadharNominee.getText().toString().length()>0){
+                            if (!dob.isEmpty()){
+                                if(!relationshipID.isEmpty()){
+                                    JSONObject jsonObject=new JSONObject();
+                                    try {
+                                        jsonObject.put("Name",binding.etName.getText().toString());
+                                        jsonObject.put("Address",binding.etAddress.getText().toString());
+                                        jsonObject.put("Aadhar",binding.etAadharNominee.getText().toString());
+                                        jsonObject.put("Relationship",relationshipID);
+                                        jsonObject.put("DOB",dob);
+                                        jsonObject.put("AEMEMPLOYEEID",pref.getEmpId());
+                                        nominationarray.put(jsonObject);
+                                        nominationobject.put("widowDetails",nominationarray);
+                                        nominationobject.put("DbOperation","8");
+                                        nominationobject.put("SecurityCode",pref.getSecurityCode());
+                                        uploadfamilydetails(nominationobject);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    Toast.makeText(WidowNominationActivity.this, "Please Enter Relationship type with Nominee", Toast.LENGTH_LONG).show();
+                                    binding.llRelationship.setBackgroundResource(R.drawable.lldesign_error);
+                                }
+                            } else {
+                                Toast.makeText(WidowNominationActivity.this, "Please Select Date of Birth of Nominee", Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            Toast.makeText(WidowNominationActivity.this, "Please Enter Nominee's Aadhar Card No.", Toast.LENGTH_LONG).show();
+                            binding.etAadharNominee.setBackgroundResource(R.drawable.lldesign_error);
+                        }
+                    } else {
+                        Toast.makeText(WidowNominationActivity.this, "Please Enter Address of the Nominee", Toast.LENGTH_LONG).show();
+                        binding.etAddress.setBackgroundResource(R.drawable.lldesign_error);
                     }
                 }else {
                     Toast.makeText(WidowNominationActivity.this,"Please Enter Family Member's Name",Toast.LENGTH_LONG).show();
+                    binding.etName.setBackgroundResource(R.drawable.lldesign_error);
                 }
             }
         });
@@ -232,6 +256,63 @@ public class WidowNominationActivity extends AppCompatActivity {
 
                 }
 
+            }
+        });
+
+        binding.etName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().length() > 0){
+                    binding.etName.setBackgroundResource(R.drawable.lldesign9);
+                }
+            }
+        });
+
+        binding.etAadharNominee.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().length() > 0){
+                    binding.etAadharNominee.setBackgroundResource(R.drawable.lldesign9);
+                }
+            }
+        });
+
+        binding.etAddress.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().length() > 0){
+                    binding.etAddress.setBackgroundResource(R.drawable.lldesign_error);
+                }
             }
         });
     }
@@ -294,8 +375,8 @@ public class WidowNominationActivity extends AppCompatActivity {
                         pd.dismiss();
                         realation.clear();
                         mainRealation.clear();
-                        realation.add("Please Select");
-                        mainRealation.add(new MainDocModule("0",""));
+                        //realation.add("Please Select");
+                        //mainRealation.add(new MainDocModule("0",""));
 
                         try {
                             JSONObject job1 = new JSONObject(response);
@@ -307,21 +388,20 @@ public class WidowNominationActivity extends AppCompatActivity {
                                 JSONArray responseData = job1.optJSONArray("responseData");
                                 for (int i = 0; i < responseData.length(); i++) {
                                     JSONObject obj = responseData.getJSONObject(i);
-                                    String value = obj.optString("value");
-                                    String id = obj.optString("id");
-                                    realation.add(value);
-                                    MainDocModule mainDocModule = new MainDocModule(id, value);
-                                    mainRealation.add(mainDocModule);
-
+                                    if (obj.optString("value").equalsIgnoreCase("Wife")){
+                                        String value = obj.optString("value");
+                                        String id = obj.optString("id");
+                                        realation.add(value);
+                                        MainDocModule mainDocModule = new MainDocModule(id, value);
+                                        mainRealation.add(mainDocModule);
+                                    }
                                 }
                                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
                                         (WidowNominationActivity.this, android.R.layout.simple_spinner_item,
                                                 realation); //selected item will look like a spinner set from XML
                                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 binding.spRealation.setAdapter(spinnerArrayAdapter);
-
-
-
+                                //binding.spRealation.setSelection(0);
                             } else {
 
 

@@ -82,36 +82,48 @@ public class EPSNominationActivity extends AppCompatActivity {
         binding.imgAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (binding.etName.getText().toString().length()>0){
-                    if (binding.etAadharNominee.getText().toString().length()>0){
-
-                        JSONObject jsonObject=new JSONObject();
-                        try {
-                            jsonObject.put("Name",binding.etName.getText().toString());
-                            jsonObject.put("Address",binding.etAddress.getText().toString());
-                            jsonObject.put("Relationship",relationshipID);
-                            jsonObject.put("RelationshipID",relationship);
-                            jsonObject.put("DOB",dob);
-                            jsonObject.put("Aadhar",binding.etAadharNominee.getText().toString());
-                            jsonObject.put("AEMEMPLOYEEID",pref.getEmpId());
-                            nominationarray.put(jsonObject);
-                            nominationobject.put("epsDetails",nominationarray);
-                            nominationobject.put("DbOperation","7");
-                            nominationobject.put("SecurityCode",pref.getSecurityCode());
-                            Log.d("nomination",nominationobject.toString());
-                            getItemList(nominationobject);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                if (binding.etName.getText().toString().length() > 0) {
+                    if (binding.etAddress.getText().toString().length() > 0) {
+                        if (binding.etAadharNominee.getText().toString().length() > 0) {
+                            if (!dob.isEmpty()){
+                                if (!relationshipID.isEmpty()){
+                                    JSONObject jsonObject = new JSONObject();
+                                    try {
+                                        jsonObject.put("Name", binding.etName.getText().toString());
+                                        jsonObject.put("Address", binding.etAddress.getText().toString());
+                                        jsonObject.put("Relationship", relationshipID);
+                                        jsonObject.put("RelationshipID", relationship);
+                                        jsonObject.put("DOB", dob);
+                                        jsonObject.put("Aadhar", binding.etAadharNominee.getText().toString());
+                                        jsonObject.put("AEMEMPLOYEEID", pref.getEmpId());
+                                        nominationarray.put(jsonObject);
+                                        nominationobject.put("epsDetails", nominationarray);
+                                        nominationobject.put("DbOperation", "7");
+                                        nominationobject.put("SecurityCode", pref.getSecurityCode());
+                                        Log.d("nomination", nominationobject.toString());
+                                        getItemList(nominationobject);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }  else  {
+                                    Toast.makeText(EPSNominationActivity.this, "Please Enter Relationship type with Nominee", Toast.LENGTH_LONG).show();
+                                    binding.llRelationship.setBackgroundResource(R.drawable.lldesign_error);
+                                }
+                            } else {
+                                Toast.makeText(EPSNominationActivity.this, "Please Select Date of Birth of Nominee", Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            Toast.makeText(EPSNominationActivity.this, "Please Enter Nominee's Aadhar Card No.", Toast.LENGTH_LONG).show();
+                            binding.etAadharNominee.setBackgroundResource(R.drawable.lldesign_error);
                         }
-                    }else {
-                        Toast.makeText(EPSNominationActivity.this,"Please Enter Nominee's Aadhar Card No.",Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(EPSNominationActivity.this, "Please Enter Address of the Nominee", Toast.LENGTH_LONG).show();
+                        binding.etAddress.setBackgroundResource(R.drawable.lldesign_error);
                     }
-
-                }else {
-                    Toast.makeText(EPSNominationActivity.this,"Please Enter Family Member's Name",Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(EPSNominationActivity.this, "Please Enter Family Member's Name", Toast.LENGTH_LONG).show();
+                    binding.etName.setBackgroundResource(R.drawable.lldesign_error);
                 }
-
             }
         });
         binding.llTick.setOnClickListener(new View.OnClickListener() {
@@ -120,6 +132,7 @@ public class EPSNominationActivity extends AppCompatActivity {
                 if (binding.imgTick.getVisibility()==View.GONE){
                     binding.imgTick.setVisibility(View.VISIBLE);
                     binding.etAddress.setText(AppData.PERMANENTADDRESS);
+                    binding.etAddress.setBackgroundResource(R.drawable.lldesign9);
                 }else {
                     binding.imgTick.setVisibility(View.GONE);
                     binding.etAddress.setText("");
@@ -130,6 +143,15 @@ public class EPSNominationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 onBackPressed();
+            }
+        });
+
+        binding.imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EPSNominationActivity.this, TempDashBoardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
         });
         final SimpleTooltip tooltip = new SimpleTooltip.Builder(EPSNominationActivity.this)
@@ -182,12 +204,8 @@ public class EPSNominationActivity extends AppCompatActivity {
             epSmodel.setRelationship(Relationship);
             itemList.add(epSmodel);
         }
-        EPSNominationAdapter nominationAdapter=new EPSNominationAdapter(itemList,EPSNominationActivity.this);
+        EPSNominationAdapter nominationAdapter = new EPSNominationAdapter(itemList,EPSNominationActivity.this);
         binding.rvData.setAdapter(nominationAdapter);
-
-
-
-
     }
 
     private void onClick(){
@@ -197,6 +215,7 @@ public class EPSNominationActivity extends AppCompatActivity {
                 if (i>0){
                     relationshipID=mainRealation.get(i).getDocID();
                     relationship=mainRealation.get(i).getDocumentType();
+                    binding.llRelationship.setBackgroundResource(R.drawable.lldesign9);
                 }
             }
 
@@ -255,11 +274,10 @@ public class EPSNominationActivity extends AppCompatActivity {
                         } else if (mm == 12) {
                             month = "December";
                         }
+
                         dob = d + " " + month + " " + y;
 
-                        binding.tvUANDOB.setText(dob);
-
-
+                        binding.tvUANDOB.setText(Util.changeAnyDateFormat(dob,"dd MMMM yyyy","dd MMM yy"));
                     }
                 }, dyear, dmonth, dday);
                 dialog.getDatePicker().setMaxDate((long) (System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 365.25 * 18)));
@@ -313,6 +331,63 @@ public class EPSNominationActivity extends AppCompatActivity {
 
                 }
 
+            }
+        });
+
+        binding.etName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().length() > 0){
+                    binding.etName.setBackgroundResource(R.drawable.lldesign9);
+                }
+            }
+        });
+
+        binding.etAadharNominee.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().length() > 0){
+                    binding.etAadharNominee.setBackgroundResource(R.drawable.lldesign9);
+                }
+            }
+        });
+
+        binding.etAddress.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().length() > 0){
+                        binding.etAddress.setBackgroundResource(R.drawable.lldesign_error);
+                }
             }
         });
     }
@@ -418,7 +493,7 @@ public class EPSNominationActivity extends AppCompatActivity {
 
                             Toast.makeText(EPSNominationActivity.this,"EPS Details has been updated Successfully",Toast.LENGTH_LONG).show();
 
-                        }else {
+                        } else {
 
                         }
                     }

@@ -44,9 +44,6 @@ public class GratuityNominationAdapter extends RecyclerView.Adapter<GratuityNomi
                 notifyDataSetChanged();
             }
         });
-
-
-
     }
 
     @Override

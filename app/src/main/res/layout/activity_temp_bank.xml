@@ -103,9 +103,11 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1">
                         <LinearLayout
+                            android:id="@+id/llBankName"
                             android:layout_width="match_parent"
                             android:layout_height="30dp"
-                            android:background="@drawable/lldesign9">
+                            android:background="@drawable/lldesign9"
+                            android:orientation="vertical">
 
                             <Spinner
                                 android:visibility="gone"
@@ -180,6 +182,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1">
                         <LinearLayout
+                            android:id="@+id/llDocumentType"
                             android:layout_width="match_parent"
                             android:layout_height="30dp"
                             android:background="@drawable/lldesign9">

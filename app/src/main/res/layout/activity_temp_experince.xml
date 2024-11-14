@@ -168,19 +168,19 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:textColor="@color/black"
-                            android:text="SBI Experience (In Months): "></TextView>
+                            android:text="SBI Experience (In Months): "/>
                         <EditText
+                            android:id="@+id/etSBIExp"
                             android:singleLine="true"
                             android:imeOptions="actionNext"
                             android:inputType="number"
                             android:padding="5dp"
                             android:textSize="14sp"
                             android:textColor="@color/black"
-                            android:id="@+id/etSBIExp"
                             android:layout_width="0dp"
                             android:layout_height="40dp"
                             android:background="@drawable/lldesign9"
-                            android:layout_weight="0.5"></EditText>
+                            android:layout_weight="0.5"/>
                     </LinearLayout>
                     <LinearLayout
                         android:id="@+id/llNonSBIEXP"
@@ -194,7 +194,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:textColor="@color/black"
-                            android:text="Non SBI Experience (In Months): "></TextView>
+                            android:text="Non SBI Experience (In Months): "/>
                         <EditText
                             android:singleLine="true"
                             android:imeOptions="actionNext"
@@ -206,7 +206,7 @@
                             android:layout_width="0dp"
                             android:layout_height="40dp"
                             android:background="@drawable/lldesign9"
-                            android:layout_weight="0.5"></EditText>
+                            android:layout_weight="0.5"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_marginTop="10dp"
@@ -219,7 +219,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:textColor="@color/black"
-                            android:text="Previous Company’s Name*: "></TextView>
+                            android:text="Previous Company’s Name*: "/>
                         <EditText
                             android:singleLine="true"
                             android:imeOptions="actionNext"
@@ -230,7 +230,7 @@
                             android:layout_width="0dp"
                             android:layout_height="40dp"
                             android:background="@drawable/lldesign9"
-                            android:layout_weight="0.5"></EditText>
+                            android:layout_weight="0.5"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_marginTop="10dp"
@@ -243,7 +243,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:textColor="@color/black"
-                            android:text="Previous Employee’s Designation*: "></TextView>
+                            android:text="Previous Employee’s Designation*: "/>
                         <EditText
                             android:singleLine="true"
                             android:imeOptions="actionNext"
@@ -254,7 +254,7 @@
                             android:layout_width="0dp"
                             android:layout_height="40dp"
                             android:background="@drawable/lldesign9"
-                            android:layout_weight="0.5"></EditText>
+                            android:layout_weight="0.5"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_marginTop="10dp"
@@ -267,7 +267,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:textColor="@color/black"
-                            android:text="Previous Reporting Manager’s Name*: "></TextView>
+                            android:text="Previous Reporting Manager’s Name*: "/>
                         <EditText
                             android:singleLine="true"
                             android:imeOptions="actionNext"
@@ -278,7 +278,7 @@
                             android:layout_width="0dp"
                             android:layout_height="40dp"
                             android:background="@drawable/lldesign9"
-                            android:layout_weight="0.5"></EditText>
+                            android:layout_weight="0.5"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_marginTop="10dp"
@@ -291,7 +291,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:textColor="@color/black"
-                            android:text="Previous Reporting Manager’s Designation*: "></TextView>
+                            android:text="Previous Reporting Manager’s Designation*: "/>
                         <EditText
                             android:singleLine="true"
                             android:imeOptions="actionNext"
@@ -302,7 +302,7 @@
                             android:layout_width="0dp"
                             android:layout_height="40dp"
                             android:background="@drawable/lldesign9"
-                            android:layout_weight="0.5"></EditText>
+                            android:layout_weight="0.5"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_marginTop="10dp"
@@ -315,7 +315,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:textColor="@color/black"
-                            android:text="Previous Reporting Manager’s Contact Details*: "></TextView>
+                            android:text="Previous Reporting Manager’s Contact Details*: "/>
                         <EditText
                             android:singleLine="true"
                             android:imeOptions="actionNext"
@@ -328,7 +328,7 @@
                             android:layout_width="0dp"
                             android:layout_height="40dp"
                             android:background="@drawable/lldesign9"
-                            android:layout_weight="0.5"></EditText>
+                            android:layout_weight="0.5"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_marginTop="10dp"
@@ -341,7 +341,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:textColor="@color/black"
-                            android:text="Previous Company’s DOJ*: "></TextView>
+                            android:text="Previous Company’s DOJ*: "/>
                         <TextView
                             android:padding="5dp"
                             android:textSize="14sp"
@@ -350,7 +350,7 @@
                             android:layout_width="0dp"
                             android:layout_height="40dp"
                             android:background="@drawable/lldesign9"
-                            android:layout_weight="0.5"></TextView>
+                            android:layout_weight="0.5"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_marginTop="10dp"
@@ -363,7 +363,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:textColor="@color/black"
-                            android:text="Previous Company’s DOE*: "></TextView>
+                            android:text="Previous Company’s DOE*: "/>
                         <TextView
                             android:padding="5dp"
                             android:textSize="14sp"
@@ -372,7 +372,7 @@
                             android:layout_width="0dp"
                             android:layout_height="40dp"
                             android:background="@drawable/lldesign9"
-                            android:layout_weight="0.5"></TextView>
+                            android:layout_weight="0.5"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_marginTop="10dp"

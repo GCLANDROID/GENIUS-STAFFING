@@ -94,6 +94,10 @@ public class KYCFamilyActivity extends AppCompatActivity {
     String relationship="";
     String relationshipID="";
     KYCFamilyAdapter nominationAdapter;
+    ArrayList<String> gender = new ArrayList<>();
+    ArrayList<MainDocModule> mainGender = new ArrayList<>();
+    ProgressDialog pd2;
+    String sexGender="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,37 +136,51 @@ public class KYCFamilyActivity extends AppCompatActivity {
         });
 
         tooltip.show();
-        layoutManager
-                = new LinearLayoutManager(KYCFamilyActivity.this, LinearLayoutManager.VERTICAL, false);
+        layoutManager = new LinearLayoutManager(KYCFamilyActivity.this, LinearLayoutManager.VERTICAL, false);
         binding.rvData.setLayoutManager(layoutManager);
         binding.imgAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (binding.etName.getText().toString().length()>0){
-                    JSONObject jsonObject=new JSONObject();
-                    try {
-                        jsonObject.put("Name",binding.etName.getText().toString());
-                        jsonObject.put("Gender",binding.etGender.getText().toString());
-                        jsonObject.put("Relationship",relationshipID);
-                        jsonObject.put("RelationshipID",relationship);
-                        jsonObject.put("DOB",dob);
-                        jsonObject.put("AEMEMPLOYEEID",pref.getEmpId());
-                        nominationarray.put(jsonObject);
-                        nominationobject.put("familyDetails",nominationarray);
-                        nominationobject.put("DbOperation","6");
-                        nominationobject.put("SecurityCode",pref.getSecurityCode());
-                        Log.d("nomination",nominationobject.toString());
-                        getItemList(nominationobject);
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                if (binding.etName.getText().toString().length()>0) {
+                    if (!sexGender.isEmpty()) {
+                        if (!dob.isEmpty()) {
+                            if (!relationship.isEmpty()){
+                                JSONObject jsonObject = new JSONObject();
+                                try {
+                                    jsonObject.put("Name", binding.etName.getText().toString());
+                                    jsonObject.put("Gender", sexGender);
+                                    jsonObject.put("Relationship", relationshipID);
+                                    jsonObject.put("RelationshipID", relationship);
+                                    jsonObject.put("DOB", dob);
+                                    jsonObject.put("AEMEMPLOYEEID", pref.getEmpId());
+                                    nominationarray.put(jsonObject);
+                                    nominationobject.put("familyDetails", nominationarray);
+                                    nominationobject.put("DbOperation", "6");
+                                    nominationobject.put("SecurityCode", pref.getSecurityCode());
+                                    Log.d("nomination", nominationobject.toString());
+                                    getItemList(nominationobject);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                Toast.makeText(KYCFamilyActivity.this, "Please Select Relationship with Family Member", Toast.LENGTH_LONG).show();
+                                binding.llRelationship.setBackgroundResource(R.drawable.lldesign_error);
+                            }
+                        } else {
+                            Toast.makeText(KYCFamilyActivity.this, "Please Select Family Member's Date of Birth", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Toast.makeText(KYCFamilyActivity.this, "Please Select Family Member's Gender", Toast.LENGTH_LONG).show();
+                        binding.llGender.setBackgroundResource(R.drawable.lldesign_error);
                     }
                 }else {
                     Toast.makeText(KYCFamilyActivity.this,"Please Enter Family Member's Name",Toast.LENGTH_LONG).show();
+                    binding.etName.setBackgroundResource(R.drawable.lldesign_error);
                 }
 
             }
         });
+
         binding.imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -170,6 +188,14 @@ public class KYCFamilyActivity extends AppCompatActivity {
             }
         });
 
+        binding.imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(KYCFamilyActivity.this, TempDashBoardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
     }
 
     private void getItemList(JSONObject object){
@@ -211,6 +237,7 @@ public class KYCFamilyActivity extends AppCompatActivity {
                 if (i>0){
                     relationshipID=mainRealation.get(i).getDocID();
                     relationship=mainRealation.get(i).getDocumentType();
+                    binding.llRelationship.setBackgroundResource(R.drawable.lldesign9);
                 }
             }
 
@@ -306,6 +333,44 @@ public class KYCFamilyActivity extends AppCompatActivity {
 
             }
         });
+
+        binding.spGender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!mainGender.get(position).getDocumentType().isEmpty()){
+                    sexGender = mainGender.get(position).getDocumentType();
+                    binding.llGender.setBackgroundResource(R.drawable.lldesign9);
+                }
+
+                //sexGender = mainGender.get(position).getDocID();
+                //Log.d("sexgender", sexGender);
+                //spESICGender.setSelection(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        binding.etName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().length() > 0){
+                    binding.etName.setBackgroundResource(R.drawable.lldesign9);
+                }
+            }
+        });
     }
 
 
@@ -355,7 +420,7 @@ public class KYCFamilyActivity extends AppCompatActivity {
     private void setNomineeRelation() {
 
         String surl = AppData.url+"gcl_CommonDDL?ddltype=7&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
-        ProgressDialog pd=new ProgressDialog(KYCFamilyActivity.this);
+        pd=new ProgressDialog(KYCFamilyActivity.this);
         pd.setMessage("Loading");
         pd.setCancelable(false);
         pd.show();
@@ -364,7 +429,6 @@ public class KYCFamilyActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Log.d("responseLogin", response);
-                       pd.dismiss();
                         realation.clear();
                         mainRealation.clear();
                         realation.add("Please Select");
@@ -394,7 +458,7 @@ public class KYCFamilyActivity extends AppCompatActivity {
                                 binding.spRealation.setAdapter(spinnerArrayAdapter);
 
 
-
+                                setGender();
                             } else {
 
 
@@ -412,7 +476,7 @@ public class KYCFamilyActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-               pd.dismiss();
+               pd2.dismiss();
 
                 //   Toast.makeText(DocumentManageActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
                 Log.e("ert", error.toString());
@@ -435,8 +499,76 @@ public class KYCFamilyActivity extends AppCompatActivity {
 
     }
 
+    private void setGender() {
+        String surl = AppData.url + "gcl_CommonDDL?ddltype=10&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
+        //llLoader.setVisibility(View.VISIBLE);
+        //llMain.setVisibility(View.GONE);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("responseLogin", response);
+                        //llLoader.setVisibility(View.VISIBLE);
+                        //llMain.setVisibility(View.GONE);
+                        pd.dismiss();
+                        gender.clear();
+                        mainGender.clear();
+
+                        try {
+                            JSONObject job1 = new JSONObject(response);
+                            Log.e("response12", "@@@@@@" + job1);
+                            String responseText = job1.optString("responseText");
+                            boolean responseStatus = job1.optBoolean("responseStatus");
+                            gender.add("Please select");
+                            mainGender.add(new MainDocModule("",""));
+                            if (responseStatus) {
+                                //Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
+                                JSONArray responseData = job1.optJSONArray("responseData");
+                                for (int i = 0; i < responseData.length(); i++) {
+                                    JSONObject obj = responseData.getJSONObject(i);
+                                    String value = obj.optString("value");
+                                    String id = obj.optString("id");
+                                    gender.add(value);
+                                    MainDocModule mainDocModule = new MainDocModule(id, value);
+                                    mainGender.add(mainDocModule);
+
+                                }
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                        (KYCFamilyActivity.this, android.R.layout.simple_spinner_item,
+                                                gender); //selected item will look like a spinner set from XML
+                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                binding.spGender.setAdapter(spinnerArrayAdapter);
 
 
 
+                            } else {
 
+
+                            }
+
+                            // boolean _status = job1.getBoolean("status");
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(KYCFamilyActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //llLoader.setVisibility(View.VISIBLE);
+                //llMain.setVisibility(View.GONE);
+                pd.dismiss();
+                //   Toast.makeText(DocumentManageActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
+                Log.e("ert", error.toString());
+                //errflag = 4;
+                //showInternetDialog();
+            }
+        }) {
+
+        };
+        AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
+    }
 }

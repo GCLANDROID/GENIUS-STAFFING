@@ -16,6 +16,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -86,6 +88,7 @@ public class TempExperinceActivity extends AppCompatActivity {
     String pfPercantage="";
     String uanRltionshp="";
     int pfflag=0;
+    boolean is_PF_Account_Exist = false, is_Experience_Letter_Selected = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -167,6 +170,7 @@ public class TempExperinceActivity extends AppCompatActivity {
                     binding.imgYes.setVisibility(View.GONE);
                     binding.llUAN.setVisibility(View.GONE);
                 }
+                is_PF_Account_Exist = true;
             }
         });
 
@@ -184,6 +188,7 @@ public class TempExperinceActivity extends AppCompatActivity {
                     binding.imgYes.setVisibility(View.GONE);
                     binding.llUAN.setVisibility(View.GONE);
                 }
+                is_PF_Account_Exist = true;
             }
         });
 
@@ -195,6 +200,16 @@ public class TempExperinceActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        binding.imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TempExperinceActivity.this, TempDashBoardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+
         binding.imgAttach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -256,7 +271,7 @@ public class TempExperinceActivity extends AppCompatActivity {
 
                         binding.etDOJ.setText(doj);
 
-
+                        binding.etDOJ.setBackgroundResource(R.drawable.lldesign9);
 
                     }
                 }, dyear, dmonth, dday);
@@ -337,14 +352,10 @@ public class TempExperinceActivity extends AppCompatActivity {
                         if (striDate.getTime() > strDate.getTime() ||striDate.getTime() == strDate.getTime()) {
 
                             binding.etDOE.setText(doe);
-
+                            binding.etDOE.setBackgroundResource(R.drawable.lldesign9);
                         }else {
                             Toast.makeText(TempExperinceActivity.this,"DOE Can Not be before than DOJ",Toast.LENGTH_LONG).show();
                         }
-
-
-
-
                     }
                 }, dyear, dmonth, dday);
                 dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
@@ -406,8 +417,6 @@ public class TempExperinceActivity extends AppCompatActivity {
                         uanDOB = d + " " + month + " " + y;
 
                         binding.tvUANDOB.setText(uanDOB);
-
-
                     }
                 }, dyear, dmonth, dday);
                 dialog.getDatePicker().setMaxDate((long) (System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 365.25 * 18)));
@@ -437,12 +446,137 @@ public class TempExperinceActivity extends AppCompatActivity {
                 if (position > 0) {
                     pfPercantage = uanPercentage.get(position);
                 }
-
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+        binding.etcompany.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().length() > 0){
+                    binding.etcompany.setBackgroundResource(R.drawable.lldesign9);
+                }
+            }
+        });
+        binding.etDesignation.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().length() > 0){
+                    binding.etDesignation.setBackgroundResource(R.drawable.lldesign9);
+                }
+            }
+        });
+        binding.etManagerName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().length() > 0){
+                    binding.etManagerName.setBackgroundResource(R.drawable.lldesign9);
+                }
+            }
+        });
+        binding.etManagerDesignation.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().length() > 0){
+                    binding.etManagerDesignation.setBackgroundResource(R.drawable.lldesign9);
+                }
+            }
+        });
+        binding.etManagerContact.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().length() > 0){
+                    binding.etManagerContact.setBackgroundResource(R.drawable.lldesign9);
+                }
+            }
+        });
+        binding.etUAN.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().length() > 0){
+                    binding.etUAN.setBackgroundResource(R.drawable.lldesign9);
+                }
+            }
+        });
+        binding.etPFNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().length() > 0){
+                    binding.etPFNumber.setBackgroundResource(R.drawable.lldesign9);
+                }
             }
         });
         binding.btnSaveForm.setOnClickListener(new View.OnClickListener() {
@@ -459,54 +593,51 @@ public class TempExperinceActivity extends AppCompatActivity {
                                         if (binding.etManagerContact.getText().toString().length()==10){
                                             if (!doj.equals("")){
                                                 if (!doe.equals("")){
-                                                    if (pfflag==1){
-                                                        UANValidation();
-                                                    }else {
-                                                        experiencesubmit("1");
+                                                    if (is_Experience_Letter_Selected){
+                                                        if (is_PF_Account_Exist){
+                                                            if (pfflag==1){
+                                                                UANValidation();
+                                                            }else {
+                                                                experiencesubmit("1");
+                                                            }
+                                                        } else {
+                                                            Toast.makeText(TempExperinceActivity.this,"Please Select PF Account Existing status",Toast.LENGTH_LONG).show();
+                                                        }
+                                                    } else {
+                                                        Toast.makeText(TempExperinceActivity.this,"Please Select Your Experience Letter",Toast.LENGTH_LONG).show();
                                                     }
-
-
                                                 }else {
                                                     Toast.makeText(TempExperinceActivity.this,"Please Enter Previous Company’s DOE",Toast.LENGTH_LONG).show();
-
+                                                    binding.etDOE.setBackgroundResource(R.drawable.lldesign_error);
                                                 }
-
                                             }else {
                                                 Toast.makeText(TempExperinceActivity.this,"Please Enter Previous Company’s DOJ",Toast.LENGTH_LONG).show();
-
+                                                binding.etDOJ.setBackgroundResource(R.drawable.lldesign_error);
                                             }
-
                                         }else {
                                             Toast.makeText(TempExperinceActivity.this,"Please Enter Previous Reporting Manager’s Contact Details",Toast.LENGTH_LONG).show();
-
+                                            binding.etManagerContact.setBackgroundResource(R.drawable.lldesign_error);
                                         }
-
                                     }else {
                                         Toast.makeText(TempExperinceActivity.this,"Please Enter Previous Reporting Manager’s Designation",Toast.LENGTH_LONG).show();
-
+                                        binding.etManagerDesignation.setBackgroundResource(R.drawable.lldesign_error);
                                     }
-
                                 }else {
                                     Toast.makeText(TempExperinceActivity.this,"Please Enter Previous Reporting Manager’s Name",Toast.LENGTH_LONG).show();
-
+                                    binding.etManagerName.setBackgroundResource(R.drawable.lldesign_error);
                                 }
-
                             }else {
                                 Toast.makeText(TempExperinceActivity.this,"Please Enter Previous Employee’s Designation",Toast.LENGTH_LONG).show();
-
+                                binding.etDesignation.setBackgroundResource(R.drawable.lldesign_error);
                             }
-
-
                         }else {
                             Toast.makeText(TempExperinceActivity.this,"Please Enter Previous Company's Name",Toast.LENGTH_LONG).show();
+                            binding.etcompany.setBackgroundResource(R.drawable.lldesign_error);
                         }
-
                     }
                 }else {
                     Toast.makeText(TempExperinceActivity.this,"Please select Freshers/Experienced option",Toast.LENGTH_LONG).show();
                 }
-
-
             }
         });
     }
@@ -578,7 +709,7 @@ public class TempExperinceActivity extends AppCompatActivity {
             if (image_uri != null){
                 binding.imgAttachImage.setImageURI(image_uri);
                 imageflag=1;
-
+                is_Experience_Letter_Selected = true;
             }
         }else  if ((requestCode == 300 )){
             Uri uri = data.getData();
@@ -602,14 +733,10 @@ public class TempExperinceActivity extends AppCompatActivity {
 
             }
             binding.imgAttachImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_pdf));
-             imageflag = 1;
-            //flag++;
+            imageflag = 1;
+            is_Experience_Letter_Selected = true;
+
         }
-
-
-
-
-
     }
 
     public static String getRealPath(Context context, Uri fileUri) {
@@ -875,15 +1002,13 @@ public class TempExperinceActivity extends AppCompatActivity {
         if (binding.etUAN.getText().toString().length()==12){
             if (binding.etPFNumber.getText().toString().length()>5){
                 experiencesubmit("1");
-
             }else {
                 Toast.makeText(TempExperinceActivity.this,"Please Enter your PF number",Toast.LENGTH_LONG).show();
-
+                binding.etPFNumber.setBackgroundResource(R.drawable.lldesign_error);
             }
-
-        }else {
+        } else {
             Toast.makeText(TempExperinceActivity.this,"Please Enter your UAN number",Toast.LENGTH_LONG).show();
+            binding.etUAN.setBackgroundResource(R.drawable.lldesign_error);
         }
     }
-
 }

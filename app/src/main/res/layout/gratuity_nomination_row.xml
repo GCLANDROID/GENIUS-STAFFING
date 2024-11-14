@@ -2,23 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="horizontal">
     <LinearLayout
-
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/lldesign9">
-        <TextView
-            android:padding="10dp"
-            android:id="@+id/tvName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:layout_weight="0.5"
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
             android:gravity="center"
-            android:textSize="12sp"
-            android:text="Name"
-            android:layout_gravity="center"></TextView>
+            android:orientation="vertical">
+
+            <TextView
+                android:padding="10dp"
+                android:id="@+id/tvName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:textSize="12sp"
+                android:text="Name"
+                android:layout_gravity="center"/>
+
+        </LinearLayout>
+
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
@@ -26,14 +33,14 @@
         <TextView
             android:id="@+id/tvAddress"
             android:padding="10dp"
-            android:layout_width="0dp"
+            android:layout_width="130dp"
+            android:minWidth="130dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:layout_weight="0.5"
             android:gravity="center"
             android:textSize="12sp"
             android:text="Address"
-            android:layout_gravity="center"></TextView>
+            android:layout_gravity="center"/>
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
@@ -41,10 +48,9 @@
         <TextView
             android:id="@+id/tvAge"
             android:padding="10dp"
-            android:layout_width="0dp"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:layout_weight="0.3"
             android:gravity="center"
             android:textSize="12sp"
             android:text="Age"
@@ -56,10 +62,9 @@
         <TextView
             android:id="@+id/tvRealtionShip"
             android:padding="10dp"
-            android:layout_width="0dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:layout_weight="0.5"
             android:gravity="center"
             android:textSize="12sp"
             android:text="Relationship"
@@ -71,20 +76,30 @@
         <TextView
             android:id="@+id/tvProportion"
             android:padding="10dp"
-            android:layout_width="0dp"
+            android:layout_width="100dp"
+            android:minWidth="100dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:layout_weight="0.5"
             android:gravity="center"
             android:textSize="12sp"
             android:text="Relationship"
             android:layout_gravity="center"></TextView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:visibility="visible"
+        android:layout_gravity="center">
         <ImageView
             android:id="@+id/imgDelete"
             android:layout_gravity="center"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/deleteicon"></ImageView>
+            android:src="@drawable/deleteicon"/>
     </LinearLayout>
 
 
