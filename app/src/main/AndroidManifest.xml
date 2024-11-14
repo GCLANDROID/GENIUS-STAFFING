@@ -35,16 +35,12 @@
             android:exported="false" />
         <activity
             android:name=".activity.TempExperinceActivity"
-            android:exported="false"
-            android:screenOrientation="userPortrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".activity.TEMPAadharQRActivity"
-            android:exported="false"
-            android:screenOrientation="userPortrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -79,40 +75,30 @@
             android:screenOrientation="userPortrait" />
         <activity
             android:name=".activity.TempOtherDocumentActivity"
-            android:exported="false"
-            android:screenOrientation="userPortrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".activity.TempEducationaActivity"
-            android:exported="false"
-            android:screenOrientation="userPortrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".activity.GratuityNominationActivity"
-            android:exported="false"
-            android:screenOrientation="userPortrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".activity.WidowNominationActivity"
-            android:exported="false"
-            android:screenOrientation="userPortrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".activity.EPSNominationActivity"
-            android:exported="false"
-            android:screenOrientation="userPortrait" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

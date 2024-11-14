@@ -20,6 +20,7 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 
@@ -27,6 +28,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -77,20 +80,26 @@ import java.util.Locale;
 import io.cordova.myapp00d753.R;
 
 import io.cordova.myapp00d753.Retrofit.RetrofitClient;
+import io.cordova.myapp00d753.activity.LoginActivity;
+import io.cordova.myapp00d753.activity.TempEducationaActivity;
+import io.cordova.myapp00d753.activity.TempExperinceActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.LocationSpinnerAdapter;
 import io.cordova.myapp00d753.activity.metso.adapter.ShiftSpinnerAdapter;
 import io.cordova.myapp00d753.activity.metso.model.LocationSpinnerModel;
 import io.cordova.myapp00d753.activity.metso.model.MetsoLocationModel;
 import io.cordova.myapp00d753.activity.metso.model.MetsoShiftModel;
 import io.cordova.myapp00d753.activity.metso.model.ShiftSpinnerModel;
+import io.cordova.myapp00d753.adapter.EducationAdapter;
+import io.cordova.myapp00d753.module.EducationalModel;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.GPSTracker;
 import io.cordova.myapp00d753.utility.Pref;
+import io.cordova.myapp00d753.utility.Util;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener{
+public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private static final String TAG = "MetsoAttendanceActivity";
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -125,8 +134,12 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
     LocationListener locationListener;
     String address1;
     String address = "N/A";
-    LinearLayout llLoading,llSubmit;
+    LinearLayout llLoading, llSubmit;
     TextView tvTimer;
+    AlertDialog alertDialog;
+    private static final int REQUEST_PHONE_STATE = 1;
+    String phoneNumber;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -286,6 +299,20 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
         progressDialog = new ProgressDialog(MetsoAttendanceActivity.this);
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
+        phoneNumber=getAndroidID(MetsoAttendanceActivity.this);
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("CompanyID", pref.getEmpClintId());
+            obj.put("EmployeeID", pref.getEmpId());
+            obj.put("IMEINo", phoneNumber);
+            obj.put("Action", 1);
+            obj.put("Username", "A");
+            obj.put("SecurityCode", pref.getSecurityCode());
+            savedeviceID(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void settingToGetLocation() {
@@ -454,7 +481,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
         });*/
 
 
-        AndroidNetworking.upload(AppData.url+"gcl_post_attedanceGeofenceMetso")
+        AndroidNetworking.upload(AppData.url + "gcl_post_attedanceGeofenceMetso")
                 .addMultipartParameter("AEMEmployeeID", MasterID)
                 .addMultipartParameter("Address", address)
                 .addMultipartParameter("Shiftid", Shiftid)
@@ -575,7 +602,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
                                 public void run() {
                                     getLocations();
                                 }
-                            },2000);
+                            }, 2000);
                             Log.e(TAG, "onMapReady: Error");
                         }
                     }
@@ -601,7 +628,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
                 == PackageManager.PERMISSION_GRANTED) {
             @SuppressLint("MissingPermission") Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleClient);
             if (location == null) {
-                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleClient, mLocationRequest,  this);
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleClient, mLocationRequest, this);
             } else {
                 handleNewLocation(location);
             }
@@ -609,8 +636,8 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
     }
 
     private void handleNewLocation(Location location) {
-        Log.e(TAG,"Imporent: "+location.toString());
-        Log.e(TAG,"currentLongitude: Latitude: "+location.getLatitude()+" Longitude: "+location.getLongitude());
+        Log.e(TAG, "Imporent: " + location.toString());
+        Log.e(TAG, "currentLongitude: Latitude: " + location.getLatitude() + " Longitude: " + location.getLongitude());
         currentLatitude = location.getLatitude();
         latitude = String.valueOf(location.getLatitude());
 
@@ -630,7 +657,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.location_icon_5));
         txtCurrentLocation.setText(address);
 
-        if (llLoading.getVisibility() == View.VISIBLE){
+        if (llLoading.getVisibility() == View.VISIBLE) {
             llLoading.setVisibility(View.GONE);
             llSubmit.setVisibility(View.VISIBLE);
             startTimer();
@@ -650,7 +677,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
 
     private void startTimer() {
         int timerInMillis = 120 * 1000;
-        CountDownTimer countDownTimer = new CountDownTimer(timerInMillis,1000) {
+        CountDownTimer countDownTimer = new CountDownTimer(timerInMillis, 1000) {
             @Override
             public void onTick(long l) {
                 long seconds = l / 1000;
@@ -870,6 +897,87 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
         }
         return strAdd;
     }
+
+
+    private void savedeviceID(JSONObject jsonObject) {
+        ProgressDialog pd = new ProgressDialog(MetsoAttendanceActivity.this);
+        pd.setCancelable(false);
+        pd.setMessage("Loading");
+        pd.show();
+        AndroidNetworking.post(AppData.newv2url + "Attendance/SaveIMEITrackingDetails")
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        pd.dismiss();
+
+                        int Response_Code = job1.optInt("Response_Code");
+                        String Response_Message = job1.optString("Response_Message");
+                        if (Response_Code == 101) {
+
+                        } else {
+
+                            shoeErrorDialog(Response_Message);
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        pd.dismiss();
+
+
+                    }
+                });
+    }
+
+
+    private void shoeErrorDialog(String msg) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MetsoAttendanceActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.dialog_alerts, null);
+        dialogBuilder.setView(dialogView);
+        Button btnOk = (Button) dialogView.findViewById(R.id.btnOk);
+        TextView tvSuccess = (TextView) dialogView.findViewById(R.id.tvSuccess);
+        tvSuccess.setText(msg);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+                onBackPressed();
+            }
+        });
+        alertDialog = dialogBuilder.create();
+        alertDialog.setCancelable(false);
+        Window window = alertDialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        alertDialog.show();
+
+
+    }
+
+
+
+
+
+    public static String getAndroidID(Context context) {
+        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
+
+
+
+
+
 
 
 }
