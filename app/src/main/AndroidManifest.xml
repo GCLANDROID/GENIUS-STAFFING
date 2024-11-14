@@ -2,9 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.cordova.myapp00d753">
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -13,11 +13,12 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <application
         android:name=".utility.AppController"
@@ -35,12 +36,15 @@
             android:exported="false" />
         <activity
             android:name=".activity.TempExperinceActivity"
+            android:screenOrientation="userPortrait"
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".activity.TEMPAadharQRActivity"
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -75,35 +79,45 @@
             android:screenOrientation="userPortrait" />
         <activity
             android:name=".activity.TempOtherDocumentActivity"
+            android:exported="false"
+            android:screenOrientation="userPortrait" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".activity.TempEducationaActivity"
+            android:exported="false"
+            android:screenOrientation="userPortrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".activity.GratuityNominationActivity"
+            android:exported="false"
+            android:screenOrientation="userPortrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".activity.WidowNominationActivity"
+            android:exported="false"
+            android:screenOrientation="userPortrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".activity.EPSNominationActivity"
+            android:screenOrientation="userPortrait"
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
-                android:value="" />
+                android:value=""/>
         </activity>
-        <activity android:name=".activity.FMSNewClaimActivity" />
+        <activity android:name=".activity.FMSNewClaimActivity"/>
         <activity
             android:name=".activity.honnasa.HonasaSalesDashboardActivity"
             android:exported="false">
@@ -222,14 +236,14 @@
         <activity android:name=".activity.QRGeneratorActivity" />
         <activity
             android:name=".activity.LeaveApplicationActivity"
-            android:screenOrientation="userPortrait" />
+            android:screenOrientation="userPortrait"/>
         <activity
             android:name=".activity.OffAttenDanceActivity"
-            android:screenOrientation="userPortrait" />
+            android:screenOrientation="userPortrait"/>
 
         <uses-library
             android:name="org.apache.http.legacy"
-            android:required="false" />
+            android:required="false"/>
 
         <activity
             android:name=".SplashScreenActivity"
@@ -345,6 +359,7 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
@@ -369,8 +384,7 @@
             android:screenOrientation="userPortrait" />
         <activity
             android:name=".activity.TempProfileActivity"
-            android:screenOrientation="userPortrait">
-        </activity>
+            android:screenOrientation="userPortrait" />
         <activity
             android:name=".activity.HRMSDashBoardActivity"
             android:screenOrientation="userPortrait" />
@@ -575,16 +589,13 @@
             android:name=".facereogntion.InterViewerPanelActivity"
             android:screenOrientation="userPortrait" />
         <activity android:name=".activity.FrontCamera" />
-        <activity android:name=".AndroidXCamera.FrontAndroidXCameraActivity"
-            android:screenOrientation="userPortrait"/>
+        <activity android:name=".AndroidXCamera.FrontAndroidXCameraActivity" />
         <activity android:name=".activity.metso.MetsoAttendanceActivity" />
         <activity android:name=".activity.metso.MetsoAttendanceRegularizationActivity" />
         <activity android:name=".activity.metso.MetsoAttendanceReportActivity" />
-        <activity android:name=".AndroidXCamera.AndroidXCameraActivity"
-            android:screenOrientation="userPortrait"/>
+        <activity android:name=".AndroidXCamera.AndroidXCameraActivity" />
         <activity android:name=".activity.HolidayMarkingActivity" />
-        <activity android:name=".AndroidXCamera.FrontBackAndroidXCameraActivity"
-            android:screenOrientation="userPortrait"/>
+        <activity android:name=".AndroidXCamera.FrontBackAndroidXCameraActivity" />
 
         <service
             android:name=".FirebaseNotification.MyFirebaseMessagingService"
@@ -594,5 +605,4 @@
             </intent-filter>
         </service>
     </application>
-
 </manifest>
