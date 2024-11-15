@@ -76,7 +76,7 @@ public class WidowNominationActivity extends AppCompatActivity {
                 startActivity(intent);
                 binding.etName.setText("");
                 binding.etAadharNominee.setText("");
-                binding.etAddress.setVisibility(View.GONE);
+                binding.etAddress.setText("");
                 binding.imgTick.setVisibility(View.GONE);
                 binding.spRealation.setSelection(0);
 
