@@ -186,6 +186,7 @@ public class TempProfileActivity extends AppCompatActivity {
             llGender,llRelationship,llPermanentState,llPresentState,llPresentCity,llContactDetails,llMartialStatus;
     ScrollView mainScrollView;
     View scrollingPointPersonalDetails,scrollViewPoint,scrollingViewPoint2,scrollinViewPoint3,scrollingViewPoint4,llIldEsic,llScrollingViewPoint2,llPrePin;
+    boolean aadhaarflag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -197,6 +198,7 @@ public class TempProfileActivity extends AppCompatActivity {
     }
 
     private void initialize() {
+        aadhaarflag=getIntent().getBooleanExtra("aadhaarflag",false);
         searchHolidayDialog = new Dialog(TempProfileActivity.this, R.style.CustomDialogNew2);
         namevalue = getIntent().getStringExtra("namevalue");
         dobvalue = getIntent().getStringExtra("dobvalue");
@@ -2942,6 +2944,70 @@ public class TempProfileActivity extends AppCompatActivity {
 
                         int Response_Code = job1.optInt("Response_Code");
                         if (Response_Code == 101) {
+                            if (aadhaarflag==true){
+                                pd.show();
+                                JSONObject obj=new JSONObject();
+                                try {
+                                    obj.put("Operation",1);
+                                    obj.put("Id",pref.getEmpId());
+                                    aadharTrack(obj);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }else {
+                                pd.dismiss();
+
+                                Intent intent = new Intent(TempProfileActivity.this, KYCFamilyActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+
+                                Toast.makeText(TempProfileActivity.this, "Your Details has been updated Successfully", Toast.LENGTH_LONG).show();
+
+                            }
+
+
+
+                            //Toast.makeText(TempProfileActivity.this, "ESIC Details has been updated Successfully", Toast.LENGTH_LONG).show();
+
+                        } else {
+                            pd.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+
+                        Intent intent = new Intent(TempProfileActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+
+                    }
+                });
+    }
+
+
+    private void aadharTrack(JSONObject jsonObject) {
+        Log.e(TAG, "AADHER: Esic Details: "+jsonObject);
+        pd.show();
+        AndroidNetworking.post(AppData.newv2url + "Profile/UpdateEmployeeKYCApiStatus")
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+
+
+                        int Response_Code = job1.optInt("Response_Code");
+                        if (Response_Code == 101) {
                             pd.dismiss();
 
                             Intent intent = new Intent(TempProfileActivity.this, KYCFamilyActivity.class);
@@ -2969,9 +3035,6 @@ public class TempProfileActivity extends AppCompatActivity {
                     }
                 });
     }
-
-
-
 
     private void openSearchCityDialog(String from) {
         searchHolidayDialog.setContentView(R.layout.wbs_code_search_layout);

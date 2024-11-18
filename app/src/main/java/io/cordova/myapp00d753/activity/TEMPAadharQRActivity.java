@@ -48,6 +48,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
     String sessionId;
     AlertDialog al1;
     androidx.appcompat.app.AlertDialog alerDialog1;
+    boolean aadharflag=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -263,6 +264,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
 
                         int statusCode = job1.optInt("statusCode");
                         if (statusCode == 200) {
+                            aadharflag=true;
                             JSONObject details=job1.optJSONObject("details");
                             //name
                             JSONObject name=details.optJSONObject("name");
@@ -434,6 +436,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                     intent.putExtra("district",district);
                     intent.putExtra("vtc",vtc);
                     intent.putExtra("landmark",landmark);
+                    intent.putExtra("aadhaarflag",aadharflag);
                     startActivity(intent);
                     finish();
                 }
@@ -556,6 +559,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                         int Response_Code = job1.optInt("Response_Code");
                         JSONObject Response_Data=job1.optJSONObject("Response_Data");
                         if (Response_Data!=null){
+                            aadharflag=false;
                             JSONObject details=Response_Data.optJSONObject("details");
                             JSONObject name=details.optJSONObject("name");
                             String namevalue=name.optString("value");
