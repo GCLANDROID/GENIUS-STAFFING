@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -189,6 +190,7 @@ public class TempProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_temp_profile);
+
         initialize();
         // completedialog();
         onClick();
@@ -1675,6 +1677,7 @@ public class TempProfileActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 realationship = mainRealation.get(position).getDocumentType();
+                llRelationship.setBackgroundResource(R.drawable.lldesign9);
                 Log.d("realation", realationship);
             }
 
@@ -1898,6 +1901,7 @@ public class TempProfileActivity extends AppCompatActivity {
                 if (!preaddr.equals("")) {
                     if (!prepin.equals("")) {
                         if (etGurdianName.getText().toString().length() > 0) {
+                        if (!realationship.isEmpty()) {
                             if (etPreAddr.getText().toString().length() > 0) {
                                 if (etPerAddr.getText().toString().length() > 0) {
                                     if (etPrePinCode.getText().toString().length() > 0) {
@@ -2071,7 +2075,18 @@ public class TempProfileActivity extends AppCompatActivity {
                                 });
                             }
                         } else {
-                            Toast.makeText(getApplicationContext(), "Please update your fathers or husband name", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Please select relationship", Toast.LENGTH_LONG).show();
+                            llRelationship.setBackgroundResource(R.drawable.lldesign_error);
+                            mainScrollView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    int y = llPersonalDetails.getTop();
+                                    mainScrollView.smoothScrollTo(0, y);
+                                }
+                            });
+                        }
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Please update your father's or husband name", Toast.LENGTH_LONG).show();
                             etGurdianName.setBackgroundResource(R.drawable.lldesign_error);
                             mainScrollView.post(new Runnable() {
                                 @Override
