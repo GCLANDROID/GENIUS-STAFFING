@@ -137,6 +137,23 @@
                 android:text="Leave \nAdjustment"></TextView>
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/llLeaveBalanceReport"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/lldesign11"
+            android:gravity="center">
+            <TextView
+                android:textAlignment="center"
+                android:id="@+id/tvLeaveBalance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/maincolor"
+                android:text="Leave \nBalance"></TextView>
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>
