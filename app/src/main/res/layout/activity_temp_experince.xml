@@ -500,7 +500,7 @@
                                     android:background="@drawable/lldesign9"
                                     android:digits="1234567890"
                                     android:paddingLeft="10dp"
-                                    android:text="--"
+                                    android:text=""
                                     android:textSize="12sp"
                                     android:textColor="@android:color/black" />
                             </LinearLayout>
@@ -539,7 +539,7 @@
                                     android:layout_marginLeft="10dp"
                                     android:background="@drawable/lldesign9"
                                     android:paddingLeft="10dp"
-                                    android:text="--"
+                                    android:text=""
                                     android:textSize="12sp"
                                     android:textColor="@android:color/black" />
                             </LinearLayout>
@@ -580,7 +580,7 @@
                                     android:layout_marginLeft="10dp"
                                     android:background="@drawable/lldesign9"
                                     android:paddingLeft="10dp"
-                                    android:text="--"
+                                    android:text=""
                                     android:textSize="12sp"
                                     android:textColor="@android:color/black" />
                             </LinearLayout>
@@ -619,7 +619,7 @@
                                     android:layout_marginLeft="10dp"
                                     android:background="@drawable/lldesign9"
                                     android:paddingLeft="10dp"
-                                    android:text="--"
+                                    android:text=""
                                     android:textSize="12sp"
                                     android:textColor="@android:color/black" />
                             </LinearLayout>
@@ -781,7 +781,7 @@
                                     android:layout_marginLeft="10dp"
                                     android:background="@drawable/lldesign9"
                                     android:paddingLeft="10dp"
-                                    android:text="--"
+                                    android:text=""
                                     android:textSize="12sp"
                                     android:textColor="@android:color/black" />
                             </LinearLayout>

@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,6 +76,7 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
     int flag;
     String pdfFilePath, pdfFileName;
     private static final int DEFAULT_BUFFER_SIZE = 2048;
+    ImageView imgBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -202,6 +204,12 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
                 Intent intent = new Intent(TempOtherDocumentActivity.this, TempDashBoardActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+            }
+        });
+        binding.imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }
