@@ -44,6 +44,7 @@
         </activity>
         <activity
             android:name=".activity.TEMPAadharQRActivity"
+            android:screenOrientation="userPortrait"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -384,7 +385,7 @@
             android:screenOrientation="userPortrait" />
         <activity
             android:name=".activity.TempProfileActivity"
-            android:screenOrientation="userPortrait" />
+            android:screenOrientation="userPortrait"/>
         <activity
             android:name=".activity.HRMSDashBoardActivity"
             android:screenOrientation="userPortrait" />
