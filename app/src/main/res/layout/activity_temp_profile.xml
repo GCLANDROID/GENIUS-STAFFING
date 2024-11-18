@@ -24,7 +24,7 @@
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:layout_marginLeft="10dp"
-                    android:src="@drawable/backimg" />
+                    android:src="@drawable/backimg"/>
             </LinearLayout>
 
             <LinearLayout
@@ -625,7 +625,7 @@
                                     <Spinner
                                         android:id="@+id/spRealation"
                                         android:layout_width="match_parent"
-                                        android:layout_height="match_parent"></Spinner>
+                                        android:layout_height="match_parent"/>
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
@@ -1167,6 +1167,15 @@
                             android:layout_height="wrap_content"/>
 
                         <LinearLayout
+                            android:id="@+id/llScrollingViewPoint2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+
+
+                        <LinearLayout
+                            android:id="@+id/llPrePin"
                             android:visibility="visible"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1507,10 +1516,7 @@
                         </LinearLayout>
 
 
-
-
-
-
+                        </LinearLayout>
 
 
                     </LinearLayout>
@@ -1565,11 +1571,11 @@
                                 android:layout_height="30dp"
                                 android:layout_marginLeft="10dp"
                                 android:background="@drawable/lldesign9"
+                                android:hint="--"
                                 android:maxLength="17"
                                 android:paddingLeft="10dp"
-                                android:hint="--"
-                                android:textSize="12sp"
-                                android:textColor="@android:color/black" />
+                                android:textColor="@android:color/black"
+                                android:textSize="12sp" />
                         </LinearLayout>
                     </LinearLayout>
                     <!--nominee name-->
