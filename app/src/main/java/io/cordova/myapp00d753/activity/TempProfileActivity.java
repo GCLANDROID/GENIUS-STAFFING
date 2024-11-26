@@ -291,12 +291,12 @@ public class TempProfileActivity extends AppCompatActivity {
 
         llMain = (LinearLayout) findViewById(R.id.llMain);
 
-        /*JSONObject obj=new JSONObject();
+       /* JSONObject obj=new JSONObject();
         try {
             obj.put("AEMConsultantID", pref.getEmpConId());
             obj.put("AEMClientID",pref.getEmpClintId());
             obj.put("AEMClientOfficeID",pref.getEmpClintOffId());
-            obj.put("AEMEmployeeID",pref.getEmpId());
+            obj.put("AEMEmployeeID",pref.getMasterId());
             obj.put("SecurityCode",pref.getSecurityCode());
             obj.put("WorkingStatus","1");
             obj.put("CurrentPage","0");
@@ -2950,6 +2950,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                 try {
                                     obj.put("Operation",1);
                                     obj.put("Id",pref.getEmpId());
+                                    Log.d("aadhartrackobj",obj.toString());
                                     aadharTrack(obj);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -3003,7 +3004,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
 
                         JSONObject job1 = response;
-                        Log.e("response12", "@@@@@@" + job1);
+                        Log.e("aadhartarck", "@@@@@@" + job1);
 
 
                         int Response_Code = job1.optInt("Response_Code");

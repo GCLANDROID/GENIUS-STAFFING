@@ -116,6 +116,7 @@ public class TempPanActivity extends AppCompatActivity {
     int panvalflag=0;
     LinearLayout llPANVAL,llPanDoc,llAadharFront,llAadharBack;
     //boolean is_Pan_Document_selected = false;
+    boolean panFlag=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -811,6 +812,7 @@ public class TempPanActivity extends AppCompatActivity {
                             if (!dateOfBirth.equals("")){
                                 if (dateOfBirth.equals(AppData.ADHARDOB)) {
                                     panvalflag=1;
+                                    panFlag=true;
                                     etPanNumber.setEnabled(false);
                                     llPANVAL.setVisibility(View.VISIBLE);
                                 }else {
@@ -820,6 +822,7 @@ public class TempPanActivity extends AppCompatActivity {
                                 }
                             }else {
                                 panvalflag=1;
+                                panFlag=true;
                                 etPanNumber.setEnabled(false);
                             }
 
@@ -881,7 +884,21 @@ public class TempPanActivity extends AppCompatActivity {
 
                         JSONObject job1 = response;
                         Log.e("response12", "@@@@@@" + job1);
-                        pd.dismiss();
+                        if (panFlag==true){
+                            pd.show();
+                            JSONObject obj=new JSONObject();
+                            try {
+                                obj.put("Operation",2);
+                                obj.put("Id",pref.getEmpId());
+                                Log.d("aadhartrackobj",obj.toString());
+                                aadharTrack(obj,pd);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }else {
+                            pd.dismiss();
+                        }
 
 
 
@@ -891,6 +908,49 @@ public class TempPanActivity extends AppCompatActivity {
                     public void onError(ANError error) {
 
                         pd.dismiss();
+
+                    }
+                });
+    }
+
+    private void aadharTrack(JSONObject jsonObject,ProgressDialog pd) {
+
+        pd.show();
+        AndroidNetworking.post(AppData.newv2url + "Profile/UpdateEmployeeKYCApiStatus")
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        JSONObject job1 = response;
+                        Log.e("aadhartarck", "@@@@@@" + job1);
+
+
+                        int Response_Code = job1.optInt("Response_Code");
+                        if (Response_Code == 101) {
+                            pd.dismiss();
+
+
+
+                            //Toast.makeText(TempProfileActivity.this, "ESIC Details has been updated Successfully", Toast.LENGTH_LONG).show();
+
+                        } else {
+                            pd.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+
+                        Intent intent = new Intent(TempPanActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
 
                     }
                 });
@@ -967,6 +1027,7 @@ public class TempPanActivity extends AppCompatActivity {
                             JSONObject panData=data.optJSONObject("panData");
                             String dateOfBirth= Util.changeAnyDateFormat(panData.optString("dateOfBirth"),"yyyy-MM-dd","dd-MM-yyyy");
                             if (!dateOfBirth.equals("")){
+                                panFlag=true;
                                 if (dateOfBirth.equals(AppData.ADHARDOB)) {
                                     panvalflag=1;
                                     etPanNumber.setEnabled(false);
@@ -979,6 +1040,7 @@ public class TempPanActivity extends AppCompatActivity {
                                     etPanNumber.setBackgroundResource(R.drawable.lldesign_error);
                                 }
                             }else {
+                                panFlag=true;
                                 panvalflag=1;
                                 etPanNumber.setEnabled(false);
                             }
