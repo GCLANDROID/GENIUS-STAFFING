@@ -42,6 +42,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
@@ -74,8 +75,11 @@ import java.util.Date;
 import java.util.Locale;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.SKF.SKF_AttendanceRegularizationActivity;
 import io.cordova.myapp00d753.adapter.MenuItemAdapter;
+import io.cordova.myapp00d753.adapter.PFDocumentAdapter;
 import io.cordova.myapp00d753.module.MenuItemModel;
+import io.cordova.myapp00d753.module.PFDocumentModule;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
@@ -106,7 +110,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
     File f;
     private static final String IMAGE_DIRECTORY = "/signdemo";
 
-    RecyclerView rvItem;
+    RecyclerView rvItem,rvPFDocument;
     ArrayList<MenuItemModel>itemList=new ArrayList<>();
     ImageView imglogout;
     String menuName;
@@ -130,6 +134,8 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
     ArrayList<String>menuID=new ArrayList<>();
     TextView tvNotifcation;
     LinearLayout llNotification;
+    ArrayList<PFDocumentModule>docList=new ArrayList<>();
+    LinearLayout llPfDocument;
 
 
     @Override
@@ -180,7 +186,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
 
         tvEmpName=(TextView)findViewById(R.id.tvEmpName);
 
-        tvEmpName.setText("Welcome "+pref.getEmpName());
+        tvEmpName.setText(pref.getEmpName());
         tvNotifcation=(TextView)findViewById(R.id.tvNotifcation);
         llNotification=(LinearLayout)findViewById(R.id.llNotification);
 
@@ -189,7 +195,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         Calendar c = Calendar.getInstance();
         int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
 
-        if (timeOfDay >= 0 && timeOfDay < 12) {
+       /* if (timeOfDay >= 0 && timeOfDay < 12) {
             tvGreeting.setText("Hi! Good Morning");
         } else if (timeOfDay >= 12 && timeOfDay < 16) {
             tvGreeting.setText("Hi! Good Afternoon");
@@ -198,14 +204,17 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         } else if (timeOfDay >= 21 && timeOfDay < 24) {
 
             tvGreeting.setText("Hi! Good Evening");
-        }
+        }*/
         tvLoginDateTime = (TextView) findViewById(R.id.tvDate);
         tvLoginDateTime.setText(pref.getloginTime());
 
         rvItem=(RecyclerView)findViewById(R.id.rvItem);
-        rvItem.setLayoutManager(new GridLayoutManager(this, 4));
+        rvItem.setLayoutManager(new GridLayoutManager(this, 3));
 
 
+        rvPFDocument=(RecyclerView) findViewById(R.id.rvPFDocument);
+        rvPFDocument.setLayoutManager(new LinearLayoutManager(EmployeeDashBoardActivity.this));
+        llPfDocument=(LinearLayout)findViewById(R.id.llPfDocument);
         Date cd = Calendar.getInstance().getTime();
         System.out.println("Current time => " + cd);
 
@@ -602,6 +611,25 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                     llNotification.setVisibility(View.VISIBLE);
                                 }else {
                                     llNotification.setVisibility(View.GONE);
+                                }
+
+                                JSONArray Document=Response_Data.optJSONArray("Document");
+                                if (Document.length()>0){
+                                    llPfDocument.setVisibility(View.VISIBLE);
+                                    for (int i=0;i<Document.length();i++){
+                                        JSONObject docOBJ=Document.optJSONObject(i);
+                                        String Doc_Info=docOBJ.optString("Doc_Info");
+                                        String Doc_Url=docOBJ.optString("Doc_Url");
+                                        PFDocumentModule pfmodule=new PFDocumentModule();
+                                        pfmodule.setDoc_Info(Doc_Info);
+                                        pfmodule.setDoc_Url(Doc_Url);
+                                        docList.add(pfmodule);
+                                    }
+
+                                    PFDocumentAdapter docAdapter=new PFDocumentAdapter(docList,EmployeeDashBoardActivity.this);
+                                    rvPFDocument.setAdapter(docAdapter);
+                                }else {
+                                    llPfDocument.setVisibility(View.GONE);
                                 }
 
                             }
