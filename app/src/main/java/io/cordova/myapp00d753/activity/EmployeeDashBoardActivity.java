@@ -128,6 +128,8 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
     String android_id;
     int leaveFlag;
     ArrayList<String>menuID=new ArrayList<>();
+    TextView tvNotifcation;
+    LinearLayout llNotification;
 
 
     @Override
@@ -179,7 +181,8 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         tvEmpName=(TextView)findViewById(R.id.tvEmpName);
 
         tvEmpName.setText("Welcome "+pref.getEmpName());
-
+        tvNotifcation=(TextView)findViewById(R.id.tvNotifcation);
+        llNotification=(LinearLayout)findViewById(R.id.llNotification);
 
 
         tvGreeting = (TextView) findViewById(R.id.tvGreeting);
@@ -200,7 +203,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         tvLoginDateTime.setText(pref.getloginTime());
 
         rvItem=(RecyclerView)findViewById(R.id.rvItem);
-        rvItem.setLayoutManager(new GridLayoutManager(this, 3));
+        rvItem.setLayoutManager(new GridLayoutManager(this, 4));
 
 
         Date cd = Calendar.getInstance().getTime();
@@ -551,6 +554,56 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                 rvItem.setAdapter(menuItemAdapter);
 
                                 getFeedbackChecking();
+                                JSONObject object=new JSONObject();
+                                object.put("Id","1");
+                                object.put("SecurityCode","0000");
+                                getNotification(object);
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "GET_MENU_error: "+anError.getErrorBody());
+                        if (anError.getErrorCode()==401){
+                            Toast.makeText(EmployeeDashBoardActivity.this, "Session expired, please login", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(EmployeeDashBoardActivity.this, LoginActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }
+                    }
+                });
+    }
+
+
+    public void getNotification(JSONObject jsonObject) {
+        AndroidNetworking.post(AppData.GetPFNotificationAPI)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "GET_MENU: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                JSONObject Response_Data = job1.optJSONObject("Response_Data");
+                                JSONArray Content=Response_Data.optJSONArray("Content");
+                                JSONObject contentobj=Content.optJSONObject(0);
+                                String sContent=contentobj.optString("Content");
+                                tvNotifcation.setText(sContent);
+                                if (Content.length()>0){
+                                    llNotification.setVisibility(View.VISIBLE);
+                                }else {
+                                    llNotification.setVisibility(View.GONE);
+                                }
+
                             }
                         } catch (JSONException e) {
                             throw new RuntimeException(e);

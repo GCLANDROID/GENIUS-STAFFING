@@ -70,5 +70,6 @@ public class AppData {
     public static String SKF_SAVE_ATTENDANCE_REGULARIZATION = newv2url+"SKF/SaveAttendanceRegularization";
     public static String SaveExperienceDetails = newv2url+"Document/SaveExperienceDetails";
     public static String PROTACTORGAMBLEID = "AEMCLI1310000776";
+    public static String GetPFNotificationAPI=newv2url+"PFNotification/GetPFNotification";
 
 }
