@@ -36,6 +36,7 @@ import java.util.Calendar;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.databinding.ActivityWidowNominationBinding;
+import io.cordova.myapp00d753.module.EPSmodel;
 import io.cordova.myapp00d753.module.MainDocModule;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
@@ -43,6 +44,7 @@ import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.Util;
 
 public class WidowNominationActivity extends AppCompatActivity {
+    private static final String TAG = "WidowNominationActivity";
     ActivityWidowNominationBinding binding;
     Pref pref;
     ProgressDialog pd;
@@ -361,7 +363,6 @@ public class WidowNominationActivity extends AppCompatActivity {
     }
 
     private void setNomineeRelation() {
-
         String surl = AppData.url+"gcl_CommonDDL?ddltype=7&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
         ProgressDialog pd=new ProgressDialog(WidowNominationActivity.this);
         pd.setMessage("Loading");
@@ -402,6 +403,19 @@ public class WidowNominationActivity extends AppCompatActivity {
                                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 binding.spRealation.setAdapter(spinnerArrayAdapter);
                                 //binding.spRealation.setSelection(0);
+
+                                JSONObject jsonObject = new JSONObject();
+                                try {
+                                    jsonObject.put("AEMConsultantID", pref.getEmpConId());
+                                    jsonObject.put("AEMClientID", pref.getEmpClintId());
+                                    jsonObject.put("AEMClientOfficeID", pref.getEmpClintOffId());
+                                    jsonObject.put("AEMEmployeeID", pref.getEmpId());
+                                    jsonObject.put("WorkingStatus", "1");
+                                    jsonObject.put("Operation", "8");
+                                    getWidowPensionDetails(jsonObject);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             } else {
 
 
@@ -482,6 +496,51 @@ public class WidowNominationActivity extends AppCompatActivity {
                 });
     }
 
+    private void getWidowPensionDetails(JSONObject jsonObject) {
+        Log.e(TAG, "getWidowPensionDetails: INPUT: "+jsonObject);
+        pd.show();
+        AndroidNetworking.post(AppData.KYC_GET_DETAILS)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "GET_WIDOW_NOMINATION_DETAILS: "+response.toString(4));
+                            pd.dismiss();
+                            JSONObject job1 = response;
+                            int Response_Code = job1.optInt("Response_Code");
+                            if (Response_Code == 101) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONObject job2 = new JSONObject(Response_Data);
+                                JSONArray jsonArray = job2.getJSONArray("WIDOWDetails");
+                                JSONObject job3 = jsonArray.getJSONObject(0);
+                                binding.etName.setText(job3.optString("MemberName"));
+                                binding.etAddress.setText(job3.optString("NomineeAddress"));
+                                binding.etAddress.setBackgroundResource(R.drawable.lldesign9);
+                                binding.etAadharNominee.setText(job3.optString("MemberAadhar"));
+                                dob = job3.optString("MemberDOB");
+                                binding.tvUANDOB.setText(dob);
+                                int index = realation.indexOf(job3.optString("Relation"));
+                                binding.spRealation.setSelection(index);
+                            } else {
 
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        pd.dismiss();
+                        Log.e(TAG, "GET_WIDOW_NOMINATION_DETAILS_onError: "+anError.getErrorBody());
+                        Toast.makeText(WidowNominationActivity.this, "Something went to wrong", Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
 
 }

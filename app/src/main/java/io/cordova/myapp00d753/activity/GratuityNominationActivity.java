@@ -49,6 +49,7 @@ import io.cordova.myapp00d753.utility.Pref;
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip;
 
 public class GratuityNominationActivity extends AppCompatActivity {
+    private static final String TAG = "GratuityNominationActiv";
     ActivityGratuityNominationBinding binding;
     JSONObject nominationobject=new JSONObject();
     JSONArray nominationarray=new JSONArray();
@@ -62,6 +63,7 @@ public class GratuityNominationActivity extends AppCompatActivity {
     String relationshipID="";
     String month;
     String dob="";
+    GratuityNominationAdapter nominationAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -398,7 +400,7 @@ public class GratuityNominationActivity extends AppCompatActivity {
         binding.spRealation.setSelection(0);
         binding.etProportion.setText("");
         binding.llData.setVisibility(View.VISIBLE);
-        itemList.clear();
+        //itemList.clear();
 
 
         JSONArray nomination=object.optJSONArray("gratuityDetails");
@@ -418,8 +420,13 @@ public class GratuityNominationActivity extends AppCompatActivity {
 
             itemList.add(epSmodel);
         }
-        GratuityNominationAdapter nominationAdapter=new GratuityNominationAdapter(itemList,GratuityNominationActivity.this);
-        binding.rvData.setAdapter(nominationAdapter);
+
+        if (nominationAdapter == null){
+            nominationAdapter=new GratuityNominationAdapter(itemList,GratuityNominationActivity.this);
+            binding.rvData.setAdapter(nominationAdapter);
+        } else {
+            nominationAdapter.notifyDataSetChanged();
+        }
     }
 
 
@@ -467,7 +474,6 @@ public class GratuityNominationActivity extends AppCompatActivity {
 
 
     private void setNomineeRelation() {
-
         String surl = AppData.url+"gcl_CommonDDL?ddltype=7&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
         ProgressDialog pd=new ProgressDialog(GratuityNominationActivity.this);
         pd.setMessage("Loading");
@@ -507,7 +513,18 @@ public class GratuityNominationActivity extends AppCompatActivity {
                                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 binding.spRealation.setAdapter(spinnerArrayAdapter);
 
-
+                                JSONObject jsonObject = new JSONObject();
+                                try {
+                                    jsonObject.put("AEMConsultantID", pref.getEmpConId());
+                                    jsonObject.put("AEMClientID", pref.getEmpClintId());
+                                    jsonObject.put("AEMClientOfficeID", pref.getEmpClintOffId());
+                                    jsonObject.put("AEMEmployeeID", pref.getEmpId());
+                                    jsonObject.put("WorkingStatus", "1");
+                                    jsonObject.put("Operation", "9");
+                                    getGratuityDetails(jsonObject);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
 
                             } else {
 
@@ -582,8 +599,6 @@ public class GratuityNominationActivity extends AppCompatActivity {
 
                         Toast.makeText(GratuityNominationActivity.this,"Sorry!Invalid Aadhar Number",Toast.LENGTH_LONG).show();
                         binding.etAadharNominee.setText("");
-
-
                     }
                 });
     }
@@ -595,7 +610,72 @@ public class GratuityNominationActivity extends AppCompatActivity {
         if (itemList.size()==0){
             binding.llData.setVisibility(View.GONE);
         }
-
     }
 
+    private void getGratuityDetails(JSONObject jsonObject) {
+        Log.e(TAG, "getGratuityDetails: INPUT: "+jsonObject);
+        pd.show();
+        AndroidNetworking.post(AppData.KYC_GET_DETAILS)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "GET_GRATUITY_DETAILS: "+response.toString(4));
+                            pd.dismiss();
+                            JSONObject job1 = response;
+                            int Response_Code = job1.optInt("Response_Code");
+                            if (Response_Code == 101) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONObject job2 = new JSONObject(Response_Data);
+                                JSONArray jsonArray = job2.getJSONArray("GratuityDetails");
+                                for (int i=0;i<jsonArray.length();i++){
+                                    JSONObject nomiobj=jsonArray.optJSONObject(i);
+                                    String Name=nomiobj.optString("MemberName");
+                                    String Address=nomiobj.optString("NomineeAddress");
+                                    String Relationship=nomiobj.optString("Relation");
+                                    String Age=nomiobj.optString("MemberDOB");
+                                    String Proportion=nomiobj.optString("Proportion");
+                                    GratuityModel epSmodel=new GratuityModel();
+                                    epSmodel.setName(Name);
+                                    epSmodel.setAddress(Address);
+                                    epSmodel.setAge(Age);
+                                    epSmodel.setRelationship(Relationship);
+                                    epSmodel.setPortion(Proportion);
+                                    itemList.add(epSmodel);
+                                }
+
+
+                                if (itemList.size() > 0){
+                                    binding.llData.setVisibility(View.VISIBLE);
+                                } else {
+                                    binding.llData.setVisibility(View.GONE);
+                                }
+
+                                if (nominationAdapter == null){
+                                    nominationAdapter=new GratuityNominationAdapter(itemList,GratuityNominationActivity.this);
+                                    binding.rvData.setAdapter(nominationAdapter);
+                                } else {
+                                    nominationAdapter.notifyDataSetChanged();
+                                }
+                            } else {
+
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        pd.dismiss();
+                        Log.e(TAG, "GET_GRATUITY_DETAILS_onError: "+anError.getErrorBody());
+                        Toast.makeText(GratuityNominationActivity.this, "Something went to wrong", Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
 }

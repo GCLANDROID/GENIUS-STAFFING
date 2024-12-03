@@ -36,10 +36,12 @@ import java.util.List;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.adapter.EPSNominationAdapter;
 import io.cordova.myapp00d753.adapter.EducationAdapter;
+import io.cordova.myapp00d753.adapter.GratuityNominationAdapter;
 import io.cordova.myapp00d753.databinding.ActivityEpsnominationBinding;
 import io.cordova.myapp00d753.databinding.ActivityTempEducationaBinding;
 import io.cordova.myapp00d753.module.EPSmodel;
 import io.cordova.myapp00d753.module.EducationalModel;
+import io.cordova.myapp00d753.module.GratuityModel;
 import io.cordova.myapp00d753.module.MainDocModule;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
@@ -47,6 +49,7 @@ import io.cordova.myapp00d753.utility.Pref;
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip;
 
 public class TempEducationaActivity extends AppCompatActivity {
+    private static final String TAG = "TempEducationaActivity";
     ActivityTempEducationaBinding binding;
     JSONObject educationobj=new JSONObject();
     JSONArray educationarray=new JSONArray();
@@ -60,6 +63,7 @@ public class TempEducationaActivity extends AppCompatActivity {
     ProgressDialog pd;
     ArrayList<String>yearlist=new ArrayList<>();
     String passingyear="";
+    EducationAdapter educationAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -231,7 +235,11 @@ public class TempEducationaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (itemList.size()>0){
-                    uploadfamilydetails(educationobj);
+                    try {
+                        uploadfamilydetails(educationobj);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
                 }else {
                     Toast.makeText(TempEducationaActivity.this,"Please Add Education Details",Toast.LENGTH_LONG).show();
                 }
@@ -284,7 +292,7 @@ public class TempEducationaActivity extends AppCompatActivity {
         binding.etPassingYear.setText("");
         binding.llData.setVisibility(View.VISIBLE);
         binding.spYear.setSelection(0);
-        itemList.clear();
+        //itemList.clear();
 
 
         JSONArray education=object.optJSONArray("qualificationDetails");
@@ -302,11 +310,15 @@ public class TempEducationaActivity extends AppCompatActivity {
             educationalModel.setPercentage(Percentage);
             itemList.add(educationalModel);
         }
-        EducationAdapter educationAdapter=new EducationAdapter(itemList);
-        binding.rvData.setAdapter(educationAdapter);
 
 
 
+        if (educationAdapter == null){
+            educationAdapter=new EducationAdapter(itemList);
+            binding.rvData.setAdapter(educationAdapter);
+        } else {
+            educationAdapter.notifyDataSetChanged();
+        }
 
     }
 
@@ -348,6 +360,19 @@ public class TempEducationaActivity extends AppCompatActivity {
                                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 binding.spExam.setAdapter(spinnerArrayAdapter);
 
+                                JSONObject jsonObject = new JSONObject();
+                                try {
+                                    jsonObject.put("AEMConsultantID", pref.getEmpConId());
+                                    jsonObject.put("AEMClientID", pref.getEmpClintId());
+                                    jsonObject.put("AEMClientOfficeID", pref.getEmpClintOffId());
+                                    jsonObject.put("AEMEmployeeID", pref.getEmpId());
+                                    jsonObject.put("WorkingStatus", "1");
+                                    jsonObject.put("Operation", "5");
+                                    getEducationDetails(jsonObject);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
                             } else {
 
 
@@ -375,7 +400,8 @@ public class TempEducationaActivity extends AppCompatActivity {
 
     }
 
-    private void uploadfamilydetails(JSONObject jsonObject) {
+    private void uploadfamilydetails(JSONObject jsonObject) throws JSONException {
+        Log.e("EDU",jsonObject.toString(4));
         pd.show();
         AndroidNetworking.post(AppData.newv2url+"KYC/UpdateKYCDetails")
                 .addJSONObjectBody(jsonObject)
@@ -417,5 +443,68 @@ public class TempEducationaActivity extends AppCompatActivity {
                 });
     }
 
+    private void getEducationDetails(JSONObject jsonObject) {
+        Log.e(TAG, "getEducationDetails: INPUT: "+jsonObject);
+        pd.show();
+        AndroidNetworking.post(AppData.KYC_GET_DETAILS)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "GET_EDUCATION_DETAILS: "+response.toString(4));
+                            pd.dismiss();
+                            JSONObject job1 = response;
+                            int Response_Code = job1.optInt("Response_Code");
+                            if (Response_Code == 101) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONObject job2 = new JSONObject(Response_Data);
+                                JSONArray jsonArray = job2.getJSONArray("EducationDetails");
+                                for (int i=0;i<jsonArray.length();i++){
+                                    JSONObject educationobj=jsonArray.optJSONObject(i);
+                                    String Qualification=educationobj.optString("Qualification");
+                                    String Board=educationobj.optString("Institute");
+                                    String Percentage=educationobj.optString("Marks");
+                                    String PassingYear=educationobj.optString("YearOfPass");
 
+                                    EducationalModel educationalModel=new EducationalModel();
+                                    educationalModel.setQualification(Qualification);
+                                    educationalModel.setPassingyear(PassingYear);
+                                    educationalModel.setBoard(Board);
+                                    educationalModel.setPercentage(Percentage);
+                                    itemList.add(educationalModel);
+                                }
+
+                                if (itemList.size() > 0){
+                                    binding.llData.setVisibility(View.VISIBLE);
+                                } else {
+                                    binding.llData.setVisibility(View.GONE);
+                                }
+
+                                if (educationAdapter == null){
+                                    educationAdapter=new EducationAdapter(itemList);
+                                    binding.rvData.setAdapter(educationAdapter);
+                                } else {
+                                    educationAdapter.notifyDataSetChanged();
+                                }
+                            } else {
+
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        pd.dismiss();
+                        Log.e(TAG, "GET_EDUCATION_DETAILS_onError: "+anError.getErrorBody());
+                        Toast.makeText(TempEducationaActivity.this, "Something went to wrong", Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
 }

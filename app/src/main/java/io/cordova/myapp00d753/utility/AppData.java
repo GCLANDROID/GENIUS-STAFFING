@@ -72,4 +72,7 @@ public class AppData {
     public static String PROTACTORGAMBLEID = "AEMCLI1310000776";
     public static String GetPFNotificationAPI=newv2url+"PFNotification/GetPFNotification";
 
+    //KYC
+    public static String KYC_GET_DETAILS = newv2url+"Profile/GetKYCDetails";
+
 }

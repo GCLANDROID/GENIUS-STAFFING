@@ -36,8 +36,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import io.cordova.myapp00d753.KYCFamilyModel;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.adapter.EPSNominationAdapter;
+import io.cordova.myapp00d753.adapter.KYCFamilyAdapter;
 import io.cordova.myapp00d753.databinding.ActivityEpsnominationBinding;
 import io.cordova.myapp00d753.module.EPSmodel;
 import io.cordova.myapp00d753.module.MainDocModule;
@@ -48,6 +50,7 @@ import io.cordova.myapp00d753.utility.Util;
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip;
 
 public class EPSNominationActivity extends AppCompatActivity {
+    private static final String TAG = "EPSNominationActivity";
     ActivityEpsnominationBinding binding;
     JSONObject nominationobject=new JSONObject();
     JSONArray nominationarray=new JSONArray();
@@ -61,7 +64,7 @@ public class EPSNominationActivity extends AppCompatActivity {
     String relationshipID="";
     String month;
     String dob="";
-
+    EPSNominationAdapter nominationAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +77,7 @@ public class EPSNominationActivity extends AppCompatActivity {
     private void initView(){
         pref=new Pref(EPSNominationActivity.this);
         pd=new ProgressDialog(EPSNominationActivity.this);
-        pd.setMessage("Loading");
+        pd.setMessage("Loading...");
         pd.setCancelable(false);
         layoutManager
                 = new LinearLayoutManager(EPSNominationActivity.this, LinearLayoutManager.VERTICAL, false);
@@ -187,9 +190,7 @@ public class EPSNominationActivity extends AppCompatActivity {
         binding.etAadharNominee.setText("");
         binding.tvUANDOB.setText("");
         binding.llData.setVisibility(View.VISIBLE);
-        itemList.clear();
-
-
+        //itemList.clear();
         JSONArray nomination=object.optJSONArray("epsDetails");
         for (int i=0;i<nomination.length();i++){
             JSONObject nomiobj=nomination.optJSONObject(i);
@@ -204,8 +205,13 @@ public class EPSNominationActivity extends AppCompatActivity {
             epSmodel.setRelationship(Relationship);
             itemList.add(epSmodel);
         }
-        EPSNominationAdapter nominationAdapter = new EPSNominationAdapter(itemList,EPSNominationActivity.this);
-        binding.rvData.setAdapter(nominationAdapter);
+        if(nominationAdapter == null){
+            nominationAdapter = new EPSNominationAdapter(itemList,EPSNominationActivity.this);
+            binding.rvData.setAdapter(nominationAdapter);
+        } else {
+            nominationAdapter.notifyDataSetChanged();
+        }
+
     }
 
     private void onClick(){
@@ -396,7 +402,7 @@ public class EPSNominationActivity extends AppCompatActivity {
 
         String surl = AppData.url+"gcl_CommonDDL?ddltype=7&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
         ProgressDialog pd=new ProgressDialog(EPSNominationActivity.this);
-        pd.setMessage("Loading");
+        pd.setMessage("Loading...");
         pd.setCancelable(false);
         pd.show();
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
@@ -433,8 +439,18 @@ public class EPSNominationActivity extends AppCompatActivity {
                                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 binding.spRealation.setAdapter(spinnerArrayAdapter);
 
-
-
+                                JSONObject jsonObject = new JSONObject();
+                                try {
+                                    jsonObject.put("AEMConsultantID", pref.getEmpConId());
+                                    jsonObject.put("AEMClientID", pref.getEmpClintId());
+                                    jsonObject.put("AEMClientOfficeID", pref.getEmpClintOffId());
+                                    jsonObject.put("AEMEmployeeID", pref.getEmpId());
+                                    jsonObject.put("WorkingStatus", "1");
+                                    jsonObject.put("Operation", "7");
+                                    getEpsNominationDetails(jsonObject);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             } else {
 
 
@@ -568,6 +584,70 @@ public class EPSNominationActivity extends AppCompatActivity {
             binding.llData.setVisibility(View.GONE);
         }
 
+    }
+
+    private void getEpsNominationDetails(JSONObject jsonObject) {
+        Log.e(TAG, "getEpsNominationDetails: INPUT: "+jsonObject);
+        pd.show();
+        AndroidNetworking.post(AppData.KYC_GET_DETAILS)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "GET_EPS_NOMINATION_DETAILS: "+response.toString(4));
+                            pd.dismiss();
+                            JSONObject job1 = response;
+                            int Response_Code = job1.optInt("Response_Code");
+                            if (Response_Code == 101) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONObject job2 = new JSONObject(Response_Data);
+                                JSONArray jsonArray = job2.getJSONArray("EPSDetails");
+                                for (int i=0;i<jsonArray.length();i++){
+                                    JSONObject nomiobj=jsonArray.optJSONObject(i);
+                                    String Name=nomiobj.optString("MemberName");
+                                    String Address=nomiobj.optString("NomineeAddress");
+                                    String Relationship=nomiobj.optString("Relation");
+                                    String Age=nomiobj.optString("DOB");
+                                    EPSmodel epSmodel=new EPSmodel();
+                                    epSmodel.setName(Name);
+                                    epSmodel.setAddress(Address);
+                                    epSmodel.setAge(Age);
+                                    epSmodel.setRelationship(Relationship);
+                                    itemList.add(epSmodel);
+                                }
+
+                                if(nominationAdapter == null){
+                                    nominationAdapter = new EPSNominationAdapter(itemList,EPSNominationActivity.this);
+                                    binding.rvData.setAdapter(nominationAdapter);
+                                } else {
+                                    nominationAdapter.notifyDataSetChanged();
+                                }
+
+                                if (itemList.size() > 0){
+                                    binding.llData.setVisibility(View.VISIBLE);
+                                } else {
+                                    binding.llData.setVisibility(View.GONE);
+                                }
+                            } else {
+
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        pd.dismiss();
+                        Log.e(TAG, "GET_EPS_NOMINATION_DETAILS_onError: "+anError.getErrorBody());
+                        Toast.makeText(EPSNominationActivity.this, "Something went to wrong", Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
 
