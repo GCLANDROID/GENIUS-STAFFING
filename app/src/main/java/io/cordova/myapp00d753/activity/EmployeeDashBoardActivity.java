@@ -135,7 +135,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
     TextView tvNotifcation;
     LinearLayout llNotification;
     ArrayList<PFDocumentModule>docList=new ArrayList<>();
-    LinearLayout llPfDocument;
+    LinearLayout llPfDocument,llAppointment;
 
 
     @Override
@@ -215,6 +215,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         rvPFDocument=(RecyclerView) findViewById(R.id.rvPFDocument);
         rvPFDocument.setLayoutManager(new LinearLayoutManager(EmployeeDashBoardActivity.this));
         llPfDocument=(LinearLayout)findViewById(R.id.llPfDocument);
+        llAppointment=(LinearLayout)findViewById(R.id.llAppointment);
         Date cd = Calendar.getInstance().getTime();
         System.out.println("Current time => " + cd);
 
@@ -236,12 +237,20 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
     }
 
     private void onClick() {
+
         imglogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(EmployeeDashBoardActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+        llAppointment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(DocLink));
+                startActivity(browserIntent);
             }
         });
 
@@ -419,7 +428,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                 }
 
                                 if (responseCode.equals("1")){
-                                    shoeDialog(DocLink);
+                                    llAppointment.setVisibility(View.VISIBLE);
                                 }
                             }
 
@@ -606,12 +615,8 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                 JSONArray Content=Response_Data.optJSONArray("Content");
                                 JSONObject contentobj=Content.optJSONObject(0);
                                 String sContent=contentobj.optString("Content");
-                                tvNotifcation.setText(sContent);
-                                if (Content.length()>0){
-                                    llNotification.setVisibility(View.VISIBLE);
-                                }else {
-                                    llNotification.setVisibility(View.GONE);
-                                }
+                                tvNotifcation.setText("* "+sContent);
+
 
                                 JSONArray Document=Response_Data.optJSONArray("Document");
                                 if (Document.length()>0){
@@ -895,8 +900,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         tvClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(docLink));
-                startActivity(browserIntent);
+
             }
         });
         ImageView imgCancel=(ImageView)dialogView.findViewById(R.id.imgCancel);
