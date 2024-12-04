@@ -207,6 +207,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/textcolor"
                     android:textSize="14sp"
+                    android:gravity="center"
                     android:text="ODOMeter Approval"
                     android:layout_marginTop="5dp"/>
             </LinearLayout>

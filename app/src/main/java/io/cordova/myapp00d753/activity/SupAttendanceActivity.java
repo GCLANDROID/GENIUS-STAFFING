@@ -47,6 +47,11 @@ public class SupAttendanceActivity extends AppCompatActivity {
     }
 
     private void onClick(){
+        if (pref.getEmpClintId().equals("AEMCLI1810001410")){
+            llODOmeter.setVisibility(View.VISIBLE);
+        } else {
+            llODOmeter.setVisibility(View.GONE);
+        }
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
