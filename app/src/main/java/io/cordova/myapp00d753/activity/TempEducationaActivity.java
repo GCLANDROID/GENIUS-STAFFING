@@ -427,7 +427,7 @@ public class TempEducationaActivity extends AppCompatActivity {
 
                             Toast.makeText(TempEducationaActivity.this,"Education Details has been updated Successfully",Toast.LENGTH_LONG).show();
 
-                        }else {
+                        } else {
 
                         }
                     }
@@ -466,7 +466,7 @@ public class TempEducationaActivity extends AppCompatActivity {
                                 JSONArray jsonArray = job2.getJSONArray("EducationDetails");
                                 for (int i=0;i<jsonArray.length();i++){
                                     JSONObject educationobj=jsonArray.optJSONObject(i);
-                                    String Qualification=educationobj.optString("Qualification");
+                                    String Qualification=educationobj.optString("QualificationName");
                                     String Board=educationobj.optString("Institute");
                                     String Percentage=educationobj.optString("Marks");
                                     String PassingYear=educationobj.optString("YearOfPass");

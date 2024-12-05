@@ -220,7 +220,7 @@
                     </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:id="@+id/llData"
                     android:padding="20dp"
                     android:layout_width="match_parent"
