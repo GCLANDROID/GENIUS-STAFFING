@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 
@@ -42,6 +44,8 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,6 +53,8 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -63,6 +69,7 @@ import io.cordova.myapp00d753.module.MainDocModule;
 import io.cordova.myapp00d753.module.UploadObject;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
+import io.cordova.myapp00d753.utility.ImageDownloader;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.Util;
 import okhttp3.MediaType;
@@ -169,9 +176,7 @@ public class TempBankActivity extends AppCompatActivity {
         pan_pattern = "(([A-Za-z]{4})([0-9]{7}))";
         if (!pref.getBankName().equals("")){
             getbankname=pref.getBankName();
-        }else {
-
-
+        } else {
 
         }
         imgHome=(ImageView)findViewById(R.id.imgHome);
@@ -280,7 +285,6 @@ public class TempBankActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (etAccNumber.getText().toString().length()>0){
                     if (etIFSC.getText().toString().length()>0){
-
                         JSONObject jsonObject=new JSONObject();
                         try {
                             jsonObject.put("Id",etAccNumber.getText().toString());
@@ -292,7 +296,7 @@ public class TempBankActivity extends AppCompatActivity {
                         Toast.makeText(TempBankActivity.this,"Please Enter IFSC Code",Toast.LENGTH_LONG).show();
                     }
 
-                }else {
+                } else {
                     Toast.makeText(TempBankActivity.this,"Please enter Bank Account Number",Toast.LENGTH_LONG).show();
                 }
             }
@@ -480,10 +484,22 @@ public class TempBankActivity extends AppCompatActivity {
 
                                 }
                                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
-                                        (TempBankActivity.this, android.R.layout.simple_spinner_item,
-                                                doctype); //selected item will look like a spinner set from XML
+                                        (TempBankActivity.this, android.R.layout.simple_spinner_item, doctype); //selected item will look like a spinner set from XML
                                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 spDocType.setAdapter(spinnerArrayAdapter);
+
+                                JSONObject jsonObject = new JSONObject();
+                                try {
+                                    jsonObject.put("AEMConsultantID", pref.getEmpConId());
+                                    jsonObject.put("AEMClientID", pref.getEmpClintId());
+                                    jsonObject.put("AEMClientOfficeID", pref.getEmpClintOffId());
+                                    jsonObject.put("AEMEmployeeID", pref.getEmpId());
+                                    jsonObject.put("WorkingStatus", "1");
+                                    jsonObject.put("Operation", "14");
+                                    getBankDetails(jsonObject);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
 
                             } else {
 
@@ -511,8 +527,6 @@ public class TempBankActivity extends AppCompatActivity {
 
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
-
-
     }
 
     private void cameraIntent() {
@@ -578,7 +592,6 @@ public class TempBankActivity extends AppCompatActivity {
 
     private void BankDetailsSubmit() {
         progressDialog.show();
-
         //RequestBody mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         RequestBody mFile = RequestBody.create(MediaType.parse(".jpg"), compressedImageFile);
         MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", compressedImageFile.getName(), mFile);
@@ -589,7 +602,8 @@ public class TempBankActivity extends AppCompatActivity {
         String ifsc = etIFSC.getText().toString();
         String masterid = pref.getMasterId();
         String AEMEmployeeID = pref.getEmpId();
-        Log.e(TAG, "BankDetailsSubmit: \nfile: IMAGE"
+
+        Log.e(TAG, "BankDetailsSubmit: \nfile: "+compressedImageFile.getPath()
                 +"\nAEMEmployeeID: "+masterid
                 +"\nFirstNameAsperBank: "+fname
                 +"\nLastNameAsperBank: "
@@ -704,12 +718,7 @@ public class TempBankActivity extends AppCompatActivity {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-
-
-
-
-
-                        }else {
+                        } else {
 
                             bankflag=0;
                         }
@@ -919,5 +928,87 @@ public class TempBankActivity extends AppCompatActivity {
         llBankName.setBackgroundResource(R.drawable.lldesign9);
         Log.e(TAG, "bankname: "+bankname);
         searchHolidayDialog.dismiss();
+    }
+
+    private void getBankDetails(JSONObject jsonObject){
+        ProgressDialog pd=new ProgressDialog(TempBankActivity.this);
+        pd.setMessage("Loading");
+        pd.show();
+        pd.setCancelable(false);
+        Log.e(TAG, "getBankDetails: INPUT: "+jsonObject);
+        AndroidNetworking.post(AppData.KYC_GET_DETAILS)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "GET_BANK_DETAILS: "+response.toString(4));
+                            JSONObject job1 = response;
+                            int Response_Code = job1.optInt("Response_Code");
+                            if (Response_Code == 101) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONObject job2 = new JSONObject(Response_Data);
+                                JSONArray jsonArray = job2.getJSONArray("BankDetails");
+
+                                JSONObject bankObj = jsonArray.getJSONObject(0);
+                                for (MainDocModule doc: mainBankName) {
+                                    if(doc.getDocID().equals(bankObj.optString("BankName"))){
+                                        txtBankName.setText(doc.getDocumentType());
+                                        bankname = doc.getDocID();
+                                        break;
+                                    }
+                                }
+
+                                etAccNumber.setText(bankObj.optString("AccountNumber"));
+                                int index = doctype.indexOf(bankObj.optString("Document"));
+                                spDocType.setSelection(index);
+                                String imageURL = AppData.IMAGE_PATH_URL+bankObj.optString("FileName");
+                                Picasso.with(TempBankActivity.this)
+                                        .load(imageURL)
+                                        .placeholder(R.drawable.load)
+                                        .skipMemoryCache()// optional
+                                        .error(R.drawable.load)
+                                        // optional
+                                        .into(imgDoc);
+
+
+                                etIFSC.setText(bankObj.optString("IFSCCode"));
+                                etFName.setText(bankObj.optString("FirstNameAsperBank"));
+                                etLName.setText(bankObj.optString("LastNameAsperBank"));
+
+                                ImageDownloader.downloadImageAndSaveToFile(getApplication(), imageURL, bankObj.optString("FileName"), new ImageDownloader.SaveFileListener() {
+                                    @Override
+                                    public void onSaveFile(File file) {
+                                        pd.dismiss();
+                                        compressedImageFile = file;
+                                        flag = 1;
+                                        Log.e(TAG, "compressedImageFile: "+compressedImageFile.getPath());
+                                    }
+
+                                    @Override
+                                    public void onFileSaveFailure(String error) {
+                                        pd.dismiss();
+                                        Log.e(TAG, "onFileSaveFailure: "+error);
+                                    }
+                                });
+
+                            } else {
+                                pd.dismiss();
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        pd.dismiss();
+                        Log.e(TAG, "GET_BANK_DETAILS_anError: "+anError.getErrorBody());
+                    }
+                });
     }
 }

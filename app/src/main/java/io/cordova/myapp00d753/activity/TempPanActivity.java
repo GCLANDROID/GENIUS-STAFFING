@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.RecoverySystem;
 import android.provider.MediaStore;
 
 import android.os.Bundle;
@@ -44,6 +45,7 @@ import com.androidnetworking.interfaces.UploadProgressListener;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -65,8 +67,10 @@ import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.metso.MetsoPMSTargetAchivementActivity;
 import io.cordova.myapp00d753.bluedart.BlueDartAttendanceManageActivity;
 import io.cordova.myapp00d753.module.AttendanceService;
+import io.cordova.myapp00d753.module.EducationalModel;
 import io.cordova.myapp00d753.module.UploadObject;
 import io.cordova.myapp00d753.utility.AppData;
+import io.cordova.myapp00d753.utility.ImageDownloader;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.Util;
 import okhttp3.MediaType;
@@ -80,6 +84,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class TempPanActivity extends AppCompatActivity {
+    private static final String TAG = "TempPanActivity";
     LinearLayout llSubmit;
     ImageView imgDoc,imgCamera;
     String userChoosenTask = "";
@@ -87,7 +92,7 @@ public class TempPanActivity extends AppCompatActivity {
     private Uri imageUri;
     private static final int CAMERA_REQUEST = 1;
     ProgressDialog progressDialog;
-    File file,compressedImageFile;
+    File file,compressedImageFile,compressedImageFilePan;
     private static final int REQUEST_GALLERY_CODE = 200;
     private static final int READ_REQUEST_CODE = 300;
     private Uri uri;
@@ -123,6 +128,19 @@ public class TempPanActivity extends AppCompatActivity {
         setContentView(R.layout.activity_temp_pan);
         initialize();
         onClick();
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("AEMConsultantID", pref.getEmpConId());
+            jsonObject.put("AEMClientID", pref.getEmpClintId());
+            jsonObject.put("AEMClientOfficeID", pref.getEmpClintOffId());
+            jsonObject.put("AEMEmployeeID", pref.getEmpId());
+            jsonObject.put("WorkingStatus", "1");
+            jsonObject.put("Operation", "12");
+            getAadhaarDetails(jsonObject);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initialize(){
@@ -184,9 +202,6 @@ public class TempPanActivity extends AppCompatActivity {
 
         etAddaharNo.setText(AppData.AADAHARNUMBER);
         etAddaharNo.setEnabled(false);
-
-
-
     }
 
     private void onClick(){
@@ -356,11 +371,12 @@ public class TempPanActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 2000 && resultCode == 1001){
+            Log.e(TAG, "onActivityResult: 2000  1001");
             Log.e("TAG", "onActivityResult: "+data.getExtras().get("picture"));
             Log.e("TAG", "onActivityResult: "+data.getExtras().get(AndroidXCameraActivity.IMAGE_PATH_KEY));
             image_uri =  Uri.parse(String.valueOf(data.getExtras().get("picture")));
             //image_uri = (Uri) data.getExtras().get(AndroidXCameraActivity.IMAGE_PATH_KEY);
-           compressedImageFile = new File(String.valueOf(data.getExtras().get("picture")));
+            compressedImageFilePan = new File(String.valueOf(data.getExtras().get("picture")));
 
             if (image_uri != null){
                 imgDoc.setImageURI(image_uri);
@@ -374,7 +390,7 @@ public class TempPanActivity extends AppCompatActivity {
                 try {
                     uri = data.getData();
                     String filePath = getRealPathFromURIPath(uri, TempPanActivity.this);
-                    compressedImageFile = new File(filePath);
+                    compressedImageFilePan = new File(filePath);
                     //  Log.d(TAG, "filePath=" + filePath);
                     imageStream = getContentResolver().openInputStream(uri);
                     Bitmap bm = cropToSquare(BitmapFactory.decodeStream(imageStream));
@@ -522,7 +538,7 @@ public class TempPanActivity extends AppCompatActivity {
                 .addMultipartParameter("DocumentID", "003")
                 .addMultipartParameter("ReferenceNo", etPanNumber.getText().toString())
                 .addMultipartParameter("SecurityCode", pref.getSecurityCode())
-                .addMultipartFile("SingleFile", compressedImageFile)
+                .addMultipartFile("SingleFile", compressedImageFilePan)
                 .setPercentageThresholdForCancelling(60)
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
@@ -562,14 +578,8 @@ public class TempPanActivity extends AppCompatActivity {
                         } else {
                             progressDialog.dismiss();
                             Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
-
                         }
-
-
                         // boolean _status = job1.getBoolean("status");
-
-
-
                     }
 
                     @Override
@@ -1072,6 +1082,180 @@ public class TempPanActivity extends AppCompatActivity {
                 });
     }
 
+    private void getAadhaarDetails(JSONObject jsonObject){
+        ProgressDialog pd=new ProgressDialog(TempPanActivity.this);
+        pd.setMessage("Loading...");
+        pd.show();
+        pd.setCancelable(false);
+        Log.e(TAG, "getAadhaarDetails: "+jsonObject);
+        AndroidNetworking.post(AppData.KYC_GET_DETAILS)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "GET_AADHAAR_DETAILS: "+ response.toString(4));
+                            JSONObject job1 = response;
+                            int Response_Code = job1.optInt("Response_Code");
+                            if (Response_Code == 101) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONObject job2 = new JSONObject(Response_Data);
+                                JSONArray jsonArray = job2.getJSONArray("AadharDetails");
 
+                                JSONObject aadhaarFront = jsonArray.getJSONObject(0);
+                                JSONObject aadhaarBack = jsonArray.getJSONObject(1);
+
+                                String aadhaarImage = AppData.IMAGE_PATH_URL+aadhaarFront.optString("FileName");
+                                Picasso.with(TempPanActivity.this)
+                                        .load(AppData.IMAGE_PATH_URL+aadhaarFront.optString("FileName"))
+                                        .placeholder(R.drawable.load)
+                                        .skipMemoryCache()// optional
+                                        .error(R.drawable.load)
+                                        // optional
+                                        .into(imgAadharDocument);
+
+                                String aadhaarBackPage = AppData.IMAGE_PATH_URL+aadhaarBack.optString("FileName");
+                                Picasso.with(TempPanActivity.this)
+                                        .load(AppData.IMAGE_PATH_URL+aadhaarBack.optString("FileName"))
+                                        .placeholder(R.drawable.load)
+                                        .skipMemoryCache()// optional
+                                        .error(R.drawable.load)
+                                        // optional
+                                        .into(imgAadharBackDocument);
+
+                                ImageDownloader.downloadImageAndSaveToFile(getApplication(), aadhaarImage, aadhaarFront.optString("FileName"), new ImageDownloader.SaveFileListener() {
+                                    @Override
+                                    public void onSaveFile(File file) {
+                                        pd.dismiss();
+                                        compressedImageFile = file;
+                                        frontflag=1;
+                                        responseflag = 1;
+                                        Log.e(TAG, "compressedImageFile: "+compressedImageFile.getPath());
+                                    }
+
+                                    @Override
+                                    public void onFileSaveFailure(String error) {
+                                        pd.dismiss();
+                                        Log.e(TAG, "onFileSaveFailure: "+error);
+                                    }
+                                });
+
+                                ImageDownloader.downloadImageAndSaveToFile(getApplication(), aadhaarBackPage, aadhaarBack.optString("FileName"), new ImageDownloader.SaveFileListener() {
+                                    @Override
+                                    public void onSaveFile(File file1) {
+                                        pd.dismiss();
+                                        file = file1;
+                                        backflag=1;
+                                        responseflag = 1;
+                                        Log.e(TAG, "compressedImageFile: "+compressedImageFile.getPath());
+                                    }
+
+                                    @Override
+                                    public void onFileSaveFailure(String error) {
+                                        pd.dismiss();
+                                        Log.e(TAG, "onFileSaveFailure: "+error);
+                                    }
+                                });
+                            } else {
+                                pd.dismiss();
+                            }
+
+                            JSONObject jsonObject = new JSONObject();
+                            try {
+                                jsonObject.put("AEMConsultantID", pref.getEmpConId());
+                                jsonObject.put("AEMClientID", pref.getEmpClintId());
+                                jsonObject.put("AEMClientOfficeID", pref.getEmpClintOffId());
+                                jsonObject.put("AEMEmployeeID", pref.getEmpId());
+                                jsonObject.put("WorkingStatus", "1");
+                                jsonObject.put("Operation", "13");
+                                getPanDetails(jsonObject);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        pd.dismiss();
+                        Log.e(TAG, "GET_AADHAAR_DETAILS_anError: "+ anError.getErrorBody()  );
+                    }
+                });
+    }
+
+    private void getPanDetails(JSONObject jsonObject){
+        ProgressDialog pd=new ProgressDialog(TempPanActivity.this);
+        pd.setMessage("Loading...");
+        pd.show();
+        pd.setCancelable(false);
+        Log.e(TAG, "getAadhaarDetails: "+jsonObject);
+        AndroidNetworking.post(AppData.KYC_GET_DETAILS)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            pd.dismiss();
+                            Log.e(TAG, "GET_PAN_DETAILS: "+ response.toString(4));
+                            JSONObject job1 = response;
+                            int Response_Code = job1.optInt("Response_Code");
+                            if (Response_Code == 101) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONObject job2 = new JSONObject(Response_Data);
+                                JSONArray jsonArray = job2.getJSONArray("PANDetails");
+
+                                JSONObject panObj = jsonArray.getJSONObject(0);
+
+                                etPanNumber.setText(panObj.optString("ReferenceNo"));
+                                String imagePanURL = AppData.IMAGE_PATH_URL+panObj.optString("FileName");
+                                Picasso.with(TempPanActivity.this)
+                                        .load(AppData.IMAGE_PATH_URL+panObj.optString("FileName"))
+                                        .placeholder(R.drawable.load)
+                                        .skipMemoryCache()// optional
+                                        .error(R.drawable.load)
+                                        // optional
+                                        .into(imgDoc);
+
+                                ImageDownloader.downloadImageAndSaveToFile(getApplication(), imagePanURL, panObj.optString("FileName"), new ImageDownloader.SaveFileListener() {
+                                    @Override
+                                    public void onSaveFile(File file1) {
+                                        pd.dismiss();
+                                        compressedImageFilePan = file1;
+                                        flag = 1;
+                                        panvalflag = 1;
+                                        Log.e(TAG, "compressedImageFile: "+compressedImageFilePan.getPath());
+                                    }
+
+                                    @Override
+                                    public void onFileSaveFailure(String error) {
+                                        pd.dismiss();
+                                        Log.e(TAG, "onFileSaveFailure: "+error);
+                                    }
+                                });
+                            } else {
+                                pd.dismiss();
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        pd.dismiss();
+                        Log.e(TAG, "GET_PAN_DETAILS_anError: "+ anError.getErrorBody()  );
+                    }
+                });
+    }
 
 }

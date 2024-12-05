@@ -612,7 +612,7 @@ public class EPSNominationActivity extends AppCompatActivity {
                                     String Name=nomiobj.optString("MemberName");
                                     String Address=nomiobj.optString("NomineeAddress");
                                     String Relationship=nomiobj.optString("Relation");
-                                    String Age=nomiobj.optString("DOB");
+                                    String Age=nomiobj.optString("MemberDOB");
                                     EPSmodel epSmodel=new EPSmodel();
                                     epSmodel.setName(Name);
                                     epSmodel.setAddress(Address);

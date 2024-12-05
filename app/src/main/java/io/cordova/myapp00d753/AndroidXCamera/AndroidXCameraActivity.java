@@ -18,6 +18,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.util.Size;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -116,6 +117,7 @@ public class AndroidXCameraActivity extends AppCompatActivity {
                 .build();
 
         imageCapture = new ImageCapture.Builder()
+                .setTargetResolution(new Size(640, 480)) // Set a low resolution
                 .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
                 .build();
 
