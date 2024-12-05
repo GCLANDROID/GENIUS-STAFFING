@@ -25,7 +25,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/white"
-                    android:text="CONSENT LETTER"/>
+                    android:text="Digital Signature Pad"/>
             </LinearLayout>
 
 
@@ -36,6 +36,7 @@
             android:layout_marginTop="5dp"
             android:background="@android:color/white">
             <TextView
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/blue"
@@ -88,7 +89,7 @@
                 android:backgroundTint="@color/blue"
                 android:textColor="@color/white"
                 android:textSize="14sp"
-                android:text="acknowledge"></Button>
+                android:text="Save"></Button>
 
         </LinearLayout>
 

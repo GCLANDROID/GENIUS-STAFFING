@@ -71,6 +71,7 @@ public class AppData {
     public static String SaveExperienceDetails = newv2url+"Document/SaveExperienceDetails";
     public static String PROTACTORGAMBLEID = "AEMCLI1310000776";
     public static String GetPFNotificationAPI=newv2url+"PFNotification/GetPFNotification";
+    public static String GetEmpConsentPendingListAPI=newv2url+"KYC/GetEmpConsentPendingList";
 
     //KYC
     public static String KYC_GET_DETAILS = newv2url+"Profile/GetKYCDetails";

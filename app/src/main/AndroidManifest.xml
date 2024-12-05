@@ -17,8 +17,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:name=".utility.AppController"
@@ -32,20 +32,27 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".activity.SKF.SKF_AttendanceRegularizationActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.TempExperinceActivity"
-            android:screenOrientation="userPortrait"
+            android:name=".activity.ConsentActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
+            android:name=".activity.SKF.SKF_AttendanceRegularizationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.TempExperinceActivity"
+            android:exported="false"
+            android:screenOrientation="userPortrait">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".activity.TEMPAadharQRActivity"
-            android:screenOrientation="userPortrait"
-            android:exported="false">
+            android:exported="false"
+            android:screenOrientation="userPortrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -81,7 +88,7 @@
         <activity
             android:name=".activity.TempOtherDocumentActivity"
             android:exported="false"
-            android:screenOrientation="userPortrait" >
+            android:screenOrientation="userPortrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -112,13 +119,13 @@
         </activity>
         <activity
             android:name=".activity.EPSNominationActivity"
-            android:screenOrientation="userPortrait"
-            android:exported="false">
+            android:exported="false"
+            android:screenOrientation="userPortrait">
             <meta-data
                 android:name="android.app.lib_name"
-                android:value=""/>
+                android:value="" />
         </activity>
-        <activity android:name=".activity.FMSNewClaimActivity"/>
+        <activity android:name=".activity.FMSNewClaimActivity" />
         <activity
             android:name=".activity.honnasa.HonasaSalesDashboardActivity"
             android:exported="false">
@@ -237,14 +244,14 @@
         <activity android:name=".activity.QRGeneratorActivity" />
         <activity
             android:name=".activity.LeaveApplicationActivity"
-            android:screenOrientation="userPortrait"/>
+            android:screenOrientation="userPortrait" />
         <activity
             android:name=".activity.OffAttenDanceActivity"
-            android:screenOrientation="userPortrait"/>
+            android:screenOrientation="userPortrait" />
 
         <uses-library
             android:name="org.apache.http.legacy"
-            android:required="false"/>
+            android:required="false" />
 
         <activity
             android:name=".SplashScreenActivity"
@@ -360,7 +367,6 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
@@ -385,7 +391,7 @@
             android:screenOrientation="userPortrait" />
         <activity
             android:name=".activity.TempProfileActivity"
-            android:screenOrientation="userPortrait"/>
+            android:screenOrientation="userPortrait" />
         <activity
             android:name=".activity.HRMSDashBoardActivity"
             android:screenOrientation="userPortrait" />
@@ -405,8 +411,9 @@
             android:name=".activity.KYCContactActivity"
             android:screenOrientation="userPortrait" />
         <activity android:name=".activity.KYCMisActivity" />
-        <activity android:name=".activity.KYCFamilyActivity"
-            android:screenOrientation="userPortrait"/>
+        <activity
+            android:name=".activity.KYCFamilyActivity"
+            android:screenOrientation="userPortrait" />
         <activity
             android:name=".activity.ProfileDashBoardActivity"
             android:screenOrientation="userPortrait" />
@@ -606,4 +613,5 @@
             </intent-filter>
         </service>
     </application>
+
 </manifest>
