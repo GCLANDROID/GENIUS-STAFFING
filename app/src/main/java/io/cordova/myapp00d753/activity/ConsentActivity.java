@@ -330,8 +330,8 @@ public class ConsentActivity extends AppCompatActivity {
         progressDialog.show();
         progressDialog.show();
         String masterID=pref.getMasterId();
-        String Doc_Indx=docIndexList.toString().replaceAll(",","#").replaceAll(" ","");
-        String DocID=docIDList.toString().replaceAll(",","#").replaceAll(" ","");
+        String Doc_Indx=docIndexList.toString().replaceAll(",","#").replaceAll(" ","").replace("[","").replace("]","");
+        String DocID=docIDList.toString().replaceAll(",","#").replaceAll(" ","").replace("]","").replace("[","");
         //RequestBody mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         AndroidNetworking.upload(AppData.newv2url+"Document/SaveEmpKYCDocConsent")
                 .addMultipartParameter("MasterID",masterID)
