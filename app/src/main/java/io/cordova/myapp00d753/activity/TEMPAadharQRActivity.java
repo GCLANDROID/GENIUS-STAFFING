@@ -40,9 +40,11 @@ import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.databinding.ActivityTempaadharQractivityBinding;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
+import io.cordova.myapp00d753.utility.ShowDialog;
 import io.cordova.myapp00d753.utility.Util;
 
 public class TEMPAadharQRActivity extends AppCompatActivity {
+    private static final String TAG = "TEMPAadharQRActivity";
     ActivityTempaadharQractivityBinding binding;
     Pref pref;
     String sessionId;
@@ -67,7 +69,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        binding.etAadhar.addTextChangedListener(new TextWatcher() {
+        /*binding.etAadhar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -92,7 +94,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                 }
 
             }
-        });
+        });*/
 
         binding.btnValidate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +120,28 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
             }
         });
 
+        binding.btnGo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (binding.etAadhar.getText().toString().length()==12){
 
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("AEMConsultantID", pref.getEmpConId());
+                        jsonObject.put("AEMClientID", pref.getEmpClintId());
+                        jsonObject.put("AEMClientOfficeID", pref.getEmpClintOffId());
+                        jsonObject.put("AEMEmployeeID", pref.getMasterId());
+                        jsonObject.put("WorkingStatus", "1");
+                        jsonObject.put("Operation", "12");
+                        checkAadhaarNumber(jsonObject);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(TEMPAadharQRActivity.this, "Please Enter Valid Aadhaar Number", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         binding.btnOTPValidate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,6 +164,68 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void checkAadhaarNumber(JSONObject jsonObject) {
+        ProgressDialog pd=new ProgressDialog(this);
+        pd.setMessage("Loading");
+        pd.show();
+        pd.setCancelable(false);
+        Log.e(TAG, "checkAadhaarNumber: INPUT: "+jsonObject);
+        AndroidNetworking.post(AppData.KYC_GET_DETAILS)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        pd.dismiss();
+                        try {
+                            Log.e(TAG, "CHECK_AADHAAR_NUMBER: "+response.toString(4));
+                            JSONObject job1 = response;
+                            int Response_Code = job1.optInt("Response_Code");
+                            JSONObject Response_Data = job1.getJSONObject("Response_Data");
+                            if (Response_Code == 101) {
+                                //AadharDetails
+                                if (Response_Data != null){
+                                    JSONArray jsonArray = Response_Data.getJSONArray("AadharDetails");
+                                    JSONObject job2 = jsonArray.getJSONObject(0);
+                                    Log.e(TAG, "onResponse: "+job2.getString("ReferenceNo") );
+                                    String AadhaarNumber = job2.getString("ReferenceNo");
+                                    if (AadhaarNumber.equals(binding.etAadhar.getText().toString().trim())){
+                                        try {
+                                            jsonObject.put("Id",binding.etAadhar.getText().toString().trim());
+                                            checkAddahrDetails(jsonObject);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    } else {
+                                        ShowDialog.showErrorDialog(TEMPAadharQRActivity.this,
+                                                "Another Aadhaar number is linked to this ID. Kindly provide the accurate Aadhaar number.");
+                                    }
+                                } else {
+                                    JSONObject jsonObject=new JSONObject();
+                                    try {
+                                        jsonObject.put("Id",binding.etAadhar.getText().toString().trim());
+                                        checkAddahrDetails(jsonObject);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        pd.dismiss();
+                        Log.e(TAG, "CHECK_AADHAAR_NUMBER_onError: "+anError.getErrorBody() );
+                    }
+                });
     }
 
     private void captchagebneration() {
@@ -326,11 +411,6 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-
                         }else {
 
 
@@ -405,9 +485,10 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
         ImageView imgAdhar=(ImageView)dialogView.findViewById(R.id.imgAdhar);
 
         if (!AppData.ADHARIMAGE.equals("")){
-            byte[] decodedString = Base64.decode(AppData.ADHARIMAGE, Base64.DEFAULT);
+            /*byte[] decodedString = Base64.decode(AppData.ADHARIMAGE, Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            imgAdhar.setImageBitmap(decodedByte);
+            imgAdhar.setImageBitmap(decodedByte);*/
+            imgAdhar.setImageDrawable(getResources().getDrawable(R.drawable.man));
         }else {
             imgAdhar.setImageDrawable(getResources().getDrawable(R.drawable.man));
         }
