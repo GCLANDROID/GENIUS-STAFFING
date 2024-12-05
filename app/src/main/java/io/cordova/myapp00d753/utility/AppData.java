@@ -75,5 +75,5 @@ public class AppData {
 
     //KYC
     public static String KYC_GET_DETAILS = newv2url+"Profile/GetKYCDetails";
-
+    public static String IMAGE_PATH_URL = "https://gsppi.geniusconsultant.com/GeniusiOSApi/DigitalDocument/";
 }
