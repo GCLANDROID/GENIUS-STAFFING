@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tvGrad"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:background="@drawable/broder"
+    android:text="A"
+    android:textSize="17sp"
+    android:textColor="@color/black"
+    android:gravity="center"
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginTop="10dp"/>

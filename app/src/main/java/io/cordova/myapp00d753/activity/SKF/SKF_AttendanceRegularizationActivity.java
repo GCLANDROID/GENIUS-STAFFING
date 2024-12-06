@@ -87,6 +87,7 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
     ProgressDialog progressDialog;
     AlertDialog alerDialog1;
     android.app.AlertDialog al1;
+    ArrayList<String> dayTypeArray;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,6 +122,14 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
         progressDialog = new ProgressDialog(SKF_AttendanceRegularizationActivity.this);
         progressDialog.setCancelable(false);
         getLocationData();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("clientid","AEMCLI1110000502");
+            jsonObject.put("BranchID","AEMCLO1110001277");
+            getSkfDayTypeList(jsonObject);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -173,6 +182,48 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
                 selectAllOperation();
                 break;
         }
+    }
+
+    private void getSkfDayTypeList(JSONObject jsonObject) {
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
+        AndroidNetworking.post(AppData.SKF_DAY_TYPE_LIST)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+
+                            Log.e(TAG, "SKF_DAY_TYPE_LIST: "+response.toString(4));
+                            progressDialog.dismiss();
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                dayTypeArray = new ArrayList<>();
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                    dayTypeArray.add(jsonObject.optString("DayType"));
+                                }
+
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.dismiss();
+                        Log.e(TAG, "SKF_DAY_TYPE_LIST_error: "+anError.getErrorBody());
+                    }
+                });
     }
 
     private void selectAllOperation() {
@@ -252,7 +303,7 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
 
     private void regularizationSaveApiCall(JSONObject jsonObject) {
         Log.e(TAG, "BACKLOG_SAVE_INPUT: "+jsonObject);
-        AndroidNetworking.post(AppData.SKF_SAVE_ATTENDANCE_REGULARIZATION)
+       /* AndroidNetworking.post(AppData.SKF_SAVE_ATTENDANCE_REGULARIZATION)
                 .addJSONObjectBody(jsonObject)
                 .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
@@ -284,7 +335,7 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
                         progressDialog.dismiss();
                         Log.e(TAG, "SKF_BACKLOG_SAVE_error: "+anError.getErrorBody());
                     }
-                });
+                });*/
     }
 
 
@@ -332,7 +383,7 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
                                 llLoader.setVisibility(View.GONE);
                                 llMain.setVisibility(View.VISIBLE);
                                 llNodata.setVisibility(View.GONE);
-                                skfBacklogAdapter = new SKF_BacklogAdapter(blockLogList,SKF_AttendanceRegularizationActivity.this);
+                                skfBacklogAdapter = new SKF_BacklogAdapter(blockLogList,dayTypeArray,SKF_AttendanceRegularizationActivity.this);
                                 rvItem.setAdapter(skfBacklogAdapter);
                                 //tvCount.setText("Total Day(s) Count : "+jsonArray.length());
                             } else {
