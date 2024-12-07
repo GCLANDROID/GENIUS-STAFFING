@@ -1,27 +1,30 @@
 package io.cordova.myapp00d753.activity.SKF.adapter;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import io.cordova.myapp00d753.R;
-import io.cordova.myapp00d753.activity.BacklogAttendanceActivity;
 import io.cordova.myapp00d753.activity.SKF.SKF_AttendanceRegularizationActivity;
-import io.cordova.myapp00d753.adapter.BackLogAdapter;
 import io.cordova.myapp00d753.module.BackLogAttendanceModel;
 import io.cordova.myapp00d753.utility.TimeConversion;
 
@@ -29,10 +32,12 @@ public class SKF_BacklogAdapter extends RecyclerView.Adapter<SKF_BacklogAdapter.
     private static final String TAG = "SKF_BacklogAdapter";
     ArrayList<BackLogAttendanceModel> itemList;
     Context mContext;
+    ArrayList<String> dayTypeArray;
 
-    public SKF_BacklogAdapter(ArrayList<BackLogAttendanceModel> itemList, Context mContext) {
+    public SKF_BacklogAdapter(ArrayList<BackLogAttendanceModel> itemList, ArrayList<String> dayTypeArray, Context mContext) {
         this.itemList = itemList;
         this.mContext = mContext;
+        this.dayTypeArray = dayTypeArray;
     }
 
     @NonNull
@@ -122,6 +127,12 @@ public class SKF_BacklogAdapter extends RecyclerView.Adapter<SKF_BacklogAdapter.
             }
         });
 
+        holder.tvDayType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDayTypePopup(mContext,holder,position);
+            }
+        });
     }
 
     @Override
@@ -148,5 +159,44 @@ public class SKF_BacklogAdapter extends RecyclerView.Adapter<SKF_BacklogAdapter.
 
     public void selectAll(){
         notifyDataSetChanged();
+    }
+
+    private void openDayTypePopup(Context context, MyViewholder holder, int position) {
+        Dialog openGradPopup = new Dialog(context,R.style.CustomDialogNew2);
+        openGradPopup.setContentView(R.layout.grad_selection_popup);
+        openGradPopup.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        openGradPopup.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        RecyclerView rvGrad = openGradPopup.findViewById(R.id.rvGrad);
+        LinearLayout lnCancel = openGradPopup.findViewById(R.id.lnCancel);
+        rvGrad.setLayoutManager(new LinearLayoutManager(context));
+        SKF_DayTypeAdapter skfDayTypeAdapter = new SKF_DayTypeAdapter(mContext,dayTypeArray);
+        rvGrad.setAdapter(skfDayTypeAdapter);
+        skfDayTypeAdapter.setSetOnGradSelect(new setOnDayTypeSelect() {
+            @Override
+            public void onClick(int pos, String dayType) {
+                itemList.get(position).setDayType(dayType);
+                holder.tvDayType.setText(dayType);
+                openGradPopup.cancel();
+            }
+        });
+
+        lnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGradPopup.cancel();
+            }
+        });
+
+
+        Window window = openGradPopup.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.gravity = Gravity.NO_GRAVITY;
+        openGradPopup.setCancelable(false);
+        openGradPopup.show();
+    }
+
+    public interface setOnDayTypeSelect{
+        void onClick(int position,String dayType);
     }
 }
