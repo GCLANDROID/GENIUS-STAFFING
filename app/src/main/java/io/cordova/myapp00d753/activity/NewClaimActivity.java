@@ -1,5 +1,7 @@
 package io.cordova.myapp00d753.activity;
 
+import static android.os.Build.VERSION.SDK_INT;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -62,6 +64,8 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
@@ -74,12 +78,15 @@ import java.util.concurrent.TimeUnit;
 
 import id.zelory.compressor.Compressor;
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.metso.MetsoNewReimbursementClaimActivity;
 import io.cordova.myapp00d753.module.AttendanceService;
 import io.cordova.myapp00d753.module.SpineerItemModel;
 import io.cordova.myapp00d753.module.UploadObject;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
+import io.cordova.myapp00d753.utility.FindDocumentInformation;
 import io.cordova.myapp00d753.utility.Pref;
+import io.cordova.myapp00d753.utility.RealPathUtil;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -152,7 +159,8 @@ public class NewClaimActivity extends AppCompatActivity {
     private Uri uri;
 
     String galleryflagone,galleryflagtwo;
-
+    private static final int REQUEST_SELECT_PDF = 600;
+    private static final int DEFAULT_BUFFER_SIZE = 2048;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -477,7 +485,10 @@ public class NewClaimActivity extends AppCompatActivity {
         imgAttach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPDFPickerdialog();
+                Intent uploadIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                uploadIntent.setType("application/pdf");
+                startActivityForResult(uploadIntent, REQUEST_SELECT_PDF);
+
             }
         });
         llSubmit.setOnClickListener(new View.OnClickListener() {
@@ -1361,7 +1372,37 @@ public class NewClaimActivity extends AppCompatActivity {
 
                 }
                 break;
+            case REQUEST_SELECT_PDF:
+                if (resultCode == Activity.RESULT_OK) {
+                    Uri uri = data.getData();
+                    Log.e(TAG, "onActivityResult: "+uri.getPath());
+                    String imagePath = uri.getPath();
+                    if (imagePath.contains("all_external")){
+                        pdfFileName = FindDocumentInformation.FileNameFromURL(imagePath);
+                        pdfFile = convertInputStreamToFile(uri,pdfFileName);
+                        Log.e(TAG, "onActivityResult: "+pdfFile.getAbsolutePath());
+                    } else {
+                        try {
+                            pdfFilePath = getRealPath(NewClaimActivity.this,uri);
+                            Log.e(TAG, "onActivityResult: ================== "+pdfFilePath);
+                            pdfFileName = FindDocumentInformation.FileNameFromURL(pdfFilePath);
+                        } catch (IllegalArgumentException e){
+                            //Todo: from WPS office document select
+                            pdfFileName = FindDocumentInformation.FileNameFromURL(imagePath);
+                            pdfFile = convertInputStreamToFile(uri,pdfFileName);
+                            Log.e(TAG, "onActivityResult: "+pdfFile.getAbsolutePath());
+                        }
+                        pdfFile = convertInputStreamToFile(uri,pdfFileName);
+                        Log.e(TAG, "onActivityResult: Real Path: "+pdfFilePath);
+                        Log.e(TAG, "onActivityResult: PDF name "+pdfFileName);
+                        Log.e(TAG, "onActivityResult: Final PDF path"+pdfFile);
+                    }
+                    imgPDF.setVisibility(View.VISIBLE);
 
+                    pdfflag = 1;
+                    //flag++;
+                }
+                break;
 
         }
 
@@ -1916,6 +1957,7 @@ public class NewClaimActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
         //Checking the request code of our request
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == STORAGE_PERMISSION_CODE) {
 
             //If permission is granted
@@ -1936,7 +1978,7 @@ public class NewClaimActivity extends AppCompatActivity {
         //getting name for the pdf
         //getting the actual path of the pdf
         //TODO: new api
-        AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
+/*        AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
                 .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
                 .addMultipartParameter("AEMComponentID", comeid)
                 .addMultipartParameter("Description", description)
@@ -1980,7 +2022,7 @@ public class NewClaimActivity extends AppCompatActivity {
 
 
 
-                        /*JSONObject job1 = response;
+                        *//*JSONObject job1 = response;
                         Log.e("response12", "@@@@@@" + job1);
                         String responseText = job1.optString("responseText");
                         boolean responseStatus = job1.optBoolean("responseStatus");
@@ -1993,7 +2035,7 @@ public class NewClaimActivity extends AppCompatActivity {
 
                             Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
 
-                        }*/
+                        }*//*
 
 
                         // boolean _status = job1.getBoolean("status");
@@ -2006,9 +2048,9 @@ public class NewClaimActivity extends AppCompatActivity {
                         Log.e("errt", String.valueOf(error));
                         Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                     }
-                });
+                });*/
 
-           /* AndroidNetworking.upload(UPLOAD_URL)
+            AndroidNetworking.upload(UPLOAD_URL)
                     .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
                     .addMultipartParameter("AEMComponentID", comeid)
                     .addMultipartParameter("Description", description)
@@ -2062,10 +2104,11 @@ public class NewClaimActivity extends AppCompatActivity {
                         public void onError(ANError error) {
                             // handle error
                             Log.e("errt", String.valueOf(error));
+                            progressDialog.dismiss();
 
                             Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                         }
-                    });*/
+                    });
 
 
 
@@ -2421,5 +2464,50 @@ public class NewClaimActivity extends AppCompatActivity {
             Toast.makeText(NewClaimActivity.this,"Please Attach Your Reimbursement File",Toast.LENGTH_LONG).show();
         }
     }
+
+
+    public static String getRealPath(Context context, Uri fileUri) {
+        String realPath;
+        Log.e("SDK_INT", "= " + SDK_INT);
+        // SDK < API11
+        if (SDK_INT < 11) {
+            realPath = RealPathUtil.getRealPathFromURI_BelowAPI11(context, fileUri);
+        }
+        // SDK >= 11 && SDK < 19
+        else if (SDK_INT < 19) {
+            realPath = RealPathUtil.getRealPathFromURI_API11to18(context, fileUri);
+        }
+        // SDK > 19 (Android 4.4) and up
+        else {
+            realPath = RealPathUtil.getRealPathFromURI_API19(context, fileUri);
+        }
+        return realPath;
+    }
+
+    private File convertInputStreamToFile(Uri uri, String fileNme) {
+        InputStream inputStream;
+        try {
+            inputStream = NewClaimActivity.this.getContentResolver().openInputStream(uri);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        File file = new File(NewClaimActivity.this.getExternalFilesDir("/").getAbsolutePath(), fileNme);
+
+        try (FileOutputStream outputStream = new FileOutputStream(file, false)) {
+            int read;
+            byte[] bytes = new byte[DEFAULT_BUFFER_SIZE];
+            while ((read = inputStream.read(bytes)) != -1) {
+                outputStream.write(bytes, 0, read);
+            }
+            Log.e(TAG, "convertInputStreamToFile: file: " + file.getPath());
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return file;
+    }
+
+
 
 }

@@ -54,13 +54,15 @@ public class ClaimReportActivity extends AppCompatActivity {
     LinearLayout llLoder,llMain,llNodata,llAgain,llSearch;
     String year;
     int y;
-    TextView tvYear;
+    TextView tvYear,tvMonth;
     String month;
-    TextView tvMonth;
+    TextView tvReportMonth;
     AlertDialog alertDialog,alertDialog1,alertDialog2;
     Pref pref;
     ImageView imgBack;
     ImageView imgSearch,imgHome;
+    LinearLayout llYear,llMonth;
+    Button btnSubmit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,13 +132,26 @@ public class ClaimReportActivity extends AppCompatActivity {
         else if (m==12){
             month="December";
         }
+        tvReportMonth=(TextView)findViewById(R.id.tvReportMonth);
+       // tvReportMonth.setText("Month of "+month);
+        tvYear=(TextView)findViewById(R.id.tvYear);
+        tvMonth=(TextView)findViewById(R.id.tvMonth);
+        tvMonth.setText(month);
+        tvYear.setText(year);
         imgBack=(ImageView)findViewById(R.id.imgBack);
         imgHome=(ImageView) findViewById(R.id.imgHome);
         imgSearch=(ImageView)findViewById(R.id.imgSearch);
+        llMonth=(LinearLayout) findViewById(R.id.llMonth);
+        llYear=(LinearLayout) findViewById(R.id.llYear);
+        btnSubmit=(Button) findViewById(R.id.btnSubmit);
 
     }
 
     private void getItemList(JSONObject jsonObject) {
+        llLoder.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.GONE);
+        llNodata.setVisibility(View.GONE);
+        llAgain.setVisibility(View.GONE);
         AndroidNetworking.post(AppData.GET_REIMBURSEMENT_CLAIM)
                 .addJSONObjectBody(jsonObject)
                 .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
@@ -286,7 +301,7 @@ public class ClaimReportActivity extends AppCompatActivity {
         imgSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(ClaimReportActivity.this, R.style.CustomDialogNew);
+               /* AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(ClaimReportActivity.this, R.style.CustomDialogNew);
                 LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View dialogView = inflater.inflate(R.layout.attendancereportsearch, null);
                 dialogBuilder.setView(dialogView);
@@ -345,8 +360,37 @@ public class ClaimReportActivity extends AppCompatActivity {
                 Window window = alertDialog.getWindow();
                 window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
                 window.setGravity(Gravity.CENTER);
-                alertDialog.show();
+                alertDialog.show();*/
 
+            }
+        });
+        llYear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showYearDialog();
+            }
+        });
+        llMonth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showMonthDialog();
+            }
+        });
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                itemList.clear();
+                //getItemList();
+                JSONObject obj = new JSONObject();
+                try {
+                    obj.put("AEMEmployeeID", pref.getEmpId());
+                    obj.put("Year", year);
+                    obj.put("Month", month);
+                    obj.put("SecurityCode", pref.getSecurityCode());
+                    getItemList(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
