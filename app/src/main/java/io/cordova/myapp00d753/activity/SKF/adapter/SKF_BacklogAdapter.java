@@ -130,7 +130,7 @@ public class SKF_BacklogAdapter extends RecyclerView.Adapter<SKF_BacklogAdapter.
         holder.tvDayType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openDayTypePopup(mContext,holder,position);
+                //openDayTypePopup(mContext,holder,position);
             }
         });
     }
