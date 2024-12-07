@@ -19,8 +19,11 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -74,12 +77,15 @@ public class ConsentActivity extends AppCompatActivity {
     private static final String IMAGE_DIRECTORY = "/signdemo";
     String android_id;
     File f;
+    int frsttxtflag=0;
+    private long startTime;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding= DataBindingUtil.setContentView(this,R.layout.activity_consent);
         pref=new Pref(ConsentActivity.this);
         binding.rvItem.setLayoutManager(new LinearLayoutManager(ConsentActivity.this));
+        binding.llSigned.setEnabled(false);
         android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
         if (android_id.equals("")) {
@@ -99,6 +105,13 @@ public class ConsentActivity extends AppCompatActivity {
             android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
                     Settings.Secure.ANDROID_ID);
         }
+        startTime = SystemClock.elapsedRealtime();
+
+
+
+
+
+
         JSONObject object=new JSONObject();
         try {
             object.put("MasterID",pref.getMasterId());
@@ -110,9 +123,21 @@ public class ConsentActivity extends AppCompatActivity {
         binding.llSigned.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                consnetLetter();
+                if (binding.imgTick.getVisibility()==View.GONE){
+                    binding.imgTick.setVisibility(View.VISIBLE);
+                    consnetLetter();
+                }
             }
         });
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                binding.llSigned.setEnabled(true);
+            }
+        }, 6000);
+
+
 
     }
 
@@ -136,7 +161,7 @@ public class ConsentActivity extends AppCompatActivity {
                                 String[] splitconten=Contents.split(",",2);
                                 String frst=splitconten[0];
                                 String secnd=splitconten[1];
-                                binding.tvConsnet.setText(frst+", "+pref.getEmpName()+", "+secnd);
+                                //binding.tvConsnet.setText(frst+", "+pref.getEmpName()+", "+secnd);
 
                                 String Document=obj.optString("Document");
                                 String indx= String.valueOf(obj.optInt("indx"));
@@ -393,6 +418,13 @@ public class ConsentActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                     }
                 });
+
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
 
     }
 }

@@ -11,23 +11,73 @@
             android:layout_width="match_parent"
             android:layout_height="?android:actionBarSize"
             android:orientation="horizontal"
-            android:background="@color/colorPrimary">
+            android:background="@color/colorPrimary"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:text="Consent Form"></TextView>
 
         </LinearLayout>
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/scroolView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:padding="8dp">
             <LinearLayout
+                android:background="@drawable/lldesign9"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:padding="10dp">
                 <TextView
+                    android:text="I hereby give my consent to and agree and authorize Genius Consultants Limited (“Genius”)
+to fetch and/or use my personal data i.e. Adhaar Information, PAN, UAN details, my Bank
+Account(s) details, and other personal documents/ information as may be required for the
+following purposes:"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
                     android:textColor="@color/blue"
                     android:id="@+id/tvConsnet"></TextView>
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:text="1.Recruitment and selection process .\n\n 2.Establishing my identity and/or seeding my account with appropriate authority, Govt
+departments and Govt portals/mapper to enable me and, other relevant credentials
+for my registration as an employee and compliance under various statutory and Social
+Security provisions as may be applicable. \n\n3.Management of employment records maintenance of my personal information. \n\n4.Compliance with legal obligations. \n\n5.Provision of benefits and services related to my employment. \n\n6.Other legitimate business as outlined in the company’s privacy policy."
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/designcolor1"
+                    ></TextView>
+                <TextView
+                    android:id="@+id/tvConsent1"
+                    android:layout_marginTop="10dp"
+                    android:text="I understand that the type of personal data that may be collected, shall be shared with Genius,
+its clients, Government departments, authorities and assignees. \n\nI understand and consent to Genius for using or sharing information submitted by me to
+conduct employment verification and other related checks, through third party agency(ies)
+engaged by it, from public information sources such as Employees' Provident Fund
+Organisation (EPFO). \n\nI am giving my consent voluntarily without coercion and at my own volition.
+\n\n I authorize Genius to send and I agree to receive SMS alerts/E-mails related to my application
+status and account activity as well as product use messages that Genius will send, from time
+to time, on my mobile phone number/E-mail ID as mentioned in this application form. I will
+intimate Genius in the event of any change in my mobile phone number/E-mail ID. I agree
+that in the event I fail to inform the new mobile number/email id, I will not hold Genius
+Consultants Limited, responsible for non-communication of any information regarding my
+application status and/or account activity. \n\nI will not hold Genius Consultants Limited and its officials responsible in the event this
+document is not found to be in order or in case of any incorrect information provided by me. \n\nThe above consent and purpose of collecting information has been explained to me in my
+local language.
+
+"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/blue"
+                    ></TextView>
                 <TextView
                     android:textStyle="bold"
                     android:layout_marginTop="10dp"
@@ -42,21 +92,34 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"></androidx.recyclerview.widget.RecyclerView>
                 <LinearLayout
-                    android:id="@+id/llSigned"
+                    android:visibility="visible"
                     android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    <TextView
+                    <LinearLayout
+                        android:backgroundTint="@color/democolor"
+                        android:id="@+id/llSigned"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:background="@drawable/lldesign9"
-                        android:backgroundTint="@color/blue"
-                        android:padding="14dp"
+                        >
+                        <ImageView
+                            android:id="@+id/imgTick"
+                            android:visibility="gone"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/tick"></ImageView>
+                    </LinearLayout>
+                    <TextView
+                        android:layout_marginLeft="4dp"
                         android:textStyle="bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
-                        android:textColor="@color/white"
-                        android:text="Acknowledge"></TextView>
+                        android:textColor="@color/maincolor"
+                        android:text="I willfully agreed with the above mentioned terms and conditions"></TextView>
                 </LinearLayout>
+
 
 
 
