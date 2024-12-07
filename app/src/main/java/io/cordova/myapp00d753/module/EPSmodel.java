@@ -1,7 +1,7 @@
 package io.cordova.myapp00d753.module;
 
 public class EPSmodel {
-    String name,address,age,relationship;
+    String name,address,age,relationship,aadhaarNo;
 
     public String getName() {
         return name;
@@ -33,5 +33,13 @@ public class EPSmodel {
 
     public void setRelationship(String relationship) {
         this.relationship = relationship;
+    }
+
+    public String getAadhaarNo() {
+        return aadhaarNo;
+    }
+
+    public void setAadhaarNo(String aadhaarNo) {
+        this.aadhaarNo = aadhaarNo;
     }
 }

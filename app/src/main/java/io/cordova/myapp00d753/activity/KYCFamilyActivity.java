@@ -1,31 +1,18 @@
 package io.cordova.myapp00d753.activity;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,8 +27,6 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
-import com.intrusoft.scatter.ChartData;
-import com.intrusoft.scatter.PieChart;
 
 
 import org.json.JSONArray;
@@ -50,31 +35,16 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import io.cordova.myapp00d753.KYCFamilyModel;
 import io.cordova.myapp00d753.R;
-import io.cordova.myapp00d753.adapter.EPSNominationAdapter;
 import io.cordova.myapp00d753.adapter.KYCFamilyAdapter;
-import io.cordova.myapp00d753.databinding.ActivityEpsnominationBinding;
 import io.cordova.myapp00d753.databinding.ActivityKycfamilyBinding;
-import io.cordova.myapp00d753.module.AttendanceService;
-import io.cordova.myapp00d753.module.EPSmodel;
 import io.cordova.myapp00d753.module.MainDocModule;
-import io.cordova.myapp00d753.module.UploadObject;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import static java.util.Calendar.DAY_OF_MONTH;
 
@@ -85,6 +55,7 @@ public class KYCFamilyActivity extends AppCompatActivity {
     JSONObject nominationobject=new JSONObject();
     JSONArray nominationarray=new JSONArray();
     ArrayList<KYCFamilyModel>itemList=new ArrayList<>();
+    ArrayList<KYCFamilyModel>itemListForView=new ArrayList<>();
     LinearLayoutManager layoutManager;
     String month;
     String dob="";
@@ -99,14 +70,19 @@ public class KYCFamilyActivity extends AppCompatActivity {
     ArrayList<MainDocModule> mainGender = new ArrayList<>();
     ProgressDialog pd2;
     String sexGender="";
+    String isFatherSelected = "", isMotherSelected = "", isWifeSelected = "", isHusbandSelected = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding= DataBindingUtil.setContentView(this,R.layout.activity_kycfamily);
         initialize();
         setNomineeRelation();
+
+
         onClick();
     }
+
+
 
     private void initialize() {
         pref=new Pref(KYCFamilyActivity.this);
@@ -150,6 +126,15 @@ public class KYCFamilyActivity extends AppCompatActivity {
                                     jsonObject.put("Gender", sexGender);
                                     jsonObject.put("Relationship", relationshipID);
                                     jsonObject.put("RelationshipID", relationship);
+                                    if (relationship.equalsIgnoreCase("Father")){
+                                        isFatherSelected = "Father";
+                                    } else if (relationship.equalsIgnoreCase("Mother")){
+                                        isMotherSelected = "Mother";
+                                    } else if (relationship.equalsIgnoreCase("Wife")){
+                                        isWifeSelected = "Wife";
+                                    } else if (relationship.equalsIgnoreCase("Husband")){
+                                        isHusbandSelected = "Husband";
+                                    }
                                     jsonObject.put("DOB", dob);
                                     jsonObject.put("AEMEMPLOYEEID", pref.getEmpId());
                                     nominationarray.put(jsonObject);
@@ -207,21 +192,37 @@ public class KYCFamilyActivity extends AppCompatActivity {
         binding.etGender.setText("");
         binding.spRealation.setSelection(0);
         binding.llData.setVisibility(View.VISIBLE);
-        //itemList.clear();
+        itemList.clear();
+
 
         JSONArray nomination=object.optJSONArray("familyDetails");
-        for (int i=0;i<nomination.length();i++){
-            JSONObject nomiobj=nomination.optJSONObject(i);
-            String Name=nomiobj.optString("Name");
-            String Gender=nomiobj.optString("Gender");
-            String Relationship=nomiobj.optString("RelationshipID");
-            String DOB=nomiobj.optString("DOB");
-            KYCFamilyModel epSmodel=new KYCFamilyModel();
-            epSmodel.setFamilyMemberName(Name);
-            epSmodel.setGender(Gender);
-            epSmodel.setDob(DOB);
-            epSmodel.setRealationship(Relationship);
-            itemList.add(epSmodel);
+        for (int i=0;i<nomination.length();i++) {
+            JSONObject nomiobj = nomination.optJSONObject(i);
+            try {
+                if (!itemList.get(i).getFamilyMemberName().equalsIgnoreCase(nomiobj.optString("Name"))) {
+                    String Name = nomiobj.optString("Name");
+                    String Gender = nomiobj.optString("Gender");
+                    String Relationship = nomiobj.optString("RelationshipID");
+                    String DOB = nomiobj.optString("DOB");
+                    KYCFamilyModel epSmodel = new KYCFamilyModel();
+                    epSmodel.setFamilyMemberName(Name);
+                    epSmodel.setGender(Gender);
+                    epSmodel.setDob(DOB);
+                    epSmodel.setRealationship(Relationship);
+                    itemList.add(epSmodel);
+                }
+            } catch (IndexOutOfBoundsException e) {
+                String Name = nomiobj.optString("Name");
+                String Gender = nomiobj.optString("Gender");
+                String Relationship = nomiobj.optString("RelationshipID");
+                String DOB = nomiobj.optString("DOB");
+                KYCFamilyModel epSmodel = new KYCFamilyModel();
+                epSmodel.setFamilyMemberName(Name);
+                epSmodel.setGender(Gender);
+                epSmodel.setDob(DOB);
+                epSmodel.setRealationship(Relationship);
+                itemList.add(epSmodel);
+            }
         }
         if (nominationAdapter == null){
             nominationAdapter=new KYCFamilyAdapter(itemList,KYCFamilyActivity.this);
@@ -237,9 +238,17 @@ public class KYCFamilyActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i>0){
-                    relationshipID=mainRealation.get(i).getDocID();
-                    relationship=mainRealation.get(i).getDocumentType();
-                    binding.llRelationship.setBackgroundResource(R.drawable.lldesign9);
+                    if (isFatherSelected.equalsIgnoreCase(mainRealation.get(i).getDocumentType())
+                        || isMotherSelected.equalsIgnoreCase(mainRealation.get(i).getDocumentType())
+                        || isWifeSelected.equalsIgnoreCase(mainRealation.get(i).getDocumentType())
+                        || isHusbandSelected.equalsIgnoreCase(mainRealation.get(i).getDocumentType())){
+                        Toast.makeText(KYCFamilyActivity.this, "You have already add "+mainRealation.get(i).getDocumentType(), Toast.LENGTH_SHORT).show();
+                        binding.spRealation.setSelection(0);
+                    } else {
+                        relationshipID=mainRealation.get(i).getDocID();
+                        relationship=mainRealation.get(i).getDocumentType();
+                        binding.llRelationship.setBackgroundResource(R.drawable.lldesign9);
+                    }
                 }
             }
 
@@ -253,7 +262,11 @@ public class KYCFamilyActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (itemList.size()>0){
-                    uploadfamilydetails(nominationobject);
+                    try {
+                        uploadfamilydetails(nominationobject);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
                 }else {
                     Toast.makeText(KYCFamilyActivity.this,"Please Add Family Member",Toast.LENGTH_LONG).show();
                 }
@@ -376,7 +389,8 @@ public class KYCFamilyActivity extends AppCompatActivity {
     }
 
 
-    private void uploadfamilydetails(JSONObject jsonObject) {
+    private void uploadfamilydetails(JSONObject jsonObject) throws JSONException {
+        Log.e(TAG, "uploadfamilydetails: "+jsonObject.toString(4) );
         pd.show();
         AndroidNetworking.post(AppData.newv2url+"KYC/UpdateKYCDetails")
                 .addJSONObjectBody(jsonObject)
@@ -420,7 +434,6 @@ public class KYCFamilyActivity extends AppCompatActivity {
 
 
     private void setNomineeRelation() {
-
         String surl = AppData.url+"gcl_CommonDDL?ddltype=7&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
         pd=new ProgressDialog(KYCFamilyActivity.this);
         pd.setMessage("Loading");
@@ -493,12 +506,22 @@ public class KYCFamilyActivity extends AppCompatActivity {
     }
 
     public void deleteItem(int pos){
+        if (itemList.get(pos).getRealationship().equalsIgnoreCase("Father")){
+            isFatherSelected = "";
+        } else if (itemList.get(pos).getRealationship().equalsIgnoreCase("Mother")){
+            isMotherSelected = "";
+        } else if (itemList.get(pos).getRealationship().equalsIgnoreCase("Wife")){
+            isWifeSelected = "";
+        } else if (itemList.get(pos).getRealationship().equalsIgnoreCase("Husband")){
+            isHusbandSelected = "";
+        }
         itemList.remove(pos);
         nominationarray.remove(pos);
         if (itemList.size()==0){
             binding.llData.setVisibility(View.GONE);
         }
-
+        Log.e(TAG, "deleteItem: itemList: "+itemList.size());
+        Log.e(TAG, "deleteItem: nominationarray: "+nominationarray.length());
     }
 
     private void setGender() {
@@ -553,7 +576,6 @@ public class KYCFamilyActivity extends AppCompatActivity {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-
                             } else {
 
 
@@ -607,16 +629,35 @@ public class KYCFamilyActivity extends AppCompatActivity {
                                 JSONArray jsonArray = job2.getJSONArray("FamilyDetails");
                                 for (int i=0;i<jsonArray.length();i++){
                                     JSONObject nomiobj=jsonArray.optJSONObject(i);
+                                    JSONObject object = new JSONObject();
+                                    String AEMEmployeeID = nomiobj.optString("AEMEmployeeID");
                                     String Name=nomiobj.optString("MemberName");
                                     String Gender=nomiobj.optString("Gender");
                                     String Relationship=nomiobj.optString("Relation");
+                                    String RelationshipID=nomiobj.optString("RelationID");
                                     String DOB=nomiobj.optString("MemberDOB");
+                                    if (Relationship.equalsIgnoreCase("Father")){
+                                        isFatherSelected = "Father";
+                                    } else if (Relationship.equalsIgnoreCase("Mother")){
+                                        isMotherSelected = "Mother";
+                                    } else if (Relationship.equalsIgnoreCase("Wife")){
+                                        isWifeSelected = "Wife";
+                                    } else if (Relationship.equalsIgnoreCase("Husband")){
+                                        isHusbandSelected = "Husband";
+                                    }
+
                                     KYCFamilyModel epSmodel=new KYCFamilyModel();
                                     epSmodel.setFamilyMemberName(Name);
                                     epSmodel.setGender(Gender);
                                     epSmodel.setDob(DOB);
                                     epSmodel.setRealationship(Relationship);
                                     itemList.add(epSmodel);
+                                    object.put("AEMEmployeeID",AEMEmployeeID);
+                                    object.put("Name",Name);
+                                    object.put("RelationshipID",Relationship);
+                                    object.put("Relationship",RelationshipID);
+                                    object.put("DOB",DOB);
+                                    nominationarray.put(object);
                                 }
 
                                 if (nominationAdapter == null){
