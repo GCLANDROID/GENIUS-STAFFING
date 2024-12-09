@@ -140,8 +140,10 @@ public class SKF_BacklogAdapter extends RecyclerView.Adapter<SKF_BacklogAdapter.
         } else {
             holder.txtRemarks.setVisibility(View.VISIBLE);
             if (itemList.get(position).getRemarksCode().equals("0")){
-                holder.txtRemarks.setTextColor(Color.parseColor("#FF4CAF50"));
-                holder.txtRemarks.setText(itemList.get(position).getRemarks());
+                //holder.txtRemarks.setTextColor(Color.parseColor("#FF4CAF50"));
+                if (itemList.get(position).getRemarks() == null){
+                    holder.txtRemarks.setVisibility(View.GONE);
+                }
             } else if (itemList.get(position).getRemarksCode().equals("1")){
                 holder.txtRemarks.setTextColor(Color.parseColor("#FFD1BF20"));
                 holder.txtRemarks.setText(itemList.get(position).getRemarks());

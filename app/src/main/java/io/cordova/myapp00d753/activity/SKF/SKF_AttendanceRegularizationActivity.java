@@ -344,6 +344,7 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
                                     successAlert();
                                 } else {
                                     blockLogList.clear();
+                                    btnSubmit.setVisibility(View.GONE);
                                     //TODO: Failure
                                     for (int i = 0; i < TableArray.length(); i++) {
                                         Log.e(TAG, "Table: called");
@@ -438,12 +439,14 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
                                         llLoader.setVisibility(View.GONE);
                                         llMain.setVisibility(View.VISIBLE);
                                         llNodata.setVisibility(View.GONE);
+                                        llWarning.setVisibility(View.GONE);
                                         skfBacklogAdapter = new SKF_BacklogAdapter(blockLogList,dayTypeArray,SKF_AttendanceRegularizationActivity.this);
                                         rvItem.setAdapter(skfBacklogAdapter);
                                     } else {
                                         llLoader.setVisibility(View.GONE);
                                         llMain.setVisibility(View.GONE);
                                         llNodata.setVisibility(View.VISIBLE);
+                                        llWarning.setVisibility(View.GONE);
                                     }
                                 } else {
                                     //TODO: Exceed Request Limit message;
@@ -457,6 +460,7 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
                                 llLoader.setVisibility(View.GONE);
                                 llMain.setVisibility(View.GONE);
                                 llNodata.setVisibility(View.VISIBLE);
+                                llWarning.setVisibility(View.GONE);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
