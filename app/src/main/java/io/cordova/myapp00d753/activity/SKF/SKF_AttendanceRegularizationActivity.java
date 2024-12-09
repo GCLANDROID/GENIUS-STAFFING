@@ -276,14 +276,14 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
                 //Log.e(TAG, "submitOperation: "+i);
                 if (regularizationSubmitString.isEmpty()){
                     if (SKF_PUNE_CLIENT_OFFICE_ID.equals(pref.getEmpClintOffId()))
-                        regularizationSubmitString = pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(i).getDate()+"_"+blockLogList.get(i).getInTime()+"_"+blockLogList.get(i).getOutTime()+"_"+blockLogList.get(i).getDayType()+"_"+Siteid+"_0";
+                        regularizationSubmitString = pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(i).getDate()+"_"+blockLogList.get(i).getInTime()+"_"+blockLogList.get(i).getOutTime()+"_"+blockLogList.get(i).getRemarks()+"_"+Siteid+"_0_"+blockLogList.get(i).getDayType();
                     else
-                        regularizationSubmitString = pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(i).getDate()+"_"+blockLogList.get(i).getInTime()+"_"+blockLogList.get(i).getOutTime()+"_"+blockLogList.get(i).getDayType()+"_0_0";
+                        regularizationSubmitString = pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(i).getDate()+"_"+blockLogList.get(i).getInTime()+"_"+blockLogList.get(i).getOutTime()+"_"+blockLogList.get(i).getRemarks()+"_0_0_"+blockLogList.get(i).getDayType();
                 } else {
                     if (SKF_PUNE_CLIENT_OFFICE_ID.equals(pref.getEmpClintOffId()))
-                        regularizationSubmitString += ","+pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(i).getDate()+"_"+blockLogList.get(i).getInTime()+"_"+blockLogList.get(i).getOutTime()+"_"+blockLogList.get(i).getDayType()+"_"+Siteid+"_0";
+                        regularizationSubmitString += ","+pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(i).getDate()+"_"+blockLogList.get(i).getInTime()+"_"+blockLogList.get(i).getOutTime()+"_"+blockLogList.get(i).getRemarks()+"_"+Siteid+"_0_"+blockLogList.get(i).getDayType();
                     else
-                        regularizationSubmitString += ","+pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(i).getDate()+"_"+blockLogList.get(i).getInTime()+"_"+blockLogList.get(i).getOutTime()+"_"+blockLogList.get(i).getDayType()+"_0_0";
+                        regularizationSubmitString += ","+pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(i).getDate()+"_"+blockLogList.get(i).getInTime()+"_"+blockLogList.get(i).getOutTime()+"_"+blockLogList.get(i).getRemarks()+"_0_0_"+blockLogList.get(i).getDayType();
                 }
             }
         }
@@ -303,7 +303,7 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
 
     private void regularizationSaveApiCall(JSONObject jsonObject) {
         Log.e(TAG, "BACKLOG_SAVE_INPUT: "+jsonObject);
-       /* AndroidNetworking.post(AppData.SKF_SAVE_ATTENDANCE_REGULARIZATION)
+        AndroidNetworking.post(AppData.SKF_SAVE_ATTENDANCE_REGULARIZATION)
                 .addJSONObjectBody(jsonObject)
                 .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
@@ -335,7 +335,7 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
                         progressDialog.dismiss();
                         Log.e(TAG, "SKF_BACKLOG_SAVE_error: "+anError.getErrorBody());
                     }
-                });*/
+                });
     }
 
 
