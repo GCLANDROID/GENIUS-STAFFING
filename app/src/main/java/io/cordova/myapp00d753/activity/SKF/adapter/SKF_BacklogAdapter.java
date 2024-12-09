@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -43,7 +44,7 @@ public class SKF_BacklogAdapter extends RecyclerView.Adapter<SKF_BacklogAdapter.
     @NonNull
     @Override
     public MyViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.back_attendance_row, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.skf_back_attendance_row, parent, false);
         return new MyViewholder(itemView);
     }
 
@@ -130,9 +131,28 @@ public class SKF_BacklogAdapter extends RecyclerView.Adapter<SKF_BacklogAdapter.
         holder.tvDayType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //openDayTypePopup(mContext,holder,position);
+                openDayTypePopup(mContext,holder,position);
             }
         });
+
+        if (itemList.get(position).getRemarks().equals("C")){
+            holder.txtRemarks.setVisibility(View.GONE);
+        } else {
+            holder.txtRemarks.setVisibility(View.VISIBLE);
+            if (itemList.get(position).getRemarksCode().equals("0")){
+                holder.txtRemarks.setTextColor(Color.parseColor("#FF4CAF50"));
+                holder.txtRemarks.setText(itemList.get(position).getRemarks());
+            } else if (itemList.get(position).getRemarksCode().equals("1")){
+                holder.txtRemarks.setTextColor(Color.parseColor("#FFD1BF20"));
+                holder.txtRemarks.setText(itemList.get(position).getRemarks());
+            } else if (itemList.get(position).getRemarksCode().equals("2")){
+                holder.txtRemarks.setTextColor(Color.parseColor("#000000"));
+                holder.txtRemarks.setText(itemList.get(position).getRemarks());
+            } else if (itemList.get(position).getRemarksCode().equals("3")){
+                holder.txtRemarks.setTextColor(Color.parseColor("#FFF44336"));
+                holder.txtRemarks.setText(itemList.get(position).getRemarks());
+            }
+        }
     }
 
     @Override
@@ -141,7 +161,7 @@ public class SKF_BacklogAdapter extends RecyclerView.Adapter<SKF_BacklogAdapter.
     }
 
     class MyViewholder extends RecyclerView.ViewHolder{
-        TextView tvDate, tvInTime,tvOutTime,tvDayType;
+        TextView tvDate, tvInTime,tvOutTime,tvDayType,txtRemarks;
         ImageView imgLike,imgInTime,imgOutTime;
         LinearLayout llLike;
         public MyViewholder(@NonNull View itemView) {
@@ -149,6 +169,7 @@ public class SKF_BacklogAdapter extends RecyclerView.Adapter<SKF_BacklogAdapter.
             tvDate = itemView.findViewById(R.id.tvDate);
             tvInTime = itemView.findViewById(R.id.tvInTime);
             tvOutTime = itemView.findViewById(R.id.tvOutTime);
+            txtRemarks = itemView.findViewById(R.id.txtRemarks);
             imgLike = itemView.findViewById(R.id.imgLike);
             llLike = itemView.findViewById(R.id.llLike);
             tvDayType = itemView.findViewById(R.id.tvDayType);

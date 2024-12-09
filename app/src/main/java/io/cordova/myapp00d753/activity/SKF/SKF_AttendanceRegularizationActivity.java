@@ -69,7 +69,7 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
     RecyclerView rvItem;
     LinearLayout btnSubmit;
     ImageView imgBack,imgLike;
-    LinearLayout lnStartDate,lnEndDate,llMain,llLoader,llNodata;
+    LinearLayout lnStartDate,lnEndDate,llMain,llLoader,llNodata,llWarning;
     TextView tvStartDate,tvEndDate;
     Button btnShow;
     Pref pref;
@@ -88,6 +88,7 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
     AlertDialog alerDialog1;
     android.app.AlertDialog al1;
     ArrayList<String> dayTypeArray;
+    TextView txtRegularisationCount;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,9 +109,10 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
         llMain = findViewById(R.id.llMain);
         llLoader = findViewById(R.id.llLoader);
         llNodata = findViewById(R.id.llNodata);
+        llWarning = findViewById(R.id.llWarning);
         llTick = findViewById(R.id.llTick);
         imgLike = findViewById(R.id.imgLike);
-
+        txtRegularisationCount = findViewById(R.id.txtRegularisationCount);
         btnSubmit.setOnClickListener(this);
         imgBack.setOnClickListener(this);
         lnStartDate.setOnClickListener(this);
@@ -319,8 +321,51 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
                             String Response_Code = job1.optString("Response_Code");
                             String Response_Message = job1.optString("Response_Message");
                             if (Response_Code.equals("101")) {
-                                String Response_Data = job1.optString("Response_Data");
-                                successAlert();
+                                //String Response_Data = job1.optString("Response_Data");
+                                //successAlert();
+                                JSONObject json_Response_Data = job1.optJSONObject("Response_Data");
+                                String Table = json_Response_Data.optString("Table");
+                                JSONArray TableArray = new JSONArray(Table);
+                                Log.e(TAG, "TableArray: "+TableArray);
+                                String Table1 = json_Response_Data.optString("Table1");
+                                JSONArray Table1Array = new JSONArray(Table1);
+                                Log.e(TAG, "TableArray: "+Table1Array);
+                                JSONObject FinalStatusObj = Table1Array.optJSONObject(0);
+                                Log.e(TAG, "FinalStatusObj: "+FinalStatusObj);
+                                if (FinalStatusObj.getInt("FinalStatus") == 1){
+                                    //TODO: Success
+                                    int FinalStatus = FinalStatusObj.getInt("FinalStatus");
+                                    int AlreadyRequestCount = FinalStatusObj.getInt("AlreadyRequestCount");
+                                    int ExceedRequestLimit = FinalStatusObj.getInt("ExceedRequestLimit");
+                                    txtRegularisationCount.setText(String.valueOf(AlreadyRequestCount));
+                                    Log.e(TAG, "FinalStatus: "+FinalStatus);
+                                    Log.e(TAG, "AlreadyRequestCount: "+AlreadyRequestCount);
+                                    Log.e(TAG, "ExceedRequestLimit: "+ExceedRequestLimit);
+                                    successAlert();
+                                } else {
+                                    blockLogList.clear();
+                                    //TODO: Failure
+                                    for (int i = 0; i < TableArray.length(); i++) {
+                                        Log.e(TAG, "Table: called");
+                                        JSONObject obj = TableArray.getJSONObject(i);
+                                        String AttDate = obj.optString("Dates");
+                                        String InTime = obj.optString("Intime");
+                                        String OutTime = obj.optString("Outtime");
+                                        String Daytype = obj.optString("DayType");
+                                        String Remarks = obj.optString("Remarks");
+                                        String RemarksCode = String.valueOf(obj.optInt("RemarksCode"));
+                                        String SLNo = String.valueOf(obj.optInt("SLNo"));
+
+
+                                        BackLogAttendanceModel blockModule = new BackLogAttendanceModel(AttDate, InTime, OutTime);
+                                        blockModule.setDayType(Daytype);
+                                        blockModule.setRemarks(Remarks);
+                                        blockModule.setRemarksCode(RemarksCode);
+                                        blockModule.setSLNo(SLNo);
+                                        blockLogList.add(blockModule);
+                                    }
+                                    skfBacklogAdapter.notifyDataSetChanged();
+                                }
                             } else {
                                 showErrorDialog(Response_Message);
                                 //Toast.makeText(SKF_AttendanceRegularizationActivity.this,Response_Message,Toast.LENGTH_LONG).show();
@@ -362,29 +407,51 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
                             String Response_Message = job1.optString("Response_Message");
                             if (Response_Code.equals("101")) {
                                 String Response_Data = job1.optString("Response_Data");
-                                JSONArray jsonArray = new JSONArray(Response_Data);
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    JSONObject obj = jsonArray.getJSONObject(i);
-                                    String AttDate = obj.optString("Dates");
-                                    String InTime = obj.optString("Intime");
-                                    String OutTime = obj.optString("Outtime");
-                                    String Daytype=obj.optString("Daytype");
-                                    String Remarks=obj.optString("Remark");
-                                    Log.e(TAG, "Remarks: "+obj.optString("Remark") );
+                                JSONObject Response_Data_obj = new JSONObject(Response_Data);
+                                String Table = Response_Data_obj.optString("Table");
+                                Log.e(TAG, "Table: "+Table);
+                                String Table1 = Response_Data_obj.optString("Table1");
+                                Log.e(TAG, "Table1: "+Table1);
+                                JSONArray Table1Array = new JSONArray(Table1);
+                                JSONObject table1Obj = Table1Array.getJSONObject(0);
+                                txtRegularisationCount.setText(String.valueOf(table1Obj.getInt("RegularisationRequestCount")));
+                                if(table1Obj.getInt("RegularisationRequestCount") < 4) {
+                                    JSONArray jsonArray = new JSONArray(Table);
+                                    if (jsonArray.length() > 0){
+                                        for (int i = 0; i < jsonArray.length(); i++) {
+                                            JSONObject obj = jsonArray.getJSONObject(i);
+                                            String AttDate = obj.optString("Dates");
+                                            String InTime = obj.optString("Intime");
+                                            String OutTime = obj.optString("Outtime");
+                                            String Daytype=obj.optString("Daytype");
+                                            String Remarks=obj.optString("Remark");
+                                            //Log.e(TAG, "Remarks: "+obj.optString("Remark") );
 
-                                    //Log.e(TAG, "Remarks: "+Remarks);
+                                            //Log.e(TAG, "Remarks: "+Remarks);
 
-                                    BackLogAttendanceModel blockModule = new BackLogAttendanceModel(AttDate, InTime, OutTime);
-                                    blockModule.setDayType(Daytype);
-                                    blockModule.setRemarks(Remarks);
-                                    blockLogList.add(blockModule);
-                                    //item1.add(pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+AttDate + "_" + InTime + "_" + OutTime + "_"+Remarks);
+                                            BackLogAttendanceModel blockModule = new BackLogAttendanceModel(AttDate, InTime, OutTime);
+                                            blockModule.setDayType(Daytype);
+                                            blockModule.setRemarks(Remarks);
+                                            blockLogList.add(blockModule);
+                                            //item1.add(pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+AttDate + "_" + InTime + "_" + OutTime + "_"+Remarks);
+                                        }
+                                        llLoader.setVisibility(View.GONE);
+                                        llMain.setVisibility(View.VISIBLE);
+                                        llNodata.setVisibility(View.GONE);
+                                        skfBacklogAdapter = new SKF_BacklogAdapter(blockLogList,dayTypeArray,SKF_AttendanceRegularizationActivity.this);
+                                        rvItem.setAdapter(skfBacklogAdapter);
+                                    } else {
+                                        llLoader.setVisibility(View.GONE);
+                                        llMain.setVisibility(View.GONE);
+                                        llNodata.setVisibility(View.VISIBLE);
+                                    }
+                                } else {
+                                    //TODO: Exceed Request Limit message;
+                                    llLoader.setVisibility(View.GONE);
+                                    llMain.setVisibility(View.GONE);
+                                    llNodata.setVisibility(View.GONE);
+                                    llWarning.setVisibility(View.VISIBLE);
                                 }
-                                llLoader.setVisibility(View.GONE);
-                                llMain.setVisibility(View.VISIBLE);
-                                llNodata.setVisibility(View.GONE);
-                                skfBacklogAdapter = new SKF_BacklogAdapter(blockLogList,dayTypeArray,SKF_AttendanceRegularizationActivity.this);
-                                rvItem.setAdapter(skfBacklogAdapter);
                                 //tvCount.setText("Total Day(s) Count : "+jsonArray.length());
                             } else {
                                 llLoader.setVisibility(View.GONE);
