@@ -81,6 +81,7 @@ import io.cordova.myapp00d753.module.AttendanceCalenderModel;
 import io.cordova.myapp00d753.module.SpineerItemModel;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
+import io.cordova.myapp00d753.utility.ClientID;
 import io.cordova.myapp00d753.utility.GPSTracker;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.Util;
@@ -192,7 +193,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         } else {
             llHoliday.setVisibility(View.GONE);
         }
-
+        Log.e(TAG, "initView: "+pref.getBackAttd());
         if (pref.getBackAttd().equals("1")) {
             llBackAttendance.setVisibility(View.VISIBLE);
             llAttenRegularize.setVisibility(View.VISIBLE);
@@ -397,7 +398,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         });
 
         tvOK.setOnClickListener(this);
-        if (pref.getEmpClintId().equals("AEMCLI0910000343") || pref.getEmpClintId().equals("AEMCLI0910000315") || pref.getEmpClintId().equals("AEMCLI2110001671")) {
+        if (pref.getEmpClintId().equals("AEMCLI0910000343") || pref.getEmpClintId().equals("AEMCLI0910000315") || pref.getEmpClintId().equals("AEMCLI2110001671") || pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID)) {
             llAdjustment.setVisibility(View.VISIBLE);
         } else {
             llAdjustment.setVisibility(View.GONE);
@@ -546,8 +547,6 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                             } else {
                                 //   Toast.makeText(getApplicationContext(),"No data found",Toast.LENGTH_LONG).show();
                             }
-
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                             // Toast.makeText(AttendanceReportActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
@@ -776,7 +775,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, BoschAttendanceReportActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-            }else {
+            } else {
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceReportActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -1543,7 +1542,6 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }else if (pref.getEmpClintId().equals(AppData.PROTACTORGAMBLEID) || pref.getEmpClintId().equals("AEMCLI1110000502")) {
-            //
             Intent intent = new Intent(AttenDanceDashboardActivity.this, ProtectorGambleAttendanceActivity.class);
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
