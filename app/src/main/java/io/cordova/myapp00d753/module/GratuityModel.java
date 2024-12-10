@@ -1,7 +1,7 @@
 package io.cordova.myapp00d753.module;
 
 public class GratuityModel {
-    String name,address,age,relationship,portion;
+    String name,address,age,relationship,portion, aadhaarNo;
 
     public String getName() {
         return name;
@@ -41,5 +41,13 @@ public class GratuityModel {
 
     public void setPortion(String portion) {
         this.portion = portion;
+    }
+
+    public String getAadhaarNo() {
+        return aadhaarNo;
+    }
+
+    public void setAadhaarNo(String aadhaarNo) {
+        this.aadhaarNo = aadhaarNo;
     }
 }

@@ -64,6 +64,7 @@ public class GratuityNominationActivity extends AppCompatActivity {
     String month;
     String dob="";
     GratuityNominationAdapter nominationAdapter;
+    String isFatherSelected = "", isMotherSelected = "", isWifeSelected = "", isHusbandSelected = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,9 +115,17 @@ public class GratuityNominationActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i>0){
-                    relationshipID=mainRealation.get(i).getDocID();
-                    relationship=mainRealation.get(i).getDocumentType();
-                    binding.llRelationship.setBackgroundResource(R.drawable.lldesign9);
+                    if (isFatherSelected.equalsIgnoreCase(mainRealation.get(i).getDocumentType())
+                            || isMotherSelected.equalsIgnoreCase(mainRealation.get(i).getDocumentType())
+                            || isWifeSelected.equalsIgnoreCase(mainRealation.get(i).getDocumentType())
+                            || isHusbandSelected.equalsIgnoreCase(mainRealation.get(i).getDocumentType())){
+                        Toast.makeText(GratuityNominationActivity.this, "You have already add "+mainRealation.get(i).getDocumentType(), Toast.LENGTH_SHORT).show();
+                        binding.spRealation.setSelection(0);
+                    } else {
+                        relationshipID=mainRealation.get(i).getDocID();
+                        relationship=mainRealation.get(i).getDocumentType();
+                        binding.llRelationship.setBackgroundResource(R.drawable.lldesign9);
+                    }
                 }
             }
 
@@ -207,6 +216,15 @@ public class GratuityNominationActivity extends AppCompatActivity {
                                             jsonObject.put("DOB",dob);
                                             jsonObject.put("Proportion",binding.etProportion.getText().toString());
                                             jsonObject.put("AEMEMPLOYEEID",pref.getEmpId());
+                                            if (relationship.equalsIgnoreCase("Father")){
+                                                isFatherSelected = "Father";
+                                            } else if (relationship.equalsIgnoreCase("Mother")){
+                                                isMotherSelected = "Mother";
+                                            } else if (relationship.equalsIgnoreCase("Wife")){
+                                                isWifeSelected = "Wife";
+                                            } else if (relationship.equalsIgnoreCase("Husband")){
+                                                isHusbandSelected = "Husband";
+                                            }
                                             nominationarray.put(jsonObject);
                                             nominationobject.put("gratuityDetails",nominationarray);
                                             nominationobject.put("DbOperation","9");
@@ -406,19 +424,37 @@ public class GratuityNominationActivity extends AppCompatActivity {
         JSONArray nomination=object.optJSONArray("gratuityDetails");
         for (int i=0;i<nomination.length();i++){
             JSONObject nomiobj=nomination.optJSONObject(i);
-            String Name=nomiobj.optString("Name");
-            String Address=nomiobj.optString("Address");
-            String Relationship=nomiobj.optString("RelationshipID");
-            String Age=nomiobj.optString("DOB");
-            String Proportion=nomiobj.optString("Proportion");
-            GratuityModel epSmodel=new GratuityModel();
-            epSmodel.setName(Name);
-            epSmodel.setAddress(Address);
-            epSmodel.setAge(Age);
-            epSmodel.setRelationship(Relationship);
-            epSmodel.setPortion(Proportion);
+            try {
+                if (!itemList.get(i).getAadhaarNo().equalsIgnoreCase(nomiobj.optString("Aadhar"))){
+                    String Name=nomiobj.optString("Name");
+                    String Address=nomiobj.optString("Address");
+                    String Relationship=nomiobj.optString("RelationshipID");
+                    String Age=nomiobj.optString("DOB");
+                    String Proportion=nomiobj.optString("Proportion");
+                    GratuityModel epSmodel=new GratuityModel();
+                    epSmodel.setName(Name);
+                    epSmodel.setAddress(Address);
+                    epSmodel.setAge(Age);
+                    epSmodel.setRelationship(Relationship);
+                    epSmodel.setPortion(Proportion);
 
-            itemList.add(epSmodel);
+                    itemList.add(epSmodel);
+                }
+            } catch (IndexOutOfBoundsException e){
+                String Name=nomiobj.optString("Name");
+                String Address=nomiobj.optString("Address");
+                String Relationship=nomiobj.optString("RelationshipID");
+                String Age=nomiobj.optString("DOB");
+                String Proportion=nomiobj.optString("Proportion");
+                GratuityModel epSmodel=new GratuityModel();
+                epSmodel.setName(Name);
+                epSmodel.setAddress(Address);
+                epSmodel.setAge(Age);
+                epSmodel.setRelationship(Relationship);
+                epSmodel.setPortion(Proportion);
+
+                itemList.add(epSmodel);
+            }
         }
 
         if (nominationAdapter == null){
@@ -605,6 +641,15 @@ public class GratuityNominationActivity extends AppCompatActivity {
 
 
     public void deleteItem(int pos){
+        if (itemList.get(pos).getRelationship().equalsIgnoreCase("Father")){
+            isFatherSelected = "";
+        } else if (itemList.get(pos).getRelationship().equalsIgnoreCase("Mother")){
+            isMotherSelected = "";
+        } else if (itemList.get(pos).getRelationship().equalsIgnoreCase("Wife")){
+            isWifeSelected = "";
+        } else if (itemList.get(pos).getRelationship().equalsIgnoreCase("Husband")){
+            isHusbandSelected = "";
+        }
         itemList.remove(pos);
         nominationarray.remove(pos);
         if (itemList.size()==0){
@@ -635,18 +680,45 @@ public class GratuityNominationActivity extends AppCompatActivity {
                                 JSONArray jsonArray = job2.getJSONArray("GratuityDetails");
                                 for (int i=0;i<jsonArray.length();i++){
                                     JSONObject nomiobj=jsonArray.optJSONObject(i);
+                                    JSONObject object = new JSONObject();
+                                    String AEMEmployeeID=nomiobj.optString("AEMEmployeeID");
                                     String Name=nomiobj.optString("MemberName");
                                     String Address=nomiobj.optString("NomineeAddress");
                                     String Relationship=nomiobj.optString("Relation");
-                                    String Age=nomiobj.optString("MemberDOB");
+                                    String RelationID=nomiobj.optString("RelationID");
+                                    String MemberDOB=nomiobj.optString("MemberDOB");
                                     String Proportion=nomiobj.optString("Proportion");
+                                    String MemberAadhar=nomiobj.optString("MemberAadhar");
+
+                                    if (Relationship.equalsIgnoreCase("Father")){
+                                        isFatherSelected = "Father";
+                                    } else if (Relationship.equalsIgnoreCase("Mother")){
+                                        isMotherSelected = "Mother";
+                                    } else if (Relationship.equalsIgnoreCase("Wife")){
+                                        isWifeSelected = "Wife";
+                                    } else if (Relationship.equalsIgnoreCase("Husband")){
+                                        isHusbandSelected = "Husband";
+                                    }
+
                                     GratuityModel epSmodel=new GratuityModel();
                                     epSmodel.setName(Name);
                                     epSmodel.setAddress(Address);
-                                    epSmodel.setAge(Age);
+                                    epSmodel.setAge(MemberDOB);
                                     epSmodel.setRelationship(Relationship);
                                     epSmodel.setPortion(Proportion);
+                                    epSmodel.setAadhaarNo(MemberAadhar);
                                     itemList.add(epSmodel);
+
+                                    object.put("Name",Name);
+                                    object.put("Aadhar",MemberAadhar);
+                                    object.put("Address",Address);
+                                    object.put("Relationship",RelationID);
+                                    object.put("RelationshipID",Relationship);
+                                    object.put("DOB",MemberDOB);
+                                    object.put("Proportion",Proportion);
+                                    object.put("AEMEMPLOYEEID",AEMEmployeeID);
+
+                                    nominationarray.put(object);
                                 }
 
 
