@@ -187,8 +187,9 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                             JSONObject job1 = response;
                             int Response_Code = job1.optInt("Response_Code");
                             String Response_Data = job1.optString("Response_Data");
+                            //Log.e(TAG, "Response_Data: "+Response_Data);
                             if (Response_Code == 101) {
-                                if (Response_Data != null){
+                                if (Response_Data != null) {
                                     JSONObject Response_Data_obj = new JSONObject(Response_Data);
                                     JSONArray jsonArray = Response_Data_obj.getJSONArray("AadharDetails");
                                     JSONObject job2 = jsonArray.getJSONObject(0);
@@ -205,7 +206,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                                         ShowDialog.showErrorDialog(TEMPAadharQRActivity.this,
                                                 "Another Aadhaar number is linked to this ID. Kindly provide the accurate Aadhaar number.");
                                     }
-                                }/* else {
+                                } else {
                                     JSONObject jsonObject=new JSONObject();
                                     try {
                                         jsonObject.put("Id",binding.etAadhar.getText().toString().trim());
@@ -213,8 +214,8 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
-                                }*/
-                            } else if (Response_Code == 104){
+                                }
+                            } else {
                                 //TODO: No Data Found
                                 JSONObject jsonObject=new JSONObject();
                                 try {
