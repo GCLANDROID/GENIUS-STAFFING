@@ -69,7 +69,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        /*binding.etAadhar.addTextChangedListener(new TextWatcher() {
+        binding.etAadhar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -84,17 +84,17 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 if (binding.etAadhar.getText().toString().length()==12){
                     hideKeyboard();
-                    JSONObject jsonObject=new JSONObject();
+                    /*JSONObject jsonObject=new JSONObject();
                     try {
                         jsonObject.put("Id",binding.etAadhar.getText().toString());
                         checkAddahrDetails(jsonObject);
                     } catch (JSONException e) {
                         e.printStackTrace();
-                    }
+                    }*/
                 }
 
             }
-        });*/
+        });
 
         binding.btnValidate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,11 +186,11 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                             Log.e(TAG, "CHECK_AADHAAR_NUMBER: "+response.toString(4));
                             JSONObject job1 = response;
                             int Response_Code = job1.optInt("Response_Code");
-                            JSONObject Response_Data = job1.getJSONObject("Response_Data");
+                            String Response_Data = job1.optString("Response_Data");
                             if (Response_Code == 101) {
-                                //AadharDetails
                                 if (Response_Data != null){
-                                    JSONArray jsonArray = Response_Data.getJSONArray("AadharDetails");
+                                    JSONObject Response_Data_obj = new JSONObject(Response_Data);
+                                    JSONArray jsonArray = Response_Data_obj.getJSONArray("AadharDetails");
                                     JSONObject job2 = jsonArray.getJSONObject(0);
                                     Log.e(TAG, "onResponse: "+job2.getString("ReferenceNo") );
                                     String AadhaarNumber = job2.getString("ReferenceNo");
@@ -205,7 +205,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                                         ShowDialog.showErrorDialog(TEMPAadharQRActivity.this,
                                                 "Another Aadhaar number is linked to this ID. Kindly provide the accurate Aadhaar number.");
                                     }
-                                } else {
+                                }/* else {
                                     JSONObject jsonObject=new JSONObject();
                                     try {
                                         jsonObject.put("Id",binding.etAadhar.getText().toString().trim());
@@ -213,6 +213,15 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
+                                }*/
+                            } else if (Response_Code == 104){
+                                //TODO: No Data Found
+                                JSONObject jsonObject=new JSONObject();
+                                try {
+                                    jsonObject.put("Id",binding.etAadhar.getText().toString().trim());
+                                    checkAddahrDetails(jsonObject);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
                             }
                         } catch (JSONException e) {
