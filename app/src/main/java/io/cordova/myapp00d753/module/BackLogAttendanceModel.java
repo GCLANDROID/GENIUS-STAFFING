@@ -9,6 +9,8 @@ public class BackLogAttendanceModel {
     String dayType;
     long shiftID;
     String remarks2="";
+    String RemarksCode="";
+    String SLNo="";
 
 
 
@@ -91,5 +93,21 @@ public class BackLogAttendanceModel {
 
     public void setRemarks2(String remarks2) {
         this.remarks2 = remarks2;
+    }
+
+    public String getRemarksCode() {
+        return RemarksCode;
+    }
+
+    public void setRemarksCode(String remarksCode) {
+        RemarksCode = remarksCode;
+    }
+
+    public String getSLNo() {
+        return SLNo;
+    }
+
+    public void setSLNo(String SLNo) {
+        this.SLNo = SLNo;
     }
 }
