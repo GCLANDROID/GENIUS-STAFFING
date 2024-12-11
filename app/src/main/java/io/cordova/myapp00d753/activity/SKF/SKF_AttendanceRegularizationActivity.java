@@ -403,10 +403,12 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
                         try {
                             Log.e(TAG, "SKF_BACK_LOG_DATA: "+response.toString(4));
                             blockLogList = new ArrayList<>();
+
                             JSONObject job1 = response;
                             String Response_Code = job1.optString("Response_Code");
                             String Response_Message = job1.optString("Response_Message");
                             if (Response_Code.equals("101")) {
+                                btnSubmit.setVisibility(View.VISIBLE);
                                 String Response_Data = job1.optString("Response_Data");
                                 JSONObject Response_Data_obj = new JSONObject(Response_Data);
                                 String Table = Response_Data_obj.optString("Table");

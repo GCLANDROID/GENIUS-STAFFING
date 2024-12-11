@@ -177,7 +177,7 @@
         android:layout_marginRight="5dp"
         android:orientation="vertical"
         android:id="@+id/llMain"
-        android:visibility="visible">
+        android:visibility="gone">
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
