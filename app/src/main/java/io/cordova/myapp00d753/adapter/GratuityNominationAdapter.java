@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 
 import io.cordova.myapp00d753.R;
@@ -44,6 +46,18 @@ public class GratuityNominationAdapter extends RecyclerView.Adapter<GratuityNomi
                 notifyDataSetChanged();
             }
         });
+
+        myViewHolder.imgEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    ((GratuityNominationActivity)context).editItem(i);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+                notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
@@ -53,7 +67,7 @@ public class GratuityNominationAdapter extends RecyclerView.Adapter<GratuityNomi
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvName,tvAddress,tvAge,tvRealtionShip,tvProportion;
-        ImageView imgDelete;
+        ImageView imgDelete,imgEdit;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName=(TextView)itemView.findViewById(R.id.tvName);
@@ -62,6 +76,7 @@ public class GratuityNominationAdapter extends RecyclerView.Adapter<GratuityNomi
             tvRealtionShip=(TextView)itemView.findViewById(R.id.tvRealtionShip);
             tvProportion=(TextView) itemView.findViewById(R.id.tvProportion);
             imgDelete=(ImageView) itemView.findViewById(R.id.imgDelete);
+            imgEdit=(ImageView) itemView.findViewById(R.id.imgEdit);
         }
     }
 

@@ -65,6 +65,7 @@ public class GratuityNominationActivity extends AppCompatActivity {
     String dob="";
     GratuityNominationAdapter nominationAdapter;
     String isFatherSelected = "", isMotherSelected = "", isWifeSelected = "", isHusbandSelected = "";
+    boolean isEditClick = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -187,14 +188,11 @@ public class GratuityNominationActivity extends AppCompatActivity {
                         dob = d + " " + month + " " + y;
 
                         binding.tvUANDOB.setText(dob);
-
-
                     }
                 }, dyear, dmonth, dday);
                 dialog.getDatePicker().setMaxDate((long) (System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 365.25 * 18)));
                 dialog.getDatePicker().setMinDate((long) (System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 365.25 * 90)));
                 dialog.show();
-
             }
         });
         binding.imgAdd.setOnClickListener(new View.OnClickListener() {
@@ -418,7 +416,7 @@ public class GratuityNominationActivity extends AppCompatActivity {
         binding.spRealation.setSelection(0);
         binding.etProportion.setText("");
         binding.llData.setVisibility(View.VISIBLE);
-        //itemList.clear();
+        itemList.clear();
 
 
         JSONArray nomination=object.optJSONArray("gratuityDetails");
@@ -458,7 +456,7 @@ public class GratuityNominationActivity extends AppCompatActivity {
         }
 
         if (nominationAdapter == null){
-            nominationAdapter=new GratuityNominationAdapter(itemList,GratuityNominationActivity.this);
+            nominationAdapter = new GratuityNominationAdapter(itemList,GratuityNominationActivity.this);
             binding.rvData.setAdapter(nominationAdapter);
         } else {
             nominationAdapter.notifyDataSetChanged();
@@ -656,6 +654,69 @@ public class GratuityNominationActivity extends AppCompatActivity {
             binding.llData.setVisibility(View.GONE);
         }
     }
+
+    public void editItem(int pos) throws JSONException {
+        if (isEditClick){
+            if (binding.etName.getText().toString().length()>0
+                    && binding.etAddress.getText().toString().length()>0
+                    && binding.etAadharNominee.getText().toString().length()>0
+                    && !dob.isEmpty()
+                    && !relationshipID.isEmpty()
+                    && binding.etProportion.getText().toString().length() > 0){
+                binding.imgAdd.performClick();
+                editItemCode(pos);
+            } else {
+                editItemCode(pos);
+            }
+        } else {
+            isEditClick = true;
+            editItemCode(pos);
+        }
+    }
+
+
+    void editItemCode(int pos) throws JSONException {
+        if (itemList.get(pos).getRelationship().equalsIgnoreCase("Father")){
+            isFatherSelected = "";
+        } else if (itemList.get(pos).getRelationship().equalsIgnoreCase("Mother")){
+            isMotherSelected = "";
+        } else if (itemList.get(pos).getRelationship().equalsIgnoreCase("Wife")){
+            isWifeSelected = "";
+        } else if (itemList.get(pos).getRelationship().equalsIgnoreCase("Husband")){
+            isHusbandSelected = "";
+        }
+        JSONObject object = nominationarray.optJSONObject(pos);
+        Log.e(TAG, "editItem: "+object.toString(4));
+        binding.etName.setText(object.optString("Name"));
+        binding.etAadharNominee.setText(object.optString("Aadhar"));
+        String Address = object.optString("Address");
+        binding.etAddress.setText(object.optString("Address"));
+        if (AppData.PERMANENTADDRESS.equals(Address)){
+            binding.imgTick.setVisibility(View.VISIBLE);
+            binding.etAddress.setText(AppData.PERMANENTADDRESS);
+            binding.etAddress.setBackgroundResource(R.drawable.lldesign9);
+        } else {
+            binding.imgTick.setVisibility(View.GONE);
+            binding.etAddress.setText(Address);
+            binding.etAddress.setBackgroundResource(R.drawable.lldesign9);
+        }
+        dob = object.optString("DOB");
+        binding.tvUANDOB.setText(object.optString("DOB"));
+        relationshipID=object.optString("Relationship");
+        relationship=object.optString("RelationshipID");
+        Log.e(TAG, "editItem: relationshipID: "+relationshipID);
+        Log.e(TAG, "editItem: relationship: "+relationship);
+        int index = realation.indexOf(relationship);
+        binding.spRealation.setSelection(index);
+        binding.etProportion.setText(object.optString("Proportion"));
+
+        itemList.remove(pos);
+        nominationarray.remove(pos);
+        if (itemList.size()==0){
+            binding.llData.setVisibility(View.GONE);
+        }
+    }
+
 
     private void getGratuityDetails(JSONObject jsonObject) {
         Log.e(TAG, "getGratuityDetails: INPUT: "+jsonObject);
