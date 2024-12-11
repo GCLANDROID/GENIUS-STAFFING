@@ -1105,61 +1105,74 @@ public class TempPanActivity extends AppCompatActivity {
                                 String Response_Data = job1.optString("Response_Data");
                                 JSONObject job2 = new JSONObject(Response_Data);
                                 JSONArray jsonArray = job2.getJSONArray("AadharDetails");
-
-                                JSONObject aadhaarFront = jsonArray.getJSONObject(0);
-                                JSONObject aadhaarBack = jsonArray.getJSONObject(1);
-
-                                String aadhaarImage = AppData.IMAGE_PATH_URL+aadhaarFront.optString("FileName");
-                                Picasso.with(TempPanActivity.this)
-                                        .load(AppData.IMAGE_PATH_URL+aadhaarFront.optString("FileName"))
-                                        .placeholder(R.drawable.load)
-                                        .skipMemoryCache()// optional
-                                        .error(R.drawable.load)
-                                        // optional
-                                        .into(imgAadharDocument);
-
-                                String aadhaarBackPage = AppData.IMAGE_PATH_URL+aadhaarBack.optString("FileName");
-                                Picasso.with(TempPanActivity.this)
-                                        .load(AppData.IMAGE_PATH_URL+aadhaarBack.optString("FileName"))
-                                        .placeholder(R.drawable.load)
-                                        .skipMemoryCache()// optional
-                                        .error(R.drawable.load)
-                                        // optional
-                                        .into(imgAadharBackDocument);
-
-                                ImageDownloader.downloadImageAndSaveToFile(getApplication(), aadhaarImage, aadhaarFront.optString("FileName"), new ImageDownloader.SaveFileListener() {
-                                    @Override
-                                    public void onSaveFile(File file) {
-                                        pd.dismiss();
-                                        compressedImageFile = file;
-                                        frontflag=1;
-                                        responseflag = 1;
-                                        Log.e(TAG, "compressedImageFile: "+compressedImageFile.getPath());
+                                JSONObject aadhaarFront = null;
+                                JSONObject aadhaarBack = null;
+                                if (jsonArray.length()>0){
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject object = jsonArray.optJSONObject(i);
+                                        if (object.optString("Document").equalsIgnoreCase("Aadhaar Card")){
+                                            aadhaarFront = object;
+                                        } else {
+                                            aadhaarBack = object;
+                                        }
                                     }
 
-                                    @Override
-                                    public void onFileSaveFailure(String error) {
-                                        pd.dismiss();
-                                        Log.e(TAG, "onFileSaveFailure: "+error);
-                                    }
-                                });
+                                    if (aadhaarFront != null){
+                                        String aadhaarImage = AppData.IMAGE_PATH_URL+aadhaarFront.optString("FileName");
+                                        Picasso.with(TempPanActivity.this)
+                                                .load(AppData.IMAGE_PATH_URL+aadhaarFront.optString("FileName"))
+                                                .placeholder(R.drawable.load)
+                                                .skipMemoryCache()// optional
+                                                .error(R.drawable.warning)
+                                                // optional
+                                                .into(imgAadharDocument);
+                                        ImageDownloader.downloadImageAndSaveToFile(getApplication(), aadhaarImage, aadhaarFront.optString("FileName"), new ImageDownloader.SaveFileListener() {
+                                            @Override
+                                            public void onSaveFile(File file) {
+                                                pd.dismiss();
+                                                compressedImageFile = file;
+                                                frontflag=1;
+                                                responseflag = 1;
+                                                Log.e(TAG, "compressedImageFile: "+compressedImageFile.getPath());
+                                            }
 
-                                ImageDownloader.downloadImageAndSaveToFile(getApplication(), aadhaarBackPage, aadhaarBack.optString("FileName"), new ImageDownloader.SaveFileListener() {
-                                    @Override
-                                    public void onSaveFile(File file1) {
-                                        pd.dismiss();
-                                        file = file1;
-                                        backflag=1;
-                                        responseflag = 1;
-                                        Log.e(TAG, "compressedImageFile: "+compressedImageFile.getPath());
+                                            @Override
+                                            public void onFileSaveFailure(String error) {
+                                                pd.dismiss();
+                                                Log.e(TAG, "onFileSaveFailure: "+error);
+                                            }
+                                        });
                                     }
 
-                                    @Override
-                                    public void onFileSaveFailure(String error) {
-                                        pd.dismiss();
-                                        Log.e(TAG, "onFileSaveFailure: "+error);
+                                    if (aadhaarBack != null){
+                                        String aadhaarBackPage = AppData.IMAGE_PATH_URL+aadhaarBack.optString("FileName");
+                                        Picasso.with(TempPanActivity.this)
+                                                .load(AppData.IMAGE_PATH_URL+aadhaarBack.optString("FileName"))
+                                                .placeholder(R.drawable.load)
+                                                .skipMemoryCache()// optional
+                                                .error(R.drawable.warning)
+                                                // optional
+                                                .into(imgAadharBackDocument);
+                                        ImageDownloader.downloadImageAndSaveToFile(getApplication(), aadhaarBackPage, aadhaarBack.optString("FileName"), new ImageDownloader.SaveFileListener() {
+                                            @Override
+                                            public void onSaveFile(File file1) {
+                                                pd.dismiss();
+                                                file = file1;
+                                                backflag=1;
+                                                responseflag = 1;
+                                                Log.e(TAG, "compressedImageFile: "+compressedImageFile.getPath());
+                                            }
+
+                                            @Override
+                                            public void onFileSaveFailure(String error) {
+                                                pd.dismiss();
+                                                Log.e(TAG, "onFileSaveFailure: "+error);
+                                            }
+                                        });
                                     }
-                                });
+                                }
+
+
                             } else {
                                 pd.dismiss();
                             }
@@ -1214,34 +1227,44 @@ public class TempPanActivity extends AppCompatActivity {
                                 JSONObject job2 = new JSONObject(Response_Data);
                                 JSONArray jsonArray = job2.getJSONArray("PANDetails");
 
-                                JSONObject panObj = jsonArray.getJSONObject(0);
-
-                                etPanNumber.setText(panObj.optString("ReferenceNo"));
-                                String imagePanURL = AppData.IMAGE_PATH_URL+panObj.optString("FileName");
-                                Picasso.with(TempPanActivity.this)
-                                        .load(AppData.IMAGE_PATH_URL+panObj.optString("FileName"))
-                                        .placeholder(R.drawable.load)
-                                        .skipMemoryCache()// optional
-                                        .error(R.drawable.load)
-                                        // optional
-                                        .into(imgDoc);
-
-                                ImageDownloader.downloadImageAndSaveToFile(getApplication(), imagePanURL, panObj.optString("FileName"), new ImageDownloader.SaveFileListener() {
-                                    @Override
-                                    public void onSaveFile(File file1) {
-                                        pd.dismiss();
-                                        compressedImageFilePan = file1;
-                                        flag = 1;
-                                        panvalflag = 1;
-                                        Log.e(TAG, "compressedImageFile: "+compressedImageFilePan.getPath());
+                                if (jsonArray.length() > 0){
+                                    JSONObject panObj = null;
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject object = jsonArray.optJSONObject(i);
+                                        if (object.optString("Document").equalsIgnoreCase("PAN Card")){
+                                            panObj = object;
+                                        }
                                     }
 
-                                    @Override
-                                    public void onFileSaveFailure(String error) {
-                                        pd.dismiss();
-                                        Log.e(TAG, "onFileSaveFailure: "+error);
+                                    if (panObj != null){
+                                        etPanNumber.setText(panObj.optString("ReferenceNo"));
+                                        String imagePanURL = AppData.IMAGE_PATH_URL+panObj.optString("FileName");
+                                        Picasso.with(TempPanActivity.this)
+                                                .load(AppData.IMAGE_PATH_URL+panObj.optString("FileName"))
+                                                .placeholder(R.drawable.load)
+                                                .skipMemoryCache()// optional
+                                                .error(R.drawable.warning)
+                                                // optional
+                                                .into(imgDoc);
+
+                                        ImageDownloader.downloadImageAndSaveToFile(getApplication(), imagePanURL, panObj.optString("FileName"), new ImageDownloader.SaveFileListener() {
+                                            @Override
+                                            public void onSaveFile(File file1) {
+                                                pd.dismiss();
+                                                compressedImageFilePan = file1;
+                                                flag = 1;
+                                                panvalflag = 1;
+                                                Log.e(TAG, "compressedImageFile: "+compressedImageFilePan.getPath());
+                                            }
+
+                                            @Override
+                                            public void onFileSaveFailure(String error) {
+                                                pd.dismiss();
+                                                Log.e(TAG, "onFileSaveFailure: "+error);
+                                            }
+                                        });
                                     }
-                                });
+                                }
                             } else {
                                 pd.dismiss();
                             }
@@ -1253,7 +1276,7 @@ public class TempPanActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError anError) {
                         pd.dismiss();
-                        Log.e(TAG, "GET_PAN_DETAILS_anError: "+ anError.getErrorBody()  );
+                        Log.e(TAG, "GET_PAN_DETAILS_anError: "+ anError.getErrorBody());
                     }
                 });
     }
