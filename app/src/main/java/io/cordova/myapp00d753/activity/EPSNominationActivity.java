@@ -66,6 +66,7 @@ public class EPSNominationActivity extends AppCompatActivity {
     String dob="";
     EPSNominationAdapter nominationAdapter;
     String isFatherSelected = "", isMotherSelected = "", isWifeSelected = "", isHusbandSelected = "";
+    boolean isEditClick = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -482,14 +483,8 @@ public class EPSNominationActivity extends AppCompatActivity {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-                            } else {
-
-
-                            }
-
+                            } else {}
                             // boolean _status = job1.getBoolean("status");
-
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(EPSNominationActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
@@ -560,7 +555,7 @@ public class EPSNominationActivity extends AppCompatActivity {
 
     private void validateAadhar(JSONObject jsonObject) {
         ProgressDialog pd=new ProgressDialog(this);
-        pd.setMessage("Loading");
+        pd.setMessage("Loading...");
         pd.show();
         pd.setCancelable(false);
         AndroidNetworking.post("https://ind.thomas.hyperverge.co/v1/verifyAadhaar")
@@ -624,6 +619,62 @@ public class EPSNominationActivity extends AppCompatActivity {
             binding.llData.setVisibility(View.GONE);
         }
 
+    }
+
+    public void editItem(int pos) throws JSONException {
+        if (isEditClick){
+            if (binding.etName.getText().toString().length()>0
+                    && !dob.isEmpty()
+                    && !relationship.isEmpty()){
+                binding.imgAdd.performClick();
+                editItemCode(pos);
+            } else {
+                editItemCode(pos);
+            }
+        } else {
+            isEditClick = true;
+            editItemCode(pos);
+        }
+    }
+
+
+    public void editItemCode(int pos){
+        if (itemList.get(pos).getRelationship().equalsIgnoreCase("Father")){
+            isFatherSelected = "";
+        } else if (itemList.get(pos).getRelationship().equalsIgnoreCase("Mother")){
+            isMotherSelected = "";
+        } else if (itemList.get(pos).getRelationship().equalsIgnoreCase("Wife")){
+            isWifeSelected = "";
+        } else if (itemList.get(pos).getRelationship().equalsIgnoreCase("Husband")){
+            isHusbandSelected = "";
+        }
+        JSONObject object = nominationarray.optJSONObject(pos);
+        binding.etName.setText(object.optString("Name"));
+        String Address = object.optString("Address");
+        binding.etAddress.setText(Address);
+        if (AppData.PERMANENTADDRESS.equals(Address)){
+            binding.imgTick.setVisibility(View.VISIBLE);
+            binding.etAddress.setText(AppData.PERMANENTADDRESS);
+
+            binding.etAddress.setBackgroundResource(R.drawable.lldesign9);
+        } else {
+            binding.imgTick.setVisibility(View.GONE);
+            binding.etAddress.setText(Address);
+            binding.etAddress.setBackgroundResource(R.drawable.lldesign9);
+        }
+        binding.etAadharNominee.setText(object.optString("Aadhar"));
+        relationship = object.optString("RelationshipID");
+        relationshipID = object.optString("Relationship");
+        relationshipID = object.optString("RelationshipID");
+        dob = object.optString("DOB");
+        binding.tvUANDOB.setText(dob);
+        int index = realation.indexOf(relationship);
+        binding.spRealation.setSelection(index);
+        itemList.remove(pos);
+        nominationarray.remove(pos);
+        if (itemList.size()==0){
+            binding.llData.setVisibility(View.GONE);
+        }
     }
 
     private void getEpsNominationDetails(JSONObject jsonObject) {
@@ -713,6 +764,4 @@ public class EPSNominationActivity extends AppCompatActivity {
                     }
                 });
     }
-
-
 }

@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 
 import io.cordova.myapp00d753.R;
@@ -45,6 +47,18 @@ public class EPSNominationAdapter extends RecyclerView.Adapter<EPSNominationAdap
                 notifyDataSetChanged();
             }
         });
+
+        myViewHolder.imgEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    ((EPSNominationActivity)context).editItem(i);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+                notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
@@ -54,7 +68,7 @@ public class EPSNominationAdapter extends RecyclerView.Adapter<EPSNominationAdap
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvName,tvAddress,tvAge,tvRealtionShip;
-        ImageView imgDelete;
+        ImageView imgDelete,imgEdit;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName=(TextView)itemView.findViewById(R.id.tvName);
@@ -62,7 +76,7 @@ public class EPSNominationAdapter extends RecyclerView.Adapter<EPSNominationAdap
             tvAge=(TextView)itemView.findViewById(R.id.tvAge);
             tvRealtionShip=(TextView)itemView.findViewById(R.id.tvRealtionShip);
             imgDelete=(ImageView) itemView.findViewById(R.id.imgDelete);
-
+            imgEdit=(ImageView) itemView.findViewById(R.id.imgEdit);
         }
     }
 
