@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 
 import io.cordova.myapp00d753.KYCFamilyModel;
@@ -44,6 +46,17 @@ public class KYCFamilyAdapter extends RecyclerView.Adapter<KYCFamilyAdapter.MyVi
             }
         });
 
+        myViewHolder.imgEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    ((KYCFamilyActivity)context).editItem(i);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+                notifyDataSetChanged();
+            }
+        });
 
     }
 
@@ -54,7 +67,7 @@ public class KYCFamilyAdapter extends RecyclerView.Adapter<KYCFamilyAdapter.MyVi
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvName,tvGender,tvDOB,tvRealtionShip;
-        ImageView imgDelete;
+        ImageView imgDelete,imgEdit;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName=(TextView)itemView.findViewById(R.id.tvName);
@@ -62,6 +75,7 @@ public class KYCFamilyAdapter extends RecyclerView.Adapter<KYCFamilyAdapter.MyVi
             tvDOB=(TextView)itemView.findViewById(R.id.tvDOB);
             tvRealtionShip=(TextView)itemView.findViewById(R.id.tvRealtionShip);
             imgDelete=(ImageView) itemView.findViewById(R.id.imgDelete);
+            imgEdit=(ImageView) itemView.findViewById(R.id.imgEdit);
 
         }
     }

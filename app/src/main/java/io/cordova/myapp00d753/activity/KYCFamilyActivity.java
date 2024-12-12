@@ -71,6 +71,7 @@ public class KYCFamilyActivity extends AppCompatActivity {
     ProgressDialog pd2;
     String sexGender="";
     String isFatherSelected = "", isMotherSelected = "", isWifeSelected = "", isHusbandSelected = "";
+    boolean isEditClick = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,7 +118,7 @@ public class KYCFamilyActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (binding.etName.getText().toString().length()>0) {
-                    if (!getSexGender().isEmpty()) {
+                    //if (!getSexGender().isEmpty()) {
                         if (!dob.isEmpty()) {
                             if (!relationship.isEmpty()){
                                 JSONObject jsonObject = new JSONObject();
@@ -153,10 +154,10 @@ public class KYCFamilyActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(KYCFamilyActivity.this, "Please Select Family Member's Date of Birth", Toast.LENGTH_LONG).show();
                         }
-                    } else {
+                   /* } else {
                         Toast.makeText(KYCFamilyActivity.this, "Please Select Family Member's Gender", Toast.LENGTH_LONG).show();
                         binding.llGender.setBackgroundResource(R.drawable.lldesign_error);
-                    }
+                    }*/
                 }else {
                     Toast.makeText(KYCFamilyActivity.this,"Please Enter Family Member's Name",Toast.LENGTH_LONG).show();
                     binding.etName.setBackgroundResource(R.drawable.lldesign_error);
@@ -250,6 +251,8 @@ public class KYCFamilyActivity extends AppCompatActivity {
                         binding.llRelationship.setBackgroundResource(R.drawable.lldesign9);
                     }
                 }
+                Log.e(TAG, "onItemSelected: relationshipID: "+relationshipID);
+                Log.e(TAG, "onItemSelected: relationship: "+relationship);
             }
 
             @Override
@@ -501,8 +504,6 @@ public class KYCFamilyActivity extends AppCompatActivity {
 
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
-
-
     }
 
     public void deleteItem(int pos){
@@ -515,6 +516,48 @@ public class KYCFamilyActivity extends AppCompatActivity {
         } else if (itemList.get(pos).getRealationship().equalsIgnoreCase("Husband")){
             isHusbandSelected = "";
         }
+        itemList.remove(pos);
+        nominationarray.remove(pos);
+        if (itemList.size()==0){
+            binding.llData.setVisibility(View.GONE);
+        }
+    }
+
+    public void editItem(int pos) throws JSONException {
+        if (isEditClick){
+            if (binding.etName.getText().toString().length()>0
+                    && !dob.isEmpty()
+                    && !relationship.isEmpty()){
+                binding.imgAdd.performClick();
+                editItemCode(pos);
+            } else {
+                editItemCode(pos);
+            }
+        } else {
+            isEditClick = true;
+            editItemCode(pos);
+        }
+    }
+
+
+    public void editItemCode(int pos){
+        if (itemList.get(pos).getRealationship().equalsIgnoreCase("Father")){
+            isFatherSelected = "";
+        } else if (itemList.get(pos).getRealationship().equalsIgnoreCase("Mother")){
+            isMotherSelected = "";
+        } else if (itemList.get(pos).getRealationship().equalsIgnoreCase("Wife")){
+            isWifeSelected = "";
+        } else if (itemList.get(pos).getRealationship().equalsIgnoreCase("Husband")){
+            isHusbandSelected = "";
+        }
+        JSONObject object = nominationarray.optJSONObject(pos);
+        binding.etName.setText(object.optString("Name"));
+        relationshipID = object.optString("Relationship");
+        relationship = object.optString("RelationshipID");
+        int index = realation.indexOf(relationship);
+        binding.spRealation.setSelection(index);
+        dob = object.optString("DOB");
+        binding.tvUANDOB.setText(dob);
         itemList.remove(pos);
         nominationarray.remove(pos);
         if (itemList.size()==0){
@@ -583,12 +626,10 @@ public class KYCFamilyActivity extends AppCompatActivity {
 
                             // boolean _status = job1.getBoolean("status");
 
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(KYCFamilyActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
                         }
-
                     }
                 }, new Response.ErrorListener() {
             @Override
