@@ -449,6 +449,7 @@ public class TempEducationaActivity extends AppCompatActivity {
                 });
     }
 
+
     public void deleteItem(int pos){
         itemList.remove(pos);
         educationarray.remove(pos);

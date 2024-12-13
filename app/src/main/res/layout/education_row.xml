@@ -69,6 +69,7 @@
             android:textSize="12sp" />
     </LinearLayout>
 
+
     <ImageView
         android:id="@+id/imgEdit"
         android:layout_width="20dp"
