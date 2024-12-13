@@ -294,10 +294,20 @@ public class GratuityNominationActivity extends AppCompatActivity {
         binding.btnSaveForm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (itemList.size()>0){
-                    uploadfamilydetails(nominationobject);
-                }else {
-                    Toast.makeText(GratuityNominationActivity.this,"Please Add Family Member",Toast.LENGTH_LONG).show();
+                try {
+                    if (itemList.size()>0){
+                        if (nominationobject.length() == 0){
+                            nominationobject.put("gratuityDetails",nominationarray);
+                            nominationobject.put("DbOperation","9");
+                            nominationobject.put("SecurityCode",pref.getSecurityCode());
+                        } else {
+                            uploadfamilydetails(nominationobject);
+                        }
+                    }else {
+                        Toast.makeText(GratuityNominationActivity.this,"Please Add Family Member",Toast.LENGTH_LONG).show();
+                    }
+                } catch(Exception e){
+                    e.printStackTrace();
                 }
             }
         });
@@ -583,12 +593,8 @@ public class GratuityNominationActivity extends AppCompatActivity {
                 Log.e("ert", error.toString());
 
             }
-        }) {
-
-        };
+        }) {};
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
-
-
     }
 
     private void validateAadhar(JSONObject jsonObject) {
@@ -781,7 +787,6 @@ public class GratuityNominationActivity extends AppCompatActivity {
 
                                     nominationarray.put(object);
                                 }
-
 
                                 if (itemList.size() > 0){
                                     binding.llData.setVisibility(View.VISIBLE);

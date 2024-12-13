@@ -360,7 +360,6 @@
                                             android:textSize="12sp"
                                             android:text="Name"
                                             android:gravity="center"/>
-
                                         <View
                                             android:layout_width="1dp"
                                             android:layout_height="match_parent"
@@ -436,12 +435,12 @@
                                                 android:layout_gravity="center"/>
                                         </LinearLayout>
 
-                                        <!--<View
+                                        <View
                                             android:id="@+id/imgDelete"
                                             android:layout_gravity="center"
                                             android:layout_width="match_parent"
                                             android:layout_height="20dp"
-                                            android:visibility="invisible"/>-->
+                                            android:visibility="gone"/>
 
                                     </LinearLayout>
 
