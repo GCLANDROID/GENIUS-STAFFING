@@ -394,6 +394,9 @@ public class ConsentActivity extends AppCompatActivity {
                         int Response_Code = job1.optInt("Response_Code");
                         if (Response_Code == 101 || Response_Code==100) {
                             consnetdialog.dismiss();
+                            Intent intent=new Intent(ConsentActivity.this,EmployeeDashBoardActivity.class);
+                            startActivity(intent);
+                            finish();
 
                             Toast.makeText(ConsentActivity.this,"Consent letter has been saved successfully",Toast.LENGTH_LONG).show();
 

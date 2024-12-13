@@ -80,6 +80,7 @@ import java.util.Locale;
 import io.cordova.myapp00d753.R;
 
 import io.cordova.myapp00d753.Retrofit.RetrofitClient;
+import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.activity.LoginActivity;
 import io.cordova.myapp00d753.activity.TempEducationaActivity;
 import io.cordova.myapp00d753.activity.TempExperinceActivity;
@@ -139,6 +140,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
     AlertDialog alertDialog;
     private static final int REQUEST_PHONE_STATE = 1;
     String phoneNumber;
+    ImageView imhHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -288,7 +290,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
         txtCurrentLocation = findViewById(R.id.txtCurrentLocation);
         imgBack = findViewById(R.id.imgBack);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
+        imhHome=(ImageView)findViewById(R.id.imhHome);
         //smf = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fmGoogleMaps);
         //smf.getMapAsync(this);
 
@@ -313,6 +315,15 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        imhHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(MetsoAttendanceActivity.this, EmployeeDashBoardActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     private void settingToGetLocation() {

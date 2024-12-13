@@ -118,6 +118,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     int date;
     GPSTracker gps;
     int leaveFlag;
+    ImageView imgHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -396,8 +397,10 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 }
             }
         });
+        imgHome=(ImageView)findViewById(R.id.imgHome);
 
         tvOK.setOnClickListener(this);
+        imgHome.setOnClickListener(this);
         if (pref.getEmpClintId().equals("AEMCLI0910000343") || pref.getEmpClintId().equals("AEMCLI0910000315") || pref.getEmpClintId().equals("AEMCLI2110001671") || pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID)) {
             llAdjustment.setVisibility(View.VISIBLE);
         } else {
@@ -864,6 +867,10 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             Intent intent = new Intent(AttenDanceDashboardActivity.this, AdjustmentActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+        }else if (view == imgHome) {
+            Intent intent = new Intent(AttenDanceDashboardActivity.this, EmployeeDashBoardActivity.class);
+            startActivity(intent);
+            finish();
         }
     }
 
