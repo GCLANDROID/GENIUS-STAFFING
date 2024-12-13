@@ -483,7 +483,7 @@ public class LoginActivity extends AppCompatActivity {
                                         startActivity(intent);
                                         finish();
                                     }else {
-                                        Intent intent = new Intent(LoginActivity.this, EmployeeDashBoardActivity.class);
+                                        Intent intent = new Intent(LoginActivity.this, ConsentActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
                                         startActivity(intent);
@@ -670,11 +670,20 @@ public class LoginActivity extends AppCompatActivity {
                                     startActivity(intent);
                                     finish();
                                 }else {
-                                    Intent intent = new Intent(LoginActivity.this, EmployeeDashBoardActivity.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    intent.putExtra("ConsentFlag",ConsentFlag);
-                                    startActivity(intent);
-                                    finish();
+                                    if (ConsentFlag.equals("1")){
+                                        Intent intent = new Intent(LoginActivity.this, ConsentActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        intent.putExtra("ConsentFlag",ConsentFlag);
+                                        startActivity(intent);
+                                        finish();
+                                    }else {
+                                        Intent intent = new Intent(LoginActivity.this, EmployeeDashBoardActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        intent.putExtra("ConsentFlag",ConsentFlag);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+
                                 }
 
 
