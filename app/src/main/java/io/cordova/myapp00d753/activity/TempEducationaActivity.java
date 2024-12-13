@@ -64,6 +64,7 @@ public class TempEducationaActivity extends AppCompatActivity {
     ArrayList<String>yearlist=new ArrayList<>();
     String passingyear="";
     EducationAdapter educationAdapter;
+    boolean isEditClick = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,8 +94,7 @@ public class TempEducationaActivity extends AppCompatActivity {
 
 
 
-        layoutManager
-                = new LinearLayoutManager(TempEducationaActivity.this, LinearLayoutManager.VERTICAL, false);
+        layoutManager = new LinearLayoutManager(TempEducationaActivity.this, LinearLayoutManager.VERTICAL, false);
         binding.rvData.setLayoutManager(layoutManager);
 
 
@@ -110,6 +110,8 @@ public class TempEducationaActivity extends AppCompatActivity {
                 if (i>0) {
                     qualificationid = mainQualification.get(i).getDocID();
                     qualification=mainQualification.get(i).getDocumentType();
+                    Log.e(TAG, "onItemSelected: "+qualificationid);
+                    Log.e(TAG, "onItemSelected: "+qualification);
                     binding.llQualification.setBackgroundResource(R.drawable.lldesign9);
                 }
             }
@@ -236,7 +238,15 @@ public class TempEducationaActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (itemList.size()>0){
                     try {
-                        uploadfamilydetails(educationobj);
+                        if (educationobj.length() == 0){
+                            educationobj.put("qualificationDetails", educationarray);
+                            educationobj.put("DbOperation", "5");
+                            educationobj.put("SecurityCode", pref.getSecurityCode());
+                            uploadfamilydetails(educationobj);
+                        } else {
+                            uploadfamilydetails(educationobj);
+                        }
+
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
@@ -292,7 +302,7 @@ public class TempEducationaActivity extends AppCompatActivity {
         binding.etPassingYear.setText("");
         binding.llData.setVisibility(View.VISIBLE);
         binding.spYear.setSelection(0);
-        //itemList.clear();
+        itemList.clear();
 
 
         JSONArray education=object.optJSONArray("qualificationDetails");
@@ -314,16 +324,16 @@ public class TempEducationaActivity extends AppCompatActivity {
 
 
         if (educationAdapter == null){
-            educationAdapter=new EducationAdapter(itemList);
+            educationAdapter=new EducationAdapter(TempEducationaActivity.this,itemList);
             binding.rvData.setAdapter(educationAdapter);
         } else {
             educationAdapter.notifyDataSetChanged();
         }
 
+
     }
 
     private void setQualification() {
-
         String surl = AppData.url+"gcl_CommonDDL?ddltype=6&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
         ProgressDialog pd=new ProgressDialog(TempEducationaActivity.this);
         pd.setMessage("Loading");
@@ -349,11 +359,12 @@ public class TempEducationaActivity extends AppCompatActivity {
                                     JSONObject obj = responseData.getJSONObject(i);
                                     String qualivalue = obj.optString("value");
                                     String qualiid = obj.optString("id");
+                                    Log.e(TAG, "onResponse: "+qualivalue);
                                     qualificationlist.add(qualivalue);
                                     MainDocModule mainDocModule = new MainDocModule(qualiid, qualivalue);
                                     mainQualification.add(mainDocModule);
-
                                 }
+
                                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
                                         (TempEducationaActivity.this, android.R.layout.simple_spinner_item,
                                                 qualificationlist); //selected item will look like a spinner set from XML
@@ -372,9 +383,7 @@ public class TempEducationaActivity extends AppCompatActivity {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-
                             } else {
-
 
                             }
 
@@ -396,8 +405,6 @@ public class TempEducationaActivity extends AppCompatActivity {
 
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
-
-
     }
 
     private void uploadfamilydetails(JSONObject jsonObject) throws JSONException {
@@ -434,13 +441,55 @@ public class TempEducationaActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError error) {
-
-                            Intent intent=new Intent(TempEducationaActivity.this,LoginActivity.class);
-                            startActivity(intent);
-                            finish();
-
+                        pd.dismiss();
+                        Intent intent=new Intent(TempEducationaActivity.this,LoginActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
                 });
+    }
+
+    public void deleteItem(int pos){
+        itemList.remove(pos);
+        educationarray.remove(pos);
+        if (itemList.size()==0){
+            binding.llData.setVisibility(View.GONE);
+        }
+    }
+
+    public void editItem(int pos) throws JSONException {
+        if (isEditClick){
+            if (!qualification.equals("")
+                    && binding.etUniversity.getText().toString().length() > 0
+                    && !passingyear.equals("")
+                    && binding.etPercentage.getText().length() > 0
+                    && Integer.parseInt(binding.etPercentage.getText().toString()) > 0 && Integer.parseInt(binding.etPercentage.getText().toString()) < 101){
+
+                binding.imgAdd.performClick();
+                editItemCode(pos);
+            } else {
+                editItemCode(pos);
+            }
+        } else {
+            isEditClick = true;
+            editItemCode(pos);
+        }
+    }
+
+    public void editItemCode(int pos) throws JSONException {
+        JSONObject jsonObject = educationarray.getJSONObject(pos);
+        Log.e(TAG, "editItemCode: "+jsonObject.optString("Qualification"));
+        int indexQualification = qualificationlist.indexOf(jsonObject.optString("Qualification"));
+        binding.spExam.setSelection(indexQualification);
+        int indexYear = yearlist.indexOf(jsonObject.optString("PassingYear"));
+        binding.spYear.setSelection(indexYear);
+        binding.etUniversity.setText(jsonObject.optString("Board"));
+        binding.etPercentage.setText(jsonObject.optString("Percentage"));
+        itemList.remove(pos);
+        educationarray.remove(pos);
+        if (itemList.size()==0){
+            binding.llData.setVisibility(View.GONE);
+        }
     }
 
     private void getEducationDetails(JSONObject jsonObject) {
@@ -467,6 +516,7 @@ public class TempEducationaActivity extends AppCompatActivity {
                                 for (int i=0;i<jsonArray.length();i++){
                                     JSONObject educationobj=jsonArray.optJSONObject(i);
                                     String Qualification=educationobj.optString("QualificationName");
+                                    String QualificationID=educationobj.optString("QualificationID");
                                     String Board=educationobj.optString("Institute");
                                     String Percentage=educationobj.optString("Marks");
                                     String PassingYear=educationobj.optString("YearOfPass");
@@ -477,6 +527,14 @@ public class TempEducationaActivity extends AppCompatActivity {
                                     educationalModel.setBoard(Board);
                                     educationalModel.setPercentage(Percentage);
                                     itemList.add(educationalModel);
+                                    JSONObject object = new JSONObject();
+                                    object.put("Qualification", Qualification);
+                                    object.put("AEMEMPLOYEEID", pref.getEmpId());
+                                    object.put("qualificationid", QualificationID);
+                                    object.put("Board", Board);
+                                    object.put("Percentage", Percentage);
+                                    object.put("PassingYear", PassingYear);
+                                    educationarray.put(object);
                                 }
 
                                 if (itemList.size() > 0){
@@ -486,7 +544,7 @@ public class TempEducationaActivity extends AppCompatActivity {
                                 }
 
                                 if (educationAdapter == null){
-                                    educationAdapter=new EducationAdapter(itemList);
+                                    educationAdapter=new EducationAdapter(TempEducationaActivity.this,itemList);
                                     binding.rvData.setAdapter(educationAdapter);
                                 } else {
                                     educationAdapter.notifyDataSetChanged();

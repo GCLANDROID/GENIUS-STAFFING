@@ -243,66 +243,97 @@
                             android:layout_gravity="center"
                             android:text="Added Qualification Details"></TextView>
                     </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:background="@drawable/lldesign9">
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            android:layout_weight="0.5"
-                            android:gravity="center"
-                            android:textSize="12sp"
-                            android:text="Qualification"
-                            android:layout_gravity="center"></TextView>
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/black"></View>
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:textSize="12sp"
-                            android:text="Name of Board"
-                            android:layout_gravity="center"></TextView>
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/black"></View>
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            android:layout_weight="0.5"
-                            android:gravity="center"
-                            android:textSize="12sp"
-                            android:text="Passig Year"
-                            android:layout_gravity="center"></TextView>
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/black"></View>
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            android:layout_weight="0.5"
-                            android:gravity="center"
-                            android:textSize="12sp"
-                            android:text="Percentage"
-                            android:layout_gravity="center"></TextView>
 
-                    </LinearLayout>
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:nestedScrollingEnabled="false"
-                        android:visibility="visible"
+                    <HorizontalScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/rvData"></androidx.recyclerview.widget.RecyclerView>
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:background="@drawable/lldesign9">
+                                    <TextView
+                                        android:layout_width="100dp"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/black"
+                                        android:gravity="center"
+                                        android:textSize="12sp"
+                                        android:text="Qualification"
+                                        android:layout_gravity="center"/>
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="match_parent"
+                                        android:background="@color/black"></View>
+                                    <TextView
+                                        android:layout_width="130dp"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/black"
+                                        android:gravity="center"
+                                        android:textSize="12sp"
+                                        android:text="Name of Board"
+                                        android:layout_gravity="center"></TextView>
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="match_parent"
+                                        android:background="@color/black"></View>
+                                    <TextView
+                                        android:layout_width="100dp"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/black"
+                                        android:gravity="center"
+                                        android:textSize="12sp"
+                                        android:text="Passig Year"
+                                        android:layout_gravity="center"></TextView>
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="match_parent"
+                                        android:background="@color/black"></View>
+
+                                    <TextView
+                                        android:layout_width="100dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:gravity="center"
+                                        android:text="Percentage"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp"></TextView>
+
+                                </LinearLayout>
+
+                                <ImageView
+                                    android:id="@+id/imgEdit"
+                                    android:layout_gravity="center"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_marginStart="15dp"
+                                    android:src="@drawable/edit"
+                                    android:visibility="gone"/>
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_marginStart="15dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/deleteicon"
+                                    android:visibility="gone"/>
+                            </LinearLayout>
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:nestedScrollingEnabled="false"
+                                android:visibility="visible"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/rvData"/>
+                        </LinearLayout>
+                    </HorizontalScrollView>
                 </LinearLayout>
 
                 <LinearLayout
