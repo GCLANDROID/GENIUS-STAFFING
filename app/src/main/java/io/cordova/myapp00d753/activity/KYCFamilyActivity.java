@@ -266,7 +266,14 @@ public class KYCFamilyActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (itemList.size()>0){
                     try {
-                        uploadfamilydetails(nominationobject);
+                        if (nominationobject.length() == 0){
+                            nominationobject.put("familyDetails", nominationarray);
+                            nominationobject.put("DbOperation", "6");
+                            nominationobject.put("SecurityCode", pref.getSecurityCode());
+                            uploadfamilydetails(nominationobject);
+                        } else {
+                            uploadfamilydetails(nominationobject);
+                        }
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }

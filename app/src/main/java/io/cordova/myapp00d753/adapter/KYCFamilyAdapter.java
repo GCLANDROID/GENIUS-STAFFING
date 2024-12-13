@@ -76,7 +76,6 @@ public class KYCFamilyAdapter extends RecyclerView.Adapter<KYCFamilyAdapter.MyVi
             tvRealtionShip=(TextView)itemView.findViewById(R.id.tvRealtionShip);
             imgDelete=(ImageView) itemView.findViewById(R.id.imgDelete);
             imgEdit=(ImageView) itemView.findViewById(R.id.imgEdit);
-
         }
     }
 
