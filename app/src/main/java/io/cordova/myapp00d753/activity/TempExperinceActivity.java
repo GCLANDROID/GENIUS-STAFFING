@@ -28,6 +28,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -68,6 +69,7 @@ import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.RealPathUtil;
 
 public class TempExperinceActivity extends AppCompatActivity {
+    private static final String TAG = "TempExperinceActivity";
     ActivityTempExperinceBinding binding;
     String month;
     String doj="";
@@ -94,6 +96,20 @@ public class TempExperinceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding= DataBindingUtil.setContentView(this,R.layout.activity_temp_experince);
         initView();
+
+
+        /*JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("AEMConsultantID", pref.getEmpConId());
+            jsonObject.put("AEMClientID", pref.getEmpClintId());
+            jsonObject.put("AEMClientOfficeID", pref.getEmpClintOffId());
+            jsonObject.put("AEMEmployeeID", pref.getEmpId());
+            jsonObject.put("WorkingStatus", "1");
+            jsonObject.put("Operation", "0");
+            checkFresherOrExperienceByOfficeDetails(jsonObject);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }*/
     }
 
     private void initView(){
@@ -649,6 +665,7 @@ public class TempExperinceActivity extends AppCompatActivity {
         dialogBuilder.setView(dialogView);
         LinearLayout lnCamera=(LinearLayout)dialogView.findViewById(R.id.lnCamera);
         LinearLayout lnGallery=(LinearLayout)dialogView.findViewById(R.id.lnGallery);
+        ImageView imgCancel=(ImageView)dialogView.findViewById(R.id.imgCancel);
         lnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -676,7 +693,12 @@ public class TempExperinceActivity extends AppCompatActivity {
         });
 
 
-
+        imgCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attachAlert.dismiss();
+            }
+        });
 
         attachAlert = dialogBuilder.create();
         attachAlert.setCancelable(false);
@@ -786,7 +808,7 @@ public class TempExperinceActivity extends AppCompatActivity {
         progressDialog.setMessage("Uploading");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        progressDialog.show();
+        //progressDialog.show();
 
         //RequestBody mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         AndroidNetworking.upload(AppData.SaveExperienceDetails)
@@ -813,21 +835,16 @@ public class TempExperinceActivity extends AppCompatActivity {
                     public void onProgress(long bytesUploaded, long totalBytes) {
                         progressDialog.show();
 
-
                     }
                 })
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-
-
-
                         JSONObject job1 = response;
                         Log.e("response12", "@@@@@@" + job1);
 
                         int Response_Code = job1.optInt("Response_Code");
                         if (Response_Code == 101) {
-
                             if (pfflag==1){
                                 progressDialog.show();
                                 JSONObject mainobject = new JSONObject();
@@ -1010,5 +1027,123 @@ public class TempExperinceActivity extends AppCompatActivity {
             Toast.makeText(TempExperinceActivity.this,"Please Enter your UAN number",Toast.LENGTH_LONG).show();
             binding.etUAN.setBackgroundResource(R.drawable.lldesign_error);
         }
+    }
+
+    void checkFresherOrExperienceByOfficeDetails(JSONObject jsonObject){
+        ProgressDialog pd=new ProgressDialog(TempExperinceActivity.this);
+        pd.setMessage("Loading...");
+        pd.show();
+        pd.setCancelable(false);
+        AndroidNetworking.post(AppData.KYC_GET_DETAILS)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        pd.dismiss();
+                        try {
+                            Log.e(TAG, "CHECK_EXPERIENCE: " + response.toString(4));
+                            JSONObject job1 = response;
+                            int Response_Code = job1.optInt("Response_Code");
+                            if (Response_Code == 101) {
+                                JSONObject Response_Data =  job1.optJSONObject("Response_Data");
+                                JSONArray OfficeDetailsArray = Response_Data.optJSONArray("OfficeDetails");
+                                JSONObject OfficeDetailsObj = OfficeDetailsArray.optJSONObject(0);
+                                String IsExperience = OfficeDetailsObj.optString("IsExperience");
+                                if (IsExperience.equals("1")){
+                                    //TODO: Experience
+                                    JSONObject jsonObject = new JSONObject();
+                                    try {
+                                        jsonObject.put("AEMConsultantID", pref.getEmpConId());
+                                        jsonObject.put("AEMClientID", pref.getEmpClintId());
+                                        jsonObject.put("AEMClientOfficeID", pref.getEmpClintOffId());
+                                        jsonObject.put("AEMEmployeeID", pref.getEmpId());
+                                        jsonObject.put("WorkingStatus", "1");
+                                        jsonObject.put("Operation", "10");
+                                        getExperienceDetails(jsonObject);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    //TODO: Fresher
+                                }
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        pd.dismiss();
+                        Log.e(TAG, "CHECK_EXPERIENCE_anError: "+anError.getErrorBody());
+                    }
+                });
+    }
+
+    void getExperienceDetails(JSONObject jsonObject){
+        Log.e(TAG, "getExperienceDetails: INPUT: "+jsonObject);
+        ProgressDialog pd=new ProgressDialog(TempExperinceActivity.this);
+        pd.setMessage("Loading...");
+        pd.show();
+        pd.setCancelable(false);
+        AndroidNetworking.post(AppData.KYC_GET_DETAILS)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "GET_EXPERIENCE_DETAILS: "+response.toString(4));
+                            pd.dismiss();
+                            JSONObject job1 = response;
+                            int Response_Code = job1.optInt("Response_Code");
+                            if (Response_Code == 101){
+                                String Response_Data = job1.optString("Response_Data");
+                                if (Response_Data != null){
+                                    JSONObject job2 = new JSONObject(Response_Data);
+                                    JSONArray jsonArray = job2.getJSONArray("ExperienceDetails");
+                                    JSONObject experienceObj = jsonArray.getJSONObject(0);
+                                    binding.etcompany.setText(experienceObj.optString("CompanyName"));
+                                    binding.etDesignation.setText(experienceObj.optString("PreviousEmployeeDesignation"));
+                                    binding.etManagerName.setText(experienceObj.optString("PreviousReportingManagerName"));
+                                    binding.etManagerDesignation.setText(experienceObj.optString("PreviousReportingManagerDesignation"));
+                                    binding.etManagerContact.setText(experienceObj.optString("PreviousReportingManagerContactDetails"));
+                                    String DOJ = experienceObj.optString("PrevDOJ");
+                                    String DOE = experienceObj.optString("PrevDOE");
+                                    doj = DOJ;
+                                    doe = DOE;
+                                    binding.etDOJ.setText(DOJ);
+                                    binding.etDOE.setText(DOE);
+                                    //imgAttachImage
+                                    if (binding.imgExperience.getVisibility()==View.GONE){
+                                        binding.imgFreshersTick.setVisibility(View.GONE);
+                                        binding.imgExperience.setVisibility(View.VISIBLE);
+                                        binding.llExpericedForm.setVisibility(View.VISIBLE);
+                                        flag=2;
+                                    } else {
+                                        binding.imgFreshersTick.setVisibility(View.GONE);
+                                        binding.imgExperience.setVisibility(View.GONE);
+                                        binding.llExpericedForm.setVisibility(View.GONE);
+                                    }
+                                }
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        pd.dismiss();
+                        Log.e(TAG, "GET_EXPERIENCE_DETAILS_anError: "+anError.getErrorBody());
+                    }
+                });
     }
 }
