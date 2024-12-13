@@ -230,13 +230,13 @@ public class EPSNominationActivity extends AppCompatActivity {
                 itemList.add(epSmodel);
             }
         }
+        Log.e(TAG, "getItemList: "+nomination);
         if(nominationAdapter == null){
             nominationAdapter = new EPSNominationAdapter(itemList,EPSNominationActivity.this);
             binding.rvData.setAdapter(nominationAdapter);
         } else {
             nominationAdapter.notifyDataSetChanged();
         }
-
     }
 
     private void onClick(){
@@ -322,7 +322,6 @@ public class EPSNominationActivity extends AppCompatActivity {
                 dialog.getDatePicker().setMaxDate((long) (System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 365.25 * 18)));
                 dialog.getDatePicker().setMinDate((long) (System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 365.25 * 90)));
                 dialog.show();
-
             }
         });
         binding.btnSkip.setOnClickListener(new View.OnClickListener() {
@@ -339,7 +338,19 @@ public class EPSNominationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (itemList.size()>0){
-                    uploadfamilydetails(nominationobject);
+                    if (nominationobject.length() == 0){
+                        try {
+                            nominationobject.put("epsDetails", nominationarray);
+                            nominationobject.put("DbOperation", "7");
+                            nominationobject.put("SecurityCode", pref.getSecurityCode());
+                            uploadfamilydetails(nominationobject);
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    } else {
+                        uploadfamilydetails(nominationobject);
+                    }
+                    Log.e(TAG, "onClick: "+nominationobject);
                 }else {
                     Toast.makeText(EPSNominationActivity.this,"Please Add Family Member",Toast.LENGTH_LONG).show();
                 }
@@ -618,12 +629,13 @@ public class EPSNominationActivity extends AppCompatActivity {
         if (itemList.size()==0){
             binding.llData.setVisibility(View.GONE);
         }
-
     }
 
     public void editItem(int pos) throws JSONException {
         if (isEditClick){
             if (binding.etName.getText().toString().length()>0
+                    && binding.etAddress.getText().toString().length() > 0
+                    && binding.etAadharNominee.getText().toString().length() > 0
                     && !dob.isEmpty()
                     && !relationship.isEmpty()){
                 binding.imgAdd.performClick();
@@ -734,6 +746,7 @@ public class EPSNominationActivity extends AppCompatActivity {
                                     object.put("AEMEMPLOYEEID",AEMEmployeeID);
 
                                     nominationarray.put(object);
+                                    //Log.e(TAG, "onResponse: "+nominationarray);
                                 }
 
                                 if(nominationAdapter == null){
