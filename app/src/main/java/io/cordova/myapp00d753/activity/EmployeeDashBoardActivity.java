@@ -228,11 +228,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
 
         }
 
-        if (ConsentFlag.equals("0")){
-            consnetLetter();
-        }else {
 
-        }
         //
     }
 
