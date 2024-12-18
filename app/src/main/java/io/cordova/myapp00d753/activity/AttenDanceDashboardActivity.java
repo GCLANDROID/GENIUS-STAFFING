@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -316,6 +317,17 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         HD_Property.dateTextViewResource = R.id.text_view;
         descHashMap.put("hd", HD_Property);
 
+        //TODO: Holiday work
+        Property HW_Property = new Property();
+        HW_Property.layoutResource = R.layout.hw_view;
+        HW_Property.dateTextViewResource = R.id.text_view;
+        descHashMap.put("hw", HW_Property);
+
+        //TODO: weekly comp off
+        Property WC_Property = new Property();
+        WC_Property.layoutResource = R.layout.wc_view;
+        WC_Property.dateTextViewResource = R.id.text_view;
+        descHashMap.put("wc", WC_Property);
 
         // set desc hashmap on custom calendar
         customCalendar.setMapDescToProp(descHashMap);
@@ -394,6 +406,18 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                     lnStatus.setVisibility(View.VISIBLE);
                     lnStatus.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#F20A75F6")));
                     tvDetails.setText(date + " : " + PunchTiming + "-" + "Weekly Off");
+                } else if (Status.equalsIgnoreCase("HW")) {
+                    lnStatus.setVisibility(View.VISIBLE);
+                    int color = ContextCompat.getColor(AttenDanceDashboardActivity.this, R.color.holiday_work);
+                    //lnStatus.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#86C73B")));
+                    lnStatus.setBackgroundColor(color);
+                    tvDetails.setText(date + " : " + PunchTiming + " - " + "Holiday Work");
+                } else if (Status.equalsIgnoreCase("WC")) {
+                    lnStatus.setVisibility(View.VISIBLE);
+                    int color = ContextCompat.getColor(AttenDanceDashboardActivity.this, R.color.weekly_comp_off);
+                    lnStatus.setBackgroundColor(color);
+                    //lnStatus.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#F20A75F6")));
+                    tvDetails.setText(date + " : " + PunchTiming + " - " + "Weekly Comp Off");
                 }
             }
         });
@@ -805,7 +829,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, MetsoAttendanceRegularizationActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-            }else {
+            } else {
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, BacklogAttendanceActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -867,7 +891,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             Intent intent = new Intent(AttenDanceDashboardActivity.this, AdjustmentActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-        }else if (view == imgHome) {
+        } else if (view == imgHome) {
             Intent intent = new Intent(AttenDanceDashboardActivity.this, EmployeeDashBoardActivity.class);
             startActivity(intent);
             finish();

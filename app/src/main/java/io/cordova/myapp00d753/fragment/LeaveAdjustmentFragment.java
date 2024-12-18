@@ -69,6 +69,7 @@ import io.cordova.myapp00d753.module.MenuItemModel;
 import io.cordova.myapp00d753.module.SpineerItemModel;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
+import io.cordova.myapp00d753.utility.ClientID;
 import io.cordova.myapp00d753.utility.Pref;
 
 
@@ -131,14 +132,13 @@ public class LeaveAdjustmentFragment extends Fragment {
         }*/
         lnAddApplication = (LinearLayout) view.findViewById(R.id.lnAddApplication);
         next = "<font color='#EE0000'>*</font>";
-        if (pref.getEmpClintId().equals("AEMCLI2110001671")) {
+        if (pref.getEmpClintId().equals("AEMCLI2110001671") || pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID)) {
             modelist.add("Full Day");
         } else {
             modelist.add("Full Day");
             modelist.add("First Half");
             modelist.add("Second Half");
         }
-
 
         modelModulelist.add(new SpineerItemModel("Full Day", "2"));
         modelModulelist.add(new SpineerItemModel("First Half", "1"));
@@ -204,6 +204,7 @@ public class LeaveAdjustmentFragment extends Fragment {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MMM-dd", Locale.getDefault());
         effectiveDate = df.format(c);
         Log.d("effectiveDate", effectiveDate);
+        int monthNumber = Calendar.getInstance().get(Calendar.MONTH);
         int m = Calendar.getInstance().get(Calendar.MONTH) + 1;
         month = String.valueOf(m);
         getOtherApplicationComponentItem();
@@ -216,6 +217,7 @@ public class LeaveAdjustmentFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }*/
+        spMonth.setSelection(monthNumber);
     }
 
     private void onclick() {
@@ -523,7 +525,11 @@ public class LeaveAdjustmentFragment extends Fragment {
                 if (applicationComponent.equalsIgnoreCase("On Duty")) {
                     postDataOD(etReason.getText().toString());
                 } else if (applicationComponent.equalsIgnoreCase("Comp Off")) {
-                    approverpopup(etReason.getText().toString());
+                    if (pref.getEmpClintId().equalsIgnoreCase(ClientID.SKF_CLIENT_ID)){
+                        //TODO: Data save will be called
+                    } else {
+                        approverpopup(etReason.getText().toString());
+                    }
                 } else {
                     postData(etReason.getText().toString(), tvInTime.getText().toString(), tvOutTime.getText().toString());
                 }
@@ -1088,6 +1094,7 @@ public class LeaveAdjustmentFragment extends Fragment {
 
         ImageView imgCancel = dialogLocationPopUp.findViewById(R.id.imgCancel);
         TextView txtSelectLocation = dialogLocationPopUp.findViewById(R.id.txtSelectLocation);
+        TextView textView = dialogLocationPopUp.findViewById(R.id.textView);
         TextView tvLocationTitle = dialogLocationPopUp.findViewById(R.id.tvLocationTitle);
         tvLocationTitle.setVisibility(View.GONE);
         txtSelectLocation.setVisibility(View.GONE);
@@ -1099,7 +1106,7 @@ public class LeaveAdjustmentFragment extends Fragment {
         LinearLayout llApprover = dialogLocationPopUp.findViewById(R.id.llApprover);
         AppCompatButton btnSubmit = dialogLocationPopUp.findViewById(R.id.btnSubmit);
 
-
+        textView.setText("Select Approver");
         actApproverName.setAdapter(approverAutoCompleteAdapter);
         actApproverName.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -1121,7 +1128,7 @@ public class LeaveAdjustmentFragment extends Fragment {
         imgCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                dialogLocationPopUp.cancel();
             }
         });
 
@@ -1132,7 +1139,6 @@ public class LeaveAdjustmentFragment extends Fragment {
                     postDataCompOff(remarks, String.valueOf(approverID));
                     dialogLocationPopUp.cancel();
                 } else {
-
                     Toast.makeText(getContext(), "Please select Your approver", Toast.LENGTH_LONG).show();
                 }
             }

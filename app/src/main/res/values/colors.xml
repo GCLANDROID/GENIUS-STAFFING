@@ -28,5 +28,7 @@
     <color name="bar2">#FFE7E7</color>
     <color name="half_day">#F87AA5</color>
     <color name="optional_holiday">#ABBC04</color>
+    <color name="holiday_work">#009688</color>
+    <color name="weekly_comp_off">#673AB7</color>
 
 </resources>

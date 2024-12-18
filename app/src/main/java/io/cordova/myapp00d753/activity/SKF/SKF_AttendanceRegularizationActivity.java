@@ -93,7 +93,6 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_skf_attendance_regularization);
-        
         initView();
     }
 
@@ -126,8 +125,8 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
         getLocationData();
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("clientid","AEMCLI1110000502");
-            jsonObject.put("BranchID","AEMCLO1110001277");
+            jsonObject.put("clientid",pref.getEmpClintId());
+            jsonObject.put("BranchID","0");
             getSkfDayTypeList(jsonObject);
         } catch (JSONException e) {
             throw new RuntimeException(e);
