@@ -44,6 +44,7 @@ import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
+import io.cordova.myapp00d753.utility.ShowDialog;
 
 public class WeeklyOffAttendanceActivity extends AppCompatActivity {
     LinearLayout llDate;
@@ -180,13 +181,13 @@ public class WeeklyOffAttendanceActivity extends AppCompatActivity {
                         JSONObject job = response;
                         responseText = job.optString("responseText");
                         boolean responseStatus = job.optBoolean("responseStatus");
-
-                        successAlert(responseText);
-
+                        if (responseStatus){
+                            successAlert(responseText);
+                        } else {
+                            ShowDialog.showErrorDialog(WeeklyOffAttendanceActivity.this, responseText);
+                        }
 
                         // boolean _status = job1.getBoolean("status");
-
-
                         // do anything with response
                     }
 

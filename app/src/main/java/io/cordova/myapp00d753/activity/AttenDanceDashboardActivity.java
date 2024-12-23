@@ -835,7 +835,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 startActivity(intent);
             }
         } else if (view == llWeekly) {
-            if (pref.getEmpClintId().equals("AEMCLI2210001707") || pref.getEmpClintId().equals("AEMCLI2210001697") || pref.getEmpClintId().equals("AEMCLI2210001698") || pref.getEmpClintId().equals("AEMCLI2310001805")|| pref.getEmpClintId().equals("AEMCLI2110001671")) {
+            if (pref.getEmpClintId().equals("AEMCLI2210001707") || pref.getEmpClintId().equals("AEMCLI2210001697") || pref.getEmpClintId().equals("AEMCLI2210001698") || pref.getEmpClintId().equals("AEMCLI2310001805")|| pref.getEmpClintId().equals("AEMCLI2110001671")|| pref.getEmpClintId().equals(ClientID.HONASA)) {
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, WeeklyOffAttendanceActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -1566,7 +1566,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
 
-        }else if (pref.getEmpClintId().equals("AEMCLI1110000593")) {
+        } else if (pref.getEmpClintId().equals("AEMCLI1110000593")) {
             //
             Intent intent = new Intent(AttenDanceDashboardActivity.this, BoschAttendanceActivity.class);
             intent.putExtra("intt", "2");
