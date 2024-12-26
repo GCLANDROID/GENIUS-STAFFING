@@ -42,11 +42,13 @@ import java.util.Calendar;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
+import io.cordova.myapp00d753.utility.ClientID;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.ShowDialog;
 
 public class WeeklyOffAttendanceActivity extends AppCompatActivity {
+    private static final String TAG = "WeeklyOffAttendanceActi";
     LinearLayout llDate;
     TextView tvDate;
     ImageView imgBack, imgHome;
@@ -90,8 +92,9 @@ public class WeeklyOffAttendanceActivity extends AppCompatActivity {
                 int year = c.get(Calendar.YEAR);
                 int month = c.get(Calendar.MONTH);
                 int day = c.get(Calendar.DAY_OF_MONTH);
-                c.add(Calendar.DAY_OF_MONTH, -7);
-
+                if (!pref.getEmpClintId().equals(ClientID.HONASA)){
+                    c.add(Calendar.DAY_OF_MONTH, -7);
+                }
 
                 final DatePickerDialog dialog = new DatePickerDialog(WeeklyOffAttendanceActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
@@ -105,7 +108,11 @@ public class WeeklyOffAttendanceActivity extends AppCompatActivity {
 
                     }
                 }, year, month, day);
-                dialog.getDatePicker();
+                if (pref.getEmpClintId().equals(ClientID.HONASA)){
+                    dialog.getDatePicker().setMinDate(c.getTimeInMillis());
+                } else {
+                    dialog.getDatePicker();
+                }
                 dialog.show();
             }
         });
