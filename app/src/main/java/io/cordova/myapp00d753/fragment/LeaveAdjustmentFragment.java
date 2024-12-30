@@ -527,6 +527,7 @@ public class LeaveAdjustmentFragment extends Fragment {
                 } else if (applicationComponent.equalsIgnoreCase("Comp Off")) {
                     if (pref.getEmpClintId().equalsIgnoreCase(ClientID.SKF_CLIENT_ID)){
                         //TODO: Data save will be called
+                        postDataCompOff(etReason.getText().toString(), "0");
                     } else {
                         approverpopup(etReason.getText().toString());
                     }

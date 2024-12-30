@@ -814,7 +814,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, MetsoAttendanceRegularizationActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-            }  else if(pref.getEmpClintId().equals("AEMCLI1110000502")) { // SKF Attendance Regularization
+            }  else if(pref.getEmpClintId().equals("AEMCLI1110000502") || pref.getEmpClintId().equals(ClientID.HONASA)) { // SKF Attendance Regularization
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, SKF_AttendanceRegularizationActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);

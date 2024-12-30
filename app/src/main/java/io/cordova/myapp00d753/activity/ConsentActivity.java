@@ -115,6 +115,8 @@ public class ConsentActivity extends AppCompatActivity {
         JSONObject object=new JSONObject();
         try {
             object.put("MasterID",pref.getMasterId());
+            object.put("SecurityCode",pref.getSecurityCode());
+
             getConsentLetter(object);
         } catch (JSONException e) {
             e.printStackTrace();
