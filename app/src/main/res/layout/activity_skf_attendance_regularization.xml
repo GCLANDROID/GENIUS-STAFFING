@@ -194,6 +194,7 @@
                     android:text="Note:- \n* You can change your In Time/Out Time."/>
 
                 <LinearLayout
+                    android:id="@+id/llRegularisationCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/broder"
