@@ -58,6 +58,7 @@ import io.cordova.myapp00d753.activity.metso.model.MetsoLocationModel;
 import io.cordova.myapp00d753.adapter.BackLogAdapter;
 import io.cordova.myapp00d753.module.BackLogAttendanceModel;
 import io.cordova.myapp00d753.utility.AppData;
+import io.cordova.myapp00d753.utility.ClientID;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.Util;
 import retrofit2.Call;
@@ -89,6 +90,7 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
     android.app.AlertDialog al1;
     ArrayList<String> dayTypeArray;
     TextView txtRegularisationCount;
+    LinearLayout llRegularisationCount;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +112,7 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
         llNodata = findViewById(R.id.llNodata);
         llWarning = findViewById(R.id.llWarning);
         llTick = findViewById(R.id.llTick);
+        llRegularisationCount = findViewById(R.id.llRegularisationCount);
         imgLike = findViewById(R.id.imgLike);
         txtRegularisationCount = findViewById(R.id.txtRegularisationCount);
         btnSubmit.setOnClickListener(this);
@@ -122,6 +125,11 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
         pref = new Pref(SKF_AttendanceRegularizationActivity.this);
         progressDialog = new ProgressDialog(SKF_AttendanceRegularizationActivity.this);
         progressDialog.setCancelable(false);
+        if (pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_CLIENT_ID)){
+            llRegularisationCount.setVisibility(View.VISIBLE);
+        } else {
+            llRegularisationCount.setVisibility(View.GONE);
+        }
         getLocationData();
         JSONObject jsonObject = new JSONObject();
         try {
@@ -296,10 +304,94 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
             obj.put("SetMsg","");
             obj.put("SecurityCode", pref.getSecurityCode());
             //Log.e(TAG, "BACKLOG_SAVE_INPUT: "+obj);
-            regularizationSaveApiCall(obj);
+            if (pref.getSecurityCode().equals(io.cordova.myapp00d753.utility.ClientID.SKF_CLIENT_ID)){
+                regularizationSaveApiCall(obj);
+            } else {
+                regularizationSave_New_ApiCall(obj);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private void regularizationSave_New_ApiCall(JSONObject jsonObject) {
+        AndroidNetworking.post(AppData.SAVE_ATTENDANCE_REGULARIZATION_NEW_LOCAL_IP)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "NEW_BACKLOG_SAVE: "+response.toString(4));
+                            progressDialog.dismiss();
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                //String Response_Data = job1.optString("Response_Data");
+                                //successAlert();
+                                JSONObject json_Response_Data = job1.optJSONObject("Response_Data");
+                                String Table = json_Response_Data.optString("Table");
+                                JSONArray TableArray = new JSONArray(Table);
+                                Log.e(TAG, "TableArray: "+TableArray);
+                                String Table1 = json_Response_Data.optString("Table1");
+                                JSONArray Table1Array = new JSONArray(Table1);
+                                Log.e(TAG, "TableArray: "+Table1Array);
+                                JSONObject FinalStatusObj = Table1Array.optJSONObject(0);
+                                Log.e(TAG, "FinalStatusObj: "+FinalStatusObj);
+                                if (FinalStatusObj.getInt("FinalStatus") == 1){
+                                    //TODO: Success
+                                    int FinalStatus = FinalStatusObj.getInt("FinalStatus");
+                                    int AlreadyRequestCount = FinalStatusObj.getInt("AlreadyRequestCount");
+                                    int ExceedRequestLimit = FinalStatusObj.getInt("ExceedRequestLimit");
+                                    txtRegularisationCount.setText(String.valueOf(AlreadyRequestCount));
+                                    Log.e(TAG, "FinalStatus: "+FinalStatus);
+                                    Log.e(TAG, "AlreadyRequestCount: "+AlreadyRequestCount);
+                                    Log.e(TAG, "ExceedRequestLimit: "+ExceedRequestLimit);
+                                    successAlert();
+                                } else {
+                                    blockLogList.clear();
+                                    btnSubmit.setVisibility(View.GONE);
+                                    //TODO: Failure
+                                    for (int i = 0; i < TableArray.length(); i++) {
+                                        Log.e(TAG, "Table: called");
+                                        JSONObject obj = TableArray.getJSONObject(i);
+                                        String AttDate = obj.optString("Dates");
+                                        String InTime = obj.optString("Intime");
+                                        String OutTime = obj.optString("Outtime");
+                                        String Daytype = obj.optString("DayType");
+                                        String Remarks = obj.optString("Remarks");
+                                        String RemarksCode = String.valueOf(obj.optInt("RemarksCode"));
+                                        String SLNo = String.valueOf(obj.optInt("SLNo"));
+
+
+                                        BackLogAttendanceModel blockModule = new BackLogAttendanceModel(AttDate, InTime, OutTime);
+                                        blockModule.setDayType(Daytype);
+                                        blockModule.setRemarks(Remarks);
+                                        blockModule.setRemarksCode(RemarksCode);
+                                        blockModule.setSLNo(SLNo);
+                                        blockLogList.add(blockModule);
+                                    }
+                                    skfBacklogAdapter.notifyDataSetChanged();
+                                }
+                            } else {
+                                showErrorDialog(Response_Message);
+                                //Toast.makeText(SKF_AttendanceRegularizationActivity.this,Response_Message,Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.dismiss();
+                        Log.e(TAG, "SKF_BACKLOG_SAVE_error: "+anError.getErrorBody());
+                    }
+                });
     }
 
     private void regularizationSaveApiCall(JSONObject jsonObject) {
@@ -390,7 +482,8 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
         llMain.setVisibility(View.GONE);
         llNodata.setVisibility(View.GONE);
         //blockLogList.clear();
-        AndroidNetworking.post(AppData.GET_ATTENDANCE_REGULARIZATION)
+        //AndroidNetworking.post(AppData.GET_ATTENDANCE_REGULARIZATION)
+        AndroidNetworking.post(AppData.GET_ATTENDANCE_REGULARIZATION_LOCAL_IP)
                 .addJSONObjectBody(jsonObject)
                 .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")

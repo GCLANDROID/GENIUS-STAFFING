@@ -44,6 +44,8 @@ public class AppData {
     public static String POST_EMPLOYEE_DAILY_ACTIVITY = newv2url+"FileUpload/PostEmployeeDailyActivity";
 
     public static String GET_ATTENDANCE_REGULARIZATION = newv2url+"Attendance/GetAttendanceRegularization";
+    public static String GET_ATTENDANCE_REGULARIZATION_LOCAL_IP = "http://171.16.2.105/GSPPI_API_V2/api/Attendance/GetAttendanceRegularization";
+
     public static String SAVE_ATTENDANCE_REGULARIZATION = newv2url+"Attendance/SaveAttendanceRegularization";
     public static String GET_SHIFT = newv2url+"Attendance/GetShift";
     public static String SaveHolidayleave = newv2url+"SKF/SaveHolidayleave";
@@ -68,7 +70,11 @@ public class AppData {
     //public static String SKF_GET_HOLIDAY_DETAILS = "http://171.16.2.67/GSPPI_API_V2/api/SKF/GetHolidayDetails";
     public static String SKF_GET_HOLIDAY_DETAILS = newv2url+"SKF/GetHolidayDetails";
     public static String SKF_SAVE_ATTENDANCE_REGULARIZATION = newv2url+"SKF/SaveAttendanceRegularization";
-    public static String SKF_DAY_TYPE_LIST= "http://171.16.2.105/GSPPI_API_V2/api/SKF/GetWorkingDayTypeSKF";
+    public static String SKF_SAVE_ATTENDANCE_REGULARIZATION_LOCAL_IP = "http://171.16.2.105/GSPPI_API_V2/api/SKF/SaveAttendanceRegularization";
+    public static String SAVE_ATTENDANCE_REGULARIZATION_NEW= newv2url+"Attendance/SaveAttendanceRegularizationNew";
+    public static String SAVE_ATTENDANCE_REGULARIZATION_NEW_LOCAL_IP = "http://171.16.2.105/GSPPI_API_V2/api/Attendance/SaveAttendanceRegularizationNew";
+    public static String SKF_DAY_TYPE_LIST = newv2url+"SKF/GetWorkingDayTypeSKF";
+    //public static String SKF_DAY_TYPE_LIST= "http://171.16.2.105/GSPPI_API_V2/api/SKF/GetWorkingDayTypeSKF";
     public static String SaveExperienceDetails = newv2url+"Document/SaveExperienceDetails";
     public static String PROTACTORGAMBLEID = "AEMCLI1310000776";
     public static String GetPFNotificationAPI=newv2url+"PFNotification/GetPFNotification";
