@@ -304,7 +304,7 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
             obj.put("SetMsg","");
             obj.put("SecurityCode", pref.getSecurityCode());
             //Log.e(TAG, "BACKLOG_SAVE_INPUT: "+obj);
-            if (pref.getSecurityCode().equals(io.cordova.myapp00d753.utility.ClientID.SKF_CLIENT_ID)){
+            if (pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_CLIENT_ID)){
                 regularizationSaveApiCall(obj);
             } else {
                 regularizationSave_New_ApiCall(obj);
