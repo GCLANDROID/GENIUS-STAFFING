@@ -315,7 +315,7 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
     }
 
     private void regularizationSave_New_ApiCall(JSONObject jsonObject) {
-        AndroidNetworking.post(AppData.SAVE_ATTENDANCE_REGULARIZATION_NEW_LOCAL_IP)
+        AndroidNetworking.post(AppData.SAVE_ATTENDANCE_REGULARIZATION_NEW)
                 .addJSONObjectBody(jsonObject)
                 .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
@@ -483,7 +483,7 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
         llNodata.setVisibility(View.GONE);
         //blockLogList.clear();
         //AndroidNetworking.post(AppData.GET_ATTENDANCE_REGULARIZATION)
-        AndroidNetworking.post(AppData.GET_ATTENDANCE_REGULARIZATION_LOCAL_IP)
+        AndroidNetworking.post(AppData.GET_ATTENDANCE_REGULARIZATION)
                 .addJSONObjectBody(jsonObject)
                 .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
