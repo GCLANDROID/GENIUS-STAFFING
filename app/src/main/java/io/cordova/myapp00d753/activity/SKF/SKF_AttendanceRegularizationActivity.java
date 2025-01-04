@@ -279,23 +279,36 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
         progressDialog.setMessage("Loading...");
         progressDialog.show();
         String regularizationSubmitString="";
-        for (int i = 0; i < blockLogList.size(); i++) {
-            Log.e(TAG, "submitOperation: Remarks: "+blockLogList.get(i).getRemarks());
-            if (blockLogList.get(i).isSelected()){
-                //Log.e(TAG, "submitOperation: "+i);
-                if (regularizationSubmitString.isEmpty()){
-                    if (SKF_PUNE_CLIENT_OFFICE_ID.equals(pref.getEmpClintOffId()))
-                        regularizationSubmitString = pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(i).getDate()+"_"+blockLogList.get(i).getInTime()+"_"+blockLogList.get(i).getOutTime()+"_"+blockLogList.get(i).getRemarks()+"_"+Siteid+"_0_"+blockLogList.get(i).getDayType();
-                    else
-                        regularizationSubmitString = pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(i).getDate()+"_"+blockLogList.get(i).getInTime()+"_"+blockLogList.get(i).getOutTime()+"_"+blockLogList.get(i).getRemarks()+"_0_0_"+blockLogList.get(i).getDayType();
-                } else {
-                    if (SKF_PUNE_CLIENT_OFFICE_ID.equals(pref.getEmpClintOffId()))
-                        regularizationSubmitString += ","+pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(i).getDate()+"_"+blockLogList.get(i).getInTime()+"_"+blockLogList.get(i).getOutTime()+"_"+blockLogList.get(i).getRemarks()+"_"+Siteid+"_0_"+blockLogList.get(i).getDayType();
-                    else
-                        regularizationSubmitString += ","+pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(i).getDate()+"_"+blockLogList.get(i).getInTime()+"_"+blockLogList.get(i).getOutTime()+"_"+blockLogList.get(i).getRemarks()+"_0_0_"+blockLogList.get(i).getDayType();
+        if (pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_CLIENT_ID)){
+            for (int i = 0; i < blockLogList.size(); i++) {
+                Log.e(TAG, "submitOperation: Remarks: "+blockLogList.get(i).getRemarks());
+                if (blockLogList.get(i).isSelected()){
+                    //Log.e(TAG, "submitOperation: "+i);
+                    if (regularizationSubmitString.isEmpty()){
+                        if (SKF_PUNE_CLIENT_OFFICE_ID.equals(pref.getEmpClintOffId()))
+                            regularizationSubmitString = pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(i).getDate()+"_"+blockLogList.get(i).getInTime()+"_"+blockLogList.get(i).getOutTime()+"_"+blockLogList.get(i).getRemarks()+"_"+Siteid+"_0_"+blockLogList.get(i).getDayType();
+                        else
+                            regularizationSubmitString = pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(i).getDate()+"_"+blockLogList.get(i).getInTime()+"_"+blockLogList.get(i).getOutTime()+"_"+blockLogList.get(i).getRemarks()+"_0_0_"+blockLogList.get(i).getDayType();
+                    } else {
+                        if (SKF_PUNE_CLIENT_OFFICE_ID.equals(pref.getEmpClintOffId()))
+                            regularizationSubmitString += ","+pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(i).getDate()+"_"+blockLogList.get(i).getInTime()+"_"+blockLogList.get(i).getOutTime()+"_"+blockLogList.get(i).getRemarks()+"_"+Siteid+"_0_"+blockLogList.get(i).getDayType();
+                        else
+                            regularizationSubmitString += ","+pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(i).getDate()+"_"+blockLogList.get(i).getInTime()+"_"+blockLogList.get(i).getOutTime()+"_"+blockLogList.get(i).getRemarks()+"_0_0_"+blockLogList.get(i).getDayType();
+                    }
+                }
+            }
+        } else {
+            for (int i = 0; i < blockLogList.size(); i++) {
+                if (blockLogList.get(i).isSelected()){
+                    if (regularizationSubmitString.isEmpty()){
+                        regularizationSubmitString = pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(i).getDate()+"_"+blockLogList.get(i).getInTime()+"_"+blockLogList.get(i).getOutTime()+"_"+blockLogList.get(i).getRemarks()+"_0_"+blockLogList.get(i).getDayType();
+                    } else {
+                        regularizationSubmitString += ","+pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+blockLogList.get(i).getDate()+"_"+blockLogList.get(i).getInTime()+"_"+blockLogList.get(i).getOutTime()+"_"+blockLogList.get(i).getRemarks()+"_0_"+blockLogList.get(i).getDayType();
+                    }
                 }
             }
         }
+
         Log.e(TAG, "submitOperation: "+regularizationSubmitString);
 
         JSONObject obj=new JSONObject();
@@ -389,7 +402,7 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
                     @Override
                     public void onError(ANError anError) {
                         progressDialog.dismiss();
-                        Log.e(TAG, "SKF_BACKLOG_SAVE_error: "+anError.getErrorBody());
+                        Log.e(TAG, "NEW_BACKLOG_SAVE_error: "+anError.getErrorBody());
                     }
                 });
     }
