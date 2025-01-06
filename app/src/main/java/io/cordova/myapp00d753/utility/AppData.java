@@ -81,6 +81,6 @@ public class AppData {
     public static String GetEmpConsentPendingListAPI=newv2url+"KYC/GetEmpConsentPendingList";
 
     //KYC
-    public static String KYC_GET_DETAILS = newv2url+"Profile/GetKYCDetails";
+    public static String KYC_GET_DETAILS = newv2url+"Profile/GetTempEmpKYCDetails";
     public static String IMAGE_PATH_URL = "https://gsppi.geniusconsultant.com/GeniusiOSApi/DigitalDocument/";
 }
