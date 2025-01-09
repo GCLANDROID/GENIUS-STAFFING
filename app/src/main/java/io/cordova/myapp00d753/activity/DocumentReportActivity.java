@@ -90,7 +90,8 @@ public class DocumentReportActivity extends AppCompatActivity  {
             aempEmployeeid=pref.getMasterId();
             Log.d("aempEmployeeid",aempEmployeeid);
         }
-        status=getIntent().getStringExtra("status");
+        status=(getIntent().getStringExtra("status") == null)?"":getIntent().getStringExtra("status");
+        Log.e(TAG, "initialize: "+status);
         if (status.equals("Approval Pending")){
             //getDocListForPending();
             JSONObject obj=new JSONObject();
@@ -190,6 +191,7 @@ public class DocumentReportActivity extends AppCompatActivity  {
         llMain.setVisibility(View.GONE);
         llNoadata.setVisibility(View.GONE);
         llAgain.setVisibility(View.GONE);
+
         AndroidNetworking.post(AppData.EMPLOYEE_DOCUMENT_MANAGE)
                 .addJSONObjectBody(jsonObject)
                 .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
