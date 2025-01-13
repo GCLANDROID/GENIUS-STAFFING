@@ -1240,11 +1240,6 @@ public class TempProfileActivity extends AppCompatActivity {
                         residing); //selected item will look like a spinner set from XML
         residingspinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spResiding.setAdapter(residingspinnerArrayAdapter);
-
-
-
-
-
         setNomineeRelation();
 
 

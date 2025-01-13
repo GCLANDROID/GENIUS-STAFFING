@@ -5,29 +5,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@mipmap/login_back"
     tools:context="io.cordova.myapp00d753.activity.LoginActivity">
     <LinearLayout
-        android:background="@mipmap/bg_green"
+
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.4"
-        android:padding="50dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="LOGIN"
-            android:textStyle="bold"
-            android:textSize="26sp"
-            android:textColor="@color/white"></TextView>
+        android:layout_weight="0.3"
+        android:padding="10dp"
+        android:gravity="top|right">
+        <ImageView
+            android:scaleType="fitCenter"
+            android:layout_width="120dp"
+            android:layout_height="80dp"
+            android:src="@drawable/geniuslogo"
+            app:tint="@color/white"></ImageView>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.9"
         android:orientation="vertical"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
         android:paddingTop="20dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+        </LinearLayout>
 
         <LinearLayout
             android:visibility="gone"
@@ -115,63 +120,62 @@
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
+            android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
-                android:layout_marginLeft="30dp"
-                android:text="Employee ID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/familycolor"></TextView>
+                android:textSize="16sp"
+                android:textColor="@color/grey"
+                android:text="Login to Continue"
+                android:layout_gravity="center"></TextView>
+
             <LinearLayout
+                android:backgroundTint="@color/maincolor"
+                android:layout_marginLeft="34dp"
+                android:layout_marginRight="34dp"
+                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginTop="10dp">
-                <ImageView
-                    android:layout_gravity="center"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/employee_id"></ImageView>
+                android:layout_height="40dp"
+                android:background="@drawable/lldesign">
+
                 <EditText
+                    android:paddingLeft="5dp"
+                    android:textColorHint="@color/white"
+                    android:background="@null"
                     android:singleLine="true"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@null"
+
                     android:textSize="14sp"
-                    android:textColor="@color/textcolor"
+                    android:textColor="@color/white"
                     android:imeOptions="actionNext"
+                    android:hint="Enter Your User ID"
                     android:id="@+id/etUserId"></EditText>
             </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/textcolor"></View>
+
         </LinearLayout>
         <LinearLayout
 
-            android:layout_marginTop="10dp"
+            android:background="@drawable/lldesign"
+            android:backgroundTint="@color/maincolor"
+            android:layout_marginLeft="34dp"
+            android:layout_marginRight="34dp"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:orientation="vertical">
-            <TextView
-                android:layout_marginLeft="30dp"
-                android:text="Password"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/familycolor"></TextView>
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginTop="10dp">
-                <ImageView
-                    android:layout_gravity="center"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/password"></ImageView>
+                android:layout_height="match_parent"
+                >
+
                 <EditText
+                    android:paddingLeft="5dp"
+                    android:hint="Enter Your Password"
                     android:singleLine="true"
                     android:layout_weight="1"
                     android:inputType="textPassword"
@@ -179,54 +183,50 @@
                     android:layout_height="match_parent"
                     android:background="@null"
                     android:textSize="14sp"
-                    android:textColor="@color/textcolor"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
                     android:imeOptions="actionNext"
                     android:id="@+id/etPassword"></EditText>
                 <FrameLayout
+                    android:visibility="visible"
+                    android:padding="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <ImageView
                         android:id="@+id/imgVisible"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/show"></ImageView>
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/show"
+                        app:tint="@color/white"></ImageView>
                     <ImageView
+                        app:tint="@color/white"
                         android:id="@+id/imginVisible"
                         android:visibility="gone"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:src="@drawable/hide"></ImageView>
                 </FrameLayout>
             </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/textcolor"></View>
+
         </LinearLayout>
         <LinearLayout
+            android:background="@drawable/lldesign"
+            android:backgroundTint="@color/maincolor"
             android:id="@+id/llSecurityCode"
             android:visibility="gone"
-            android:layout_marginTop="10dp"
+            android:layout_marginLeft="34dp"
+            android:layout_marginRight="34dp"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:orientation="vertical">
-            <TextView
-                android:layout_marginLeft="30dp"
-                android:text="Security Code"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/familycolor"></TextView>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginTop="10dp">
-                <ImageView
-                    android:layout_gravity="center"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/security"></ImageView>
+                android:layout_height="match_parent"
+               >
+
                 <EditText
+                    android:paddingLeft="5dp"
                     android:singleLine="true"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -234,7 +234,9 @@
                     android:textSize="14sp"
                     android:textColor="@color/textcolor"
                     android:imeOptions="actionDone"
-                    android:id="@+id/etSecuritycode"></EditText>
+                    android:id="@+id/etSecuritycode"
+                    android:textColorHint="@color/white"
+                    android:hint="Enter Your Security Code"></EditText>
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
@@ -244,8 +246,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+            android:layout_margin="14dp">
             <CheckBox
+                android:layout_marginLeft="10dp"
                 android:id="@+id/ckRemember"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -254,6 +257,7 @@
                 android:textSize="12sp"
                 android:text="Remember Me"></CheckBox>
             <TextView
+                android:layout_marginRight="10dp"
                 android:id="@+id/llForgotPassword"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
@@ -262,49 +266,53 @@
                 android:textColor="@color/textcolor"
                 android:text="Forgot Password"></TextView>
         </LinearLayout>
-       <!-- <LinearLayout
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:gravity="center"
-            android:layout_height="wrap_content">
-            <test.jinesh.captchaimageviewlib.CaptchaImageView
-                android:layout_width="wrap_content"
-                android:id="@+id/captchaimage"
-                android:layout_weight="6"
-                android:layout_margin="5dp"
-                android:layout_height="50dp"
-
-                />
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
-                android:background="@android:drawable/ic_menu_rotate"
-                android:gravity="center"
-                android:id="@+id/regen"
-
-                />
-        </LinearLayout>
-        <EditText
-            android:visibility="gone"
-            android:hint="Please Enter Your Captcha here"
-            android:id="@+id/etCaptcha"
-            android:textSize="14sp"
-            android:textColor="@color/textcolor"
-            android:paddingLeft="5dp"
-            android:background="@drawable/lldesign13"
-            android:backgroundTint="@color/bar1"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"></EditText>-->
         <LinearLayout
-            android:id="@+id/llSignIn"
-            android:layout_width="250dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center"
+
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:gravity="right"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="5dp"
-            android:background="@mipmap/loginbutton"
-            android:orientation="vertical"></LinearLayout>
+            >
+            <LinearLayout
+                android:id="@+id/llSignIn"
+                android:backgroundTint="@color/maincolor"
+                android:layout_width="220dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/llonesiderounded"
+                android:gravity="center">
+                <TextView
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:text="Login"
+                    android:textSize="22sp"></TextView>
+                <ImageView
+                    android:layout_marginLeft="10dp"
+                    android:layout_gravity="center"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/forwardimg"></ImageView>
+            </LinearLayout>
+        </LinearLayout>
+
+
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.1"
+        android:padding="20dp">
+        <TextView
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:text="Genius Staffing"></TextView>
+    </LinearLayout>
+
 
 
 

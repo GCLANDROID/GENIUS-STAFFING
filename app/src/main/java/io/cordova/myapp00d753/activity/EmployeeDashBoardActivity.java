@@ -481,6 +481,8 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                             try {
                                 objMenu.put("ConsultantID", pref.getEmpConId());
                                 objMenu.put("ClientID",pref.getEmpClintId());
+                                objMenu.put("ClientOfficeID",pref.getEmpClintOffId());
+                                objMenu.put("AEMEmployeeID",pref.getEmpId());
                                 objMenu.put("SecurityCode",pref.getSecurityCode());
                                 getMenu(objMenu);
                             } catch (JSONException e) {

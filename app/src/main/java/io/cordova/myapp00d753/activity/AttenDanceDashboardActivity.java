@@ -134,7 +134,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         if (leaveFlag==1){
             btnLeave.setVisibility(View.VISIBLE);
         }else {
-            btnLeave.setVisibility(View.GONE);
+            btnLeave.setVisibility(View.VISIBLE);
         }
         llQR = (LinearLayout) findViewById(R.id.llQR);
         llQR.setOnClickListener(this);
