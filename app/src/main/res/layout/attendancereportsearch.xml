@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="320dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="320dp"
     android:layout_height="320dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/lldesign7"
     android:layout_gravity="center"
     android:orientation="vertical">
+<!--    android:background="@drawable/lldesign8"-->
     <LinearLayout
         android:layout_width="320dp"
         android:layout_height="50dp"
-        android:background="@drawable/lldesign8"
+        android:background="@color/maincolor"
         android:gravity="center"
         android:orientation="horizontal"
         android:layout_marginLeft="1dp"
@@ -40,6 +42,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:src="@drawable/cancelicon"
+                app:tint="@color/white"
                 android:id="@+id/imgCancel"/>
         </LinearLayout>
 
