@@ -75,6 +75,7 @@ import java.util.Locale;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.Retrofit.RetrofitClient;
+import io.cordova.myapp00d753.activity.AttendanceReportActivity;
 import io.cordova.myapp00d753.activity.metso.MetsoAttendanceReportActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.LocationSpinnerAdapter;
 import io.cordova.myapp00d753.activity.metso.adapter.ShiftSpinnerAdapter;
@@ -83,6 +84,7 @@ import io.cordova.myapp00d753.activity.metso.model.MetsoLocationModel;
 import io.cordova.myapp00d753.activity.metso.model.MetsoShiftModel;
 import io.cordova.myapp00d753.activity.metso.model.ShiftSpinnerModel;
 import io.cordova.myapp00d753.utility.AppData;
+import io.cordova.myapp00d753.utility.ClientID;
 import io.cordova.myapp00d753.utility.GPSTracker;
 import io.cordova.myapp00d753.utility.Pref;
 import retrofit2.Call;
@@ -477,7 +479,12 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
             public void onClick(View view) {
                 alerDialog1.dismiss();
                 //Intent intent = new Intent(MetsoAttendanceActivity.this, AttendanceReportActivity.class);
-                Intent intent = new Intent(ProtectorGambleAttendanceActivity.this, MetsoAttendanceReportActivity.class);
+                Intent intent;
+                if(pref.getEmpClintId().equals(AppData.PROTACTORGAMBLEID)){
+                    intent = new Intent(ProtectorGambleAttendanceActivity.this, MetsoAttendanceReportActivity.class);
+                } else {
+                    intent = new Intent(ProtectorGambleAttendanceActivity.this, AttendanceReportActivity.class);
+                }
                 startActivity(intent);
                 finish();
             }
