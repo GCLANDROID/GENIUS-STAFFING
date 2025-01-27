@@ -69,6 +69,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.SKF.HolidayViewActivity;
 import io.cordova.myapp00d753.activity.SKF.SKF_AttendanceRegularizationActivity;
 import io.cordova.myapp00d753.activity.bosch.BoschAttendanceActivity;
 import io.cordova.myapp00d753.activity.bosch.BoschAttendanceReportActivity;
@@ -115,7 +116,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     ArrayList<String> dateList = new ArrayList<>();
 
     TextView tvPresent, tvDetails, tvOK;
-    LinearLayout lnStatus, llAdjustment,llHoliday;
+    LinearLayout lnStatus, llAdjustment,llHoliday,llHolidayView;
     int date;
     GPSTracker gps;
     int leaveFlag;
@@ -176,6 +177,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         llAttenRegularize = (LinearLayout) findViewById(R.id.llAttenRegularize);
         llWeekly = (LinearLayout) findViewById(R.id.llWeekly);
         llHoliday = (LinearLayout) findViewById(R.id.llHoliday);
+        llHolidayView = (LinearLayout) findViewById(R.id.llHolidayView);
         tvCancel = (TextView) findViewById(R.id.tvCancel);
         llBottom = (LinearLayout) findViewById(R.id.llBottom);
         if (pref.getEmpClintId().equals("AEMCLI0910000315")) {
@@ -187,7 +189,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         if (pref.getOnLeave().equals("1")) {
             llWeekly.setVisibility(View.VISIBLE);
         } else {
-            llWeekly.setVisibility(View.VISIBLE);
+            llWeekly.setVisibility(View.GONE);
         }
 
         if (pref.getEmpClintId().equals("AEMCLI1110000502")){
@@ -200,8 +202,16 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             llBackAttendance.setVisibility(View.VISIBLE);
             llAttenRegularize.setVisibility(View.VISIBLE);
         } else {
+            /*llBackAttendance.setVisibility(View.GONE);
+            llAttenRegularize.setVisibility(View.GONE);*/
             llBackAttendance.setVisibility(View.GONE);
             llAttenRegularize.setVisibility(View.GONE);
+        }
+
+        if (pref.getEmpClintId().equals(ClientID.SKY_ROOT)){
+            llHolidayView.setVisibility(View.VISIBLE);
+        } else {
+            llHolidayView.setVisibility(View.GONE);
         }
 
         llAttandanceManage.setOnClickListener(this);
@@ -211,6 +221,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         llBackAttendance.setOnClickListener(this);
         llAttenRegularize.setOnClickListener(this);
         llAdjustment.setOnClickListener(this);
+        llHolidayView.setOnClickListener(this);
         tvCancel.setOnClickListener(this);
 
         y = Calendar.getInstance().get(Calendar.YEAR);
@@ -425,7 +436,11 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
 
         tvOK.setOnClickListener(this);
         imgHome.setOnClickListener(this);
-        if (pref.getEmpClintId().equals("AEMCLI0910000343") || pref.getEmpClintId().equals("AEMCLI0910000315") || pref.getEmpClintId().equals("AEMCLI2110001671") || pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID)) {
+        if (pref.getEmpClintId().equals("AEMCLI0910000343") ||
+                pref.getEmpClintId().equals("AEMCLI0910000315") ||
+                pref.getEmpClintId().equals("AEMCLI2110001671") ||
+                pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID) ||
+                pref.getEmpClintId().equals(ClientID.SKY_ROOT)) {
             llAdjustment.setVisibility(View.VISIBLE);
         } else {
             llAdjustment.setVisibility(View.GONE);
@@ -889,6 +904,10 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             lnStatus.setVisibility(View.GONE);
         } else if (view == llAdjustment) {
             Intent intent = new Intent(AttenDanceDashboardActivity.this, AdjustmentActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } else if (view == llHolidayView) {
+            Intent intent = new Intent(AttenDanceDashboardActivity.this, HolidayViewActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else if (view == imgHome) {
