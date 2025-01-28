@@ -74,6 +74,8 @@ public class AppData {
     public static String SAVE_ATTENDANCE_REGULARIZATION_NEW= newv2url+"Attendance/SaveAttendanceRegularizationNew";
     public static String SAVE_ATTENDANCE_REGULARIZATION_NEW_LOCAL_IP = "http://171.16.2.105/GSPPI_API_V2/api/Attendance/SaveAttendanceRegularizationNew";
     public static String SKF_DAY_TYPE_LIST = newv2url+"SKF/GetWorkingDayTypeSKF";
+    public static String SKF_GET_HOLIDAY_LIST = newv2url+"SKF/GetHolidayList";
+
     //public static String SKF_DAY_TYPE_LIST= "http://171.16.2.105/GSPPI_API_V2/api/SKF/GetWorkingDayTypeSKF";
     public static String SaveExperienceDetails = newv2url+"Document/SaveExperienceDetails";
     public static String PROTACTORGAMBLEID = "AEMCLI1310000776";

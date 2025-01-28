@@ -140,9 +140,16 @@ public class LeaveAdjustmentFragment extends Fragment {
             modelist.add("Second Half");
         }
 
-        modelModulelist.add(new SpineerItemModel("Full Day", "2"));
-        modelModulelist.add(new SpineerItemModel("First Half", "1"));
-        modelModulelist.add(new SpineerItemModel("Second Half", "3"));
+        if (pref.getEmpClintId().equals(ClientID.SKY_ROOT)){
+            modelModulelist.add(new SpineerItemModel("Full Day", "2"));
+            modelModulelist.add(new SpineerItemModel("First Half", "4"));
+            modelModulelist.add(new SpineerItemModel("Second Half", "5"));
+        } else {
+            modelModulelist.add(new SpineerItemModel("Full Day", "2"));
+            modelModulelist.add(new SpineerItemModel("First Half", "1"));
+            modelModulelist.add(new SpineerItemModel("Second Half", "3"));
+        }
+
 
         finyearList.add("2024-2025");
         finyearList.add("2025-2026");
@@ -437,7 +444,6 @@ public class LeaveAdjustmentFragment extends Fragment {
                         llEndTime.setVisibility(View.GONE);
                         tvStartDateName.setText(Html.fromHtml("Referal Date " + next));
                     }
-
                 }
             }
 
@@ -482,7 +488,6 @@ public class LeaveAdjustmentFragment extends Fragment {
                 }, hour, minute, false);//Yes 24 hour time
                 mTimePicker.setTitle("Select Time");
                 mTimePicker.show();
-
             }
         });
         llOutTime.setOnClickListener(new View.OnClickListener() {
@@ -508,6 +513,7 @@ public class LeaveAdjustmentFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 mode = modelModulelist.get(i).getItemId();
+                Log.e(TAG, "onItemSelected: "+mode);
             }
 
             @Override
@@ -525,8 +531,10 @@ public class LeaveAdjustmentFragment extends Fragment {
                 if (applicationComponent.equalsIgnoreCase("On Duty")) {
                     postDataOD(etReason.getText().toString());
                 } else if (applicationComponent.equalsIgnoreCase("Comp Off")) {
-                    if (pref.getEmpClintId().equalsIgnoreCase(ClientID.SKF_CLIENT_ID)){
+                    if (pref.getEmpClintId().equalsIgnoreCase(ClientID.SKF_CLIENT_ID)) {
                         //TODO: Data save will be called
+                        postDataCompOff(etReason.getText().toString(), "0");
+                    } else if (pref.getEmpClintId().equalsIgnoreCase(ClientID.SKY_ROOT)){
                         postDataCompOff(etReason.getText().toString(), "0");
                     } else {
                         approverpopup(etReason.getText().toString());
@@ -838,6 +846,27 @@ public class LeaveAdjustmentFragment extends Fragment {
         pd.setCancelable(false);
         pd.show();
 
+        Log.e(TAG, "postDataCompOff: \nCompanyID:"+pref.getEmpClintId()
+                +"\nEmployeeID:"+pref.getEmpId()
+                +"\nYearId:20"
+                +"\nMonthId:"+month
+                +"\nGatePassDate:"+effectiveDate + " 00:00:00.000"
+                +"\nEndDate:"+effectiveDate + " 00:00:00.000"
+                +"\nRemarks:"+remarks
+                +"\nStartTime:"+effectiveDate + " 00:00:00.000"
+                +"\nEndTime:"+effectiveDate + " 00:00:00.000"
+                +"\nGatePassType:"+applicationComponentID
+                +"\nclinetname:"
+                +"\nclinetphn:"
+                +"\nCreatedBy:"+pref.getEmpId()
+                +"\nAID:0"
+                +"\nOddaytype:"+mode
+                +"\nOtMin:"+0
+                +"\nApproverid:"+approverID
+                +"\nrefdate:"+startDate + " 00:00:00.000"
+                +"\nLtMin:0"
+                +"\nSecurityCode:"+pref.getSecurityCode());
+
         AndroidNetworking.upload(AppData.url + "Post_EmployeeOTandODAdjustment")
                 .addMultipartParameter("CompanyID", pref.getEmpClintId())
                 .addMultipartParameter("EmployeeID", pref.getEmpId())
@@ -873,7 +902,7 @@ public class LeaveAdjustmentFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         pd.dismiss();
-
+                        Log.e(TAG, "postDataCompOff: "+response);
                         JSONObject job = response;
                         boolean responseStatus = job.optBoolean("responseStatus");
                         String responseText=job.optString("responseText");
