@@ -67,32 +67,38 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <LinearLayout
                 android:id="@+id/lnStartDate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:gravity="center">
+
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:src="@drawable/calendar"
-                    app:tint="@color/maincolor"/>
+                    app:tint="@color/maincolor" />
+
                 <TextView
-                    android:textAlignment="center"
+                    android:id="@+id/tvStartDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:textColor="@color/textcolor"
                     android:layout_gravity="center"
                     android:layout_marginLeft="5dp"
-                    android:id="@+id/tvStartDate"
-                    android:text="Start Date"/>
+                    android:text="Start Date"
+                    android:textAlignment="center"
+                    android:textColor="@color/textcolor"
+                    android:textSize="12sp" />
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/lnEndDate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:gravity="center">
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"

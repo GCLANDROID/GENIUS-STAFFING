@@ -2077,6 +2077,10 @@ public class ApplicationFragment extends Fragment {
 
 
     private void leaveSave() {
+        final ProgressDialog pd = new ProgressDialog(getContext());
+        pd.setMessage("Loading...");
+        pd.setCancelable(true);
+        pd.show();
         Log.e(TAG, "leaveSave: \nCompanyID:"+pref.getEmpClintId()
                 +"\nEmployeeId:"+applicantId
                 +"\nStartDate:"+startDate
@@ -2113,7 +2117,7 @@ public class ApplicationFragment extends Fragment {
                 .setUploadProgressListener(new UploadProgressListener() {
                     @Override
                     public void onProgress(long bytesUploaded, long totalBytes) {
-                        pg.show();
+                        //pg.show();
 
                     }
                 })
@@ -2121,7 +2125,7 @@ public class ApplicationFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
 
-                        pg.dismiss();
+                        pd.dismiss();
                         JSONObject job = response;
                         boolean responseStatus = job.optBoolean("responseStatus");
                         if (responseStatus) {
@@ -2136,7 +2140,7 @@ public class ApplicationFragment extends Fragment {
                     @Override
                     public void onError(ANError error) {
                         // handle error
-                        pg.dismiss();
+                        pd.dismiss();
                         Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
                     }
                 });
