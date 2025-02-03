@@ -32,6 +32,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.SKF.HolidayViewActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.ConsentActivity"
             android:exported="false">
             <meta-data
