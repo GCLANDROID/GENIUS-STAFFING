@@ -98,7 +98,7 @@ public class TempExperinceActivity extends AppCompatActivity {
         initView();
 
 
-        /*JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("AEMConsultantID", pref.getEmpConId());
             jsonObject.put("AEMClientID", pref.getEmpClintId());
@@ -109,7 +109,7 @@ public class TempExperinceActivity extends AppCompatActivity {
             checkFresherOrExperienceByOfficeDetails(jsonObject);
         } catch (JSONException e) {
             e.printStackTrace();
-        }*/
+        }
     }
 
     private void initView(){
