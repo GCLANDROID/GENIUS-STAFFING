@@ -158,7 +158,8 @@
                             android:paddingLeft="5dp"
                             android:textAppearance="?android:textAppearanceSmall"
                             android:textColor="@color/colorPrimary"
-                            android:digits="1234567890"/>
+                            android:digits="1234567890"
+                            android:maxLength="17"/>
                     </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
