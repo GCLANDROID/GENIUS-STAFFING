@@ -7,6 +7,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -49,6 +50,7 @@ import java.util.Calendar;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.Retrofit.RetrofitClient;
 import io.cordova.myapp00d753.activity.BacklogAttendanceActivity;
+import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.activity.HolidayMarkingActivity;
 import io.cordova.myapp00d753.activity.SKF.adapter.SKF_BacklogAdapter;
 import io.cordova.myapp00d753.activity.metso.MetsoAttendanceRegularizationActivity;
@@ -69,7 +71,7 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
     private static final String TAG = "SKF_AttendanceRegulariz";
     RecyclerView rvItem;
     LinearLayout btnSubmit;
-    ImageView imgBack,imgLike;
+    ImageView imgBack,imgLike,imgHome;
     LinearLayout lnStartDate,lnEndDate,llMain,llLoader,llNodata,llWarning;
     TextView tvStartDate,tvEndDate;
     Button btnShow;
@@ -112,6 +114,7 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
         llNodata = findViewById(R.id.llNodata);
         llWarning = findViewById(R.id.llWarning);
         llTick = findViewById(R.id.llTick);
+        imgHome = findViewById(R.id.imgHome);
         llRegularisationCount = findViewById(R.id.llRegularisationCount);
         imgLike = findViewById(R.id.imgLike);
         txtRegularisationCount = findViewById(R.id.txtRegularisationCount);
@@ -121,6 +124,7 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
         lnEndDate.setOnClickListener(this);
         btnShow.setOnClickListener(this);
         llTick.setOnClickListener(this);
+        imgHome.setOnClickListener(this);
         rvItem.setLayoutManager(new LinearLayoutManager(SKF_AttendanceRegularizationActivity.this));
         pref = new Pref(SKF_AttendanceRegularizationActivity.this);
         progressDialog = new ProgressDialog(SKF_AttendanceRegularizationActivity.this);
@@ -189,6 +193,11 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
                 break;
             case R.id.llTick:
                 selectAllOperation();
+                break;
+            case R.id.imgHome:
+                Intent intent = new Intent(SKF_AttendanceRegularizationActivity.this, EmployeeDashBoardActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
                 break;
         }
     }
