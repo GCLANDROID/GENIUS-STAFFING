@@ -181,6 +181,7 @@ public class TempProfileActivity extends AppCompatActivity {
     String esicDOB = "", uanDOB = "", esicGender = "", esicRltionshp = "", uanRltionshp = "", residingIP = "", pfPercantage = "";
     ProgressDialog pd;
     String namevalue, dobvalue, gendervalue="", careof, state, pin, street, locality, house, postoffice, subDistrict, vtc, district, landmark;
+    String esic_nominee_gender="";
     Dialog searchHolidayDialog;
     LinearLayout llPermanentCity,llQualification,llInsideMain,llPersonalDetails,llBloodGrp,
             llGender,llRelationship,llPermanentState,llPresentState,llPresentCity,llContactDetails,llMartialStatus;
@@ -291,7 +292,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
         llMain = (LinearLayout) findViewById(R.id.llMain);
 
-       /* JSONObject obj=new JSONObject();
+        JSONObject obj=new JSONObject();
         try {
             obj.put("AEMConsultantID", pref.getEmpConId());
             obj.put("AEMClientID",pref.getEmpClintId());
@@ -299,13 +300,14 @@ public class TempProfileActivity extends AppCompatActivity {
             obj.put("AEMEmployeeID",pref.getMasterId());
             obj.put("SecurityCode",pref.getSecurityCode());
             obj.put("WorkingStatus","1");
-            obj.put("CurrentPage","0");
+            //obj.put("CurrentPage","0");
+            obj.put("Operation","0");
             profileFunction(obj);
         } catch (JSONException e) {
             e.printStackTrace();
-        }*/
+        }
 
-        profileFunction();
+        //profileFunction();
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
@@ -479,7 +481,8 @@ public class TempProfileActivity extends AppCompatActivity {
         Log.e(TAG, "profileFunction: " + jsonObject);
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
-        AndroidNetworking.post(AppData.GCL_KYC)
+        //AndroidNetworking.post(AppData.GCL_KYC)
+        AndroidNetworking.post(AppData.KYC_GET_DETAILS)
                 .addJSONObjectBody(jsonObject)
                 .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
@@ -494,21 +497,22 @@ public class TempProfileActivity extends AppCompatActivity {
                             String Response_Code = job1.optString("Response_Code");
                             if (Response_Code.equals("101")) {
                                 String Response_Data = job1.optString("Response_Data");
-
-                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                JSONObject Response_Data_obj = new JSONObject(Response_Data);
+                                JSONArray jsonArray = Response_Data_obj.optJSONArray("OfficeDetails");
                                 for (int i = 0; i < jsonArray.length(); i++) {
+                                    Log.e(TAG, "onResponse: "+i);
                                     JSONObject obj = jsonArray.getJSONObject(i);
                                     AEMEmployeeID = obj.optString("AEMEmployeeID");
                                     tvEmplId.setText(AEMEmployeeID);
                                     pref.saveEmpId(AEMEmployeeID);
 
                                     Code = obj.optString("Code");
-                                    tvEmpCode.setText(Code);
+                                    tvEmpCode.setText((Code.equals("null"))?"":Code);
 
                                     Name = obj.optString("Name");
                                     //  tvEmpName.setText(Name);
 
-                                    DateOfJoining = obj.optString("DOJ");
+                                    DateOfJoining = obj.optString("DateOfJoining");
                                     tvDOJ.setText(DateOfJoining);
 
                                     Department = obj.optString("Department");
@@ -697,6 +701,15 @@ public class TempProfileActivity extends AppCompatActivity {
                                     pref.saveBankName(BankName);
                                     String AccountNumber = obj.optString("AccountNumber");
                                     pref.saveAccNumber(AccountNumber);
+                                    String ESINominee = obj.optString("NomineeName");
+                                    binding.etESINominee.setText(ESINominee);
+                                    esicDOB = obj.optString("NomineeDOB");
+                                    binding.tvESICDOB.setText(esicDOB);
+                                    esic_nominee_gender = obj.optString("NomineeGender");
+                                    esicRltionshp = obj.optString("Relation");
+                                    residingIP = obj.optString("ResidingIP");
+                                    String RefContact = obj.optString("RefContact");
+                                    binding.etRefNumber.setText(RefContact);
                                 }
                                 llMain.setVisibility(View.GONE);
                                 llLoader.setVisibility(View.VISIBLE);
@@ -1167,16 +1180,22 @@ public class TempProfileActivity extends AppCompatActivity {
                                 if (!gendervalue.isEmpty()){
                                     if (gendervalue.equalsIgnoreCase("M")) {
                                         spGender.setSelection(1);
-                                        spESICGender.setSelection(1);
+                                        //spESICGender.setSelection(1);
                                     } else {
                                         spGender.setSelection(2);
-                                        spESICGender.setSelection(2);
+                                       // spESICGender.setSelection(2);
                                     }
                                     spGender.setEnabled(false);
-                                    binding.spESICGender.setEnabled(false);
+                                    //binding.spESICGender.setEnabled(false);
                                 } else {
                                     spGender.setSelection(0);
-                                    spESICGender.setSelection(0);
+                                    //spESICGender.setSelection(0);
+                                }
+
+                                if (!esic_nominee_gender.isEmpty()){
+                                    int index =  gender.indexOf(esic_nominee_gender);
+                                    Log.e(TAG, "index: "+index);
+                                    binding.spESICGender.setSelection(index);
                                 }
 
                                 setRealation();
@@ -1242,7 +1261,10 @@ public class TempProfileActivity extends AppCompatActivity {
         binding.spResiding.setAdapter(residingspinnerArrayAdapter);
         setNomineeRelation();
 
-
+        if (!residingIP.isEmpty()){
+            int indexResiding = residing.indexOf(residingIP);
+            binding.spResiding.setSelection(indexResiding);
+        }
     }
 
 
@@ -1285,6 +1307,10 @@ public class TempProfileActivity extends AppCompatActivity {
                                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 binding.spESICRealation.setAdapter(spinnerArrayAdapter);
 
+                                if (!esicRltionshp.isEmpty()){
+                                    int index = realation.indexOf(esicRltionshp);
+                                    binding.spESICRealation.setSelection(index);
+                                }
 
                                 setBlood();
 
@@ -1475,6 +1501,7 @@ public class TempProfileActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 presentstate = mainPerState.get(position).getDocID();
+                Log.e(TAG, "onItemSelected: "+presentstate);
                 llPresentState.setBackgroundResource(R.drawable.lldesign9);
             }
 
@@ -1536,7 +1563,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
                 sexGender = mainGender.get(position).getDocID();
                 Log.d("sexgender", sexGender);
-                spESICGender.setSelection(position);
+                //spESICGender.setSelection(position);
                 llGender.setBackgroundResource(R.drawable.lldesign9);
             }
 
@@ -1553,7 +1580,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
                 esicGender = mainGender.get(position).getDocID();
                 Log.d("sexgender", sexGender);
-                spGender.setSelection(position);
+                //spGender.setSelection(position);
             }
 
             @Override
@@ -1927,10 +1954,9 @@ public class TempProfileActivity extends AppCompatActivity {
                                                                                 personalOBJ.put("MaritalStatus", martialstatus);
                                                                                 personalOBJ.put("EmployeeName", tvEmpName.getText().toString());
                                                                                 mainobject.put("PersonalDetails", personalOBJ);
-
+                                                                                Log.e(TAG, "onClick: "+mainobject);
                                                                                 uploadOfficalDetails(mainobject);
-                                                                            } catch (
-                                                                                    JSONException e) {
+                                                                            } catch (JSONException e) {
                                                                                 e.printStackTrace();
                                                                             }
                                                                         } else {
@@ -2444,7 +2470,7 @@ public class TempProfileActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
     }
 
-    private void setprestate() {
+        private void setprestate() {
         String surl = AppData.url + "gcl_CommonDDL?ddltype=3&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
         Log.d("deptname", surl);
         llLoader.setVisibility(View.VISIBLE);
@@ -3094,6 +3120,7 @@ public class TempProfileActivity extends AppCompatActivity {
             txtPermanentCity.setText(selectedItem);
             permanentcity = cityID;
         }
+        Log.e(TAG, "cityID: "+cityID );
         searchHolidayDialog.dismiss();
     }
 
@@ -3104,5 +3131,29 @@ public class TempProfileActivity extends AppCompatActivity {
         int middlePosition = scrollHeight / 2;
         Log.e(TAG, "scrollHeight: "+scrollHeight+" scrollViewHeight: "+scrollViewHeight+" middlePosition: "+middlePosition);
         return middlePosition;
+    }
+
+    void get_OLD_ESIC_Details(JSONObject jsonObject){
+        AndroidNetworking.post(AppData.KYC_GET_DETAILS)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "OLD_ESIC_DETAILS: "+response.toString(4));
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "OLD_ESIC_DETAILS_error: "+anError.getErrorBody());
+                    }
+                });
     }
 }

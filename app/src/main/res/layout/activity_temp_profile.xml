@@ -1112,12 +1112,12 @@
                                     android:layout_marginLeft="10dp"
                                     android:background="@drawable/lldesign9"
                                     android:digits="1234567890"
+                                    android:hint="--"
                                     android:inputType="number"
                                     android:maxLength="10"
                                     android:paddingLeft="10dp"
-                                    android:hint="--"
-                                    android:textSize="12sp"
-                                    android:textColor="@android:color/black" />
+                                    android:textColor="@android:color/black"
+                                    android:textSize="12sp" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -1781,7 +1781,6 @@
                             android:background="@drawable/lldesign9">
 
                             <Spinner
-
                                 android:layout_width="match_parent"
                                 android:layout_height="30dp"
                                 android:id="@+id/spResiding"></Spinner>

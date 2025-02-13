@@ -663,7 +663,7 @@ public class TempDashBoardActivity extends AppCompatActivity {
                         int Response_Code = job1.optInt("Response_Code");
                         if (Response_Code == 101 || Response_Code==100) {
                             consnetdialog.dismiss();
-
+                            consetfile.delete();
                             Toast.makeText(TempDashBoardActivity.this,"Consent letter has been saved successfully",Toast.LENGTH_LONG).show();
 
 
