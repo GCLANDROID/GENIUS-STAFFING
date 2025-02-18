@@ -4,6 +4,7 @@ public class AppData {
     public static String url="https://gsppi.geniusconsultant.com/GeniusiOSApi/api/";
     public static String localurl="http://171.16.2.67/GSPPI_API_V2/api/";
     public static String newv2url="https://gsppi.geniusconsultant.com/GSPPI_API_V2/api/";
+    //public static String newv2url="http://171.16.2.105/GSPPI_API_V2/api/";
 
     //http://gsppi.geniusconsultant.com/
 
@@ -84,5 +85,7 @@ public class AppData {
 
     //KYC
     public static String KYC_GET_DETAILS = newv2url+"Profile/GetTempEmpKYCDetails";
+    public static String COMMON_DDL = newv2url+"General/CommonDDL";
+    //public static String IMAGE_PATH_URL = "https://gsppi.geniusconsultant.com/GeniusiOSApi/DigitalDocument/";
     public static String IMAGE_PATH_URL = "https://gsppi.geniusconsultant.com/GeniusiOSApi/DigitalDocument/";
 }

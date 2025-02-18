@@ -7,7 +7,6 @@ import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -120,7 +119,7 @@ public class TempProfileActivity extends AppCompatActivity {
     String BloodGroup;
     EditText etESI;
     TextView tvCity,txtPresentCity,txtPermanentCity;
-    String PresentCity="", AEMEmployeeID, Code, Name, DateOfJoining, Department, Designation, Location, DateOfBirth, GuardianName, PermanentAddress, Mobile, EmailID, Phone, AEMClientName;
+    String PresentCity="", AEMEmployeeID, Code, Name, DateOfJoining, Department, Designation, Location, DateOfBirth, GuardianName, PermanentAddress, Mobile, EmailID, Phone,EmergencyContact, AEMClientName;
     private static final String SERVER_PATH = AppData.url;
     private AttendanceService uploadService;
     ProgressDialog progressDialog;
@@ -595,11 +594,18 @@ public class TempProfileActivity extends AppCompatActivity {
                                         etEmailId.setText("");
                                     }
 
-                                    Phone = obj.optString("Phone");
-                                    if (!Phone.equals("")) {
-                                        etPhnNumber.setText(Phone);
+                                    EmergencyContact = obj.optString("EmergencyContactNo");
+                                    if (!EmergencyContact.equals("")) {
+                                        etPhnNumber.setText(EmergencyContact);
                                     } else {
                                         etPhnNumber.setText("");
+                                    }
+
+                                    Phone = obj.optString("Phone");
+                                    if (!Phone.equals("")) {
+                                        binding.etWhatssappNumber.setText(Phone);
+                                    } else {
+                                        binding.etWhatssappNumber.setText("");
                                     }
                                     AEMClientName = obj.optString("AEMClientName");
                                     tvComName.setText(AEMClientName);
@@ -610,8 +616,9 @@ public class TempProfileActivity extends AppCompatActivity {
                                     } else {
                                         etESI.setText("");
                                     }
+                                    pref.saveSESI(ESINumber);
                                     String UanNo = obj.optString("UANNumber");
-
+                                    pref.saveSUAN(UanNo);
                                     PresentCity = obj.optString("PresentCity");
 
                                     String PresentPincode = obj.optString("PresentPincode");
@@ -652,6 +659,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                     PermanentState = obj.optString("PermanentState");
                                     PermanentCity = obj.optString("PermanentCity");
                                     PresentState = obj.optString("PresentState");
+
 
                                     String PAN = obj.optString("PAN");
                                     Log.d("pan", PAN);
@@ -710,10 +718,21 @@ public class TempProfileActivity extends AppCompatActivity {
                                     residingIP = obj.optString("ResidingIP");
                                     String RefContact = obj.optString("RefContact");
                                     binding.etRefNumber.setText(RefContact);
+
                                 }
                                 llMain.setVisibility(View.GONE);
                                 llLoader.setVisibility(View.VISIBLE);
-                                setQualification();
+                                //setQualification();
+
+                                JSONObject obj=new JSONObject();
+                                try {
+                                    obj.put("ddltype", 6);
+                                    //obj.put("id1","");
+                                    obj.put("SecurityCode",pref.getSecurityCode());
+                                    setQualification(obj);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             } else {
 
                             }
@@ -994,6 +1013,71 @@ public class TempProfileActivity extends AppCompatActivity {
 
     }
 
+    private void setQualification(JSONObject jsonObject) {
+        llLoader.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.GONE);
+        AndroidNetworking.post(AppData.COMMON_DDL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "Qualification_DropDown: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.optJSONObject(i);
+                                    qualivalue = obj.optString("value");
+                                    qualiid = obj.optString("id");
+                                    qualification.add(qualivalue);
+                                    MainDocModule mainDocModule = new MainDocModule(qualiid, qualivalue);
+                                    mainQualification.add(mainDocModule);
+                                }
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                        (TempProfileActivity.this, android.R.layout.simple_spinner_item,
+                                                qualification); //selected item will look like a spinner set from XML
+                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                spQualification.setAdapter(spinnerArrayAdapter);
+                                if (!Qualification.isEmpty()){
+                                    int index = qualification.indexOf(Qualification);
+                                    Log.d("indexr", String.valueOf(index));
+                                    spQualification.setSelection(index);
+                                }
+
+                                //setMartial();
+
+                                JSONObject obj=new JSONObject();
+                                try {
+                                    obj.put("ddltype", 8);
+                                    obj.put("SecurityCode",pref.getSecurityCode());
+                                    setMarital(obj);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "Qualification_DropDown_error: "+anError.getErrorBody());
+                        llLoader.setVisibility(View.VISIBLE);
+                        llMain.setVisibility(View.GONE);
+                        errflag = 2;
+                        showInternetDialog();
+                    }
+                });
+    }
+
     private void setQualification() {
         String surl = AppData.url + "gcl_CommonDDL?ddltype=6&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
         llLoader.setVisibility(View.VISIBLE);
@@ -1066,6 +1150,67 @@ public class TempProfileActivity extends AppCompatActivity {
 
     }
 
+    private void setMarital(JSONObject jsonObject) {
+        llLoader.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.GONE);
+        AndroidNetworking.post(AppData.COMMON_DDL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "Marital_Status_DropDown: "+response.toString(4) );
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    qualivalue = obj.optString("value");
+                                    qualiid = obj.optString("id");
+                                    martial.add(qualivalue);
+                                    MainDocModule mainDocModule = new MainDocModule(qualiid, qualivalue);
+                                    mainMartial.add(mainDocModule);
+                                }
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                        (TempProfileActivity.this, android.R.layout.simple_spinner_item,
+                                                martial); //selected item will look like a spinner set from XML
+                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                spMartial.setAdapter(spinnerArrayAdapter);
+                                int index = martial.indexOf(MaritalStatus);
+                                Log.d("indexr", String.valueOf(index));
+                                spMartial.setSelection(index);
+                                //setGender();
+
+                                JSONObject obj=new JSONObject();
+                                try {
+                                    obj.put("ddltype", 10);
+                                    obj.put("SecurityCode",pref.getSecurityCode());
+                                    setGender(obj);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "Marital_Status_DropDown_error: "+anError.getErrorBody());
+                        llLoader.setVisibility(View.VISIBLE);
+                        llMain.setVisibility(View.GONE);
+                        errflag = 3;
+                    }
+                });
+    }
+
     private void setMartial() {
         String surl = AppData.url + "gcl_CommonDDL?ddltype=8&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
         llLoader.setVisibility(View.VISIBLE);
@@ -1135,6 +1280,84 @@ public class TempProfileActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
 
 
+    }
+
+    private void setGender(JSONObject jsonObject) {
+        llLoader.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.GONE);
+        AndroidNetworking.post(AppData.COMMON_DDL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "GENDER_DROPDOWN: "+response.toString(4));
+                            llLoader.setVisibility(View.VISIBLE);
+                            llMain.setVisibility(View.GONE);
+                            gender.clear();
+                            mainGender.clear();
+                            gender.add("Please select");
+                            mainGender.add(new MainDocModule("",""));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String value = obj.optString("value");
+                                    String id = obj.optString("id");
+                                    gender.add(value);
+                                    MainDocModule mainDocModule = new MainDocModule(id, value);
+                                    mainGender.add(mainDocModule);
+
+                                }
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                        (TempProfileActivity.this, android.R.layout.simple_spinner_item,
+                                                gender); //selected item will look like a spinner set from XML
+                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                spGender.setAdapter(spinnerArrayAdapter);
+                                binding.spESICGender.setAdapter(spinnerArrayAdapter);
+
+                                if (!gendervalue.isEmpty()){
+                                    if (gendervalue.equalsIgnoreCase("M")) {
+                                        spGender.setSelection(1);
+                                    } else {
+                                        spGender.setSelection(2);
+                                    }
+                                    spGender.setEnabled(false);
+                                } else {
+                                    spGender.setSelection(0);
+                                }
+
+                                if (!esic_nominee_gender.isEmpty()){
+                                    int index =  gender.indexOf(esic_nominee_gender);
+                                    Log.e(TAG, "index: "+index);
+                                    binding.spESICGender.setSelection(index);
+                                }
+
+                                setRealation();
+
+
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "GENDER_DROPDOWN_error: "+anError.getErrorBody());
+                        llLoader.setVisibility(View.VISIBLE);
+                        llMain.setVisibility(View.GONE);
+                        errflag = 4;
+                        showInternetDialog();
+                    }
+                });
     }
 
     private void setGender() {
@@ -1259,7 +1482,16 @@ public class TempProfileActivity extends AppCompatActivity {
                         residing); //selected item will look like a spinner set from XML
         residingspinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spResiding.setAdapter(residingspinnerArrayAdapter);
-        setNomineeRelation();
+        //setNomineeRelation();
+
+        JSONObject obj=new JSONObject();
+        try {
+            obj.put("ddltype", 7);
+            obj.put("SecurityCode",pref.getSecurityCode());
+            setNomineeRelation(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         if (!residingIP.isEmpty()){
             int indexResiding = residing.indexOf(residingIP);
@@ -1267,6 +1499,78 @@ public class TempProfileActivity extends AppCompatActivity {
         }
     }
 
+    private void setNomineeRelation(JSONObject jsonObject) {
+        llLoader.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.GONE);
+        AndroidNetworking.post(AppData.COMMON_DDL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "Nominee_Relation_Dropdown: "+response.toString(4));
+                            llLoader.setVisibility(View.VISIBLE);
+                            llMain.setVisibility(View.GONE);
+                            realation.clear();
+                            mainRealation.clear();
+                            realation.add("Please Select");
+                            mainRealation.add(new MainDocModule("0", ""));
+
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String value = obj.optString("value");
+                                    String id = obj.optString("id");
+                                    realation.add(value);
+                                    MainDocModule mainDocModule = new MainDocModule(id, value);
+                                    mainRealation.add(mainDocModule);
+
+                                }
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                        (TempProfileActivity.this, android.R.layout.simple_spinner_item,
+                                                realation); //selected item will look like a spinner set from XML
+                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                binding.spESICRealation.setAdapter(spinnerArrayAdapter);
+
+                                if (!esicRltionshp.isEmpty()){
+                                    int index = realation.indexOf(esicRltionshp);
+                                    binding.spESICRealation.setSelection(index);
+                                }
+
+                                //setBlood();
+
+                                JSONObject obj=new JSONObject();
+                                try {
+                                    obj.put("ddltype", 9);
+                                    obj.put("SecurityCode",pref.getSecurityCode());
+                                    setBlood(obj);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "Nominee_Relation_Dropdown_error: "+anError.getErrorBody());
+                        llLoader.setVisibility(View.VISIBLE);
+                        llMain.setVisibility(View.GONE);
+                        errflag = 5;
+                        showInternetDialog();
+                    }
+                });
+    }
 
     private void setNomineeRelation() {
         String surl = AppData.url + "gcl_CommonDDL?ddltype=7&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
@@ -1344,6 +1648,82 @@ public class TempProfileActivity extends AppCompatActivity {
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
     }
+
+    private void setBlood(JSONObject jsonObject) {
+        llLoader.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.GONE);
+        AndroidNetworking.post(AppData.COMMON_DDL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "BLOOD_DROPDOWN: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String value = obj.optString("value");
+                                    String id = obj.optString("id");
+                                    blood.add(value);
+                                    MainDocModule mainDocModule = new MainDocModule(id, value);
+                                    mainBlood.add(mainDocModule);
+
+                                }
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                        (TempProfileActivity.this, android.R.layout.simple_spinner_item,
+                                                blood); //selected item will look like a spinner set from XML
+                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                spBloodGrp.setAdapter(spinnerArrayAdapter);
+                                if (!BloodGroup.isEmpty()){
+                                    int index = blood.indexOf(BloodGroup);
+                                    Log.d("indexr", String.valueOf(index));
+                                    spBloodGrp.setSelection(index);
+                                }
+                                //setPerCity();
+
+                                JSONObject obj=new JSONObject();
+                                try {
+                                    obj.put("ddltype", 3);
+                                    obj.put("SecurityCode",pref.getSecurityCode());
+                                    setPresentState(obj);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                /*JSONObject obj=new JSONObject();
+                                try {
+                                    obj.put("ddltype", 4);
+                                    obj.put("id1",presentstate);;
+                                    obj.put("SecurityCode",pref.getSecurityCode());
+                                    setPerCity(obj);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }*/
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "BLOOD_DROPDOWN_error: "+anError.getErrorBody());
+                        llLoader.setVisibility(View.VISIBLE);
+                        llMain.setVisibility(View.GONE);
+                        errflag = 5;
+                        showInternetDialog();
+                    }
+                });
+    }
+
 
     private void setBlood() {
 
@@ -1489,6 +1869,17 @@ public class TempProfileActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 permanentstate = mainPerState.get(position).getDocID();
                 llPermanentState.setBackgroundResource(R.drawable.lldesign9);
+                if (position > 0){
+                    JSONObject obj=new JSONObject();
+                    try {
+                        obj.put("ddltype", 4);
+                        obj.put("id1",permanentstate);;
+                        obj.put("SecurityCode",pref.getSecurityCode());
+                        setPerCity(obj);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
 
             @Override
@@ -1503,6 +1894,18 @@ public class TempProfileActivity extends AppCompatActivity {
                 presentstate = mainPerState.get(position).getDocID();
                 Log.e(TAG, "onItemSelected: "+presentstate);
                 llPresentState.setBackgroundResource(R.drawable.lldesign9);
+                if (position > 0){
+                    JSONObject obj=new JSONObject();
+                    try {
+                        obj.put("ddltype", 4);
+                        obj.put("id1",presentstate);
+                        obj.put("SecurityCode",pref.getSecurityCode());
+                        serPreCity(obj);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
             }
 
             @Override
@@ -2288,6 +2691,106 @@ public class TempProfileActivity extends AppCompatActivity {
         }
     }
 
+    private void setPerCity(JSONObject jsonObject) {
+        //llLoader.setVisibility(View.VISIBLE);
+        //llMain.setVisibility(View.GONE);
+        ProgressDialog pd=new ProgressDialog(this);
+        pd.setMessage("Loading...");
+        pd.setCancelable(false);
+        pd.show();
+        AndroidNetworking.post(AppData.COMMON_DDL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "PERMANENT_CITY: "+response.toString(4));
+                            //llLoader.setVisibility(View.GONE);
+                            //llMain.setVisibility(View.VISIBLE);
+                            pd.dismiss();
+                            percity.clear();
+                            mainPerCity.clear();
+                            percity.add("Please Select");
+                            mainPerCity.add(new MainDocModule("", ""));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String qualivalue = obj.optString("value");
+                                    String qualiid = obj.optString("id");
+                                    percity.add(qualivalue);
+                                    MainDocModule mainDocModule = new MainDocModule(qualiid, qualivalue);
+                                    mainPerCity.add(mainDocModule);
+                                }
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                        (TempProfileActivity.this, android.R.layout.simple_spinner_item,
+                                                percity); //selected item will look like a spinner set from XML
+                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                spPermanentCity.setAdapter(spinnerArrayAdapter);
+
+                                Log.e(TAG, "permanentcity: "+percity.size());
+
+                                try {
+                                    int index = percity.indexOf(vtc);
+                                    Log.d("indexr", String.valueOf(index));
+                                    permanentcity = mainPerCity.get(index).getDocID();
+                                    txtPermanentCity.setText(percity.get(index));
+                                    //spPermanentCity.setSelection(index);
+                                    if (index == -1) {
+                                        int indexp = percity.indexOf(district);
+                                        //spPermanentCity.setSelection(indexp);
+                                        txtPermanentCity.setText(percity.get(indexp));
+                                        permanentcity = mainPerCity.get(indexp).getDocID();
+                                    }
+                                    Log.e(TAG, "CITY: permanentcity: "+permanentcity);
+                                } catch (Exception e){
+                                    //IndexOutOfBoundsException
+                                    try {
+                                        if(!PermanentCity.isEmpty()){
+                                            int index = percity.indexOf(PermanentCity);
+                                            Log.d("indexr", String.valueOf(index));
+                                            permanentcity = mainPerCity.get(index).getDocID();
+                                            txtPermanentCity.setText(percity.get(index));
+                                        }
+                                    } catch (Exception ex){
+                                        txtPermanentCity.setText("");
+                                    }
+                                }
+                                //serPreCity();
+
+                                /*JSONObject obj=new JSONObject();
+                                try {
+                                    obj.put("ddltype", 4);
+                                    obj.put("SecurityCode",pref.getSecurityCode());
+                                    serPreCity(obj);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }*/
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "PERMANENT_CITY_error: "+anError.getErrorBody());
+                        pd.dismiss();
+                        //llLoader.setVisibility(View.VISIBLE);
+                        //llMain.setVisibility(View.GONE);
+                        errflag = 6;
+                        showInternetDialog();
+                    }
+                });
+    }
+
     private void setPerCity() {
         String surl = AppData.url + "gcl_CommonDDL?ddltype=4&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
         llLoader.setVisibility(View.VISIBLE);
@@ -2380,6 +2883,103 @@ public class TempProfileActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
     }
 
+    private void serPreCity(JSONObject jsonObject) {
+        //llLoader.setVisibility(View.VISIBLE);
+        ///llMain.setVisibility(View.GONE);
+        ProgressDialog pd=new ProgressDialog(this);
+        pd.setMessage("Loading...");
+        pd.setCancelable(false);
+        pd.show();
+        AndroidNetworking.post(AppData.COMMON_DDL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "PRESENT_CITY: "+response.toString(4));
+                            pd.dismiss();
+                            //llLoader.setVisibility(View.VISIBLE);
+                            //llMain.setVisibility(View.GONE);
+                            precity.clear();
+                            mainPreCity.clear();
+                            precity.add("Please Select");
+                            mainPreCity.add(new MainDocModule("", ""));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String qualivalue = obj.optString("value");
+                                    String qualiid = obj.optString("id");
+                                    precity.add(qualivalue);
+                                    MainDocModule mainDocModule = new MainDocModule(qualiid, qualivalue);
+                                    mainPreCity.add(mainDocModule);
+                                }
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                        (TempProfileActivity.this, android.R.layout.simple_spinner_item,
+                                                precity); //selected item will look like a spinner set from XML
+                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                spPresentCity.setAdapter(spinnerArrayAdapter);
+                                try {
+                                    int index = precity.indexOf(vtc);
+                                    Log.d("indexr", String.valueOf(index));
+                                    txtPresentCity.setText(precity.get(index));
+                                    presentcity = mainPreCity.get(index).getDocID();
+                                    //spPresentCity.setSelection(index);
+                                    if (index == -1) {
+                                        int indexp = precity.indexOf(district);
+                                        txtPresentCity.setText(precity.get(indexp));
+                                        presentcity = mainPreCity.get(indexp).getDocID();
+                                        //spPresentCity.setSelection(indexp);
+                                    }
+                                    Log.e(TAG, "CITY present: "+presentcity);
+                                } catch (Exception e){
+                                    try {
+                                        if (!PresentCity.isEmpty()){
+                                            int index = precity.indexOf(PresentCity);
+                                            Log.d("indexr", String.valueOf(index));
+                                            txtPresentCity.setText(precity.get(index));
+                                            presentcity = mainPreCity.get(index).getDocID();
+                                        }
+                                    } catch (Exception ex){
+                                        txtPresentCity.setText("");
+                                    }
+
+                                }
+                                //setprestate();
+
+                                /*JSONObject obj=new JSONObject();
+                                try {
+                                    obj.put("ddltype", 3);
+                                    obj.put("SecurityCode",pref.getSecurityCode());
+                                    setPresentState(obj);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }*/
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "PRESENT_CITY_error: "+anError.getErrorBody());
+                        pd.dismiss();
+                        //llLoader.setVisibility(View.VISIBLE);
+                        //llMain.setVisibility(View.GONE);
+                        errflag = 7;
+                        showInternetDialog();
+                    }
+                });
+    }
+
     private void serPreCity() {
         String surl = AppData.url + "gcl_CommonDDL?ddltype=4&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
         llLoader.setVisibility(View.VISIBLE);
@@ -2469,6 +3069,82 @@ public class TempProfileActivity extends AppCompatActivity {
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
     }
+        private void setPresentState(JSONObject jsonObject) {
+            llLoader.setVisibility(View.VISIBLE);
+            llMain.setVisibility(View.GONE);
+            AndroidNetworking.post(AppData.COMMON_DDL)
+                    .addJSONObjectBody(jsonObject)
+                    .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                    .setTag("uploadTest")
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                Log.e(TAG, "PERMANENT_STATE: "+response.toString(4));
+                                llLoader.setVisibility(View.VISIBLE);
+                                llMain.setVisibility(View.GONE);
+                                mainPreState.clear();
+                                prestate.clear();
+                                JSONObject job1 = response;
+                                String Response_Code = job1.optString("Response_Code");
+                                if (Response_Code.equals("101")) {
+                                    String Response_Data = job1.optString("Response_Data");
+                                    JSONArray jsonArray = new JSONArray(Response_Data);
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject obj = jsonArray.getJSONObject(i);
+                                        String deptvalue = obj.optString("value");
+                                        String id = obj.optString("id");
+                                        prestate.add(deptvalue);
+                                        MainDocModule mainDocModule = new MainDocModule(id, deptvalue);
+                                        mainPreState.add(mainDocModule);
+                                    }
+                                    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                            (TempProfileActivity.this, android.R.layout.simple_spinner_item,
+                                                    prestate); //selected item will look like a spinner set from XML
+                                    spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    spPresentState.setAdapter(spinnerArrayAdapter);
+
+                                    if (!PresentState.isEmpty()){
+                                        int index = prestate.indexOf(PresentState);
+                                        Log.d("indexr", String.valueOf(index));
+                                        spPresentState.setSelection(index);
+                                    } else {
+                                        if (!state.isEmpty()){
+                                            int index = prestate.indexOf(state);
+                                            Log.d("indexr", String.valueOf(index));
+                                            spPresentState.setSelection(index);
+                                        }
+                                    }
+
+
+                                    //setperstate();
+                                    JSONObject obj=new JSONObject();
+                                    try {
+                                        obj.put("ddltype", 3);
+                                        obj.put("SecurityCode",pref.getSecurityCode());
+                                        setPermanentState(obj);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+                            Log.e(TAG, "PERMANENT_STATE_error: "+anError.getErrorBody());
+                            llLoader.setVisibility(View.VISIBLE);
+                            llMain.setVisibility(View.GONE);
+                            errflag = 8;
+                            showInternetDialog();
+                        }
+                    });
+        }
 
         private void setprestate() {
         String surl = AppData.url + "gcl_CommonDDL?ddltype=3&id1=0&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
@@ -2548,6 +3224,66 @@ public class TempProfileActivity extends AppCompatActivity {
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
     }
+    private void setPermanentState(JSONObject jsonObject) {
+        llLoader.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.GONE);
+        AndroidNetworking.post(AppData.COMMON_DDL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "PRESENT_STATE: "+response.toString(4));
+                            llLoader.setVisibility(View.GONE);
+                            llMain.setVisibility(View.VISIBLE);
+                            mainPerState.clear();
+                            perstate.clear();
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String deptvalue = obj.optString("value");
+                                    String id = obj.optString("id");
+                                    perstate.add(deptvalue);
+                                    MainDocModule mainDocModule = new MainDocModule(id, deptvalue);
+                                    mainPerState.add(mainDocModule);
+                                    // clientname.add(value);
+                                }
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                        (TempProfileActivity.this, android.R.layout.simple_spinner_item,
+                                                perstate); //selected item will look like a spinner set from XML
+                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                spPermanentState.setAdapter(spinnerArrayAdapter);
+                                if (!state.isEmpty()){
+                                    int index = perstate.indexOf(state);
+                                    Log.d("indexr", String.valueOf(index));
+                                    spPermanentState.setSelection(index);
+                                    spPermanentState.setEnabled(false);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "PRESENT_STATE_error: "+anError.getErrorBody());
+                        llLoader.setVisibility(View.VISIBLE);
+                        llMain.setVisibility(View.GONE);
+                        errflag = 9;
+                        showInternetDialog();
+                    }
+                });
+    }
+
 
     private void setperstate() {
 
@@ -2829,6 +3565,9 @@ public class TempProfileActivity extends AppCompatActivity {
     private void uploadOfficalDetails(JSONObject jsonObject) {
         Log.e(TAG, "AADHER: Offical Details: "+jsonObject);
         pd.show();
+
+
+        //AndroidNetworking.post("http://171.16.2.105/GSPPI_API_V2/api/KYC/UpdateKYCDetails")
         AndroidNetworking.post(AppData.newv2url + "KYC/UpdateKYCDetails")
                 .addJSONObjectBody(jsonObject)
                 .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
@@ -2859,8 +3598,9 @@ public class TempProfileActivity extends AppCompatActivity {
                                 innerobj.put("PresentStateID", presentstate);
                                 innerobj.put("PresentCityID", presentcity);
                                 innerobj.put("PresentPincode", etPrePinCode.getText().toString());
-                                innerobj.put("Phone", binding.etPhnNumber.getText().toString());
+                                innerobj.put("Phone", binding.etWhatssappNumber.getText().toString());
                                 innerobj.put("Mobile", etMobNumber.getText().toString());
+                                innerobj.put("EmergencyContact", etPhnNumber.getText().toString());
                                 innerobj.put("EmailID", etEmailId.getText().toString());
                                 innerobj.put("RefContact", binding.etRefNumber.getText().toString());
                                 mainobject.put("ContactDetails", innerobj);
@@ -2890,6 +3630,7 @@ public class TempProfileActivity extends AppCompatActivity {
     private void uploadContactDetails(JSONObject jsonObject) {
         Log.e(TAG, "AADHER: Contact Details: "+jsonObject);
         pd.show();
+        //AndroidNetworking.post("http://171.16.2.105/GSPPI_API_V2/api/KYC/UpdateKYCDetails")
         AndroidNetworking.post(AppData.newv2url + "KYC/UpdateKYCDetails")
                 .addJSONObjectBody(jsonObject)
                 .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
@@ -2947,6 +3688,7 @@ public class TempProfileActivity extends AppCompatActivity {
     private void uploadesicDetails(JSONObject jsonObject) {
         Log.e(TAG, "AADHER: Esic Details: "+jsonObject);
         pd.show();
+        //AndroidNetworking.post("http://171.16.2.105/GSPPI_API_V2/api/KYC/UpdateKYCDetails")
         AndroidNetworking.post(AppData.newv2url + "KYC/UpdateKYCDetails")
                 .addJSONObjectBody(jsonObject)
                 .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
