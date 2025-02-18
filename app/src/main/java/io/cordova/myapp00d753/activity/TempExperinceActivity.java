@@ -120,6 +120,7 @@ public class TempExperinceActivity extends AppCompatActivity {
         uanPercentage.add("75");
         uanPercentage.add("50");
         uanPercentage.add("25");
+        binding.etUAN.setText(pref.getSUAN());
         if (AppData.COMPANYNAME.contains("SBI")){
             binding.llNonSBIEXP.setVisibility(View.VISIBLE);
             binding.llSBIEXP.setVisibility(View.VISIBLE);
@@ -1051,24 +1052,26 @@ public class TempExperinceActivity extends AppCompatActivity {
                             if (Response_Code == 101) {
                                 JSONObject Response_Data =  job1.optJSONObject("Response_Data");
                                 JSONArray OfficeDetailsArray = Response_Data.optJSONArray("OfficeDetails");
-                                JSONObject OfficeDetailsObj = OfficeDetailsArray.optJSONObject(0);
-                                String IsExperience = OfficeDetailsObj.optString("IsExperience");
-                                if (IsExperience.equals("1")){
-                                    //TODO: Experience
-                                    JSONObject jsonObject = new JSONObject();
-                                    try {
-                                        jsonObject.put("AEMConsultantID", pref.getEmpConId());
-                                        jsonObject.put("AEMClientID", pref.getEmpClintId());
-                                        jsonObject.put("AEMClientOfficeID", pref.getEmpClintOffId());
-                                        jsonObject.put("AEMEmployeeID", pref.getEmpId());
-                                        jsonObject.put("WorkingStatus", "1");
-                                        jsonObject.put("Operation", "10");
-                                        getExperienceDetails(jsonObject);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
+                                for (int i = 0; i < OfficeDetailsArray.length(); i++) {
+                                    JSONObject OfficeDetailsObj = OfficeDetailsArray.optJSONObject(i);
+                                    String IsExperience = OfficeDetailsObj.optString("IsExperience");
+                                    if (IsExperience.equals("1")){
+                                        //TODO: Experience
+                                        JSONObject jsonObject = new JSONObject();
+                                        try {
+                                            jsonObject.put("AEMConsultantID", pref.getEmpConId());
+                                            jsonObject.put("AEMClientID", pref.getEmpClintId());
+                                            jsonObject.put("AEMClientOfficeID", pref.getEmpClintOffId());
+                                            jsonObject.put("AEMEmployeeID", pref.getEmpId());
+                                            jsonObject.put("WorkingStatus", "1");
+                                            jsonObject.put("Operation", "10");
+                                            getExperienceDetails(jsonObject);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    } else {
+                                        //TODO: Fresher
                                     }
-                                } else {
-                                    //TODO: Fresher
                                 }
                             }
                         } catch (JSONException e) {
@@ -1109,28 +1112,30 @@ public class TempExperinceActivity extends AppCompatActivity {
                                 if (Response_Data != null){
                                     JSONObject job2 = new JSONObject(Response_Data);
                                     JSONArray jsonArray = job2.getJSONArray("ExperienceDetails");
-                                    JSONObject experienceObj = jsonArray.getJSONObject(0);
-                                    binding.etcompany.setText(experienceObj.optString("CompanyName"));
-                                    binding.etDesignation.setText(experienceObj.optString("PreviousEmployeeDesignation"));
-                                    binding.etManagerName.setText(experienceObj.optString("PreviousReportingManagerName"));
-                                    binding.etManagerDesignation.setText(experienceObj.optString("PreviousReportingManagerDesignation"));
-                                    binding.etManagerContact.setText(experienceObj.optString("PreviousReportingManagerContactDetails"));
-                                    String DOJ = experienceObj.optString("PrevDOJ");
-                                    String DOE = experienceObj.optString("PrevDOE");
-                                    doj = DOJ;
-                                    doe = DOE;
-                                    binding.etDOJ.setText(DOJ);
-                                    binding.etDOE.setText(DOE);
-                                    //imgAttachImage
-                                    if (binding.imgExperience.getVisibility()==View.GONE){
-                                        binding.imgFreshersTick.setVisibility(View.GONE);
-                                        binding.imgExperience.setVisibility(View.VISIBLE);
-                                        binding.llExpericedForm.setVisibility(View.VISIBLE);
-                                        flag=2;
-                                    } else {
-                                        binding.imgFreshersTick.setVisibility(View.GONE);
-                                        binding.imgExperience.setVisibility(View.GONE);
-                                        binding.llExpericedForm.setVisibility(View.GONE);
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject experienceObj = jsonArray.getJSONObject(i);
+                                        binding.etcompany.setText(experienceObj.optString("CompanyName"));
+                                        binding.etDesignation.setText(experienceObj.optString("PreviousEmployeeDesignation"));
+                                        binding.etManagerName.setText(experienceObj.optString("PreviousReportingManagerName"));
+                                        binding.etManagerDesignation.setText(experienceObj.optString("PreviousReportingManagerDesignation"));
+                                        binding.etManagerContact.setText(experienceObj.optString("PreviousReportingManagerContactDetails"));
+                                        String DOJ = experienceObj.optString("PrevDOJ");
+                                        String DOE = experienceObj.optString("PrevDOE");
+                                        doj = DOJ;
+                                        doe = DOE;
+                                        binding.etDOJ.setText(DOJ);
+                                        binding.etDOE.setText(DOE);
+                                        //imgAttachImage
+                                        if (binding.imgExperience.getVisibility()==View.GONE){
+                                            binding.imgFreshersTick.setVisibility(View.GONE);
+                                            binding.imgExperience.setVisibility(View.VISIBLE);
+                                            binding.llExpericedForm.setVisibility(View.VISIBLE);
+                                            flag=2;
+                                        } else {
+                                            binding.imgFreshersTick.setVisibility(View.GONE);
+                                            binding.imgExperience.setVisibility(View.GONE);
+                                            binding.llExpericedForm.setVisibility(View.GONE);
+                                        }
                                     }
                                 }
                             }
