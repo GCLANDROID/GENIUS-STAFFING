@@ -588,7 +588,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                     }
 
                                     EmailID = obj.optString("EmailID");
-                                    if (!EmailID.equals("")) {
+                                    if (!EmailID.equals("") && !EmailID.equals("null")) {
                                         etEmailId.setText(EmailID);
                                     } else {
                                         etEmailId.setText("");
@@ -602,8 +602,13 @@ public class TempProfileActivity extends AppCompatActivity {
                                     }
 
                                     Phone = obj.optString("Phone");
-                                    if (!Phone.equals("")) {
+                                    if (!Phone.equals("") && !Phone.equals("null")) {
                                         binding.etWhatssappNumber.setText(Phone);
+                                        if(Mobile.equals(Phone)){
+                                           binding.imgTick.setVisibility(View.VISIBLE);
+                                        } else {
+                                            binding.imgTick.setVisibility(View.GONE);
+                                        }
                                     } else {
                                         binding.etWhatssappNumber.setText("");
                                     }
@@ -611,7 +616,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                     tvComName.setText(AEMClientName);
                                     AppData.COMPANYNAME=AEMClientName;
                                     String ESINumber = obj.optString("ESINumber");
-                                    if (!ESINumber.equals("")) {
+                                    if (!ESINumber.equals("") && !ESINumber.equals("null")) {
                                         etESI.setText(ESINumber);
                                     } else {
                                         etESI.setText("");
@@ -660,6 +665,8 @@ public class TempProfileActivity extends AppCompatActivity {
                                     PermanentCity = obj.optString("PermanentCity");
                                     PresentState = obj.optString("PresentState");
 
+                                    Log.e(TAG, "State_PermanentState: "+PermanentState);
+                                    Log.e(TAG, "State_PresentState: "+PresentState);
 
                                     String PAN = obj.optString("PAN");
                                     Log.d("pan", PAN);
@@ -710,13 +717,18 @@ public class TempProfileActivity extends AppCompatActivity {
                                     String AccountNumber = obj.optString("AccountNumber");
                                     pref.saveAccNumber(AccountNumber);
                                     String ESINominee = obj.optString("NomineeName");
-                                    binding.etESINominee.setText(ESINominee);
+                                    if (!ESINominee.equals("null")){
+                                        binding.etESINominee.setText(ESINominee);
+                                    }
                                     esicDOB = obj.optString("NomineeDOB");
-                                    binding.tvESICDOB.setText(esicDOB);
+                                    if (!esicDOB.equals("null")){
+                                        binding.tvESICDOB.setText(esicDOB);
+                                    }
                                     esic_nominee_gender = obj.optString("NomineeGender");
                                     esicRltionshp = obj.optString("Relation");
                                     residingIP = obj.optString("ResidingIP");
                                     String RefContact = obj.optString("RefContact");
+
                                     binding.etRefNumber.setText(RefContact);
 
                                 }
@@ -727,7 +739,6 @@ public class TempProfileActivity extends AppCompatActivity {
                                 JSONObject obj=new JSONObject();
                                 try {
                                     obj.put("ddltype", 6);
-                                    //obj.put("id1","");
                                     obj.put("SecurityCode",pref.getSecurityCode());
                                     setQualification(obj);
                                 } catch (JSONException e) {
@@ -1029,6 +1040,8 @@ public class TempProfileActivity extends AppCompatActivity {
                             Log.e(TAG, "Qualification_DropDown: "+response.toString(4));
                             JSONObject job1 = response;
                             String Response_Code = job1.optString("Response_Code");
+                            qualification.add("Please select");
+                            mainQualification.add(new MainDocModule("",""));
                             if (Response_Code.equals("101")) {
                                 String Response_Data = job1.optString("Response_Data");
                                 JSONArray jsonArray = new JSONArray(Response_Data);
@@ -1166,6 +1179,8 @@ public class TempProfileActivity extends AppCompatActivity {
                             Log.e(TAG, "Marital_Status_DropDown: "+response.toString(4) );
                             JSONObject job1 = response;
                             String Response_Code = job1.optString("Response_Code");
+                            martial.add("Please Select");
+                            mainMartial.add(new MainDocModule("",""));
                             if (Response_Code.equals("101")) {
                                 String Response_Data = job1.optString("Response_Data");
                                 JSONArray jsonArray = new JSONArray(Response_Data);
@@ -1566,7 +1581,7 @@ public class TempProfileActivity extends AppCompatActivity {
                         Log.e(TAG, "Nominee_Relation_Dropdown_error: "+anError.getErrorBody());
                         llLoader.setVisibility(View.VISIBLE);
                         llMain.setVisibility(View.GONE);
-                        errflag = 5;
+                        errflag = 10;
                         showInternetDialog();
                     }
                 });
@@ -1665,6 +1680,8 @@ public class TempProfileActivity extends AppCompatActivity {
                             Log.e(TAG, "BLOOD_DROPDOWN: "+response.toString(4));
                             JSONObject job1 = response;
                             String Response_Code = job1.optString("Response_Code");
+                            blood.add("Please select");
+                            mainBlood.add(new MainDocModule("",""));
                             if (Response_Code.equals("101")) {
                                 String Response_Data = job1.optString("Response_Data");
                                 JSONArray jsonArray = new JSONArray(Response_Data);
@@ -1833,6 +1850,27 @@ public class TempProfileActivity extends AppCompatActivity {
             }
         });
 
+        binding.etWhatssappNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().equalsIgnoreCase(Mobile)){
+                    binding.imgTick.setVisibility(View.VISIBLE);
+                } else {
+                    binding.imgTick.setVisibility(View.GONE);
+                }
+            }
+        });
+
         spQualification.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -1891,8 +1929,9 @@ public class TempProfileActivity extends AppCompatActivity {
         spPresentState.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                presentstate = mainPerState.get(position).getDocID();
-                Log.e(TAG, "onItemSelected: "+presentstate);
+                presentstate = mainPreState.get(position).getDocID();
+                Log.e(TAG, "presentstate_onItemSelected: "+presentstate);
+                Log.e(TAG, "position: "+position);
                 llPresentState.setBackgroundResource(R.drawable.lldesign9);
                 if (position > 0){
                     JSONObject obj=new JSONObject();
@@ -1904,6 +1943,8 @@ public class TempProfileActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                } else {
+
                 }
 
             }
@@ -3082,11 +3123,13 @@ public class TempProfileActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
-                                Log.e(TAG, "PERMANENT_STATE: "+response.toString(4));
+                                Log.e(TAG, "PRESENT_STATE: "+response.toString(4));
                                 llLoader.setVisibility(View.VISIBLE);
                                 llMain.setVisibility(View.GONE);
                                 mainPreState.clear();
                                 prestate.clear();
+                                prestate.add("Please Select");
+                                mainPreState.add(new MainDocModule("",""));
                                 JSONObject job1 = response;
                                 String Response_Code = job1.optString("Response_Code");
                                 if (Response_Code.equals("101")) {
@@ -3105,10 +3148,12 @@ public class TempProfileActivity extends AppCompatActivity {
                                                     prestate); //selected item will look like a spinner set from XML
                                     spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                     spPresentState.setAdapter(spinnerArrayAdapter);
+                                    Log.e(TAG, "prestate: "+prestate.size());
+                                    Log.e(TAG, "mainPreState: "+mainPreState.size());
 
                                     if (!PresentState.isEmpty()){
                                         int index = prestate.indexOf(PresentState);
-                                        Log.d("indexr", String.valueOf(index));
+                                        Log.d("pre_indexr", String.valueOf(index));
                                         spPresentState.setSelection(index);
                                     } else {
                                         if (!state.isEmpty()){
@@ -3237,11 +3282,13 @@ public class TempProfileActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            Log.e(TAG, "PRESENT_STATE: "+response.toString(4));
+                            Log.e(TAG, "PERMANENT_STATE: "+response.toString(4));
                             llLoader.setVisibility(View.GONE);
                             llMain.setVisibility(View.VISIBLE);
                             mainPerState.clear();
                             perstate.clear();
+                            perstate.add("Please Select");
+                            mainPerState.add(new MainDocModule("",""));
                             JSONObject job1 = response;
                             String Response_Code = job1.optString("Response_Code");
                             if (Response_Code.equals("101")) {
@@ -3522,32 +3569,121 @@ public class TempProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (errflag == 1) {
-                    profileFunction();
+                    //profileFunction();
+                    JSONObject obj=new JSONObject();
+                    try {
+                        obj.put("AEMConsultantID", pref.getEmpConId());
+                        obj.put("AEMClientID",pref.getEmpClintId());
+                        obj.put("AEMClientOfficeID",pref.getEmpClintOffId());
+                        obj.put("AEMEmployeeID",pref.getMasterId());
+                        obj.put("SecurityCode",pref.getSecurityCode());
+                        obj.put("WorkingStatus","1");
+                        //obj.put("CurrentPage","0");
+                        obj.put("Operation","0");
+                        profileFunction(obj);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     alert1.dismiss();
                 } else if (errflag == 2) {
-                    setQualification();
+                    //setQualification();
+                    JSONObject obj=new JSONObject();
+                    try {
+                        obj.put("ddltype", 6);
+                        obj.put("SecurityCode",pref.getSecurityCode());
+                        setQualification(obj);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     alert1.dismiss();
                 } else if (errflag == 3) {
-                    setMartial();
+                    //setMartial();
+                    JSONObject obj=new JSONObject();
+                    try {
+                        obj.put("ddltype", 8);
+                        obj.put("SecurityCode",pref.getSecurityCode());
+                        setMarital(obj);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     alert1.dismiss();
                 } else if (errflag == 4) {
-                    setGender();
+                    //setGender();
+                    JSONObject obj=new JSONObject();
+                    try {
+                        obj.put("ddltype", 10);
+                        obj.put("SecurityCode",pref.getSecurityCode());
+                        setGender(obj);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     alert1.dismiss();
                 } else if (errflag == 5) {
-                    setBlood();
+                    //setBlood();
+                    JSONObject obj=new JSONObject();
+                    try {
+                        obj.put("ddltype", 9);
+                        obj.put("SecurityCode",pref.getSecurityCode());
+                        setBlood(obj);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     alert1.dismiss();
                 } else if (errflag == 6) {
-                    setPerCity();
+                    //setPerCity();
+                    JSONObject obj=new JSONObject();
+                    try {
+                        obj.put("ddltype", 4);
+                        obj.put("id1",permanentstate);;
+                        obj.put("SecurityCode",pref.getSecurityCode());
+                        setPerCity(obj);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     alert1.dismiss();
                 } else if (errflag == 7) {
-                    serPreCity();
+                    //serPreCity();
+                    JSONObject obj=new JSONObject();
+                    try {
+                        obj.put("ddltype", 4);
+                        obj.put("id1",presentstate);
+                        obj.put("SecurityCode",pref.getSecurityCode());
+                        serPreCity(obj);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     alert1.dismiss();
                 } else if (errflag == 8) {
-                    setprestate();
+                    //setprestate();
+                    JSONObject obj=new JSONObject();
+                    try {
+                        obj.put("ddltype", 3);
+                        obj.put("SecurityCode",pref.getSecurityCode());
+                        setPresentState(obj);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     alert1.dismiss();
                 } else if (errflag == 9) {
-                    setperstate();
+                    //setperstate();
+                    JSONObject obj=new JSONObject();
+                    try {
+                        obj.put("ddltype", 3);
+                        obj.put("SecurityCode",pref.getSecurityCode());
+                        setPermanentState(obj);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     alert1.dismiss();
+                } else if (errflag == 10){
+                    JSONObject obj=new JSONObject();
+                    try {
+                        obj.put("ddltype", 7);
+                        obj.put("SecurityCode",pref.getSecurityCode());
+                        setNomineeRelation(obj);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
