@@ -91,6 +91,7 @@ public class TempExperinceActivity extends AppCompatActivity {
     String uanRltionshp="";
     int pfflag=0;
     boolean is_PF_Account_Exist = false, is_Experience_Letter_Selected = false;
+    ProgressDialog pd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,7 +115,15 @@ public class TempExperinceActivity extends AppCompatActivity {
 
     private void initView(){
         pref=new Pref(TempExperinceActivity.this);
-        setNomineeRelation();
+        //setNomineeRelation();
+        JSONObject obj=new JSONObject();
+        try {
+            obj.put("ddltype", 7);
+            obj.put("SecurityCode",pref.getSecurityCode());
+            setNomineeRelation(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         uanPercentage.add("Please Select");
         uanPercentage.add("100");
         uanPercentage.add("75");
@@ -446,8 +455,7 @@ public class TempExperinceActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position > 0) {
-                    uanRltionshp = mainRealation.get(position).getDocID();
-
+                    uanRltionshp = mainRealation.get(position).getDocID();;
                 }
 
             }
@@ -898,6 +906,60 @@ public class TempExperinceActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    private void setNomineeRelation(JSONObject jsonObject) {
+        pd=new ProgressDialog(TempExperinceActivity.this);
+        pd.setMessage("Loading");
+        pd.setCancelable(false);
+        pd.show();
+        AndroidNetworking.post(AppData.COMMON_DDL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "Nominee_Relation_Dropdown: "+response.toString(4));
+                            pd.dismiss();
+                            realation.clear();
+                            mainRealation.clear();
+                            realation.add("Please Select");
+                            mainRealation.add(new MainDocModule("0", ""));
+
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String value = obj.optString("value");
+                                    String id = obj.optString("id");
+                                    realation.add(value);
+                                    MainDocModule mainDocModule = new MainDocModule(id, value);
+                                    mainRealation.add(mainDocModule);
+                                }
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                        (TempExperinceActivity.this, android.R.layout.simple_spinner_item,
+                                                realation); //selected item will look like a spinner set from XML
+                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                binding.spUANRealation.setAdapter(spinnerArrayAdapter);
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "Nominee_Relation_Dropdown_error: "+anError.getErrorBody());
+                        pd.dismiss();
+                    }
+                });
     }
     private void setNomineeRelation() {
 
