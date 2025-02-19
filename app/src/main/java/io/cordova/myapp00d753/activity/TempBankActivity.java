@@ -142,10 +142,20 @@ public class TempBankActivity extends AppCompatActivity {
 
         btnBankVal=(Button)findViewById(R.id.btnBankVal);
         txtBankName=(TextView) findViewById(R.id.txtBankName);
-        setBank();
+        //setBank();
+
+        JSONObject obj=new JSONObject();
+        try {
+            obj.put("ddltype", 5);
+            obj.put("id1",pref.getEmpConId());;
+            obj.put("SecurityCode",pref.getSecurityCode());
+            setBank(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         etAccNumber = (EditText) findViewById(R.id.etAccNumber);
-        etAccNumber.setText(pref.getAccNumber());
+        //etAccNumber.setText(pref.getAccNumber());
         etIFSC = (EditText) findViewById(R.id.etIFSC);
         etIFSC.setText(pref.getIFSC());
         etFName = (EditText) findViewById(R.id.etFName);
@@ -379,6 +389,71 @@ public class TempBankActivity extends AppCompatActivity {
         });
     }
 
+    private void setBank(JSONObject jsonObject) {
+        llLoader.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.GONE);
+        AndroidNetworking.post(AppData.COMMON_DDL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "BANK_DROPDOWN: "+response.toString(4));
+                            llLoader.setVisibility(View.VISIBLE);
+                            llMain.setVisibility(View.GONE);
+                            bankName.clear();
+                            mainBankName.clear();
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String qualivalue = obj.optString("value");
+                                    String qualiid = obj.optString("id");
+                                    bankName.add(qualivalue);
+                                    MainDocModule mainDocModule = new MainDocModule(qualiid, qualivalue);
+                                    mainBankName.add(mainDocModule);
+
+                                }
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                        (TempBankActivity.this, android.R.layout.simple_spinner_item,
+                                                bankName); //selected item will look like a spinner set from XML
+                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                spBankName.setAdapter(spinnerArrayAdapter);
+                                int index = bankName.indexOf(getbankname);
+                                Log.d("indexr", String.valueOf(index));
+                                spBankName.setSelection(index);
+                                //setBankDocType();
+                                JSONObject obj=new JSONObject();
+                                try {
+                                    obj.put("ddltype", 11);
+                                    obj.put("id1",pref.getEmpConId());;
+                                    obj.put("SecurityCode",pref.getSecurityCode());
+                                    setBankDocType(obj);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "BANK_DROPDOWN_error: "+anError.getErrorBody());
+                        llLoader.setVisibility(View.VISIBLE);
+                        llMain.setVisibility(View.GONE);
+                    }
+                });
+    }
+
     private void setBank() {
 
         String surl = AppData.url+"gcl_CommonDDL?ddltype=5&id1=" + pref.getEmpConId() + "&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
@@ -449,6 +524,70 @@ public class TempBankActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
 
 
+    }
+
+    private void setBankDocType(JSONObject jsonObject) {
+        llLoader.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.GONE);
+        AndroidNetworking.post(AppData.COMMON_DDL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "BANK_DOC_TYPE: "+response.toString(4));
+                            llLoader.setVisibility(View.GONE);
+                            llMain.setVisibility(View.VISIBLE);
+                            doctype.clear();
+                            mainDocType.clear();
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String qualivalue = obj.optString("value");
+                                    String qualiid = obj.optString("id");
+                                    doctype.add(qualivalue);
+                                    MainDocModule mainDocModule = new MainDocModule(qualiid, qualivalue);
+                                    mainDocType.add(mainDocModule);
+
+                                }
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                        (TempBankActivity.this, android.R.layout.simple_spinner_item, doctype); //selected item will look like a spinner set from XML
+                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                spDocType.setAdapter(spinnerArrayAdapter);
+
+                                JSONObject jsonObject = new JSONObject();
+                                try {
+                                    jsonObject.put("AEMConsultantID", pref.getEmpConId());
+                                    jsonObject.put("AEMClientID", pref.getEmpClintId());
+                                    jsonObject.put("AEMClientOfficeID", pref.getEmpClintOffId());
+                                    jsonObject.put("AEMEmployeeID", pref.getEmpId());
+                                    jsonObject.put("WorkingStatus", "1");
+                                    jsonObject.put("Operation", "14");
+                                    getBankDetails(jsonObject);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "BANK_DOC_TYPE_error: "+anError.getErrorBody());
+                        llLoader.setVisibility(View.VISIBLE);
+                        llMain.setVisibility(View.GONE);
+                    }
+                });
     }
 
     private void setBankDocType() {
