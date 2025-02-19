@@ -70,7 +70,16 @@ public class TempEducationaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding= DataBindingUtil.setContentView(this,R.layout.activity_temp_educationa);
         initView();
-        setQualification();
+        //setQualification();
+
+        JSONObject obj=new JSONObject();
+        try {
+            obj.put("ddltype", 6);
+            obj.put("SecurityCode",pref.getSecurityCode());
+            setQualification(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initView(){
@@ -331,6 +340,72 @@ public class TempEducationaActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    private void setQualification(JSONObject jsonObject) {
+        pd=new ProgressDialog(TempEducationaActivity.this);
+        pd.setMessage("Loading");
+        pd.setCancelable(false);
+        pd.show();
+        AndroidNetworking.post(AppData.COMMON_DDL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "Qualification_DropDown: "+response.toString(4));
+                            pd.dismiss();
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            qualificationlist.add("Please Select");
+                            mainQualification.add(new MainDocModule("0",""));
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String qualivalue = obj.optString("value");
+                                    String qualiid = obj.optString("id");
+                                    //Log.e(TAG, "onResponse: "+qualivalue);
+                                    qualificationlist.add(qualivalue);
+                                    MainDocModule mainDocModule = new MainDocModule(qualiid, qualivalue);
+                                    mainQualification.add(mainDocModule);
+                                }
+
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                        (TempEducationaActivity.this, android.R.layout.simple_spinner_item,
+                                                qualificationlist); //selected item will look like a spinner set from XML
+                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                binding.spExam.setAdapter(spinnerArrayAdapter);
+
+                                JSONObject jsonObject = new JSONObject();
+                                try {
+                                    jsonObject.put("AEMConsultantID", pref.getEmpConId());
+                                    jsonObject.put("AEMClientID", pref.getEmpClintId());
+                                    jsonObject.put("AEMClientOfficeID", pref.getEmpClintOffId());
+                                    jsonObject.put("AEMEmployeeID", pref.getEmpId());
+                                    jsonObject.put("WorkingStatus", "1");
+                                    jsonObject.put("Operation", "5");
+                                    getEducationDetails(jsonObject);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "Qualification_DropDown_error: "+anError.getErrorBody());
+                        pd.dismiss();
+                    }
+                });
     }
 
     private void setQualification() {
