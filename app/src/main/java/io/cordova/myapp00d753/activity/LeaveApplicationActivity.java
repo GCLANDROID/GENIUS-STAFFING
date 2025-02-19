@@ -134,6 +134,7 @@ public class LeaveApplicationActivity extends AppCompatActivity {
         tvDetails.setTextColor(Color.parseColor("#4f8888"));
         tvApproval.setTextColor(Color.parseColor("#4f8888"));
         tvAdjustment.setTextColor(Color.parseColor("#4f8888"));
+        tvLeaveBalance.setTextColor(Color.parseColor("#4f8888"));
         tvToolBar.setText("Leave Application");
 
    }
