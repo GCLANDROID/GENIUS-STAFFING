@@ -62,7 +62,15 @@ public class WidowNominationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding= DataBindingUtil.setContentView(this,R.layout.activity_widow_nomination);
         onClick();
-        setNomineeRelation();
+        //setNomineeRelation();
+        JSONObject obj=new JSONObject();
+        try {
+            obj.put("ddltype", 7);
+            obj.put("SecurityCode",pref.getSecurityCode());
+            setNomineeRelation(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void onClick(){
@@ -358,6 +366,75 @@ public class WidowNominationActivity extends AppCompatActivity {
                             startActivity(intent);
                             finish();
 
+                    }
+                });
+    }
+
+    private void setNomineeRelation(JSONObject jsonObject) {
+        pd=new ProgressDialog(WidowNominationActivity.this);
+        pd.setMessage("Loading");
+        pd.setCancelable(false);
+        pd.show();
+        AndroidNetworking.post(AppData.COMMON_DDL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "Nominee_Relation_Dropdown: "+response.toString(4));
+                            realation.clear();
+                            mainRealation.clear();
+                            //realation.add("Please Select");
+                            //mainRealation.add(new MainDocModule("0",""));
+
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    if (obj.optString("value").equalsIgnoreCase("Wife")){
+                                        String value = obj.optString("value");
+                                        String id = obj.optString("id");
+                                        realation.add(value);
+                                        MainDocModule mainDocModule = new MainDocModule(id, value);
+                                        mainRealation.add(mainDocModule);
+                                    }
+                                }
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                        (WidowNominationActivity.this, android.R.layout.simple_spinner_item,
+                                                realation); //selected item will look like a spinner set from XML
+                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                binding.spRealation.setAdapter(spinnerArrayAdapter);
+                                //binding.spRealation.setSelection(0);
+
+                                JSONObject jsonObject = new JSONObject();
+                                try {
+                                    jsonObject.put("AEMConsultantID", pref.getEmpConId());
+                                    jsonObject.put("AEMClientID", pref.getEmpClintId());
+                                    jsonObject.put("AEMClientOfficeID", pref.getEmpClintOffId());
+                                    jsonObject.put("AEMEmployeeID", pref.getEmpId());
+                                    jsonObject.put("WorkingStatus", "1");
+                                    jsonObject.put("Operation", "8");
+                                    getWidowPensionDetails(jsonObject);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "Nominee_Relation_Dropdown_error: "+anError.getErrorBody());
+                        pd.dismiss();
                     }
                 });
     }
