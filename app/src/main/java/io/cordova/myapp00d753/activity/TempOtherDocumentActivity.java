@@ -42,6 +42,7 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.kyanogen.signatureview.SignatureView;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -63,6 +64,7 @@ import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.RealPathUtil;
 
 public class TempOtherDocumentActivity extends AppCompatActivity {
+    private static final String TAG = "TempOtherDocumentActivi";
     ActivityTempOtherDocumentBinding binding;
     int signFlag=0;
     private static final String IMAGE_DIRECTORY = "/signdemo";
@@ -385,10 +387,58 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
         progressDialog.setMessage("Uploading");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        progressDialog.show();
+        //progressDialog.show();
+
+        AndroidNetworking.upload(AppData.SAVE_EMP_DIGITAL_DOCUMENT)
+                .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
+                .addMultipartParameter("DocumentID", docid)
+                .addMultipartParameter("ReferenceNo", "0")
+                .addMultipartParameter("SecurityCode", pref.getSecurityCode())
+                .addMultipartFile("SingleFile", compressedImageFile)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setPercentageThresholdForCancelling(60)
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                        progressDialog.show();
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "OTHER_DOCUMENT: "+response.toString(4));
+                            progressDialog.dismiss();
+                            JSONObject job1 = response;
+                            int Response_Code = job1.optInt("Response_Code");
+                            String Response_Data = job1.optString("Response_Data");
+                            if (Response_Code == 101) {
+                                flag=0;
+                                btn.setVisibility(View.GONE);
+                                Toast.makeText(getApplicationContext(), doc+" details has been updated successfully", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), Response_Data, Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        progressDialog.dismiss();
+                        Log.e("errt", String.valueOf(error));
+                        Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
+                    }
+                });
+
 
         //RequestBody mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        AndroidNetworking.upload(AppData.url+"post_empdigitaldocument")
+        /*AndroidNetworking.upload(AppData.url+"post_empdigitaldocument")
                 .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
                 .addMultipartParameter("DocumentID", docid)
                 .addMultipartParameter("ReferenceNo", "0")
@@ -442,7 +492,7 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
 
                         Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                     }
-                });
+                });*/
 
     }
 
