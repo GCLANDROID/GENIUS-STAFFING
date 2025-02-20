@@ -742,7 +742,68 @@ public class TempBankActivity extends AppCompatActivity {
         String masterid = pref.getMasterId();
         String AEMEmployeeID = pref.getEmpId();
 
-        Log.e(TAG, "BankDetailsSubmit: \nfile: "+compressedImageFile.getPath()
+        AndroidNetworking.upload(AppData.SAVE_DUMMY_EMP_BANK_DOCUMENT)
+                .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
+                .addMultipartParameter("FirstNameAsperBank",fname)
+                .addMultipartParameter("LastNameAsperBank",lname)
+                .addMultipartParameter("BankName",bankname)
+                .addMultipartParameter("AccountNumber",accnumbet)
+                .addMultipartParameter("IFSCode",ifsc)
+                .addMultipartParameter("SecurityCode",pref.getSecurityCode())
+                .addMultipartParameter("DocumentID",bankdocid)
+                .addMultipartFile("SingleFile", compressedImageFile)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setPercentageThresholdForCancelling(60)
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "SAVE_BANK_DETAILS: "+response.toString(4));
+                            JSONObject job1 = response;
+                            int Response_Code = job1.optInt("Response_Code");
+                            String Response_Data = job1.optString("Response_Data");
+                            if (Response_Code == 101) {
+                                Intent intent = new Intent(TempBankActivity.this, TempOtherDocumentActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                JSONObject jsonObject=new JSONObject();
+                                try {
+                                    jsonObject.put("AEMEMPLOYEEID",pref.getEmpId());
+                                    jsonObject.put("Type",3);
+                                    jsonObject.put("Status",1);
+                                    bankvalidFlag(jsonObject,progressDialog);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                Toast.makeText(getApplicationContext(), Response_Data, Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "SAVE_BANK_DETAILS_error: "+anError.getErrorBody());
+                        progressDialog.show();
+                    }
+                });
+
+
+
+
+
+
+
+
+
+
+
+        /*Log.e(TAG, "BankDetailsSubmit: \nfile: "+compressedImageFile.getPath()
                 +"\nAEMEmployeeID: "+masterid
                 +"\nFirstNameAsperBank: "+fname
                 +"\nLastNameAsperBank: "
@@ -787,7 +848,7 @@ public class TempBankActivity extends AppCompatActivity {
                 Log.e("error", "Error " + t.getMessage());
                 Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
             }
-        });
+        });*/
 
     }
 
@@ -858,7 +919,6 @@ public class TempBankActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         } else {
-
                             bankflag=0;
                         }
                     }
