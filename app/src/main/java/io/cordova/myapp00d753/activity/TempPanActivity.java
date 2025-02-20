@@ -531,9 +531,64 @@ public class TempPanActivity extends AppCompatActivity {
 
     private void panUpload() {
         progressDialog.show();
+        AndroidNetworking.upload(AppData.SAVE_EMP_DIGITAL_DOCUMENT)
+                .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
+                .addMultipartParameter("DocumentID", "003")
+                .addMultipartParameter("ReferenceNo", etPanNumber.getText().toString())
+                .addMultipartParameter("SecurityCode", pref.getSecurityCode())
+                .addMultipartFile("SingleFile", compressedImageFilePan)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setPercentageThresholdForCancelling(60)
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                        progressDialog.show();
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "SAVE_PAN_DOC: "+response.toString(4));
+                            JSONObject job1 = response;
+                            int Response_Code = job1.optInt("Response_Code");
+                            String Response_Data = job1.optString("Response_Data");
+                            if (Response_Code == 101) {
+                                JSONObject jsonObject=new JSONObject();
+                                try {
+                                    jsonObject.put("AEMEMPLOYEEID",pref.getEmpId());
+                                    jsonObject.put("Type",2);
+                                    jsonObject.put("Status",1);
+                                    panAadharvalidFlag(jsonObject,progressDialog);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                btnPanSave.setVisibility(View.GONE);
+                                Toast.makeText(getApplicationContext(), "Your PAN details has been updated Successfully", Toast.LENGTH_LONG).show();
+                            } else {
+                                progressDialog.dismiss();
+                                Toast.makeText(getApplicationContext(), Response_Data, Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        Log.e("errt", String.valueOf(error));
+                        progressDialog.dismiss();
+                        Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
+                    }
+                });
 
         //RequestBody mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        AndroidNetworking.upload(AppData.url+"post_empdigitaldocument")
+        /*AndroidNetworking.upload(AppData.url+"post_empdigitaldocument")
                 .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
                 .addMultipartParameter("DocumentID", "003")
                 .addMultipartParameter("ReferenceNo", etPanNumber.getText().toString())
@@ -589,7 +644,7 @@ public class TempPanActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                         Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                     }
-                });
+                });*/
 
     }
 
@@ -660,9 +715,51 @@ public class TempPanActivity extends AppCompatActivity {
 
     private void aadharFrontUpload() {
         progressDialog.show();
+        AndroidNetworking.upload(AppData.SAVE_EMP_DIGITAL_DOCUMENT)
+                .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
+                .addMultipartParameter("DocumentID", "002")
+                .addMultipartParameter("ReferenceNo", etAddaharNo.getText().toString())
+                .addMultipartParameter("SecurityCode", pref.getSecurityCode())
+                .addMultipartFile("SingleFile", compressedImageFile)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setPercentageThresholdForCancelling(60)
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                        progressDialog.show();
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "SAVE_AADHAAR_FRONT: "+response.toString(4));
+                            JSONObject job1 = response;
+                            int Response_Code = job1.optInt("Response_Code");
+                            String Response_Data = job1.optString("Response_Data");
+                            if (Response_Code == 101) {
+                                aadharBackUpload();
+                            } else {
+                                Toast.makeText(getApplicationContext(), Response_Data, Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        Log.e(TAG, "SAVE_AADHAAR_FRONT: "+error.getErrorBody());
+                        progressDialog.dismiss();
+                        Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
+                    }
+                });
 
         //RequestBody mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        AndroidNetworking.upload(AppData.url+"post_empdigitaldocument")
+        /*AndroidNetworking.upload(AppData.url+"post_empdigitaldocument")
                 .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
                 .addMultipartParameter("DocumentID", "002")
                 .addMultipartParameter("ReferenceNo", etAddaharNo.getText().toString())
@@ -711,16 +808,71 @@ public class TempPanActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                         Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                     }
-                });
+                });*/
 
     }
 
 
     private void aadharBackUpload() {
         progressDialog.show();
+        AndroidNetworking.upload(AppData.SAVE_EMP_DIGITAL_DOCUMENT)
+                .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
+                .addMultipartParameter("DocumentID", "00233")
+                .addMultipartParameter("ReferenceNo", etAddaharNo.getText().toString())
+                .addMultipartParameter("SecurityCode", pref.getSecurityCode())
+                .addMultipartFile("SingleFile", file)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setPercentageThresholdForCancelling(60)
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                        progressDialog.show();
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "SAVE_AADHAAR_BACK: "+response.toString(4));
+                            JSONObject job1 = response;
+                            int Response_Code = job1.optInt("Response_Code");
+                            String Response_Data = job1.optString("Response_Data");
+                            if (Response_Code == 101) {
+                                JSONObject jsonObject=new JSONObject();
+                                try {
+                                    jsonObject.put("AEMEMPLOYEEID",pref.getEmpId());
+                                    jsonObject.put("Type",1);
+                                    jsonObject.put("Status",1);
+                                    panAadharvalidFlag(jsonObject,progressDialog);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                btnAadharSave.setVisibility(View.GONE);
+                                responseflag=1;
+                                Toast.makeText(getApplicationContext(), "Your Aadhaar details has been updated Successfully", Toast.LENGTH_LONG).show();
+                            } else {
+                                progressDialog.dismiss();
+                                Toast.makeText(getApplicationContext(), Response_Data, Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        Log.e(TAG, "SAVE_AADHAAR_BACK_error: "+error.getErrorBody());
+                        progressDialog.dismiss();
+                        Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
+                    }
+                });
+
 
         //RequestBody mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        AndroidNetworking.upload(AppData.url+"post_empdigitaldocument")
+        /*AndroidNetworking.upload(AppData.url+"post_empdigitaldocument")
                 .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
                 .addMultipartParameter("DocumentID", "00233")
                 .addMultipartParameter("ReferenceNo", etAddaharNo.getText().toString())
@@ -785,7 +937,7 @@ public class TempPanActivity extends AppCompatActivity {
 
                         Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                     }
-                });
+                });*/
 
     }
 
