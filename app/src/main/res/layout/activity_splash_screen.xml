@@ -18,11 +18,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center">
-            <ImageView
-                android:layout_width="220dp"
-                android:layout_height="220dp"
-                android:src="@drawable/geniuslogo"
-                app:tint="@color/white"></ImageView>
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_width="220dp"
+                    android:layout_height="220dp"
+                    android:src="@drawable/geniuslogo"
+                    app:tint="@color/white"></ImageView>
+
+
         </LinearLayout>
 
        <!-- <TextView

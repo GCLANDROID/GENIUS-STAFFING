@@ -394,7 +394,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
     public void acceptance() {
 
         String surl = AppData.url+"gcl_EmployeeAppointLetterAcceptance?AEMConsultantId=" + pref.getEmpConId() + "&MasterId=" + pref.getMasterId() + "&SecurityCode=" + pref.getSecurityCode();
-        Log.d("inputLogin", surl);
+        Log.d("inputLogin", surl);//
 
         final ProgressDialog pd=new ProgressDialog(EmployeeDashBoardActivity.this);
         pd.setMessage("Loading.....");
@@ -551,6 +551,8 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                     MenuItemModel itemModel=new MenuItemModel(MenuItem,MenuID);
                                     itemList.add(itemModel);
                                 }
+
+                                itemList.add(new MenuItemModel("Attendance","2"));
 
                                 if (pref.getEmpClintId().equals("AEMCLI1910000054") || pref.getEmpClintId().equals("AEMCLI2010000067") ||pref.getEmpClintId().equals("SECCLI2110000011") ||pref.getEmpClintId().equals("SECCLI2110000012") ){
                                     itemList.add(new MenuItemModel("Survey","200"));

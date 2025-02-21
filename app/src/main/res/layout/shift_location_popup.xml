@@ -109,33 +109,41 @@
         android:layout_marginEnd="20dp"
         android:visibility="invisible" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Location"
-        android:textStyle="bold"
-        android:textSize="13sp"
-        android:textColor="@color/colorPrimary"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="20dp"/>
-
-    <TextView
-        android:id="@+id/txtSelectLocation"
+    <LinearLayout
+        android:id="@+id/llLocation"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:hint="Select Location"
-        android:textSize="13.5sp"
-        android:paddingStart="20dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="8dp"
-        android:paddingBottom="10dp"
-        android:gravity="center_vertical"
-        android:drawableEnd="@drawable/ic_arrow_drop_down_24"
-        android:drawableTint="@color/colorPrimary"
-        android:background="@drawable/border_background"
-        android:layout_marginTop="5dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Location"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="20dp"/>
+
+        <TextView
+            android:id="@+id/txtSelectLocation"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="Select Location"
+            android:textSize="13.5sp"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="10dp"
+            android:gravity="center_vertical"
+            android:drawableEnd="@drawable/ic_arrow_drop_down_24"
+            android:drawableTint="@color/colorPrimary"
+            android:background="@drawable/border_background"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"/>
+    </LinearLayout>
+
+
 
     <Spinner
         android:id="@+id/spLocation"

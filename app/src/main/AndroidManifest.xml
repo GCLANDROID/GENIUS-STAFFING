@@ -41,6 +41,8 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <activity android:name=".activity.AttendanceWithOnlyShiftActivity"
+            android:screenOrientation="userPortrait"></activity>
         <activity
             android:name=".activity.SKF.SKF_AttendanceRegularizationActivity"
             android:exported="false" />

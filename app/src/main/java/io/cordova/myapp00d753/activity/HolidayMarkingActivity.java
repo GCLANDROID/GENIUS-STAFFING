@@ -57,6 +57,7 @@ import io.cordova.myapp00d753.databinding.ActivityHolidayMarkingBinding;
 import io.cordova.myapp00d753.module.HolidayMarkModel;
 import io.cordova.myapp00d753.module.SpineerItemModel;
 import io.cordova.myapp00d753.utility.AppData;
+import io.cordova.myapp00d753.utility.ClientID;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.Util;
 import retrofit2.Call;
@@ -92,6 +93,9 @@ public class HolidayMarkingActivity extends AppCompatActivity {
 
     private void initView() {
         pref = new Pref(HolidayMarkingActivity.this);
+        if (pref.getEmpClintId().equals(ClientID.SVF)){
+            llOptionalHolidayMark.setVisibility(View.GONE);
+        }
         leaveFlag=getIntent().getIntExtra("leaveFlag",1);
         searchHolidayDialog = new Dialog(HolidayMarkingActivity.this, R.style.CustomDialogNew2);
         spHoliday = findViewById(R.id.spHoliday);

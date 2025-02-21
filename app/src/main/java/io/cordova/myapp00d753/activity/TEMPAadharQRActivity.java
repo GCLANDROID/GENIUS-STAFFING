@@ -238,12 +238,13 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                 });
     }
 
+
     private void captchagebneration() {
         ProgressDialog pd=new ProgressDialog(this);
         pd.setMessage("Loading");
         pd.show();
         pd.setCancelable(false);
-        AndroidNetworking.get("https://india-vcip-aadhaarxml-demo.hyperverge.co/api/v1/captcha")
+        AndroidNetworking.get("https://vcip-aadhaarxml.hyperverge.co/api/v1/captcha")
                 .addHeaders("appId", AppData.APPID)
                 .addHeaders("appKey", AppData.APPKEY)
                 .addHeaders("transactionId", pref.getMasterId())
@@ -291,7 +292,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
         pd.setMessage("Loading");
         pd.show();
         pd.setCancelable(false);
-        AndroidNetworking.post("https://india-vcip-aadhaarxml-demo.hyperverge.co/api/v1/captcha")
+        AndroidNetworking.post("https://vcip-aadhaarxml.hyperverge.co/api/v1/captcha")
                 .addJSONObjectBody(jsonObject)
                 .addHeaders("appId", AppData.APPID)
                 .addHeaders("appKey", AppData.APPKEY)
@@ -339,7 +340,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
         pd.setMessage("Loading");
         pd.show();
         pd.setCancelable(false);
-        AndroidNetworking.post("https://india-vcip-aadhaarxml-demo.hyperverge.co/api/v1/otp")
+        AndroidNetworking.post("https://vcip-aadhaarxml.hyperverge.co/api/v1/otp")
                 .addJSONObjectBody(jsonObject)
                 .addHeaders("appId", AppData.APPID)
                 .addHeaders("appKey", AppData.APPKEY)
