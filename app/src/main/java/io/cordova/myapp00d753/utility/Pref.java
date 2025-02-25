@@ -1020,6 +1020,14 @@ public class Pref {
         return _pref.getString("UserLoginId","");
     }
 
+    public void saveExperience(String expStatus){
+        _editorPref.putString("experience", expStatus);
+        _editorPref.commit();
+    }
+
+    public String getExperience(){
+        return _pref.getString("experience","");
+    }
 
 }
 

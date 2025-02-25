@@ -730,7 +730,10 @@ public class TempProfileActivity extends AppCompatActivity {
                                     String RefContact = obj.optString("RefContact");
 
                                     binding.etRefNumber.setText(RefContact);
-
+                                    String experience = obj.optString("IsExperience");
+                                    pref.saveExperience(experience);
+                                    String PF_Number = obj.optString("PFNumber");
+                                    pref.saveSPF(PF_Number);
                                 }
                                 llMain.setVisibility(View.GONE);
                                 llLoader.setVisibility(View.VISIBLE);

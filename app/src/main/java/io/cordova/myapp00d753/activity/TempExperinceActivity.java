@@ -12,10 +12,9 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -26,7 +25,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,19 +37,22 @@ import com.android.volley.toolbox.StringRequest;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.DownloadListener;
+import com.androidnetworking.interfaces.DownloadProgressListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -65,8 +66,11 @@ import io.cordova.myapp00d753.module.MainDocModule;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.FindDocumentInformation;
+import io.cordova.myapp00d753.utility.ImageDownloader;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.RealPathUtil;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
 
 public class TempExperinceActivity extends AppCompatActivity {
     private static final String TAG = "TempExperinceActivity";
@@ -92,6 +96,8 @@ public class TempExperinceActivity extends AppCompatActivity {
     int pfflag=0;
     boolean is_PF_Account_Exist = false, is_Experience_Letter_Selected = false;
     ProgressDialog pd;
+    String experience_latter_url, file_name;
+    private Call downloadCall1,downloadCall2,downloadCall3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,7 +105,7 @@ public class TempExperinceActivity extends AppCompatActivity {
         initView();
 
 
-        JSONObject jsonObject = new JSONObject();
+        /*JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("AEMConsultantID", pref.getEmpConId());
             jsonObject.put("AEMClientID", pref.getEmpClintId());
@@ -110,6 +116,34 @@ public class TempExperinceActivity extends AppCompatActivity {
             checkFresherOrExperienceByOfficeDetails(jsonObject);
         } catch (JSONException e) {
             e.printStackTrace();
+        }*/
+
+        if (pref.getExperience().equals("1")){
+            //TODO: Experience
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("AEMConsultantID", pref.getEmpConId());
+                jsonObject.put("AEMClientID", pref.getEmpClintId());
+                jsonObject.put("AEMClientOfficeID", pref.getEmpClintOffId());
+                jsonObject.put("AEMEmployeeID", pref.getEmpId());
+                jsonObject.put("WorkingStatus", "1");
+                jsonObject.put("Operation", "10");
+                getExperienceDetails(jsonObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            //TODO: Fresher
+            if (binding.imgFreshersTick.getVisibility()==View.GONE){
+                binding.imgFreshersTick.setVisibility(View.VISIBLE);
+                binding.imgExperience.setVisibility(View.GONE);
+                binding.llExpericedForm.setVisibility(View.GONE);
+                flag=1;
+            }else {
+                binding.imgExperience.setVisibility(View.GONE);
+                binding.imgFreshersTick.setVisibility(View.GONE);
+                binding.llExpericedForm.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -130,6 +164,7 @@ public class TempExperinceActivity extends AppCompatActivity {
         uanPercentage.add("50");
         uanPercentage.add("25");
         binding.etUAN.setText(pref.getSUAN());
+        binding.etPFNumber.setText(pref.getSPF());
         if (AppData.COMPANYNAME.contains("SBI")){
             binding.llNonSBIEXP.setVisibility(View.VISIBLE);
             binding.llSBIEXP.setVisibility(View.VISIBLE);
@@ -158,7 +193,7 @@ public class TempExperinceActivity extends AppCompatActivity {
                     binding.imgExperience.setVisibility(View.GONE);
                     binding.llExpericedForm.setVisibility(View.GONE);
                     flag=1;
-                }else {
+                } else {
                     binding.imgExperience.setVisibility(View.GONE);
                     binding.imgFreshersTick.setVisibility(View.GONE);
                     binding.llExpericedForm.setVisibility(View.VISIBLE);
@@ -174,7 +209,7 @@ public class TempExperinceActivity extends AppCompatActivity {
                     binding.imgExperience.setVisibility(View.VISIBLE);
                     binding.llExpericedForm.setVisibility(View.VISIBLE);
                     flag=2;
-                }else {
+                } else {
                     binding.imgFreshersTick.setVisibility(View.GONE);
                     binding.imgExperience.setVisibility(View.GONE);
                     binding.llExpericedForm.setVisibility(View.GONE);
@@ -1187,7 +1222,9 @@ public class TempExperinceActivity extends AppCompatActivity {
                                         doe = DOE;
                                         binding.etDOJ.setText(DOJ);
                                         binding.etDOE.setText(DOE);
-                                        //imgAttachImage
+                                        file_name = experienceObj.optString("FILENAME");
+                                        experience_latter_url = AppData.IMAGE_PATH_URL + file_name;
+                                        Log.e(TAG, "onResponse: "+experience_latter_url);
                                         if (binding.imgExperience.getVisibility()==View.GONE){
                                             binding.imgFreshersTick.setVisibility(View.GONE);
                                             binding.imgExperience.setVisibility(View.VISIBLE);
@@ -1199,6 +1236,77 @@ public class TempExperinceActivity extends AppCompatActivity {
                                             binding.llExpericedForm.setVisibility(View.GONE);
                                         }
                                     }
+                                    is_Experience_Letter_Selected = true;
+                                    String exe = file_name.substring(file_name.lastIndexOf("."));
+                                    if (exe.equalsIgnoreCase(".pdf")){
+                                        binding.imgAttachImage.setVisibility(View.VISIBLE);
+                                        Picasso.with(TempExperinceActivity.this)
+                                                .load(R.drawable.loading)        // Load the image from the URL
+                                                .placeholder(R.drawable.loading)
+                                                .skipMemoryCache()
+                                                .error(R.drawable.warning)
+                                                .into(binding.imgAttachImage);
+                                        new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Log.e(TAG, "Thread: called");
+                                                compressedImageFile = downloadAndSavePDF(downloadCall1,experience_latter_url,file_name);
+                                                Log.e(TAG, "run: "+compressedImageFile.getAbsolutePath());
+                                                if (compressedImageFile != null){
+                                                    //is_Experience_Letter_Selected = true;
+                                                }
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Picasso.with(TempExperinceActivity.this)
+                                                                .load(R.drawable.pdff)        // Load the image from the URL
+                                                                .placeholder(R.drawable.loading)
+                                                                .skipMemoryCache()
+                                                                .error(R.drawable.warning)
+                                                                .into(binding.imgAttachImage);
+                                                    }
+                                                });
+                                            }
+                                        }).start();
+                                    } else {
+                                        Picasso.with(TempExperinceActivity.this)
+                                                .load(experience_latter_url)
+                                                .placeholder(R.drawable.loading)
+                                                .skipMemoryCache()// optional
+                                                .error(R.drawable.warning)
+                                                // optional
+                                                .into(binding.imgAttachImage);
+
+                                        ImageDownloader.downloadImageAndSaveToFile(getApplication(), experience_latter_url, file_name, new ImageDownloader.SaveFileListener() {
+                                            @Override
+                                            public void onSaveFile(File file) {
+                                                compressedImageFile = file;
+                                                //is_Experience_Letter_Selected = true;
+                                            }
+
+                                            @Override
+                                            public void onFileSaveFailure(String error) {
+                                                Log.e(TAG, "onFileSaveFailure: "+error);
+                                            }
+                                        });
+                                    }
+
+
+
+                                    JSONObject jsonObject = new JSONObject();
+                                    try {
+                                        jsonObject.put("AEMConsultantID", pref.getEmpConId());
+                                        jsonObject.put("AEMClientID", pref.getEmpClintId());
+                                        jsonObject.put("AEMClientOfficeID", pref.getEmpClintOffId());
+                                        jsonObject.put("AEMEmployeeID", pref.getEmpId());
+                                        jsonObject.put("WorkingStatus", "1");
+                                        jsonObject.put("Operation", "17");
+                                        getUAN_Details(jsonObject);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+
                                 }
                             }
                         } catch (JSONException e) {
@@ -1212,5 +1320,149 @@ public class TempExperinceActivity extends AppCompatActivity {
                         Log.e(TAG, "GET_EXPERIENCE_DETAILS_anError: "+anError.getErrorBody());
                     }
                 });
+    }
+
+    private void getUAN_Details(JSONObject jsonObject) {
+        ProgressDialog pd=new ProgressDialog(TempExperinceActivity.this);
+        pd.setMessage("Loading...");
+        pd.show();
+        pd.setCancelable(false);
+        AndroidNetworking.post(AppData.KYC_GET_DETAILS)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "GET_UAN_DETAILS: "+response.toString(4));
+                            pd.dismiss();
+                            JSONObject job1 = response;
+                            int Response_Code = job1.optInt("Response_Code");
+                            if (Response_Code == 101){
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONObject job2 = new JSONObject(Response_Data);
+                                JSONArray jsonArray = job2.getJSONArray("OldUANDetails");
+                                if (jsonArray.length() > 0){
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject uanDetailsObj = jsonArray.getJSONObject(i);
+                                        binding.etUANNominee.setText(uanDetailsObj.optString("MemberName"));
+                                        binding.etUANNomineeAddress.setText(uanDetailsObj.optString("NomineeAddress"));
+                                        int index = realation.indexOf(uanDetailsObj.optString("Relation"));
+                                        binding.spUANRealation.setSelection(index);
+                                        binding.tvUANDOB.setText(uanDetailsObj.optString("MemberDOB"));
+                                        int index_uan_percentage  = uanPercentage.indexOf(uanDetailsObj.optString("PFPercentage"));
+                                        binding.spTotalAmt.setSelection(index_uan_percentage);
+                                        binding.imgYes.setVisibility(View.VISIBLE);
+                                        binding.llUAN.setVisibility(View.VISIBLE);
+                                        is_PF_Account_Exist = true;
+                                    }
+                                } else {
+                                    binding.imgNo.setVisibility(View.VISIBLE);
+                                }
+                            } else {
+                                binding.imgNo.setVisibility(View.VISIBLE);
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "GET_UAN_DETAILS_error: "+anError.getErrorBody());
+                        pd.dismiss();
+                    }
+                });
+    }
+
+    void downloadExperienceLatter(){
+        ProgressDialog pd=new ProgressDialog(TempExperinceActivity.this);
+        pd.setMessage("Loading...");
+        pd.show();
+        pd.setCancelable(false);
+        File directory = new File(Environment.getExternalStorageDirectory(), "Genius Staffing KYC");
+        //File directory = new File(getExternalFilesDir(null), "Genius Staffing KYC");
+        if (!directory.exists()) {
+            directory.mkdirs(); // Create the directory if it doesn't exist
+        }
+        Log.e(TAG, "experience_latter_url: "+experience_latter_url );
+        Log.e(TAG, "directory: "+directory.getAbsolutePath() );
+        Log.e(TAG, "file_name: "+file_name );
+        String downloadPath = directory.getAbsolutePath();
+        AndroidNetworking.download(experience_latter_url, downloadPath,file_name)
+                .setTag("downloadTest")
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .setDownloadProgressListener(new DownloadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesDownloaded, long totalBytes) {
+                        // do anything with progress
+                    }
+                }).startDownload(new DownloadListener() {
+                    @Override
+                    public void onDownloadComplete() {
+                        // do anything after completion
+                        pd.dismiss();
+                        Log.e(TAG, "onDownloadComplete: called: "+directory.getAbsolutePath());
+
+                    }
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        pd.dismiss();
+                        Log.e(TAG, "onError: "+error.getErrorBody());
+                    }
+                });
+
+    }
+
+    private File downloadAndSavePDF(Call downloadCall,String url,String fileName) {
+        // Create OkHttp client to handle the download
+        OkHttpClient client = new OkHttpClient();
+
+        // Create the request to download the PDF
+        okhttp3.Request request = new okhttp3.Request.Builder().url(url).build();
+
+        // Keep the Call object reference to be able to cancel it later
+        downloadCall = client.newCall(request);
+
+        try {
+            // Execute the request
+            okhttp3.Response response = downloadCall.execute();
+
+            if (response.isSuccessful()) {
+                // Define the file where the PDF will be saved
+                File pdfFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
+                //File pdfFile = new File(Environment.getExternalStorageDirectory(), fileName);
+
+                // Create the output stream to save the file
+                try (InputStream inputStream = response.body().byteStream();
+                     OutputStream outputStream = new FileOutputStream(pdfFile)) {
+
+                    byte[] buffer = new byte[4096];
+                    int bytesRead;
+
+                    // Read from input stream and write to output stream
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
+                    }
+
+                    // Return the saved file
+                    return pdfFile;
+                } catch (IOException e) {
+                    Log.e(TAG, "Error saving PDF", e);
+                    return null;
+                }
+            } else {
+                Log.e(TAG, "Failed to download PDF. Response code: " + response.code());
+                return null;
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "Error downloading PDF", e);
+            return null;
+        }
     }
 }
