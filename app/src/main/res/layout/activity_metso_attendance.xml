@@ -135,7 +135,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:textColor="@color/black"
-                android:text=" This page will be expried within"
+                android:text=" This page will be expired within"
                 android:layout_gravity="center"/>
 
             <TextView

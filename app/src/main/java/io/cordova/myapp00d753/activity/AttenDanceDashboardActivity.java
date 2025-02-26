@@ -135,7 +135,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         if (leaveFlag==1){
             btnLeave.setVisibility(View.VISIBLE);
         }else {
-            btnLeave.setVisibility(View.VISIBLE);
+            btnLeave.setVisibility(View.GONE);
         }
         llQR = (LinearLayout) findViewById(R.id.llQR);
         llQR.setOnClickListener(this);
@@ -189,7 +189,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         if (pref.getOnLeave().equals("1")) {
             llWeekly.setVisibility(View.VISIBLE);
         } else {
-            llWeekly.setVisibility(View.VISIBLE);
+            llWeekly.setVisibility(View.GONE);
         }
 
         if (pref.getEmpClintId().equals("AEMCLI1110000502")||pref.getEmpClintId().equals(ClientID.SVF)){
@@ -204,7 +204,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         } else {
             /*llBackAttendance.setVisibility(View.GONE);
             llAttenRegularize.setVisibility(View.GONE);*/
-            llBackAttendance.setVisibility(View.VISIBLE);
+            llBackAttendance.setVisibility(View.GONE);
             llAttenRegularize.setVisibility(View.GONE);
         }
 
