@@ -41,7 +41,9 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.kyanogen.signatureview.SignatureView;
+import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,17 +53,18 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Calendar;
 
 import io.cordova.myapp00d753.AndroidXCamera.AndroidXCameraActivity;
 import io.cordova.myapp00d753.R;
-import io.cordova.myapp00d753.activity.metso.MetsoNewReimbursementClaimActivity;
-import io.cordova.myapp00d753.activity.metso.MetsoPMSTargetAchivementActivity;
 import io.cordova.myapp00d753.databinding.ActivityTempOtherDocumentBinding;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.FindDocumentInformation;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.RealPathUtil;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
 
 public class TempOtherDocumentActivity extends AppCompatActivity {
     private static final String TAG = "TempOtherDocumentActivi";
@@ -72,10 +75,11 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
     Bitmap bitmap;
     SignatureView canvasLL;
     File f;
-    File compressedImageFile;
+    File compressedImageFile, filePassportSizePhoto, fileFamilyPhoto, fileResume, fileExperience, fileAppointmentLetter;
+    String passportSizePhotoURL="", familyPhotoURL="", resumeURL="", experienceURL="", appointmentLetterURL="";
     Pref pref;
     Uri image_uri;
-    int flag;
+    int flag,pFlag = 0, fFlag=0, rFlag=0, eFlag = 0, aFlag=0;
     String pdfFilePath, pdfFileName;
     private static final int DEFAULT_BUFFER_SIZE = 2048;
     ImageView imgBack;
@@ -95,6 +99,21 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
             binding.imgPassportDocument.setImageBitmap(decodedByte);
         }
 
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("AEMConsultantID", pref.getEmpConId());
+            jsonObject.put("AEMClientID", pref.getEmpClintId());
+            jsonObject.put("AEMClientOfficeID", pref.getEmpClintOffId());
+            jsonObject.put("AEMEmployeeID", pref.getEmpId());
+            jsonObject.put("WorkingStatus", "1");
+            jsonObject.put("Operation", "16");
+            getOtherDocument(jsonObject);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+
 
         binding.btnSaveForm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,8 +131,9 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
         binding.btnPassportSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (flag==1){
-                    docupload("0016","Passport Size Photo",binding.btnPassportSave);
+                //if (flag==1){
+                if (pFlag==1){
+                    docupload("0016","Passport Size Photo",binding.btnPassportSave,filePassportSizePhoto);
                 }else {
                     Toast.makeText(TempOtherDocumentActivity.this,"Please Upload Passport Size Photo",Toast.LENGTH_LONG).show();
                 }
@@ -132,8 +152,9 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
         binding.btnFamilySave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (flag==1){
-                    docupload("0015","Family Photo",binding.btnFamilySave);
+                //if (flag==1){
+                if (fFlag==1){
+                    docupload("0015","Family Photo",binding.btnFamilySave,fileFamilyPhoto);
                 }else {
                     Toast.makeText(TempOtherDocumentActivity.this,"Please Upload Family Photo",Toast.LENGTH_LONG).show();
                 }
@@ -152,8 +173,9 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
         binding.btnResumeSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (flag==1){
-                    docupload("0021","Resume",binding.btnResumeSave);
+                //if (flag==1){
+                if (rFlag==1){
+                    docupload("0021","Resume",binding.btnResumeSave,fileResume);
                 }else {
                     Toast.makeText(TempOtherDocumentActivity.this,"Please Upload Resume",Toast.LENGTH_LONG).show();
                 }
@@ -172,8 +194,9 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
         binding.btnExperinceLetterSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (flag==1){
-                    docupload("0070","Experince Letter",binding.btnExperinceLetterSave);
+                //if (flag==1){
+                if (eFlag==1){
+                    docupload("0070","Experience Letter",binding.btnExperinceLetterSave,fileExperience);
                 }else {
                     Toast.makeText(TempOtherDocumentActivity.this,"Please Upload Experince Letter",Toast.LENGTH_LONG).show();
                 }
@@ -192,8 +215,9 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
         binding.btnAppointLetterSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (flag==1){
-                    docupload("0068","Appointment Letter",binding.btnAppointLetterSave);
+                //if (flag==1){
+                if (aFlag==1){
+                    docupload("0068","Appointment Letter",binding.btnAppointLetterSave,fileAppointmentLetter);
                 }else {
                     Toast.makeText(TempOtherDocumentActivity.this,"Please Upload Appointment Letter",Toast.LENGTH_LONG).show();
                 }
@@ -212,6 +236,61 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+
+        binding.imgPassportDocument.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!passportSizePhotoURL.isEmpty()){
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(passportSizePhotoURL));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+            }
+        });
+
+        binding.imgFamilyDocument.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!familyPhotoURL.isEmpty()){
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(familyPhotoURL));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+            }
+        });
+
+        binding.imgResumeDocument.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!resumeURL.isEmpty()){
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(resumeURL));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+            }
+        });
+
+        binding.imgExperinceLetterDocument.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!experienceURL.isEmpty()){
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(experienceURL));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+            }
+        });
+
+        binding.imgAppointmentletterDocument.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!appointmentLetterURL.isEmpty()){
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(appointmentLetterURL));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -382,7 +461,7 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
     }
 
 
-    private void docupload(String docid,String doc,Button btn) {
+    private void docupload(String docid,String doc,Button btn,File docFile) {
         ProgressDialog progressDialog=new ProgressDialog(TempOtherDocumentActivity.this);
         progressDialog.setMessage("Uploading");
         progressDialog.setCancelable(false);
@@ -394,7 +473,8 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
                 .addMultipartParameter("DocumentID", docid)
                 .addMultipartParameter("ReferenceNo", "0")
                 .addMultipartParameter("SecurityCode", pref.getSecurityCode())
-                .addMultipartFile("SingleFile", compressedImageFile)
+                //.addMultipartFile("SingleFile", compressedImageFile)
+                .addMultipartFile("SingleFile", docFile)
                 .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setPercentageThresholdForCancelling(60)
                 .setTag("uploadTest")
@@ -416,6 +496,17 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
                             int Response_Code = job1.optInt("Response_Code");
                             String Response_Data = job1.optString("Response_Data");
                             if (Response_Code == 101) {
+                                if (doc.equalsIgnoreCase("Passport Size Photo")){
+                                    pFlag=0;
+                                } else if (doc.equalsIgnoreCase("Family Photo")){
+                                    fFlag = 0;
+                                } else if (doc.equalsIgnoreCase("Resume")){
+                                    rFlag = 0;
+                                } else if (doc.equalsIgnoreCase("Experience Letter")){
+                                    eFlag = 0;
+                                } else if (doc.equalsIgnoreCase("Appointment Letter")){
+                                    aFlag = 0;
+                                }
                                 flag=0;
                                 btn.setVisibility(View.GONE);
                                 Toast.makeText(getApplicationContext(), doc+" details has been updated successfully", Toast.LENGTH_LONG).show();
@@ -566,11 +657,11 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
             image_uri =  Uri.parse(String.valueOf(data.getExtras().get("picture")));
             //image_uri = (Uri) data.getExtras().get(AndroidXCameraActivity.IMAGE_PATH_KEY);
             compressedImageFile = new File(String.valueOf(data.getExtras().get("picture")));
-
+            filePassportSizePhoto = new File(String.valueOf(data.getExtras().get("picture")));
             if (image_uri != null){
                 binding.imgPassportDocument.setImageURI(image_uri);
                 flag=1;
-
+                pFlag=1;
             }
         }else if ((requestCode == 100 )) {
             InputStream imageStream = null;
@@ -579,6 +670,7 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
                     image_uri = data.getData();
                     String filePath = getRealPathFromURIPath(image_uri, TempOtherDocumentActivity.this);
                     compressedImageFile = new File(filePath);
+                    filePassportSizePhoto = new File(filePath);
                     //  Log.d(TAG, "filePath=" + filePath);
                     imageStream = getContentResolver().openInputStream(image_uri);
                     Bitmap bm = cropToSquare(BitmapFactory.decodeStream(imageStream));
@@ -588,7 +680,7 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
                     binding.imgPassportDocument.setImageBitmap(bm);
 
                     flag = 1;
-
+                    pFlag=1;
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -603,11 +695,11 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
             image_uri =  Uri.parse(String.valueOf(data.getExtras().get("picture")));
             //image_uri = (Uri) data.getExtras().get(AndroidXCameraActivity.IMAGE_PATH_KEY);
             compressedImageFile = new File(String.valueOf(data.getExtras().get("picture")));
-
+            fileFamilyPhoto = new File(String.valueOf(data.getExtras().get("picture")));
             if (image_uri != null){
                 binding.imgFamilyDocument.setImageURI(image_uri);
                 flag=1;
-
+                fFlag=1;
             }
         }else if ((requestCode == 200 )) {
             InputStream imageStream = null;
@@ -616,6 +708,7 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
                     image_uri = data.getData();
                     String filePath = getRealPathFromURIPath(image_uri, TempOtherDocumentActivity.this);
                     compressedImageFile = new File(filePath);
+                    fileFamilyPhoto = new File(filePath);
                     //  Log.d(TAG, "filePath=" + filePath);
                     imageStream = getContentResolver().openInputStream(image_uri);
                     Bitmap bm = cropToSquare(BitmapFactory.decodeStream(imageStream));
@@ -625,7 +718,7 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
                     binding.imgFamilyDocument.setImageBitmap(bm);
 
                     flag = 1;
-
+                    fFlag=1;
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -640,35 +733,38 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
             image_uri =  Uri.parse(String.valueOf(data.getExtras().get("picture")));
             //image_uri = (Uri) data.getExtras().get(AndroidXCameraActivity.IMAGE_PATH_KEY);
             compressedImageFile = new File(String.valueOf(data.getExtras().get("picture")));
-
+            fileResume = new File(String.valueOf(data.getExtras().get("picture")));
             if (image_uri != null){
                 binding.imgResumeDocument.setImageURI(image_uri);
                 flag=1;
-
+                rFlag = 1;
             }
         }else  if ((requestCode == 300 )){
-            Uri uri = data.getData();
-            Log.e("TAG", "onActivityResult: "+uri.getPath());
-            String imagePath = uri.getPath();
-            if (imagePath.contains("all_external")){
-                 pdfFileName = FindDocumentInformation.FileNameFromURL(imagePath);
-                compressedImageFile = convertInputStreamToFile(uri,pdfFileName);
-
-            } else {
-                try {
-                    pdfFilePath = getRealPath(TempOtherDocumentActivity.this,uri);
-                    pdfFileName = FindDocumentInformation.FileNameFromURL(pdfFilePath);
-                } catch (IllegalArgumentException e){
-                    //Todo: from WPS office document select
+            if (data != null){
+                Uri uri = data.getData();
+                Log.e("TAG", "onActivityResult: "+uri.getPath());
+                String imagePath = uri.getPath();
+                if (imagePath.contains("all_external")){
                     pdfFileName = FindDocumentInformation.FileNameFromURL(imagePath);
                     compressedImageFile = convertInputStreamToFile(uri,pdfFileName);
-
+                    fileResume = convertInputStreamToFile(uri,pdfFileName);
+                } else {
+                    try {
+                        pdfFilePath = getRealPath(TempOtherDocumentActivity.this,uri);
+                        pdfFileName = FindDocumentInformation.FileNameFromURL(pdfFilePath);
+                    } catch (IllegalArgumentException e){
+                        //Todo: from WPS office document select
+                        pdfFileName = FindDocumentInformation.FileNameFromURL(imagePath);
+                        compressedImageFile = convertInputStreamToFile(uri,pdfFileName);
+                        fileResume = convertInputStreamToFile(uri,pdfFileName);
+                    }
+                    compressedImageFile = convertInputStreamToFile(uri,pdfFileName);
+                    fileResume = convertInputStreamToFile(uri,pdfFileName);
                 }
-                compressedImageFile = convertInputStreamToFile(uri,pdfFileName);
-
+                binding.imgResumeDocument.setImageDrawable(getResources().getDrawable(R.drawable.ic_pdf));
+                flag = 1;
+                rFlag = 1;
             }
-            binding.imgResumeDocument.setImageDrawable(getResources().getDrawable(R.drawable.ic_pdf));
-            flag = 1;
             //flag++;
         }else  if (requestCode == 2000 && resultCode == 4001){
             Log.e("TAG", "onActivityResult: "+data.getExtras().get("picture"));
@@ -676,11 +772,11 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
             image_uri =  Uri.parse(String.valueOf(data.getExtras().get("picture")));
             //image_uri = (Uri) data.getExtras().get(AndroidXCameraActivity.IMAGE_PATH_KEY);
             compressedImageFile = new File(String.valueOf(data.getExtras().get("picture")));
-
+            fileExperience = new File(String.valueOf(data.getExtras().get("picture")));
             if (image_uri != null){
                 binding.imgExperinceLetterDocument.setImageURI(image_uri);
                 flag=1;
-
+                eFlag =1;
             }
         }else  if ((requestCode == 400 )){
             Uri uri = data.getData();
@@ -689,7 +785,7 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
             if (imagePath.contains("all_external")){
                 pdfFileName = FindDocumentInformation.FileNameFromURL(imagePath);
                 compressedImageFile = convertInputStreamToFile(uri,pdfFileName);
-
+                fileExperience = convertInputStreamToFile(uri,pdfFileName);
             } else {
                 try {
                     pdfFilePath = getRealPath(TempOtherDocumentActivity.this,uri);
@@ -698,13 +794,14 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
                     //Todo: from WPS office document select
                     pdfFileName = FindDocumentInformation.FileNameFromURL(imagePath);
                     compressedImageFile = convertInputStreamToFile(uri,pdfFileName);
-
+                    fileExperience = convertInputStreamToFile(uri,pdfFileName);
                 }
                 compressedImageFile = convertInputStreamToFile(uri,pdfFileName);
-
+                fileExperience = convertInputStreamToFile(uri,pdfFileName);
             }
             binding.imgExperinceLetterDocument.setImageDrawable(getResources().getDrawable(R.drawable.ic_pdf));
             flag = 1;
+            eFlag =1;
             //flag++;
         }else  if (requestCode == 2000 && resultCode == 5001){
             Log.e("TAG", "onActivityResult: "+data.getExtras().get("picture"));
@@ -712,11 +809,11 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
             image_uri =  Uri.parse(String.valueOf(data.getExtras().get("picture")));
             //image_uri = (Uri) data.getExtras().get(AndroidXCameraActivity.IMAGE_PATH_KEY);
             compressedImageFile = new File(String.valueOf(data.getExtras().get("picture")));
-
+            fileAppointmentLetter = new File(String.valueOf(data.getExtras().get("picture")));
             if (image_uri != null){
                 binding.imgAppointmentletterDocument.setImageURI(image_uri);
                 flag=1;
-
+                aFlag = 1;
             }
         }else  if ((requestCode == 500 )){
             Uri uri = data.getData();
@@ -725,7 +822,7 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
             if (imagePath.contains("all_external")){
                 pdfFileName = FindDocumentInformation.FileNameFromURL(imagePath);
                 compressedImageFile = convertInputStreamToFile(uri,pdfFileName);
-
+                fileAppointmentLetter = convertInputStreamToFile(uri,pdfFileName);
             } else {
                 try {
                     pdfFilePath = getRealPath(TempOtherDocumentActivity.this,uri);
@@ -734,20 +831,16 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
                     //Todo: from WPS office document select
                     pdfFileName = FindDocumentInformation.FileNameFromURL(imagePath);
                     compressedImageFile = convertInputStreamToFile(uri,pdfFileName);
-
+                    fileAppointmentLetter = convertInputStreamToFile(uri,pdfFileName);
                 }
                 compressedImageFile = convertInputStreamToFile(uri,pdfFileName);
-
+                fileAppointmentLetter = convertInputStreamToFile(uri,pdfFileName);
             }
             binding.imgAppointmentletterDocument.setImageDrawable(getResources().getDrawable(R.drawable.ic_pdf));
             flag = 1;
+            aFlag = 1;
             //flag++;
         }
-
-
-
-
-
     }
 
     private File convertInputStreamToFile(Uri uri, String fileNme) {
@@ -931,5 +1024,487 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.CENTER);
         alerDialog1.show();
+    }
+
+    void getOtherDocument(JSONObject jsonObject){
+        ProgressDialog pd=new ProgressDialog(TempOtherDocumentActivity.this);
+        pd.setMessage("Loading...");
+        pd.show();
+        pd.setCancelable(false);
+        AndroidNetworking.post(AppData.KYC_GET_DETAILS)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "GET_OTHER_DOCUMENT: "+response.toString(4));
+                            pd.dismiss();
+                            JSONObject job1 = response;
+                            int Response_Code = job1.optInt("Response_Code");
+                            if (Response_Code == 101){
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONObject job2 = new JSONObject(Response_Data);
+                                JSONArray jsonArray = job2.getJSONArray("OtherDocDetails");
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject otherDocObj = jsonArray.getJSONObject(i);
+                                    if (otherDocObj.optString("DocumentType").equalsIgnoreCase("Self Photo(PP)")){
+                                        String DocUrl = otherDocObj.optString("DocUrl");
+                                        passportSizePhotoURL = otherDocObj.optString("DocUrl");
+                                        String DocumentID = otherDocObj.optString("DocumentID");
+                                        String FileName = otherDocObj.optString("FileName");
+                                        getPassportPhoto(DocUrl,FileName);
+                                    } else if(otherDocObj.optString("DocumentType").equalsIgnoreCase("Family Photo")){
+                                        String DocUrl = otherDocObj.optString("DocUrl");
+                                        familyPhotoURL = otherDocObj.optString("DocUrl");
+                                        String DocumentID = otherDocObj.optString("DocumentID");
+                                        String FileName = otherDocObj.optString("FileName");
+                                        getFamilyPhoto(DocUrl,FileName);
+                                    } else if(otherDocObj.optString("DocumentType").equalsIgnoreCase("Resume")){
+                                        String DocUrl = otherDocObj.optString("DocUrl");
+                                        resumeURL = otherDocObj.optString("DocUrl");
+                                        String DocumentID = otherDocObj.optString("DocumentID");
+                                        String FileName = otherDocObj.optString("FileName");
+                                        getResume(DocUrl,FileName);
+                                    } else if(otherDocObj.optString("DocumentType").equalsIgnoreCase("Experience Letter")){
+                                        String DocUrl = otherDocObj.optString("DocUrl");
+                                        experienceURL = otherDocObj.optString("DocUrl");
+                                        String DocumentID = otherDocObj.optString("DocumentID");
+                                        String FileName = otherDocObj.optString("FileName");
+                                        getExperienceLetter(DocUrl,FileName);
+                                    } else if(otherDocObj.optString("DocumentType").equalsIgnoreCase("Appointment Letter")){
+                                        String DocUrl = otherDocObj.optString("DocUrl");
+                                        appointmentLetterURL = otherDocObj.optString("DocUrl");
+                                        String DocumentID = otherDocObj.optString("DocumentID");
+                                        String FileName = otherDocObj.optString("FileName");
+                                        getAppointmentLetter(DocUrl,FileName);
+                                    }
+                                }
+                            } else {
+
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "GET_OTHER_DOCUMENT_error: "+anError.getErrorBody());
+                        pd.dismiss();
+                    }
+                });
+    }
+
+    private void getAppointmentLetter(String docUrl, String fileName) {
+        String exe = docUrl.substring(docUrl.lastIndexOf("."));
+        Picasso.with(TempOtherDocumentActivity.this)
+                .load(R.drawable.loading)        // Load the image from the URL
+                .placeholder(R.drawable.loading)
+                .skipMemoryCache()
+                .error(R.drawable.warning)
+                .into(binding.imgAppointmentletterDocument);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                fileAppointmentLetter = downloadResume_PDF(docUrl,fileName);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (exe.equalsIgnoreCase(".pdf")){
+                            Picasso.with(TempOtherDocumentActivity.this)
+                                    .load(R.drawable.pdff)        // Load the image from the URL
+                                    .placeholder(R.drawable.loading)
+                                    .skipMemoryCache()
+                                    .error(R.drawable.warning)
+                                    .into(binding.imgAppointmentletterDocument);
+                        } else {
+                            Picasso.with(TempOtherDocumentActivity.this)
+                                    .load(docUrl)
+                                    .placeholder(R.drawable.loading)
+                                    .skipMemoryCache()// optional
+                                    .error(R.drawable.warning)
+                                    .into(binding.imgAppointmentletterDocument);
+                        }
+                    }
+                });
+            }
+        }).start();
+
+    }
+
+    private void getExperienceLetter(String docUrl, String fileName) {
+        String exe = docUrl.substring(docUrl.lastIndexOf("."));
+        Picasso.with(TempOtherDocumentActivity.this)
+                .load(R.drawable.loading)        // Load the image from the URL
+                .placeholder(R.drawable.loading)
+                .skipMemoryCache()
+                .error(R.drawable.warning)
+                .into(binding.imgExperinceLetterDocument);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                fileExperience = downloadResume_PDF(docUrl, fileName);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (exe.equalsIgnoreCase(".pdf")){
+                            Picasso.with(TempOtherDocumentActivity.this)
+                                    .load(R.drawable.pdff)        // Load the image from the URL
+                                    .placeholder(R.drawable.loading)
+                                    .skipMemoryCache()
+                                    .error(R.drawable.warning)
+                                    .into(binding.imgExperinceLetterDocument);
+                        } else {
+                            Picasso.with(TempOtherDocumentActivity.this)
+                                    .load(docUrl)
+                                    .placeholder(R.drawable.loading)
+                                    .skipMemoryCache()// optional
+                                    .error(R.drawable.warning)
+                                    .into(binding.imgExperinceLetterDocument);
+                        }
+
+                    }
+                });
+            }
+        }).start();
+    }
+
+    private void getResume(String docUrl, String fileName) {
+        String exe = docUrl.substring(docUrl.lastIndexOf("."));
+        Picasso.with(TempOtherDocumentActivity.this)
+                .load(R.drawable.loading)
+                .placeholder(R.drawable.loading)
+                .skipMemoryCache()// optional
+                .error(R.drawable.warning)
+                .into(binding.imgResumeDocument);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                fileResume = downloadResume_PDF(docUrl, fileName);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (exe.equalsIgnoreCase(".pdf")){
+                            Picasso.with(TempOtherDocumentActivity.this)
+                                    .load(R.drawable.pdff)        // Load the image from the URL
+                                    .placeholder(R.drawable.loading)
+                                    .skipMemoryCache()
+                                    .error(R.drawable.warning)
+                                    .into(binding.imgResumeDocument);
+                        } else {
+                            Picasso.with(TempOtherDocumentActivity.this)
+                                    .load(docUrl)
+                                    .placeholder(R.drawable.loading)
+                                    .skipMemoryCache()// optional
+                                    .error(R.drawable.warning)
+                                    .into(binding.imgResumeDocument);
+                        }
+                    }
+                });
+            }
+        }).start();
+    }
+
+    private void getFamilyPhoto(String docUrl, String fileName) {
+        String exe = docUrl.substring(docUrl.lastIndexOf("."));
+        Picasso.with(TempOtherDocumentActivity.this)
+                .load(docUrl)
+                .placeholder(R.drawable.loading)
+                .skipMemoryCache()
+                .error(R.drawable.warning)
+                .into(binding.imgFamilyDocument);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Log.e(TAG, "Family_Photo: "+downloadFamilyPhoto(docUrl, fileName));
+                fileFamilyPhoto = downloadFamilyPhoto(docUrl, fileName);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Picasso.with(TempOtherDocumentActivity.this)
+                                .load(docUrl)
+                                .placeholder(R.drawable.loading)
+                                .skipMemoryCache()
+                                .error(R.drawable.warning)
+                                .into(binding.imgFamilyDocument);
+                    }
+                });
+            }
+        }).start();
+    }
+
+    private void getPassportPhoto(String docUrl, String fileName) {
+        String exe = docUrl.substring(docUrl.lastIndexOf("."));
+        Picasso.with(TempOtherDocumentActivity.this)
+                .load(docUrl)
+                .placeholder(R.drawable.loading)
+                .skipMemoryCache()
+                .error(R.drawable.warning)
+                .into(binding.imgPassportDocument);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Log.e(TAG, "Passport_Photo: "+downloadFamilyPhoto(docUrl, fileName));
+                filePassportSizePhoto = downloadFamilyPhoto(docUrl, fileName);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Picasso.with(TempOtherDocumentActivity.this)
+                                .load(docUrl)
+                                .placeholder(R.drawable.loading)
+                                .skipMemoryCache()
+                                .error(R.drawable.warning)
+                                .into(binding.imgPassportDocument);
+                    }
+                });
+            }
+        }).start();
+    }
+
+
+    private File downloadPassportPhoto(String url, String fileName) {
+        // Create OkHttp client to handle the download
+
+        OkHttpClient client = new OkHttpClient();
+
+        // Create the request to download the PDF
+        okhttp3.Request request = new okhttp3.Request.Builder().url(url).build();
+
+        // Keep the Call object reference to be able to cancel it later
+        Call downloadCall = client.newCall(request);
+
+        try {
+            // Execute the request
+            okhttp3.Response response = downloadCall.execute();
+
+            if (response.isSuccessful()) {
+                // Define the file where the PDF will be saved
+                File pdfFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
+                //File pdfFile = new File(Environment.getExternalStorageDirectory(), fileName);
+
+                // Create the output stream to save the file
+                try (InputStream inputStream = response.body().byteStream();
+                     OutputStream outputStream = new FileOutputStream(pdfFile)) {
+
+                    byte[] buffer = new byte[4096];
+                    int bytesRead;
+
+                    // Read from input stream and write to output stream
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
+                    }
+
+                    // Return the saved file
+                    return pdfFile;
+                } catch (IOException e) {
+                    Log.e(TAG, "Error saving PDF", e);
+                    return null;
+                }
+            } else {
+                Log.e(TAG, "Failed to download PDF. Response code: " + response.code());
+                return null;
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "Error downloading PDF", e);
+            return null;
+        }
+    }
+
+
+    private File downloadFamilyPhoto(String url, String fileName) {
+        // Create OkHttp client to handle the download
+
+        OkHttpClient client = new OkHttpClient();
+
+        // Create the request to download the PDF
+        okhttp3.Request request = new okhttp3.Request.Builder().url(url).build();
+
+        // Keep the Call object reference to be able to cancel it later
+        Call downloadCall = client.newCall(request);
+
+        try {
+            // Execute the request
+            okhttp3.Response response = downloadCall.execute();
+
+            if (response.isSuccessful()) {
+                // Define the file where the PDF will be saved
+                File pdfFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
+                //File pdfFile = new File(Environment.getExternalStorageDirectory(), fileName);
+
+                // Create the output stream to save the file
+                try (InputStream inputStream = response.body().byteStream();
+                     OutputStream outputStream = new FileOutputStream(pdfFile)) {
+
+                    byte[] buffer = new byte[4096];
+                    int bytesRead;
+
+                    // Read from input stream and write to output stream
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
+                    }
+
+                    // Return the saved file
+                    return pdfFile;
+                } catch (IOException e) {
+                    Log.e(TAG, "Error saving PDF", e);
+                    return null;
+                }
+            } else {
+                Log.e(TAG, "Failed to download PDF. Response code: " + response.code());
+                return null;
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "Error downloading PDF", e);
+            return null;
+        }
+    }
+
+    private File downloadAppointmentLetter_PDF(String url, String fileName) {
+        // Create OkHttp client to handle the download
+
+        OkHttpClient client = new OkHttpClient();
+
+        // Create the request to download the PDF
+        okhttp3.Request request = new okhttp3.Request.Builder().url(url).build();
+
+        // Keep the Call object reference to be able to cancel it later
+        Call downloadCall = client.newCall(request);
+
+        try {
+            // Execute the request
+            okhttp3.Response response = downloadCall.execute();
+
+            if (response.isSuccessful()) {
+                // Define the file where the PDF will be saved
+                File pdfFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
+                //File pdfFile = new File(Environment.getExternalStorageDirectory(), fileName);
+
+                // Create the output stream to save the file
+                try (InputStream inputStream = response.body().byteStream();
+                     OutputStream outputStream = new FileOutputStream(pdfFile)) {
+
+                    byte[] buffer = new byte[4096];
+                    int bytesRead;
+
+                    // Read from input stream and write to output stream
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
+                    }
+
+                    // Return the saved file
+                    return pdfFile;
+                } catch (IOException e) {
+                    Log.e(TAG, "Error saving PDF", e);
+                    return null;
+                }
+            } else {
+                Log.e(TAG, "Failed to download PDF. Response code: " + response.code());
+                return null;
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "Error downloading PDF", e);
+            return null;
+        }
+    }
+
+    private File downloadExperienceLetter_PDF(String url, String fileName) {
+        // Create OkHttp client to handle the download
+
+        OkHttpClient client = new OkHttpClient();
+
+        // Create the request to download the PDF
+        okhttp3.Request request = new okhttp3.Request.Builder().url(url).build();
+
+        // Keep the Call object reference to be able to cancel it later
+        Call downloadCall = client.newCall(request);
+
+        try {
+            // Execute the request
+            okhttp3.Response response = downloadCall.execute();
+
+            if (response.isSuccessful()) {
+                // Define the file where the PDF will be saved
+                File pdfFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
+                //File pdfFile = new File(Environment.getExternalStorageDirectory(), fileName);
+
+                // Create the output stream to save the file
+                try (InputStream inputStream = response.body().byteStream();
+                     OutputStream outputStream = new FileOutputStream(pdfFile)) {
+
+                    byte[] buffer = new byte[4096];
+                    int bytesRead;
+
+                    // Read from input stream and write to output stream
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
+                    }
+
+                    // Return the saved file
+                    return pdfFile;
+                } catch (IOException e) {
+                    Log.e(TAG, "Error saving PDF", e);
+                    return null;
+                }
+            } else {
+                Log.e(TAG, "Failed to download PDF. Response code: " + response.code());
+                return null;
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "Error downloading PDF", e);
+            return null;
+        }
+    }
+
+    private File downloadResume_PDF(String url, String fileName) {
+        // Create OkHttp client to handle the download
+
+        OkHttpClient client = new OkHttpClient();
+
+        // Create the request to download the PDF
+        okhttp3.Request request = new okhttp3.Request.Builder().url(url).build();
+
+        // Keep the Call object reference to be able to cancel it later
+        Call downloadCall = client.newCall(request);
+
+        try {
+            // Execute the request
+            okhttp3.Response response = downloadCall.execute();
+
+            if (response.isSuccessful()) {
+                // Define the file where the PDF will be saved
+                File pdfFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
+                //File pdfFile = new File(Environment.getExternalStorageDirectory(), fileName);
+
+                // Create the output stream to save the file
+                try (InputStream inputStream = response.body().byteStream();
+                     OutputStream outputStream = new FileOutputStream(pdfFile)) {
+
+                    byte[] buffer = new byte[4096];
+                    int bytesRead;
+
+                    // Read from input stream and write to output stream
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
+                    }
+
+                    // Return the saved file
+                    return pdfFile;
+                } catch (IOException e) {
+                    Log.e(TAG, "Error saving PDF", e);
+                    return null;
+                }
+            } else {
+                Log.e(TAG, "Failed to download PDF. Response code: " + response.code());
+                return null;
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "Error downloading PDF", e);
+            return null;
+        }
     }
 }
