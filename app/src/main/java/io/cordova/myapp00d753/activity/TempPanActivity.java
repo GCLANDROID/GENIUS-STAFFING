@@ -1,5 +1,7 @@
 package io.cordova.myapp00d753.activity;
 
+import static io.cordova.myapp00d753.utility.RealPathUtil.getRealPath;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
@@ -8,10 +10,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Environment;
-import android.os.RecoverySystem;
 import android.provider.MediaStore;
 
 import android.os.Bundle;
@@ -20,7 +20,6 @@ import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,12 +41,9 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
-import com.google.android.gms.vision.Frame;
-import com.google.android.gms.vision.text.TextBlock;
-import com.google.android.gms.vision.text.TextRecognizer;
 import com.squareup.picasso.Picasso;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
+//import com.theartofdev.edmodo.cropper.CropImage;
+//import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,31 +51,25 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import id.zelory.compressor.Compressor;
 import io.cordova.myapp00d753.AndroidXCamera.AndroidXCameraActivity;
 import io.cordova.myapp00d753.R;
-import io.cordova.myapp00d753.activity.metso.MetsoPMSTargetAchivementActivity;
-import io.cordova.myapp00d753.bluedart.BlueDartAttendanceManageActivity;
 import io.cordova.myapp00d753.module.AttendanceService;
-import io.cordova.myapp00d753.module.EducationalModel;
-import io.cordova.myapp00d753.module.UploadObject;
 import io.cordova.myapp00d753.utility.AppData;
-import io.cordova.myapp00d753.utility.ImageDownloader;
+import io.cordova.myapp00d753.utility.FindDocumentInformation;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.Util;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
+import okhttp3.Call;
 import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
 import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -120,8 +110,11 @@ public class TempPanActivity extends AppCompatActivity {
     int responseflag=0;
     int panvalflag=0;
     LinearLayout llPANVAL,llPanDoc,llAadharFront,llAadharBack;
+    String aadhaarImage="",aadhaarBackPage = "", imagePanURL ="";
     //boolean is_Pan_Document_selected = false;
     boolean panFlag=false;
+    String pdfFilePath, pdfFileName;
+    private static final int DEFAULT_BUFFER_SIZE = 2048;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -299,7 +292,7 @@ public class TempPanActivity extends AppCompatActivity {
         imgCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                attechmentAlert(200,1001);
+                attechmentAlert(200,1001, "yes");
             }
         });
 
@@ -307,7 +300,7 @@ public class TempPanActivity extends AppCompatActivity {
         imgAadharCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                attechmentAlert(300,2001);
+                attechmentAlert(300,2001,"yes");
             }
         });
 
@@ -315,7 +308,7 @@ public class TempPanActivity extends AppCompatActivity {
         imgAadharBackCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                attechmentAlert(400,3001);
+                attechmentAlert(400,3001,"yes");
             }
         });
 
@@ -352,7 +345,38 @@ public class TempPanActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+        //aadhaarImage="",aadhaarBackPage = "", imagePanURL ="";
+        imgAadharDocument.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!aadhaarImage.isEmpty()){
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(aadhaarImage));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);                }
+            }
+        });
 
+        imgAadharBackDocument.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!aadhaarBackPage.isEmpty()){
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(aadhaarBackPage));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+            }
+        });
+
+        imgDoc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!imagePanURL.isEmpty()){
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(imagePanURL));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     private void cameraIntent() {
@@ -411,6 +435,32 @@ public class TempPanActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
+        }else if (requestCode == 1002){
+            Log.e(TAG, "onActivityResult: PDF: "+data.getData());
+            if (data != null){
+                Uri uri = data.getData();
+                Log.e("TAG", "onActivityResult: "+uri.getPath());
+                String imagePath = uri.getPath();
+                if (imagePath.contains("all_external")){
+                    pdfFileName = FindDocumentInformation.FileNameFromURL(imagePath);
+                    compressedImageFilePan = convertInputStreamToFile(uri,pdfFileName);
+
+                } else {
+                    try {
+                        pdfFilePath = getRealPath(TempPanActivity.this,uri);
+                        pdfFileName = FindDocumentInformation.FileNameFromURL(pdfFilePath);
+                    } catch (IllegalArgumentException e){
+                        //Todo: from WPS office document select
+                        pdfFileName = FindDocumentInformation.FileNameFromURL(imagePath);
+                        compressedImageFilePan = convertInputStreamToFile(uri,pdfFileName);
+
+                    }
+                    compressedImageFilePan = convertInputStreamToFile(uri,pdfFileName);
+                    Log.e(TAG, "onActivityResult: "+compressedImageFile.getAbsolutePath());
+                    imgDoc.setImageResource(R.drawable.pdff);
+                }
+                flag = 1;
+            }
         }else if (requestCode == 2000 && resultCode == 2001){
             Log.e("TAG", "onActivityResult: "+data.getExtras().get("picture"));
             Log.e("TAG", "onActivityResult: "+data.getExtras().get(AndroidXCameraActivity.IMAGE_PATH_KEY));
@@ -451,7 +501,33 @@ public class TempPanActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-        } else if (requestCode == 2000 && resultCode == 3001) {
+        } else if (requestCode == 1003){
+            Log.e(TAG, "onActivityResult: PDF: "+data.getData());
+            if (data != null){
+                Uri uri = data.getData();
+                Log.e("TAG", "onActivityResult: "+uri.getPath());
+                String imagePath = uri.getPath();
+                if (imagePath.contains("all_external")){
+                    pdfFileName = FindDocumentInformation.FileNameFromURL(imagePath);
+                    compressedImageFile = convertInputStreamToFile(uri,pdfFileName);
+
+                } else {
+                    try {
+                        pdfFilePath = getRealPath(TempPanActivity.this,uri);
+                        pdfFileName = FindDocumentInformation.FileNameFromURL(pdfFilePath);
+                    } catch (IllegalArgumentException e){
+                        //Todo: from WPS office document select
+                        pdfFileName = FindDocumentInformation.FileNameFromURL(imagePath);
+                        compressedImageFile = convertInputStreamToFile(uri,pdfFileName);
+
+                    }
+                    compressedImageFile = convertInputStreamToFile(uri,pdfFileName);
+                    Log.e(TAG, "onActivityResult: "+compressedImageFile.getAbsolutePath());
+                    imgAadharDocument.setImageResource(R.drawable.pdff);
+                }
+                frontflag=1;
+            }
+        }else if (requestCode == 2000 && resultCode == 3001) {
             Log.e("TAG", "onActivityResult: "+data.getExtras().get("picture"));
             Log.e("TAG", "onActivityResult: "+data.getExtras().get(AndroidXCameraActivity.IMAGE_PATH_KEY));
             image_uri =  Uri.parse(String.valueOf(data.getExtras().get("picture")));
@@ -488,6 +564,32 @@ public class TempPanActivity extends AppCompatActivity {
                 }
             } catch (OutOfMemoryError e) {
                 e.printStackTrace();
+            }
+        } else if (requestCode == 1004){
+            Log.e(TAG, "onActivityResult: PDF: "+data.getData());
+            if (data != null){
+                Uri uri = data.getData();
+                Log.e("TAG", "onActivityResult: "+uri.getPath());
+                String imagePath = uri.getPath();
+                if (imagePath.contains("all_external")){
+                    pdfFileName = FindDocumentInformation.FileNameFromURL(imagePath);
+                    file = convertInputStreamToFile(uri,pdfFileName);
+
+                } else {
+                    try {
+                        pdfFilePath = getRealPath(TempPanActivity.this,uri);
+                        pdfFileName = FindDocumentInformation.FileNameFromURL(pdfFilePath);
+                    } catch (IllegalArgumentException e){
+                        //Todo: from WPS office document select
+                        pdfFileName = FindDocumentInformation.FileNameFromURL(imagePath);
+                        file = convertInputStreamToFile(uri,pdfFileName);
+
+                    }
+                    file = convertInputStreamToFile(uri,pdfFileName);
+                    Log.e(TAG, "onActivityResult: "+compressedImageFile.getAbsolutePath());
+                    imgAadharBackDocument.setImageResource(R.drawable.pdff);
+                }
+                backflag=1;
             }
         }
     }
@@ -663,7 +765,7 @@ public class TempPanActivity extends AppCompatActivity {
     }
 
 
-    private void attechmentAlert(int gallerycode,int cameracode) {
+    private void attechmentAlert(int gallerycode,int cameracode, String pdf_option) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(TempPanActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_attachment, null);
@@ -671,6 +773,12 @@ public class TempPanActivity extends AppCompatActivity {
         LinearLayout lnCamera=(LinearLayout)dialogView.findViewById(R.id.lnCamera);
         LinearLayout lnGallery=(LinearLayout)dialogView.findViewById(R.id.lnGallery);
         LinearLayout lnCancel=(LinearLayout)dialogView.findViewById(R.id.lnCancel);
+        LinearLayout lnPDF=(LinearLayout)dialogView.findViewById(R.id.lnPDF);
+        if (pdf_option.equalsIgnoreCase("yes")){
+            lnPDF.setVisibility(View.VISIBLE);
+        } else {
+            lnPDF.setVisibility(View.GONE);
+        }
         lnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -687,7 +795,20 @@ public class TempPanActivity extends AppCompatActivity {
                 alerDialog1.dismiss();
             }
         });
-
+        lnPDF.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e(TAG, "gallerycode: "+gallerycode);
+                if (gallerycode == 200){
+                    pdfIntent(1002);
+                } else if(gallerycode == 300){
+                    pdfIntent(1003);
+                } else if (gallerycode == 400){
+                    pdfIntent(1004);
+                }
+                alerDialog1.dismiss();
+            }
+        });
         lnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -709,6 +830,12 @@ public class TempPanActivity extends AppCompatActivity {
     private void galleryIntent(int gallerycode) {
         Intent openGalleryIntent = new Intent(Intent.ACTION_PICK);
         openGalleryIntent.setType("image/*");
+        startActivityForResult(openGalleryIntent, gallerycode);
+    }
+
+    private void pdfIntent(int gallerycode) {
+        Intent openGalleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        openGalleryIntent.setType("application/pdf");
         startActivityForResult(openGalleryIntent, gallerycode);
     }
 
@@ -1270,8 +1397,9 @@ public class TempPanActivity extends AppCompatActivity {
                                     }
 
                                     if (aadhaarFront != null){
-                                        String aadhaarImage = AppData.IMAGE_PATH_URL+aadhaarFront.optString("FileName");
-                                        Picasso.with(TempPanActivity.this)
+                                        aadhaarImage = AppData.IMAGE_PATH_URL+aadhaarFront.optString("FileName");
+
+                                       /* Picasso.with(TempPanActivity.this)
                                                 .load(AppData.IMAGE_PATH_URL+aadhaarFront.optString("FileName"))
                                                 .placeholder(R.drawable.load)
                                                 .skipMemoryCache()// optional
@@ -1293,12 +1421,14 @@ public class TempPanActivity extends AppCompatActivity {
                                                 pd.dismiss();
                                                 Log.e(TAG, "onFileSaveFailure: "+error);
                                             }
-                                        });
+                                        });*/
+                                        frontflag=1;
+                                        getAadhaarFront(aadhaarImage, aadhaarFront.optString("FileName"),pd);
                                     }
 
                                     if (aadhaarBack != null){
-                                        String aadhaarBackPage = AppData.IMAGE_PATH_URL+aadhaarBack.optString("FileName");
-                                        Picasso.with(TempPanActivity.this)
+                                        aadhaarBackPage = AppData.IMAGE_PATH_URL+aadhaarBack.optString("FileName");
+                                        /*Picasso.with(TempPanActivity.this)
                                                 .load(AppData.IMAGE_PATH_URL+aadhaarBack.optString("FileName"))
                                                 .placeholder(R.drawable.load)
                                                 .skipMemoryCache()// optional
@@ -1320,7 +1450,9 @@ public class TempPanActivity extends AppCompatActivity {
                                                 pd.dismiss();
                                                 Log.e(TAG, "onFileSaveFailure: "+error);
                                             }
-                                        });
+                                        });*/
+                                        backflag=1;
+                                        getAadhaarBack(aadhaarBackPage, aadhaarBack.optString("FileName"),pd);
                                     }
                                 }
 
@@ -1390,8 +1522,8 @@ public class TempPanActivity extends AppCompatActivity {
 
                                     if (panObj != null){
                                         etPanNumber.setText(panObj.optString("ReferenceNo"));
-                                        String imagePanURL = AppData.IMAGE_PATH_URL+panObj.optString("FileName");
-                                        Picasso.with(TempPanActivity.this)
+                                        imagePanURL = AppData.IMAGE_PATH_URL+panObj.optString("FileName");
+                                       /* Picasso.with(TempPanActivity.this)
                                                 .load(AppData.IMAGE_PATH_URL+panObj.optString("FileName"))
                                                 .placeholder(R.drawable.load)
                                                 .skipMemoryCache()// optional
@@ -1414,7 +1546,9 @@ public class TempPanActivity extends AppCompatActivity {
                                                 pd.dismiss();
                                                 Log.e(TAG, "onFileSaveFailure: "+error);
                                             }
-                                        });
+                                        });*/
+                                        flag = 1;
+                                        getLoadPAN(imagePanURL, panObj.optString("FileName"),pd);
                                     }
                                 }
                             } else {
@@ -1431,6 +1565,193 @@ public class TempPanActivity extends AppCompatActivity {
                         Log.e(TAG, "GET_PAN_DETAILS_anError: "+ anError.getErrorBody());
                     }
                 });
+    }
+
+    private File convertInputStreamToFile(Uri uri, String fileNme) {
+        InputStream inputStream;
+        try {
+            inputStream = TempPanActivity.this.getContentResolver().openInputStream(uri);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        File file = new File(TempPanActivity.this.getExternalFilesDir("/").getAbsolutePath(), fileNme);
+
+        try (FileOutputStream outputStream = new FileOutputStream(file, false)) {
+            int read;
+            byte[] bytes = new byte[DEFAULT_BUFFER_SIZE];
+            while ((read = inputStream.read(bytes)) != -1) {
+                outputStream.write(bytes, 0, read);
+            }
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return file;
+    }
+
+    private void getAadhaarFront(String docUrl, String fileName, ProgressDialog pd) {
+        String exe = docUrl.substring(docUrl.lastIndexOf("."));
+        Picasso.with(TempPanActivity.this)
+                .load(R.drawable.loading)        // Load the image from the URL
+                .placeholder(R.drawable.loading)
+                .skipMemoryCache()
+                .error(R.drawable.warning)
+                .into(imgAadharDocument);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                compressedImageFile = downloadDocument(docUrl,fileName);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        pd.dismiss();
+                        if (exe.equalsIgnoreCase(".pdf")){
+                            Picasso.with(TempPanActivity.this)
+                                    .load(R.drawable.pdff)        // Load the image from the URL
+                                    .placeholder(R.drawable.loading)
+                                    .skipMemoryCache()
+                                    .error(R.drawable.warning)
+                                    .into(imgAadharDocument);
+                        } else {
+                            Picasso.with(TempPanActivity.this)
+                                    .load(docUrl)
+                                    .placeholder(R.drawable.loading)
+                                    .skipMemoryCache()// optional
+                                    .error(R.drawable.warning)
+                                    .into(imgAadharDocument);
+                        }
+
+                    }
+                });
+            }
+        }).start();
+
+    }
+
+    private void getAadhaarBack(String docUrl, String fileName, ProgressDialog pd) {
+        String exe = docUrl.substring(docUrl.lastIndexOf("."));
+        Picasso.with(TempPanActivity.this)
+                .load(R.drawable.loading)        // Load the image from the URL
+                .placeholder(R.drawable.loading)
+                .skipMemoryCache()
+                .error(R.drawable.warning)
+                .into(imgAadharBackDocument);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                file = downloadDocument(docUrl,fileName);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        pd.dismiss();
+                        if (exe.equalsIgnoreCase(".pdf")){
+                            Picasso.with(TempPanActivity.this)
+                                    .load(R.drawable.pdff)        // Load the image from the URL
+                                    .placeholder(R.drawable.loading)
+                                    .skipMemoryCache()
+                                    .error(R.drawable.warning)
+                                    .into(imgAadharBackDocument);
+                        } else {
+                            Picasso.with(TempPanActivity.this)
+                                    .load(docUrl)
+                                    .placeholder(R.drawable.loading)
+                                    .skipMemoryCache()// optional
+                                    .error(R.drawable.warning)
+                                    .into(imgAadharBackDocument);
+                        }
+                    }
+                });
+            }
+        }).start();
+
+    }
+
+    private void getLoadPAN(String docUrl, String fileName, ProgressDialog pd) {
+        String exe = docUrl.substring(docUrl.lastIndexOf("."));
+        Picasso.with(TempPanActivity.this)
+                .load(R.drawable.loading)        // Load the image from the URL
+                .placeholder(R.drawable.loading)
+                .skipMemoryCache()
+                .error(R.drawable.warning)
+                .into(imgDoc);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                compressedImageFilePan = downloadDocument(docUrl,fileName);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        pd.dismiss();
+                        if (exe.equalsIgnoreCase(".pdf")){
+                            Picasso.with(TempPanActivity.this)
+                                    .load(R.drawable.pdff)        // Load the image from the URL
+                                    .placeholder(R.drawable.loading)
+                                    .skipMemoryCache()
+                                    .error(R.drawable.warning)
+                                    .into(imgDoc);
+                        } else {
+                            Picasso.with(TempPanActivity.this)
+                                    .load(docUrl)
+                                    .placeholder(R.drawable.loading)
+                                    .skipMemoryCache()// optional
+                                    .error(R.drawable.warning)
+                                    .into(imgDoc);
+                        }
+                    }
+                });
+            }
+        }).start();
+
+    }
+
+    private File downloadDocument(String url, String fileName) {
+        // Create OkHttp client to handle the download
+
+        OkHttpClient client = new OkHttpClient();
+
+        // Create the request to download the PDF
+        okhttp3.Request request = new okhttp3.Request.Builder().url(url).build();
+
+        // Keep the Call object reference to be able to cancel it later
+        Call downloadCall = client.newCall(request);
+
+        try {
+            // Execute the request
+            okhttp3.Response response = downloadCall.execute();
+
+            if (response.isSuccessful()) {
+                // Define the file where the PDF will be saved
+                File pdfFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
+                //File pdfFile = new File(Environment.getExternalStorageDirectory(), fileName);
+
+                // Create the output stream to save the file
+                try (InputStream inputStream = response.body().byteStream();
+                     OutputStream outputStream = new FileOutputStream(pdfFile)) {
+
+                    byte[] buffer = new byte[4096];
+                    int bytesRead;
+
+                    // Read from input stream and write to output stream
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
+                    }
+
+                    // Return the saved file
+                    return pdfFile;
+                } catch (IOException e) {
+                    Log.e(TAG, "Error saving PDF", e);
+                    return null;
+                }
+            } else {
+                Log.e(TAG, "Failed to download PDF. Response code: " + response.code());
+                return null;
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "Error downloading PDF", e);
+            return null;
+        }
     }
 
 }
