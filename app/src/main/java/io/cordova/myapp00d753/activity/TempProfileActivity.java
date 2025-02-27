@@ -2378,7 +2378,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                     if (etPrePinCode.getText().toString().length() > 0) {
                                         //if (!etESI.getText().toString().equals("") || etESI.getText().toString().length() > 9) {
                                             //if (!etPhnNumber.getText().toString().equals("") || etPhnNumber.getText().toString().length() > 9) {
-                                                if (!sexGender.equals("") && !esicGender.equals("")) {
+                                                if (!sexGender.equals("") ) {
                                                 if (!martialstatus.equals("") ) {
                                                     if (!education.equals("")) {
                                                         if (!bloodgrp.equals("")) {
@@ -2398,6 +2398,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                                                                 personalOBJ.put("BloodGroup", bloodgrp);
                                                                                 personalOBJ.put("DateOfBirth", DateOfBirth);
                                                                                 personalOBJ.put("Qualification", education);
+                                                                                personalOBJ.put("UpdatedFrom", "ANDR");
                                                                                 personalOBJ.put("MaritalStatus", martialstatus);
                                                                                 personalOBJ.put("EmployeeName", tvEmpName.getText().toString());
                                                                                 mainobject.put("PersonalDetails", personalOBJ);

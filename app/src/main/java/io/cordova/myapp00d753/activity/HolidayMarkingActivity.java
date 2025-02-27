@@ -93,9 +93,7 @@ public class HolidayMarkingActivity extends AppCompatActivity {
 
     private void initView() {
         pref = new Pref(HolidayMarkingActivity.this);
-        if (pref.getEmpClintId().equals(ClientID.SVF)){
-            llOptionalHolidayMark.setVisibility(View.GONE);
-        }
+
         leaveFlag=getIntent().getIntExtra("leaveFlag",1);
         searchHolidayDialog = new Dialog(HolidayMarkingActivity.this, R.style.CustomDialogNew2);
         spHoliday = findViewById(R.id.spHoliday);
@@ -122,7 +120,9 @@ public class HolidayMarkingActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
+        if (pref.getEmpClintId().equals(ClientID.SVF)){
+            llOptionalHolidayMark.setVisibility(View.GONE);
+        }
         binding.imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
