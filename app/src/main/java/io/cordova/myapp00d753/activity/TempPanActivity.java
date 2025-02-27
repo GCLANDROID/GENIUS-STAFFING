@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -63,6 +64,7 @@ import java.util.regex.Pattern;
 import io.cordova.myapp00d753.AndroidXCamera.AndroidXCameraActivity;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.module.AttendanceService;
+import io.cordova.myapp00d753.module.MainDocModule;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.FindDocumentInformation;
 import io.cordova.myapp00d753.utility.Pref;
@@ -115,6 +117,7 @@ public class TempPanActivity extends AppCompatActivity {
     boolean panFlag=false;
     String pdfFilePath, pdfFileName;
     private static final int DEFAULT_BUFFER_SIZE = 2048;
+    String frontID,backID,panID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -195,6 +198,14 @@ public class TempPanActivity extends AppCompatActivity {
 
         etAddaharNo.setText(AppData.AADAHARNUMBER);
         etAddaharNo.setEnabled(false);
+        JSONObject obj=new JSONObject();
+        try {
+            obj.put("ddltype", "Doc_Aadhar");
+            obj.put("SecurityCode",pref.getSecurityCode());
+            getAddharFrontID(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void onClick(){
@@ -292,7 +303,7 @@ public class TempPanActivity extends AppCompatActivity {
         imgCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                attechmentAlert(200,1001, "yes");
+                attechmentAlert(200,1001, "no");
             }
         });
 
@@ -300,7 +311,7 @@ public class TempPanActivity extends AppCompatActivity {
         imgAadharCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                attechmentAlert(300,2001,"yes");
+                attechmentAlert(300,2001,"no");
             }
         });
 
@@ -308,7 +319,7 @@ public class TempPanActivity extends AppCompatActivity {
         imgAadharBackCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                attechmentAlert(400,3001,"yes");
+                attechmentAlert(400,3001,"no");
             }
         });
 
@@ -635,7 +646,7 @@ public class TempPanActivity extends AppCompatActivity {
         progressDialog.show();
         AndroidNetworking.upload(AppData.SAVE_EMP_DIGITAL_DOCUMENT)
                 .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
-                .addMultipartParameter("DocumentID", "003")
+                .addMultipartParameter("DocumentID", panID)
                 .addMultipartParameter("ReferenceNo", etPanNumber.getText().toString())
                 .addMultipartParameter("SecurityCode", pref.getSecurityCode())
                 .addMultipartFile("SingleFile", compressedImageFilePan)
@@ -844,7 +855,7 @@ public class TempPanActivity extends AppCompatActivity {
         progressDialog.show();
         AndroidNetworking.upload(AppData.SAVE_EMP_DIGITAL_DOCUMENT)
                 .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
-                .addMultipartParameter("DocumentID", "002")
+                .addMultipartParameter("DocumentID", frontID)
                 .addMultipartParameter("ReferenceNo", etAddaharNo.getText().toString())
                 .addMultipartParameter("SecurityCode", pref.getSecurityCode())
                 .addMultipartFile("SingleFile", compressedImageFile)
@@ -944,7 +955,7 @@ public class TempPanActivity extends AppCompatActivity {
         progressDialog.show();
         AndroidNetworking.upload(AppData.SAVE_EMP_DIGITAL_DOCUMENT)
                 .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
-                .addMultipartParameter("DocumentID", "00233")
+                .addMultipartParameter("DocumentID", backID)
                 .addMultipartParameter("ReferenceNo", etAddaharNo.getText().toString())
                 .addMultipartParameter("SecurityCode", pref.getSecurityCode())
                 .addMultipartFile("SingleFile", file)
@@ -1381,6 +1392,7 @@ public class TempPanActivity extends AppCompatActivity {
                             JSONObject job1 = response;
                             int Response_Code = job1.optInt("Response_Code");
                             if (Response_Code == 101) {
+                                responseflag=1;
                                 String Response_Data = job1.optString("Response_Data");
                                 JSONObject job2 = new JSONObject(Response_Data);
                                 JSONArray jsonArray = job2.getJSONArray("AadharDetails");
@@ -1752,6 +1764,110 @@ public class TempPanActivity extends AppCompatActivity {
             Log.e(TAG, "Error downloading PDF", e);
             return null;
         }
+    }
+
+
+    private void getAddharFrontID(JSONObject jsonObject) {
+        ProgressDialog progressDialog=new ProgressDialog(TempPanActivity.this);
+        progressDialog.setMessage("Loading");
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+        AndroidNetworking.post(AppData.COMMON_DDL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressDialog.dismiss();
+                            Log.e(TAG, "BLOOD_DROPDOWN: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code=job1.optString("Response_Code");
+                            if (Response_Code.equals("101")){
+                                JSONArray Response_Data=job1.optJSONArray("Response_Data");
+                                for (int i=0;i<Response_Data.length();i++){
+                                    JSONObject obj=Response_Data.optJSONObject(i);
+                                    String id=obj.optString("id");
+                                    String value=obj.optString("value");
+                                    if (value.equals("Aadhaar Card")){
+                                        frontID=id;
+                                    }
+                                    if (value.equals("Aadhar Card-Back")){
+                                        backID=id;
+                                    }
+                                }
+
+                                JSONObject obj=new JSONObject();
+                                try {
+                                    obj.put("ddltype", "Doc_Pan");
+                                    obj.put("SecurityCode",pref.getSecurityCode());
+                                    getPANID(obj);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "BLOOD_DROPDOWN_error: "+anError.getErrorBody());
+                       progressDialog.dismiss();
+                    }
+                });
+    }
+
+
+    private void getPANID(JSONObject jsonObject) {
+        ProgressDialog progressDialog=new ProgressDialog(TempPanActivity.this);
+        progressDialog.setMessage("Loading");
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+        AndroidNetworking.post(AppData.COMMON_DDL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressDialog.dismiss();
+                            Log.e(TAG, "BLOOD_DROPDOWN: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code=job1.optString("Response_Code");
+                            if (Response_Code.equals("101")){
+                                JSONArray Response_Data=job1.optJSONArray("Response_Data");
+                                for (int i=0;i<Response_Data.length();i++){
+                                    JSONObject obj=Response_Data.optJSONObject(i);
+                                    panID=obj.optString("id");
+
+
+                                }
+
+
+                            }
+
+
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "BLOOD_DROPDOWN_error: "+anError.getErrorBody());
+                        progressDialog.dismiss();
+                    }
+                });
     }
 
 }
