@@ -83,6 +83,11 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
     String pdfFilePath, pdfFileName;
     private static final int DEFAULT_BUFFER_SIZE = 2048;
     ImageView imgBack;
+    String familyPhotoID="";
+    String passportPhotoID="";
+    String resumeID="";
+    String appointmentLetterID="";
+    String expLetterID="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,6 +118,17 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
         }
 
 
+        JSONObject oobj=new JSONObject();
+        try {
+            oobj.put("ddltype", "Doc_OtherDocs");
+            oobj.put("SecurityCode",pref.getSecurityCode());
+            getDocID(oobj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+
 
 
         binding.btnSaveForm.setOnClickListener(new View.OnClickListener() {
@@ -133,7 +149,7 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //if (flag==1){
                 if (pFlag==1){
-                    docupload("0016","Passport Size Photo",binding.btnPassportSave,filePassportSizePhoto);
+                    docupload(passportPhotoID,"Passport Size Photo",binding.btnPassportSave,filePassportSizePhoto);
                 }else {
                     Toast.makeText(TempOtherDocumentActivity.this,"Please Upload Passport Size Photo",Toast.LENGTH_LONG).show();
                 }
@@ -154,7 +170,7 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //if (flag==1){
                 if (fFlag==1){
-                    docupload("0015","Family Photo",binding.btnFamilySave,fileFamilyPhoto);
+                    docupload(familyPhotoID,"Family Photo",binding.btnFamilySave,fileFamilyPhoto);
                 }else {
                     Toast.makeText(TempOtherDocumentActivity.this,"Please Upload Family Photo",Toast.LENGTH_LONG).show();
                 }
@@ -175,7 +191,7 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //if (flag==1){
                 if (rFlag==1){
-                    docupload("0021","Resume",binding.btnResumeSave,fileResume);
+                    docupload(resumeID,"Resume",binding.btnResumeSave,fileResume);
                 }else {
                     Toast.makeText(TempOtherDocumentActivity.this,"Please Upload Resume",Toast.LENGTH_LONG).show();
                 }
@@ -196,7 +212,7 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //if (flag==1){
                 if (eFlag==1){
-                    docupload("0070","Experience Letter",binding.btnExperinceLetterSave,fileExperience);
+                    docupload(expLetterID,"Experience Letter",binding.btnExperinceLetterSave,fileExperience);
                 }else {
                     Toast.makeText(TempOtherDocumentActivity.this,"Please Upload Experince Letter",Toast.LENGTH_LONG).show();
                 }
@@ -217,7 +233,7 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //if (flag==1){
                 if (aFlag==1){
-                    docupload("0068","Appointment Letter",binding.btnAppointLetterSave,fileAppointmentLetter);
+                    docupload(appointmentLetterID,"Appointment Letter",binding.btnAppointLetterSave,fileAppointmentLetter);
                 }else {
                     Toast.makeText(TempOtherDocumentActivity.this,"Please Upload Appointment Letter",Toast.LENGTH_LONG).show();
                 }
@@ -1506,5 +1522,93 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
             Log.e(TAG, "Error downloading PDF", e);
             return null;
         }
+    }
+
+
+    private void getDocID(JSONObject jsonObject) {
+        ProgressDialog progressDialog=new ProgressDialog(TempOtherDocumentActivity.this);
+        progressDialog.setMessage("Loading");
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+        AndroidNetworking.post(AppData.COMMON_DDL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressDialog.dismiss();
+                            Log.e(TAG, "BLOOD_DROPDOWN: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code=job1.optString("Response_Code");
+                            if (Response_Code.equals("101")){
+                                JSONArray Response_Data=job1.optJSONArray("Response_Data");
+                                for (int i=0;i<Response_Data.length();i++){
+                                    JSONObject obj=Response_Data.optJSONObject(i);
+                                    String value=obj.optString("value");
+                                    String id=obj.optString("id");
+                                    if (value.equals("Family Photo")){
+                                        familyPhotoID=id;
+                                    }
+
+                                    if (value.equals("Self Photo(PP)")){
+                                        passportPhotoID=id;
+                                    }
+
+                                    if (value.equals("Resume")){
+                                        resumeID=id;
+                                    }
+
+                                    if (value.equals("Appointment Letter")){
+                                        appointmentLetterID=id;
+                                    }
+
+                                    if (value.equals("Experience Letter")){
+                                        expLetterID=id;
+                                    }
+
+
+
+
+                                }
+
+                                if (passportPhotoID.equals("")||passportPhotoID.equals("null")){
+                                    binding.btnPassportSave.setVisibility(View.GONE);
+                                }
+
+                                if (familyPhotoID.equals("")||familyPhotoID.equals("null")){
+                                    binding.btnFamilySave.setVisibility(View.GONE);
+                                }
+
+                                if (resumeID.equals("")||resumeID.equals("null")){
+                                    binding.btnResumeSave.setVisibility(View.GONE);
+                                }
+
+                                if (expLetterID.equals("")||expLetterID.equals("null")){
+                                    binding.btnExperinceLetterSave.setVisibility(View.GONE);
+                                }
+
+                                if (appointmentLetterID.equals("")||appointmentLetterID.equals("null")){
+                                    binding.btnAppointLetterSave.setVisibility(View.GONE);
+                                }
+
+
+                            }
+
+
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "BLOOD_DROPDOWN_error: "+anError.getErrorBody());
+                        progressDialog.dismiss();
+                    }
+                });
     }
 }
