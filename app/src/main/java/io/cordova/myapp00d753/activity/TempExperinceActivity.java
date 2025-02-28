@@ -119,32 +119,17 @@ public class TempExperinceActivity extends AppCompatActivity {
             e.printStackTrace();
         }*/
 
-        if (pref.getExperience().equals("1")){
-            //TODO: Experience
-            JSONObject jsonObject = new JSONObject();
-            try {
-                jsonObject.put("AEMConsultantID", pref.getEmpConId());
-                jsonObject.put("AEMClientID", pref.getEmpClintId());
-                jsonObject.put("AEMClientOfficeID", pref.getEmpClintOffId());
-                jsonObject.put("AEMEmployeeID", pref.getEmpId());
-                jsonObject.put("WorkingStatus", "1");
-                jsonObject.put("Operation", "10");
-                getExperienceDetails(jsonObject);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        } else {
-            //TODO: Fresher
-            if (binding.imgFreshersTick.getVisibility()==View.GONE){
-                binding.imgFreshersTick.setVisibility(View.VISIBLE);
-                binding.imgExperience.setVisibility(View.GONE);
-                binding.llExpericedForm.setVisibility(View.GONE);
-                flag=1;
-            }else {
-                binding.imgExperience.setVisibility(View.GONE);
-                binding.imgFreshersTick.setVisibility(View.GONE);
-                binding.llExpericedForm.setVisibility(View.VISIBLE);
-            }
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("AEMConsultantID", pref.getEmpConId());
+            jsonObject.put("AEMClientID", pref.getEmpClintId());
+            jsonObject.put("AEMClientOfficeID", pref.getEmpClintOffId());
+            jsonObject.put("AEMEmployeeID", pref.getEmpId());
+            jsonObject.put("WorkingStatus", "1");
+            jsonObject.put("Operation", "10");
+            getExperienceDetails(jsonObject);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
@@ -164,8 +149,8 @@ public class TempExperinceActivity extends AppCompatActivity {
         uanPercentage.add("75");
         uanPercentage.add("50");
         uanPercentage.add("25");
-        binding.etUAN.setText(pref.getSUAN());
-        binding.etPFNumber.setText(pref.getSPF());
+        binding.etUAN.setText((pref.getSUAN().equals("null")?"":pref.getSUAN()));
+        binding.etPFNumber.setText((pref.getSPF().equals("null"))?"":pref.getSPF());
         if (AppData.COMPANYNAME.contains("SBI")){
             binding.llNonSBIEXP.setVisibility(View.VISIBLE);
             binding.llSBIEXP.setVisibility(View.VISIBLE);
@@ -1221,87 +1206,101 @@ public class TempExperinceActivity extends AppCompatActivity {
                                     JSONArray jsonArray = job2.getJSONArray("ExperienceDetails");
                                     for (int i = 0; i < jsonArray.length(); i++) {
                                         JSONObject experienceObj = jsonArray.getJSONObject(i);
-                                        binding.etcompany.setText(experienceObj.optString("CompanyName"));
-                                        binding.etDesignation.setText(experienceObj.optString("PreviousEmployeeDesignation"));
-                                        binding.etManagerName.setText(experienceObj.optString("PreviousReportingManagerName"));
-                                        binding.etManagerDesignation.setText(experienceObj.optString("PreviousReportingManagerDesignation"));
-                                        binding.etManagerContact.setText(experienceObj.optString("PreviousReportingManagerContactDetails"));
-                                        String DOJ = experienceObj.optString("PrevDOJ");
-                                        String DOE = experienceObj.optString("PrevDOE");
-                                        doj = DOJ;
-                                        doe = DOE;
-                                        binding.etDOJ.setText(DOJ);
-                                        binding.etDOE.setText(DOE);
-                                        file_name = experienceObj.optString("FILENAME");
-                                        experience_latter_url = AppData.IMAGE_PATH_URL + file_name;
-                                        Log.e(TAG, "onResponse: "+experience_latter_url);
-                                        if (binding.imgExperience.getVisibility()==View.GONE){
-                                            binding.imgFreshersTick.setVisibility(View.GONE);
-                                            binding.imgExperience.setVisibility(View.VISIBLE);
-                                            binding.llExpericedForm.setVisibility(View.VISIBLE);
-                                            flag=2;
-                                        } else {
-                                            binding.imgFreshersTick.setVisibility(View.GONE);
-                                            binding.imgExperience.setVisibility(View.GONE);
-                                            binding.llExpericedForm.setVisibility(View.GONE);
-                                        }
-                                    }
-                                    is_Experience_Letter_Selected = true;
-                                    String exe = file_name.substring(file_name.lastIndexOf("."));
-                                    if (exe.equalsIgnoreCase(".pdf")){
-                                        binding.imgAttachImage.setVisibility(View.VISIBLE);
-                                        Picasso.with(TempExperinceActivity.this)
-                                                .load(R.drawable.loading)        // Load the image from the URL
-                                                .placeholder(R.drawable.loading)
-                                                .skipMemoryCache()
-                                                .error(R.drawable.warning)
-                                                .into(binding.imgAttachImage);
-                                        new Thread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                Log.e(TAG, "Thread: called");
-                                                compressedImageFile = downloadAndSavePDF(downloadCall1,experience_latter_url,file_name);
-                                                Log.e(TAG, "run: "+compressedImageFile.getAbsolutePath());
-                                                if (compressedImageFile != null){
-                                                    //is_Experience_Letter_Selected = true;
-                                                }
-                                                runOnUiThread(new Runnable() {
+                                        if(experienceObj.optString("IsExperience").equals("1")){
+                                            //TODO: Experience
+                                            binding.etcompany.setText(experienceObj.optString("CompanyName"));
+                                            binding.etDesignation.setText(experienceObj.optString("PreviousEmployeeDesignation"));
+                                            binding.etManagerName.setText(experienceObj.optString("PreviousReportingManagerName"));
+                                            binding.etManagerDesignation.setText(experienceObj.optString("PreviousReportingManagerDesignation"));
+                                            binding.etManagerContact.setText(experienceObj.optString("PreviousReportingManagerContactDetails"));
+                                            String DOJ = experienceObj.optString("PrevDOJ");
+                                            String DOE = experienceObj.optString("PrevDOE");
+                                            doj = DOJ;
+                                            doe = DOE;
+                                            binding.etDOJ.setText(DOJ);
+                                            binding.etDOE.setText(DOE);
+                                            file_name = experienceObj.optString("FILENAME");
+                                            experience_latter_url = AppData.IMAGE_PATH_URL + file_name;
+                                            Log.e(TAG, "onResponse: "+experience_latter_url);
+                                            if (binding.imgExperience.getVisibility()==View.GONE){
+                                                binding.imgFreshersTick.setVisibility(View.GONE);
+                                                binding.imgExperience.setVisibility(View.VISIBLE);
+                                                binding.llExpericedForm.setVisibility(View.VISIBLE);
+                                                flag=2;
+                                            } else {
+                                                binding.imgFreshersTick.setVisibility(View.GONE);
+                                                binding.imgExperience.setVisibility(View.GONE);
+                                                binding.llExpericedForm.setVisibility(View.GONE);
+                                            }
+                                            is_Experience_Letter_Selected = true;
+                                            String exe = file_name.substring(file_name.lastIndexOf("."));
+                                            if (exe.equalsIgnoreCase(".pdf")){
+                                                binding.imgAttachImage.setVisibility(View.VISIBLE);
+                                                Picasso.with(TempExperinceActivity.this)
+                                                        .load(R.drawable.loading)        // Load the image from the URL
+                                                        .placeholder(R.drawable.loading)
+                                                        .skipMemoryCache()
+                                                        .error(R.drawable.warning)
+                                                        .into(binding.imgAttachImage);
+                                                new Thread(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        Picasso.with(TempExperinceActivity.this)
-                                                                .load(R.drawable.pdff)        // Load the image from the URL
-                                                                .placeholder(R.drawable.loading)
-                                                                .skipMemoryCache()
-                                                                .error(R.drawable.warning)
-                                                                .into(binding.imgAttachImage);
+                                                        Log.e(TAG, "Thread: called");
+                                                        compressedImageFile = downloadAndSavePDF(downloadCall1,experience_latter_url,file_name);
+                                                        Log.e(TAG, "run: "+compressedImageFile.getAbsolutePath());
+                                                        if (compressedImageFile != null){
+                                                            //is_Experience_Letter_Selected = true;
+                                                        }
+                                                        runOnUiThread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                Picasso.with(TempExperinceActivity.this)
+                                                                        .load(R.drawable.pdff)        // Load the image from the URL
+                                                                        .placeholder(R.drawable.loading)
+                                                                        .skipMemoryCache()
+                                                                        .error(R.drawable.warning)
+                                                                        .into(binding.imgAttachImage);
+                                                            }
+                                                        });
+                                                    }
+                                                }).start();
+                                            } else {
+                                                Picasso.with(TempExperinceActivity.this)
+                                                        .load(experience_latter_url)
+                                                        .placeholder(R.drawable.loading)
+                                                        .skipMemoryCache()// optional
+                                                        .error(R.drawable.warning)
+                                                        // optional
+                                                        .into(binding.imgAttachImage);
+
+                                                ImageDownloader.downloadImageAndSaveToFile(getApplication(), experience_latter_url, file_name, new ImageDownloader.SaveFileListener() {
+                                                    @Override
+                                                    public void onSaveFile(File file) {
+                                                        compressedImageFile = file;
+                                                        //is_Experience_Letter_Selected = true;
+                                                    }
+
+                                                    @Override
+                                                    public void onFileSaveFailure(String error) {
+                                                        Log.e(TAG, "onFileSaveFailure: "+error);
                                                     }
                                                 });
                                             }
-                                        }).start();
-                                    } else {
-                                        Picasso.with(TempExperinceActivity.this)
-                                                .load(experience_latter_url)
-                                                .placeholder(R.drawable.loading)
-                                                .skipMemoryCache()// optional
-                                                .error(R.drawable.warning)
-                                                // optional
-                                                .into(binding.imgAttachImage);
 
-                                        ImageDownloader.downloadImageAndSaveToFile(getApplication(), experience_latter_url, file_name, new ImageDownloader.SaveFileListener() {
-                                            @Override
-                                            public void onSaveFile(File file) {
-                                                compressedImageFile = file;
-                                                //is_Experience_Letter_Selected = true;
+                                        } else {
+                                            //TODO: Fresher
+                                            if (binding.imgFreshersTick.getVisibility()==View.GONE){
+                                                binding.imgFreshersTick.setVisibility(View.VISIBLE);
+                                                binding.imgExperience.setVisibility(View.GONE);
+                                                binding.llExpericedForm.setVisibility(View.GONE);
+                                                flag=1;
+                                            }else {
+                                                binding.imgExperience.setVisibility(View.GONE);
+                                                binding.imgFreshersTick.setVisibility(View.GONE);
+                                                binding.llExpericedForm.setVisibility(View.VISIBLE);
                                             }
-
-                                            @Override
-                                            public void onFileSaveFailure(String error) {
-                                                Log.e(TAG, "onFileSaveFailure: "+error);
-                                            }
-                                        });
+                                        }
                                     }
-
-
 
                                     JSONObject jsonObject = new JSONObject();
                                     try {
@@ -1315,8 +1314,6 @@ public class TempExperinceActivity extends AppCompatActivity {
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
-
-
                                 }
                             }
                         } catch (JSONException e) {
