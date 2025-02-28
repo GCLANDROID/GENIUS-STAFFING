@@ -109,6 +109,7 @@ public class HolidayMarkingActivity extends AppCompatActivity {
             obj.put("EmployeeID",pref.getEmpId());
             obj.put("Type","1");
             obj.put("Year" , currentYear);
+            obj.put("SecurityCode", pref.getSecurityCode());
             getHolidayData(obj);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -148,7 +149,7 @@ public class HolidayMarkingActivity extends AppCompatActivity {
                             jsonObject.put("DbOperation", "3");
                             jsonObject.put("Shiftid", "");
                             jsonObject.put("SiteId", "");
-                            jsonObject.put("SecurityCode", "0000");
+                            jsonObject.put("SecurityCode", pref.getSecurityCode());
                             attendance(jsonObject);
                         } catch (JSONException e) {
                             e.printStackTrace();
