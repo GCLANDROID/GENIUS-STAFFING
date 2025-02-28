@@ -98,6 +98,7 @@ public class TempExperinceActivity extends AppCompatActivity {
     ProgressDialog pd;
     String experience_latter_url, file_name;
     private Call downloadCall1,downloadCall2,downloadCall3;
+    String expDocID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -178,6 +179,15 @@ public class TempExperinceActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        JSONObject oobj=new JSONObject();
+        try {
+            oobj.put("ddltype", "Doc_Exp");
+            oobj.put("SecurityCode",pref.getSecurityCode());
+            getExpDocID(oobj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 
         ArrayAdapter<String> uanspinnerArrayAdapter = new ArrayAdapter<String>
@@ -863,7 +873,7 @@ public class TempExperinceActivity extends AppCompatActivity {
                 .addMultipartParameter("PreviousCompanyName", binding.etcompany.getText().toString())
                 .addMultipartParameter("PreviousEmployeeDesignation", binding.etDesignation.getText().toString())
                 .addMultipartParameter("SecurityCode", pref.getSecurityCode())
-                .addMultipartParameter("DocumentID", "0070")
+                .addMultipartParameter("DocumentID", expDocID)
                 .addMultipartParameter("PreviousReportingManagerName", binding.etManagerName.getText().toString())
                 .addMultipartParameter("PreviousReportingManagerDesignation", binding.etManagerDesignation.getText().toString())
                 .addMultipartParameter("PreviousReportingManagerContactDetails", binding.etManagerContact.getText().toString())
@@ -1468,4 +1478,52 @@ public class TempExperinceActivity extends AppCompatActivity {
             return null;
         }
     }
+
+
+    private void getExpDocID(JSONObject jsonObject) {
+        ProgressDialog progressDialog=new ProgressDialog(TempExperinceActivity.this);
+        progressDialog.setMessage("Loading");
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+        AndroidNetworking.post(AppData.COMMON_DDL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressDialog.dismiss();
+                            Log.e(TAG, "BLOOD_DROPDOWN: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code=job1.optString("Response_Code");
+                            if (Response_Code.equals("101")){
+                                JSONArray Response_Data=job1.optJSONArray("Response_Data");
+                                for (int i=0;i<Response_Data.length();i++){
+                                    JSONObject obj=Response_Data.optJSONObject(i);
+                                    expDocID=obj.optString("id");
+
+                                }
+
+
+                            }
+
+
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "BLOOD_DROPDOWN_error: "+anError.getErrorBody());
+                        progressDialog.dismiss();
+                    }
+                });
+    }
+
+
+
 }
