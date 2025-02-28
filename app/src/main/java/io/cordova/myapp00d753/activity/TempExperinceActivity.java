@@ -1358,12 +1358,15 @@ public class TempExperinceActivity extends AppCompatActivity {
                                         binding.imgYes.setVisibility(View.VISIBLE);
                                         binding.llUAN.setVisibility(View.VISIBLE);
                                         is_PF_Account_Exist = true;
+                                        pfflag = 1;
                                     }
                                 } else {
                                     binding.imgNo.setVisibility(View.VISIBLE);
+                                    pfflag=0;
                                 }
                             } else {
                                 binding.imgNo.setVisibility(View.VISIBLE);
+                                pfflag=0;
                             }
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
