@@ -179,7 +179,7 @@ public class HolidayMarkingActivity extends AppCompatActivity {
                             jsonObject.put("DbOperation", "3");
                             jsonObject.put("Shiftid", "");
                             jsonObject.put("SiteId", "");
-                            jsonObject.put("SecurityCode", "0000");
+                            jsonObject.put("SecurityCode", pref.getSecurityCode());
                             attendance(jsonObject);
                         } catch (JSONException e) {
                             e.printStackTrace();
