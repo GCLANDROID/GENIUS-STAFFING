@@ -129,7 +129,8 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
         pref = new Pref(SKF_AttendanceRegularizationActivity.this);
         progressDialog = new ProgressDialog(SKF_AttendanceRegularizationActivity.this);
         progressDialog.setCancelable(false);
-        if (pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_CLIENT_ID)){
+        if (pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_CLIENT_ID)
+                || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_ITS)){
             llRegularisationCount.setVisibility(View.VISIBLE);
         } else {
             llRegularisationCount.setVisibility(View.GONE);
