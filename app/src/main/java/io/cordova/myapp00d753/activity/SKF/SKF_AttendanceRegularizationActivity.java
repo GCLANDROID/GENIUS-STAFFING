@@ -139,6 +139,7 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
         try {
             jsonObject.put("clientid",pref.getEmpClintId());
             jsonObject.put("BranchID","0");
+            jsonObject.put("SecurityCode", pref.getSecurityCode());
             getSkfDayTypeList(jsonObject);
         } catch (JSONException e) {
             throw new RuntimeException(e);
