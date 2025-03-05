@@ -1009,7 +1009,7 @@ public class LeaveAdjustmentFragment extends Fragment {
         AndroidNetworking.get(AppData.url + "Leave/Get_MetsoAttendanceData")
                 .addQueryParameter("Mode", "3")
                 .addQueryParameter("CompanyID", pref.getEmpClintId())
-                .addQueryParameter("SecurityCode", "0000")
+                .addQueryParameter("SecurityCode", pref.getSecurityCode())
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
