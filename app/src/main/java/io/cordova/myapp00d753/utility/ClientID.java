@@ -7,6 +7,5 @@ public class ClientID {
     public static String HONASA = "AEMCLI2310001780";
     public static String SKY_ROOT = "AEMCLI2410001883";
     public static String SVF = "AEMCLI2010001635";
-
-
+    public static String SKF_ITS = "AEMCLI2210000084";
 }
