@@ -147,6 +147,9 @@
                                     android:textColor="@color/nessecarycolor"
                                     android:text="Notification"></TextView>
                                 <TextView
+                                    android:scrollHorizontally="false"
+                                    android:ellipsize="marquee"
+                                    android:marqueeRepeatLimit="marquee_forever"
                                     android:id="@+id/tvNotifcation"
                                     android:layout_marginTop="10dp"
                                     android:layout_width="wrap_content"
@@ -159,7 +162,8 @@
                                 <androidx.recyclerview.widget.RecyclerView
                                     android:id="@+id/rvNotification"
                                     android:layout_width="match_parent"
-                                    android:layout_height="140dp" />
+                                    android:layout_height="140dp"
+                                    android:visibility="visible"/>
 
                                 <LinearLayout
                                     android:visibility="gone"
@@ -189,7 +193,7 @@
                                 android:padding="5dp">
                                 <ImageView
                                     android:layout_width="match_parent"
-                                    android:layout_height="100dp"
+                                    android:layout_height="120dp"
                                     android:src="@drawable/notification"></ImageView>
 
                             </LinearLayout>

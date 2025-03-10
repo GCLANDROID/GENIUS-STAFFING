@@ -20,9 +20,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 
+import android.os.Handler;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -43,6 +45,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
@@ -137,8 +140,8 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
     LinearLayout llNotification;
     ArrayList<PFDocumentModule>docList=new ArrayList<>();
     LinearLayout llPfDocument,llAppointment;
-
-
+    int scrollCount = 0;
+    NotiAdapter notiAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -211,9 +214,33 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
 
         rvItem=(RecyclerView)findViewById(R.id.rvItem);
         rvItem.setLayoutManager(new GridLayoutManager(this, 3));
-
+        new NotiAdapter(EmployeeDashBoardActivity.this, contentList);
         rvNotification = (RecyclerView) findViewById(R.id.rvNotification);
-        rvNotification.setLayoutManager(new LinearLayoutManager(EmployeeDashBoardActivity.this));
+        //rvNotification.setLayoutManager(new LinearLayoutManager(EmployeeDashBoardActivity.this));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(EmployeeDashBoardActivity.this) {
+
+            @Override
+            public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
+                LinearSmoothScroller smoothScroller = new LinearSmoothScroller(EmployeeDashBoardActivity.this) {
+                    private static final float SPEED = 3500f;// Change this value (default=25f)
+
+                    @Override
+                    protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
+                        return SPEED / displayMetrics.densityDpi;
+                    }
+                };
+                smoothScroller.setTargetPosition(position);
+                startSmoothScroll(smoothScroller);
+            }
+        };
+        //  LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        rvNotification.setLayoutManager(layoutManager);
+        rvNotification.setHasFixedSize(true);
+        rvNotification.setItemViewCacheSize(1000);
+        rvNotification.setDrawingCacheEnabled(true);
+        rvNotification.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         rvPFDocument=(RecyclerView) findViewById(R.id.rvPFDocument);
         rvPFDocument.setLayoutManager(new LinearLayoutManager(EmployeeDashBoardActivity.this));
         llPfDocument=(LinearLayout)findViewById(R.id.llPfDocument);
@@ -233,6 +260,9 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
 
         //
     }
+
+
+
 
     private void onClick() {
 
@@ -627,6 +657,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                         JSONObject conOBJ=Content.optJSONObject(i);
                                         contentList.add(conOBJ.optString("Content"));
                                     }
+                                    tvNotifcation.setText(contentList.toString().replace("[","").replace("]","").replaceAll(",","\n\n"));
                                 }
 
 
@@ -646,7 +677,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                     PFDocumentAdapter docAdapter=new PFDocumentAdapter(docList,EmployeeDashBoardActivity.this);
                                     rvPFDocument.setAdapter(docAdapter);
 
-                                    NotiAdapter notiAdapter = new NotiAdapter(EmployeeDashBoardActivity.this, contentList);
+                                     notiAdapter = new NotiAdapter(EmployeeDashBoardActivity.this, contentList);
                                     rvNotification.setAdapter(notiAdapter);
                                 }else {
                                     llPfDocument.setVisibility(View.GONE);
