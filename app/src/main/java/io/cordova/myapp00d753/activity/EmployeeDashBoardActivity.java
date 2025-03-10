@@ -77,6 +77,7 @@ import java.util.Locale;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.SKF.SKF_AttendanceRegularizationActivity;
 import io.cordova.myapp00d753.adapter.MenuItemAdapter;
+import io.cordova.myapp00d753.adapter.NotiAdapter;
 import io.cordova.myapp00d753.adapter.PFDocumentAdapter;
 import io.cordova.myapp00d753.module.MenuItemModel;
 import io.cordova.myapp00d753.module.PFDocumentModule;
@@ -110,7 +111,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
     File f;
     private static final String IMAGE_DIRECTORY = "/signdemo";
 
-    RecyclerView rvItem,rvPFDocument;
+    RecyclerView rvItem,rvPFDocument,rvNotification;
     ArrayList<MenuItemModel>itemList=new ArrayList<>();
     ImageView imglogout;
     String menuName;
@@ -121,7 +122,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
     boolean survey;
     String phoneNumber="0000";
 
-
+    ArrayList<String> contentList;
     int signFlag=0;
     private static final String IMAGE_DIRECTORY_CONSENT = "/signdemo";
     AlertDialog consnetdialog;
@@ -211,7 +212,8 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         rvItem=(RecyclerView)findViewById(R.id.rvItem);
         rvItem.setLayoutManager(new GridLayoutManager(this, 3));
 
-
+        rvNotification = (RecyclerView) findViewById(R.id.rvNotification);
+        rvNotification.setLayoutManager(new LinearLayoutManager(EmployeeDashBoardActivity.this));
         rvPFDocument=(RecyclerView) findViewById(R.id.rvPFDocument);
         rvPFDocument.setLayoutManager(new LinearLayoutManager(EmployeeDashBoardActivity.this));
         llPfDocument=(LinearLayout)findViewById(R.id.llPfDocument);
@@ -573,8 +575,11 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
 
                                 getFeedbackChecking();
                                 JSONObject object=new JSONObject();
-                                object.put("Id","1");
-                                object.put("SecurityCode","0000");
+                                //object.put("Id","1");
+                                //object.put("SecurityCode","0000");
+
+                                object.put("MasterID",pref.getMasterId());
+                                object.put("SecurityCode",pref.getSecurityCode());
                                 getNotification(object);
                             }
                         } catch (JSONException e) {
@@ -607,7 +612,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            Log.e(TAG, "GET_MENU: "+response.toString(4));
+                            Log.e(TAG, "GET_PF_NOTIFICATION: "+response.toString(4));
                             JSONObject job1 = response;
                             String Response_Code = job1.optString("Response_Code");
                             if (Response_Code.equals("101")) {
@@ -615,7 +620,14 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                 JSONArray Content=Response_Data.optJSONArray("Content");
                                 JSONObject contentobj=Content.optJSONObject(0);
                                 String sContent=contentobj.optString("Content");
-                                tvNotifcation.setText("* "+sContent);
+                                //tvNotifcation.setText("* "+sContent);
+                                contentList = new ArrayList<>();
+                                if (Content.length() > 0){
+                                    for (int i = 0; i < Content.length(); i++) {
+                                        JSONObject conOBJ=Content.optJSONObject(i);
+                                        contentList.add(conOBJ.optString("Content"));
+                                    }
+                                }
 
 
                                 JSONArray Document=Response_Data.optJSONArray("Document");
@@ -633,6 +645,9 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
 
                                     PFDocumentAdapter docAdapter=new PFDocumentAdapter(docList,EmployeeDashBoardActivity.this);
                                     rvPFDocument.setAdapter(docAdapter);
+
+                                    NotiAdapter notiAdapter = new NotiAdapter(EmployeeDashBoardActivity.this, contentList);
+                                    rvNotification.setAdapter(notiAdapter);
                                 }else {
                                     llPfDocument.setVisibility(View.GONE);
                                 }

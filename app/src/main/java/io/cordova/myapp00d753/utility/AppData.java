@@ -80,7 +80,8 @@ public class AppData {
     //public static String SKF_DAY_TYPE_LIST= "http://171.16.2.105/GSPPI_API_V2/api/SKF/GetWorkingDayTypeSKF";
     public static String SaveExperienceDetails = newv2url+"Document/SaveExperienceDetails";
     public static String PROTACTORGAMBLEID = "AEMCLI1310000776";
-    public static String GetPFNotificationAPI=newv2url+"PFNotification/GetPFNotification";
+    //public static String GetPFNotificationAPI=newv2url+"PFNotification/GetPFNotification";
+    public static String GetPFNotificationAPI=newv2url+"PFNotification/GetPFNotification_V1";
     public static String GetEmpConsentPendingListAPI=newv2url+"KYC/GetEmpConsentPendingList";
 
     //KYC
