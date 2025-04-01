@@ -1,6 +1,7 @@
 package io.cordova.myapp00d753.adapter;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -55,6 +56,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
     String PFLink;
     Pref pref;
     int leaveFlag;
+    Activity activity;
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -113,6 +115,8 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
             myViewHolder.imgMenu.setImageResource(R.drawable.interview);
         }else if (itemList.get(i).getMenuId().equalsIgnoreCase("201")){
             myViewHolder.imgMenu.setImageResource(R.drawable.pms);
+        }else if (itemList.get(i).getMenuId().equalsIgnoreCase("160")){
+            myViewHolder.imgMenu.setImageResource(R.drawable.resignation);
         }else {
             myViewHolder.itemView.setVisibility(View.GONE);
         }
@@ -220,6 +224,9 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                     Intent intent=new Intent(mContex, MetsoPMSTargetAchivementActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
+                }else if (itemList.get(i).getMenuId().equals("160")){
+                    //interview
+                    ((EmployeeDashBoardActivity)activity).resignationAlert();
                 }
 
             }
@@ -251,11 +258,12 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
         }
     }
 
-    public MenuItemAdapter(ArrayList<MenuItemModel> itemList, Context mContext,String pfLink,int leaveFlag) {
+    public MenuItemAdapter(ArrayList<MenuItemModel> itemList, Context mContext,String pfLink,int leaveFlag, Activity activity) {
         this.itemList = itemList;
         this.mContex=mContext;
         this.PFLink=pfLink;
         this.leaveFlag=leaveFlag;
+        this.activity=activity;
     }
 
     public void filterList(ArrayList<MenuItemModel> filterdNames) {

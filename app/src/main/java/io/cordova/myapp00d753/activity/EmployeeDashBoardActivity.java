@@ -1,15 +1,11 @@
 package io.cordova.myapp00d753.activity;
 
-import static android.Manifest.permission.READ_PHONE_NUMBERS;
-import static android.Manifest.permission.READ_PHONE_STATE;
-import static android.Manifest.permission.READ_SMS;
-
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -20,7 +16,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 
-import android.os.Handler;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Base64;
@@ -32,6 +27,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -71,11 +67,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.SKF.SKF_AttendanceRegularizationActivity;
@@ -88,6 +86,7 @@ import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
+import io.cordova.myapp00d753.utility.Util;
 
 public class  EmployeeDashBoardActivity extends AppCompatActivity {
     private static final String TAG = "EmployeeDashBoardActivi";
@@ -142,6 +141,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
     LinearLayout llPfDocument,llAppointment;
     int scrollCount = 0;
     NotiAdapter notiAdapter;
+    android.app.AlertDialog selfresignDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -584,7 +584,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                     itemList.add(itemModel);
                                 }
 
-
+                                itemList.add(new MenuItemModel("Self Resignation","160"));
 
                                 if (pref.getEmpClintId().equals("AEMCLI1910000054") || pref.getEmpClintId().equals("AEMCLI2010000067") ||pref.getEmpClintId().equals("SECCLI2110000011") ||pref.getEmpClintId().equals("SECCLI2110000012") ){
                                     itemList.add(new MenuItemModel("Survey","200"));
@@ -600,7 +600,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                     //itemList.add(new MenuItemModel("Leave Management","12"));
                                 }
 
-                                MenuItemAdapter menuItemAdapter=new MenuItemAdapter(itemList,getApplicationContext(),PFLink,leaveFlag);
+                                MenuItemAdapter menuItemAdapter=new MenuItemAdapter(itemList,getApplicationContext(),PFLink,leaveFlag,EmployeeDashBoardActivity.this);
                                 rvItem.setAdapter(menuItemAdapter);
 
                                 getFeedbackChecking();
@@ -751,7 +751,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
 
                                 }
 
-                                MenuItemAdapter menuItemAdapter=new MenuItemAdapter(itemList,getApplicationContext(),PFLink,leaveFlag);
+                                MenuItemAdapter menuItemAdapter=new MenuItemAdapter(itemList,getApplicationContext(),PFLink,leaveFlag,EmployeeDashBoardActivity.this);
                                 rvItem.setAdapter(menuItemAdapter);
 
                                 getFeedbackChecking();
@@ -1522,6 +1522,181 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                             consnetdialog.dismiss();
 
                             Toast.makeText(EmployeeDashBoardActivity.this,"Consent letter has been saved successfully",Toast.LENGTH_LONG).show();
+
+
+                        }else {
+                            Toast.makeText(EmployeeDashBoardActivity.this,"Error Occured Please contact with Administration",Toast.LENGTH_LONG).show();
+
+                        }
+
+
+                        // boolean _status = job1.getBoolean("status");
+
+
+
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        Log.e("errt", String.valueOf(error));
+                        progressDialog.dismiss();
+                        Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+    }
+
+
+    public void resignationAlert() {
+        android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(EmployeeDashBoardActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.dialog_self_resignation, null);
+        dialogBuilder.setView(dialogView);
+        TextView tvLastDate=(TextView)dialogView.findViewById(R.id.tvLastDate);
+        TextView tvNoticePeriod=(TextView)dialogView.findViewById(R.id.tvNoticePeriod);
+        TextView tvSubmit=(TextView)dialogView.findViewById(R.id.tvSubmit);
+        EditText etReason=(EditText)dialogView.findViewById(R.id.etReason);
+        LinearLayout llCancel=(LinearLayout)dialogView.findViewById(R.id.llCancel);
+        llCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selfresignDialog.dismiss();
+            }
+        });
+
+        tvLastDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDatePicker(tvLastDate,tvNoticePeriod);
+            }
+        });
+        tvSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (tvLastDate.getText().toString().length()>0){
+                    if (etReason.getText().toString().length()>0){
+                        resignationSubmit(etReason.getText().toString(),Util.changeAnyDateFormat(tvLastDate.getText().toString(),"dd MMM,yyyy","yyyy-MM-dd"));
+
+
+                    }else {
+                        Toast.makeText(EmployeeDashBoardActivity.this,"Please Enter Remarks",Toast.LENGTH_LONG).show();
+                    }
+
+                }else {
+                    Toast.makeText(EmployeeDashBoardActivity.this,"Please Select Your Last Date",Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+
+
+        selfresignDialog = dialogBuilder.create();
+        selfresignDialog.setCancelable(false);
+        Window window = selfresignDialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        selfresignDialog.show();
+    }
+
+
+    private void showDatePicker(TextView tv,TextView tvNoticePeriod) {
+        // Get current date
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        // Create DatePickerDialog
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    String selectedDate = (selectedMonth + 1) + "/" + selectedDay + "/" + selectedYear;
+                    tv.setText(Util.changeAnyDateFormat(selectedDate,"MM/dd/yyyy","dd MMM,yyyy"));
+                    int days=main(selectedDate);
+                    tvNoticePeriod.setText(days+" Days");
+
+                },
+                year, month, day
+        );
+
+        // Disable past dates
+        datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
+
+        // Show dialog
+        datePickerDialog.show();
+    }
+
+
+    public static long getDaysDifference(String selectedDateStr) {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        try {
+            Date currentDate = new Date();
+            Date selectedDate = sdf.parse(selectedDateStr);
+
+            long diffInMillis = selectedDate.getTime() - currentDate.getTime();
+            return TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public static int main(String selectedDate) {
+        int dayscalculation;
+        // Example selected date
+        long daysBetween = getDaysDifference(selectedDate);
+        System.out.println("Days between: " + daysBetween);
+        dayscalculation= Math.toIntExact(daysBetween);
+        return  dayscalculation+1;
+
+    }
+
+
+    private void resignationSubmit(String remarks,String lastDate) {
+        ProgressDialog progressDialog=new ProgressDialog(EmployeeDashBoardActivity.this);
+        progressDialog.setMessage("Uploading");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        progressDialog.show();
+        String masterID=pref.getMasterId();
+
+        //RequestBody mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        AndroidNetworking.post(AppData.newv2url+"EmployeeExit/SelfResignation")
+                .addBodyParameter("MasterID",masterID)
+                .addBodyParameter("DBOperation","3")
+                .addBodyParameter("LastWorkingDate",lastDate)
+                .addBodyParameter("EmpRemarks",remarks)
+                .addBodyParameter("SecurityCode", pref.getSecurityCode())
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                        progressDialog.show();
+
+
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        progressDialog.dismiss();
+                        selfresignDialog.dismiss();
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+
+
+
+                        int Response_Code = job1.optInt("Response_Code");
+                        if (Response_Code == 101 || Response_Code==100) {
+
+
+                            Toast.makeText(EmployeeDashBoardActivity.this,"Resignation letter has been submitted successfully",Toast.LENGTH_LONG).show();
 
 
                         }else {
