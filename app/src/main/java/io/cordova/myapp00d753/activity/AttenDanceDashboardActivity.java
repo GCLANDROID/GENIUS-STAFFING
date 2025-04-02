@@ -204,8 +204,8 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         } else {
             /*llBackAttendance.setVisibility(View.GONE);
             llAttenRegularize.setVisibility(View.GONE);*/
-            llBackAttendance.setVisibility(View.GONE);
-            llAttenRegularize.setVisibility(View.GONE);
+            llBackAttendance.setVisibility(View.VISIBLE);
+            llAttenRegularize.setVisibility(View.VISIBLE);
         }
 
         if (pref.getEmpClintId().equals(ClientID.SKY_ROOT)){
@@ -681,85 +681,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 });
     }
 
-    private void getAttendanceListForNav(int year, int month, Calendar calendar) {
-        HashMap<Integer, Object> dateHashmap = new HashMap<>();
-        presentDays = new ArrayList<>();
-        dateList = new ArrayList<>();
-        // initialize calendar
 
-
-        ProgressDialog pd = new ProgressDialog(AttenDanceDashboardActivity.this);
-        pd.setMessage("Loading...");
-        pd.setCancelable(false);
-        pd.show();
-
-        String surl = AppData.url + "gcl_Attendancecalender/Get?AemEmployeeid=" + pref.getEmpId() + "&AemClientid=" + pref.getEmpClintId() + "&Monthid=" + month + "&yearid=" + year + "&SecurityCode=" + pref.getSecurityCode();
-        Log.d("input", surl);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        Log.d("responseAttendance", response);
-                        pd.dismiss();
-                        itemList.clear();
-                        // attendabceInfiList.clear();
-
-                        try {
-                            JSONObject job1 = new JSONObject(response);
-                            Log.e("response12", "@@@@@@" + job1);
-                            String responseText = job1.optString("responseText");
-
-                            boolean responseStatus = job1.optBoolean("responseStatus");
-                            if (responseStatus) {
-                                // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
-                                JSONArray responseData = job1.optJSONArray("responseData");
-                                attendanceArray = responseData;
-                                for (int i = 0; i < responseData.length(); i++) {
-                                    JSONObject obj = responseData.getJSONObject(i);
-                                    String sDate = obj.optString("Date");
-                                    String Date = Util.changeAnyDateFormat(obj.optString("Sdate"), "dd/MM/yyyy", "dd");
-                                    int date = Integer.parseInt(Date);
-                                    String PunchTiming = obj.optString("PunchTiming");
-                                    String Day = obj.optString("Address");
-                                    String Status = obj.optString("Status");
-
-
-                                    AttendanceCalenderModel obj2 = new AttendanceCalenderModel();
-                                    obj2.setDate(Date);
-                                    obj2.setStatus(Status);
-                                    obj2.setTime(PunchTiming);
-                                    obj2.setDay(Day);
-                                    itemList.add(obj2);
-                                    dateList.add(sDate);
-                                    if (Status.equalsIgnoreCase("present")) {
-                                        presentDays.add(Day);
-                                    }
-                                    dateHashmap.put(date, Status.toLowerCase());
-                                }
-
-                                customCalendar.setDate(calendar, dateHashmap);
-                                tvPresent.setText("" + presentDays.size());
-
-                                setAdapter();
-                            } else {
-                                //   Toast.makeText(getApplicationContext(),"No data found",Toast.LENGTH_LONG).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            // Toast.makeText(AttendanceReportActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                pd.dismiss();
-                // Toast.makeText(AttendanceReportActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
-                Log.e("ert", error.toString());
-            }
-        }) {};
-        AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
-    }
 
 
     private void setAdapter() {
@@ -786,27 +708,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 }*/
             } else {
                 turnGPSOn();
-                /*if (pref.getEmpClintId().equals("AEMCLI2210001697") || pref.getEmpClintId().equals("AEMCLI2210001698")) {
-                    Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceManageWithoutLocActivity.class);
-                    intent.putExtra("intt", "2");
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                } else if (pref.getEmpClintId().equals("AEMCLI1910001556")){
-                    Intent intent = new Intent(AttenDanceDashboardActivity.this, DailyDashBoardActivity.class);
-                    intent.putExtra("intt", "2");
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                }else if (pref.getEmpClintId().equals("AEMCLI2110001671")){
-                    Intent intent = new Intent(AttenDanceDashboardActivity.this, MetsoAttendanceActivity.class);
-                    intent.putExtra("intt", "2");
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                } else {
-                    Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceManageActivity.class);
-                    intent.putExtra("intt", "2");
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                }*/
+
             }
         } else if (view == llAttendanceReport) {
             if (pref.getEmpClintId().equals("AEMCLI2110001671")) {
@@ -850,7 +752,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 startActivity(intent);
             }
         } else if (view == llWeekly) {
-            if (pref.getEmpClintId().equals("AEMCLI2210001707") || pref.getEmpClintId().equals("AEMCLI2210001697") || pref.getEmpClintId().equals("AEMCLI2210001698") || pref.getEmpClintId().equals("AEMCLI2310001805")|| pref.getEmpClintId().equals("AEMCLI2110001671")|| pref.getEmpClintId().equals(ClientID.HONASA)) {
+            if (pref.getEmpClintId().equals("AEMCLI2210001707") || pref.getEmpClintId().equals("AEMCLI2210001697") || pref.getEmpClintId().equals("AEMCLI2210001698") || pref.getEmpClintId().equals("AEMCLI2310001805")|| pref.getEmpClintId().equals("AEMCLI2110001671")|| pref.getEmpClintId().equals(ClientID.HONASA)|| pref.getEmpClintId().equals(ClientID.MAHINDRA_MAHINDRA)) {
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, WeeklyOffAttendanceActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
