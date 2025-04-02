@@ -142,6 +142,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
     int scrollCount = 0;
     NotiAdapter notiAdapter;
     android.app.AlertDialog selfresignDialog;
+    AlertDialog alerDialog1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -1694,6 +1695,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
 
                         int Response_Code = job1.optInt("Response_Code");
                         if (Response_Code == 101 || Response_Code==100) {
+                            successAlert("Resignation letter has been submitted successfully");
 
 
                             Toast.makeText(EmployeeDashBoardActivity.this,"Resignation letter has been submitted successfully",Toast.LENGTH_LONG).show();
@@ -1720,6 +1722,32 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+
+
+    private void successAlert(String text) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(EmployeeDashBoardActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.dialog_success, null);
+        dialogBuilder.setView(dialogView);
+        TextView tvSuccess = (TextView) dialogView.findViewById(R.id.tvSuccess);
+
+        tvSuccess.setText(text);
+
+        Button btnOk = (Button) dialogView.findViewById(R.id.btnOk);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alerDialog1.dismiss();
+            }
+        });
+
+        alerDialog1 = dialogBuilder.create();
+        alerDialog1.setCancelable(true);
+        Window window = alerDialog1.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        alerDialog1.show();
     }
 }
 
