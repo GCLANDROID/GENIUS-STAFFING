@@ -703,85 +703,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                 });
     }
 
-    public void getMenutem() {
-        String surl = AppData.url+"gel_MobileAppMenuList?ConsultantID="+pref.getEmpConId()+"&ClientID="+pref.getEmpClintId()+"&SecurityCode="+pref.getSecurityCode();
-        Log.d("inputLogin", surl);
 
-        final ProgressDialog pd=new ProgressDialog(EmployeeDashBoardActivity.this);
-        pd.setMessage("Loading.....");
-        pd.show();
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("responseLogin", response);
-                        pd.dismiss();
-                        itemList.clear();
-                        try {
-                            JSONObject job1 = new JSONObject(response);
-                            Log.e("response12", "@@@@@@" + job1);
-                            String responseText = job1.optString("responseText");
-                            boolean responseStatus = job1.optBoolean("responseStatus");
-                            responseCode=job1.optString("responseCode");
-                            if (responseStatus) {
-                                // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
-
-
-                                 itemList.add(new MenuItemModel("Voice Assistant","0"));
-                                JSONArray responseData = job1.optJSONArray("responseData");
-                                for (int i = 0; i < responseData.length(); i++) {
-                                    JSONObject obj = responseData.getJSONObject(i);
-                                    String MenuID=obj.optString("MenuID");
-                                    String MenuItem=obj.optString("MenuItem");
-                                    MenuItemModel itemModel=new MenuItemModel(MenuItem,MenuID);
-                                    itemList.add(itemModel);
-                                }
-
-                                if (pref.getEmpClintId().equals("AEMCLI1910000054") || pref.getEmpClintId().equals("AEMCLI2010000067") ||pref.getEmpClintId().equals("SECCLI2110000011") ||pref.getEmpClintId().equals("SECCLI2110000012") ){
-                                    itemList.add(new MenuItemModel("Survey","200"));
-
-                                }/*else if (pref.getEmpClintId().equals("AEMCLI0910000315")){
-                                    itemList.add(new MenuItemModel("Interview","300"));
-                                }*/
-                                else if (pref.getEmpClintId().equals("AEMCLI2110001671")){
-                                    itemList.add(new MenuItemModel("PMS","201"));
-                                }else if (pref.getEmpClintId().equals("AEMCLI2310001780")){
-                                    itemList.add(new MenuItemModel("Sales Management","4"));
-                                }else {
-
-                                }
-
-                                MenuItemAdapter menuItemAdapter=new MenuItemAdapter(itemList,getApplicationContext(),PFLink,leaveFlag,EmployeeDashBoardActivity.this);
-                                rvItem.setAdapter(menuItemAdapter);
-
-                                getFeedbackChecking();
-                            }
-
-
-                            // boolean _status = job1.getBoolean("status");
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(EmployeeDashBoardActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
-                        }
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                pd.dismiss();
-                //  Toast.makeText(LoginActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
-                showAlert();
-                Log.e("ert", error.toString());
-            }
-        }) {
-
-        };
-        AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
-
-    }
 
     public void getFeedbackChecking() {
 
@@ -1547,7 +1469,37 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                 });
 
     }
+    public void resignationReportAlert(String lastWorkingDate,String reason,String approvalStatus) {
+        android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(EmployeeDashBoardActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.dialog_self_resignation_report, null);
+        dialogBuilder.setView(dialogView);
+        TextView tvLastDate=(TextView)dialogView.findViewById(R.id.tvLastDate);
+        TextView tvApprovalStatus=(TextView)dialogView.findViewById(R.id.tvApprovalStatus);
+        TextView etReason=(TextView)dialogView.findViewById(R.id.etReason);
+        LinearLayout llCancel=(LinearLayout)dialogView.findViewById(R.id.llCancel);
+        llCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selfresignDialog.dismiss();
+            }
+        });
+        tvApprovalStatus.setText(approvalStatus);
+        tvLastDate.setText(lastWorkingDate);
+        etReason.setText(reason);
 
+
+
+
+
+
+        selfresignDialog = dialogBuilder.create();
+        selfresignDialog.setCancelable(false);
+        Window window = selfresignDialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        selfresignDialog.show();
+    }
 
     public void resignationAlert() {
         android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(EmployeeDashBoardActivity.this, R.style.CustomDialogNew);
@@ -1724,7 +1676,80 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
 
     }
 
+    public void resignationget() {
+        ProgressDialog progressDialog=new ProgressDialog(EmployeeDashBoardActivity.this);
+        progressDialog.setMessage("Uploading");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        progressDialog.show();
+        String masterID=pref.getMasterId();
 
+        //RequestBody mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        AndroidNetworking.post(AppData.newv2url+"EmployeeExit/SelfResignation")
+                .addBodyParameter("MasterID",masterID)
+                .addBodyParameter("DBOperation","1")
+                .addBodyParameter("SecurityCode", pref.getSecurityCode())
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                        progressDialog.show();
+
+
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        progressDialog.dismiss();
+
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+
+
+
+                        int Response_Code = job1.optInt("Response_Code");
+                        if (Response_Code == 101 || Response_Code==100) {
+                            JSONArray Response_Data=job1.optJSONArray("Response_Data");
+                            JSONObject dataobj=Response_Data.optJSONObject(0);
+                            String LastWorkingDay=dataobj.optString("LastWorkingDay");
+                            String EmpRemarks=dataobj.optString("EmpRemarks");
+                            String ApprovalStatus=dataobj.optString("ApprovalStatus");
+
+                            resignationReportAlert(LastWorkingDay,EmpRemarks,ApprovalStatus);
+
+
+
+
+
+
+                        }else {
+                            resignationAlert();
+
+                        }
+
+
+                        // boolean _status = job1.getBoolean("status");
+
+
+
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        Log.e("errt", String.valueOf(error));
+                        progressDialog.dismiss();
+                        Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+    }
     private void successAlert(String text) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(EmployeeDashBoardActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);

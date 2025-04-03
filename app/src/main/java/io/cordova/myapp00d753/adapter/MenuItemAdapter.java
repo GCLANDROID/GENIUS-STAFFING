@@ -226,7 +226,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                     mContex.startActivity(intent);
                 }else if (itemList.get(i).getMenuId().equals("160")){
                     //interview
-                    ((EmployeeDashBoardActivity)activity).resignationAlert();
+                    ((EmployeeDashBoardActivity)activity).resignationget();
                 }
 
             }
