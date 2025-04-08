@@ -1,8 +1,7 @@
-package io.cordova.myapp00d753.activity.bosch;
+package io.cordova.myapp00d753.activity.attendance;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -34,7 +33,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -56,7 +54,6 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.developers.imagezipper.ImageZipper;
-import com.google.android.cameraview.LongImageCameraActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -72,6 +69,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
@@ -84,15 +82,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import io.cordova.myapp00d753.AndroidXCamera.AndroidXCameraActivity;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.Retrofit.RetrofitClient;
-
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
+import io.cordova.myapp00d753.activity.bosch.BoschAndroidXCameraActivity;
+import io.cordova.myapp00d753.activity.bosch.BoschAttendanceReportActivity;
 import io.cordova.myapp00d753.activity.bosch.adapter.PunchTypeAdapter;
 import io.cordova.myapp00d753.activity.bosch.model.BoschPunchTypeModel;
-import io.cordova.myapp00d753.activity.metso.MetsoAttendanceActivity;
-import io.cordova.myapp00d753.activity.metso.MetsoAttendanceReportActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.LocationSpinnerAdapter;
 import io.cordova.myapp00d753.activity.metso.model.LocationSpinnerModel;
 import io.cordova.myapp00d753.activity.metso.model.MetsoLocationModel;
@@ -104,7 +100,7 @@ import io.cordova.myapp00d753.utility.Pref;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-public class BoschAttendanceActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class GeoFenceAttendanceWithPunchTypeActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private static final String TAG = "BoschAttendanceActivity";
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -131,7 +127,7 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
     LatLng latLng;
 
     private GoogleMap mMap;
-    ArrayList<MetsoLocationModel> metsoLocationArrayList;
+    ArrayList<MetsoLocationModel> punchLocationArrayList;
     ProgressDialog progressDialog;
     //LocationManager locationManager;
     private LocationCallback locationCallback;
@@ -146,6 +142,7 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
     ImageView showImageView;
     boolean isImageSelected=false;
     ArrayList<BoschPunchTypeModel> boschPunchTypeList;
+    LinearLayout llCapImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,7 +167,7 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
         String surl = AppData.url+"Leave/PunchType?CompanyID="+pref.getEmpClintId()+"&Clientofficeid="+pref.getEmpClintOffId()+"&SecurityCode="+pref.getSecurityCode();
         Log.d("inputLogin", surl);
 
-        final ProgressDialog progressDialog=new ProgressDialog(BoschAttendanceActivity.this);
+        final ProgressDialog progressDialog=new ProgressDialog(GeoFenceAttendanceWithPunchTypeActivity.this);
         progressDialog.setMessage("Loading..");
         progressDialog.setCancelable(false);
         progressDialog.show();
@@ -202,13 +199,15 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
                                     boschPunchTypeList.add(boschPunchTypeModel);
                                 }
                                 Log.e(TAG, "onResponse: "+boschPunchTypeList.size());
-                                punchTypeAdapter = new PunchTypeAdapter(BoschAttendanceActivity.this,boschPunchTypeList);
+                                punchTypeAdapter = new PunchTypeAdapter(GeoFenceAttendanceWithPunchTypeActivity.this,boschPunchTypeList);
                             } else {
 
                             }
+
+                            getPunchLocationData();
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(BoschAttendanceActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
+                            Toast.makeText(GeoFenceAttendanceWithPunchTypeActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -220,7 +219,7 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
         }) {
 
         };
-        RequestQueue requestQueue = Volley.newRequestQueue(BoschAttendanceActivity.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(GeoFenceAttendanceWithPunchTypeActivity.this);
         requestQueue.add(stringRequest);
         stringRequest.setRetryPolicy(new DefaultRetryPolicy(
                 300000,
@@ -238,14 +237,14 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(BoschAttendanceActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent = new Intent(GeoFenceAttendanceWithPunchTypeActivity.this, EmployeeDashBoardActivity.class);
                 startActivity(intent);
             }
         });
         btnOpenCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(BoschAttendanceActivity.this, BoschAndroidXCameraActivity.class);
+                Intent intent = new Intent(GeoFenceAttendanceWithPunchTypeActivity.this, BoschAndroidXCameraActivity.class);
                 startActivityForResult(intent, BoschAndroidXCameraActivity.LONG_IMAGE_RESULT_CODE);
             }
         });
@@ -253,11 +252,9 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isImageSelected){
+
                     openShiftAndLocationPopup();
-                } else {
-                    Toast.makeText(BoschAttendanceActivity.this, "Please Select Image", Toast.LENGTH_SHORT).show();
-                }
+
             }
         });
     }
@@ -280,6 +277,8 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
         };
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BETWEEN_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, locationListener);*/
         llLoading = findViewById(R.id.llLoading);
+        llCapImage=(LinearLayout)findViewById(R.id.llCapImage);
+        llCapImage.setVisibility(View.GONE);
         llSubmit = findViewById(R.id.llSubmit);
         btnSubmit = findViewById(R.id.btnSubmit);
         txtCurrentLocation = findViewById(R.id.txtCurrentLocation);
@@ -292,7 +291,7 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
         //smf = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fmGoogleMaps);
         //smf.getMapAsync(this);
 
-        pref = new Pref(BoschAttendanceActivity.this);
+        pref = new Pref(GeoFenceAttendanceWithPunchTypeActivity.this);
         ClientID = pref.getEmpClintId();
         MasterID = pref.getMasterId();
 
@@ -300,7 +299,7 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
         Log.e(TAG, "intiView: MasterID: "+MasterID);
         Log.e(TAG, "intiView: Clint Id: "+pref.getEmpClintId());
 
-        progressDialog = new ProgressDialog(BoschAttendanceActivity.this);
+        progressDialog = new ProgressDialog(GeoFenceAttendanceWithPunchTypeActivity.this);
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
     }
@@ -336,7 +335,7 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
                     Log.e(TAG, "onActivityResult: "+data.getExtras().get("image"));
                     File file = new File(String.valueOf(data.getExtras().get("image")));
                     try {
-                        compressedImageFile = new ImageZipper(BoschAttendanceActivity.this)
+                        compressedImageFile = new ImageZipper(GeoFenceAttendanceWithPunchTypeActivity.this)
                                 .setQuality(80)
                                 .compressToFile(file);
                     } catch (IOException e) {
@@ -353,7 +352,7 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        if (ContextCompat.checkSelfPermission(BoschAttendanceActivity.this,
+        if (ContextCompat.checkSelfPermission(GeoFenceAttendanceWithPunchTypeActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             @SuppressLint("MissingPermission") Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleClient);
@@ -406,7 +405,7 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
 
     @Override
     public void onConnectionSuspended(int i) {
-        if (ContextCompat.checkSelfPermission(BoschAttendanceActivity.this,
+        if (ContextCompat.checkSelfPermission(GeoFenceAttendanceWithPunchTypeActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleClient);
@@ -423,7 +422,7 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
         if (connectionResult.hasResolution()) {
             try {
                 // Start an Activity that tries to resolve the error
-                connectionResult.startResolutionForResult(BoschAttendanceActivity.this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
+                connectionResult.startResolutionForResult(GeoFenceAttendanceWithPunchTypeActivity.this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
                 /*
                  * Thrown if Google Play services canceled the original
                  * PendingIntent
@@ -456,7 +455,7 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
         mMap.getUiSettings().setZoomControlsEnabled(false);
         mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(BoschAttendanceActivity.this,
+            if (ContextCompat.checkSelfPermission(GeoFenceAttendanceWithPunchTypeActivity.this,
                     Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
                 //Location Permission already granted
@@ -483,7 +482,7 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
 
                     // permission was granted, yay! Do the
                     // location-related task you need to do.
-                    if (ContextCompat.checkSelfPermission(BoschAttendanceActivity.this,
+                    if (ContextCompat.checkSelfPermission(GeoFenceAttendanceWithPunchTypeActivity.this,
                             Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
 
@@ -496,7 +495,7 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
 
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-                    Toast.makeText(BoschAttendanceActivity.this, "permission denied", Toast.LENGTH_LONG).show();
+                    Toast.makeText(GeoFenceAttendanceWithPunchTypeActivity.this, "permission denied", Toast.LENGTH_LONG).show();
                 }
                 return;
             }
@@ -504,7 +503,7 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
     }
 
     protected synchronized void buildGoogleApiClient() {
-        mGoogleClient = new GoogleApiClient.Builder(BoschAttendanceActivity.this)
+        mGoogleClient = new GoogleApiClient.Builder(GeoFenceAttendanceWithPunchTypeActivity.this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
@@ -547,24 +546,24 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
     }
 
     private void checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(BoschAttendanceActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ContextCompat.checkSelfPermission(GeoFenceAttendanceWithPunchTypeActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
             // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(BoschAttendanceActivity.this,
+            if (ActivityCompat.shouldShowRequestPermissionRationale(GeoFenceAttendanceWithPunchTypeActivity.this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
 
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
-                new AlertDialog.Builder(BoschAttendanceActivity.this)
+                new AlertDialog.Builder(GeoFenceAttendanceWithPunchTypeActivity.this)
                         .setTitle("Location Permission Needed")
                         .setMessage("This app needs the Location permission, please accept to use location functionality")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //Prompt the user once explanation has been shown
-                                ActivityCompat.requestPermissions(BoschAttendanceActivity.this,
+                                ActivityCompat.requestPermissions(GeoFenceAttendanceWithPunchTypeActivity.this,
                                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                                         MY_PERMISSIONS_REQUEST_LOCATION);
                             }
@@ -575,7 +574,7 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
 
             } else {
                 // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(BoschAttendanceActivity.this,
+                ActivityCompat.requestPermissions(GeoFenceAttendanceWithPunchTypeActivity.this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
             }
@@ -584,11 +583,11 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
 
 
     private void openShiftAndLocationPopup() {
-        shiftAndLocationDialog = new Dialog(BoschAttendanceActivity.this);
-        shiftAndLocationDialog.setContentView(R.layout.bosch_location_dialog_layout);
+        shiftAndLocationDialog = new Dialog(GeoFenceAttendanceWithPunchTypeActivity.this);
+        shiftAndLocationDialog.setContentView(R.layout.punchtype_location_dialog_layout);
         shiftAndLocationDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         shiftAndLocationDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
+        LinearLayout llLocation=(LinearLayout) shiftAndLocationDialog.findViewById(R.id.llLocation);
         LinearLayout lnCancel = shiftAndLocationDialog.findViewById(R.id.lnCancel);
         TextView txtSelectFrom = shiftAndLocationDialog.findViewById(R.id.txtSelectFrom);
         TextView txtSelectLocation = shiftAndLocationDialog.findViewById(R.id.txtSelectLocation);
@@ -599,6 +598,7 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
         AppCompatButton btnMarkedYourAttendance = shiftAndLocationDialog.findViewById(R.id.btnMarkedYourAttendance);
 
         spFrom.setAdapter(punchTypeAdapter);
+        spLocation.setAdapter(locationSpinnerAdapter);
         spFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -607,6 +607,11 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
                     txtSelectFrom.setText(clickedItem.getPunchtypename());
                     logintype = String.valueOf(clickedItem.getPunchtypeid());
                     txtErrorShift.setVisibility(View.GONE);
+                    if (logintype.equalsIgnoreCase("1")){
+                        llLocation.setVisibility(View.VISIBLE);
+                    }else {
+                        llLocation.setVisibility(View.GONE);
+                    }
                 } else {
                     txtSelectFrom.setText("");
                 }
@@ -618,15 +623,16 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
             }
         });
 
-        /*spLocation.setAdapter(locationSpinnerAdapter);
+
         spLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 MetsoLocationModel clickedItem = (MetsoLocationModel) adapterView.getItemAtPosition(i);
                 if (!clickedItem.getSiteName().equals("Select Location")) {
                     txtSelectLocation.setText(clickedItem.getSiteName());
-                    Siteid = String.valueOf(clickedItem.getSiteid());
+                    Siteid= String.valueOf(clickedItem.getSiteid());
                     txtErrorLocation.setVisibility(View.GONE);
+
                 } else {
                     txtSelectLocation.setText("");
                 }
@@ -636,7 +642,9 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
-        });*/
+        });
+
+
 
         txtSelectFrom.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -645,6 +653,15 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
 
             }
         });
+
+        txtSelectLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                spLocation.performClick();
+            }
+        });
+
+
 
         lnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -659,8 +676,17 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
                 if (txtSelectFrom.getText().toString().trim().isEmpty()) {
                     txtErrorShift.setVisibility(View.VISIBLE);
                 } else  {
-                    txtErrorLocation.setVisibility(View.GONE);
-                    submitAttendance();
+                    txtErrorShift.setVisibility(View.GONE);
+                    if (logintype.equalsIgnoreCase("1")){
+                        if (txtSelectLocation.getText().toString().trim().isEmpty()) {
+                            txtErrorLocation.setVisibility(View.VISIBLE);
+                        }else {
+                            submitAttendance();
+                        }
+                    }else {
+                        submitAttendance();
+                    }
+
                 }
             }
         });
@@ -678,15 +704,16 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
         Log.e(TAG, "submitAttendance: AEMEmployeeID: "+pref.getEmpId()
                 +"\nAddress: "+address+"\nlogintype: "+logintype+"\nLongitude: "+longitude+"\nLatitude: "+latitude+"\nimage: "+"\nSecurityCode: 0000" );
 
-        AndroidNetworking.upload("http://gsppi.geniusconsultant.com/GeniusiOSApi/api/Bosch_post_attendance")
+        AndroidNetworking.upload(AppData.Post_AttedanceGeofence_WFH)
                 .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
-                //.addMultipartParameter("Address", currentAddresses)
                 .addMultipartParameter("Address", address)
-                .addMultipartParameter("logintype", logintype)
+                .addMultipartParameter("Shiftid", "")
+                .addMultipartParameter("Siteid", Siteid)
+                .addMultipartParameter("PunchType", logintype)
                 .addMultipartParameter("Longitude", longitude)
                 .addMultipartParameter("Latitude", latitude)
-                .addMultipartFile("image", compressedImageFile)
                 .addMultipartParameter("SecurityCode", "0000")
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
@@ -697,13 +724,14 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
                         progressDialog.cancel();
                         try {
                             JSONObject object = new JSONObject(String.valueOf(response));
-                            if (object.getBoolean("responseStatus") == true) {
+                            String Response_Code=object.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+
                                 shiftAndLocationDialog.cancel();
                                 successAlert(object.getString("responseText"));
                             } else {
                                 progressDialog.cancel();
-                                Log.e(TAG, "FAILED: "+object.getString("responseText"));
-                                Toast.makeText(BoschAttendanceActivity.this, object.getString("responseText"), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(GeoFenceAttendanceWithPunchTypeActivity.this, object.getString("Response_Message"), Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -719,7 +747,7 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
     }
 
     private void successAlert(String message) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BoschAttendanceActivity.this, R.style.CustomDialogNew);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(GeoFenceAttendanceWithPunchTypeActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_success, null);
         dialogBuilder.setView(dialogView);
@@ -736,7 +764,7 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
             public void onClick(View view) {
                 alerDialog1.dismiss();
                 //Intent intent = new Intent(MetsoAttendanceActivity.this, AttendanceReportActivity.class);
-                Intent intent = new Intent(BoschAttendanceActivity.this, BoschAttendanceReportActivity.class);
+                Intent intent = new Intent(GeoFenceAttendanceWithPunchTypeActivity.this, BoschAttendanceReportActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -748,6 +776,46 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.CENTER);
         alerDialog1.show();
+    }
+
+
+    private void getPunchLocationData() {
+        Log.e(TAG, "ClientID: " + ClientID);
+        Call<JsonObject> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .GetMetsoAttendanceData("1", ClientID, "0000");
+
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
+                Log.e(TAG, "onResponse: Location: " + new Gson().toJson(response.body()));
+                progressDialog.dismiss();
+                try {
+                    JSONObject object = new JSONObject(String.valueOf(response.body()));
+                    if (object.getBoolean("responseStatus") == true) {
+                        JSONArray jsonArray = object.getJSONArray("responseData");
+                        punchLocationArrayList = new ArrayList<>();
+                        punchLocationArrayList.add(new MetsoLocationModel(0, "Select Location"));
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject objectResponse = jsonArray.getJSONObject(i);
+                            MetsoLocationModel metsoLocationModel = new MetsoLocationModel(objectResponse.getInt("Siteid"),
+                                    (String) objectResponse.getString("SiteName"));
+                            punchLocationArrayList.add(metsoLocationModel);
+                        }
+                        Log.e(TAG, "onResponse: SIZE: " + punchLocationArrayList.size());
+                        locationSpinnerAdapter = new LocationSpinnerAdapter(GeoFenceAttendanceWithPunchTypeActivity.this, punchLocationArrayList);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.getMessage());
+            }
+        });
     }
 
 

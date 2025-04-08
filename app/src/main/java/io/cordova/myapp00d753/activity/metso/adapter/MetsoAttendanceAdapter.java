@@ -26,7 +26,7 @@ import java.util.Calendar;
 
 import io.cordova.myapp00d753.R;
 
-import io.cordova.myapp00d753.activity.metso.MetsoAttendanceRegularizationActivity;
+import io.cordova.myapp00d753.activity.attendance.MetsoAttendanceRegularizationActivity;
 import io.cordova.myapp00d753.activity.metso.model.MetsoShiftModel;
 import io.cordova.myapp00d753.module.BackLogAttendanceModel;
 import io.cordova.myapp00d753.utility.TimeConversion;

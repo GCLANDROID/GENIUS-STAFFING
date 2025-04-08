@@ -83,7 +83,7 @@ import java.util.regex.Pattern;
 import io.cordova.myapp00d753.AndroidXCamera.AndroidXCameraActivity;
 
 import io.cordova.myapp00d753.R;
-import io.cordova.myapp00d753.activity.AttendanceReportActivity;
+import io.cordova.myapp00d753.activity.attendance.AttendanceReportActivity;
 import io.cordova.myapp00d753.databinding.ActivityBlueDartAttendanceManageBinding;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.GPSTracker;

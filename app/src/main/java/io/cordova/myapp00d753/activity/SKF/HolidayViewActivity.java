@@ -2,8 +2,6 @@ package io.cordova.myapp00d753.activity.SKF;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,11 +26,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import io.cordova.myapp00d753.R;
-import io.cordova.myapp00d753.activity.AttenDanceDashboardActivity;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.activity.SKF.adapter.HolidayViewAdapter;
 import io.cordova.myapp00d753.module.HolidayMarkModel;
-import io.cordova.myapp00d753.module.HolidayModel;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.DateCalculation;
 import io.cordova.myapp00d753.utility.Pref;

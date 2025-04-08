@@ -1,4 +1,4 @@
-package io.cordova.myapp00d753.activity;
+package io.cordova.myapp00d753.activity.attendance;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -69,15 +69,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.AdjustmentActivity;
+import io.cordova.myapp00d753.activity.BacklogAttendanceActivity;
+import io.cordova.myapp00d753.activity.DailyDashBoardActivity;
+import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
+import io.cordova.myapp00d753.activity.HolidayMarkingActivity;
+import io.cordova.myapp00d753.activity.LeaveApplicationActivity;
+import io.cordova.myapp00d753.activity.QRCodeScannerActivity;
 import io.cordova.myapp00d753.activity.SKF.HolidayViewActivity;
 import io.cordova.myapp00d753.activity.SKF.SKF_AttendanceRegularizationActivity;
-import io.cordova.myapp00d753.activity.bosch.BoschAttendanceActivity;
+import io.cordova.myapp00d753.activity.WOHOHActivity;
+import io.cordova.myapp00d753.activity.WeeklyOffAttendanceActivity;
 import io.cordova.myapp00d753.activity.bosch.BoschAttendanceReportActivity;
-import io.cordova.myapp00d753.activity.metso.MetsoAttendanceActivity;
-import io.cordova.myapp00d753.activity.metso.MetsoAttendanceRegularizationActivity;
-import io.cordova.myapp00d753.activity.metso.MetsoAttendanceReportActivity;
 import io.cordova.myapp00d753.activity.metso.MetsoPMSTargetAchivementActivity;
-import io.cordova.myapp00d753.activity.protectorgamble.ProtectorGambleAttendanceActivity;
 import io.cordova.myapp00d753.adapter.AttendanceCalenderAdapter;
 import io.cordova.myapp00d753.module.AttendanceCalenderModel;
 import io.cordova.myapp00d753.module.SpineerItemModel;
@@ -204,8 +208,8 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         } else {
             /*llBackAttendance.setVisibility(View.GONE);
             llAttenRegularize.setVisibility(View.GONE);*/
-            llBackAttendance.setVisibility(View.VISIBLE);
-            llAttenRegularize.setVisibility(View.VISIBLE);
+            llBackAttendance.setVisibility(View.GONE);
+            llAttenRegularize.setVisibility(View.GONE);
         }
 
         if (pref.getEmpClintId().equals(ClientID.SKY_ROOT)){
@@ -1493,13 +1497,18 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-        }else if (pref.getEmpClintId().equals(AppData.PROTACTORGAMBLEID) || pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID)) {
+        }else if ( pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID)) {
             Intent intent = new Intent(AttenDanceDashboardActivity.this, ProtectorGambleAttendanceActivity.class);
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }else if (pref.getEmpClintId().equals(ClientID.SVF)) {
             Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceWithOnlyShiftActivity.class);
+            intent.putExtra("intt", "2");
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }else if (pref.getEmpClintId().equals(ClientID.PROTACTOR_GAMBLEID)) {
+            Intent intent = new Intent(AttenDanceDashboardActivity.this, GeoFenceAttendanceWithPunchTypeActivity.class);
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);

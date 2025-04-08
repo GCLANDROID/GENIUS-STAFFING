@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
@@ -56,16 +55,10 @@ import java.util.Date;
 import java.util.Locale;
 
 import io.cordova.myapp00d753.R;
-import io.cordova.myapp00d753.activity.AttendanceManageActivity;
-import io.cordova.myapp00d753.activity.AttendanceReportActivity;
-import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
-import io.cordova.myapp00d753.activity.VisitLocationActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.ApproverAutoCompleteAdapter;
 import io.cordova.myapp00d753.activity.metso.model.ApproverModel;
 import io.cordova.myapp00d753.adapter.CompOffViewAdapter;
-import io.cordova.myapp00d753.adapter.MenuItemAdapter;
 import io.cordova.myapp00d753.module.CompffViewModel;
-import io.cordova.myapp00d753.module.MenuItemModel;
 import io.cordova.myapp00d753.module.SpineerItemModel;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;

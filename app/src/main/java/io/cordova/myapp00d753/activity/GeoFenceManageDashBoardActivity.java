@@ -57,6 +57,7 @@ import java.util.List;
 import java.util.Locale;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.attendance.AttendanceReportActivity;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.GPSTracker;
 import io.cordova.myapp00d753.utility.Pref;

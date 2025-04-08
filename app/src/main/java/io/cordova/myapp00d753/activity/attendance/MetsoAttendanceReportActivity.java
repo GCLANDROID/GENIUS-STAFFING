@@ -1,4 +1,4 @@
-package io.cordova.myapp00d753.activity.metso;
+package io.cordova.myapp00d753.activity.attendance;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,17 +11,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.androidnetworking.AndroidNetworking;
-import com.androidnetworking.common.Priority;
-import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.JSONObjectRequestListener;
-import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import io.cordova.myapp00d753.R;
-import io.cordova.myapp00d753.activity.AttendanceReportActivity;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.MetsoAttendanceReportAdapter;
 

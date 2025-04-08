@@ -1,4 +1,4 @@
-package io.cordova.myapp00d753.activity;
+package io.cordova.myapp00d753.activity.attendance;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.adapter.AttendanceAdapter;
 import io.cordova.myapp00d753.module.AttendanceModule;
 import io.cordova.myapp00d753.module.SpModule;
@@ -309,7 +309,7 @@ public class AttendanceReportActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(AttendanceReportActivity.this,EmployeeDashBoardActivity.class);
+                Intent intent=new Intent(AttendanceReportActivity.this, EmployeeDashBoardActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
               //  finish();

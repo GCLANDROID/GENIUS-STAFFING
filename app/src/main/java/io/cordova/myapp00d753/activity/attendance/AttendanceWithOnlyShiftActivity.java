@@ -1,12 +1,4 @@
-package io.cordova.myapp00d753.activity.metso;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+package io.cordova.myapp00d753.activity.attendance;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -20,16 +12,11 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.provider.Settings;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -46,6 +33,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
@@ -54,6 +49,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -78,29 +75,22 @@ import java.util.List;
 import java.util.Locale;
 
 import io.cordova.myapp00d753.R;
-
 import io.cordova.myapp00d753.Retrofit.RetrofitClient;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
-import io.cordova.myapp00d753.activity.LoginActivity;
-import io.cordova.myapp00d753.activity.TempEducationaActivity;
-import io.cordova.myapp00d753.activity.TempExperinceActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.LocationSpinnerAdapter;
 import io.cordova.myapp00d753.activity.metso.adapter.ShiftSpinnerAdapter;
 import io.cordova.myapp00d753.activity.metso.model.LocationSpinnerModel;
 import io.cordova.myapp00d753.activity.metso.model.MetsoLocationModel;
 import io.cordova.myapp00d753.activity.metso.model.MetsoShiftModel;
 import io.cordova.myapp00d753.activity.metso.model.ShiftSpinnerModel;
-import io.cordova.myapp00d753.adapter.EducationAdapter;
-import io.cordova.myapp00d753.module.EducationalModel;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.GPSTracker;
 import io.cordova.myapp00d753.utility.Pref;
-import io.cordova.myapp00d753.utility.Util;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class AttendanceWithOnlyShiftActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private static final String TAG = "MetsoAttendanceActivity";
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -151,7 +141,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
         //buildGoogleApiClient();
         //getLocations();
 
-        getMetsoShift();
+        getShift();
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,7 +159,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
         });
     }
 
-    private void getMetsoShift() {
+    private void getShift() {
         progressDialog.show();
         Call<JsonObject> call = RetrofitClient
                 .getInstance()
@@ -180,6 +170,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 Log.e(TAG, "onResponse: " + new Gson().toJson(response.body()));
+                progressDialog.dismiss();
                 try {
                     JSONObject object = new JSONObject(String.valueOf(response.body()));
                     if (object.getBoolean("responseStatus") == true) {
@@ -193,9 +184,9 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
                             metsoShiftList.add(metsoLocationModel);
                         }
 
-                        shiftSpinnerAdapter = new ShiftSpinnerAdapter(MetsoAttendanceActivity.this, metsoShiftList);
+                        shiftSpinnerAdapter = new ShiftSpinnerAdapter(AttendanceWithOnlyShiftActivity.this, metsoShiftList);
 
-                        getMetsoLocationData();
+                     //   getMetsoLocationData();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -233,7 +224,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
                             metsoLocationArrayList.add(metsoLocationModel);
                         }
                         Log.e(TAG, "onResponse: SIZE: " + metsoLocationArrayList.size());
-                        locationSpinnerAdapter = new LocationSpinnerAdapter(MetsoAttendanceActivity.this, metsoLocationArrayList);
+                        locationSpinnerAdapter = new LocationSpinnerAdapter(AttendanceWithOnlyShiftActivity.this, metsoLocationArrayList);
 
                         progressDialog.cancel();
                     }
@@ -251,7 +242,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
     }
 
     private void openShiftAndLocationPopup2() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MetsoAttendanceActivity.this, R.style.CustomDialogNew2);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(AttendanceWithOnlyShiftActivity.this, R.style.CustomDialogNew2);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.shift_location_popup, null);
         dialogBuilder.setView(dialogView);
@@ -294,16 +285,16 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
         //smf = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fmGoogleMaps);
         //smf.getMapAsync(this);
 
-        pref = new Pref(MetsoAttendanceActivity.this);
+        pref = new Pref(AttendanceWithOnlyShiftActivity.this);
         ClientID = pref.getEmpClintId();
         MasterID = pref.getMasterId();
 
-        progressDialog = new ProgressDialog(MetsoAttendanceActivity.this);
+        progressDialog = new ProgressDialog(AttendanceWithOnlyShiftActivity.this);
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
-        phoneNumber=getAndroidID(MetsoAttendanceActivity.this);
+        phoneNumber=getAndroidID(AttendanceWithOnlyShiftActivity.this);
 
-        JSONObject obj = new JSONObject();
+       /* JSONObject obj = new JSONObject();
         try {
             obj.put("CompanyID", pref.getEmpClintId());
             obj.put("EmployeeID", pref.getEmpId());
@@ -314,12 +305,12 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
             savedeviceID(obj);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
 
         imhHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(MetsoAttendanceActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent=new Intent(AttendanceWithOnlyShiftActivity.this, EmployeeDashBoardActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -346,7 +337,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
     }
 
     private void openShiftAndLocationPopup() {
-        shiftAndLocationDialog = new Dialog(MetsoAttendanceActivity.this);
+        shiftAndLocationDialog = new Dialog(AttendanceWithOnlyShiftActivity.this);
         shiftAndLocationDialog.setContentView(R.layout.shift_location_popup);
         shiftAndLocationDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         shiftAndLocationDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -356,8 +347,12 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
         TextView txtSelectLocation = shiftAndLocationDialog.findViewById(R.id.txtSelectLocation);
         TextView txtErrorShift = shiftAndLocationDialog.findViewById(R.id.txtErrorShift);
         TextView txtErrorLocation = shiftAndLocationDialog.findViewById(R.id.txtErrorLocation);
+        TextView textView=shiftAndLocationDialog.findViewById(R.id.textView);
+        textView.setText("Select shift");
         Spinner spShift = shiftAndLocationDialog.findViewById(R.id.spShift);
         Spinner spLocation = shiftAndLocationDialog.findViewById(R.id.spLocation);
+        LinearLayout llLocation=shiftAndLocationDialog.findViewById(R.id.llLocation);
+        llLocation.setVisibility(View.GONE);
         AppCompatButton btnMarkedYourAttendance = shiftAndLocationDialog.findViewById(R.id.btnMarkedYourAttendance);
 
         spShift.setAdapter(shiftSpinnerAdapter);
@@ -423,10 +418,8 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
             public void onClick(View view) {
                 if (txtSelectShift.getText().toString().trim().isEmpty()) {
                     txtErrorShift.setVisibility(View.VISIBLE);
-                } else if (txtSelectLocation.getText().toString().trim().isEmpty()) {
-                    txtErrorLocation.setVisibility(View.VISIBLE);
-                } else {
-                    txtErrorLocation.setVisibility(View.GONE);
+                }  else {
+                    txtErrorShift.setVisibility(View.GONE);
                     submitAttendance();
                 }
             }
@@ -448,55 +441,13 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
                 + "\nlongitude: " + longitude
                 + "\nlatitude: " + latitude);
 
-        /* //TODO: Also working
-        RequestBody AEMEmployeeID = RequestBody.create(MasterID, MediaType.parse("text/plain"));
-        RequestBody mShiftid = RequestBody.create(Shiftid, MediaType.parse("text/plain"));
-        RequestBody mSiteid = RequestBody.create(Siteid, MediaType.parse("text/plain"));
-        RequestBody mLatitude = RequestBody.create(latitude,MediaType.parse("text/plain"));
-        RequestBody mLongitude = RequestBody.create(longitude,MediaType.parse("text/plain"));
-        RequestBody mCurrentAddresses = RequestBody.create(currentAddresses,MediaType.parse("text/plain"));
-        RequestBody mSecurityCode = RequestBody.create("0000",MediaType.parse("text/plain"));
-
-
-        Call<JsonObject> call = RetrofitClient
-                .getInstance()
-                .getApi()
-                .MetsoAttendancePunch(AEMEmployeeID,mCurrentAddresses,mShiftid,mSiteid,mLongitude,mLatitude,mSecurityCode);
-
-        call.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                Log.e(TAG, "onResponse: Attendance Submit: "+new Gson().toJson(response.body()));
-                progressDialog.cancel();
-                try {
-                    JSONObject object = new JSONObject(String.valueOf(response.body()));
-                    if (object.getBoolean("responseStatus") == true){
-                        shiftAndLocationDialog.cancel();
-
-                        successAlert(object.getString("responseText"));
-                        //Toast.makeText(MetsoAttendanceActivity.this, object.getString("responseText"), Toast.LENGTH_SHORT).show();
-                    } else {
-                        progressDialog.cancel();
-                        Toast.makeText(MetsoAttendanceActivity.this, "Attendance not updated", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                Log.e(TAG, "METSO_ATTENDANCE_SUBMIT_onFailure: "+t.getMessage());
-                progressDialog.cancel();
-            }
-        });*/
 
 
         AndroidNetworking.upload(AppData.url + "gcl_post_attedanceGeofenceMetso")
                 .addMultipartParameter("AEMEmployeeID", MasterID)
                 .addMultipartParameter("Address", address)
                 .addMultipartParameter("Shiftid", Shiftid)
-                .addMultipartParameter("Siteid", Siteid)
+                .addMultipartParameter("Siteid", "")
                 .addMultipartParameter("Longitude", longitude)
                 .addMultipartParameter("Latitude", latitude)
                 .addMultipartParameter("SecurityCode", "0000")
@@ -515,7 +466,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
                                 successAlert(object.getString("responseText"));
                             } else {
                                 progressDialog.cancel();
-                                Toast.makeText(MetsoAttendanceActivity.this, object.getString("responseText"), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AttendanceWithOnlyShiftActivity.this, object.getString("responseText"), Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -531,7 +482,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
     }
 
     private void successAlert(String message) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MetsoAttendanceActivity.this, R.style.CustomDialogNew);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(AttendanceWithOnlyShiftActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_success, null);
         dialogBuilder.setView(dialogView);
@@ -548,7 +499,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
             public void onClick(View view) {
                 alerDialog1.dismiss();
                 //Intent intent = new Intent(MetsoAttendanceActivity.this, AttendanceReportActivity.class);
-                Intent intent = new Intent(MetsoAttendanceActivity.this, MetsoAttendanceReportActivity.class);
+                Intent intent = new Intent(AttendanceWithOnlyShiftActivity.this, AttendanceReportActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -593,7 +544,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
                                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
 
                                 /**------- Code use for getting current address and showing address -------*/
-                                Geocoder geocoder = new Geocoder(MetsoAttendanceActivity.this, Locale.getDefault());
+                                Geocoder geocoder = new Geocoder(AttendanceWithOnlyShiftActivity.this, Locale.getDefault());
                                 List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                                 latitude = String.valueOf(addresses.get(0).getLatitude());
                                 longitude = String.valueOf(addresses.get(0).getLongitude());
@@ -624,7 +575,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
 
 
     protected synchronized void buildGoogleApiClient() {
-        mGoogleClient = new GoogleApiClient.Builder(MetsoAttendanceActivity.this)
+        mGoogleClient = new GoogleApiClient.Builder(AttendanceWithOnlyShiftActivity.this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
@@ -634,7 +585,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        if (ContextCompat.checkSelfPermission(MetsoAttendanceActivity.this,
+        if (ContextCompat.checkSelfPermission(AttendanceWithOnlyShiftActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             @SuppressLint("MissingPermission") Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleClient);
@@ -712,7 +663,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
 
     @Override
     public void onConnectionSuspended(int i) {
-        if (ContextCompat.checkSelfPermission(MetsoAttendanceActivity.this,
+        if (ContextCompat.checkSelfPermission(AttendanceWithOnlyShiftActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleClient);
@@ -729,7 +680,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
         if (connectionResult.hasResolution()) {
             try {
                 // Start an Activity that tries to resolve the error
-                connectionResult.startResolutionForResult(MetsoAttendanceActivity.this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
+                connectionResult.startResolutionForResult(AttendanceWithOnlyShiftActivity.this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
                 /*
                  * Thrown if Google Play services canceled the original
                  * PendingIntent
@@ -763,7 +714,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
         mMap.getUiSettings().setZoomControlsEnabled(false);
         mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(MetsoAttendanceActivity.this,
+            if (ContextCompat.checkSelfPermission(AttendanceWithOnlyShiftActivity.this,
                     Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
                 //Location Permission already granted
@@ -780,24 +731,24 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
     }
 
     private void checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(MetsoAttendanceActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ContextCompat.checkSelfPermission(AttendanceWithOnlyShiftActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
             // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(MetsoAttendanceActivity.this,
+            if (ActivityCompat.shouldShowRequestPermissionRationale(AttendanceWithOnlyShiftActivity.this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
 
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
-                new AlertDialog.Builder(MetsoAttendanceActivity.this)
+                new AlertDialog.Builder(AttendanceWithOnlyShiftActivity.this)
                         .setTitle("Location Permission Needed")
                         .setMessage("This app needs the Location permission, please accept to use location functionality")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //Prompt the user once explanation has been shown
-                                ActivityCompat.requestPermissions(MetsoAttendanceActivity.this,
+                                ActivityCompat.requestPermissions(AttendanceWithOnlyShiftActivity.this,
                                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                                         MY_PERMISSIONS_REQUEST_LOCATION);
                             }
@@ -808,7 +759,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
 
             } else {
                 // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(MetsoAttendanceActivity.this,
+                ActivityCompat.requestPermissions(AttendanceWithOnlyShiftActivity.this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
             }
@@ -829,7 +780,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
 
                     // permission was granted, yay! Do the
                     // location-related task you need to do.
-                    if (ContextCompat.checkSelfPermission(MetsoAttendanceActivity.this,
+                    if (ContextCompat.checkSelfPermission(AttendanceWithOnlyShiftActivity.this,
                             Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
 
@@ -842,7 +793,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
 
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-                    Toast.makeText(MetsoAttendanceActivity.this, "permission denied", Toast.LENGTH_LONG).show();
+                    Toast.makeText(AttendanceWithOnlyShiftActivity.this, "permission denied", Toast.LENGTH_LONG).show();
                 }
                 return;
             }
@@ -911,7 +862,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
 
 
     private void savedeviceID(JSONObject jsonObject) {
-        ProgressDialog pd = new ProgressDialog(MetsoAttendanceActivity.this);
+        ProgressDialog pd = new ProgressDialog(AttendanceWithOnlyShiftActivity.this);
         pd.setCancelable(false);
         pd.setMessage("Loading");
         pd.show();
@@ -953,7 +904,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
 
 
     private void shoeErrorDialog(String msg) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MetsoAttendanceActivity.this, R.style.CustomDialogNew);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(AttendanceWithOnlyShiftActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_alerts, null);
         dialogBuilder.setView(dialogView);

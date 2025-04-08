@@ -1,4 +1,4 @@
-package io.cordova.myapp00d753.activity.protectorgamble;
+package io.cordova.myapp00d753.activity.attendance;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -75,8 +75,6 @@ import java.util.Locale;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.Retrofit.RetrofitClient;
-import io.cordova.myapp00d753.activity.AttendanceReportActivity;
-import io.cordova.myapp00d753.activity.metso.MetsoAttendanceReportActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.LocationSpinnerAdapter;
 import io.cordova.myapp00d753.activity.metso.adapter.ShiftSpinnerAdapter;
 import io.cordova.myapp00d753.activity.metso.model.LocationSpinnerModel;
@@ -84,7 +82,6 @@ import io.cordova.myapp00d753.activity.metso.model.MetsoLocationModel;
 import io.cordova.myapp00d753.activity.metso.model.MetsoShiftModel;
 import io.cordova.myapp00d753.activity.metso.model.ShiftSpinnerModel;
 import io.cordova.myapp00d753.utility.AppData;
-import io.cordova.myapp00d753.utility.ClientID;
 import io.cordova.myapp00d753.utility.GPSTracker;
 import io.cordova.myapp00d753.utility.Pref;
 import retrofit2.Call;

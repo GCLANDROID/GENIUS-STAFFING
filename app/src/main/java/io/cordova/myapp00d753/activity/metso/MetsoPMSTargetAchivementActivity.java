@@ -3,7 +3,6 @@ package io.cordova.myapp00d753.activity.metso;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.transition.Visibility;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -43,8 +42,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import io.cordova.myapp00d753.R;
-import io.cordova.myapp00d753.activity.AttenDanceDashboardActivity;
-import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.ApproverAutoCompleteAdapter;
 import io.cordova.myapp00d753.activity.metso.model.ApproverModel;
 import io.cordova.myapp00d753.utility.AppController;

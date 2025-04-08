@@ -1,4 +1,4 @@
-package io.cordova.myapp00d753.activity;
+package io.cordova.myapp00d753.activity.attendance;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -50,6 +50,11 @@ import java.util.Calendar;
 import java.util.Date;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.AttenApprovalActivity;
+import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
+import io.cordova.myapp00d753.activity.FRDashboard;
+import io.cordova.myapp00d753.activity.OfflineAttenReportActivity;
+import io.cordova.myapp00d753.activity.WeeklyOffAttendanceActivity;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.DatabaseHelper;
@@ -301,7 +306,7 @@ public class AttendanceActivity extends AppCompatActivity implements GoogleApiCl
         llFCAttendance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(AttendanceActivity.this,FRDashboard.class);
+                Intent intent=new Intent(AttendanceActivity.this, FRDashboard.class);
                 intent.putExtra("intt","1");
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);

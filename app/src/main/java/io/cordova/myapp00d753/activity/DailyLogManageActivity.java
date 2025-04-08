@@ -73,6 +73,7 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.attendance.AttendanceManageActivity;
 import io.cordova.myapp00d753.module.AttendanceService;
 import io.cordova.myapp00d753.module.UploadObject;
 import io.cordova.myapp00d753.utility.AppData;
@@ -88,7 +89,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Part;
 
 public class DailyLogManageActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     public static final String TAG = AttendanceManageActivity.class.getSimpleName();

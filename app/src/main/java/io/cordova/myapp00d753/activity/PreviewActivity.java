@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Locale;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.attendance.AttendanceReportActivity;
 import io.cordova.myapp00d753.module.AttendanceManageModule;
 import io.cordova.myapp00d753.module.AttendanceService;
 import io.cordova.myapp00d753.utility.ApiClient;
@@ -254,7 +255,7 @@ public class PreviewActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 alerDialog1.dismiss();
-                Intent intent=new Intent(PreviewActivity.this,AttendanceReportActivity.class);
+                Intent intent=new Intent(PreviewActivity.this, AttendanceReportActivity.class);
                 startActivity(intent);
                 finish();
             }

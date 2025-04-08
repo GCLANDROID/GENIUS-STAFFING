@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginStart="30dp"
+    android:layout_marginEnd="30dp"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:background="@color/maincolor"
+        android:paddingRight="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1.8"
+            android:gravity="center"
+            android:text="Select Punch Type"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <LinearLayout
+            android:id="@+id/lnCancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imgCancel"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:padding="5dp"
+                android:src="@drawable/cancelicon"
+                app:tint="@color/white" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Punch From"
+        android:textStyle="bold"
+        android:textSize="13sp"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"/>
+
+    <TextView
+        android:id="@+id/txtSelectFrom"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:hint="Select From"
+        android:textSize="13.5sp"
+        android:paddingStart="20dp"
+        android:paddingEnd="8dp"
+        android:gravity="center_vertical"
+        android:background="@drawable/border_background"
+        android:drawableEnd="@drawable/ic_arrow_drop_down_24"
+        android:drawableTint="@color/colorPrimary"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"/>
+
+    <TextView
+        android:id="@+id/txtErrorShift"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please select punch type"
+        android:textColor="#F44336"
+        android:textSize="12sp"
+        android:visibility="gone"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="30dp"/>
+
+    <Spinner
+        android:id="@+id/spFrom"
+        android:layout_width="match_parent"
+        android:layout_height=".01dp"
+        android:padding="5dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:visibility="invisible" />
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/llLocation"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Location"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            android:visibility="visible"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="20dp"/>
+
+        <TextView
+            android:id="@+id/txtSelectLocation"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="Select Location"
+            android:textSize="13.5sp"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="10dp"
+            android:gravity="center_vertical"
+            android:visibility="visible"
+            android:drawableEnd="@drawable/ic_arrow_drop_down_24"
+            android:drawableTint="@color/colorPrimary"
+            android:background="@drawable/border_background"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"/>
+
+        <Spinner
+            android:id="@+id/spLocation"
+            android:layout_width="match_parent"
+            android:layout_height=".01dp"
+            android:padding="5dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/txtErrorLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Please select location"
+            android:textColor="#F44336"
+            android:textSize="12sp"
+            android:visibility="gone"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="30dp"/>
+    </LinearLayout>
+
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnMarkedYourAttendance"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="25dp"
+        android:paddingTop="3dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/buttondesign"
+        android:text="Submit"
+        android:paddingBottom="2dp"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="14sp"/>
+</LinearLayout>

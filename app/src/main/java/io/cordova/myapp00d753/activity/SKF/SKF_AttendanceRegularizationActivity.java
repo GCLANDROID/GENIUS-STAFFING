@@ -1,6 +1,6 @@
 package io.cordova.myapp00d753.activity.SKF;
 
-import static io.cordova.myapp00d753.activity.protectorgamble.ProtectorGambleAttendanceActivity.SKF_PUNE_CLIENT_OFFICE_ID;
+import static io.cordova.myapp00d753.activity.attendance.ProtectorGambleAttendanceActivity.SKF_PUNE_CLIENT_OFFICE_ID;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -27,9 +27,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,7 +34,6 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
@@ -49,18 +45,12 @@ import java.util.Calendar;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.Retrofit.RetrofitClient;
-import io.cordova.myapp00d753.activity.BacklogAttendanceActivity;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
-import io.cordova.myapp00d753.activity.HolidayMarkingActivity;
 import io.cordova.myapp00d753.activity.SKF.adapter.SKF_BacklogAdapter;
-import io.cordova.myapp00d753.activity.metso.MetsoAttendanceRegularizationActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.LocationSpinnerAdapter;
-import io.cordova.myapp00d753.activity.metso.adapter.MetsoAttendanceAdapter;
 import io.cordova.myapp00d753.activity.metso.model.MetsoLocationModel;
-import io.cordova.myapp00d753.adapter.BackLogAdapter;
 import io.cordova.myapp00d753.module.BackLogAttendanceModel;
 import io.cordova.myapp00d753.utility.AppData;
-import io.cordova.myapp00d753.utility.ClientID;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.Util;
 import retrofit2.Call;

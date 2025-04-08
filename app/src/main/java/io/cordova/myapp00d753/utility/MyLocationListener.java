@@ -10,8 +10,6 @@ import androidx.annotation.NonNull;
 
 import java.util.List;
 
-import io.cordova.myapp00d753.activity.metso.MetsoAttendanceActivity;
-
 public class MyLocationListener implements LocationListener {
     private static final String TAG = "MyLocationListener";
     Context context;

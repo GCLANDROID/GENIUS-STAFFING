@@ -19,9 +19,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.util.SparseArray;
@@ -77,7 +75,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.cordova.myapp00d753.R;
-import io.cordova.myapp00d753.activity.AttendanceReportActivity;
+import io.cordova.myapp00d753.activity.attendance.AttendanceReportActivity;
 import io.cordova.myapp00d753.databinding.ActivityBlueDartAttendanceManageBinding;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.GPSTracker;

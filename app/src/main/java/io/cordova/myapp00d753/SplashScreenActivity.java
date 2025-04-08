@@ -1,23 +1,16 @@
 package io.cordova.myapp00d753;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Handler;
 
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.multidex.MultiDex;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -31,12 +24,7 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
-import io.cordova.myapp00d753.activity.AttendanceManageActivity;
 import io.cordova.myapp00d753.activity.DashBoardActivity;
-import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
-import io.cordova.myapp00d753.activity.LoginActivity;
-import io.cordova.myapp00d753.activity.SuperVisiorDashBoardActivity;
-import io.cordova.myapp00d753.activity.TempDashBoardActivity;
 import io.cordova.myapp00d753.utility.CreativePermission;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;

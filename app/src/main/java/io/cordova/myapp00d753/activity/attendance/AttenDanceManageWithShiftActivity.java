@@ -1,4 +1,9 @@
-package io.cordova.myapp00d753.activity;
+package io.cordova.myapp00d753.activity.attendance;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -21,7 +26,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
-
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
@@ -29,21 +33,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import com.android.volley.Request;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
@@ -52,16 +50,9 @@ import com.androidnetworking.interfaces.UploadProgressListener;
 import com.developers.imagezipper.ImageZipper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStates;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -71,44 +62,33 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import id.zelory.compressor.Compressor;
-import io.cordova.myapp00d753.AndroidXCamera.AndroidXCameraActivity;
-import io.cordova.myapp00d753.AndroidXCamera.FrontAndroidXCameraActivity;
 import io.cordova.myapp00d753.R;
-import io.cordova.myapp00d753.module.AttendanceManageModule;
+import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.module.AttendanceService;
-import io.cordova.myapp00d753.module.UploadObject;
-import io.cordova.myapp00d753.utility.ApiClient;
-import io.cordova.myapp00d753.utility.AppController;
+import io.cordova.myapp00d753.module.SpineerItemModel;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.GPSTracker;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
 import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-
-public class AttendanceManageActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class AttenDanceManageWithShiftActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     public static final String TAG = AttendanceManageActivity.class.getSimpleName();
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     //  private MapView mapView;
@@ -165,22 +145,41 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
     TextView tvFace;
     LinearLayout llL;
     TextView tvToolBar;
-    Uri image_uri;
+    String shiftStatus,shiftArray;
+    JSONArray shiftJSON;
+    ArrayList<String>shiftLIST=new ArrayList<>();
+    ArrayList<SpineerItemModel>spshiftLIST=new ArrayList<>();
+    String shiftID="";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_attendance_manage);
-        // locationalerts();
+        setContentView(R.layout.activity_atten_dance_manage_with_shift);
         initialize();
         setUpMapIfNeeded();
-        //attendanceCheck();
+        // attendanceCheck();
         onClick();
     }
 
     private void initialize() {
         pref = new Pref(getApplicationContext());
+        shiftStatus=getIntent().getStringExtra("shiftStatus");
+        shiftArray=getIntent().getStringExtra("shiftArray");
+        try {
+            shiftJSON=new JSONArray(shiftArray);
+            for ( int i=0;i<shiftJSON.length();i++){
+                JSONObject obj=shiftJSON.optJSONObject(i);
+                String WorkingShiftID=obj.optString("WorkingShiftID");
+                String shiftname=obj.optString("shiftname");
+                shiftLIST.add(shiftname);
+                SpineerItemModel itemModel=new SpineerItemModel(shiftname,WorkingShiftID);
+                spshiftLIST.add(itemModel);
+            }
+            Log.d("shiftLIST",shiftLIST.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         empId = pref.getEmpId();
         String emp = empId;
         security = pref.getSecurityCode();
@@ -250,7 +249,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
         tvEmpName = (TextView) findViewById(R.id.tvEmpName);
         tvEmpName.setText("You are here:");
 
-        gps = new GPSTracker(AttendanceManageActivity.this);
+        gps = new GPSTracker(AttenDanceManageWithShiftActivity.this);
         if (gps.canGetLocation()) {
             latitude = gps.getLatitude();
             Log.d("saikatdas", String.valueOf(latitude));
@@ -266,7 +265,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
         address1 = address.replaceAll("\\s+", "%20");
         tvAddress.setText(address);
         intt = getIntent().getStringExtra("intt");
-        tvToolBar = (TextView) findViewById(R.id.tvToolBar);
+        tvToolBar=(TextView)findViewById(R.id.tvToolBar);
 
         if (intt.equals("2")) {
             btnSubmit.setVisibility(View.VISIBLE);
@@ -281,27 +280,29 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
 
         llL = (LinearLayout) findViewById(R.id.llL);
 
+        if (shiftStatus.equals("1")){
+            shiftAlert();
+        }else {
+
+        }
+
+
     }
 
     private void onClick() {
         imgCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (intt.equals("2")) {
-                    FrontAndroidXCameraActivity.launch(AttendanceManageActivity.this, 8001);
-                } else {
-                    Intent intent = new Intent(AttendanceManageActivity.this, FaceRecognitation.class);
-                    intent.putExtra("address", address1);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                }
+
+                    cameraIntent();
+
             }
         });
 
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(AttendanceManageActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent = new Intent(AttenDanceManageWithShiftActivity.this, EmployeeDashBoardActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -317,18 +318,19 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
             @Override
             public void onClick(View view) {
                 if (connectionCheck.isNetworkAvailable()) {
-                    imgemandatoryCheck();
+
+                        attendance();
+
+
                 } else {
                     connectionCheck.getNetworkActiveAlert().show();
                 }
+
+
             }
         });
-        btnSubmit1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attendanceGivenfunction();
-            }
-        });
+
+
     }
 
 
@@ -345,6 +347,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
 
 
     private void setUpMapIfNeeded() {
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -363,7 +366,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
         mMap.getUiSettings().setZoomControlsEnabled(false);
         mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(AttendanceManageActivity.this,
+            if (ContextCompat.checkSelfPermission(AttenDanceManageWithShiftActivity.this,
                     Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
                 //Location Permission already granted
@@ -378,7 +381,10 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
             mMap.setMyLocationEnabled(true);
         }
 
+
         // Creates a CameraPosition from the builder
+
+
     }
 
     private void handleNewLocation(Location location) {
@@ -411,6 +417,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
         mMap.addMarker(options);
+
     }
 
 
@@ -418,7 +425,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
     @Override
     public void onConnected(Bundle bundle) {
 
-        if (ContextCompat.checkSelfPermission(AttendanceManageActivity.this,
+        if (ContextCompat.checkSelfPermission(AttenDanceManageWithShiftActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             @SuppressLint("MissingPermission") Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -431,7 +438,8 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
     }
 
     protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(AttendanceManageActivity.this)
+
+        mGoogleApiClient = new GoogleApiClient.Builder(AttenDanceManageWithShiftActivity.this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
@@ -441,7 +449,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
 
     @Override
     public void onConnectionSuspended(int i) {
-        if (ContextCompat.checkSelfPermission(AttendanceManageActivity.this,
+        if (ContextCompat.checkSelfPermission(AttenDanceManageWithShiftActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -460,7 +468,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
         if (connectionResult.hasResolution()) {
             try {
                 // Start an Activity that tries to resolve the error
-                connectionResult.startResolutionForResult(AttendanceManageActivity.this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
+                connectionResult.startResolutionForResult(AttenDanceManageWithShiftActivity.this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
                 /*
                  * Thrown if Google Play services canceled the original
                  * PendingIntent
@@ -485,24 +493,24 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
 
 
     private void checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(AttendanceManageActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ContextCompat.checkSelfPermission(AttenDanceManageWithShiftActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
             // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(AttendanceManageActivity.this,
+            if (ActivityCompat.shouldShowRequestPermissionRationale(AttenDanceManageWithShiftActivity.this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
 
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
-                new AlertDialog.Builder(AttendanceManageActivity.this)
+                new AlertDialog.Builder(AttenDanceManageWithShiftActivity.this)
                         .setTitle("Location Permission Needed")
                         .setMessage("This app needs the Location permission, please accept to use location functionality")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //Prompt the user once explanation has been shown
-                                ActivityCompat.requestPermissions(AttendanceManageActivity.this,
+                                ActivityCompat.requestPermissions(AttenDanceManageWithShiftActivity.this,
                                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                                         MY_PERMISSIONS_REQUEST_LOCATION);
                             }
@@ -513,7 +521,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
 
             } else {
                 // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(AttendanceManageActivity.this,
+                ActivityCompat.requestPermissions(AttenDanceManageWithShiftActivity.this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
             }
@@ -534,7 +542,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
 
                     // permission was granted, yay! Do the
                     // location-related task you need to do.
-                    if (ContextCompat.checkSelfPermission(AttendanceManageActivity.this,
+                    if (ContextCompat.checkSelfPermission(AttenDanceManageWithShiftActivity.this,
                             Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
 
@@ -548,7 +556,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
 
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-                    Toast.makeText(AttendanceManageActivity.this, "permission denied", Toast.LENGTH_LONG).show();
+                    Toast.makeText(AttenDanceManageWithShiftActivity.this, "permission denied", Toast.LENGTH_LONG).show();
                 }
                 return;
             }
@@ -600,7 +608,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        /*switch (requestCode) {
+        switch (requestCode) {
             case CAMERA_REQUEST:
 
                 if (resultCode == Activity.RESULT_OK) {
@@ -608,14 +616,13 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
                         try {
 
                             //messageAlert();
-                            String imageurl = *//*"file://" +*//* getRealPathFromURIPath(imageUri);
+                            String imageurl = /*"file://" +*/ getRealPathFromURIPath(imageUri);
                             file = new File(imageurl);
-                            compressedImageFile = new ImageZipper(AttendanceManageActivity.this)
+                            compressedImageFile = new ImageZipper(AttenDanceManageWithShiftActivity.this)
                                     .setQuality(75)
                                     .setMaxWidth(300)
                                     .setMaxHeight(300)
                                     .compressToFile(file);
-                            Log.d("imageSixw", String.valueOf(getReadableFileSize(compressedImageFile.length())));
 
                             BitmapFactory.Options o = new BitmapFactory.Options();
                             o.inSampleSize = 6;
@@ -638,21 +645,6 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
                 break;
 
 
-        }*/
-
-
-        if (requestCode == 2000 && resultCode == 8001){
-            Log.e("TAG", "onActivityResult: "+data.getExtras().get("picture"));
-            Log.e("TAG", "onActivityResult: "+data.getExtras().get(AndroidXCameraActivity.IMAGE_PATH_KEY));
-            image_uri =  Uri.parse(String.valueOf(data.getExtras().get("picture")));
-            //image_uri = (Uri) data.getExtras().get(AndroidXCameraActivity.IMAGE_PATH_KEY);
-            compressedImageFile = new File(String.valueOf(data.getExtras().get("picture")));
-
-            if (image_uri != null){
-                imgEmp.setImageURI(image_uri);
-                flag=1;
-
-            }
         }
 
 
@@ -676,7 +668,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
         int cropW = (width - height) / 2;
         cropW = (cropW < 0) ? 0 : cropW;
         int cropH = (height - width) / 2;
-        cropH = (cropH < 0) ? 0 : cropH;
+        cropH = (cropH <  0) ? 0 : cropH;
         Bitmap cropImg = Bitmap.createBitmap(bitmap, cropW, cropH, newWidth, newHeight);
 
         return cropImg;
@@ -686,13 +678,15 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
     private void attendance() {
         btnSubmit.setVisibility(View.GONE);
         llL.setVisibility(View.VISIBLE);
-        AndroidNetworking.upload(AppData.url + "post_attedance")
+        AndroidNetworking.upload(AppData.url + "post_attedanceRoster/PostFormData")
                 .addMultipartFile("File", compressedImageFile)
                 .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
                 .addMultipartParameter("Address", address)
                 .addMultipartParameter("Longitude", longt)
                 .addMultipartParameter("Latitude", lat)
                 .addMultipartParameter("SecurityCode", pref.getSecurityCode())
+                .addMultipartParameter("Shiftid", shiftID)
+                .addMultipartParameter("Companyid", pref.getEmpClintId())
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
@@ -710,14 +704,14 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
                         btnSubmit.setVisibility(View.VISIBLE);
                         llL.setVisibility(View.GONE);
                         JSONObject job = response;
-                        responseText = job.optString("responseText");
+                        responseText=job.optString("responseText");
                         boolean responseStatus = job.optBoolean("responseStatus");
-                        if (responseStatus){
+                        if (responseStatus) {
+
                             successAlert();
                         }else {
-                            Toast.makeText(AttendanceManageActivity.this,responseText,Toast.LENGTH_LONG).show();
+                            Toast.makeText(AttenDanceManageWithShiftActivity.this,responseText,Toast.LENGTH_LONG).show();
                         }
-
 
 
 
@@ -732,51 +726,14 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
                         // handle error
                         btnSubmit.setVisibility(View.VISIBLE);
                         llL.setVisibility(View.GONE);
-                        Toast.makeText(AttendanceManageActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+                        Toast.makeText(AttenDanceManageWithShiftActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
 
                     }
                 });
     }
 
-
-    private void attendanceGivenfunction() {
-        if (!address.equals("")) {
-            addr = address;
-        } else {
-            addr = "default";
-        }
-
-        final ProgressDialog progressBar = new ProgressDialog(this);
-        progressBar.setCancelable(true);//you can cancel it by pressing back button
-        progressBar.setMessage("uploading...");
-        progressBar.show();
-        Call<AttendanceManageModule> datumCall = ApiClient.getService().getDatas(empId, address, longt, lat, pref.getSecurityCode());
-        datumCall.enqueue(new Callback<AttendanceManageModule>() {
-            @Override
-            public void onResponse(Call<AttendanceManageModule> call, Response<AttendanceManageModule> response) {
-                progressBar.dismiss();
-                AttendanceManageModule extraWorkingDayModel = response.body();
-                if (extraWorkingDayModel.isResponseStatus()) {
-                    responseText = extraWorkingDayModel.getResponseText();
-                    successAlert();
-                    Log.d("riku", "withoutcamera");
-                } else {
-                    // Toast.makeText(getApplicationContext(), extraWorkingDayModel.getResponseText(), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<AttendanceManageModule> call, Throwable t) {
-
-            }
-
-
-        });
-    }
-
-
     private void successAlert() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(AttendanceManageActivity.this, R.style.CustomDialogNew);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(AttenDanceManageWithShiftActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_success, null);
         dialogBuilder.setView(dialogView);
@@ -791,7 +748,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
             @Override
             public void onClick(View view) {
                 alerDialog1.dismiss();
-                Intent intent = new Intent(AttendanceManageActivity.this, AttendanceReportActivity.class);
+                Intent intent=new Intent(AttenDanceManageWithShiftActivity.this, AttendanceReportActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -805,91 +762,41 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
         alerDialog1.show();
     }
 
-
-    private void messageAlert() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(AttendanceManageActivity.this, R.style.CustomDialogNew);
+    private void shiftAlert() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(AttenDanceManageWithShiftActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View dialogView = inflater.inflate(R.layout.dialog_message, null);
+        View dialogView = inflater.inflate(R.layout.dialog_shift, null);
         dialogBuilder.setView(dialogView);
 
-        Button btnOk = (Button) dialogView.findViewById(R.id.btnOk);
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                alerDialog1.dismiss();
-                attendance();
+        Spinner spShift=(Spinner)dialogView.findViewById(R.id.spShift);
 
+        ArrayAdapter ad
+                = new ArrayAdapter(
+                this,
+                android.R.layout.simple_spinner_item,
+                shiftLIST);
+
+        // set simple layout resource file
+        // for each item of spinner
+        ad.setDropDownViewResource(
+                android.R.layout
+                        .simple_spinner_dropdown_item);
+
+        // Set the ArrayAdapter (ad) data on the
+        // Spinner which binds data to spinner
+        spShift.setAdapter(ad);
+        spShift.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                shiftID=spshiftLIST.get(i).getItemId();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
         });
 
-        alerDialog1 = dialogBuilder.create();
-        alerDialog1.setCancelable(true);
-        Window window = alerDialog1.getWindow();
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        window.setGravity(Gravity.CENTER);
-        alerDialog1.show();
-    }
-
-
-    private void attendanceCheck() {
-        String surl = AppData.url + "gcl_FetchEmployeeAttendanceByDate?AEMEmployeeID=" + pref.getEmpId() + "&Adate=" + formattedDate + "&CurrentPage=1&Operation=1&SecurityCode=" + pref.getSecurityCode();
-        final ProgressDialog progressBar = new ProgressDialog(this);
-        progressBar.setCancelable(true);//you can cancel it by pressing back button
-        progressBar.setMessage("Loading...");
-        progressBar.show();
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
-                new com.android.volley.Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("responseLeave", response);
-                        progressBar.dismiss();
-                        try {
-                            JSONObject job1 = new JSONObject(response);
-                            Log.e("response12", "@@@@@@" + job1);
-
-                            boolean responseStatus = job1.optBoolean("responseStatus");
-                            if (responseStatus) {
-                                toastText = job1.optString("responseText");
-                                //Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
-                                atteAlert();
-
-                            } else {
-
-                            }
-
-
-                            // boolean _status = job1.getBoolean("status");
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            //   Toast.makeText(AttendanceManageActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
-                        }
-
-                    }
-                }, new com.android.volley.Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                progressBar.dismiss();
-                // Toast.makeText(AttendanceManageActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
-
-                Log.e("ert", error.toString());
-            }
-        }) {
-
-        };
-        AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
-
-    }
-
-    private void atteAlert() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(AttendanceManageActivity.this, R.style.CustomDialogNew);
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View dialogView = inflater.inflate(R.layout.dialog_attendate, null);
-        dialogBuilder.setView(dialogView);
-        TextView tvAttenDate = (TextView) dialogView.findViewById(R.id.tvAttenDate);
-        tvAttenDate.setText(toastText);
         Button btnOk = (Button) dialogView.findViewById(R.id.btnOk);
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -901,16 +808,15 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
         });
 
         alertDialog = dialogBuilder.create();
-        alertDialog.setCancelable(true);
+        alertDialog.setCancelable(false);
         Window window = alertDialog.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.CENTER);
         alertDialog.show();
     }
 
-
     private void locationAlert() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(AttendanceManageActivity.this, R.style.CustomDialogNew);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(AttenDanceManageWithShiftActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_location, null);
         dialogBuilder.setView(dialogView);
@@ -934,96 +840,5 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
         window.setGravity(Gravity.CENTER);
         alertDialog2.show();
     }
-
-    private void turnGPSOn() {
-        if (googleApiClient == null) {
-            googleApiClient = new GoogleApiClient.Builder(this)
-                    .addApi(LocationServices.API).addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(AttendanceManageActivity.this).build();
-            googleApiClient.connect();
-            LocationRequest locationRequest = LocationRequest.create();
-            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-            locationRequest.setInterval(30 * 1000);
-            locationRequest.setFastestInterval(5 * 1000);
-            LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                    .addLocationRequest(locationRequest);
-
-            // **************************
-            builder.setAlwaysShow(true); // this is the key ingredient
-            // **************************
-
-            PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi
-                    .checkLocationSettings(googleApiClient, builder.build());
-            result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-                @Override
-                public void onResult(LocationSettingsResult result) {
-                    final Status status = result.getStatus();
-                    final LocationSettingsStates state = result
-                            .getLocationSettingsStates();
-                    switch (status.getStatusCode()) {
-                        case LocationSettingsStatusCodes.SUCCESS:
-
-                            break;
-                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                            try {
-                                try {
-                                    status.startResolutionForResult(AttendanceManageActivity.this, 1000);
-                                } catch (IntentSender.SendIntentException e) {
-                                    // Ignore the error.
-                                }
-                            } catch (Exception e) {
-                                // Ignore the error.
-                            }
-                            break;
-                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-
-                            break;
-                    }
-                }
-            });
-        }
-    }
-
-
-    private void locationalerts() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(AttendanceManageActivity.this, R.style.CustomDialogNew);
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View dialogView = inflater.inflate(R.layout.dialog_locationalert, null);
-        dialogBuilder.setView(dialogView);
-
-        alert1 = dialogBuilder.create();
-        alert1.setCancelable(false);
-        Window window = alert1.getWindow();
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        window.setGravity(Gravity.CENTER);
-        alert1.show();
-    }
-
-
-    public String getReadableFileSize(long size) {
-        if (size <= 0) {
-            return "0";
-        }
-        final String[] units = new String[]{"B", "KB", "MB", "GB", "TB"};
-        int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
-        return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
-    }
-
-    private void imgemandatoryCheck() {
-
-        if (pref.getAttdImg().equals("P")){
-            if (flag == 1) {
-                attendance();
-            }else {
-                Toast.makeText(AttendanceManageActivity.this,"Please attach your image",Toast.LENGTH_LONG).show();
-            }
-        }else {
-            attendanceGivenfunction();
-        }
-
-
-    }
-
-
 
 }

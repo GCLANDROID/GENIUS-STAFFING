@@ -585,7 +585,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                     itemList.add(itemModel);
                                 }
 
-                                itemList.add(new MenuItemModel("Self Resignation","160"));
+
 
                                 if (pref.getEmpClintId().equals("AEMCLI1910000054") || pref.getEmpClintId().equals("AEMCLI2010000067") ||pref.getEmpClintId().equals("SECCLI2110000011") ||pref.getEmpClintId().equals("SECCLI2110000012") ){
                                     itemList.add(new MenuItemModel("Survey","200"));

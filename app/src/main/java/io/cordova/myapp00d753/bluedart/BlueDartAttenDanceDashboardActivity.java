@@ -48,10 +48,8 @@ import java.util.Map;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.AdjustmentActivity;
-import io.cordova.myapp00d753.activity.AttenDanceManageWithShiftActivity;
-import io.cordova.myapp00d753.activity.AttendanceManageActivity;
-import io.cordova.myapp00d753.activity.AttendanceManageWithoutLocActivity;
-import io.cordova.myapp00d753.activity.AttendanceReportActivity;
+import io.cordova.myapp00d753.activity.attendance.AttenDanceManageWithShiftActivity;
+import io.cordova.myapp00d753.activity.attendance.AttendanceReportActivity;
 import io.cordova.myapp00d753.activity.BacklogAttendanceActivity;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.activity.LeaveApplicationActivity;

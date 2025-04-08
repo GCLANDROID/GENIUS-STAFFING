@@ -89,6 +89,7 @@ public class AppData {
     public static String COMMON_DDL = newv2url+"General/CommonDDL";
     public static String SAVE_EMP_DIGITAL_DOCUMENT = newv2url+"Document/SaveEmpDigitalDocument";
     public static String SAVE_DUMMY_EMP_BANK_DOCUMENT = newv2url+"Document/SaveDummyEmpBankDetails";
+    public static String Post_AttedanceGeofence_WFH = newv2url+"Attendance/Post_AttedanceGeofence_WFH";
     public static String IMAGE_PATH_URL = "https://gsppi.geniusconsultant.com/FSS/DigitalDocument/";
     //public static String IMAGE_PATH_URL = "https://gsppi.geniusconsultant.com/GeniusiOSApi/DigitalDocument/";
 }

@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.attendance.AttendanceManageActivity;
 
 
 public class FRDashboard extends AppCompatActivity {

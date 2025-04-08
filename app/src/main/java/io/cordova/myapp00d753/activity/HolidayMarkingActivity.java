@@ -1,6 +1,6 @@
 package io.cordova.myapp00d753.activity;
 
-import static io.cordova.myapp00d753.activity.protectorgamble.ProtectorGambleAttendanceActivity.SKF_PUNE_CLIENT_OFFICE_ID;
+import static io.cordova.myapp00d753.activity.attendance.ProtectorGambleAttendanceActivity.SKF_PUNE_CLIENT_OFFICE_ID;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -46,16 +46,13 @@ import java.util.Calendar;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.Retrofit.RetrofitClient;
-import io.cordova.myapp00d753.activity.metso.MetsoAttendanceActivity;
-import io.cordova.myapp00d753.activity.metso.MetsoNewReimbursementClaimActivity;
+import io.cordova.myapp00d753.activity.attendance.AttenDanceDashboardActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.LocationSpinnerAdapter;
-import io.cordova.myapp00d753.activity.metso.adapter.SupervisorFilterAdapter;
 import io.cordova.myapp00d753.activity.metso.model.MetsoLocationModel;
 import io.cordova.myapp00d753.adapter.HolidayCustomAdapter;
 import io.cordova.myapp00d753.adapter.HolidayFilterAdapter;
 import io.cordova.myapp00d753.databinding.ActivityHolidayMarkingBinding;
 import io.cordova.myapp00d753.module.HolidayMarkModel;
-import io.cordova.myapp00d753.module.SpineerItemModel;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.ClientID;
 import io.cordova.myapp00d753.utility.Pref;

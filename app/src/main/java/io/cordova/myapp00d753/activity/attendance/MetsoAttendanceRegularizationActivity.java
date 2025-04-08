@@ -1,4 +1,4 @@
-package io.cordova.myapp00d753.activity.metso;
+package io.cordova.myapp00d753.activity.attendance;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
@@ -12,7 +12,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -36,7 +35,6 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -60,9 +58,6 @@ import io.cordova.myapp00d753.module.BackLogAttendanceModel;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.Util;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MetsoAttendanceRegularizationActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "MetsoAttendanceRegulari";
@@ -359,7 +354,7 @@ public class MetsoAttendanceRegularizationActivity extends AppCompatActivity imp
                     imgLike.setVisibility(View.GONE);
                 }*/
                 alerDialog1.dismiss();
-                Intent intent = new Intent(MetsoAttendanceRegularizationActivity.this,MetsoAttendanceReportActivity.class);
+                Intent intent = new Intent(MetsoAttendanceRegularizationActivity.this, MetsoAttendanceReportActivity.class);
                 startActivity(intent);
                 finish();
                 //backLogItem.clear();

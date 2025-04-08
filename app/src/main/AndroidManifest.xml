@@ -31,6 +31,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".activity.attendance.GeoFenceAttendanceWithPunchTypeActivity"
+            android:screenOrientation="userPortrait"></activity>
         <activity
             android:name=".activity.SKF.HolidayViewActivity"
             android:exported="false" />
@@ -41,7 +43,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".activity.AttendanceWithOnlyShiftActivity"
+        <activity android:name=".activity.attendance.AttendanceWithOnlyShiftActivity"
             android:screenOrientation="userPortrait"></activity>
         <activity
             android:name=".activity.SKF.SKF_AttendanceRegularizationActivity"
@@ -79,10 +81,10 @@
         <activity android:name=".activity.honnasa.HonasaSalesActivity" />
         <activity android:name=".activity.honnasa.HanasaSalesReportActivity" />
         <activity
-            android:name=".activity.protectorgamble.ProtectorGambleAttendanceActivity"
+            android:name=".activity.attendance.ProtectorGambleAttendanceActivity"
             android:screenOrientation="userPortrait" />
         <activity
-            android:name=".activity.bosch.BoschAttendanceActivity"
+            android:name=".activity.attendance.BoschAttendanceActivity"
             android:screenOrientation="userPortrait" />
         <activity
             android:name=".activity.bosch.BoschAndroidXCameraActivity"
@@ -219,10 +221,10 @@
             android:name=".activity.SupLeaveApprovalActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.AttenDanceManageWithShiftActivity"
+            android:name=".activity.attendance.AttenDanceManageWithShiftActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.AttenDanceDashboardActivity"
+            android:name=".activity.attendance.AttenDanceDashboardActivity"
             android:exported="false" />
         <activity
             android:name=".activity.VoiceAssistantActivity"
@@ -277,13 +279,13 @@
             android:name=".activity.AttenApprovalActivity"
             android:screenOrientation="userPortrait" />
         <activity
-            android:name=".activity.AttendanceActivity"
+            android:name=".activity.attendance.AttendanceActivity"
             android:screenOrientation="userPortrait" />
         <activity
-            android:name=".activity.AttendanceManageActivity"
+            android:name=".activity.attendance.AttendanceManageActivity"
             android:screenOrientation="userPortrait" />
         <activity
-            android:name=".activity.AttendanceReportActivity"
+            android:name=".activity.attendance.AttendanceReportActivity"
             android:screenOrientation="userPortrait" />
         <activity
             android:name=".activity.WeeklyOffAttendanceActivity"
@@ -513,7 +515,7 @@
             android:name=".activity.FenceConfigActivity"
             android:screenOrientation="userPortrait" />
         <activity
-            android:name=".activity.AttendanceManageWithoutLocActivity"
+            android:name=".activity.attendance.AttendanceManageWithoutLocActivity"
             android:screenOrientation="userPortrait" />
         <activity
             android:name=".activity.GeoFenceAttendanceManageActivity"
@@ -603,9 +605,9 @@
             android:screenOrientation="userPortrait" />
         <activity android:name=".activity.FrontCamera" />
         <activity android:name=".AndroidXCamera.FrontAndroidXCameraActivity" />
-        <activity android:name=".activity.metso.MetsoAttendanceActivity" />
-        <activity android:name=".activity.metso.MetsoAttendanceRegularizationActivity" />
-        <activity android:name=".activity.metso.MetsoAttendanceReportActivity" />
+        <activity android:name=".activity.attendance.MetsoAttendanceActivity" />
+        <activity android:name=".activity.attendance.MetsoAttendanceRegularizationActivity" />
+        <activity android:name=".activity.attendance.MetsoAttendanceReportActivity" />
         <activity android:name=".AndroidXCamera.AndroidXCameraActivity" />
         <activity android:name=".activity.HolidayMarkingActivity" />
         <activity android:name=".AndroidXCamera.FrontBackAndroidXCameraActivity" />
