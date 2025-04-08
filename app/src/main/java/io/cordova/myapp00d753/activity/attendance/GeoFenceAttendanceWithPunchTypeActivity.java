@@ -728,7 +728,7 @@ public class GeoFenceAttendanceWithPunchTypeActivity extends AppCompatActivity i
                             if (Response_Code.equals("101")) {
 
                                 shiftAndLocationDialog.cancel();
-                                successAlert(object.getString("responseText"));
+                                successAlert(object.getString("Response_Message"));
                             } else {
                                 progressDialog.cancel();
                                 Toast.makeText(GeoFenceAttendanceWithPunchTypeActivity.this, object.getString("Response_Message"), Toast.LENGTH_SHORT).show();
