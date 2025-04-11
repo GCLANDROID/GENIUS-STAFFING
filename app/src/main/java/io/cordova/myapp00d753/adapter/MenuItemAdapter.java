@@ -107,7 +107,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
             myViewHolder.imgMenu.setImageResource(R.drawable.interview);
         }else if (itemList.get(i).getMenuId().equalsIgnoreCase("201")){
             myViewHolder.imgMenu.setImageResource(R.drawable.pms);
-        }else if (itemList.get(i).getMenuId().equalsIgnoreCase("160")){
+        }else if (itemList.get(i).getMenuId().equalsIgnoreCase("21")){
             myViewHolder.imgMenu.setImageResource(R.drawable.resignation);
         }else {
             myViewHolder.itemView.setVisibility(View.GONE);
@@ -216,7 +216,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                     Intent intent=new Intent(mContex, MetsoPMSTargetAchivementActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
-                }else if (itemList.get(i).getMenuId().equals("160")){
+                }else if (itemList.get(i).getMenuId().equals("21")){
                     //interview
                     ((EmployeeDashBoardActivity)activity).resignationget();
                 }
