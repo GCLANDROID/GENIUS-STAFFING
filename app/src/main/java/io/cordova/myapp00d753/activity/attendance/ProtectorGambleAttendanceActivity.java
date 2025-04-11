@@ -135,8 +135,8 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
         //buildGoogleApiClient();
         //getLocations();
 
-        getMetsoShift();
-
+        //getMetsoShift();
+        getMetsoLocationData();
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -186,7 +186,7 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
 
                         shiftSpinnerAdapter = new ShiftSpinnerAdapter(ProtectorGambleAttendanceActivity.this, metsoShiftList);
 
-                        getMetsoLocationData();
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
