@@ -149,8 +149,6 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
                         submitAttendance();
                     }
                 }
-
-
             }
         });
 
@@ -167,7 +165,7 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
         Call<JsonObject> call = RetrofitClient
                 .getInstance()
                 .getApi()
-                .GetMetsoAttendanceData("2", ClientID, "0000");
+                .GetMetsoAttendanceData("2", ClientID, pref.getSecurityCode());
 
         call.enqueue(new Callback<JsonObject>() {
             @Override
@@ -207,7 +205,7 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
         Call<JsonObject> call = RetrofitClient
                 .getInstance()
                 .getApi()
-                .GetMetsoAttendanceData("1", ClientID, "0000");
+                .GetMetsoAttendanceData("1", ClientID, pref.getSecurityCode());
 
         call.enqueue(new Callback<JsonObject>() {
             @Override
@@ -426,7 +424,7 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
                 .addMultipartParameter("Siteid", Siteid)
                 .addMultipartParameter("Longitude", longitude)
                 .addMultipartParameter("Latitude", latitude)
-                .addMultipartParameter("SecurityCode", "0000")
+                .addMultipartParameter("SecurityCode", pref.getSecurityCode())
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
