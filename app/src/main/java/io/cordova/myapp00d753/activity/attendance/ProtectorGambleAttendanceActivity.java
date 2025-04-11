@@ -135,8 +135,8 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
         //buildGoogleApiClient();
         //getLocations();
 
-        getMetsoShift();
-
+        //getMetsoShift();
+        getMetsoLocationData();
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -149,8 +149,6 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
                         submitAttendance();
                     }
                 }
-
-
             }
         });
 
@@ -167,7 +165,7 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
         Call<JsonObject> call = RetrofitClient
                 .getInstance()
                 .getApi()
-                .GetMetsoAttendanceData("2", ClientID, "0000");
+                .GetMetsoAttendanceData("2", ClientID, pref.getSecurityCode());
 
         call.enqueue(new Callback<JsonObject>() {
             @Override
@@ -188,7 +186,7 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
 
                         shiftSpinnerAdapter = new ShiftSpinnerAdapter(ProtectorGambleAttendanceActivity.this, metsoShiftList);
 
-                        getMetsoLocationData();
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -207,7 +205,7 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
         Call<JsonObject> call = RetrofitClient
                 .getInstance()
                 .getApi()
-                .GetMetsoAttendanceData("1", ClientID, "0000");
+                .GetMetsoAttendanceData("1", ClientID, pref.getSecurityCode());
 
         call.enqueue(new Callback<JsonObject>() {
             @Override
@@ -426,7 +424,7 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
                 .addMultipartParameter("Siteid", Siteid)
                 .addMultipartParameter("Longitude", longitude)
                 .addMultipartParameter("Latitude", latitude)
-                .addMultipartParameter("SecurityCode", "0000")
+                .addMultipartParameter("SecurityCode", pref.getSecurityCode())
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()

@@ -207,7 +207,7 @@ public class WOHOHActivity extends AppCompatActivity {
         Call<JsonObject> call = RetrofitClient
                 .getInstance()
                 .getApi()
-                .GetMetsoAttendanceData("1", pref.getEmpClintId(), "0000");
+                .GetMetsoAttendanceData("1", pref.getEmpClintId(), pref.getSecurityCode());
 
         call.enqueue(new Callback<JsonObject>() {
             @Override
@@ -317,7 +317,7 @@ public class WOHOHActivity extends AppCompatActivity {
                         jsonObject.put("DbOperation", "3");
                         jsonObject.put("Shiftid", "");
                         jsonObject.put("SiteId", Siteid);
-                        jsonObject.put("SecurityCode", "0000");
+                        jsonObject.put("SecurityCode", pref.getSecurityCode());
                         attendance(jsonObject);
                     } catch (JSONException e) {
                         e.printStackTrace();

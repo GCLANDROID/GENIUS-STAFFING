@@ -51,6 +51,7 @@ import io.cordova.myapp00d753.activity.metso.adapter.LocationSpinnerAdapter;
 import io.cordova.myapp00d753.activity.metso.model.MetsoLocationModel;
 import io.cordova.myapp00d753.module.BackLogAttendanceModel;
 import io.cordova.myapp00d753.utility.AppData;
+import io.cordova.myapp00d753.utility.ClientID;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.Util;
 import retrofit2.Call;
@@ -280,7 +281,8 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
         progressDialog.setMessage("Loading...");
         progressDialog.show();
         String regularizationSubmitString="";
-        if (pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_CLIENT_ID)){
+        if (pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_CLIENT_ID)
+                || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_ITS)){
             for (int i = 0; i < blockLogList.size(); i++) {
                 Log.e(TAG, "submitOperation: Remarks: "+blockLogList.get(i).getRemarks());
                 if (blockLogList.get(i).isSelected()){
@@ -318,7 +320,8 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
             obj.put("SetMsg","");
             obj.put("SecurityCode", pref.getSecurityCode());
             //Log.e(TAG, "BACKLOG_SAVE_INPUT: "+obj);
-            if (pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_CLIENT_ID)){
+            if (pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_CLIENT_ID)
+                || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_ITS)){
                 regularizationSaveApiCall(obj);
             } else {
                 regularizationSave_New_ApiCall(obj);
