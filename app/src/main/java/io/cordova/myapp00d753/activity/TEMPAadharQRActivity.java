@@ -50,21 +50,21 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
     String sessionId;
     AlertDialog al1;
     androidx.appcompat.app.AlertDialog alerDialog1;
-    boolean aadharflag=false;
+    boolean aadharflag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding= DataBindingUtil.setContentView(this,R.layout.activity_tempaadhar_qractivity);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_tempaadhar_qractivity);
         initView();
     }
 
-    private void initView(){
-        pref=new Pref(TEMPAadharQRActivity.this);
+    private void initView() {
+        pref = new Pref(TEMPAadharQRActivity.this);
         binding.imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(TEMPAadharQRActivity.this,TempDashBoardActivity.class);
+                Intent intent = new Intent(TEMPAadharQRActivity.this, TempDashBoardActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
@@ -82,7 +82,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (binding.etAadhar.getText().toString().length()==12){
+                if (binding.etAadhar.getText().toString().length() == 12) {
                     hideKeyboard();
                     /*JSONObject jsonObject=new JSONObject();
                     try {
@@ -99,23 +99,23 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
         binding.btnValidate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (binding.etAadhar.getText().toString().length()==12){
-                    if (binding.etCapctha.getText().toString().length()>0){
-                        JSONObject jsonObject=new JSONObject();
+                if (binding.etAadhar.getText().toString().length() == 12) {
+                    if (binding.etCapctha.getText().toString().length() > 0) {
+                        JSONObject jsonObject = new JSONObject();
                         try {
-                            jsonObject.put("sessionId",sessionId);
-                            jsonObject.put("aadhaar",binding.etAadhar.getText().toString());
-                            jsonObject.put("securityCode",binding.etCapctha.getText().toString());
-                            Log.e("jsonObject", "jsonObject: "+jsonObject);
+                            jsonObject.put("sessionId", sessionId);
+                            jsonObject.put("aadhaar", binding.etAadhar.getText().toString());
+                            jsonObject.put("securityCode", binding.etCapctha.getText().toString());
+                            Log.e("jsonObject", "jsonObject: " + jsonObject);
                             validateCaptcha(jsonObject);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     } else {
-                        Toast.makeText(TEMPAadharQRActivity.this,"Please Enter Captcha",Toast.LENGTH_LONG).show();
+                        Toast.makeText(TEMPAadharQRActivity.this, "Please Enter Captcha", Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Toast.makeText(TEMPAadharQRActivity.this,"Please Enter Valid Aadhaar Number",Toast.LENGTH_LONG).show();
+                    Toast.makeText(TEMPAadharQRActivity.this, "Please Enter Valid Aadhaar Number", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -123,13 +123,18 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
         binding.btnGo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (binding.etAadhar.getText().toString().length()==12){
+                if (binding.etAadhar.getText().toString().length() == 12) {
+
 
                     JSONObject jsonObject = new JSONObject();
                     try {
-                        jsonObject.put("AadharNo", binding.etAadhar.getText().toString());
-                        jsonObject.put("SecurityCode", pref.getSecurityCode());
-                        checkAadhaarNumberGeniusDB(jsonObject);
+                        jsonObject.put("AEMConsultantID", pref.getEmpConId());
+                        jsonObject.put("AEMClientID", pref.getEmpClintId());
+                        jsonObject.put("AEMClientOfficeID", pref.getEmpClintOffId());
+                        jsonObject.put("AEMEmployeeID", pref.getMasterId());
+                        jsonObject.put("WorkingStatus", "1");
+                        jsonObject.put("Operation", "12");
+                        checkAadhaarNumber(jsonObject);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -142,20 +147,20 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
         binding.btnOTPValidate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (binding.etOTP.getText().toString().length()>0){
+                if (binding.etOTP.getText().toString().length() > 0) {
 
-                        JSONObject jsonObject=new JSONObject();
-                        try {
-                            jsonObject.put("sessionId",sessionId);
-                            jsonObject.put("otp",binding.etOTP.getText().toString());
-                            jsonObject.put("shareCode",GetPassword(4));
-                            jsonObject.put("fileUrl",true);
-                            validateOTP(jsonObject);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("sessionId", sessionId);
+                        jsonObject.put("otp", binding.etOTP.getText().toString());
+                        jsonObject.put("shareCode", GetPassword(4));
+                        jsonObject.put("fileUrl", true);
+                        validateOTP(jsonObject);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 } else {
-                    Toast.makeText(TEMPAadharQRActivity.this,"Please Enter OTP",Toast.LENGTH_LONG).show();
+                    Toast.makeText(TEMPAadharQRActivity.this, "Please Enter OTP", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -164,11 +169,11 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
 
 
     private void checkAadhaarNumberGeniusDB(JSONObject jsonObject) {
-        ProgressDialog pd=new ProgressDialog(this);
+        ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("Loading");
         pd.show();
         pd.setCancelable(false);
-        Log.e(TAG, "checkAadhaarNumber: INPUT: "+jsonObject);
+        Log.e(TAG, "checkAadhaarNumber: INPUT: " + jsonObject);
         AndroidNetworking.post(AppData.CheckAadhar)
                 .addJSONObjectBody(jsonObject)
                 .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
@@ -180,7 +185,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         pd.dismiss();
                         try {
-                            Log.e(TAG, "CHECK_AADHAAR_NUMBER: "+response.toString(4));
+                            Log.e(TAG, "CHECK_AADHAAR_NUMBER: " + response.toString(4));
                             JSONObject job1 = response;
                             int Response_Code = job1.optInt("Response_Code");
                             String Response_Data = job1.optString("Response_Data");
@@ -193,13 +198,8 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                                 } else {
                                     JSONObject jsonObject = new JSONObject();
                                     try {
-                                        jsonObject.put("AEMConsultantID", pref.getEmpConId());
-                                        jsonObject.put("AEMClientID", pref.getEmpClintId());
-                                        jsonObject.put("AEMClientOfficeID", pref.getEmpClintOffId());
-                                        jsonObject.put("AEMEmployeeID", pref.getMasterId());
-                                        jsonObject.put("WorkingStatus", "1");
-                                        jsonObject.put("Operation", "12");
-                                        checkAadhaarNumber(jsonObject);
+                                        jsonObject.put("Id", binding.etAadhar.getText().toString().trim());
+                                        checkAddahrDetails(jsonObject);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -207,13 +207,8 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                             } else {
                                 JSONObject jsonObject = new JSONObject();
                                 try {
-                                    jsonObject.put("AEMConsultantID", pref.getEmpConId());
-                                    jsonObject.put("AEMClientID", pref.getEmpClintId());
-                                    jsonObject.put("AEMClientOfficeID", pref.getEmpClintOffId());
-                                    jsonObject.put("AEMEmployeeID", pref.getMasterId());
-                                    jsonObject.put("WorkingStatus", "1");
-                                    jsonObject.put("Operation", "12");
-                                    checkAadhaarNumber(jsonObject);
+                                    jsonObject.put("Id", binding.etAadhar.getText().toString().trim());
+                                    checkAddahrDetails(jsonObject);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -227,17 +222,17 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError anError) {
                         pd.dismiss();
-                        Log.e(TAG, "CHECK_AADHAAR_NUMBER_onError: "+anError.getErrorBody() );
+                        Log.e(TAG, "CHECK_AADHAAR_NUMBER_onError: " + anError.getErrorBody());
                     }
                 });
     }
 
     private void checkAadhaarNumber(JSONObject jsonObject) {
-        ProgressDialog pd=new ProgressDialog(this);
+        ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("Loading");
         pd.show();
         pd.setCancelable(false);
-        Log.e(TAG, "checkAadhaarNumber: INPUT: "+jsonObject);
+        Log.e(TAG, "checkAadhaarNumber: INPUT: " + jsonObject);
         AndroidNetworking.post(AppData.KYC_GET_DETAILS)
                 .addJSONObjectBody(jsonObject)
                 .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
@@ -249,7 +244,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         pd.dismiss();
                         try {
-                            Log.e(TAG, "CHECK_AADHAAR_NUMBER: "+response.toString(4));
+                            Log.e(TAG, "CHECK_AADHAAR_NUMBER: " + response.toString(4));
                             JSONObject job1 = response;
                             int Response_Code = job1.optInt("Response_Code");
                             String Response_Data = job1.optString("Response_Data");
@@ -259,11 +254,11 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                                     JSONObject Response_Data_obj = new JSONObject(Response_Data);
                                     JSONArray jsonArray = Response_Data_obj.getJSONArray("AadharDetails");
                                     JSONObject job2 = jsonArray.getJSONObject(0);
-                                    Log.e(TAG, "onResponse: "+job2.getString("ReferenceNo") );
+                                    Log.e(TAG, "onResponse: " + job2.getString("ReferenceNo"));
                                     String AadhaarNumber = job2.getString("ReferenceNo");
-                                    if (AadhaarNumber.equals(binding.etAadhar.getText().toString().trim())){
+                                    if (AadhaarNumber.equals(binding.etAadhar.getText().toString().trim())) {
                                         try {
-                                            jsonObject.put("Id",binding.etAadhar.getText().toString().trim());
+                                            jsonObject.put("Id", binding.etAadhar.getText().toString().trim());
                                             checkAddahrDetails(jsonObject);
                                         } catch (JSONException e) {
                                             e.printStackTrace();
@@ -273,23 +268,29 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                                                 "Another Aadhaar number is linked to this ID. Kindly provide the accurate Aadhaar number.");
                                     }
                                 } else {
-                                    JSONObject jsonObject=new JSONObject();
+                                    JSONObject jsonObject = new JSONObject();
                                     try {
-                                        jsonObject.put("Id",binding.etAadhar.getText().toString().trim());
-                                        checkAddahrDetails(jsonObject);
+                                        jsonObject.put("AadharNo", binding.etAadhar.getText().toString());
+                                        jsonObject.put("SecurityCode", pref.getSecurityCode());
+                                        checkAadhaarNumberGeniusDB(jsonObject);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
+
                                 }
                             } else {
                                 //TODO: No Data Found
-                                JSONObject jsonObject=new JSONObject();
+
+
+                                JSONObject jsonObject = new JSONObject();
                                 try {
-                                    jsonObject.put("Id",binding.etAadhar.getText().toString().trim());
-                                    checkAddahrDetails(jsonObject);
+                                    jsonObject.put("AadharNo", binding.etAadhar.getText().toString());
+                                    jsonObject.put("SecurityCode", pref.getSecurityCode());
+                                    checkAadhaarNumberGeniusDB(jsonObject);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+
                             }
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
@@ -299,14 +300,14 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError anError) {
                         pd.dismiss();
-                        Log.e(TAG, "CHECK_AADHAAR_NUMBER_onError: "+anError.getErrorBody() );
+                        Log.e(TAG, "CHECK_AADHAAR_NUMBER_onError: " + anError.getErrorBody());
                     }
                 });
     }
 
 
     private void captchagebneration() {
-        ProgressDialog pd=new ProgressDialog(this);
+        ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("Loading");
         pd.show();
         pd.setCancelable(false);
@@ -332,8 +333,8 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                         if (statusCode == 200) {
 
                             binding.llCaptcha.setVisibility(View.VISIBLE);
-                            sessionId=job1.optString("sessionId");
-                            String captchaImage=job1.optString("captchaImage");
+                            sessionId = job1.optString("sessionId");
+                            String captchaImage = job1.optString("captchaImage");
                             byte[] decodedString = Base64.decode(captchaImage, Base64.DEFAULT);
                             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                             binding.imgCaptcha.setImageBitmap(decodedByte);
@@ -354,7 +355,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
     }
 
     private void validateCaptcha(JSONObject jsonObject) {
-        ProgressDialog pd=new ProgressDialog(this);
+        ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("Loading");
         pd.show();
         pd.setCancelable(false);
@@ -378,7 +379,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
 
                         int statusCode = job1.optInt("statusCode");
                         if (statusCode == 200) {
-                            String message=job1.optString("message");
+                            String message = job1.optString("message");
                             binding.tvOTPText.setText(message);
 
                             binding.llOTp.setVisibility(View.VISIBLE);
@@ -402,7 +403,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
     }
 
     private void validateOTP(JSONObject jsonObject) {
-        ProgressDialog pd=new ProgressDialog(this);
+        ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("Loading");
         pd.show();
         pd.setCancelable(false);
@@ -426,69 +427,68 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
 
                         int statusCode = job1.optInt("statusCode");
                         if (statusCode == 200) {
-                            aadharflag=true;
-                            JSONObject details=job1.optJSONObject("details");
+                            aadharflag = true;
+                            JSONObject details = job1.optJSONObject("details");
                             //name
-                            JSONObject name=details.optJSONObject("name");
-                            String namevalue=name.optString("value");
+                            JSONObject name = details.optJSONObject("name");
+                            String namevalue = name.optString("value");
 
                             //dob
 
-                            JSONObject dob=details.optJSONObject("dob");
-                            String dobvalue=dob.optString("value");
-                            AppData.ADHARDOB=dobvalue;
+                            JSONObject dob = details.optJSONObject("dob");
+                            String dobvalue = dob.optString("value");
+                            AppData.ADHARDOB = dobvalue;
 
 
                             //gender
 
-                            JSONObject gender=details.optJSONObject("gender");
-                            String gendervalue=gender.optString("value");
+                            JSONObject gender = details.optJSONObject("gender");
+                            String gendervalue = gender.optString("value");
 
 
                             //address
 
-                            JSONObject address=details.optJSONObject("address");
-                            String careof=address.optString("careof").replace("S/O:","").trim();
-                            String state=address.optString("state");
-                            String pin=address.optString("pin");
-                            String street=address.optString("street");
-                            String locality=address.optString("locality");
-                            String house=address.optString("house");
-                            String postoffice=address.optString("postoffice");
-                            String subDistrict=address.optString("subDistrict");
-                            String district=address.optString("district");
-                            String vtc=address.optString("vtc");
-                            String landmark=address.optString("landmark");
+                            JSONObject address = details.optJSONObject("address");
+                            String careof = address.optString("careof").replace("S/O:", "").trim();
+                            String state = address.optString("state");
+                            String pin = address.optString("pin");
+                            String street = address.optString("street");
+                            String locality = address.optString("locality");
+                            String house = address.optString("house");
+                            String postoffice = address.optString("postoffice");
+                            String subDistrict = address.optString("subDistrict");
+                            String district = address.optString("district");
+                            String vtc = address.optString("vtc");
+                            String landmark = address.optString("landmark");
 
 
                             //image
 
-                            JSONObject photo=details.optJSONObject("photo");
-                            String photoval=photo.optString("value").trim();
-                            AppData.ADHARIMAGE=photoval;
-                            AppData.AADAHARNUMBER=binding.etAadhar.getText().toString();
+                            JSONObject photo = details.optJSONObject("photo");
+                            String photoval = photo.optString("value").trim();
+                            AppData.ADHARIMAGE = photoval;
+                            AppData.AADAHARNUMBER = binding.etAadhar.getText().toString();
 
-                            JSONObject cardnoobj=new JSONObject();
-                            JSONObject mainobj=new JSONObject();
+                            JSONObject cardnoobj = new JSONObject();
+                            JSONObject mainobj = new JSONObject();
                             try {
-                                cardnoobj.put("Aadhar",binding.etAadhar.getText().toString());
-                                JSONArray jar=new JSONArray();
+                                cardnoobj.put("Aadhar", binding.etAadhar.getText().toString());
+                                JSONArray jar = new JSONArray();
                                 jar.put(job1);
                                 jar.put(cardnoobj);
 
 
-                                mainobj.put("aadhardetails",jar);
+                                mainobj.put("aadhardetails", jar);
                                 Log.d("mainobj", String.valueOf(mainobj));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
 
 
-                            adharAlert(namevalue,dobvalue,AppData.AADAHARNUMBER,gendervalue,careof,state,pin,street,locality,house,postoffice,subDistrict,district,vtc,landmark,mainobj,0);
+                            adharAlert(namevalue, dobvalue, AppData.AADAHARNUMBER, gendervalue, careof, state, pin, street, locality, house, postoffice, subDistrict, district, vtc, landmark, mainobj, 0);
 
 
-
-                        }else {
+                        } else {
 
 
                         }
@@ -497,19 +497,19 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError error) {
 
-                       showErrorDialog("Technical issue with UIDAI, please try after some time");
+                        showErrorDialog("Technical issue with UIDAI, please try after some time");
 
                     }
                 });
     }
 
-    public String GetPassword(int length){
+    public String GetPassword(int length) {
         char[] chars = "0123456789".toCharArray();
         StringBuilder stringBuilder = new StringBuilder();
 
         Random rand = new Random();
 
-        for(int i = 0; i < length; i++){
+        for (int i = 0; i < length; i++) {
             char c = chars[rand.nextInt(chars.length)];
             stringBuilder.append(c);
         }
@@ -544,7 +544,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
         al1.show();
     }
 
-    private void adharAlert(String name,String dob,String aadhar,String gendervalue,String careof,String state,String pin,String street,String locality,String house,String postoffice,String subDistrict,String district,String vtc,String landmark,JSONObject mainobj,int flag) {
+    private void adharAlert(String name, String dob, String aadhar, String gendervalue, String careof, String state, String pin, String street, String locality, String house, String postoffice, String subDistrict, String district, String vtc, String landmark, JSONObject mainobj, int flag) {
         androidx.appcompat.app.AlertDialog.Builder dialogBuilder = new androidx.appcompat.app.AlertDialog.Builder(TEMPAadharQRActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_kyc, null);
@@ -554,19 +554,19 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
         tvName.setText(name);
 
         TextView tvDOB = (TextView) dialogView.findViewById(R.id.tvDOB);
-        tvDOB.setText(Util.changeAnyDateFormat(dob,"dd-MM-yyyy","dd MMM yyyy"));
+        tvDOB.setText(Util.changeAnyDateFormat(dob, "dd-MM-yyyy", "dd MMM yyyy"));
 
         TextView tvAadhar = (TextView) dialogView.findViewById(R.id.tvAadhar);
         tvAadhar.setText(aadhar);
 
-        ImageView imgAdhar=(ImageView)dialogView.findViewById(R.id.imgAdhar);
+        ImageView imgAdhar = (ImageView) dialogView.findViewById(R.id.imgAdhar);
 
-        if (!AppData.ADHARIMAGE.equals("")){
+        if (!AppData.ADHARIMAGE.equals("")) {
             /*byte[] decodedString = Base64.decode(AppData.ADHARIMAGE, Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             imgAdhar.setImageBitmap(decodedByte);*/
             imgAdhar.setImageDrawable(getResources().getDrawable(R.drawable.man));
-        }else {
+        } else {
             imgAdhar.setImageDrawable(getResources().getDrawable(R.drawable.man));
         }
 
@@ -576,25 +576,25 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 alerDialog1.dismiss();
-                if (flag==0) {
+                if (flag == 0) {
                     uploadAddharDetails(mainobj, name, dob, gendervalue, careof, state, pin, street, locality, house, postoffice, subDistrict, district, vtc, landmark);
-                }else {
-                    Intent intent=new Intent(TEMPAadharQRActivity.this,TempProfileActivity.class);
-                    intent.putExtra("namevalue",name);
-                    intent.putExtra("dobvalue",dob);
-                    intent.putExtra("gendervalue",gendervalue);
-                    intent.putExtra("careof",careof);
-                    intent.putExtra("state",state);
-                    intent.putExtra("pin",pin);
-                    intent.putExtra("street",street);
-                    intent.putExtra("locality",locality);
-                    intent.putExtra("house",house);
-                    intent.putExtra("postoffice",postoffice);
-                    intent.putExtra("subDistrict",subDistrict);
-                    intent.putExtra("district",district);
-                    intent.putExtra("vtc",vtc);
-                    intent.putExtra("landmark",landmark);
-                    intent.putExtra("aadhaarflag",aadharflag);
+                } else {
+                    Intent intent = new Intent(TEMPAadharQRActivity.this, TempProfileActivity.class);
+                    intent.putExtra("namevalue", name);
+                    intent.putExtra("dobvalue", dob);
+                    intent.putExtra("gendervalue", gendervalue);
+                    intent.putExtra("careof", careof);
+                    intent.putExtra("state", state);
+                    intent.putExtra("pin", pin);
+                    intent.putExtra("street", street);
+                    intent.putExtra("locality", locality);
+                    intent.putExtra("house", house);
+                    intent.putExtra("postoffice", postoffice);
+                    intent.putExtra("subDistrict", subDistrict);
+                    intent.putExtra("district", district);
+                    intent.putExtra("vtc", vtc);
+                    intent.putExtra("landmark", landmark);
+                    intent.putExtra("aadhaarflag", aadharflag);
                     startActivity(intent);
                     finish();
                 }
@@ -610,8 +610,8 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
     }
 
 
-    private void uploadAddharDetails(JSONObject jsonObject,String name,String dob,String gendervalue,String careof,String state,String pin,String street,String locality,String house,String postoffice,String subDistrict,String district,String vtc,String landmark) {
-        ProgressDialog pd=new ProgressDialog(TEMPAadharQRActivity.this);
+    private void uploadAddharDetails(JSONObject jsonObject, String name, String dob, String gendervalue, String careof, String state, String pin, String street, String locality, String house, String postoffice, String subDistrict, String district, String vtc, String landmark) {
+        ProgressDialog pd = new ProgressDialog(TEMPAadharQRActivity.this);
         pd.setMessage("Loading");
         pd.show();
         pd.setCancelable(false);
@@ -633,39 +633,39 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
 
                         int Response_Code = job1.optInt("Response_Code");
                         if (Response_Code == 101) {
-                            Intent intent=new Intent(TEMPAadharQRActivity.this,TempProfileActivity.class);
-                            intent.putExtra("namevalue",name);
-                            intent.putExtra("dobvalue",dob);
-                            intent.putExtra("gendervalue",gendervalue);
-                            intent.putExtra("careof",careof);
-                            intent.putExtra("state",state);
-                            intent.putExtra("pin",pin);
-                            intent.putExtra("street",street);
-                            intent.putExtra("locality",locality);
-                            intent.putExtra("house",house);
-                            intent.putExtra("postoffice",postoffice);
-                            intent.putExtra("subDistrict",subDistrict);
-                            intent.putExtra("district",district);
-                            intent.putExtra("vtc",vtc);
-                            intent.putExtra("landmark",landmark);
+                            Intent intent = new Intent(TEMPAadharQRActivity.this, TempProfileActivity.class);
+                            intent.putExtra("namevalue", name);
+                            intent.putExtra("dobvalue", dob);
+                            intent.putExtra("gendervalue", gendervalue);
+                            intent.putExtra("careof", careof);
+                            intent.putExtra("state", state);
+                            intent.putExtra("pin", pin);
+                            intent.putExtra("street", street);
+                            intent.putExtra("locality", locality);
+                            intent.putExtra("house", house);
+                            intent.putExtra("postoffice", postoffice);
+                            intent.putExtra("subDistrict", subDistrict);
+                            intent.putExtra("district", district);
+                            intent.putExtra("vtc", vtc);
+                            intent.putExtra("landmark", landmark);
                             startActivity(intent);
                             finish();
                         } else {
-                            Intent intent=new Intent(TEMPAadharQRActivity.this,TempProfileActivity.class);
-                            intent.putExtra("namevalue",name);
-                            intent.putExtra("dobvalue",dob);
-                            intent.putExtra("gendervalue",gendervalue);
-                            intent.putExtra("careof",careof);
-                            intent.putExtra("state",state);
-                            intent.putExtra("pin",pin);
-                            intent.putExtra("street",street);
-                            intent.putExtra("locality",locality);
-                            intent.putExtra("house",house);
-                            intent.putExtra("postoffice",postoffice);
-                            intent.putExtra("subDistrict",subDistrict);
-                            intent.putExtra("district",district);
-                            intent.putExtra("vtc",vtc);
-                            intent.putExtra("landmark",landmark);
+                            Intent intent = new Intent(TEMPAadharQRActivity.this, TempProfileActivity.class);
+                            intent.putExtra("namevalue", name);
+                            intent.putExtra("dobvalue", dob);
+                            intent.putExtra("gendervalue", gendervalue);
+                            intent.putExtra("careof", careof);
+                            intent.putExtra("state", state);
+                            intent.putExtra("pin", pin);
+                            intent.putExtra("street", street);
+                            intent.putExtra("locality", locality);
+                            intent.putExtra("house", house);
+                            intent.putExtra("postoffice", postoffice);
+                            intent.putExtra("subDistrict", subDistrict);
+                            intent.putExtra("district", district);
+                            intent.putExtra("vtc", vtc);
+                            intent.putExtra("landmark", landmark);
                             startActivity(intent);
                             finish();
                         }
@@ -674,21 +674,21 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError error) {
 
-                        Intent intent=new Intent(TEMPAadharQRActivity.this,TempProfileActivity.class);
-                        intent.putExtra("namevalue",name);
-                        intent.putExtra("dobvalue",dob);
-                        intent.putExtra("gendervalue",gendervalue);
-                        intent.putExtra("careof",careof);
-                        intent.putExtra("state",state);
-                        intent.putExtra("pin",pin);
-                        intent.putExtra("street",street);
-                        intent.putExtra("locality",locality);
-                        intent.putExtra("house",house);
-                        intent.putExtra("postoffice",postoffice);
-                        intent.putExtra("subDistrict",subDistrict);
-                        intent.putExtra("district",district);
-                        intent.putExtra("vtc",vtc);
-                        intent.putExtra("landmark",landmark);
+                        Intent intent = new Intent(TEMPAadharQRActivity.this, TempProfileActivity.class);
+                        intent.putExtra("namevalue", name);
+                        intent.putExtra("dobvalue", dob);
+                        intent.putExtra("gendervalue", gendervalue);
+                        intent.putExtra("careof", careof);
+                        intent.putExtra("state", state);
+                        intent.putExtra("pin", pin);
+                        intent.putExtra("street", street);
+                        intent.putExtra("locality", locality);
+                        intent.putExtra("house", house);
+                        intent.putExtra("postoffice", postoffice);
+                        intent.putExtra("subDistrict", subDistrict);
+                        intent.putExtra("district", district);
+                        intent.putExtra("vtc", vtc);
+                        intent.putExtra("landmark", landmark);
                         startActivity(intent);
                         finish();
                     }
@@ -697,7 +697,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
 
 
     private void checkAddahrDetails(JSONObject jsonObject) {
-        ProgressDialog pd=new ProgressDialog(TEMPAadharQRActivity.this);
+        ProgressDialog pd = new ProgressDialog(TEMPAadharQRActivity.this);
         pd.setMessage("Loading");
         pd.show();
         pd.setCancelable(false);
@@ -715,49 +715,49 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                         pd.dismiss();
 
                         int Response_Code = job1.optInt("Response_Code");
-                        JSONObject Response_Data=job1.optJSONObject("Response_Data");
-                        if (Response_Data!=null){
-                            aadharflag=false;
-                            JSONObject details=Response_Data.optJSONObject("details");
-                            JSONObject name=details.optJSONObject("name");
-                            String namevalue=name.optString("value");
+                        JSONObject Response_Data = job1.optJSONObject("Response_Data");
+                        if (Response_Data != null) {
+                            aadharflag = false;
+                            JSONObject details = Response_Data.optJSONObject("details");
+                            JSONObject name = details.optJSONObject("name");
+                            String namevalue = name.optString("value");
 
                             //dob
 
-                            JSONObject dob=details.optJSONObject("dob");
-                            String dobvalue=dob.optString("value");
-                            AppData.ADHARDOB=dobvalue;
+                            JSONObject dob = details.optJSONObject("dob");
+                            String dobvalue = dob.optString("value");
+                            AppData.ADHARDOB = dobvalue;
 
 
                             //gender
 
-                            JSONObject gender=details.optJSONObject("gender");
-                            String gendervalue=gender.optString("value");
+                            JSONObject gender = details.optJSONObject("gender");
+                            String gendervalue = gender.optString("value");
 
 
                             //address
 
-                            JSONObject address=details.optJSONObject("address");
-                            String careof=address.optString("careof").replace("S/O:","").trim();
-                            String state=address.optString("state");
-                            String pin=address.optString("pin");
-                            String street=address.optString("street");
-                            String locality=address.optString("locality");
-                            String house=address.optString("house");
-                            String postoffice=address.optString("postoffice");
-                            String subDistrict=address.optString("subDistrict");
-                            String district=address.optString("district");
-                            String vtc=address.optString("vtc");
-                            String landmark=address.optString("landmark");
+                            JSONObject address = details.optJSONObject("address");
+                            String careof = address.optString("careof").replace("S/O:", "").trim();
+                            String state = address.optString("state");
+                            String pin = address.optString("pin");
+                            String street = address.optString("street");
+                            String locality = address.optString("locality");
+                            String house = address.optString("house");
+                            String postoffice = address.optString("postoffice");
+                            String subDistrict = address.optString("subDistrict");
+                            String district = address.optString("district");
+                            String vtc = address.optString("vtc");
+                            String landmark = address.optString("landmark");
 
 
                             //image
 
-                            AppData.AADAHARNUMBER=binding.etAadhar.getText().toString();
+                            AppData.AADAHARNUMBER = binding.etAadhar.getText().toString();
 
-                            adharAlert(namevalue,dobvalue,AppData.AADAHARNUMBER,gendervalue,careof,state,pin,street,locality,house,postoffice,subDistrict,district,vtc,landmark,null,1);
+                            adharAlert(namevalue, dobvalue, AppData.AADAHARNUMBER, gendervalue, careof, state, pin, street, locality, house, postoffice, subDistrict, district, vtc, landmark, null, 1);
 
-                        }else {
+                        } else {
 
                             captchagebneration();
 
