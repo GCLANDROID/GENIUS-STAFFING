@@ -405,7 +405,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 } else if (Status.equalsIgnoreCase("OH")) {
 
                     lnStatus.setVisibility(View.VISIBLE);
-                    lnStatus.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#ABBC04")));
+                    lnStatus.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#daa920")));
                     tvDetails.setText(date + " : " + PunchTiming + " - " + "Optional Holiday");
                     tvDetails.setTextColor(Color.parseColor("#000000"));
                     tvOK.setTextColor(Color.parseColor("#000000"));
