@@ -188,12 +188,26 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                             Log.e(TAG, "CHECK_AADHAAR_NUMBER: " + response.toString(4));
                             JSONObject job1 = response;
                             int Response_Code = job1.optInt("Response_Code");
-                            String Response_Data = job1.optString("Response_Data");
+                            JSONArray Response_Data = job1.optJSONArray("Response_Data");
                             //Log.e(TAG, "Response_Data: "+Response_Data);
                             if (Response_Code == 101) {
-                                if (Response_Data != null) {
-                                    ShowDialog.showErrorDialog(TEMPAadharQRActivity.this,
-                                            "The provided Aadhaar number is already linked to another ID. Kindly share the correct Aadhaar number..");
+                                if (Response_Data.length()>0) {
+                                    JSONObject obj=Response_Data.optJSONObject(0);
+                                    String EmployeeID=obj.optString("EmployeeID");
+                                    if (EmployeeID.equalsIgnoreCase(pref.getMasterId())){
+                                        JSONObject jsonObject = new JSONObject();
+                                        try {
+                                            jsonObject.put("Id", binding.etAadhar.getText().toString().trim());
+                                            checkAddahrDetails(jsonObject);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }else {
+                                        ShowDialog.showErrorDialog(TEMPAadharQRActivity.this,
+                                                "The provided Aadhaar number is already linked to another ID. Kindly share the correct Aadhaar number..");
+
+                                    }
+
 
                                 } else {
                                     JSONObject jsonObject = new JSONObject();

@@ -1504,6 +1504,11 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+        }else if (pref.getEmpClintId().equals(ClientID.SPCX)) {
+            Intent intent = new Intent(AttenDanceDashboardActivity.this, GeoFenceAttendanceWithOutLocActivity.class);
+            intent.putExtra("intt", "2");
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         } else {
             Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceManageActivity.class);
             intent.putExtra("intt", "2");
