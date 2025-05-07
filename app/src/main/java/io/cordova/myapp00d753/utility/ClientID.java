@@ -8,6 +8,7 @@ public class ClientID {
     public static String SKY_ROOT = "AEMCLI2410001883";
     public static String SVF = "AEMCLI2010001635";
     public static String SKF_ITS = "AEMCLI2210000084";
+    public static String SKF_MSP = "MSPCLI2510000006";
     public static String MAHINDRA_MAHINDRA = "AEMCLI0810000241";
     public static String SPCX = "AEMCLI2410000149";
 }
