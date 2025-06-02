@@ -121,7 +121,8 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
         progressDialog = new ProgressDialog(SKF_AttendanceRegularizationActivity.this);
         progressDialog.setCancelable(false);
         if (pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_CLIENT_ID)
-                || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_ITS)){
+                || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_ITS)
+                || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_MSP)){
             llRegularisationCount.setVisibility(View.VISIBLE);
         } else {
             llRegularisationCount.setVisibility(View.GONE);
@@ -282,7 +283,8 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
         progressDialog.show();
         String regularizationSubmitString="";
         if (pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_CLIENT_ID)
-                || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_ITS)){
+                || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_ITS)
+                || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_MSP)){
             for (int i = 0; i < blockLogList.size(); i++) {
                 Log.e(TAG, "submitOperation: Remarks: "+blockLogList.get(i).getRemarks());
                 if (blockLogList.get(i).isSelected()){
@@ -321,7 +323,8 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
             obj.put("SecurityCode", pref.getSecurityCode());
             //Log.e(TAG, "BACKLOG_SAVE_INPUT: "+obj);
             if (pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_CLIENT_ID)
-                || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_ITS)){
+                    || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_ITS)
+                    || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_MSP)){
                 regularizationSaveApiCall(obj);
             } else {
                 regularizationSave_New_ApiCall(obj);

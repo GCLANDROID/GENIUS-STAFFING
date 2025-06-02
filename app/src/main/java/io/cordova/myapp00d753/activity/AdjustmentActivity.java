@@ -47,8 +47,5 @@ public class AdjustmentActivity extends AppCompatActivity {
         LeaveAdjustmentFragment htfragment=new LeaveAdjustmentFragment();
         transaction.replace(R.id.frameLayout, htfragment);
         transaction.commit();
-
-
-
     }
 }
