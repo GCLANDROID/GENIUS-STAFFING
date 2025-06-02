@@ -198,6 +198,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
 
         if (pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID)
                 || pref.getEmpClintId().equals(ClientID.SKF_ITS)
+                || pref.getEmpClintId().equals(ClientID.SKF_MSP)
                 ||pref.getEmpClintId().equals(ClientID.SVF)){
             llHoliday.setVisibility(View.VISIBLE);
         } else {
@@ -208,16 +209,16 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             llBackAttendance.setVisibility(View.VISIBLE);
             llAttenRegularize.setVisibility(View.VISIBLE);
         } else {
-            /*llBackAttendance.setVisibility(View.GONE);
-            llAttenRegularize.setVisibility(View.GONE);*/
-            llBackAttendance.setVisibility(View.VISIBLE);
-            llAttenRegularize.setVisibility(View.VISIBLE);
+            llBackAttendance.setVisibility(View.GONE);
+            llAttenRegularize.setVisibility(View.GONE);
+           /* llBackAttendance.setVisibility(View.VISIBLE);
+            llAttenRegularize.setVisibility(View.VISIBLE);*/
         }
 
         if (pref.getEmpClintId().equals(ClientID.SKY_ROOT)){
             llHolidayView.setVisibility(View.VISIBLE);
         } else {
-            llHolidayView.setVisibility(View.VISIBLE);
+            llHolidayView.setVisibility(View.GONE);
         }
 
         llAttandanceManage.setOnClickListener(this);
@@ -447,6 +448,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 pref.getEmpClintId().equals("AEMCLI2110001671") ||
                 pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID) ||
                 pref.getEmpClintId().equals(ClientID.SKF_ITS) ||
+                pref.getEmpClintId().equals(ClientID.SKF_MSP) ||
                 pref.getEmpClintId().equals(ClientID.SKY_ROOT)) {
             llAdjustment.setVisibility(View.VISIBLE);
         } else {
@@ -740,6 +742,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 startActivity(intent);
             }  else if(pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID)
                     || pref.getEmpClintId().equals(ClientID.SKF_ITS)
+                    || pref.getEmpClintId().equals(ClientID.SKF_MSP)
                     || pref.getEmpClintId().equals(ClientID.HONASA)
                     || pref.getEmpClintId().equals(ClientID.SVF)
                     || pref.getEmpClintId().equals(ClientID.PROTACTOR_GAMBLEID)) { // SKF Attendance Regularization
@@ -769,6 +772,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 startActivity(intent);
             }else if( pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID)
                     || pref.getEmpClintId().equals(ClientID.SKF_ITS)
+                    || pref.getEmpClintId().equals(ClientID.SKF_MSP)
                     || pref.getEmpClintId().equals(ClientID.SVF))  {  //WO APplication with location ->SKF PUNE
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, WOHOHActivity.class);
                 intent.putExtra("leaveFlag",leaveFlag);
@@ -1489,7 +1493,8 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }else if (pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID)
-                || pref.getEmpClintId().equals(ClientID.SKF_ITS)) {
+                || pref.getEmpClintId().equals(ClientID.SKF_ITS)
+                || pref.getEmpClintId().equals(ClientID.SKF_MSP)) {
             Intent intent = new Intent(AttenDanceDashboardActivity.this, ProtectorGambleAttendanceActivity.class);
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -56,6 +56,7 @@ import java.util.Locale;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.metso.adapter.ApproverAutoCompleteAdapter;
+import io.cordova.myapp00d753.activity.metso.adapter.ComponentSpinnerAdapter;
 import io.cordova.myapp00d753.activity.metso.model.ApproverModel;
 import io.cordova.myapp00d753.adapter.CompOffViewAdapter;
 import io.cordova.myapp00d753.module.CompffViewModel;
@@ -91,16 +92,15 @@ public class LeaveAdjustmentFragment extends Fragment {
     long approverID = 0;
     Spinner spFinYear, spMonth;
 
-    ArrayList<String> finyearList = new ArrayList<>();
+    ArrayList<SpineerItemModel> finyearList = new ArrayList<>();
     ArrayList<String> monthList = new ArrayList<>();
     ArrayList<SpineerItemModel> modulemonthList = new ArrayList<>();
-    String monthID, finyr;
+    String monthID, finyr,financialYearID;
     RecyclerView rvItem;
     ArrayList<CompffViewModel> compList = new ArrayList<>();
     Button btnShow;
     TextView tvNoData;
-
-
+    ComponentSpinnerAdapter finYearSpinnerAdapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -113,7 +113,7 @@ public class LeaveAdjustmentFragment extends Fragment {
 
     private void initView() {
         pref = new Pref(getContext());
-        getApproverList();
+        getFinancialYear();
       /*  JSONObject obj1=new JSONObject();
         try {
             obj1.put("Mode", "3");
@@ -125,8 +125,10 @@ public class LeaveAdjustmentFragment extends Fragment {
         }*/
         lnAddApplication = (LinearLayout) view.findViewById(R.id.lnAddApplication);
         next = "<font color='#EE0000'>*</font>";
-        if (pref.getEmpClintId().equals("AEMCLI2110001671") || pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID)
-                || pref.getEmpClintId().equals(ClientID.SKF_ITS)) {
+        if (pref.getEmpClintId().equals("AEMCLI2110001671")
+                || pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID)
+                || pref.getEmpClintId().equals(ClientID.SKF_ITS)
+                || pref.getEmpClintId().equals(ClientID.SKF_MSP)) {
             modelist.add("Full Day");
         } else {
             modelist.add("Full Day");
@@ -145,9 +147,9 @@ public class LeaveAdjustmentFragment extends Fragment {
         }
 
 
-        finyearList.add("2024-2025");
+        /*finyearList.add("2024-2025");
         finyearList.add("2025-2026");
-        finyearList.add("2026-2027");
+        finyearList.add("2026-2027");*/
 
         monthList.add("January");
         monthList.add("February");
@@ -186,11 +188,11 @@ public class LeaveAdjustmentFragment extends Fragment {
         btnShow = (Button) view.findViewById(R.id.btnShow);
         tvNoData = (TextView) view.findViewById(R.id.tvNoData);
 
-        ArrayAdapter<String> finadapter = new ArrayAdapter<String>
+        /*ArrayAdapter<String> finadapter = new ArrayAdapter<String>
                 (getContext(), android.R.layout.simple_spinner_item,
                         finyearList); //selected item will look like a spinner set from XML
         finadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spFinYear.setAdapter(finadapter);
+        spFinYear.setAdapter(finadapter);*/
 
 
         ArrayAdapter<String> monthadapter = new ArrayAdapter<String>
@@ -221,6 +223,48 @@ public class LeaveAdjustmentFragment extends Fragment {
         spMonth.setSelection(monthNumber);
     }
 
+    private void getFinancialYear() {
+        final ProgressDialog pd = new ProgressDialog(getContext());
+        pd.setMessage("Loading.....");
+        pd.show();
+        AndroidNetworking.get(AppData.url + "gcl_get_finyear/Get_FinYear")
+                .addQueryParameter("ClientID", pref.getEmpClintId())
+                .addQueryParameter("SecurityCode", pref.getSecurityCode())
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            pd.dismiss();
+                            Log.e(TAG, "Financial_Year: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String responseText = job1.optString("responseText");
+                            boolean responseStatus = job1.optBoolean("responseStatus");
+                            if (responseStatus) {
+                                JSONArray responseData = job1.optJSONArray("responseData");
+                                for (int i = 0; i < responseData.length(); i++) {
+                                    JSONObject obj = responseData.optJSONObject(i);
+                                    String ID = obj.optString("ID");
+                                    String FinancialYear = obj.optString("FinancialYear");
+                                    finyearList.add(new SpineerItemModel(FinancialYear,ID));
+                                }
+                                finYearSpinnerAdapter = new ComponentSpinnerAdapter(getActivity(), finyearList);
+                                spFinYear.setAdapter(finYearSpinnerAdapter);
+                                getApproverList();
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        pd.dismiss();
+                        Log.e(TAG, "Financial_Year: "+anError.getErrorBody());
+                    }
+                });
+    }
+
     private void onclick() {
         lnAddApplication.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -231,7 +275,10 @@ public class LeaveAdjustmentFragment extends Fragment {
         spFinYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                finyr = finyearList.get(i);
+                financialYearID = finyearList.get(i).getItemId();
+                finyr = finyearList.get(i).getItemName();
+                Log.e(TAG, "financialYearID: "+financialYearID);
+                Log.e(TAG, "YEAR: "+finyr);
             }
 
             @Override
@@ -525,8 +572,7 @@ public class LeaveAdjustmentFragment extends Fragment {
                 if (applicationComponent.equalsIgnoreCase("On Duty")) {
                     postDataOD(etReason.getText().toString());
                 } else if (applicationComponent.equalsIgnoreCase("Comp Off")) {
-                    if (pref.getEmpClintId().equalsIgnoreCase(ClientID.SKF_CLIENT_ID)) {
-                        //TODO: Data save will be called
+                    if (pref.getEmpClintId().equalsIgnoreCase(ClientID.SKF_CLIENT_ID) || pref.getEmpClintId().equalsIgnoreCase(ClientID.SKF_MSP)) {
                         postDataCompOff(etReason.getText().toString(), "0");
                     } else if (pref.getEmpClintId().equalsIgnoreCase(ClientID.SKY_ROOT)){
                         postDataCompOff(etReason.getText().toString(), "0");
@@ -868,7 +914,7 @@ public class LeaveAdjustmentFragment extends Fragment {
         AndroidNetworking.upload(AppData.url + "Post_EmployeeOTandODAdjustment")
                 .addMultipartParameter("CompanyID", pref.getEmpClintId())
                 .addMultipartParameter("EmployeeID", pref.getEmpId())
-                .addMultipartParameter("YearId", "20")
+                .addMultipartParameter("YearId", financialYearID)
                 .addMultipartParameter("MonthId", month)
                 .addMultipartParameter("GatePassDate", effectiveDate + " 00:00:00.000")
                 .addMultipartParameter("EndDate", effectiveDate + " 00:00:00.000")
@@ -1055,11 +1101,11 @@ public class LeaveAdjustmentFragment extends Fragment {
         AndroidNetworking.get(AppData.url + "Leave/adjustmenview")
                 .addQueryParameter("CompanyID", pref.getEmpClintId())
                 .addQueryParameter("EmployeeID", pref.getEmpId())
-                .addQueryParameter("YearID", "20")
+                .addQueryParameter("YearID", financialYearID)
                 .addQueryParameter("MonthID", monthID)
                 .addQueryParameter("FYear", finyr)
                 .addQueryParameter("AppType", "0")
-                .addQueryParameter("SecurityCode", "0000")
+                .addQueryParameter("SecurityCode", pref.getSecurityCode())
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
