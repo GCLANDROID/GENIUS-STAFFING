@@ -139,7 +139,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         if (leaveFlag==1){
             btnLeave.setVisibility(View.VISIBLE);
         }else {
-            btnLeave.setVisibility(View.GONE);
+            btnLeave.setVisibility(View.VISIBLE);
         }
         llQR = (LinearLayout) findViewById(R.id.llQR);
         llQR.setOnClickListener(this);
@@ -447,10 +447,11 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 pref.getEmpClintId().equals("AEMCLI2110001671") ||
                 pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID) ||
                 pref.getEmpClintId().equals(ClientID.SKF_ITS) ||
+                pref.getEmpClintId().equals(ClientID.ABFRL) ||
                 pref.getEmpClintId().equals(ClientID.SKY_ROOT)) {
             llAdjustment.setVisibility(View.VISIBLE);
         } else {
-            llAdjustment.setVisibility(View.VISIBLE);
+            llAdjustment.setVisibility(View.GONE);
         }
     }
 
@@ -1499,7 +1500,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-        }else if (pref.getEmpClintId().equals(ClientID.PROTACTOR_GAMBLEID)) {
+        }else if (pref.getEmpClintId().equals(ClientID.PROTACTOR_GAMBLEID) || pref.getEmpClintId().equals(ClientID.WACKER)) {
             Intent intent = new Intent(AttenDanceDashboardActivity.this, GeoFenceAttendanceWithPunchTypeActivity.class);
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
