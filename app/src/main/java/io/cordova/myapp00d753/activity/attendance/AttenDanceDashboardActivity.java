@@ -210,14 +210,14 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         } else {
             /*llBackAttendance.setVisibility(View.GONE);
             llAttenRegularize.setVisibility(View.GONE);*/
-            llBackAttendance.setVisibility(View.GONE);
-            llAttenRegularize.setVisibility(View.GONE);
+            llBackAttendance.setVisibility(View.VISIBLE);
+            llAttenRegularize.setVisibility(View.VISIBLE);
         }
 
         if (pref.getEmpClintId().equals(ClientID.SKY_ROOT)){
             llHolidayView.setVisibility(View.VISIBLE);
         } else {
-            llHolidayView.setVisibility(View.GONE);
+            llHolidayView.setVisibility(View.VISIBLE);
         }
 
         llAttandanceManage.setOnClickListener(this);
@@ -450,7 +450,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 pref.getEmpClintId().equals(ClientID.SKY_ROOT)) {
             llAdjustment.setVisibility(View.VISIBLE);
         } else {
-            llAdjustment.setVisibility(View.GONE);
+            llAdjustment.setVisibility(View.VISIBLE);
         }
     }
 
@@ -1504,7 +1504,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-        }else if (pref.getEmpClintId().equals(ClientID.SPCX)) {
+        }else if (pref.getEmpClintId().equals(ClientID.SPCX) ||pref.getEmpClintId().equals(ClientID.ABFRL)) {
             Intent intent = new Intent(AttenDanceDashboardActivity.this, GeoFenceAttendanceWithOutLocActivity.class);
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

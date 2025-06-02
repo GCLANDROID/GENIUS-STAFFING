@@ -532,6 +532,8 @@ public class LeaveAdjustmentFragment extends Fragment {
                         postDataCompOff(etReason.getText().toString(), "0");
                     } else if (pref.getEmpClintId().equalsIgnoreCase(ClientID.SKF_ITS)){
                         postDataCompOff(etReason.getText().toString(), "0");
+                    }else if (pref.getEmpClintId().equalsIgnoreCase(ClientID.ABFRL)){
+                        postDataCompOff(etReason.getText().toString(), "0");
                     } else {
                         approverpopup(etReason.getText().toString());
                     }
@@ -1012,6 +1014,7 @@ public class LeaveAdjustmentFragment extends Fragment {
                     public void onResponse(JSONObject response) {
                         try {
                             JSONObject object = new JSONObject(String.valueOf(response));
+                            progressDialog.dismiss();
                             if (object.getBoolean("responseStatus") == true) {
                                 JSONArray jsonArray = object.getJSONArray("responseData");
                                 approverList = new ArrayList<>();
@@ -1023,7 +1026,7 @@ public class LeaveAdjustmentFragment extends Fragment {
                                 }
 
                                 approverAutoCompleteAdapter = new ApproverAutoCompleteAdapter(getContext(), approverList);
-                                progressDialog.cancel();
+
 
 
                                 //llMain.setVisibility(View.VISIBLE);
@@ -1038,7 +1041,7 @@ public class LeaveAdjustmentFragment extends Fragment {
                         //Handle the error response
 
                         Toast.makeText(getContext(), "Getting Some Error", Toast.LENGTH_SHORT).show();
-                        progressDialog.cancel();
+                        progressDialog.dismiss();
                     }
                 });
     }
@@ -1106,7 +1109,7 @@ public class LeaveAdjustmentFragment extends Fragment {
                         //Handle the error response
 
                         Toast.makeText(getContext(), "Getting Some Error", Toast.LENGTH_SHORT).show();
-                        progressDialog.cancel();
+                        progressDialog.dismiss();
                     }
                 });
     }

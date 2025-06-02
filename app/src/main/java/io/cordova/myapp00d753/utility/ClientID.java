@@ -10,4 +10,6 @@ public class ClientID {
     public static String SKF_ITS = "AEMCLI2210000084";
     public static String MAHINDRA_MAHINDRA = "AEMCLI0810000241";
     public static String SPCX = "AEMCLI2410000149";
+    public static String ABFRL = "AEMCLI2210001717";
+
 }

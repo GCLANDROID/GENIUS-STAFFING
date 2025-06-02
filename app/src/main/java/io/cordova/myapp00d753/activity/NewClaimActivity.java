@@ -966,7 +966,7 @@ public class NewClaimActivity extends AppCompatActivity {
     }
 
     private void setComponenetItem() {
-        String surl = AppData.url+"gcl_CommonDDL?ddltype=160&id1=" + pref.getEmpConId() + "&id2=" + pref.getEmpClintId() + "&id3=0&SecurityCode=" + pref.getSecurityCode();
+        String surl = AppData.url+"gcl_CommonDDL?ddltype=1160&id1=" + pref.getEmpId() + "&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
         Log.d("compurl", surl);
         final ProgressDialog progressBar = new ProgressDialog(this);
         progressBar.setCancelable(true);//you can cancel it by pressing back button
