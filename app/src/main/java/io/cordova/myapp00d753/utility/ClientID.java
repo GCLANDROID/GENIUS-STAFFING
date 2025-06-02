@@ -12,5 +12,7 @@ public class ClientID {
     public static String MAHINDRA_MAHINDRA = "AEMCLI0810000241";
     public static String SPCX = "AEMCLI2410000149";
     public static String ABFRL = "AEMCLI2210001717";
+    public static String WACKER = "AEMCLI0710000144";
+
 
 }
