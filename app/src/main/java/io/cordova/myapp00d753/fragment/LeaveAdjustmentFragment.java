@@ -1086,7 +1086,7 @@ public class LeaveAdjustmentFragment extends Fragment {
                     public void onError(ANError error) {
                         //Handle the error response
 
-                        Toast.makeText(getContext(), "Getting Some Error", Toast.LENGTH_SHORT).show();
+
                         progressDialog.dismiss();
                     }
                 });
