@@ -91,6 +91,7 @@ import io.cordova.myapp00d753.module.SpinnerModel;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.ClientID;
 import io.cordova.myapp00d753.utility.Pref;
+import io.cordova.myapp00d753.utility.ShowDialog;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -553,9 +554,6 @@ public class ApplicationFragment extends Fragment {
                                     JSONObject approverObject = approverNameArray.optJSONObject(i);
                                     final String ApproverName = approverObject.optString("ApproverName");
                                     tvApproverName.setText("Approver Name:" + ApproverName);
-
-
-
                                 }
 
 
@@ -912,7 +910,7 @@ public class ApplicationFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 llLoader.setVisibility(View.GONE);
-
+                pd.dismiss();
 
                 // Toast.makeText(AttendanceReportActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
                 Log.e("ert", error.toString());
@@ -993,7 +991,7 @@ public class ApplicationFragment extends Fragment {
                         }
                         if (striDate.getTime() > strDate.getTime() ||striDate.getTime() == strDate.getTime()) {
 
-                            if (pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID)){
+                            if (pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID) || pref.getEmpClintId().equals(ClientID.SKF_ITS) || pref.getEmpClintId().equals(ClientID.SKF_MSP)){
                                 SKF_ValidationCheck();
                             } else {
                                 validationChecking();
@@ -2131,7 +2129,7 @@ public class ApplicationFragment extends Fragment {
                         if (responseStatus) {
                             successAlert();
                         } else {
-
+                            ShowDialog.showErrorDialog(getActivity(),job.optString("responseData"));
                         }
                         // boolean _status = job1.getBoolean("status");
                         // do anything with response
