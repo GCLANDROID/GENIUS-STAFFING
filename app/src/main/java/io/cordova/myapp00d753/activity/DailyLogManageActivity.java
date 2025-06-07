@@ -631,7 +631,7 @@ public class DailyLogManageActivity extends AppCompatActivity implements OnMapRe
 
         progressDialog.show();
 
-        AndroidNetworking.upload(AppData.POST_EMPLOYEE_DAILY_ACTIVITY)
+        /*AndroidNetworking.upload(AppData.POST_EMPLOYEE_DAILY_ACTIVITY)
                 .addMultipartParameter("AEMEmployeeID", aemid)
                 .addMultipartParameter("ApprovalStatus", "0")
                 .addMultipartParameter("Remarks", remarks)
@@ -675,7 +675,7 @@ public class DailyLogManageActivity extends AppCompatActivity implements OnMapRe
                         Log.e(TAG, "POST_EMPLOYEE_DAILY_ACTIVITY_error: " + anError.getErrorBody());
                         errorshowing();
                     }
-                });
+                });*/
 
 
 
@@ -702,8 +702,6 @@ public class DailyLogManageActivity extends AppCompatActivity implements OnMapRe
                 UploadObject extraWorkingDayModel = response.body();
                 if (extraWorkingDayModel.isResponseStatus()) {
                     successAlert();
-
-
                 } else {
                     Toast.makeText(getApplicationContext(), extraWorkingDayModel.getResponseText(), Toast.LENGTH_SHORT).show();
                 }
