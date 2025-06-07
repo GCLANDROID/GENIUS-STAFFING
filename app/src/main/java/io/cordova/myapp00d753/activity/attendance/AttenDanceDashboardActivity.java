@@ -215,7 +215,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             llAttenRegularize.setVisibility(View.VISIBLE);*/
         }
 
-        if (pref.getEmpClintId().equals(ClientID.SKY_ROOT)){
+        if (pref.getEmpClintId().equals(ClientID.SKY_ROOT) || pref.getEmpClintId().equals(ClientID.WACKER) || pref.getEmpClintId().equals(ClientID.ABFRL)){
             llHolidayView.setVisibility(View.VISIBLE);
         } else {
             llHolidayView.setVisibility(View.GONE);
