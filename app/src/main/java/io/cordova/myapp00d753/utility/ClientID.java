@@ -13,6 +13,5 @@ public class ClientID {
     public static String SPCX = "AEMCLI2410000149";
     public static String ABFRL = "AEMCLI2210001717";
     public static String WACKER = "AEMCLI0710000144";
-
-
+    public static String TATA_STEEL = "AEMCLI2410001868";
 }
