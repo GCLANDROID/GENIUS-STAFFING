@@ -67,8 +67,8 @@ import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 import com.google.android.material.textfield.TextInputEditText;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
+//import com.theartofdev.edmodo.cropper.CropImage;
+//import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.json.JSONObject;
 
@@ -82,6 +82,7 @@ import java.util.regex.Pattern;
 
 import io.cordova.myapp00d753.AndroidXCamera.AndroidXCameraActivity;
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.databinding.ActivityBlueDartAttendanceManageBinding;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.GPSTracker;
@@ -128,7 +129,7 @@ public class GeoFenceAttendanceWithOutLocActivity extends AppCompatActivity impl
     String encodeToString="";
 
     Integer id=0;
-
+    ImageView imgHome,imgBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +145,8 @@ public class GeoFenceAttendanceWithOutLocActivity extends AppCompatActivity impl
     private void initialize() {
         pref = new Pref(getApplicationContext());
         tvAddress = (TextView) findViewById(R.id.tvAddress);
+        imgHome = (ImageView) findViewById(R.id.imgHome);
+        imgBack = (ImageView) findViewById(R.id.imgBack);
         connectionCheck = new NetworkConnectionCheck(getApplicationContext());
         lnMark = (LinearLayout) findViewById(R.id.lnMark);
 
@@ -205,7 +208,20 @@ public class GeoFenceAttendanceWithOutLocActivity extends AppCompatActivity impl
                 attendance();
             }
         });
-
+        imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(GeoFenceAttendanceWithOutLocActivity.this, EmployeeDashBoardActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
 
@@ -248,14 +264,14 @@ public class GeoFenceAttendanceWithOutLocActivity extends AppCompatActivity impl
             //image_uri = (Uri) data.getExtras().get(AndroidXCameraActivity.IMAGE_PATH_KEY);
             File imageFile = new File(String.valueOf(data.getExtras().get("picture")));
             Log.e(TAG, "image_uri: "+image_uri);
-            if (image_uri != null){
+            /*if (image_uri != null){
                 CropImage.activity(Uri.fromFile(imageFile.getAbsoluteFile()))
                         .setGuidelines(CropImageView.Guidelines.ON) //enable image guid lines
                         .setCropMenuCropButtonIcon(R.drawable.checked)
                         .setCropMenuCropButtonTitle("Crop")
                         .start(GeoFenceAttendanceWithOutLocActivity.this);
-            }
-        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            }*/
+        } /*else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 Uri resultUri = result.getUri(); //get image uri
@@ -309,7 +325,7 @@ public class GeoFenceAttendanceWithOutLocActivity extends AppCompatActivity impl
                 Log.e(TAG, "onActivityResult: "+error);
                 Toast.makeText(this, "" + error, Toast.LENGTH_SHORT).show();
             }
-        }
+        }*/
 
         /*if (requestCode == IMAGE_PICK_CAMERA_CODE) {
             //got image from camera now crop it
