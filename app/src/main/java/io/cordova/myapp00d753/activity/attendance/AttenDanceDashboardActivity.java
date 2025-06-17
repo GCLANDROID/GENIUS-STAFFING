@@ -78,6 +78,7 @@ import io.cordova.myapp00d753.activity.LeaveApplicationActivity;
 import io.cordova.myapp00d753.activity.QRCodeScannerActivity;
 import io.cordova.myapp00d753.activity.SKF.HolidayViewActivity;
 import io.cordova.myapp00d753.activity.SKF.SKF_AttendanceRegularizationActivity;
+import io.cordova.myapp00d753.activity.ViewLeaveBalanceActivity;
 import io.cordova.myapp00d753.activity.WOHOHActivity;
 import io.cordova.myapp00d753.activity.WeeklyOffAttendanceActivity;
 import io.cordova.myapp00d753.activity.bosch.BoschAttendanceReportActivity;
@@ -102,7 +103,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     DrawerLayout dlMain;
     boolean mslideState;
     ImageView imgMenu;
-    LinearLayout llAttandanceManage, llAttendanceReport, llBackAttendance, llWeekly, llAttenRegularize, llBottom;
+    LinearLayout llAttandanceManage, llAttendanceReport, llBackAttendance, llWeekly, llAttenRegularize, llBottom,llViewLeaveBalance;
     AlertDialog alerDialog1;
     String month, year;
     int y, m;
@@ -182,6 +183,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         llWeekly = (LinearLayout) findViewById(R.id.llWeekly);
         llHoliday = (LinearLayout) findViewById(R.id.llHoliday);
         llHolidayView = (LinearLayout) findViewById(R.id.llHolidayView);
+        llViewLeaveBalance = (LinearLayout) findViewById(R.id.llViewLeaveBalance);
         tvCancel = (TextView) findViewById(R.id.tvCancel);
         llBottom = (LinearLayout) findViewById(R.id.llBottom);
         if (pref.getEmpClintId().equals("AEMCLI0910000315")) {
@@ -221,6 +223,22 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             llHolidayView.setVisibility(View.GONE);
         }
 
+        if (pref.getEmpClintId().equals(ClientID.TATA_STEEL) || pref.getEmpClintId().equals(ClientID.SHALIMAR_WIRES)){
+            llViewLeaveBalance.setVisibility(View.VISIBLE);
+        } else {
+            llViewLeaveBalance.setVisibility(View.GONE);
+        }
+
+        if (pref.getEmpClintId().equals(ClientID.SHALIMAR_WIRES)){
+            llAttandanceManage.setVisibility(View.GONE);
+            llAttendanceReport.setVisibility(View.GONE);
+            btnMarkAttendance.setVisibility(View.GONE);
+        } else {
+            llAttandanceManage.setVisibility(View.VISIBLE);
+            llAttendanceReport.setVisibility(View.VISIBLE);
+            btnMarkAttendance.setVisibility(View.VISIBLE);
+        }
+
         llAttandanceManage.setOnClickListener(this);
         llAttendanceReport.setOnClickListener(this);
         llWeekly.setOnClickListener(this);
@@ -229,6 +247,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         llAttenRegularize.setOnClickListener(this);
         llAdjustment.setOnClickListener(this);
         llHolidayView.setOnClickListener(this);
+        llViewLeaveBalance.setOnClickListener(this);
         tvCancel.setOnClickListener(this);
 
         y = Calendar.getInstance().get(Calendar.YEAR);
@@ -810,6 +829,10 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             startActivity(intent);
         } else if (view == llHolidayView) {
             Intent intent = new Intent(AttenDanceDashboardActivity.this, HolidayViewActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } else if(view == llViewLeaveBalance){
+            Intent intent = new Intent(AttenDanceDashboardActivity.this, ViewLeaveBalanceActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else if (view == imgHome) {
