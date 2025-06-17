@@ -106,24 +106,29 @@ public class LeaveBalanceReportFragment extends Fragment {
 
                                 //for  balance details
                                 JSONArray leaveBalanceArray = responseData.optJSONArray(1);
-                                for (int i = 0; i < leaveBalanceArray.length(); i++) {
-                                    JSONObject balanceObject = leaveBalanceArray.optJSONObject(i);
-                                    final String Code = balanceObject.optString("Code");
-                                    final String Opening = balanceObject.optString("Opening");
-                                    final String LeaveAvailed = balanceObject.optString("LeaveAvailed");
-                                    final String Avaliable = balanceObject.optString("Avaliable");
-                                    String LeaveTypeID = balanceObject.optString("LeaveTypeID");
-                                    //typeAvaild.add(LeaveTypeID + "_" + Avaliable);
+                                if(leaveBalanceArray.length() > 0){
+                                    for (int i = 0; i < leaveBalanceArray.length(); i++) {
+                                        JSONObject balanceObject = leaveBalanceArray.optJSONObject(i);
+                                        final String Code = balanceObject.optString("Code");
+                                        final String Opening = balanceObject.optString("Opening");
+                                        final String LeaveAvailed = balanceObject.optString("LeaveAvailed");
+                                        final String Avaliable = balanceObject.optString("Avaliable");
+                                        String LeaveTypeID = balanceObject.optString("LeaveTypeID");
+                                        //typeAvaild.add(LeaveTypeID + "_" + Avaliable);
 
-                                    LeaveBalanceDetailsModel model = new LeaveBalanceDetailsModel(Code, Opening, LeaveAvailed, Avaliable);
-                                    itemList.add(model);
+                                        LeaveBalanceDetailsModel model = new LeaveBalanceDetailsModel(Code, Opening, LeaveAvailed, Avaliable);
+                                        itemList.add(model);
+                                    }
+                                    leaveBalanceReportAdapter = new LeaveBalanceReportAdapter(getActivity(),itemList);
+                                    rvRecyclerView.setAdapter(leaveBalanceReportAdapter);
+
+                                    llNoData.setVisibility(View.GONE);
+                                } else {
+                                    llNoData.setVisibility(View.VISIBLE);
                                 }
-
-                                leaveBalanceReportAdapter = new LeaveBalanceReportAdapter(getActivity(),itemList);
-                                rvRecyclerView.setAdapter(leaveBalanceReportAdapter);
-
-                                llNoData.setVisibility(View.GONE);
-                            } else { }
+                            } else {
+                                llNoData.setVisibility(View.VISIBLE);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
