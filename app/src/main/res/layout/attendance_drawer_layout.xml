@@ -239,7 +239,33 @@
                 android:text="KM Reading Report"/>
 
         </LinearLayout>
+
+
+        <LinearLayout
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="15dp"
+            android:id="@+id/llViewLeaveBalance">
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/leave_management"/>
+            <TextView
+                android:layout_marginLeft="5dp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/colorPrimary"
+                android:text="View Leave Balance"/>
+
+        </LinearLayout>
     </LinearLayout>
+
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
