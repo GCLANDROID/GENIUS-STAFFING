@@ -282,7 +282,7 @@ public class OthersPayoutActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 lnMain.setVisibility(View.GONE);
                 lnNoData.setVisibility(View.VISIBLE);
-
+                progressDialog.dismiss();
                 // Toast.makeText(SalaryActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
 
                 Log.e("ert", error.toString());
