@@ -14,6 +14,7 @@
        android:gravity="center"
        android:layout_marginTop="30dp">
        <TextView
+           android:id="@+id/txtCompanyName"
            android:gravity="center"
            android:layout_gravity="center"
            android:textStyle="bold"
@@ -22,7 +23,7 @@
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:textSize="20sp"
-           android:text="Genius Consultants Ltd."></TextView>
+           android:text="@string/company_name"/>
 
    </LinearLayout>
     <LinearLayout
