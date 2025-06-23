@@ -75,7 +75,7 @@ public class DashBoardActivity extends AppCompatActivity {
     ArrayList<DashboardItemModel> itemList = new ArrayList<>();
     LinearLayout llLogin;
     private ReviewManager reviewManager;
-
+    TextView txtCompanyName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +89,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
     private void initialize() {
         reviewManager = ReviewManagerFactory.create(this);
+        txtCompanyName = (TextView) findViewById(R.id.txtCompanyName);
         llLogin=(LinearLayout)findViewById(R.id.llLogin);
         rvItem=(RecyclerView)findViewById(R.id.rvItem);
         rvItem.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -97,7 +98,7 @@ public class DashBoardActivity extends AppCompatActivity {
         Log.d("de", security);
         pref = new Pref(DashBoardActivity.this);
 
-
+        txtCompanyName.setText(pref.getCompanyName());
         connectionCheck = new NetworkConnectionCheck(DashBoardActivity.this);
 
         try {
