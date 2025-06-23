@@ -1,8 +1,9 @@
 package io.cordova.myapp00d753.utility;
 
 public class AppData {
+    public static final String COMPANY_NAME = "Genius Consultants Limited";
     public static String url="https://gsppi.geniusconsultant.com/GeniusiOSApi/api/";
-    public static String localurl="http://171.16.2.67/GSPPI_API_V2/api/";
+    public static String localurl="http://171.16.2.105/GSPPI_API_V2/api/";
     public static String newv2url="https://gsppi.geniusconsultant.com/GSPPI_API_V2/api/";
     //public static String newv2url="http://171.16.2.105/GSPPI_API_V2/api/";
 
@@ -43,7 +44,7 @@ public class AppData {
     public static String GET_SELF_ATTENDANCE_WO_LEAVE = newv2url+"Attendance/GetSelfAttendanceWoLeave";
     public static String GET_OFFLINE_DAILY_LOG_ACTIVITY = newv2url+"Attendance/GetOfflineDailyLogActivity";
     public static String POST_EMPLOYEE_DAILY_ACTIVITY = newv2url+"FileUpload/PostEmployeeDailyActivity";
-
+    //171.16.2.105
     public static String GET_ATTENDANCE_REGULARIZATION = newv2url+"Attendance/GetAttendanceRegularization";
     public static String GET_ATTENDANCE_REGULARIZATION_LOCAL_IP = "http://171.16.2.105/GSPPI_API_V2/api/Attendance/GetAttendanceRegularization";
 
@@ -93,5 +94,5 @@ public class AppData {
     public static String SAVE_DUMMY_EMP_BANK_DOCUMENT = newv2url+"Document/SaveDummyEmpBankDetails";
     public static String Post_AttedanceGeofence_WFH = newv2url+"Attendance/Post_AttedanceGeofence_WFH";
     public static String IMAGE_PATH_URL = "https://gsppi.geniusconsultant.com/FSS/DigitalDocument/";
-    //public static String IMAGE_PATH_URL = "https://gsppi.geniusconsultant.com/GeniusiOSApi/DigitalDocument/";
+    public static String Open_Leave_Balance_Details = newv2url+"Leave/OpenLeaveBalanceDetails";
 }
