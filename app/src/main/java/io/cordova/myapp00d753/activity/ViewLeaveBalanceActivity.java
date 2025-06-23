@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.attendance.AttenDanceDashboardActivity;
 import io.cordova.myapp00d753.fragment.LeaveBalanceReportFragment;
+import io.cordova.myapp00d753.fragment.ViewLeaveBalanceFragment;
 
 public class ViewLeaveBalanceActivity extends AppCompatActivity {
     LinearLayout llApplication,llApproval,llDetails,llAdjustment,llLeaveBalanceReport;
@@ -51,8 +52,8 @@ public class ViewLeaveBalanceActivity extends AppCompatActivity {
     public void loadBalanceReport() {
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        LeaveBalanceReportFragment htfragment=new LeaveBalanceReportFragment();
-        transaction.replace(R.id.frameLayout, htfragment);
+        ViewLeaveBalanceFragment fragment = new ViewLeaveBalanceFragment();
+        transaction.replace(R.id.frameLayout, fragment);
         transaction.commit();
     }
 }
