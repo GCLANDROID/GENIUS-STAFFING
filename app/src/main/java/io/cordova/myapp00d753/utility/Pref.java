@@ -1029,5 +1029,14 @@ public class Pref {
         return _pref.getString("experience","");
     }
 
+    public void saveCompanyName(String companyName){
+        _editorPref.putString("company_name", companyName);
+        _editorPref.commit();
+    }
+
+    public String getCompanyName(){
+        return _pref.getString("company_name","");
+    }
+
 }
 
