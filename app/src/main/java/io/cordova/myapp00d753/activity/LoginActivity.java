@@ -269,7 +269,6 @@ public class LoginActivity extends AppCompatActivity {
                                 }else {
                                     security_code="0000";
                                 }
-
                             }
                             JSONObject obj=new JSONObject();
                             try {
@@ -350,7 +349,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-
     private void login(JSONObject jsonObject) {
         Log.e("LOGIN", "login: "+jsonObject.toString());
         final ProgressDialog pd = new ProgressDialog(LoginActivity.this);
@@ -418,6 +416,8 @@ public class LoginActivity extends AppCompatActivity {
                                     String IsSupervisor = obj.optString("IsSupervisor");
                                     pref.saveSup(IsSupervisor);
                                     String CompanyName = obj.optString("CompanyName");
+                                    Log.e("Log", "CompanyName: "+CompanyName);
+                                    pref.saveCompanyName(CompanyName);
                                     pref.saveSecurityCode(security_code);
                                     String FlagAddr = obj.optString("FlagAddr");
                                     pref.saveFlagLocation(FlagAddr);
@@ -455,9 +455,6 @@ public class LoginActivity extends AppCompatActivity {
                                     String Genius_Access_Token=obj.optString("Genius_Access_Token").trim();
                                     pref.saveAccessToken(Genius_Access_Token);
                                     ConsentFlag=obj.optString("ConsentFlag");
-
-
-
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -483,10 +480,7 @@ public class LoginActivity extends AppCompatActivity {
                                         startActivity(intent);
                                         finish();
                                     }
-
                                 }
-
-
                             } else if (UserType.equals("2")) {
                                 Intent intent = new Intent(LoginActivity.this, SuperVisiorDashBoardActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
