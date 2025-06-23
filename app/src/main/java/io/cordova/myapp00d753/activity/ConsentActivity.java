@@ -23,7 +23,6 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -55,10 +54,8 @@ import java.util.Calendar;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.adapter.ConsentDocumentAdapter;
-import io.cordova.myapp00d753.adapter.PFDocumentAdapter;
 import io.cordova.myapp00d753.databinding.ActivityConsentBinding;
 import io.cordova.myapp00d753.module.ConsentDocModule;
-import io.cordova.myapp00d753.module.PFDocumentModule;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
 
@@ -79,6 +76,7 @@ public class ConsentActivity extends AppCompatActivity {
     File f;
     int frsttxtflag=0;
     private long startTime;
+    TextView tvConsent,tvConsent1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,16 +105,18 @@ public class ConsentActivity extends AppCompatActivity {
         }
         startTime = SystemClock.elapsedRealtime();
 
-
-
-
-
+        String company_name = pref.getCompanyName();
+        tvConsent = findViewById(R.id.tvConsnet);
+        tvConsent1 = findViewById(R.id.tvConsent1);
+        String consentText = getString(R.string.Consent, company_name);
+        tvConsent.setText(consentText);
+        String consentText1 = getString(R.string.Consent1, company_name);
+        tvConsent1.setText(consentText1);
 
         JSONObject object=new JSONObject();
         try {
             object.put("MasterID",pref.getMasterId());
             object.put("SecurityCode",pref.getSecurityCode());
-
             getConsentLetter(object);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -138,9 +138,6 @@ public class ConsentActivity extends AppCompatActivity {
                 binding.llSigned.setEnabled(true);
             }
         }, 6000);
-
-
-
     }
 
     public void getConsentLetter(JSONObject jsonObject) {
