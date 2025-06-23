@@ -16,4 +16,32 @@
     <string name="take_picture">Recognize</string>
     <string name="add_person">Add</string>
     <string name="title_activity_add_person">AddPerson</string>
+    <string name="company_name">Genius Consultants Limited</string>
+    <!--<string name="company_name">Genius HR Tech</string>-->
+    <string name="Consent">I hereby give my consent to and agree and authorize %1$s (“Genius”)
+to fetch and/or use my personal data i.e. Adhaar Information, PAN, UAN details, my Bank
+Account(s) details, and other personal documents/ information as may be required for the
+following purposes:</string>
+    <string name="Consent1">I understand that the type of personal data that may be collected, shall be shared with Genius,
+its clients, Government departments, authorities and assignees. \n\nI understand and consent to Genius for using or sharing information submitted by me to
+conduct employment verification and other related checks, through third party agency(ies)
+engaged by it, from public information sources such as Employees\' Provident Fund
+Organisation (EPFO). \n\nI am giving my consent voluntarily without coercion and at my own volition.
+\n\n I authorize Genius to send and I agree to receive SMS alerts/E-mails related to my application
+status and account activity as well as product use messages that Genius will send, from time
+to time, on my mobile phone number/E-mail ID as mentioned in this application form. I will
+intimate Genius in the event of any change in my mobile phone number/E-mail ID. I agree
+that in the event I fail to inform the new mobile number/email id, I will not hold %1$s, responsible for non-communication of any information regarding my
+application status and/or account activity. \n\nI will not hold %1$s and its officials responsible in the event this
+document is not found to be in order or in case of any incorrect information provided by me. \n\nThe above consent and purpose of collecting information has been explained to me in my
+local language.</string>
+    <string-array name="days_of_week">
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </string-array>
 </resources>
