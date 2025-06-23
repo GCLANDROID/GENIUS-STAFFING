@@ -226,15 +226,14 @@ public class OthersPayoutActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Log.d("responseLogin", response);
-
-
+                        progressDialog.dismiss();
                         try {
                             JSONObject job1 = new JSONObject(response);
                             Log.e("response12", "@@@@@@" + job1);
                             String responseText = job1.optString("responseText");
                             boolean responseStatus = job1.optBoolean("responseStatus");
                             if (responseStatus) {
-                                progressDialog.dismiss();
+
                                 //      Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
                                 itemList.clear();
                                 JSONArray responseData = job1.optJSONArray("responseData");
