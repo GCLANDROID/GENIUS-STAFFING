@@ -46,6 +46,8 @@
         </activity>
         <activity android:name=".activity.attendance.AttendanceWithOnlyShiftActivity"
             android:screenOrientation="userPortrait"></activity>
+        <activity android:name=".activity.ViewLeaveBalanceActivity"
+            android:screenOrientation="userPortrait"/>
         <activity
             android:name=".activity.SKF.SKF_AttendanceRegularizationActivity"
             android:exported="false" />
@@ -620,6 +622,8 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+
     </application>
 
 </manifest>
