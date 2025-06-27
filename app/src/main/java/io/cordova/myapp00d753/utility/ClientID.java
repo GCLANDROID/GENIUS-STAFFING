@@ -15,4 +15,5 @@ public class ClientID {
     public static String WACKER = "AEMCLI0710000144";
     public static String TATA_STEEL = "AEMCLI2410001868";
     public static String SHALIMAR_WIRES = "AEMCLI2110001658";
+    public static String CBRE_SOUTH_ASIA = "AEMCLI1410000807";
 }
