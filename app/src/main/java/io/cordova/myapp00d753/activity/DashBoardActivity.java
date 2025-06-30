@@ -9,10 +9,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -69,7 +71,10 @@ public class DashBoardActivity extends AppCompatActivity {
 
     String playversion;
     String version;
-    AlertDialog alertDialog,al1,alert1,alert2;
+    AlertDialog alertDialog;
+    androidx.appcompat.app.AlertDialog al1;
+    AlertDialog alert1;
+    AlertDialog alert2;
     String responseStatus;
     RecyclerView rvItem;
     ArrayList<DashboardItemModel> itemList = new ArrayList<>();
@@ -98,7 +103,7 @@ public class DashBoardActivity extends AppCompatActivity {
         Log.d("de", security);
         pref = new Pref(DashBoardActivity.this);
 
-        txtCompanyName.setText(pref.getCompanyName());
+       // txtCompanyName.setText(pref.getCompanyName());
         connectionCheck = new NetworkConnectionCheck(DashBoardActivity.this);
 
         try {
@@ -129,6 +134,10 @@ public class DashBoardActivity extends AppCompatActivity {
                     .apply();
         }
 
+        GeniusHRTechPopUp();
+
+
+
     }
 
     private void onClick() {
@@ -143,6 +152,65 @@ public class DashBoardActivity extends AppCompatActivity {
 
            }
        });
+
+    }
+
+
+    public void GeniusHRTechPopUp() {
+
+        String surl = AppData.newv2url+"General/GeniusHRTechPopUp";
+        Log.d("inputLogin", surl);//
+
+        final ProgressDialog pd=new ProgressDialog(DashBoardActivity.this);
+        pd.setMessage("Loading.....");
+        pd.show();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("responseLogin", response);
+                        pd.dismiss();
+
+                        try {
+                            JSONObject job1 = new JSONObject(response);
+                            Log.e("response12", "@@@@@@" + job1);
+                            String Response_Code=job1.optString("Response_Code");
+                            if (Response_Code.equals("101")){
+                                JSONObject Response_Data=job1.optJSONObject("Response_Data");
+                                String Base64Image=Response_Data.optString("Base64Image");
+                                int Status=Response_Data.optInt("Status");
+                                if (Status==1){
+                                    shoeDialog(Base64Image);
+                                }
+
+                            }
+
+
+
+
+
+                            // boolean _status = job1.getBoolean("status");
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(DashBoardActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                pd.dismiss();
+                //  Toast.makeText(LoginActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
+
+                Log.e("ert", error.toString());
+            }
+        }) {
+
+        };
+        AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
 
     }
 
@@ -386,6 +454,38 @@ public class DashBoardActivity extends AppCompatActivity {
         } catch (ActivityNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+
+    private void shoeDialog(String image) {
+        androidx.appcompat.app.AlertDialog.Builder dialogBuilder = new androidx.appcompat.app.AlertDialog.Builder(DashBoardActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.name_change_dialog, null);
+        dialogBuilder.setView(dialogView);
+
+        ImageView imgCancel=(ImageView)dialogView.findViewById(R.id.imgCancel);
+        imgCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                al1.dismiss();
+            }
+        });
+        ImageView imgModal=(ImageView)dialogView.findViewById(R.id.imgModal);
+        byte[] bytes   = Base64.decode(image, Base64.DEFAULT);
+        Bitmap bitmap  = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+
+        // 3.  Show it
+        imgModal.setImageBitmap(bitmap);
+
+
+        al1 = dialogBuilder.create();
+        al1.setCancelable(true);
+        Window window = al1.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        al1.show();
+
+
     }
 
 

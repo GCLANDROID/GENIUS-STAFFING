@@ -10,6 +10,7 @@
         android:layout_height="25dp"
         android:gravity="right">
         <ImageView
+            android:visibility="gone"
             android:id="@+id/imgCancel"
             android:layout_width="25dp"
             android:layout_height="25dp"

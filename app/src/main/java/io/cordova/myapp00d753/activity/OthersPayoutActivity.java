@@ -259,10 +259,12 @@ public class OthersPayoutActivity extends AppCompatActivity {
 
                                     setAdapter();
                                 } else {
+                                    progressDialog.dismiss();
                                     lnMain.setVisibility(View.GONE);
                                     lnNoData.setVisibility(View.VISIBLE);
                                 }
                             } else {
+                                progressDialog.dismiss();
                                 lnMain.setVisibility(View.GONE);
                                 lnNoData.setVisibility(View.VISIBLE);
                             }
@@ -272,6 +274,7 @@ public class OthersPayoutActivity extends AppCompatActivity {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            progressDialog.dismiss();
 
                             //Toast.makeText(SalaryActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
                         }

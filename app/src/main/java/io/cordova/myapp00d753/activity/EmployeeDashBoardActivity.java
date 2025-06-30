@@ -458,6 +458,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
 
                                 if (responseCode.equals("1")){
                                     llAppointment.setVisibility(View.VISIBLE);
+                                    shoeDialog(DocLink);
                                 }
                             }
 
@@ -869,7 +870,8 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         tvClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(DocLink));
+                startActivity(browserIntent);
             }
         });
         ImageView imgCancel=(ImageView)dialogView.findViewById(R.id.imgCancel);
@@ -881,7 +883,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         });
 
         alertDialog = dialogBuilder.create();
-        alertDialog.setCancelable(true);
+        alertDialog.setCancelable(false);
         Window window = alertDialog.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.CENTER);
