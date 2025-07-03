@@ -223,9 +223,8 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             llHolidayView.setVisibility(View.GONE);
         }
 
-        if (pref.getEmpClintId().equals(ClientID.TATA_STEEL)
-                || pref.getEmpClintId().equals(ClientID.SHALIMAR_WIRES)
-                || pref.getEmpClintId().equals(ClientID.CBRE_SOUTH_ASIA)){
+        if (AppData.LEAVE_BALANCE_VIEW_FLAG.equals("1")){
+
             llViewLeaveBalance.setVisibility(View.VISIBLE);
         } else {
             llViewLeaveBalance.setVisibility(View.GONE);

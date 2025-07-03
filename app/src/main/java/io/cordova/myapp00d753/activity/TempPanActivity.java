@@ -110,7 +110,7 @@ public class TempPanActivity extends AppCompatActivity {
     Button btnAadharSave;
     EditText etAddaharNo;
     int responseflag=0;
-    int panvalflag=0;
+    int panvalflag=1;
     LinearLayout llPANVAL,llPanDoc,llAadharFront,llAadharBack;
     String aadhaarImage="",aadhaarBackPage = "", imagePanURL ="";
     //boolean is_Pan_Document_selected = false;
@@ -275,15 +275,7 @@ public class TempPanActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (etPanNumber.getText().toString().length()==10){
-                    JSONObject jsonObject=new JSONObject();
-                    try {
-                        jsonObject.put("Id",etPanNumber.getText().toString());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    checkPANDetails(jsonObject);
-                }
+
 
             }
         });

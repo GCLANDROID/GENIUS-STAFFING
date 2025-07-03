@@ -95,4 +95,5 @@ public class AppData {
     public static String Post_AttedanceGeofence_WFH = newv2url+"Attendance/Post_AttedanceGeofence_WFH";
     public static String IMAGE_PATH_URL = "https://gsppi.geniusconsultant.com/FSS/DigitalDocument/";
     public static String Open_Leave_Balance_Details = newv2url+"Leave/OpenLeaveBalanceDetails";
+    public static String LEAVE_BALANCE_VIEW_FLAG = "0";
 }

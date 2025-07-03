@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -1776,6 +1777,9 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         window.setGravity(Gravity.CENTER);
         alerDialog1.show();
     }
+
+
+
 }
 
 

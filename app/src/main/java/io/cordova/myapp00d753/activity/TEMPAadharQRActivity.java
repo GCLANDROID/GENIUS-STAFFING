@@ -499,7 +499,9 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                             }
 
 
-                            adharAlert(namevalue, dobvalue, AppData.AADAHARNUMBER, gendervalue, careof, state, pin, street, locality, house, postoffice, subDistrict, district, vtc, landmark, mainobj, 0);
+
+
+
 
 
                         } else {
@@ -772,8 +774,25 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                             adharAlert(namevalue, dobvalue, AppData.AADAHARNUMBER, gendervalue, careof, state, pin, street, locality, house, postoffice, subDistrict, district, vtc, landmark, null, 1);
 
                         } else {
-
-                            captchagebneration();
+                            AppData.AADAHARNUMBER = binding.etAadhar.getText().toString();
+                            Intent intent = new Intent(TEMPAadharQRActivity.this, TempProfileActivity.class);
+                            intent.putExtra("namevalue", "");
+                            intent.putExtra("dobvalue", "");
+                            intent.putExtra("gendervalue", "");
+                            intent.putExtra("careof", "");
+                            intent.putExtra("state", "");
+                            intent.putExtra("pin", "");
+                            intent.putExtra("street", "");
+                            intent.putExtra("locality","");
+                            intent.putExtra("house", "");
+                            intent.putExtra("postoffice", "");
+                            intent.putExtra("subDistrict",  "");
+                            intent.putExtra("district", "");
+                            intent.putExtra("vtc", "");
+                            intent.putExtra("landmark", "");
+                            intent.putExtra("aadhaarflag", aadharflag);
+                            startActivity(intent);
+                            finish();
 
                         }
                     }
@@ -781,7 +800,25 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError error) {
                         pd.dismiss();
-                        captchagebneration();
+                        AppData.AADAHARNUMBER = binding.etAadhar.getText().toString();
+                        Intent intent = new Intent(TEMPAadharQRActivity.this, TempProfileActivity.class);
+                        intent.putExtra("namevalue", "");
+                        intent.putExtra("dobvalue", "");
+                        intent.putExtra("gendervalue", "");
+                        intent.putExtra("careof", "");
+                        intent.putExtra("state", "");
+                        intent.putExtra("pin", "");
+                        intent.putExtra("street", "");
+                        intent.putExtra("locality","");
+                        intent.putExtra("house", "");
+                        intent.putExtra("postoffice", "");
+                        intent.putExtra("subDistrict",  "");
+                        intent.putExtra("district", "");
+                        intent.putExtra("vtc", "");
+                        intent.putExtra("landmark", "");
+                        intent.putExtra("aadhaarflag", aadharflag);
+                        startActivity(intent);
+                        finish();
                     }
                 });
     }

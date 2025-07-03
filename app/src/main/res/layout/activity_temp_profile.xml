@@ -907,7 +907,6 @@
                                     android:layout_marginLeft="10dp"
                                     android:background="@null"
                                     android:digits="1234567890"
-                                    android:enabled="false"
                                     android:inputType="number"
                                     android:maxLength="10"
                                     android:paddingLeft="10dp"
@@ -1355,7 +1354,6 @@
                                     android:layout_height="80dp"
                                     android:layout_marginLeft="10dp"
                                     android:background="@drawable/lldesign9"
-                                    android:enabled="false"
                                     android:paddingLeft="10dp"
                                     android:hint="--"
                                     android:textColor="@android:color/black"
@@ -1397,7 +1395,7 @@
                                 android:layout_weight="1">
 
                                 <EditText
-                                    android:enabled="false"
+
                                     android:id="@+id/etPerPinCode"
                                     android:layout_width="match_parent"
                                     android:layout_height="30dp"
@@ -1452,7 +1450,7 @@
                                     android:background="@drawable/lldesign9">
 
                                     <Spinner
-                                        android:enabled="false"
+
                                         android:id="@+id/spPermanentState"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"></Spinner>

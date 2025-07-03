@@ -455,6 +455,9 @@ public class LoginActivity extends AppCompatActivity {
                                     String Genius_Access_Token=obj.optString("Genius_Access_Token").trim();
                                     pref.saveAccessToken(Genius_Access_Token);
                                     ConsentFlag=obj.optString("ConsentFlag");
+                                    String LeaveBalanceView=obj.optString("LeaveBalanceView");
+                                    AppData.LEAVE_BALANCE_VIEW_FLAG=LeaveBalanceView;
+
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
