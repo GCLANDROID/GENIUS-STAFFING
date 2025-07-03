@@ -914,6 +914,7 @@ public class TempBankActivity extends AppCompatActivity {
                                 mainobj.put("details",jar);
                                 mainobj.put("Document","Bank");
                                 Log.d("mainobj", String.valueOf(mainobj));
+                                //
                                 uploadBankDetails(mainobj);
                             } catch (JSONException e) {
                                 e.printStackTrace();
