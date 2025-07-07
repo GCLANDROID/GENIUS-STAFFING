@@ -2,6 +2,7 @@ package io.cordova.myapp00d753.activity;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,6 +26,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -78,6 +80,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.SKF.SKF_AttendanceRegularizationActivity;
+import io.cordova.myapp00d753.activity.attendance.MetsoAttendanceActivity;
 import io.cordova.myapp00d753.adapter.MenuItemAdapter;
 import io.cordova.myapp00d753.adapter.NotiAdapter;
 import io.cordova.myapp00d753.adapter.PFDocumentAdapter;
@@ -155,9 +158,11 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
             acceptance();
         }
         getPFURL();
-
+        Open_UAN_Activation_Popup();
         onClick();
     }
+
+
 
     private void initialize() {
         pref = new Pref(EmployeeDashBoardActivity.this);
@@ -489,7 +494,6 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
     }
 
     public void getPFURL() {
-
         String surl = AppData.url+"get_PFManagementTripleA?MasterID="+pref.getMasterId()+"&SecurityCode="+pref.getSecurityCode();
         Log.d("inputLogin", surl);
 
@@ -1778,7 +1782,60 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         alerDialog1.show();
     }
 
+    private void Open_UAN_Activation_Popup() {
+        Dialog UAN_Activation_Popup = new Dialog(EmployeeDashBoardActivity.this,R.style.CustomDialogNew2);
+        UAN_Activation_Popup.setContentView(R.layout.uan_activation_dialog);
+        UAN_Activation_Popup.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        UAN_Activation_Popup.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
+        ImageView imgCancel = UAN_Activation_Popup.findViewById(R.id.imgCancel);
+        Button btnUanActivation = UAN_Activation_Popup.findViewById(R.id.btnUanActivation);
+        TextView txtUanBen = UAN_Activation_Popup.findViewById(R.id.txtUanBen);
+        imgCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UAN_Activation_Popup.dismiss();
+            }
+        });
+
+        btnUanActivation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "https://unifiedportal-mem.epfindia.gov.in/memberinterface/";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
+            }
+        });
+
+        txtUanBen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                open_uan_activation_benefits_popup();
+            }
+        });
+        UAN_Activation_Popup.show();
+    }
+
+    private void open_uan_activation_benefits_popup() {
+        Dialog UAN_Activation_Popup = new Dialog(EmployeeDashBoardActivity.this,R.style.CustomDialogNew2);
+        UAN_Activation_Popup.setContentView(R.layout.uan_activation_dialog);
+        UAN_Activation_Popup.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        UAN_Activation_Popup.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        ImageView imgCancel = UAN_Activation_Popup.findViewById(R.id.imgCancel);
+        LinearLayout llButtonLayout = UAN_Activation_Popup.findViewById(R.id.llButtonLayout);
+        ImageView imgModal = UAN_Activation_Popup.findViewById(R.id.imgModal);
+        imgModal.setImageResource(R.mipmap.post_activation_benefits_2);
+        llButtonLayout.setVisibility(View.GONE);
+        imgCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UAN_Activation_Popup.dismiss();
+            }
+        });
+
+        UAN_Activation_Popup.show();
+    }
 
 }
 
