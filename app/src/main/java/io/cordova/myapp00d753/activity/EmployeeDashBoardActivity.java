@@ -158,7 +158,9 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
             acceptance();
         }
         getPFURL();
-        Open_UAN_Activation_Popup();
+        if (pref.getUAN_Active().equals("0")){
+            Open_UAN_Activation_Popup();
+        }
         onClick();
     }
 
@@ -1791,6 +1793,14 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         ImageView imgCancel = UAN_Activation_Popup.findViewById(R.id.imgCancel);
         Button btnUanActivation = UAN_Activation_Popup.findViewById(R.id.btnUanActivation);
         TextView txtUanBen = UAN_Activation_Popup.findViewById(R.id.txtUanBen);
+        Log.e(TAG, "Open_UAN_Activation_Popup: "+pref.getUAN_Mandatory());
+        if (pref.getUAN_Mandatory().equals("1")){
+            // TODO: 1 - Mandatory, User unable to close popup
+            imgCancel.setVisibility(View.GONE);
+        } else {
+            // TODO: 0 - Not-mandatory, User able to close popup
+            imgCancel.setVisibility(View.VISIBLE);
+        }
         imgCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
