@@ -1038,5 +1038,22 @@ public class Pref {
         return _pref.getString("company_name","");
     }
 
+    public void saveUAN_Active(String UAN_Active){
+        _editorPref.putString("UAN_Active", UAN_Active);
+        _editorPref.commit();
+    }
+
+    public String getUAN_Active(){
+        return _pref.getString("UAN_Active","");
+    }
+
+    public void saveUAN_Mandatory(String UAN_Mandatory){
+        _editorPref.putString("UAN_Mandatory", UAN_Mandatory);
+        _editorPref.commit();
+    }
+
+    public String getUAN_Mandatory(){
+        return _pref.getString("UAN_Mandatory","");
+    }
 }
 
