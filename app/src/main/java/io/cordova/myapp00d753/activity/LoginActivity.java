@@ -458,10 +458,8 @@ public class LoginActivity extends AppCompatActivity {
                                     String LeaveBalanceView=obj.optString("LeaveBalanceView");
                                     AppData.LEAVE_BALANCE_VIEW_FLAG=LeaveBalanceView;
                                     String UAN_Active = obj.optString("UAN_Active");
-                                    Log.e("UAN_Active", "UAN_Active: "+UAN_Active );
                                     pref.saveUAN_Active(UAN_Active);
                                     String UAN_Mandatory = obj.optString("UAN_Mandatory");
-                                    Log.e("UAN_Active", "UAN_Mandatory: "+UAN_Mandatory );
                                     pref.saveUAN_Mandatory(UAN_Mandatory);
                                 }
                             } catch (JSONException e) {
