@@ -486,7 +486,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
 
 
         AndroidNetworking.upload(AppData.url + "gcl_post_attedanceGeofenceMetso")
-                .addMultipartParameter("AEMEmployeeID", MasterID)
+                .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
                 .addMultipartParameter("Address", address)
                 .addMultipartParameter("Shiftid", Shiftid)
                 .addMultipartParameter("Siteid", Siteid)
