@@ -465,7 +465,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         imgHome.setOnClickListener(this);
         if (pref.getEmpClintId().equals("AEMCLI0910000343") ||
                 pref.getEmpClintId().equals("AEMCLI0910000315") ||
-                pref.getEmpClintId().equals("AEMCLI2110001671") ||
+                pref.getEmpClintId().equals(ClientID.METSO) ||
                 pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID) ||
                 pref.getEmpClintId().equals(ClientID.SKF_ITS) ||
                 pref.getEmpClintId().equals(ClientID.SKF_MSP) ||
@@ -740,7 +740,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
 
             }
         } else if (view == llAttendanceReport) {
-            if (pref.getEmpClintId().equals("AEMCLI2110001671")) {
+            if (pref.getEmpClintId().equals(ClientID.METSO)) {
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, MetsoAttendanceReportActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -756,7 +756,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             }
         } else if (view == llBackAttendance) {
             Log.e(TAG, "onClick: llBackAttendance");
-            if (pref.getEmpClintId().equals("AEMCLI2110001671")) {
+            if (pref.getEmpClintId().equals(ClientID.METSO)) {
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, MetsoAttendanceRegularizationActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -776,7 +776,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             }
         } else if (view == llAttenRegularize) {
             Log.e(TAG, "onClick: llAttenRegularize");
-            if (pref.getEmpClintId().equals("AEMCLI2110001671")) {
+            if (pref.getEmpClintId().equals(ClientID.METSO)) {
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, MetsoAttendanceRegularizationActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -786,7 +786,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 startActivity(intent);
             }
         } else if (view == llWeekly) {
-            if (pref.getEmpClintId().equals("AEMCLI2210001707") || pref.getEmpClintId().equals("AEMCLI2210001697") || pref.getEmpClintId().equals("AEMCLI2210001698") || pref.getEmpClintId().equals("AEMCLI2310001805")|| pref.getEmpClintId().equals("AEMCLI2110001671")|| pref.getEmpClintId().equals(ClientID.HONASA)|| pref.getEmpClintId().equals(ClientID.MAHINDRA_MAHINDRA)) {
+            if (pref.getEmpClintId().equals("AEMCLI2210001707") || pref.getEmpClintId().equals("AEMCLI2210001697") || pref.getEmpClintId().equals("AEMCLI2210001698") || pref.getEmpClintId().equals("AEMCLI2310001805")|| pref.getEmpClintId().equals(ClientID.METSO)|| pref.getEmpClintId().equals(ClientID.HONASA)|| pref.getEmpClintId().equals(ClientID.MAHINDRA_MAHINDRA)) {
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, WeeklyOffAttendanceActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -1504,13 +1504,12 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-        } else if (pref.getEmpClintId().equals("AEMCLI2110001671")) {
-            //
+        } else if (pref.getEmpClintId().equals(ClientID.METSO)) {
+            //AEMCLI2110001671
             Intent intent = new Intent(AttenDanceDashboardActivity.this, MetsoAttendanceActivity.class);
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-
         } else if (pref.getEmpClintId().equals("AEMCLI1110000593")) {
             Intent intent = new Intent(AttenDanceDashboardActivity.this, BoschAttendanceActivity.class);
             intent.putExtra("intt", "2");
