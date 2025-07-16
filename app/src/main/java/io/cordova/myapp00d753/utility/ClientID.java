@@ -16,4 +16,5 @@ public class ClientID {
     public static String TATA_STEEL = "AEMCLI2410001868";
     public static String SHALIMAR_WIRES = "AEMCLI2110001658";
     public static String CBRE_SOUTH_ASIA = "AEMCLI1410000807";
+    public static String METSO = "AEMCLI2510001972"; //TODO: Old Metso client id : AEMCLI2110001671
 }
