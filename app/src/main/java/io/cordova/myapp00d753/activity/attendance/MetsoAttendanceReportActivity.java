@@ -1,16 +1,24 @@
 package io.cordova.myapp00d753.activity.attendance;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -39,11 +47,16 @@ public class MetsoAttendanceReportActivity extends AppCompatActivity {
     Pref pref;
     String sYear,month;
     LinearLayout llLoder,llMain,llNodata,llAgain,llSearch;
-    ImageView imgBack,imgHome,imgAgain;
+    ImageView imgBack,imgHome,imgAgain,imgSearch;
     ProgressBar progressBar;
     ArrayList<AttendanceModule> attendabceInfiList;
     MetsoAttendanceReportAdapter metsoAttendanceReportAdapter;
     RecyclerView rvAttendanceReport;
+    TextView tvYear,tvMonth;
+    private AlertDialog alertDialog,alertDialog1,alertDialog2;
+    String year;
+    public static int mPageCount = 0;
+    int y;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +68,7 @@ public class MetsoAttendanceReportActivity extends AppCompatActivity {
     private void initView() {
         imgBack=(ImageView)findViewById(R.id.imgBack);
         imgHome=(ImageView)findViewById(R.id.imgHome);
+        imgSearch=(ImageView)findViewById(R.id.imgSearch);
         llSearch=(LinearLayout)findViewById(R.id.llSearch);
         llLoder=(LinearLayout)findViewById(R.id.llWLLoader) ;
         llMain=(LinearLayout)findViewById(R.id.llMain);
@@ -66,8 +80,8 @@ public class MetsoAttendanceReportActivity extends AppCompatActivity {
         rvAttendanceReport.setLayoutManager(new LinearLayoutManager(MetsoAttendanceReportActivity.this));
 
         pref = new Pref(MetsoAttendanceReportActivity.this);
-        int year = Calendar.getInstance().get(Calendar.YEAR);
-        sYear=String.valueOf(year);
+        y = Calendar.getInstance().get(Calendar.YEAR);
+        sYear=String.valueOf(y);
         int m=Calendar.getInstance().get(Calendar.MONTH)+1;
         if (m==1){
             month="January";
@@ -117,12 +131,74 @@ public class MetsoAttendanceReportActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        imgSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMonthListPopup();
+            }
+        });
+    }
+
+    private void openMonthListPopup() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MetsoAttendanceReportActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.attendancereportsearch, null);
+        dialogBuilder.setView(dialogView);
+        LinearLayout llYear=(LinearLayout)dialogView.findViewById(R.id.llYear);
+        tvYear=(TextView) dialogView.findViewById(R.id.tvYear);
+        tvMonth=(TextView)dialogView.findViewById(R.id.tvMonth);
+        ImageView imgCancel=(ImageView)dialogView.findViewById(R.id.imgCancel);
+
+        llYear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showYearDialog();
+            }
+        });
+
+        tvYear.setText(sYear);
+        LinearLayout llMonth=(LinearLayout)dialogView.findViewById(R.id.llMonth);
+        llMonth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showMonthDialog();
+
+            }
+        });
+        tvMonth.setText(month);
+
+        Button btnSubmit=(Button)dialogView.findViewById(R.id.btnSubmit);
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPageCount=1;
+                attendabceInfiList.clear();
+                getMetsoAttandanceReport();
+                alertDialog.dismiss();
+            }
+        });
+        imgCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog = dialogBuilder.create();
+        alertDialog.setCancelable(true);
+        Window window = alertDialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        alertDialog.show();
     }
 
     private void getMetsoAttandanceReport() {
         /*String surl = AppData.url+"get_GCLSelfAttendanceWoLeave?AEMConsultantID="+pref.getEmpConId()+"&AEMClientID="+pref.getEmpClintId()+"&AEMClientOfficeID="+pref.getEmpClintOffId()+"&AEMEmployeeID="+pref.getEmpId()+"&CurrentPage=0&AID=0&ApproverStatus=4&YearVal="+year+"&MonthName="+month+"&WorkingStatus=1&SecurityCode="+pref.getSecurityCode()+"&DbOperation=8&AttIds=null";
 
         Log.d("input",surl);*/
+        llLoder.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.GONE);
+        llNodata.setVisibility(View.GONE);
+        llAgain.setVisibility(View.GONE);
         Log.e(TAG, "getMetsoAttandanceReport: AEMConsultantID: "+pref.getEmpConId()
                 +"\nAEMClientID: "+pref.getEmpClintId()
                 +"\nAEMClientOfficeID: "+pref.getEmpClintOffId()
@@ -205,7 +281,7 @@ public class MetsoAttendanceReportActivity extends AppCompatActivity {
                             } else {
                                 //attendanceAdapter.notifyDataSetChanged();
                                 llLoder.setVisibility(View.GONE);
-                                llMain.setVisibility(View.VISIBLE);
+                                llMain.setVisibility(View.GONE);
                                 llNodata.setVisibility(View.VISIBLE);
                                 llAgain.setVisibility(View.GONE);
                                 //Toast.makeText(getApplicationContext(),"No data found",Toast.LENGTH_LONG).show();
@@ -229,5 +305,230 @@ public class MetsoAttendanceReportActivity extends AppCompatActivity {
 
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
+    }
+
+    private void showYearDialog(){
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MetsoAttendanceReportActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.dialog_year, null);
+        dialogBuilder.setView(dialogView);
+        final TextView tvYear1=(TextView)dialogView.findViewById(R.id.tvYear1);
+        final TextView tvYear2=(TextView)dialogView.findViewById(R.id.tvYear2);
+        final TextView tvYear3=(TextView)dialogView.findViewById(R.id.tvYear3);
+        LinearLayout llY1=(LinearLayout)dialogView.findViewById(R.id.llY1);
+        LinearLayout llY2=(LinearLayout)dialogView.findViewById(R.id.llY2);
+        LinearLayout llY3=(LinearLayout)dialogView.findViewById(R.id.llY3);
+
+        int pastx1=y-2;
+        String pasty1=String.valueOf(pastx1);
+        tvYear1.setText(pasty1);
+
+        int pastx2=y-1;
+        String pasty2=String.valueOf(pastx2);
+        tvYear2.setText(pasty2);
+
+        String pastx3=String.valueOf(y);
+        tvYear3.setText(pastx3);
+
+        ImageView imgCancel=(ImageView)dialogView.findViewById(R.id.imgCancel);
+        imgCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog1.dismiss();
+
+
+            }
+        });
+
+
+        llY3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //year=tvYear3.getText().toString();
+                sYear=tvYear3.getText().toString();
+                Log.d("yrtrr",sYear);
+                tvYear.setText(sYear);
+                alertDialog1.dismiss();
+
+            }
+        });
+
+        llY2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //year=tvYear2.getText().toString();
+                sYear=tvYear2.getText().toString();
+                alertDialog1.dismiss();
+                tvYear.setText(sYear);
+                Log.d("ttt",sYear);
+            }
+        });
+
+        llY1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //year=tvYear1.getText().toString();
+                sYear=tvYear1.getText().toString();
+                alertDialog1.dismiss();
+                tvYear.setText(sYear);
+                Log.d("ttt",sYear);
+            }
+        });
+
+        alertDialog1= dialogBuilder.create();
+        alertDialog1.setCancelable(true);
+        Window window = alertDialog1.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        alertDialog1.show();
+    }
+
+    private void showMonthDialog(){
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MetsoAttendanceReportActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.dialog_month, null);
+        dialogBuilder.setView(dialogView);
+        LinearLayout llM1=(LinearLayout)dialogView.findViewById(R.id.llM1);
+        LinearLayout llM2=(LinearLayout)dialogView.findViewById(R.id.llM2);
+        LinearLayout llM3=(LinearLayout)dialogView.findViewById(R.id.llM3);
+        LinearLayout llM4=(LinearLayout)dialogView.findViewById(R.id.llM4);
+        LinearLayout llM5=(LinearLayout)dialogView.findViewById(R.id.llM5);
+        LinearLayout llM6=(LinearLayout)dialogView.findViewById(R.id.llM6);
+        LinearLayout llM7=(LinearLayout)dialogView.findViewById(R.id.llM7);
+        LinearLayout llM8=(LinearLayout)dialogView.findViewById(R.id.llM8);
+        LinearLayout llM9=(LinearLayout)dialogView.findViewById(R.id.llM9);
+        LinearLayout llM10=(LinearLayout)dialogView.findViewById(R.id.llM10);
+        LinearLayout llM11=(LinearLayout)dialogView.findViewById(R.id.llM111);
+        LinearLayout llM112=(LinearLayout)dialogView.findViewById(R.id.llM12);
+
+        final TextView tvJan=(TextView)dialogView.findViewById(R.id.tvJan);
+        tvJan.setText("January");
+        final TextView tvFeb=(TextView)dialogView.findViewById(R.id.tvFeb);
+        final TextView tvMarch=(TextView)dialogView.findViewById(R.id.tvMarch);
+        final TextView tvApril=(TextView)dialogView.findViewById(R.id.tvApril);
+        final TextView tvMay=(TextView)dialogView.findViewById(R.id.tvMay);
+        final TextView tvJune=(TextView)dialogView.findViewById(R.id.tvJune);
+        final TextView tvJuly=(TextView)dialogView.findViewById(R.id.tvJuly);
+        final TextView tvAugust=(TextView)dialogView.findViewById(R.id.tvAugust);
+        final TextView tvSept=(TextView)dialogView.findViewById(R.id.tvSeptember);
+        final TextView tvOct=(TextView)dialogView.findViewById(R.id.tvOct);
+        final TextView tvNov=(TextView)dialogView.findViewById(R.id.tvNovember);
+        final TextView tvDec=(TextView)dialogView.findViewById(R.id.tvDecember);
+
+        llM1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                month=tvJan.getText().toString();
+                Log.d("monnn",month);
+                tvMonth.setText(month);
+                alertDialog2.dismiss();
+            }
+        });
+        llM2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                month=tvFeb.getText().toString();
+                tvMonth.setText(month);
+                alertDialog2.dismiss();
+            }
+        });
+
+        llM3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                month=tvMarch.getText().toString();
+                tvMonth.setText(month);
+                alertDialog2.dismiss();
+            }
+        });
+        llM4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                month=tvApril.getText().toString();
+                tvMonth.setText(month);
+                alertDialog2.dismiss();
+            }
+        });
+        llM5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                month=tvMay.getText().toString();
+                tvMonth.setText(month);
+                alertDialog2.dismiss();
+            }
+        });
+
+        llM6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                month=tvJune.getText().toString();
+                tvMonth.setText(month);
+                alertDialog2.dismiss();
+            }
+        });
+        llM7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                month=tvJuly.getText().toString();
+                tvMonth.setText(month);
+                alertDialog2.dismiss();
+            }
+        });
+        llM8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                month=tvAugust.getText().toString();
+                tvMonth.setText(month);
+                alertDialog2.dismiss();
+            }
+        });
+        llM9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                month=tvSept.getText().toString();
+                tvMonth.setText(month);
+                alertDialog2.dismiss();
+            }
+        });
+        llM10.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                month=tvOct.getText().toString();
+                tvMonth.setText(month);
+                alertDialog2.dismiss();
+            }
+        });
+        llM11.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                month=tvNov.getText().toString();
+                tvMonth.setText(month);
+                alertDialog2.dismiss();
+            }
+        });
+        llM112.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                month=tvDec.getText().toString();
+                tvMonth.setText(month);
+                alertDialog2.dismiss();
+            }
+        });
+        ImageView imgCancel=(ImageView)dialogView.findViewById(R.id.imgCancel);
+        imgCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog2.dismiss();
+            }
+        });
+
+
+        alertDialog2 = dialogBuilder.create();
+        alertDialog2.setCancelable(true);
+        Window window = alertDialog2.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        alertDialog2.show();
+
     }
 }
