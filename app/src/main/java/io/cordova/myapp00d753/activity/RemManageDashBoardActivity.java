@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.metso.MetsoNewReimbursementClaimActivity;
 import io.cordova.myapp00d753.activity.metso.MetsoReimbursementDeleteActivity;
+import io.cordova.myapp00d753.utility.ClientID;
 import io.cordova.myapp00d753.utility.Pref;
 
 public class RemManageDashBoardActivity extends AppCompatActivity {
@@ -48,7 +49,7 @@ public class RemManageDashBoardActivity extends AppCompatActivity {
                     Intent intent = new Intent(RemManageDashBoardActivity.this, RecktitRemActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
-                } else if (pref.getEmpClintId().equals("AEMCLI2110001671")) {
+                } else if (pref.getEmpClintId().equals(ClientID.METSO)) {
                     Intent intent = new Intent(RemManageDashBoardActivity.this, MetsoNewReimbursementClaimActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
@@ -68,7 +69,7 @@ public class RemManageDashBoardActivity extends AppCompatActivity {
         llDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (pref.getEmpClintId().equals("AEMCLI2110001671")) {
+                if (pref.getEmpClintId().equals(ClientID.METSO)) {
                     Intent intent = new Intent(RemManageDashBoardActivity.this, MetsoReimbursementDeleteActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
