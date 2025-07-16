@@ -19,6 +19,7 @@ import io.cordova.myapp00d753.fragment.ApproverFragment;
 import io.cordova.myapp00d753.fragment.DetailsFragment;
 import io.cordova.myapp00d753.fragment.LeaveAdjustmentFragment;
 import io.cordova.myapp00d753.fragment.LeaveBalanceReportFragment;
+import io.cordova.myapp00d753.utility.ClientID;
 import io.cordova.myapp00d753.utility.Pref;
 
 
@@ -33,7 +34,7 @@ public class LeaveApplicationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leave_application);
         initView();
-        if (pref.getEmpClintId().equalsIgnoreCase("AEMCLI2110001671")) {
+        if (pref.getEmpClintId().equalsIgnoreCase(ClientID.METSO)) {
             loadMetsoApplicationFragment();
         }else {
             loadApplicationFragment();
