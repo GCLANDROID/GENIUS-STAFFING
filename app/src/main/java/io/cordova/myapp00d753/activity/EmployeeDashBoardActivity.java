@@ -88,6 +88,7 @@ import io.cordova.myapp00d753.module.MenuItemModel;
 import io.cordova.myapp00d753.module.PFDocumentModule;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
+import io.cordova.myapp00d753.utility.ClientID;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.Util;
@@ -601,7 +602,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                 }/*else if (pref.getEmpClintId().equals("AEMCLI0910000315")){
                                     itemList.add(new MenuItemModel("Interview","300"));
                                 }*/
-                                else if (pref.getEmpClintId().equals("AEMCLI2110001671")){
+                                else if (pref.getEmpClintId().equals(ClientID.METSO)){
                                     itemList.add(new MenuItemModel("PMS","201"));
                                 }else if (pref.getEmpClintId().equals("AEMCLI2310001780")){
                                     itemList.add(new MenuItemModel("Sales Management","4"));
