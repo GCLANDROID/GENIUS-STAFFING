@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.metso.MetsoReimbursementReportActivity;
+import io.cordova.myapp00d753.utility.ClientID;
 import io.cordova.myapp00d753.utility.Pref;
 
 public class RemDashBoardActivity extends AppCompatActivity {
@@ -62,7 +63,7 @@ public class RemDashBoardActivity extends AppCompatActivity {
         llReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(pref.getEmpClintId().equals("AEMCLI2110001671")){
+                if(pref.getEmpClintId().equals(ClientID.METSO)){
                     Intent intent=new Intent(RemDashBoardActivity.this, MetsoReimbursementReportActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
