@@ -125,7 +125,7 @@ public class LeaveAdjustmentFragment extends Fragment {
         }*/
         lnAddApplication = (LinearLayout) view.findViewById(R.id.lnAddApplication);
         next = "<font color='#EE0000'>*</font>";
-        if (pref.getEmpClintId().equals("AEMCLI2110001671")
+        if (pref.getEmpClintId().equals(ClientID.METSO)
                 || pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID)
                 || pref.getEmpClintId().equals(ClientID.SKF_ITS)
                 || pref.getEmpClintId().equals(ClientID.SKF_MSP)) {
