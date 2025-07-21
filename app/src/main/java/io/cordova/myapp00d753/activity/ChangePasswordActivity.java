@@ -1,12 +1,15 @@
 package io.cordova.myapp00d753.activity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
@@ -22,6 +25,7 @@ import android.widget.Toast;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -44,10 +48,11 @@ import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
+import io.cordova.myapp00d753.utility.ShowDialog;
 
 
 public class ChangePasswordActivity extends AppCompatActivity {
-
+    private static final String TAG = "ChangePasswordActivity";
     TextView tvNewPassword, tvConfirmPassword;
     EditText etNewPassword, etConfirmPassword;
     Button btnUpdate,btnCancel;
@@ -63,8 +68,9 @@ public class ChangePasswordActivity extends AppCompatActivity {
     TextView tvOldPassword;
     EditText etOldPassword;
     AlertDialog alerDialog1;
-
-
+    TextView tvTickCross1,tvTickCross2,tvTickCross3,tvTickCross4,tvTickCross5,tvPasswordLength,tvUpperCase,tvLowerCase,tvCheckNumber,tvSpecialCharacter;
+    int GreenColor,RedColor;
+    boolean passwordPolicyStatus;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,8 +86,18 @@ public class ChangePasswordActivity extends AppCompatActivity {
         tvOldPassword = (TextView) findViewById(R.id.tvOldPassword);
         btnUpdate = (Button) findViewById(R.id.btnUpdate);
         status=getIntent().getStringExtra("goingstatus");
-
-
+        tvTickCross1 = findViewById(R.id.tvTickCross1);
+        tvTickCross2 = findViewById(R.id.tvTickCross2);
+        tvTickCross3 = findViewById(R.id.tvTickCross3);
+        tvTickCross4 = findViewById(R.id.tvTickCross4);
+        tvTickCross5 = findViewById(R.id.tvTickCross5);
+        tvPasswordLength = findViewById(R.id.tvPasswordLength);
+        tvUpperCase = findViewById(R.id.tvUpperCase);
+        tvLowerCase = findViewById(R.id.tvLowerCase);
+        tvCheckNumber = findViewById(R.id.tvCheckNumber);
+        tvSpecialCharacter = findViewById(R.id.tvSpecialCharacter);
+        GreenColor = ContextCompat.getColor(this, R.color.designcolor);
+        RedColor = ContextCompat.getColor(this, R.color.misscolor);
         String color = "<font color='#EE0000'>*</font>";
 
         newPassword="New Password:";
@@ -126,27 +142,31 @@ public class ChangePasswordActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (etNewPassword.getText().toString().length() > 0) {
-                    if (etConfirmPassword.getText().toString().length() > 0) {
-                        if (etNewPassword.getText().toString().equals(etConfirmPassword.getText().toString())) {
-                            if (etOldPassword.getText().toString().length()>0) {
+                    if (passwordPolicyStatus){
+                        if (etConfirmPassword.getText().toString().length() > 0) {
+                            if (etNewPassword.getText().toString().equals(etConfirmPassword.getText().toString())) {
+                                if (etOldPassword.getText().toString().length()>0) {
 
 
-                                changePassword();
-                            }else {
-                                etOldPassword.setError("PLease enter old password");
-                                etOldPassword.requestFocus();
+                                    changePassword();
+                                }else {
+                                    etOldPassword.setError("PLease enter old password");
+                                    etOldPassword.requestFocus();
+                                }
+
+                            } else {
+                                etConfirmPassword.setError("Confirm password should be same with new password");
+                                etConfirmPassword.requestFocus();
                             }
 
                         } else {
-                            etConfirmPassword.setError("Confirm password should be same with new password");
+                            etConfirmPassword.setError("Please enter confirm Password");
                             etConfirmPassword.requestFocus();
                         }
-
                     } else {
-                        etConfirmPassword.setError("Please enter confirm Password");
-                        etConfirmPassword.requestFocus();
+                        etNewPassword.setError("Enter a valid password as per the password policy.");
+                        etNewPassword.requestFocus();
                     }
-
                 } else {
                     etNewPassword.setError("Please enter new Password");
                     etNewPassword.requestFocus();
@@ -178,7 +198,82 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 finish();
             }
         });
+        etNewPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                passwordPolicyStatus = validatePassword();
+            }
+        });
+    }
+
+    private boolean validatePassword() {
+        boolean lengthCheck,upperCheck,lowerCheck,numberCheck,specialCharCheck;
+        if (isLengthValid(etNewPassword.getText().toString().trim())){
+            tvTickCross1.setText(R.string.tick_text);
+            tvTickCross1.setTextColor(GreenColor);
+            tvPasswordLength.setTextColor(GreenColor);
+            lengthCheck = true;
+        } else {
+            tvTickCross1.setText(R.string.cross_text);
+            tvTickCross1.setTextColor(RedColor);
+            tvPasswordLength.setTextColor(RedColor);
+            lengthCheck = false;
+        }
+        if(hasUpperCase(etNewPassword.getText().toString().trim())){
+            tvTickCross2.setText(R.string.tick_text);
+            tvTickCross2.setTextColor(GreenColor);
+            tvUpperCase.setTextColor(GreenColor);
+            upperCheck = true;
+        } else {
+            tvTickCross2.setText(R.string.cross_text);
+            tvTickCross2.setTextColor(RedColor);
+            tvUpperCase.setTextColor(RedColor);
+            upperCheck = false;
+        }
+        if(hasLowerCase(etNewPassword.getText().toString().trim())){
+            tvTickCross3.setText(R.string.tick_text);
+            tvTickCross3.setTextColor(GreenColor);
+            tvLowerCase.setTextColor(GreenColor);
+            lowerCheck = true;
+        } else {
+            tvTickCross3.setText(R.string.cross_text);
+            tvTickCross3.setTextColor(RedColor);
+            tvLowerCase.setTextColor(RedColor);
+            lowerCheck = false;
+        }
+        if (hasDigit(etNewPassword.getText().toString().trim())){
+            tvTickCross4.setText(R.string.tick_text);
+            tvTickCross4.setTextColor(GreenColor);
+            tvCheckNumber.setTextColor(GreenColor);
+            numberCheck = true;
+        } else {
+            tvTickCross4.setText(R.string.cross_text);
+            tvTickCross4.setTextColor(RedColor);
+            tvCheckNumber.setTextColor(RedColor);
+            numberCheck = false;
+        }
+        if(hasSpecialChar(etNewPassword.getText().toString().trim())){
+            tvTickCross5.setText(R.string.tick_text);
+            tvTickCross5.setTextColor(GreenColor);
+            tvSpecialCharacter.setTextColor(GreenColor);
+            specialCharCheck = true;
+        } else {
+            tvTickCross5.setText(R.string.cross_text);
+            tvTickCross5.setTextColor(RedColor);
+            tvSpecialCharacter.setTextColor(RedColor);
+            specialCharCheck = false;
+        }
+        return lengthCheck && upperCheck && lowerCheck && numberCheck && specialCharCheck;
     }
 
 
@@ -187,6 +282,8 @@ public class ChangePasswordActivity extends AppCompatActivity {
         byte[] oldpassworddata = new byte[0];
         byte[] newpassworddata = new byte[0];
         try {
+            Log.e(TAG, "changePassword: Old Password: "+etOldPassword.getText().toString());
+            Log.e(TAG, "changePassword: New Password: "+etNewPassword.getText().toString());
             oldpassworddata = etOldPassword.getText().toString().getBytes("UTF-8");
             newpassworddata = etNewPassword.getText().toString().getBytes("UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -194,7 +291,8 @@ public class ChangePasswordActivity extends AppCompatActivity {
         }
         String oldpasswordbase64 = Base64.encodeToString(oldpassworddata, Base64.DEFAULT).replaceAll("\\s+", "");;
         String newpasswordbase64 = Base64.encodeToString(newpassworddata, Base64.DEFAULT).replaceAll("\\s+", "");;
-
+        Log.e(TAG, "changePassword: "+oldpasswordbase64);
+        Log.e(TAG, "changePassword: "+newpasswordbase64);
 
         String surl = AppData.url+"gcl_EmployeePasswordChange?MasterID=" + pref.getMasterId() + "&OldPassword=" + oldpasswordbase64 + "&Password=" + newpasswordbase64 + "&SecurityCode=" + pref.getSecurityCode() ;
         Log.d("inputLogin", surl);
@@ -219,11 +317,11 @@ public class ChangePasswordActivity extends AppCompatActivity {
                             if (responseStatus) {
                                 // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
                                 successAlert("Password has been changed successfully");
+                            } else {
+                                ShowDialog.showErrorDialog(ChangePasswordActivity.this,responseText);
                             }
 
                             // boolean _status = job1.getBoolean("status");
-
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(ChangePasswordActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
@@ -274,6 +372,23 @@ public class ChangePasswordActivity extends AppCompatActivity {
         window.setGravity(Gravity.CENTER);
         alerDialog1.show();
     }
+    public static boolean isLengthValid(String password) {
+        return password.length() >= 6 && password.length() <= 12;
+    }
 
+    public static boolean hasUpperCase(String password) {
+        return password.matches(".*[A-Z].*");
+    }
 
+    public static boolean hasLowerCase(String password) {
+        return password.matches(".*[a-z].*");
+    }
+
+    public static boolean hasDigit(String password) {
+        return password.matches(".*\\d.*");
+    }
+
+    public static boolean hasSpecialChar(String password) {
+        return password.matches(".*[^a-zA-Z0-9].*");
+    }
 }

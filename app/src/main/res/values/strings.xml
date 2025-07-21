@@ -44,4 +44,6 @@ local language.</string>
         <item>Friday</item>
         <item>Saturday</item>
     </string-array>
+    <string name="tick_text">\u2714</string>
+    <string name="cross_text">\u2717</string>
 </resources>
