@@ -119,7 +119,8 @@ public class TempProfileActivity extends AppCompatActivity {
     String BloodGroup;
     EditText etESI;
     TextView tvCity,txtPresentCity,txtPermanentCity;
-    String PresentCity="", AEMEmployeeID, Code, Name, DateOfJoining, Department, Designation, Location, DateOfBirth, GuardianName, PermanentAddress, Mobile, EmailID, Phone,EmergencyContact, AEMClientName;
+    String PresentCity="", AEMEmployeeID, Code, Name, DateOfJoining, Department, Designation, Location, DateOfBirth="", GuardianName, PermanentAddress, Mobile, EmailID, Phone,EmergencyContact, AEMClientName;
+
     private static final String SERVER_PATH = AppData.url;
     private AttendanceService uploadService;
     ProgressDialog progressDialog;
@@ -179,7 +180,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
     String esicDOB = "", uanDOB = "", esicGender = "", esicRltionshp = "", uanRltionshp = "", residingIP = "", pfPercantage = "";
     ProgressDialog pd;
-    String namevalue, dobvalue, gendervalue="", careof, state, pin, street, locality, house, postoffice, subDistrict, vtc, district, landmark;
+    String namevalue="", dobvalue, gendervalue="", careof, state, pin, street, locality, house, postoffice, subDistrict, vtc, district, landmark;
     String esic_nominee_gender="";
     Dialog searchHolidayDialog;
     LinearLayout llPermanentCity,llQualification,llInsideMain,llPersonalDetails,llBloodGrp,
@@ -226,6 +227,7 @@ public class TempProfileActivity extends AppCompatActivity {
         tvEmplId = (TextView) findViewById(R.id.tvEmplId);
         tvEmpCode = (TextView) findViewById(R.id.tvEmpCode);
         tvEmpName = (TextView) findViewById(R.id.tvEmpName);
+        Log.e(TAG, "namevalue: "+namevalue);
         tvEmpName.setText(namevalue);
         tvDOJ = (TextView) findViewById(R.id.tvDOJ);
         tvDepartment = (TextView) findViewById(R.id.tvDepartment);
@@ -509,7 +511,10 @@ public class TempProfileActivity extends AppCompatActivity {
                                     tvEmpCode.setText((Code.equals("null"))?"":Code);
 
                                     Name = obj.optString("Name");
-                                    //  tvEmpName.setText(Name);
+                                    if (namevalue.isEmpty() || namevalue == null){
+                                        tvEmpName.setText(Name);
+                                    }
+
 
                                     DateOfJoining = obj.optString("DateOfJoining");
                                     tvDOJ.setText(DateOfJoining);
@@ -531,12 +536,12 @@ public class TempProfileActivity extends AppCompatActivity {
                                         tvGender.setText("");
                                     }
 
-                                    // DateOfBirth = obj.optString("DateOfBirth");
-                                   /* if (!DateOfBirth.equals("")) {
-                                        tvEmpCodeDOB.setText(DateOfBirth);
-                                    } else {
-                                        tvEmpCodeDOB.setText("");
-                                    }*/
+                                    String DateOfBirth_GAPI = obj.optString("DateOfBirth");
+                                    Log.e(TAG, "DateOfBirth: "+DateOfBirth_GAPI+" dobvalue: "+dobvalue);
+                                    if (dobvalue.isEmpty()) {
+                                        tvEmpCodeDOB.setText(DateOfBirth_GAPI);
+                                        DateOfBirth = DateOfBirth_GAPI;
+                                    }
 
                                     GuardianName = obj.optString("GuardianName");
                                     if (careof.equals("")) {
