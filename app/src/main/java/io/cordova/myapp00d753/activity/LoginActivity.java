@@ -461,6 +461,8 @@ public class LoginActivity extends AppCompatActivity {
                                     pref.saveUAN_Active(UAN_Active);
                                     String UAN_Mandatory = obj.optString("UAN_Mandatory");
                                     pref.saveUAN_Mandatory(UAN_Mandatory);
+                                    String Adjustment_Status = obj.optString("Adjustment");
+                                    pref.saveAdjustmentStatus(Adjustment_Status);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

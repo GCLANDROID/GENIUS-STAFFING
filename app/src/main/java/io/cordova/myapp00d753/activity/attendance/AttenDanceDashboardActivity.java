@@ -460,16 +460,9 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             }
         });
         imgHome=(ImageView)findViewById(R.id.imgHome);
-
         tvOK.setOnClickListener(this);
         imgHome.setOnClickListener(this);
-        if (pref.getEmpClintId().equals("AEMCLI0910000343") ||
-                pref.getEmpClintId().equals("AEMCLI0910000315") ||
-                pref.getEmpClintId().equals(ClientID.METSO) ||
-                pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID) ||
-                pref.getEmpClintId().equals(ClientID.SKF_ITS) ||
-                pref.getEmpClintId().equals(ClientID.SKF_MSP) ||
-                pref.getEmpClintId().equals(ClientID.SKY_ROOT)) {
+        if (pref.getAdjustmentStatus().equals("1")) {
             llAdjustment.setVisibility(View.VISIBLE);
         } else {
             llAdjustment.setVisibility(View.GONE);

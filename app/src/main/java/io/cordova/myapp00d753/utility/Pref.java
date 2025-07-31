@@ -1055,5 +1055,14 @@ public class Pref {
     public String getUAN_Mandatory(){
         return _pref.getString("UAN_Mandatory","");
     }
+
+    public void saveAdjustmentStatus(String UAN_Mandatory){
+        _editorPref.putString("Adjustment_Status", UAN_Mandatory);
+        _editorPref.commit();
+    }
+
+    public String getAdjustmentStatus(){
+        return _pref.getString("Adjustment_Status","");
+    }
 }
 
