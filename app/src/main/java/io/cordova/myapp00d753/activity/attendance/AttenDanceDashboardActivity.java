@@ -758,6 +758,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                     || pref.getEmpClintId().equals(ClientID.SKF_MSP)
                     || pref.getEmpClintId().equals(ClientID.HONASA)
                     || pref.getEmpClintId().equals(ClientID.SVF)
+                    || pref.getEmpClintId().equals(ClientID.FED_BANK)
                     || pref.getEmpClintId().equals(ClientID.PROTACTOR_GAMBLEID)) { // SKF Attendance Regularization
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, SKF_AttendanceRegularizationActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
