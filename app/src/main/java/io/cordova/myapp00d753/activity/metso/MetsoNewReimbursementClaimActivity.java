@@ -2364,7 +2364,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                     File pictureFile = (File) data.getExtras().get("picture");
                     Log.d("fjjgk", pictureFile.toString());
                     try {
-                        compressedImageFile = new Compressor(this).compressToFile(pictureFile);
+                        compressedImageFile = new ImageZipper(this).compressToFile(pictureFile);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -2462,7 +2462,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                     Uri uri = data.getData();
                     Log.e(TAG, "onActivityResult: "+uri.getPath());
                     String imagePath = uri.getPath();
-                    if (imagePath.contains("all_external")){
+                    if (imagePath.contains("all_external") || imagePath.contains("document")){
                         pdfFileName = FindDocumentInformation.FileNameFromURL(imagePath);
                         pdfFile = convertInputStreamToFile(uri,pdfFileName);
                         Log.e(TAG, "onActivityResult: "+pdfFile.getAbsolutePath());
@@ -2479,8 +2479,8 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                         }
                         pdfFile = convertInputStreamToFile(uri,pdfFileName);
                         Log.e(TAG, "onActivityResult: Real Path: "+pdfFilePath);
-                        Log.e(TAG, "onActivityResult: PDF name "+pdfFileName);
-                        Log.e(TAG, "onActivityResult: Final PDF path"+pdfFile);
+                        Log.e(TAG, "onActivityResult: PDF name: "+pdfFileName);
+                        Log.e(TAG, "onActivityResult: Final PDF path: "+pdfFile);
                     }
                     imgPDF.setVisibility(View.VISIBLE);
                     imgUnselectPdf.setVisibility(View.VISIBLE);
@@ -3078,21 +3078,21 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
     public void uploadMultipart() {
         //getting name for the pdf
         Log.e(TAG, "uploadMultipart: \nAEMEmployeeID"+ pref.getEmpId()
-                +"\nAEMComponentID"+ comeid
-                +"\nDescription"+ description
-                +"\nReimbursementAmount"+ amount
-                +"\nYear"+ year
-                +"\nMonth"+ month
-                +"\nSecurityCode"+ securitycode
-                +"\nConveyanceTypeId"+ componentId
-                +"\nLocationTypeID"+ "0"
-                +"\nReimbursementDate"+ "0"
-                +"\nCostCentreId"+ CostCentreId
-                +"\nWbsId"+ WbsId
-                +"\nSiteid"+ Siteid
-                +"\nSupervisorID"+ SupervisorID
-                +"\nStartDate"+ startDate
-                +"\nEndDate"+ endDate);
+                +"\nAEMComponentID:"+ comeid
+                +"\nDescription:"+ description
+                +"\nReimbursementAmount;"+ amount
+                +"\nYear:"+ year
+                +"\nMonth:"+ month
+                +"\nSecurityCode:"+ securitycode
+                +"\nConveyanceTypeId:"+ componentId
+                +"\nLocationTypeID:"+ "0"
+                +"\nReimbursementDate:"+ "0"
+                +"\nCostCentreId:"+ CostCentreId
+                +"\nWbsId:"+ WbsId
+                +"\nSiteid:"+ Siteid
+                +"\nSupervisorID:"+ SupervisorID
+                +"\nStartDate:"+ startDate
+                +"\nEndDate:"+ endDate);
 
         //getting the actual path of the pdf
         //TODO: new api
@@ -3641,7 +3641,13 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        if (fileNme == null || fileNme.contains("encoded")){
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+            fileNme = "file_" + timeStamp + ".pdf";
+        }
+
         File file = new File(MetsoNewReimbursementClaimActivity.this.getExternalFilesDir("/").getAbsolutePath(), fileNme);
+
 
         try (FileOutputStream outputStream = new FileOutputStream(file, false)) {
             int read;
