@@ -369,10 +369,14 @@
         <activity
             android:name=".activity.SupSalaryActivity"
             android:screenOrientation="userPortrait" />
-        <activity
+       <!-- <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:exported="true"
-            android:theme="@style/CropImage" />
+            android:theme="@style/CropImage" />-->
+
+        <activity android:name=".CropImage.CropImageActivity"
+            android:exported="true"
+            android:theme="@style/CropImage"/>
 
         <meta-data
             android:name="com.google.android.gms.version"
