@@ -627,7 +627,7 @@ public class MetsoPMSTargetAchivementActivity extends AppCompatActivity {
 
 
     private void getLastYearTargetDetails() {
-        String surl = AppData.url + "gcl_EmployeePMSReport_Metso?MasterID=" + pref.getMasterId() + "&Year=2024&Operation=1&SecurityCode=" + pref.getSecurityCode();
+        String surl = AppData.url + "gcl_EmployeePMSReport_Metso?MasterID=" + pref.getMasterId() + "&Year=2025&Operation=2&SecurityCode=" + pref.getSecurityCode();
         Log.d("attencinput", surl);
         final ProgressDialog progressBar = new ProgressDialog(this);
         progressBar.setCancelable(true);//you can cancel it by pressing back button
