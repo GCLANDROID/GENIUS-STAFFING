@@ -67,8 +67,11 @@ import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 import com.google.android.material.textfield.TextInputEditText;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
+//import com.theartofdev.edmodo.cropper.CropImage;
+//import com.theartofdev.edmodo.cropper.CropImageView;
+
+//import com.canhub.cropper.CropImage;
+//import com.canhub.cropper.CropImageActivity;
 
 import org.json.JSONObject;
 
@@ -82,8 +85,12 @@ import java.util.regex.Pattern;
 
 import io.cordova.myapp00d753.AndroidXCamera.AndroidXCameraActivity;
 
+import io.cordova.myapp00d753.CropImage.CropImage;
+import io.cordova.myapp00d753.CropImage.CropImageView;
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.activity.attendance.AttendanceReportActivity;
+import io.cordova.myapp00d753.activity.metso.MetsoNewReimbursementClaimActivity;
 import io.cordova.myapp00d753.databinding.ActivityBlueDartAttendanceManageBinding;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.GPSTracker;
@@ -112,7 +119,7 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
     double currentLatitude, currentLongitude;
     String lat, longt, address, address1;
     TextView tvAddress;
-
+    ImageView imgBack,imgHome;
     //Permission Code
     private static final int CAMERA_REQUEST_CODE = 200;
     private static final int IMAGE_PICK_CAMERA_CODE = 2001;
@@ -148,7 +155,8 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
         tvAddress = (TextView) findViewById(R.id.tvAddress);
         connectionCheck = new NetworkConnectionCheck(getApplicationContext());
         lnMark = (LinearLayout) findViewById(R.id.lnMark);
-
+        imgBack = (ImageView) findViewById(R.id.imgBack);
+        imgHome = (ImageView) findViewById(R.id.imgHome);
         mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(10 * 1000)        // 10 seconds, in milliseconds
@@ -205,7 +213,20 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
                 attendance();
             }
         });
-
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(BlueDartAttendanceManageActivity.this, EmployeeDashBoardActivity.class);
+                startActivity(intent);
+                finishAffinity();
+            }
+        });
     }
 
 
@@ -318,9 +339,9 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
                     .setCropMenuCropButtonIcon(R.drawable.checked)
                     .setCropMenuCropButtonTitle("Crop")
                     .start(BlueDartAttendanceManageActivity.this);
-        }
+        }*/
         //get cropped image
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+        /*if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 Uri resultUri = result.getUri(); //get image uri
