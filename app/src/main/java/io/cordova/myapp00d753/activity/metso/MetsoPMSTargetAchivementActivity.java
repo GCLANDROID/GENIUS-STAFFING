@@ -9,6 +9,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -516,6 +518,24 @@ public class MetsoPMSTargetAchivementActivity extends AppCompatActivity {
         LinearLayout llApprover = dialogLocationPopUp.findViewById(R.id.llApprover);
         AppCompatButton btnSubmit = dialogLocationPopUp.findViewById(R.id.btnSubmit);
 
+        actApproverName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                Log.e("charSequence", "onTextChanged: "+charSequence);
+                approverID = 0;
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
 
         actApproverName.setAdapter(approverAutoCompleteAdapter);
         actApproverName.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -548,6 +568,9 @@ public class MetsoPMSTargetAchivementActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (actApproverName.getText().toString().trim().isEmpty()){
                     txtErrorApprover.setVisibility(View.VISIBLE);
+                } else if (approverID == 0) {
+                    txtErrorApprover.setVisibility(View.VISIBLE);
+                    txtErrorApprover.setText("Please select an approver name from the search list");
                 } else {
                     // submitOperation();
                     dialogLocationPopUp.cancel();
