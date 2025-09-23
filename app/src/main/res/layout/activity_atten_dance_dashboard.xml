@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/dlMain"
     tools:context=".activity.attendance.AttenDanceDashboardActivity"
-
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <LinearLayout

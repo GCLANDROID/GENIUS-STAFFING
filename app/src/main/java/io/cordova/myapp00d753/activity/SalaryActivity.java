@@ -1,5 +1,6 @@
 package io.cordova.myapp00d753.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -82,14 +83,9 @@ public class SalaryActivity extends AppCompatActivity  {
             //TODO: new api
             JSONObject obj=new JSONObject();
             try {
-                obj.put("AEMConsultantID", "0");
-                obj.put("AEMClientID",JSONObject.NULL);
-                obj.put("MasterID",pref.getMasterId());
+
                 obj.put("AEMEmployeeID",pref.getEmpId());
                 obj.put("SalYear",year);
-                obj.put("SalMonth","jan");
-                obj.put("WorkingStatus","3");
-                obj.put("CurrentPage","1");
                 obj.put("SecurityCode",pref.getSecurityCode());
                 getSalaryList(obj);
             } catch (JSONException e) {
@@ -129,23 +125,18 @@ public class SalaryActivity extends AppCompatActivity  {
         imgAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getSalaryList();
+
                 //TODO: new api
-                /*JSONObject obj=new JSONObject();
+                JSONObject obj=new JSONObject();
                 try {
-                    obj.put("AEMConsultantID", "0");
-                    obj.put("AEMClientID",JSONObject.NULL);
-                    obj.put("MasterID",pref.getMasterId());
+
                     obj.put("AEMEmployeeID",pref.getEmpId());
                     obj.put("SalYear",year);
-                    obj.put("SalMonth","jan");
-                    obj.put("WorkingStatus","3");
-                    obj.put("CurrentPage","1");
                     obj.put("SecurityCode",pref.getSecurityCode());
                     getSalaryList(obj);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }*/
+                }
             }
         });
         imgSearch=(ImageView)findViewById(R.id.imgSearch);
@@ -178,6 +169,8 @@ public class SalaryActivity extends AppCompatActivity  {
                                     String MonthlyNet = obj.optString("MonthlyNet");
                                     String url = obj.optString("url");
                                     SalaryModule salaryModule = new SalaryModule(SalYear, SalMonth,"Rs. "+ MonthlyNet, url);
+                                    salaryModule.setIsPaidService(obj.optInt("IsPaidService"));
+                                    salaryModule.setCharges(obj.optString("Charges"));
                                     salaryList.add(salaryModule);
                                 }
 
@@ -193,6 +186,74 @@ public class SalaryActivity extends AppCompatActivity  {
                                     llNodata.setVisibility(View.GONE);
                                     llAgain.setVisibility(View.GONE);
                                 }
+                            } else {
+                                //Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
+                                llLoader.setVisibility(View.GONE);
+                                llMain.setVisibility(View.GONE);
+                                llNodata.setVisibility(View.VISIBLE);
+                                llAgain.setVisibility(View.GONE);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(SalaryActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "SALARY_LIST_error: "+anError.getErrorBody());
+                        llLoader.setVisibility(View.GONE);
+                        llMain.setVisibility(View.GONE);
+                        llNodata.setVisibility(View.GONE);
+                        llAgain.setVisibility(View.VISIBLE);
+                    }
+                });
+    }
+
+    public void paymentOption(int pos){
+        JSONObject jsonObject=new JSONObject();
+        try {
+            jsonObject.put("AEMEmployeeId",pref.getEmpId());
+            jsonObject.put("SalYear",year);
+            jsonObject.put("SalMonth",salaryList.get(pos).getMonth());
+            jsonObject.put("Charges",salaryList.get(pos).getCharges());
+            jsonObject.put("SecurityCode",pref.getSecurityCode());
+            getPaymentLink(jsonObject);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    private void getPaymentLink(JSONObject jsonObject) {
+        ProgressDialog pd=new ProgressDialog(SalaryActivity.this);
+        pd.setMessage("Please wait...");
+        pd.setCancelable(false);
+        pd.show();
+        Log.e(TAG, "getSalaryList: "+jsonObject);
+        AndroidNetworking.post(AppData.PAYMENT_LINK)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "SALARY_LIST: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            pd.dismiss();
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                Uri uri = Uri.parse(Response_Data); // missing 'http://' will cause crashed
+                                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+
+
                             } else {
                                 //Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
                                 llLoader.setVisibility(View.GONE);
@@ -371,23 +432,18 @@ public class SalaryActivity extends AppCompatActivity  {
                 Log.d("yrtrr", year);
                 tvYear.setText(year);
                 salaryList.clear();
-                getSalaryList();
+
                 //TODO: new api
-               /* JSONObject obj=new JSONObject();
+                JSONObject obj=new JSONObject();
                 try {
-                    obj.put("AEMConsultantID", "0");
-                    obj.put("AEMClientID",JSONObject.NULL);
-                    obj.put("MasterID",pref.getMasterId());
+
                     obj.put("AEMEmployeeID",pref.getEmpId());
                     obj.put("SalYear",year);
-                    obj.put("SalMonth","jan");
-                    obj.put("WorkingStatus","3");
-                    obj.put("CurrentPage","1");
                     obj.put("SecurityCode",pref.getSecurityCode());
                     getSalaryList(obj);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }*/
+                }
                 alertDialog.dismiss();
             }
         });
@@ -399,23 +455,18 @@ public class SalaryActivity extends AppCompatActivity  {
                 alertDialog.dismiss();
                 tvYear.setText(year);
                 salaryList.clear();
-                getSalaryList();
+
                 //TODO: new api
-               /* JSONObject obj=new JSONObject();
+                JSONObject obj=new JSONObject();
                 try {
-                    obj.put("AEMConsultantID", "0");
-                    obj.put("AEMClientID",JSONObject.NULL);
-                    obj.put("MasterID",pref.getMasterId());
+
                     obj.put("AEMEmployeeID",pref.getEmpId());
                     obj.put("SalYear",year);
-                    obj.put("SalMonth","jan");
-                    obj.put("WorkingStatus","3");
-                    obj.put("CurrentPage","1");
                     obj.put("SecurityCode",pref.getSecurityCode());
                     getSalaryList(obj);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }*/
+                }
                 alertDialog.dismiss();
                 Log.d("ttt", year);
             }
@@ -428,23 +479,18 @@ public class SalaryActivity extends AppCompatActivity  {
                 alertDialog.dismiss();
                 tvYear.setText(year);
                 salaryList.clear();
-                getSalaryList();
+
                 //TODO: new api
-                /*JSONObject obj=new JSONObject();
+                JSONObject obj=new JSONObject();
                 try {
-                    obj.put("AEMConsultantID", "0");
-                    obj.put("AEMClientID",JSONObject.NULL);
-                    obj.put("MasterID",pref.getMasterId());
+
                     obj.put("AEMEmployeeID",pref.getEmpId());
                     obj.put("SalYear",year);
-                    obj.put("SalMonth","jan");
-                    obj.put("WorkingStatus","3");
-                    obj.put("CurrentPage","1");
                     obj.put("SecurityCode",pref.getSecurityCode());
                     getSalaryList(obj);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }*/
+                }
                 alertDialog.dismiss();
                 Log.d("ttt", year);
             }

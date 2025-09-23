@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.CollapsingActivity">
+    tools:context=".activity.CollapsingActivity"
+    android:fitsSystemWindows="true">
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

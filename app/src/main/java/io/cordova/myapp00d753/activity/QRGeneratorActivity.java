@@ -36,8 +36,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import androidmads.library.qrgenearator.QRGContents;
-import androidmads.library.qrgenearator.QRGEncoder;
+
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.utility.GPSTracker;
 
@@ -46,7 +45,6 @@ public class QRGeneratorActivity extends AppCompatActivity {
 
     ImageView imgQR;
     Bitmap bitmap;
-    QRGEncoder qrgEncoder;
     GPSTracker gps;
     Double latitude,longitude;
     String latt,longt;
@@ -109,18 +107,7 @@ public class QRGeneratorActivity extends AppCompatActivity {
 
         // setting this dimensions inside our qr code
         // encoder to generate our qr code.
-        qrgEncoder = new QRGEncoder(encryptedString, null, QRGContents.Type.TEXT, dimen);
-        try {
-            // getting our qrcode in the form of bitmap.
-            bitmap = qrgEncoder.encodeAsBitmap();
-            // the bitmap is set inside our image
-            // view using .setimagebitmap method.
-            imgQR.setImageBitmap(bitmap);
-        } catch (WriterException e) {
-            // this method is called for
-            // exception handling.
-            Log.e("Tag", e.toString());
-        }
+
 
         btnDwnload.setOnClickListener(new View.OnClickListener() {
             @Override

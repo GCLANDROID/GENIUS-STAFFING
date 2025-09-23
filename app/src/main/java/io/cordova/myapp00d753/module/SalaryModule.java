@@ -1,7 +1,8 @@
 package io.cordova.myapp00d753.module;
 
 public class SalaryModule {
-    String year,month,amount,surl;
+    String year,month,amount,surl,Charges;
+    int IsPaidService;
 
     public SalaryModule(String year, String month, String amount,String surl) {
         this.year = year;
@@ -40,5 +41,21 @@ public class SalaryModule {
 
     public void setSurl(String surl) {
         this.surl = surl;
+    }
+
+    public String getCharges() {
+        return Charges;
+    }
+
+    public void setCharges(String charges) {
+        Charges = charges;
+    }
+
+    public int getIsPaidService() {
+        return IsPaidService;
+    }
+
+    public void setIsPaidService(int isPaidService) {
+        IsPaidService = isPaidService;
     }
 }

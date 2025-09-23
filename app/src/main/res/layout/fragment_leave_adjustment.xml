@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".fragment.LeaveAdjustmentFragment"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="10dp"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:layout_margin="10dp"

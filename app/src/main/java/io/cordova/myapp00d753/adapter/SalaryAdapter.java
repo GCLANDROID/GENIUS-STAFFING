@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.SalaryActivity;
 import io.cordova.myapp00d753.module.SalaryModule;
 
 public class SalaryAdapter extends RecyclerView.Adapter<SalaryAdapter.MyViewHolder> {
@@ -38,12 +39,24 @@ public class SalaryAdapter extends RecyclerView.Adapter<SalaryAdapter.MyViewHold
         myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Uri uri = Uri.parse(salryinfoList.get(i).getSurl()); // missing 'http://' will cause crashed
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+                if (salryinfoList.get(i).getIsPaidService()==1){
+                    ((SalaryActivity)context).paymentOption(i);
+
+
+                }else {
+                    Uri uri = Uri.parse(salryinfoList.get(i).getSurl()); // missing 'http://' will cause crashed
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                }
+
             }
         });
+        if (salryinfoList.get(i).getIsPaidService()==1){
+            myViewHolder.tvPayslip.setText("Paid Service");
+        }else {
+            myViewHolder.tvPayslip.setText("View Payslip");
+        }
 
     }
 
@@ -53,12 +66,13 @@ public class SalaryAdapter extends RecyclerView.Adapter<SalaryAdapter.MyViewHold
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tvYear,tvMonth,tvSalary;
+        TextView tvYear,tvMonth,tvSalary,tvPayslip;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tvYear=(TextView)itemView.findViewById(R.id.tvYear);
             tvMonth=(TextView)itemView.findViewById(R.id.tvMonth);
             tvSalary=(TextView)itemView.findViewById(R.id.tvSalary);
+            tvPayslip=(TextView)itemView.findViewById(R.id.tvPayslip);
         }
     }
 

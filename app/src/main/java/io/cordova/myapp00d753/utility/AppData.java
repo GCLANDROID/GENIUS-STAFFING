@@ -18,7 +18,8 @@ public class AppData {
     public static String GET_ATTENDANCE_CALENDER = newv2url+"Attendance/GetAttendancecalender";
     public static String SAVE_WEEKLY_OFF_APPLICATION = newv2url+"Attendance/SaveWOApplication";
 
-    public static String GET_EMPLOYEE_SALARY = newv2url+"Payroll/GetEmpSalary";
+    public static String GET_EMPLOYEE_SALARY = newv2url+"Payroll/GetEmpSalaryV2";
+    public static String PAYMENT_LINK = newv2url+"Payroll/InitializePaymentGateway";
     public static String GET_EMPLOYEE_DISBURSED_PAYOUT = newv2url+"Payroll/GetEmpDisbursedPayout";
     public static String GET_COMMON_DROP_DOWN_FILL = newv2url+"Sales/GetCommonDropDownFill";
     public static String SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT = newv2url+"Reimbursement/SaveReimbursementClaimByComponent";

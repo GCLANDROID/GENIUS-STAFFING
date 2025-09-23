@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context="io.cordova.myapp00d753.activity.SupAttenReportActivity"
     android:orientation="vertical"
+    android:fitsSystemWindows="true"
     android:background="@android:color/white">
     <LinearLayout
         android:layout_width="match_parent"
