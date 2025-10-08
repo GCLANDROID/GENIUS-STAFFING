@@ -67,7 +67,7 @@ public class ShowDialog {
         al1.show();
     }
 
-    interface ResultListener{
+    public interface ResultListener{
         void onSuccess();
     }
 }
