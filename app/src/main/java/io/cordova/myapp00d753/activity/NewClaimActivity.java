@@ -474,7 +474,7 @@ public class NewClaimActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Please enter Claim Amount", Toast.LENGTH_LONG).show();
                         }
                     } else {
-                        Toast.makeText(getApplicationContext(), "Please enter Decription", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Please enter Description", Toast.LENGTH_LONG).show();
                     }
                 } else {
                     Toast.makeText(getApplicationContext(), "Please Select Component", Toast.LENGTH_LONG).show();
@@ -587,7 +587,7 @@ public class NewClaimActivity extends AppCompatActivity {
         progressDialog.show();
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
                 .addMultipartParameter("AEMEmployeeID", aempid)
-                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount",amount)
                 .addMultipartParameter("Year",year)
@@ -634,7 +634,7 @@ public class NewClaimActivity extends AppCompatActivity {
         progressDialog.show();
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
                 .addMultipartParameter("AEMEmployeeID", aempid)
-                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount",amount)
                 .addMultipartParameter("Year",year)
@@ -680,7 +680,7 @@ public class NewClaimActivity extends AppCompatActivity {
         progressDialog.show();
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
                 .addMultipartParameter("AEMEmployeeID", aempid)
-                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount",amount)
                 .addMultipartParameter("Year",year)
@@ -723,7 +723,7 @@ public class NewClaimActivity extends AppCompatActivity {
 
     private void postOneImage() {
         Log.e(TAG, "postOneImage: \nAEMEmployeeID:"+aempid
-                +"\nAEMComponentID:"+comeid
+                +"\nAEMComponentID:"+componentId
                 +"\nDescription:"+description
                 +"\nReimbursementAmount:"+amount
                 +"\nYear:"+year
@@ -736,7 +736,7 @@ public class NewClaimActivity extends AppCompatActivity {
         progressDialog.show();
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
                 .addMultipartParameter("AEMEmployeeID", aempid)
-                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount",amount)
                 .addMultipartParameter("Year",year)
@@ -1293,7 +1293,7 @@ public class NewClaimActivity extends AppCompatActivity {
                     File pictureFile = (File)data.getExtras().get("picture");
                     Log.d("fjjgk",pictureFile.toString());
                     try {
-                        compressedImageFile = new Compressor(this).compressToFile(pictureFile);
+                        compressedImageFile = new ImageZipper(this).compressToFile(pictureFile);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -1442,7 +1442,7 @@ public class NewClaimActivity extends AppCompatActivity {
         MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", compressedImageFile.getName(), mFile);
         RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile.getName());
 
-        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage1(aempid, comeid, description, amount, year, month, securitycode, fileToUpload, componentId,"0","0");
+            Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage1(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, componentId,"0","0");
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
@@ -1485,7 +1485,7 @@ public class NewClaimActivity extends AppCompatActivity {
         MultipartBody.Part fileToUpload1 = MultipartBody.Part.createFormData("file", compressedImageFile1.getName(), mFile);
         RequestBody filename1 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile1.getName());
 
-        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage2(aempid, comeid, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, componentId,"0","0");
+        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage2(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, componentId,"0","0");
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
@@ -1530,7 +1530,7 @@ public class NewClaimActivity extends AppCompatActivity {
         MultipartBody.Part fileToUpload2 = MultipartBody.Part.createFormData("file", compressedImageFile2.getName(), mFile);
         RequestBody filename2 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile2.getName());
 
-        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage3(aempid, comeid, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, fileToUpload2, componentId,"0","0");
+        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage3(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, fileToUpload2, componentId,"0","0");
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
@@ -1580,7 +1580,7 @@ public class NewClaimActivity extends AppCompatActivity {
         MultipartBody.Part fileToUpload3 = MultipartBody.Part.createFormData("file", compressedImageFile3.getName(), mFile);
         RequestBody filename3 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile3.getName());
 
-        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage4(aempid, comeid, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, fileToUpload2, fileToUpload3, componentId,"0","0");
+        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage4(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, fileToUpload2, fileToUpload3, componentId,"0","0");
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
@@ -1635,7 +1635,7 @@ public class NewClaimActivity extends AppCompatActivity {
         RequestBody filename4 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile4.getName());
 
 
-        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage5(aempid, comeid, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, fileToUpload2, fileToUpload3, fileToUpload4, componentId,"0","0");
+        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage5(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, fileToUpload2, fileToUpload3, fileToUpload4, componentId,"0","0");
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
@@ -2050,9 +2050,22 @@ public class NewClaimActivity extends AppCompatActivity {
                     }
                 });*/
 
+        Log.e(TAG, "uploadMultipart: \nAEMEmployeeID:"+pref.getEmpId()
+                +"\nAEMComponentID:"+componentId
+                +"\nDescription:"+description
+                +"\nReimbursementAmount:"+amount
+                +"\nYear:"+year
+                +"\nMonth:"+month
+                +"\nSecurityCode:"+securitycode
+                +"\nConveyanceTypeId:"+componentId
+                +"\nLocationTypeID:0"
+                +"\nReimbursementDate:0"
+                +"\nSingleFile:File"
+        );
+
             AndroidNetworking.upload(UPLOAD_URL)
                     .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
-                    .addMultipartParameter("AEMComponentID", comeid)
+                    .addMultipartParameter("AEMComponentID", componentId)
                     .addMultipartParameter("Description", description)
                     .addMultipartParameter("ReimbursementAmount", amount)
                     .addMultipartParameter("Year", year)
@@ -2123,7 +2136,7 @@ public class NewClaimActivity extends AppCompatActivity {
         //TODO: new api
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
                 .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
-                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount", amount)
                 .addMultipartParameter("Year", year)
@@ -2176,7 +2189,7 @@ public class NewClaimActivity extends AppCompatActivity {
 
         /*AndroidNetworking.upload(UPLOAD_URL)
                 .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
-                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount", amount)
                 .addMultipartParameter("Year", year)
@@ -2246,7 +2259,7 @@ public class NewClaimActivity extends AppCompatActivity {
         //TODO: new api
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
                 .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
-                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount", amount)
                 .addMultipartParameter("Year", year)
@@ -2299,7 +2312,7 @@ public class NewClaimActivity extends AppCompatActivity {
 
         /*AndroidNetworking.upload(UPLOAD_URL)
                 .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
-                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount", amount)
                 .addMultipartParameter("Year", year)
