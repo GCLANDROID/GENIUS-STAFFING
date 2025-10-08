@@ -88,6 +88,7 @@ import io.cordova.myapp00d753.module.AttendanceCalenderModel;
 import io.cordova.myapp00d753.module.SpineerItemModel;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
+import io.cordova.myapp00d753.utility.BrunchId;
 import io.cordova.myapp00d753.utility.ClientID;
 import io.cordova.myapp00d753.utility.GPSTracker;
 import io.cordova.myapp00d753.utility.Pref;
@@ -1526,7 +1527,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-        }else if (pref.getEmpClintId().equals(ClientID.SPCX) ||pref.getEmpClintId().equals(ClientID.ABFRL) ||pref.getEmpClintId().equals(ClientID.TATA_STEEL)) {
+        } else if (pref.getEmpClintId().equals(ClientID.SPCX) ||pref.getEmpClintId().equals(ClientID.ABFRL) ||pref.getEmpClintId().equals(ClientID.TATA_STEEL) || pref.getEmpClintId().equals(ClientID.APG_HOTEL)) {
             Intent intent = new Intent(AttenDanceDashboardActivity.this, GeoFenceAttendanceWithOutLocActivity.class);
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
