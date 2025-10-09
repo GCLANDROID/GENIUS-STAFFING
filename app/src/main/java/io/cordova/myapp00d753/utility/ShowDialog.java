@@ -37,7 +37,7 @@ public class ShowDialog {
         });
 
         successaAlertDialog = dialogBuilder.create();
-        successaAlertDialog.setCancelable(true);
+        successaAlertDialog.setCancelable(false);
         Window window = successaAlertDialog.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.CENTER);
