@@ -717,22 +717,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         if (view == imgMenu) {
             dlMain.openDrawer(Gravity.LEFT);
         } else if (view == llAttandanceManage) {
-            if (pref.getShiftFlag().equals("1")) {
-                getShift();
-                /*JSONObject obj = new JSONObject();
-                try {
-                    obj.put("CompanyID", "AEMCLI1410000807");
-                    obj.put("EmployeeID", pref.getEmpId());
-                    obj.put("AttendanceDate", currentDate);
-                    obj.put("&SecurityCode", pref.getSecurityCode());
-                    getShift(obj);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }*/
-            } else {
-                turnGPSOn();
-
-            }
+            turnGPSOn();
         } else if (view == llAttendanceReport) {
             if (pref.getEmpClintId().equals(ClientID.METSO)) {
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, MetsoAttendanceReportActivity.class);
@@ -1175,9 +1160,9 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                                     || pref.getEmpClintOffId().equals(BrunchId.CBRE_KARNATAKA_AMERICAN_EXPRESS)
                                     || pref.getEmpClintOffId().equals(BrunchId.CBRE_Tamil_Nadu_American_Express)){
                                 Intent intent = new Intent(AttenDanceDashboardActivity.this, GeoFenceAttendanceWithShiftActivity.class);
-                                intent.putExtra("intt", "2");
-                                intent.putExtra("shiftStatus", ShiftStatus);
-                                intent.putExtra("shiftArray", shiftArray.toString());
+                                //intent.putExtra("intt", "2");
+                                //intent.putExtra("shiftStatus", ShiftStatus);
+                                //intent.putExtra("shiftArray", shiftArray.toString());
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                             } else {
@@ -1469,7 +1454,11 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                     switch (status.getStatusCode()) {
                         case LocationSettingsStatusCodes.SUCCESS:
                             Log.e("LOCATION", "onResult: location on");
-                            openMarkAttendanceActivities();
+                            if (pref.getShiftFlag().equals("1")) {
+                                getShift();
+                            } else {
+                                openMarkAttendanceActivities();
+                            }
                             break;
                         case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                             Log.e("LOCATION", "onResult: log 2");
