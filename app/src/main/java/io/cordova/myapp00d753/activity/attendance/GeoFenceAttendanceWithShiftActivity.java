@@ -276,9 +276,9 @@ public class GeoFenceAttendanceWithShiftActivity extends AppCompatActivity  impl
         TextView txtPopUpHeader = shiftAndLocationDialog.findViewById(R.id.txtPopUpHeader);
         Spinner spShift = shiftAndLocationDialog.findViewById(R.id.spShift);
         Spinner spLocation = shiftAndLocationDialog.findViewById(R.id.spLocation);
-        txtPopUpHeader.setText("Select shift");
+        //txtPopUpHeader.setText("Select shift");
         AppCompatButton btnMarkedYourAttendance = shiftAndLocationDialog.findViewById(R.id.btnMarkedYourAttendance);
-        //spShift.setAdapter(shiftSpinnerAdapter);
+        spShift.setAdapter(shiftSpinnerAdapter);
         spShift.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
