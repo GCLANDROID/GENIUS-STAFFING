@@ -939,7 +939,7 @@ public class FMSNewClaimActivity extends AppCompatActivity {
                     File pictureFile = (File)data.getExtras().get("picture");
                     Log.d("fjjgk",pictureFile.toString());
                     try {
-                        compressedImageFile = new Compressor(this).compressToFile(pictureFile);
+                        compressedImageFile = new ImageZipper(this).compressToFile(pictureFile);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -1097,7 +1097,7 @@ public class FMSNewClaimActivity extends AppCompatActivity {
         MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", compressedImageFile.getName(), mFile);
         RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile.getName());
 
-        Call<UploadObject> fileUpload = uploadService.FMSpostreimburstmentwithimage1(aempid, comeid, description, amount, year, month, securitycode, fileToUpload, componentId,"0","0",SupervisorID);
+        Call<UploadObject> fileUpload = uploadService.FMSpostreimburstmentwithimage1(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, componentId,"0","0",SupervisorID);
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
@@ -1139,7 +1139,7 @@ public class FMSNewClaimActivity extends AppCompatActivity {
         MultipartBody.Part fileToUpload1 = MultipartBody.Part.createFormData("file", compressedImageFile1.getName(), mFile);
         RequestBody filename1 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile1.getName());
 
-        Call<UploadObject> fileUpload = uploadService.FMSpostreimburstmentwithimage2(aempid, comeid, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, componentId,"0","0",SupervisorID);
+        Call<UploadObject> fileUpload = uploadService.FMSpostreimburstmentwithimage2(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, componentId,"0","0",SupervisorID);
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
@@ -1184,7 +1184,7 @@ public class FMSNewClaimActivity extends AppCompatActivity {
         MultipartBody.Part fileToUpload2 = MultipartBody.Part.createFormData("file", compressedImageFile2.getName(), mFile);
         RequestBody filename2 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile2.getName());
 
-        Call<UploadObject> fileUpload = uploadService.FMSpostreimburstmentwithimage3(aempid, comeid, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, fileToUpload2, componentId,"0","0",SupervisorID);
+        Call<UploadObject> fileUpload = uploadService.FMSpostreimburstmentwithimage3(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, fileToUpload2, componentId,"0","0",SupervisorID);
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
@@ -1234,7 +1234,7 @@ public class FMSNewClaimActivity extends AppCompatActivity {
         MultipartBody.Part fileToUpload3 = MultipartBody.Part.createFormData("file", compressedImageFile3.getName(), mFile);
         RequestBody filename3 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile3.getName());
 
-        Call<UploadObject> fileUpload = uploadService.FMSpostreimburstmentwithimage4(aempid, comeid, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, fileToUpload2, fileToUpload3, componentId,"0","0",SupervisorID);
+        Call<UploadObject> fileUpload = uploadService.FMSpostreimburstmentwithimage4(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, fileToUpload2, fileToUpload3, componentId,"0","0",SupervisorID);
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
@@ -1289,7 +1289,7 @@ public class FMSNewClaimActivity extends AppCompatActivity {
         RequestBody filename4 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile4.getName());
 
 
-        Call<UploadObject> fileUpload = uploadService.FMSpostreimburstmentwithimage5(aempid, comeid, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, fileToUpload2, fileToUpload3, fileToUpload4, componentId,"0","0",SupervisorID);
+        Call<UploadObject> fileUpload = uploadService.FMSpostreimburstmentwithimage5(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, fileToUpload2, fileToUpload3, fileToUpload4, componentId,"0","0",SupervisorID);
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
@@ -1636,7 +1636,7 @@ public class FMSNewClaimActivity extends AppCompatActivity {
 
             AndroidNetworking.upload(UPLOAD_URL)
                     .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
-                    .addMultipartParameter("AEMComponentID", comeid)
+                    .addMultipartParameter("AEMComponentID", componentId)
                     .addMultipartParameter("Description", description)
                     .addMultipartParameter("ReimbursementAmount", amount)
                     .addMultipartParameter("Year", year)
@@ -1707,7 +1707,7 @@ public class FMSNewClaimActivity extends AppCompatActivity {
 
         AndroidNetworking.upload(UPLOAD_URL)
                 .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
-                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount", amount)
                 .addMultipartParameter("Year", year)
@@ -1778,7 +1778,7 @@ public class FMSNewClaimActivity extends AppCompatActivity {
 
         AndroidNetworking.upload(UPLOAD_URL)
                 .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
-                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount", amount)
                 .addMultipartParameter("Year", year)
