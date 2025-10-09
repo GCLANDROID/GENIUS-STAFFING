@@ -719,7 +719,10 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         } else if (view == llAttandanceManage) {
             turnGPSOn();
         } else if (view == llAttendanceReport) {
-            if (pref.getEmpClintId().equals(ClientID.METSO)) {
+            if (pref.getEmpClintId().equals(ClientID.METSO)
+                    || pref.getEmpClintOffId().equals(BrunchId.CBRE_HARYANA_AMERICAN_EXPRESS)
+                    || pref.getEmpClintOffId().equals(BrunchId.CBRE_KARNATAKA_AMERICAN_EXPRESS)
+                    || pref.getEmpClintOffId().equals(BrunchId.CBRE_Tamil_Nadu_American_Express)) {
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, MetsoAttendanceReportActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -1484,7 +1487,11 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 }
             });
         } else {
-            openMarkAttendanceActivities();
+            if (pref.getShiftFlag().equals("1")) {
+                getShift();
+            } else {
+                openMarkAttendanceActivities();
+            }
         }
     }
 
