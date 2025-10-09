@@ -1171,12 +1171,23 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
 
                             JSONArray shiftArray = responseData.optJSONArray(1);
 
-                            Intent intent = new Intent(AttenDanceDashboardActivity.this, AttenDanceManageWithShiftActivity.class);
-                            intent.putExtra("intt", "2");
-                            intent.putExtra("shiftStatus", ShiftStatus);
-                            intent.putExtra("shiftArray", shiftArray.toString());
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
+                            if (pref.getEmpClintOffId().equals(BrunchId.CBRE_HARYANA_AMERICAN_EXPRESS)
+                                    || pref.getEmpClintOffId().equals(BrunchId.CBRE_KARNATAKA_AMERICAN_EXPRESS)
+                                    || pref.getEmpClintOffId().equals(BrunchId.CBRE_Tamil_Nadu_American_Express)){
+                                Intent intent = new Intent(AttenDanceDashboardActivity.this, GeoFenceAttendanceWithShiftActivity.class);
+                                intent.putExtra("intt", "2");
+                                intent.putExtra("shiftStatus", ShiftStatus);
+                                intent.putExtra("shiftArray", shiftArray.toString());
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            } else {
+                                Intent intent = new Intent(AttenDanceDashboardActivity.this, AttenDanceManageWithShiftActivity.class);
+                                intent.putExtra("intt", "2");
+                                intent.putExtra("shiftStatus", ShiftStatus);
+                                intent.putExtra("shiftArray", shiftArray.toString());
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
 
 
                             // boolean _status = job1.getBoolean("status");
