@@ -78,7 +78,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import id.zelory.compressor.Compressor;
+
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.metso.MetsoNewReimbursementClaimActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.ComponentSpinnerAdapter;
