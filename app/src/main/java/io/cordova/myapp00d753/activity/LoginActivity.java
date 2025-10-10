@@ -69,7 +69,7 @@ import io.cordova.myapp00d753.utility.Util;
 
 public class LoginActivity extends AppCompatActivity {
     TextView tvSignIn;
-    EditText etUserId, etPassword;
+    EditText etUserId, etPassword,etForgotUserId;
     String userId, password;
     LinearLayout llSignIn;
     NetworkConnectionCheck connectionCheck;
@@ -651,7 +651,7 @@ public class LoginActivity extends AppCompatActivity {
                 popUp.dismiss();
             }
         });
-        etUserId = (EditText) dialogView.findViewById(R.id.etUserId);
+        etForgotUserId = (EditText) dialogView.findViewById(R.id.etForgotUserId);
         final EditText etSecurityCode = (EditText) dialogView.findViewById(R.id.etSecurityCode);
         final Button btnSubmit = (Button) dialogView.findViewById(R.id.btnSubmit);
 
@@ -659,7 +659,7 @@ public class LoginActivity extends AppCompatActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (etUserId.getText().toString().length() > 0  ) {
+                if (etForgotUserId.getText().toString().length() > 0  ) {
 
                     changePassword();
 
@@ -679,33 +679,27 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void changePassword() {
-        String surl = AppData.url+"GCl_ForgotPassword?MasterID="+etUserId.getText().toString()+"&SecurityCode="+ security_code;
+        ProgressDialog pd=new ProgressDialog(LoginActivity.this);
+        pd.setMessage("Loading");
+        pd.show();
+        pd.setCancelable(false);
+        String surl = " https://gsppi.geniusconsultant.com/GENESS/Account/RetrievePassword?UserID="+etForgotUserId.getText().toString();
         Log.d("inputLogin", surl);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, surl,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Log.d("responseChangePassword", response);
+                        pd.dismiss();
 
                         try {
                             JSONObject job1 = new JSONObject(response);
-                            Log.e("response12", "@@@@@@" + job1);
-                            String responseText = job1.optString("responseText");
-                            boolean responseStatus = job1.optBoolean("responseStatus");
-                            if (responseStatus) {
-                                // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
-
-                                JSONArray responseData = job1.optJSONArray("responseData");
-
-
-                                successAlert(responseText);
-
-                            } else {
-
-                                Toast.makeText(LoginActivity.this, responseText, Toast.LENGTH_LONG).show();
+                            int isSuccess=job1.optInt("isSuccess");
+                            if (isSuccess==1){
+                                successAlert("Password sent to your registered email id");
+                            }else {
 
                             }
-
 
 
 
@@ -718,6 +712,7 @@ public class LoginActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                pd.dismiss();
                 Toast.makeText(LoginActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
                 //showAlert();
                 Log.e("ert", error.toString());
