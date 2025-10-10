@@ -321,22 +321,25 @@ public class DocumentNumberActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             Log.e(TAG, "DOC_NUMBER_LIST: "+response.toString(0) );
+                                pg.dismiss();
                                 JSONObject job1 = response;
                                 String Response_Code = job1.optString("Response_Code");
                                 if (Response_Code.equals("101")) {
                                 String Response_Data = job1.optString("Response_Data");
 
                                 JSONArray jsonArray = new JSONArray(Response_Data);
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    JSONObject obj = jsonArray.getJSONObject(i);
-                                    String DocumentName = obj.optString("DocumentName");
-                                    String DocumentType = obj.optString("DocumentType");
-                                    String AEMStatusName = obj.optString("AEMStatusName");
-                                    String CreatedOn = obj.optString("CreatedOn");
-                                    String ApprovalRemarks = obj.optString("ApprovalRemarks");
-                                    String DocLink = obj.optString("DocLink");
-                                    DocumentManageModule dmodule = new DocumentManageModule(DocumentName, DocumentType, ApprovalRemarks, CreatedOn, AEMStatusName, DocLink);
-                                    docNumList.add(dmodule);
+                                if (jsonArray.length() > 0){
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject obj = jsonArray.getJSONObject(i);
+                                        String DocumentName = obj.optString("DocumentName");
+                                        String DocumentType = obj.optString("DocumentType");
+                                        String AEMStatusName = obj.optString("AEMStatusName");
+                                        String CreatedOn = obj.optString("CreatedOn");
+                                        String ApprovalRemarks = obj.optString("ApprovalRemarks");
+                                        String DocLink = obj.optString("DocLink");
+                                        DocumentManageModule dmodule = new DocumentManageModule(DocumentName, DocumentType, ApprovalRemarks, CreatedOn, AEMStatusName, DocLink);
+                                        docNumList.add(dmodule);
+                                    }
                                     String size= String.valueOf(docNumList.size());
                                     tvTotalDoc.setText(size);
                                 }
@@ -349,10 +352,12 @@ public class DocumentNumberActivity extends AppCompatActivity {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+                            } else {
+                                    tvTotalDoc.setText("0");
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(DocumentNumberActivity.this, "", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DocumentNumberActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -432,6 +437,7 @@ public class DocumentNumberActivity extends AppCompatActivity {
     }
 
     private void getDocInfoList(JSONObject jsonObject) {
+        pg.show();
         AndroidNetworking.post(AppData.DOCUMENT_UPLOAD_INFO)
                 .addJSONObjectBody(jsonObject)
                 .addHeaders("Authorization", "Bearer "+pref.getAccessToken())

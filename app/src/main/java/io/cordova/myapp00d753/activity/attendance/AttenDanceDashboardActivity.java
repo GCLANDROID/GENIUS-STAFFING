@@ -88,6 +88,7 @@ import io.cordova.myapp00d753.module.AttendanceCalenderModel;
 import io.cordova.myapp00d753.module.SpineerItemModel;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
+import io.cordova.myapp00d753.utility.BrunchId;
 import io.cordova.myapp00d753.utility.ClientID;
 import io.cordova.myapp00d753.utility.GPSTracker;
 import io.cordova.myapp00d753.utility.Pref;
@@ -716,24 +717,12 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         if (view == imgMenu) {
             dlMain.openDrawer(Gravity.LEFT);
         } else if (view == llAttandanceManage) {
-            if (pref.getShiftFlag().equals("1")) {
-                getShift();
-                /*JSONObject obj = new JSONObject();
-                try {
-                    obj.put("CompanyID", "AEMCLI1410000807");
-                    obj.put("EmployeeID", pref.getEmpId());
-                    obj.put("AttendanceDate", currentDate);
-                    obj.put("&SecurityCode", pref.getSecurityCode());
-                    getShift(obj);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }*/
-            } else {
-                turnGPSOn();
-
-            }
+            turnGPSOn();
         } else if (view == llAttendanceReport) {
-            if (pref.getEmpClintId().equals(ClientID.METSO)) {
+            if (pref.getEmpClintId().equals(ClientID.METSO)
+                    || pref.getEmpClintOffId().equals(BrunchId.CBRE_HARYANA_AMERICAN_EXPRESS)
+                    || pref.getEmpClintOffId().equals(BrunchId.CBRE_KARNATAKA_AMERICAN_EXPRESS)
+                    || pref.getEmpClintOffId().equals(BrunchId.CBRE_Tamil_Nadu_American_Express)) {
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, MetsoAttendanceReportActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -1170,12 +1159,23 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
 
                             JSONArray shiftArray = responseData.optJSONArray(1);
 
-                            Intent intent = new Intent(AttenDanceDashboardActivity.this, AttenDanceManageWithShiftActivity.class);
-                            intent.putExtra("intt", "2");
-                            intent.putExtra("shiftStatus", ShiftStatus);
-                            intent.putExtra("shiftArray", shiftArray.toString());
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
+                            if (pref.getEmpClintOffId().equals(BrunchId.CBRE_HARYANA_AMERICAN_EXPRESS)
+                                    || pref.getEmpClintOffId().equals(BrunchId.CBRE_KARNATAKA_AMERICAN_EXPRESS)
+                                    || pref.getEmpClintOffId().equals(BrunchId.CBRE_Tamil_Nadu_American_Express)){
+                                Intent intent = new Intent(AttenDanceDashboardActivity.this, GeoFenceAttendanceWithShiftActivity.class);
+                                //intent.putExtra("intt", "2");
+                                //intent.putExtra("shiftStatus", ShiftStatus);
+                                //intent.putExtra("shiftArray", shiftArray.toString());
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            } else {
+                                Intent intent = new Intent(AttenDanceDashboardActivity.this, AttenDanceManageWithShiftActivity.class);
+                                intent.putExtra("intt", "2");
+                                intent.putExtra("shiftStatus", ShiftStatus);
+                                intent.putExtra("shiftArray", shiftArray.toString());
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
 
 
                             // boolean _status = job1.getBoolean("status");
@@ -1457,7 +1457,11 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                     switch (status.getStatusCode()) {
                         case LocationSettingsStatusCodes.SUCCESS:
                             Log.e("LOCATION", "onResult: location on");
-                            openMarkAttendanceActivities();
+                            if (pref.getShiftFlag().equals("1")) {
+                                getShift();
+                            } else {
+                                openMarkAttendanceActivities();
+                            }
                             break;
                         case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                             Log.e("LOCATION", "onResult: log 2");
@@ -1483,7 +1487,11 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 }
             });
         } else {
-            openMarkAttendanceActivities();
+            if (pref.getShiftFlag().equals("1")) {
+                getShift();
+            } else {
+                openMarkAttendanceActivities();
+            }
         }
     }
 
@@ -1526,7 +1534,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-        }else if (pref.getEmpClintId().equals(ClientID.SPCX) ||pref.getEmpClintId().equals(ClientID.ABFRL) ||pref.getEmpClintId().equals(ClientID.TATA_STEEL)) {
+        } else if (pref.getEmpClintId().equals(ClientID.SPCX) ||pref.getEmpClintId().equals(ClientID.ABFRL) ||pref.getEmpClintId().equals(ClientID.TATA_STEEL) || pref.getEmpClintId().equals(ClientID.APG_HOTEL)) {
             Intent intent = new Intent(AttenDanceDashboardActivity.this, GeoFenceAttendanceWithOutLocActivity.class);
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

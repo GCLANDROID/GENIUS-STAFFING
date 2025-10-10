@@ -618,6 +618,7 @@
         <activity android:name=".AndroidXCamera.AndroidXCameraActivity" />
         <activity android:name=".activity.HolidayMarkingActivity" />
         <activity android:name=".AndroidXCamera.FrontBackAndroidXCameraActivity" />
+        <activity android:name=".activity.attendance.GeoFenceAttendanceWithShiftActivity" />
 
         <service
             android:name=".FirebaseNotification.MyFirebaseMessagingService"

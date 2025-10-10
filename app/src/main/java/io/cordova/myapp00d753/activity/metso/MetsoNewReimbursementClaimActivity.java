@@ -2463,7 +2463,13 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                     Log.e(TAG, "onActivityResult: "+uri.getPath());
                     String imagePath = uri.getPath();
                     if (imagePath.contains("all_external") || imagePath.contains("document")){
-                        pdfFileName = FindDocumentInformation.FileNameFromURL(imagePath);
+                        if (imagePath.contains("/document/msf")){
+                            pdfFilePath = getRealPath(MetsoNewReimbursementClaimActivity.this,uri);
+                            Log.e(TAG, "onActivityResult: ================== "+pdfFilePath);
+                            pdfFileName = FindDocumentInformation.FileNameFromURL(pdfFilePath);
+                        } else {
+                            pdfFileName = FindDocumentInformation.FileNameFromURL(imagePath);
+                        }
                         pdfFile = convertInputStreamToFile(uri,pdfFileName);
                         Log.e(TAG, "onActivityResult: "+pdfFile.getAbsolutePath());
                     } else {
@@ -2531,7 +2537,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         Call<UploadObject> fileUpload = RetrofitClient
                 .getInstance()
                 .getApi()
-                .postMetsoReimbursementWithImage1(aempid, comeid, description, amount, year, month, securitycode, fileToUpload, componentId, "0", "0", CostCentreId, WbsId, Siteid, SupervisorID,startDate,endDate);
+                .postMetsoReimbursementWithImage1(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, componentId, "0", "0", CostCentreId, WbsId, Siteid, SupervisorID,startDate,endDate);
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
@@ -2572,7 +2578,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         Call<UploadObject> fileUpload = RetrofitClient
                 .getInstance()
                 .getApi()
-                .postMetsoReimbursementWithImage2(aempid, comeid, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, componentId, "0", "0", CostCentreId, WbsId, Siteid, SupervisorID,startDate,endDate);
+                .postMetsoReimbursementWithImage2(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, componentId, "0", "0", CostCentreId, WbsId, Siteid, SupervisorID,startDate,endDate);
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
@@ -2617,7 +2623,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         Call<UploadObject> fileUpload = RetrofitClient
                 .getInstance()
                 .getApi()
-                .postMetsoReimbursementWithImage3(aempid, comeid, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, fileToUpload2, componentId, "0", "0", CostCentreId, WbsId, Siteid, SupervisorID,startDate,endDate);
+                .postMetsoReimbursementWithImage3(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, fileToUpload2, componentId, "0", "0", CostCentreId, WbsId, Siteid, SupervisorID,startDate,endDate);
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
@@ -2670,7 +2676,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         Call<UploadObject> fileUpload = RetrofitClient
                 .getInstance()
                 .getApi()
-                .postMetsoReimbursementWithImage4(aempid, comeid, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, fileToUpload2, fileToUpload3, componentId, "0", "0", CostCentreId, WbsId, Siteid, SupervisorID,startDate,endDate);
+                .postMetsoReimbursementWithImage4(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, fileToUpload2, fileToUpload3, componentId, "0", "0", CostCentreId, WbsId, Siteid, SupervisorID,startDate,endDate);
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
@@ -2728,7 +2734,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         Call<UploadObject> fileUpload = RetrofitClient
                 .getInstance()
                 .getApi()
-                .postMetsoReimbursementWithImage5(aempid, comeid, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, fileToUpload2, fileToUpload3, fileToUpload4, componentId, "0", "0", CostCentreId, WbsId, Siteid, SupervisorID,startDate,endDate);
+                .postMetsoReimbursementWithImage5(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, fileToUpload2, fileToUpload3, fileToUpload4, componentId, "0", "0", CostCentreId, WbsId, Siteid, SupervisorID,startDate,endDate);
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
@@ -3078,7 +3084,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
     public void uploadMultipart() {
         //getting name for the pdf
         Log.e(TAG, "uploadMultipart: \nAEMEmployeeID"+ pref.getEmpId()
-                +"\nAEMComponentID:"+ comeid
+                +"\nAEMComponentID:"+ componentId
                 +"\nDescription:"+ description
                 +"\nReimbursementAmount;"+ amount
                 +"\nYear:"+ year
@@ -3098,7 +3104,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         //TODO: new api
        /* AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_METSO)
                 .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
-                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount", amount)
                 .addMultipartParameter("Year", year)
@@ -3177,7 +3183,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
 
         AndroidNetworking.upload(UPLOAD_URL)
                 .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
-                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount", amount)
                 .addMultipartParameter("Year", year)
@@ -3246,7 +3252,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         //TODO: new api
         /*AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_METSO)
                 .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
-                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount", amount)
                 .addMultipartParameter("Year", year)
@@ -3321,7 +3327,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
 
         AndroidNetworking.upload(UPLOAD_URL)
                 .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
-                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount", amount)
                 .addMultipartParameter("Year", year)
@@ -3386,7 +3392,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         //TODO: new api
         /*AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_METSO)
                 .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
-                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount", amount)
                 .addMultipartParameter("Year", year)
@@ -3441,7 +3447,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
 
         AndroidNetworking.upload(UPLOAD_URL)
                 .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
-                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount", amount)
                 .addMultipartParameter("Year", year)
@@ -3799,7 +3805,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
 
     private void postOneImage() {
         Log.e(TAG, "postOneImage: \nAEMEmployeeID:"+aempid
-                +"\nAEMComponentID:"+comeid
+                +"\nAEMComponentID:"+componentId
                 +"\nDescription:"+description
                 +"\nReimbursementAmount:"+amount
                 +"\nYear:"+year
@@ -3819,7 +3825,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         progressDialog.show();
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_METSO)
                 .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
-                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount", amount)
                 .addMultipartParameter("Year", year)
@@ -3869,7 +3875,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         progressDialog.show();
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_METSO)
                 .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
-                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount", amount)
                 .addMultipartParameter("Year", year)
@@ -3920,7 +3926,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         progressDialog.show();
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_METSO)
                 .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
-                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount", amount)
                 .addMultipartParameter("Year", year)
@@ -3972,7 +3978,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         progressDialog.show();
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_METSO)
                 .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
-                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount", amount)
                 .addMultipartParameter("Year", year)
@@ -4025,7 +4031,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         progressDialog.show();
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_METSO)
                 .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
-                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount", amount)
                 .addMultipartParameter("Year", year)

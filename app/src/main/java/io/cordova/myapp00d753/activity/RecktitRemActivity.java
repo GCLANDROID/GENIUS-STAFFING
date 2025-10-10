@@ -44,6 +44,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.developers.imagezipper.ImageZipper;
 import com.google.android.cameraview.LongImageCameraActivity;
 
 
@@ -580,7 +581,7 @@ public class RecktitRemActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Please enter Claim Amount", Toast.LENGTH_LONG).show();
                         }
                     } else {
-                        Toast.makeText(getApplicationContext(), "Please enter Decription", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Please enter Description", Toast.LENGTH_LONG).show();
                     }
                 } else {
                     Toast.makeText(getApplicationContext(), "Please Select Component", Toast.LENGTH_LONG).show();
@@ -704,7 +705,7 @@ public class RecktitRemActivity extends AppCompatActivity {
         progressDialog.show();
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
                 .addMultipartParameter("AEMEmployeeID", aempid)
-                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount",amount)
                 .addMultipartParameter("Year",year)
@@ -751,7 +752,7 @@ public class RecktitRemActivity extends AppCompatActivity {
         progressDialog.show();
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
                 .addMultipartParameter("AEMEmployeeID", aempid)
-                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount",amount)
                 .addMultipartParameter("Year",year)
@@ -797,7 +798,7 @@ public class RecktitRemActivity extends AppCompatActivity {
         progressDialog.show();
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
                 .addMultipartParameter("AEMEmployeeID", aempid)
-                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount",amount)
                 .addMultipartParameter("Year",year)
@@ -841,7 +842,7 @@ public class RecktitRemActivity extends AppCompatActivity {
         progressDialog.show();
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
                 .addMultipartParameter("AEMEmployeeID", aempid)
-                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount",amount)
                 .addMultipartParameter("Year",year)
@@ -950,7 +951,7 @@ public class RecktitRemActivity extends AppCompatActivity {
                         try {
                             String imageurl = /*"file://" +*/ getRealPathFromURI(imageUri);
                             file = new File(imageurl);
-                            compressedImageFile = new Compressor(this).compressToFile(file);
+                            compressedImageFile = new ImageZipper(this).compressToFile(file);
                             //Log.d("imageSixw", String.valueOf(getReadableFileSize(compressedImageFile.length())));
 
                             BitmapFactory.Options o = new BitmapFactory.Options();
@@ -986,7 +987,7 @@ public class RecktitRemActivity extends AppCompatActivity {
                         try {
                             String imageurl = /*"file://" +*/ getRealPathFromURI(imageUri);
                             file1 = new File(imageurl);
-                            compressedImageFile1 = new Compressor(this).compressToFile(file1);
+                            compressedImageFile1 = new ImageZipper(this).compressToFile(file1);
                             //Log.d("imageSixw", String.valueOf(getReadableFileSize(compressedImageFile1.length())));
 
                             BitmapFactory.Options o = new BitmapFactory.Options();
@@ -1017,7 +1018,7 @@ public class RecktitRemActivity extends AppCompatActivity {
                         try {
                             String imageurl = /*"file://" +*/ getRealPathFromURI(imageUri);
                             file2 = new File(imageurl);
-                            compressedImageFile2 = new Compressor(this).compressToFile(file2);
+                            compressedImageFile2 = new ImageZipper(this).compressToFile(file2);
                             BitmapFactory.Options o = new BitmapFactory.Options();
                             o.inSampleSize = 2;
                             Bitmap bm = cropToSquare(BitmapFactory.decodeFile(imageurl, o));
@@ -1050,7 +1051,7 @@ public class RecktitRemActivity extends AppCompatActivity {
                         try {
                             String imageurl = /*"file://" +*/ getRealPathFromURI(imageUri);
                             file3 = new File(imageurl);
-                            compressedImageFile3 = new Compressor(this).compressToFile(file3);
+                            compressedImageFile3 = new ImageZipper(this).compressToFile(file3);
                             BitmapFactory.Options o = new BitmapFactory.Options();
                             o.inSampleSize = 2;
                             Bitmap bm = cropToSquare(BitmapFactory.decodeFile(imageurl, o));
@@ -1082,7 +1083,7 @@ public class RecktitRemActivity extends AppCompatActivity {
                         try {
                             String imageurl = /*"file://" +*/ getRealPathFromURI(imageUri);
                             file4 = new File(imageurl);
-                            compressedImageFile4 = new Compressor(this).compressToFile(file4);
+                            compressedImageFile4 = new ImageZipper(this).compressToFile(file4);
                             BitmapFactory.Options o = new BitmapFactory.Options();
                             o.inSampleSize = 2;
                             Bitmap bm = cropToSquare(BitmapFactory.decodeFile(imageurl, o));
@@ -1133,7 +1134,7 @@ public class RecktitRemActivity extends AppCompatActivity {
                     File pictureFile = (File)data.getExtras().get("picture");
                     Log.d("fjjgk",pictureFile.toString());
                     try {
-                        compressedImageFile = new Compressor(this).compressToFile(pictureFile);
+                        compressedImageFile = new ImageZipper(this).compressToFile(pictureFile);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -1750,7 +1751,7 @@ public class RecktitRemActivity extends AppCompatActivity {
         MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", compressedImageFile.getName(), mFile);
         RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile.getName());
 
-        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage1(aempid, comeid, etDescription.getText().toString(), amount, spyear, spmonth, securitycode, fileToUpload, componentId,loactionId,"0");
+        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage1(aempid, componentId, etDescription.getText().toString(), amount, spyear, spmonth, securitycode, fileToUpload, componentId,loactionId,"0");
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
@@ -1788,7 +1789,7 @@ public class RecktitRemActivity extends AppCompatActivity {
         MultipartBody.Part fileToUpload1 = MultipartBody.Part.createFormData("file", compressedImageFile1.getName(), mFile);
         RequestBody filename1 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile1.getName());
 
-        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage2(aempid, comeid, etDescription.getText().toString(), amount, spyear, spmonth, securitycode, fileToUpload, fileToUpload1, componentId,loactionId,"0");
+        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage2(aempid, componentId, etDescription.getText().toString(), amount, spyear, spmonth, securitycode, fileToUpload, fileToUpload1, componentId,loactionId,"0");
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
@@ -1832,7 +1833,7 @@ public class RecktitRemActivity extends AppCompatActivity {
         MultipartBody.Part fileToUpload2 = MultipartBody.Part.createFormData("file", compressedImageFile2.getName(), mFile);
         RequestBody filename2 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile2.getName());
 
-        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage3(aempid, comeid, etDescription.getText().toString(), amount, spyear, spmonth, securitycode, fileToUpload, fileToUpload1, fileToUpload2, componentId,loactionId,"0");
+        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage3(aempid, componentId, etDescription.getText().toString(), amount, spyear, spmonth, securitycode, fileToUpload, fileToUpload1, fileToUpload2, componentId,loactionId,"0");
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
@@ -1882,7 +1883,7 @@ public class RecktitRemActivity extends AppCompatActivity {
         MultipartBody.Part fileToUpload3 = MultipartBody.Part.createFormData("file", compressedImageFile3.getName(), mFile);
         RequestBody filename3 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile3.getName());
 
-        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage4(aempid, comeid, etDescription.getText().toString(), amount, spyear, spmonth, securitycode, fileToUpload, fileToUpload1, fileToUpload2, fileToUpload3, componentId,loactionId,"0");
+        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage4(aempid, componentId, etDescription.getText().toString(), amount, spyear, spmonth, securitycode, fileToUpload, fileToUpload1, fileToUpload2, fileToUpload3, componentId,loactionId,"0");
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
@@ -1937,7 +1938,7 @@ public class RecktitRemActivity extends AppCompatActivity {
         RequestBody filename4 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile4.getName());
 
 
-        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage5(aempid, comeid, etDescription.getText().toString(), amount, spyear, spmonth, securitycode, fileToUpload, fileToUpload1, fileToUpload2, fileToUpload3, fileToUpload4, componentId,loactionId,"0");
+        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage5(aempid, componentId, etDescription.getText().toString(), amount, spyear, spmonth, securitycode, fileToUpload, fileToUpload1, fileToUpload2, fileToUpload3, fileToUpload4, componentId,loactionId,"0");
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
@@ -2036,7 +2037,7 @@ public class RecktitRemActivity extends AppCompatActivity {
         progressDialog.show();
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
                 .addMultipartParameter("AEMEmployeeID", aempid)
-                .addMultipartParameter("AEMComponentID", comeid)
+                .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount",amount)
                 .addMultipartParameter("Year",year)
