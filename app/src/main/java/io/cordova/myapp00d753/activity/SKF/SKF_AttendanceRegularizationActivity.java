@@ -714,8 +714,8 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
         Spinner spShift = shiftAndLocationDialog.findViewById(R.id.spShift);
         Spinner spLocation = shiftAndLocationDialog.findViewById(R.id.spLocation);
         AppCompatButton btnMarkedYourAttendance = shiftAndLocationDialog.findViewById(R.id.btnMarkedYourAttendance);
-        TextView textView = shiftAndLocationDialog.findViewById(R.id.textView);
-        textView.setText("Select location");
+        //TextView textView = shiftAndLocationDialog.findViewById(R.id.textView);
+        //textView.setText("Select location");
 
         spLocation.setAdapter(locationSpinnerAdapter);
         spLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
