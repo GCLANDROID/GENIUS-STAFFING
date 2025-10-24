@@ -92,7 +92,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import id.zelory.compressor.Compressor;
+//import id.zelory.compressor.Compressor;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.Retrofit.RetrofitClient;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
@@ -2463,7 +2463,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                     Log.e(TAG, "onActivityResult: "+uri.getPath());
                     String imagePath = uri.getPath();
                     if (imagePath.contains("all_external") || imagePath.contains("document")){
-                        if (imagePath.contains("/document/msf")){
+                        if (imagePath.contains("/document/msf") || imagePath.contains("/document/document")){
                             pdfFilePath = getRealPath(MetsoNewReimbursementClaimActivity.this,uri);
                             Log.e(TAG, "onActivityResult: ================== "+pdfFilePath);
                             pdfFileName = FindDocumentInformation.FileNameFromURL(pdfFilePath);
