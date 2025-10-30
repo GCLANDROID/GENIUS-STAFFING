@@ -103,34 +103,79 @@
                     android:background="@drawable/lldesign"
                     android:backgroundTint="@color/textcolor"></Button>
             </LinearLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clReportingManager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="5dp"
+                android:paddingVertical="5dp"
+                android:background="@drawable/broder">
+
+                <LinearLayout
+                    android:id="@+id/linearLayout6"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="5dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/btnChangeApprover"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Reporting Manager/Approver:"
+                        android:textColor="@color/textcolor"
+                        android:textStyle="bold"
+                        android:textSize="12.5sp"/>
+
+                    <TextView
+                        android:id="@+id/tvApproverName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="Reporting Manager"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnChangeApprover"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:background="@drawable/lldesign"
+                    android:backgroundTint="@color/textcolor"
+                    android:text="Change"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/linearLayout6"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/linearLayout6" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
             <LinearLayout
                 android:visibility="gone"
                 android:id="@+id/llLastYrTarget"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginTop="10dp">
                 <TextView
+                    android:id="@+id/txtYear"
                     android:textStyle="bold"
                     android:textSize="14sp"
                     android:textColor="@color/color1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Your Last Year Target is :"></TextView>
+                    android:text="Your Last Year Target is :"/>
                 <TextView
                     android:layout_marginTop="4dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tvLastYearTarget"></TextView>
+                    android:id="@+id/tvLastYearTarget"/>
             </LinearLayout>
-            <TextView
-                android:textStyle="bold"
-                android:layout_marginTop="10dp"
-                android:id="@+id/tvApproverName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/grey"
-                ></TextView>
             <TextView
                 android:layout_marginTop="10dp"
                 android:id="@+id/tvTargetAchievement"

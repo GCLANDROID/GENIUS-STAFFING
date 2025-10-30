@@ -3,6 +3,10 @@ package io.cordova.myapp00d753.activity.metso;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.SearchView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -45,13 +49,15 @@ import java.util.ArrayList;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.metso.adapter.ApproverAutoCompleteAdapter;
+import io.cordova.myapp00d753.activity.metso.adapter.SupervisorFilterAdapter;
 import io.cordova.myapp00d753.activity.metso.model.ApproverModel;
+import io.cordova.myapp00d753.module.SpineerItemModel;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
 
 public class MetsoPMSTargetAchivementActivity extends AppCompatActivity {
-    TextView tvTargetAchievement;
+    TextView tvTargetAchievement,txtYear;
     EditText etRemarks;
     LinearLayout llExceptional,llExcellent,llGood,llImprovement,llNA,llRating;
     ImageView imgExceptional,imgSelectedExceptional,imgExcellent,imgSelectedExcellent,imgGood,imgSelectedGood,imgImprovement,imgSelectedImprovement,imgNA,imgSelectedNA;
@@ -69,7 +75,8 @@ public class MetsoPMSTargetAchivementActivity extends AppCompatActivity {
     TextView tvLastYearTarget;
     LinearLayout llLastYrTarget;
     Button btnReport;
-
+    Dialog searchWbsCodeDialog;
+    ConstraintLayout clReportingManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,12 +92,14 @@ public class MetsoPMSTargetAchivementActivity extends AppCompatActivity {
         btnReport=(Button)findViewById(R.id.btnReport);
         llLastYrTarget=(LinearLayout)findViewById(R.id.llLastYrTarget);
         tvLastYearTarget=(TextView)findViewById(R.id.tvLastYearTarget);
+        clReportingManager=(ConstraintLayout) findViewById(R.id.clReportingManager);
         imgHome=(ImageView)findViewById(R.id.imgHome);
         imgBack=(ImageView)findViewById(R.id.imgBack);;
 
         tvApproverName=(TextView)findViewById(R.id.tvApproverName);
 
         tvTargetAchievement=(TextView) findViewById(R.id.tvTargetAchievement);
+        txtYear=(TextView) findViewById(R.id.txtYear);
 
         etRemarks=(EditText) findViewById(R.id.etRemarks);
 
@@ -380,6 +389,12 @@ public class MetsoPMSTargetAchivementActivity extends AppCompatActivity {
         pg.setCancelable(false);
         pg.show();
 
+        Log.e("postTargetAchevement", "postTargetAchevement: \nMasterID:"+pref.getMasterId()
+                +"\nRemarks:"+etRemarks.getText().toString()
+                +"\nRating:"+rating
+                +"\nSuperID:"+String.valueOf(approverID)
+                +"\nOperation:"+operation
+                +"\nSecurityCode:0000");
 
 
         AndroidNetworking.upload(AppData.url+"post_EmployeePMS_Metso")
@@ -543,7 +558,8 @@ public class MetsoPMSTargetAchivementActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 ApproverModel selectedItem = (ApproverModel) adapterView.getItemAtPosition(i);
                 actApproverName.setText(selectedItem.getApproverName());
-                tvApproverName.setText("You select "+selectedItem.getApproverName()+" as an approver");
+                //tvApproverName.setText("You select "+selectedItem.getApproverName()+" as an approver");
+                tvApproverName.setText(selectedItem.getApproverName());
                 approverID = selectedItem.approverId;
                 txtErrorApprover.setVisibility(View.GONE);
             }
@@ -572,7 +588,7 @@ public class MetsoPMSTargetAchivementActivity extends AppCompatActivity {
                     txtErrorApprover.setVisibility(View.VISIBLE);
                     txtErrorApprover.setText("Please select an approver name from the search list");
                 } else {
-                    // submitOperation();
+                    //submitOperation();
                     dialogLocationPopUp.cancel();
                 }
             }
@@ -617,6 +633,7 @@ public class MetsoPMSTargetAchivementActivity extends AppCompatActivity {
                                 tvTargetAchievement.setVisibility(View.GONE);
                                 llRating.setVisibility(View.GONE);
                                 tvApproverName.setVisibility(View.GONE);
+                                clReportingManager.setVisibility(View.GONE);
                                 etRemarks.setVisibility(View.GONE);
                                 btnSave.setVisibility(View.GONE);
                                 getLastYearTargetDetails();
@@ -666,11 +683,15 @@ public class MetsoPMSTargetAchivementActivity extends AppCompatActivity {
                             JSONArray job1 = new JSONArray(response);
                             JSONObject jsonObject = job1.optJSONObject(0);
                             String E_Targt_Remarks = jsonObject.optString("E_Targt_Remarks");
+                            String A_Targt_ApprovedBy = jsonObject.optString("A_Targt_ApprovedBy");
+                            String T_Year = jsonObject.optString("T_Year");
 
                             tvLastYearTarget.setText(E_Targt_Remarks);
-
+                            tvApproverName.setText(A_Targt_ApprovedBy);
+                            txtYear.setText("Your Target for " + T_Year+":");
+                            tvApproverName.setVisibility(View.VISIBLE);
                             llLastYrTarget.setVisibility(View.VISIBLE);
-
+                            clReportingManager.setVisibility(View.VISIBLE);
                             if (E_Targt_Remarks.equals("")){
                                 btnReport.setVisibility(View.GONE);
                             }else {
