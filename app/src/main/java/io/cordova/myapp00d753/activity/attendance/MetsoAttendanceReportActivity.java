@@ -245,7 +245,7 @@ public class MetsoAttendanceReportActivity extends AppCompatActivity {
 
                         Log.d("responseAttendance", response);
 
-                        attendabceInfiList.clear();
+
 
                         try {
                             JSONObject job1 = new JSONObject(response);
@@ -254,6 +254,7 @@ public class MetsoAttendanceReportActivity extends AppCompatActivity {
 
                             boolean responseStatus=job1.optBoolean("responseStatus");
                             if (responseStatus){
+                                attendabceInfiList.clear();
                                 // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
                                 JSONArray responseData=job1.optJSONArray("responseData");
 
