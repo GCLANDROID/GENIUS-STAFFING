@@ -49,7 +49,7 @@ public class MetsoAttendanceReportActivity extends AppCompatActivity {
     LinearLayout llLoder,llMain,llNodata,llAgain,llSearch;
     ImageView imgBack,imgHome,imgAgain,imgSearch;
     ProgressBar progressBar;
-    ArrayList<AttendanceModule> attendabceInfiList;
+    ArrayList<AttendanceModule> attendabceInfiList = new ArrayList<>();
     MetsoAttendanceReportAdapter metsoAttendanceReportAdapter;
     RecyclerView rvAttendanceReport;
     TextView tvYear,tvMonth;
@@ -245,7 +245,7 @@ public class MetsoAttendanceReportActivity extends AppCompatActivity {
 
                         Log.d("responseAttendance", response);
 
-                        // attendabceInfiList.clear();
+                        attendabceInfiList.clear();
 
                         try {
                             JSONObject job1 = new JSONObject(response);
@@ -256,7 +256,7 @@ public class MetsoAttendanceReportActivity extends AppCompatActivity {
                             if (responseStatus){
                                 // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
                                 JSONArray responseData=job1.optJSONArray("responseData");
-                                attendabceInfiList = new ArrayList<>();
+
                                 for (int i = 0; i < responseData.length(); i++){
                                     JSONObject obj=responseData.getJSONObject(i);
                                     String AttendanceDate=obj.optString("AttendanceDate");
