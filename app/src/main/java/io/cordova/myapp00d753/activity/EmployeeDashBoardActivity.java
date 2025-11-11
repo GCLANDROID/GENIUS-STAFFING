@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -79,12 +78,13 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import io.cordova.myapp00d753.R;
-import io.cordova.myapp00d753.activity.SKF.SKF_AttendanceRegularizationActivity;
 import io.cordova.myapp00d753.activity.attendance.MetsoAttendanceActivity;
 import io.cordova.myapp00d753.adapter.MenuItemAdapter;
+import io.cordova.myapp00d753.adapter.NeedToActAdapter;
 import io.cordova.myapp00d753.adapter.NotiAdapter;
 import io.cordova.myapp00d753.adapter.PFDocumentAdapter;
 import io.cordova.myapp00d753.module.MenuItemModel;
+import io.cordova.myapp00d753.module.NeedToActModel;
 import io.cordova.myapp00d753.module.PFDocumentModule;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
@@ -143,11 +143,13 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
     TextView tvNotifcation;
     LinearLayout llNotification;
     ArrayList<PFDocumentModule>docList=new ArrayList<>();
-    LinearLayout llPfDocument,llAppointment;
+    LinearLayout llPfDocument,llAppointment,llNeedToAct;
     int scrollCount = 0;
     NotiAdapter notiAdapter;
     android.app.AlertDialog selfresignDialog;
     AlertDialog alerDialog1;
+    ArrayList<NeedToActModel> needToActModelList = new ArrayList<>();
+    RecyclerView rvNeedToAct;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,7 +165,16 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
             Open_UAN_Activation_Popup();
         }
         onClick();
+        JSONObject objNeedToAct=new JSONObject();
+        try {
+            //objNeedToAct.put("MasterID", "AEMP001707000777");
+            objNeedToAct.put("MasterID", pref.getMasterId());
+            getNeedToActData(objNeedToAct);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
+
 
 
 
@@ -199,10 +210,12 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         imglogout=(ImageView)findViewById(R.id.imglogout);
 
         tvEmpName=(TextView)findViewById(R.id.tvEmpName);
-
+        rvNeedToAct = findViewById(R.id.rvNeedToAct);
+        rvNeedToAct.setLayoutManager(new LinearLayoutManager(EmployeeDashBoardActivity.this));
         tvEmpName.setText(pref.getEmpName());
         tvNotifcation=(TextView)findViewById(R.id.tvNotifcation);
         llNotification=(LinearLayout)findViewById(R.id.llNotification);
+        llNeedToAct=(LinearLayout)findViewById(R.id.llNeedToAct);
 
 
         tvGreeting = (TextView) findViewById(R.id.tvGreeting);
@@ -271,7 +284,89 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         //
     }
 
+    private void getNeedToActData(JSONObject objNeedToAct) {
+        final ProgressDialog pd=new ProgressDialog(EmployeeDashBoardActivity.this);
+        pd.setMessage("Loading.....");
+        pd.show();
+        AndroidNetworking.post(AppData.NEED_TO_ACT)
+                .addJSONObjectBody(objNeedToAct)
+                .addHeaders("SecurityKey", "gStbCQYjYBDCQ4fkGoQSUj7LYe8uVdZ1")
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "NEED_TO_ACT: "+response.toString(4));
+                            pd.dismiss();
+                            JSONObject job = response;
+                            boolean isSuccess = job.optBoolean("Success");
+                            if (isSuccess){
+                                JSONObject Data = job.getJSONObject("Data");
+                                JSONArray Table = Data.optJSONArray("Table");
+                                if (Table.length() > 0){
+                                    for (int i = 0; i < Table.length(); i++) {
+                                        JSONObject object = Table.getJSONObject(i);
+                                        int LetterID = object.optInt("LetterID");
+                                        String MasterID = object.optString("MasterID");
+                                        String Domain = object.optString("Domain");
+                                        String DocName = object.optString("DocName");
+                                        String Category = object.optString("Category");
+                                        String ExpDate = object.optString("ExpDate");
+                                        int AcceptanceType = object.optInt("AcceptanceType");
+                                        int IsMandatoryPopup = object.optInt("IsMandatoryPopup");
+                                        String ActUrl = object.optString("ActUrl");
+                                        if(IsMandatoryPopup == 1){
+                                            openActionRequiredPopUp(DocName,ActUrl);
+                                        }
 
+                                        needToActModelList.add(new NeedToActModel(LetterID,MasterID,Domain,DocName,Category,ExpDate,
+                                                AcceptanceType,IsMandatoryPopup,ActUrl));
+                                    }
+
+                                    NeedToActAdapter needToActAdapter = new NeedToActAdapter(EmployeeDashBoardActivity.this,needToActModelList);
+                                    rvNeedToAct.setAdapter(needToActAdapter);
+                                } else {
+                                    llNeedToAct.setVisibility(View.GONE);
+                                }
+                            } else {
+                                llNeedToAct.setVisibility(View.GONE);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        pd.dismiss();
+                        llNeedToAct.setVisibility(View.GONE);
+                        Log.e(TAG, "NEED_TO_ACT_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
+    public void openActionRequiredPopUp(String docName, String actUrl){
+        Dialog dialog = new Dialog(EmployeeDashBoardActivity.this,R.style.CustomDialogNew2);
+        dialog.setContentView(R.layout.action_requried_popup);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        TextView tvDocName = dialog.findViewById(R.id.tvDocName);
+        Button btnAccept = dialog.findViewById(R.id.btnAccept);
+        tvDocName.setText(docName);
+        btnAccept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(actUrl));
+                startActivity(intent);
+
+            }
+        });
+        dialog.show();
+    }
 
 
     private void onClick() {
