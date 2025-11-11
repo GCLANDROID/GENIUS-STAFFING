@@ -2,11 +2,9 @@ package io.cordova.myapp00d753.utility;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -14,11 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import io.cordova.myapp00d753.R;
-import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
-import io.cordova.myapp00d753.activity.WeeklyOffAttendanceActivity;
 
 public class ShowDialog {
-    private static AlertDialog al1,successaAlertDialog;
+    private static AlertDialog errorAlertDialog,successaAlertDialog;
 
     public static void showSuccessDialog(Context context, String text,ResultListener resultListener) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context, R.style.CustomDialogNew);
@@ -55,17 +51,23 @@ public class ShowDialog {
         imgCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                al1.dismiss();
+                errorAlertDialog.dismiss();
             }
         });
 
-        al1 = dialogBuilder.create();
-        al1.setCancelable(false);
-        Window window = al1.getWindow();
+        errorAlertDialog = dialogBuilder.create();
+        errorAlertDialog.setCancelable(false);
+        Window window = errorAlertDialog.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.CENTER);
-        al1.show();
+        errorAlertDialog.show();
     }
+    public static void onDismiss(){
+        if (successaAlertDialog != null  || successaAlertDialog.isShowing()){
+            successaAlertDialog.dismiss();
+        }
+    }
+
 
     public interface ResultListener{
         void onSuccess();

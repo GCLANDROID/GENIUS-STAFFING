@@ -121,17 +121,70 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:padding="20dp">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clReportingManager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="5dp"
+                    android:paddingVertical="5dp"
+                    android:background="@drawable/broder">
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout6"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginEnd="5dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/btnChangeApprover"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Reporting Manager/Approver:"
+                            android:textColor="@color/textcolor"
+                            android:textStyle="bold"
+                            android:textSize="12.5sp"/>
+
+                        <TextView
+                            android:id="@+id/tvApproverName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Reporting Manager"
+                            android:textColor="@color/black"
+                            android:textSize="14sp"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/btnChangeApprover"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:background="@drawable/lldesign"
+                        android:backgroundTint="@color/textcolor"
+                        android:text="Update"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@+id/linearLayout6"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/linearLayout6" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp">
                     <TextView
                         android:textStyle="bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
                         android:textColor="@color/blue"
-                        android:text="Target set by Self:"></TextView>
+                        android:text="Target set by Self:"/>
                     <TextView
                         android:layout_marginTop="10dp"
                         android:id="@+id/tvSelfTarget"
@@ -139,7 +192,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
                         android:textColor="@color/textcolor"
-                        ></TextView>
+                        />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_marginTop="20dp"
@@ -153,7 +206,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
                         android:textColor="@color/blue"
-                       ></TextView>
+                       />
                     <TextView
                         android:layout_marginTop="10dp"
                         android:id="@+id/tvApproverTarget"
@@ -161,7 +214,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
                         android:textColor="@color/textcolor"
-                        ></TextView>
+                        />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_marginTop="20dp"
@@ -250,6 +303,24 @@
                 </LinearLayout>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
+        <LinearLayout
+            android:id="@+id/llNoDataFound"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone">
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/search"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PMS Details Not Found"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"/>
+        </LinearLayout>
     </LinearLayout>
 
 </layout>
