@@ -37,6 +37,8 @@
         <activity
             android:name=".activity.SKF.HolidayViewActivity"
             android:exported="false" />
+        <activity android:name=".activity.ChatBotActivity"
+            android:theme="@style/FloatingChatTheme" />
         <activity
             android:name=".activity.ConsentActivity"
             android:exported="false">
