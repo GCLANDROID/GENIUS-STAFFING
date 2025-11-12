@@ -127,6 +127,28 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
+                        <LinearLayout
+                            android:id="@+id/llNeedToAct"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Need To Act"
+                                android:textColor="@color/black"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/rvNeedToAct"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="10dp"
+                                tools:listitem="@layout/need_to_act_item" />
+                        </LinearLayout>
 
                         <LinearLayout
                             android:id="@+id/llNotification"
@@ -219,28 +241,7 @@
                             </LinearLayout>
 
 
-                        <LinearLayout
-                            android:id="@+id/llNeedToAct"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:orientation="vertical">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Need To Act"
-                                android:textColor="@color/black"
-                                android:textSize="14sp"
-                                android:textStyle="bold" />
-
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/rvNeedToAct"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_marginTop="10dp"
-                                tools:listitem="@layout/need_to_act_item" />
-                        </LinearLayout>
 
                         <LinearLayout
                             android:layout_marginTop="10dp"
@@ -266,6 +267,9 @@
                 </androidx.core.widget.NestedScrollView>
 
 
+
+
+
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/fbSpoke"
                     android:backgroundTint="@color/misscolor"
@@ -275,6 +279,44 @@
                     app:fabSize="auto"
                    android:layout_gravity="bottom|right"
                     app:srcCompat="@drawable/helpdesk" />
+
+                <LinearLayout
+                    android:layout_gravity="center|right"
+                    android:id="@+id/chatFabContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <!-- Floating label text -->
+
+
+                    <!-- Floating Action Button -->
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/fbChatbot"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/chatbot"
+                        app:backgroundTint="@color/colorAccent"
+
+                        app:maxImageSize="56dp" />
+                    <TextView
+                        android:id="@+id/fabLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Genius Genie 🤖"
+                        android:textColor="@android:color/white"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:background="@drawable/fab_label_bg"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="6dp"
+                        android:layout_marginEnd="8dp"
+                        android:elevation="6dp" />
+                </LinearLayout>
 
             </FrameLayout>
 

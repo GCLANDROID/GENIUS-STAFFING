@@ -123,7 +123,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
     ImageView imglogout;
     String menuName;
     AlertDialog feedbackpopupDialog,aknowledgePopUp,pfImageDialog;
-    FloatingActionButton fbSpoke;
+    FloatingActionButton fbSpoke,fbChatbot;
     JSONArray spokepersonArray;
     AlertDialog al1,al2;
     boolean survey;
@@ -150,6 +150,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
     AlertDialog alerDialog1;
     ArrayList<NeedToActModel> needToActModelList = new ArrayList<>();
     RecyclerView rvNeedToAct;
+    LinearLayout chatFabContainer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -206,6 +207,8 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         }
 
         fbSpoke=(FloatingActionButton)findViewById(R.id.fbSpoke);
+        fbChatbot=(FloatingActionButton)findViewById(R.id.fbChatbot);
+        chatFabContainer=(LinearLayout)findViewById(R.id.chatFabContainer);
         connectionCheck = new NetworkConnectionCheck(EmployeeDashBoardActivity.this);
         imglogout=(ImageView)findViewById(R.id.imglogout);
 
@@ -393,6 +396,16 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                 Intent intent = new Intent(EmployeeDashBoardActivity.this, ViewSpokePersonActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("spokepersonarray", spokepersonArray.toString());
+                startActivity(intent);
+
+            }
+        });
+
+        chatFabContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(EmployeeDashBoardActivity.this, ChatBotNewActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
 
             }

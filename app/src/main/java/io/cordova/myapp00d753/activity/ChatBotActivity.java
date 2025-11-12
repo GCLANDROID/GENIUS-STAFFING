@@ -70,7 +70,7 @@ public class ChatBotActivity extends AppCompatActivity {
                 showPFResponse();
             }
             else {
-                addBotMessage("Please choose 1️⃣ Payroll Service or 2️⃣ PF Service.");
+                addBotMessage("Please choose 1️⃣ Payroll or 2️⃣ PF.");
             }
         }
         else if (selectedMainOption.equals("Payroll")) {
@@ -111,7 +111,7 @@ public class ChatBotActivity extends AppCompatActivity {
     }
 
     private void showPayrollOptions() {
-        addBotMessage("You selected Payroll Service. Please choose an option:");
+        addBotMessage("You selected Payroll. Please choose an option:");
         addBotMessage("1️⃣ Last Month Salary Slip");
         addBotMessage("2️⃣ View CTC");
         addBotMessage("3️⃣ Primary Options");
@@ -119,7 +119,7 @@ public class ChatBotActivity extends AppCompatActivity {
     }
 
     private void showPFResponse() {
-        addBotMessage("You selected PF Service.");
+        addBotMessage("You selected PF.");
         addBotMessage("🧾 Your UAN Number is: UAN1234567890");
         addBotMessage("🔗 Please view your passbook here:");
         addBotMessage("<a href='https://www.epfindia.gov.in/site_en/For_Employees.php'>View PF Passbook</a>");
@@ -148,7 +148,7 @@ public class ChatBotActivity extends AppCompatActivity {
 
         // Robot icon
         ImageView icon = new ImageView(this);
-        icon.setImageResource(R.drawable.ic_robot);
+        icon.setImageResource(R.drawable.chatbot);
         LinearLayout.LayoutParams iconParams = new LinearLayout.LayoutParams(60, 60);
         iconParams.setMargins(5, 0, 10, 0);
         icon.setLayoutParams(iconParams);

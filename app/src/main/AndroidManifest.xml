@@ -31,13 +31,23 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.attendance.GeoFenceAttendanceWithOutLocActivity"></activity>
-        <activity android:name=".activity.attendance.GeoFenceAttendanceWithPunchTypeActivity"
-            android:screenOrientation="userPortrait"></activity>
+        <activity
+            android:name=".activity.ChatBotNewActivity"
+            android:exported="false"
+            android:theme="@style/FloatingChatTheme">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity android:name=".activity.attendance.GeoFenceAttendanceWithOutLocActivity" />
+        <activity
+            android:name=".activity.attendance.GeoFenceAttendanceWithPunchTypeActivity"
+            android:screenOrientation="userPortrait" />
         <activity
             android:name=".activity.SKF.HolidayViewActivity"
             android:exported="false" />
-        <activity android:name=".activity.ChatBotActivity"
+        <activity
+            android:name=".activity.ChatBotActivity"
             android:theme="@style/FloatingChatTheme" />
         <activity
             android:name=".activity.ConsentActivity"
@@ -46,10 +56,12 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".activity.attendance.AttendanceWithOnlyShiftActivity"
-            android:screenOrientation="userPortrait"></activity>
-        <activity android:name=".activity.ViewLeaveBalanceActivity"
-            android:screenOrientation="userPortrait"/>
+        <activity
+            android:name=".activity.attendance.AttendanceWithOnlyShiftActivity"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activity.ViewLeaveBalanceActivity"
+            android:screenOrientation="userPortrait" />
         <activity
             android:name=".activity.SKF.SKF_AttendanceRegularizationActivity"
             android:exported="false" />
@@ -371,14 +383,16 @@
         <activity
             android:name=".activity.SupSalaryActivity"
             android:screenOrientation="userPortrait" />
-       <!-- <activity
+        <!--
+ <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:exported="true"
-            android:theme="@style/CropImage" />-->
-
-        <activity android:name=".CropImage.CropImageActivity"
+            android:theme="@style/CropImage" />
+        -->
+        <activity
+            android:name=".CropImage.CropImageActivity"
             android:exported="true"
-            android:theme="@style/CropImage"/>
+            android:theme="@style/CropImage" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -629,8 +643,6 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
-
     </application>
 
 </manifest>
