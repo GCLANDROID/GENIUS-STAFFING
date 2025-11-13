@@ -38,6 +38,14 @@
             android:src="@drawable/paperplane"
             />
 
+        <ImageView
+            android:id="@+id/imgMic"
+            android:layout_marginLeft="5dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/microphone"
+            />
+
         </LinearLayout>
 
 

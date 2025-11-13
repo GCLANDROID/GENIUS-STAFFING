@@ -1,17 +1,25 @@
 package io.cordova.myapp00d753.activity;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
@@ -24,11 +32,16 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.adapter.ChatbotMessageAdapter;
+import io.cordova.myapp00d753.adapter.DocumentAdapter;
 import io.cordova.myapp00d753.module.BotMessageModule;
+import io.cordova.myapp00d753.module.DocumentManageModule;
 import io.cordova.myapp00d753.module.SalaryModule;
+import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
 
@@ -43,6 +56,9 @@ public class ChatBotNewActivity extends AppCompatActivity {
     Pref pref;
     int y;
     String year;
+    boolean esiCardFound,medicalCardFound;
+    ImageView imgMic;
+    private static final int REQUEST_CODE_SPEECH_INPUT = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +70,13 @@ public class ChatBotNewActivity extends AppCompatActivity {
         recyclerChat = findViewById(R.id.recyclerChat);
         etMessage = findViewById(R.id.etMessage);
         btnSend = findViewById(R.id.btnSend);
+        imgMic=findViewById(R.id.imgMic);
 
         adapter = new ChatbotMessageAdapter(messages);
         recyclerChat.setAdapter(adapter);
         recyclerChat.setLayoutManager(new LinearLayoutManager(this));
 
-        addBotMessage("Hi! I'm Genius Genie🤖\nPlease select one option from below \n\n🅰️ Payroll Query\n🅱️ PF Query");
+        addBotMessage("Hi! I'm Genie🤖\nPlease select one option from below \n\n1️⃣ Payroll Query\n2️⃣ PF Query\n3️⃣ ESI Card \n4️⃣ Medical Card");
 
         btnSend.setOnClickListener(v -> {
             String msg = etMessage.getText().toString().trim();
@@ -68,6 +85,29 @@ public class ChatBotNewActivity extends AppCompatActivity {
             addUserMessage(msg);
             etMessage.setText("");
             handleUserInput(msg.toLowerCase());
+        });
+
+        imgMic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent
+                        = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                        RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,
+                        Locale.getDefault());
+                intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak to text");
+
+                try {
+                    startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT);
+                }
+                catch (Exception e) {
+                    Toast
+                            .makeText(ChatBotNewActivity.this, " " + e.getMessage(),
+                                    Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
         });
     }
 
@@ -80,7 +120,7 @@ public class ChatBotNewActivity extends AppCompatActivity {
         // 🔹 Global commands
         if (msg.equals("restart")) {
             currentMenu = MenuState.MAIN;
-            addBotMessage("Please select one option from below 🔄\n\n🅰️ Payroll Related Query\n🅱️ PF Related Query");
+            addBotMessage("Please select one option from below \n\n1️⃣ Payroll Query\n2️⃣ PF Query\n3️⃣ ESI Card \n4️⃣ Medical Card");
             return;
         }
 
@@ -95,27 +135,64 @@ public class ChatBotNewActivity extends AppCompatActivity {
             // 🅰️🅱️🅲 MAIN MENU
             case MAIN:
                 switch (msg) {
-                    case "a":
+                    case "1":
+                    case "one":
                     case "payroll":
+                    case "payroll query":
                         currentMenu = MenuState.PAYROLL;
                         addBotMessage("Please choose any option:\n\n1️⃣ Last Month Salary Slip\n2️⃣ CTC Information\n3️⃣ Primary Options\n4️⃣ Exit Chat");
                         break;
 
-                    case "b":
+                    case "2":
+                    case "two":
                     case "pf":
+                    case "pf query":
                         currentMenu = MenuState.PF;
                         addBotMessage("Please choose any option:\n1️⃣ UAN Number\n2️⃣ PF Passbook\n3️⃣ Any other PF Related Query\n4️⃣ Primary Options\n5️⃣ Exit Chat");
                         break;
 
-                    case "c":
-                    case "document":
-                        currentMenu = MenuState.DOCUMENT;
-                        addBotMessage("You chose Document Service 📄\nPlease upload or request your document here:\nhttps://example.com/document\nType 'primary' to go back.");
+                    case "3":
+                    case "three":
+                    case "esi":
+                    case "esi card":
+                        JSONObject obj=new JSONObject();
+                        try {
+                            obj.put("AEMEmployeeID", pref.getEmpId());
+                            obj.put("FileName",JSONObject.NULL);
+                            obj.put("FileType","0");
+                            obj.put("DocumentID","0");
+                            obj.put("ReferenceNo","0");
+                            obj.put("DbOperation","1");
+                            obj.put("SecurityCode",pref.getSecurityCode());
+                            getDocList(obj);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        break;
+                    case "4":
+                    case "four":
+                    case "medical":
+                    case "medical card":
+                        JSONObject medobj=new JSONObject();
+                        try {
+                            medobj.put("AEMEmployeeID", pref.getEmpId());
+                            medobj.put("FileName",JSONObject.NULL);
+                            medobj.put("FileType","0");
+                            medobj.put("DocumentID","0");
+                            medobj.put("ReferenceNo","0");
+                            medobj.put("DbOperation","1");
+                            medobj.put("SecurityCode",pref.getSecurityCode());
+                            getMedicalCard(medobj);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                         break;
 
                     default:
                         // 🔸 Default handler for MAIN
-                        addBotMessage("Please choose a valid option 🙂\n🅰️ Payroll \n🅱️ PF");
+                        addBotMessage("Please choose a valid option 🙂\n1️⃣ Payroll \n2️⃣ PF \n3️⃣ ESI Card \n4️⃣ Medical Card");
                 }
                 break;
 
@@ -123,6 +200,11 @@ public class ChatBotNewActivity extends AppCompatActivity {
             case PAYROLL:
                 switch (msg) {
                     case "1":
+                    case "one":
+                    case "salary":
+                    case "last month salary":
+                    case "last month salary slip":
+                    case "salary slip":
                         JSONObject obj=new JSONObject();
                         try {
 
@@ -136,17 +218,24 @@ public class ChatBotNewActivity extends AppCompatActivity {
                         //addBotMessage("Here’s your Last Month Salary Slip 📑\nhttps://example.com/salaryslip");
                         break;
                     case "2":
+                    case "two":
+                    case "ctc":
+                    case "ctc information":
+                    case "ctc view":
                         String ctcUrl = pref.getCTCURL(); // your real URL
                         String maskedText = "<a href=\"" + ctcUrl + "\">Click to View</a>";
                         addBotMessage("Here is your CTC information 🔒:\n" + maskedText);
                         break;
                     case "3":
+                    case "three":
                     case "primary":
                     case "primary options":
                         currentMenu = MenuState.MAIN;
-                        addBotMessage("Returning to Primary Options:\n🅰️ Payroll Service\n🅱️ PF Service");
+                        addBotMessage("Please select one option from below \n\n1️⃣ Payroll Query\n2️⃣ PF Query\n3️⃣ ESI Card \n4️⃣ Medical Card");
                         break;
                     case "4":
+                    case "four":
+                    case "exit":
                     case "exit chat":
                         addBotMessage("Thank you for chatting with HR Genius! 👋");
                         recyclerChat.postDelayed(this::finish, 1200);
@@ -161,6 +250,10 @@ public class ChatBotNewActivity extends AppCompatActivity {
             case PF:
                 switch (msg) {
                     case "1":
+                    case "one":
+                    case "uan number":
+                    case "un number":
+                    case "uan":
                         //addBotMessage("Your UAN number is: <b>UAN1234567890</b>");
                         JSONObject obj=new JSONObject();
                         try {
@@ -177,6 +270,9 @@ public class ChatBotNewActivity extends AppCompatActivity {
                         }
                         break;
                     case "2":
+                    case "two":
+                    case "pf passbook":
+                    case "passbook":
                         addBotMessage("Please view your PF Passbook here 📘\nhttps://www.epfindia.gov.in");
                         break;
                     case "3":
@@ -184,9 +280,9 @@ public class ChatBotNewActivity extends AppCompatActivity {
                         break;
                     case "4":
                     case "primary":
-                    case "primary options":
+                    case "primary option":
                         currentMenu = MenuState.MAIN;
-                        addBotMessage("Returning to Primary Options:\n🅰️ Payroll Service\n🅱️ PF Service");
+                        addBotMessage("Please select one option from below \n\n1️⃣ Payroll Query\n2️⃣ PF Query\n3️⃣ ESI Card \n4️⃣ Medical Card");
                         break;
                     case "5":
                     case "exit chat":
@@ -339,9 +435,196 @@ public class ChatBotNewActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError anError) {
+                        hideTypingIndicator();
+                        addBotMessage("Error fetching Salary details. Please try again later ❌");
 
 
                     }
                 });
+    }
+
+    private void getDocList(JSONObject jsonObject) {
+       showTypingIndicator();
+        AndroidNetworking.post(AppData.EMPLOYEE_DOCUMENT_MANAGE)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String DocumentName = obj.optString("DocumentName");
+                                    String DocLink = obj.optString("Mobilelink");
+                                    if (DocumentName.equalsIgnoreCase("Esi Card")) {
+                                        hideTypingIndicator();
+                                        esiCardFound=true;
+                                        String maskedText = "<a href=\"" + DocLink + "\">Click to View</a>";
+                                        addBotMessage("Here’s your ESI Card 📑\n" + maskedText);
+                                        break;
+
+                                    }
+                                }
+
+                                if (!esiCardFound) {
+                                    getSpokePersonList();
+                                }
+
+                            } else {
+                                hideTypingIndicator();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        hideTypingIndicator();
+                        addBotMessage("Error fetching ESI Card details. Please try again later ❌");
+
+                    }
+                });
+    }
+
+    private void getMedicalCard(JSONObject jsonObject) {
+        showTypingIndicator();
+        AndroidNetworking.post(AppData.EMPLOYEE_DOCUMENT_MANAGE)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String DocumentName = obj.optString("DocumentName");
+                                    String DocLink = obj.optString("Mobilelink");
+                                    if (DocumentName.equalsIgnoreCase("Medical Card")) {
+                                        hideTypingIndicator();
+                                        medicalCardFound=true;
+                                        String maskedText = "<a href=\"" + DocLink + "\">Click to View</a>";
+                                        addBotMessage("Here’s your Medical Card 📑\n" + maskedText);
+                                        break;
+
+                                    }
+                                }
+
+                                if (!medicalCardFound) {
+                                    getSpokePersonList();
+                                }
+
+                            } else {
+                                hideTypingIndicator();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        hideTypingIndicator();
+                        addBotMessage("Error fetching ESI Card details. Please try again later ❌");
+
+                    }
+                });
+    }
+
+    private void getSpokePersonList(){
+      showTypingIndicator();
+        String surl = AppData.url+"gcl_GeniusSpocList?ID="+pref.getEmpId()+"&SecurityCode="+pref.getSecurityCode();
+        Log.d("input",surl);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("responseAttendance", response);
+                        hideTypingIndicator();
+
+
+                        // attendabceInfiList.clear();
+
+                        try {
+                            JSONObject job1 = new JSONObject(response);
+                            Log.e("response12", "@@@@@@" + job1);
+                            String responseText=job1.optString("responseText");
+
+                            boolean responseStatus=job1.optBoolean("responseStatus");
+
+                            // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
+                            JSONArray responseData=job1.optJSONArray("responseData");
+                            JSONObject obj = responseData.optJSONObject(0);
+                            String Name = obj.optString("Name");
+                            String Mobile = obj.optString("Mobile");
+                            addBotMessage("No ESI Card found \n\nFor further query please contact with: " + Name + "\nContact Number: " + Mobile);
+
+
+
+
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            // Toast.makeText(AttendanceReportActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
+
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                hideTypingIndicator();
+
+                // Toast.makeText(AttendanceReportActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
+                Log.e("ert",error.toString());
+            }
+        }) {
+
+        };
+        AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_SPEECH_INPUT) {
+            if (resultCode == RESULT_OK && data != null) {
+                ArrayList<String> result = data.getStringArrayListExtra(
+                        RecognizerIntent.EXTRA_RESULTS);
+
+                String text = Objects.requireNonNull(result).get(0);
+                String msg = text;
+                if (msg.isEmpty()) return;
+
+                addUserMessage(msg);
+                etMessage.setText("");
+                handleUserInput(msg.toLowerCase());
+
+
+            }
+        }
     }
 }
