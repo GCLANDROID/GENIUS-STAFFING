@@ -361,11 +361,10 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.dismiss();
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(Uri.parse(actUrl));
                 startActivity(intent);
-
+                dialog.dismiss();
             }
         });
         dialog.show();
