@@ -51,12 +51,14 @@ public class ChatBotNewActivity extends AppCompatActivity {
     private ImageView btnSend;
     private ChatbotMessageAdapter adapter;
     private List<BotMessageModule> messages = new ArrayList<>();
-    private enum MenuState { MAIN, PAYROLL, PF, DOCUMENT }
+
+    private enum MenuState {MAIN, PAYROLL, PF, DOCUMENT}
+
     private MenuState currentMenu = MenuState.MAIN;
     Pref pref;
     int y;
     String year;
-    boolean esiCardFound,medicalCardFound;
+    boolean esiCardFound, medicalCardFound;
     ImageView imgMic;
     private static final int REQUEST_CODE_SPEECH_INPUT = 1;
 
@@ -64,13 +66,13 @@ public class ChatBotNewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_bot_new);
-        pref=new Pref(ChatBotNewActivity.this);
+        pref = new Pref(ChatBotNewActivity.this);
         y = Calendar.getInstance().get(Calendar.YEAR);
-        year=String.valueOf(y);
+        year = String.valueOf(y);
         recyclerChat = findViewById(R.id.recyclerChat);
         etMessage = findViewById(R.id.etMessage);
         btnSend = findViewById(R.id.btnSend);
-        imgMic=findViewById(R.id.imgMic);
+        imgMic = findViewById(R.id.imgMic);
 
         adapter = new ChatbotMessageAdapter(messages);
         recyclerChat.setAdapter(adapter);
@@ -100,8 +102,7 @@ public class ChatBotNewActivity extends AppCompatActivity {
 
                 try {
                     startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     Toast
                             .makeText(ChatBotNewActivity.this, " " + e.getMessage(),
                                     Toast.LENGTH_SHORT)
@@ -110,7 +111,6 @@ public class ChatBotNewActivity extends AppCompatActivity {
             }
         });
     }
-
 
 
     private void handleUserInput(String rawMsg) {
@@ -155,15 +155,15 @@ public class ChatBotNewActivity extends AppCompatActivity {
                     case "three":
                     case "esi":
                     case "esi card":
-                        JSONObject obj=new JSONObject();
+                        JSONObject obj = new JSONObject();
                         try {
                             obj.put("AEMEmployeeID", pref.getEmpId());
-                            obj.put("FileName",JSONObject.NULL);
-                            obj.put("FileType","0");
-                            obj.put("DocumentID","0");
-                            obj.put("ReferenceNo","0");
-                            obj.put("DbOperation","1");
-                            obj.put("SecurityCode",pref.getSecurityCode());
+                            obj.put("FileName", JSONObject.NULL);
+                            obj.put("FileType", "0");
+                            obj.put("DocumentID", "0");
+                            obj.put("ReferenceNo", "0");
+                            obj.put("DbOperation", "1");
+                            obj.put("SecurityCode", pref.getSecurityCode());
                             getDocList(obj);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -174,15 +174,15 @@ public class ChatBotNewActivity extends AppCompatActivity {
                     case "four":
                     case "medical":
                     case "medical card":
-                        JSONObject medobj=new JSONObject();
+                        JSONObject medobj = new JSONObject();
                         try {
                             medobj.put("AEMEmployeeID", pref.getEmpId());
-                            medobj.put("FileName",JSONObject.NULL);
-                            medobj.put("FileType","0");
-                            medobj.put("DocumentID","0");
-                            medobj.put("ReferenceNo","0");
-                            medobj.put("DbOperation","1");
-                            medobj.put("SecurityCode",pref.getSecurityCode());
+                            medobj.put("FileName", JSONObject.NULL);
+                            medobj.put("FileType", "0");
+                            medobj.put("DocumentID", "0");
+                            medobj.put("ReferenceNo", "0");
+                            medobj.put("DbOperation", "1");
+                            medobj.put("SecurityCode", pref.getSecurityCode());
                             getMedicalCard(medobj);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -205,12 +205,12 @@ public class ChatBotNewActivity extends AppCompatActivity {
                     case "last month salary":
                     case "last month salary slip":
                     case "salary slip":
-                        JSONObject obj=new JSONObject();
+                        JSONObject obj = new JSONObject();
                         try {
 
-                            obj.put("AEMEmployeeID",pref.getEmpId());
-                            obj.put("SalYear",year);
-                            obj.put("SecurityCode",pref.getSecurityCode());
+                            obj.put("AEMEmployeeID", pref.getEmpId());
+                            obj.put("SalYear", year);
+                            obj.put("SecurityCode", pref.getSecurityCode());
                             getSalaryList(obj);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -229,7 +229,7 @@ public class ChatBotNewActivity extends AppCompatActivity {
                     case "3":
                     case "three":
                     case "primary":
-                    case "primary options":
+                    case "primary option":
                         currentMenu = MenuState.MAIN;
                         addBotMessage("Please select one option from below \n\n1️⃣ Payroll Query\n2️⃣ PF Query\n3️⃣ ESI Card \n4️⃣ Medical Card");
                         break;
@@ -255,15 +255,15 @@ public class ChatBotNewActivity extends AppCompatActivity {
                     case "un number":
                     case "uan":
                         //addBotMessage("Your UAN number is: <b>UAN1234567890</b>");
-                        JSONObject obj=new JSONObject();
+                        JSONObject obj = new JSONObject();
                         try {
                             obj.put("AEMConsultantID", pref.getEmpConId());
-                            obj.put("AEMClientID",pref.getEmpClintId());
-                            obj.put("AEMClientOfficeID",pref.getEmpClintOffId());
-                            obj.put("AEMEmployeeID",pref.getEmpId());
-                            obj.put("SecurityCode",pref.getSecurityCode());
-                            obj.put("WorkingStatus","1");
-                            obj.put("CurrentPage","0");
+                            obj.put("AEMClientID", pref.getEmpClintId());
+                            obj.put("AEMClientOfficeID", pref.getEmpClintOffId());
+                            obj.put("AEMEmployeeID", pref.getEmpId());
+                            obj.put("SecurityCode", pref.getSecurityCode());
+                            obj.put("WorkingStatus", "1");
+                            obj.put("CurrentPage", "0");
                             getUANNumber(obj);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -276,15 +276,21 @@ public class ChatBotNewActivity extends AppCompatActivity {
                         addBotMessage("Please view your PF Passbook here 📘\nhttps://www.epfindia.gov.in");
                         break;
                     case "3":
+                    case "three":
+                    case "query":
+                    case "pf related query":
+                    case "another query":
                         addBotMessage("For any other PF-related queries \nPlease contact our toll-free helpline at \n\n7313604174 (available from 10:00 AM to 6:00 PM)");
                         break;
                     case "4":
+                    case "four":
                     case "primary":
                     case "primary option":
                         currentMenu = MenuState.MAIN;
                         addBotMessage("Please select one option from below \n\n1️⃣ Payroll Query\n2️⃣ PF Query\n3️⃣ ESI Card \n4️⃣ Medical Card");
                         break;
                     case "5":
+                    case "five":
                     case "exit chat":
                         addBotMessage("Thank you for chatting with HR Genius! 👋");
                         recyclerChat.postDelayed(this::finish, 1200);
@@ -344,7 +350,7 @@ public class ChatBotNewActivity extends AppCompatActivity {
         showTypingIndicator();
         AndroidNetworking.post(AppData.GCL_KYC)
                 .addJSONObjectBody(jsonObject)
-                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
@@ -362,10 +368,10 @@ public class ChatBotNewActivity extends AppCompatActivity {
 
                                 JSONArray jsonArray = new JSONArray(Response_Data);
                                 for (int i = 0; i < jsonArray.length(); i++) {
-                                    JSONObject obj=jsonArray.getJSONObject(i);
+                                    JSONObject obj = jsonArray.getJSONObject(i);
 
 
-                                    String UanNo=obj.optString("UANNumber");
+                                    String UanNo = obj.optString("UANNumber");
                                     addBotMessage("Your UAN Number is: " + UanNo);
 
                                 }
@@ -392,7 +398,7 @@ public class ChatBotNewActivity extends AppCompatActivity {
         showTypingIndicator();
         AndroidNetworking.post(AppData.GET_EMPLOYEE_SALARY)
                 .addJSONObjectBody(jsonObject)
-                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
@@ -408,15 +414,13 @@ public class ChatBotNewActivity extends AppCompatActivity {
                                 String Response_Data = job1.optString("Response_Data");
                                 JSONArray jsonArray = new JSONArray(Response_Data);
 
-                                    JSONObject obj = jsonArray.getJSONObject(0);
+                                JSONObject obj = jsonArray.getJSONObject(0);
 
-                                    String url = obj.optString("url");
-                                    Log.d("SalarySlipURL", url);
+                                String url = obj.optString("url");
+                                Log.d("SalarySlipURL", url);
                                 String ctcUrl = url; // your real URL
                                 String maskedText = "<a href=\"" + url + "\">Click to View</a>";
                                 addBotMessage("Here’s your Last Month Salary Slip 📑\n" + maskedText);
-
-
 
 
                             } else {
@@ -444,10 +448,10 @@ public class ChatBotNewActivity extends AppCompatActivity {
     }
 
     private void getDocList(JSONObject jsonObject) {
-       showTypingIndicator();
+        showTypingIndicator();
         AndroidNetworking.post(AppData.EMPLOYEE_DOCUMENT_MANAGE)
                 .addJSONObjectBody(jsonObject)
-                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
@@ -468,7 +472,7 @@ public class ChatBotNewActivity extends AppCompatActivity {
                                     String DocLink = obj.optString("Mobilelink");
                                     if (DocumentName.equalsIgnoreCase("Esi Card")) {
                                         hideTypingIndicator();
-                                        esiCardFound=true;
+                                        esiCardFound = true;
                                         String maskedText = "<a href=\"" + DocLink + "\">Click to View</a>";
                                         addBotMessage("Here’s your ESI Card 📑\n" + maskedText);
                                         break;
@@ -501,7 +505,7 @@ public class ChatBotNewActivity extends AppCompatActivity {
         showTypingIndicator();
         AndroidNetworking.post(AppData.EMPLOYEE_DOCUMENT_MANAGE)
                 .addJSONObjectBody(jsonObject)
-                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
@@ -522,7 +526,7 @@ public class ChatBotNewActivity extends AppCompatActivity {
                                     String DocLink = obj.optString("Mobilelink");
                                     if (DocumentName.equalsIgnoreCase("Medical Card")) {
                                         hideTypingIndicator();
-                                        medicalCardFound=true;
+                                        medicalCardFound = true;
                                         String maskedText = "<a href=\"" + DocLink + "\">Click to View</a>";
                                         addBotMessage("Here’s your Medical Card 📑\n" + maskedText);
                                         break;
@@ -551,10 +555,10 @@ public class ChatBotNewActivity extends AppCompatActivity {
                 });
     }
 
-    private void getSpokePersonList(){
-      showTypingIndicator();
-        String surl = AppData.url+"gcl_GeniusSpocList?ID="+pref.getEmpId()+"&SecurityCode="+pref.getSecurityCode();
-        Log.d("input",surl);
+    private void getSpokePersonList() {
+        showTypingIndicator();
+        String surl = AppData.url + "gcl_GeniusSpocList?ID=" + pref.getEmpId() + "&SecurityCode=" + pref.getSecurityCode();
+        Log.d("input", surl);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
                 new Response.Listener<String>() {
                     @Override
@@ -569,20 +573,24 @@ public class ChatBotNewActivity extends AppCompatActivity {
                         try {
                             JSONObject job1 = new JSONObject(response);
                             Log.e("response12", "@@@@@@" + job1);
-                            String responseText=job1.optString("responseText");
+                            String responseText = job1.optString("responseText");
 
-                            boolean responseStatus=job1.optBoolean("responseStatus");
+                            boolean responseStatus = job1.optBoolean("responseStatus");
+
 
                             // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
-                            JSONArray responseData=job1.optJSONArray("responseData");
-                            JSONObject obj = responseData.optJSONObject(0);
-                            String Name = obj.optString("Name");
-                            String Mobile = obj.optString("Mobile");
-                            addBotMessage("No ESI Card found \n\nFor further query please contact with: " + Name + "\nContact Number: " + Mobile);
+                            JSONArray responseData = job1.optJSONArray("responseData");
+                            if (responseData.length() > 0) {
+                                hideTypingIndicator();
+                                JSONObject obj = responseData.optJSONObject(0);
+                                String Name = obj.optString("Name");
+                                String Mobile = obj.optString("Mobile");
+                                addBotMessage("No details found \n\nFor further query please contact with: " + Name + "\nContact Number: " + Mobile);
 
-
-
-
+                            } else {
+                                hideTypingIndicator();
+                                addBotMessage("Please contact our toll-free helpline at \n\n7313604174 (available from 10:00 AM to 6:00 PM)");
+                            }
 
 
                         } catch (JSONException e) {
@@ -598,7 +606,7 @@ public class ChatBotNewActivity extends AppCompatActivity {
                 hideTypingIndicator();
 
                 // Toast.makeText(AttendanceReportActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
-                Log.e("ert",error.toString());
+                Log.e("ert", error.toString());
             }
         }) {
 

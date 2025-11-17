@@ -4,10 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="550dp"
-    tools:context=".activity.ChatBotNewActivity"
     android:background="@drawable/chat_bg"
-    android:orientation="vertical">
-
+    android:orientation="vertical"
+    tools:context=".activity.ChatBotNewActivity">
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -19,10 +18,10 @@
 
     <!-- Input bar -->
     <LinearLayout
-        android:orientation="horizontal"
-         android:padding="5dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
 
         <EditText
             android:id="@+id/etMessage"
@@ -31,24 +30,21 @@
             android:layout_weight="1"
             android:hint="Type your message..."
             android:padding="10dp" />
+
         <ImageView
             android:id="@+id/btnSend"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/paperplane"
-            />
+            android:src="@drawable/paperplane" />
 
         <ImageView
             android:id="@+id/imgMic"
-            android:layout_marginLeft="5dp"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/microphone"
-            />
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/microphone" />
 
-        </LinearLayout>
-
-
+    </LinearLayout>
 
 
 </LinearLayout>
