@@ -37,7 +37,7 @@ public class NeedToActAdapter extends RecyclerView.Adapter<NeedToActAdapter.MyVi
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.tvDocInfo.setText(needToActModelList.get(position).docName);
-        if (needToActModelList.get(position).acceptanceType == 0){
+        if (needToActModelList.get(position).acceptanceType == 0 || needToActModelList.get(position).acceptanceType == 3){
             holder.txtButton.setText("View Document");
             holder.actionImage.setImageResource(R.drawable.check_mark);
             holder.llMain.setBackgroundResource(R.drawable.design_green_outline);
