@@ -99,7 +99,8 @@ public class HanasaSalesReportActivity extends AppCompatActivity {
         monthList.add("November");
         monthList.add("December");
 
-        financialYearList.add("2024-2025");
+
+        financialYearList.add("2025-2026");
 
         Calendar calendar = Calendar.getInstance();
         int month = calendar.get(Calendar.MONTH); // January is 0, December is 11

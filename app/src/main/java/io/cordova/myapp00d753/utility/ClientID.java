@@ -18,5 +18,6 @@ public class ClientID {
     public static String CBRE_SOUTH_ASIA = "AEMCLI1410000807";
     public static String FED_BANK = "AEMCLI2510001959";
     public static String APG_HOTEL = "AEMCLI2510000161"; // APEEJAY NORTH-WEST HOTELS PRIVATE LIMITED
-    public static String METSO = "AEMCLI2510001972"; //TODO: Old Metso client id : AEMCLI2110001671
+    public static String METSO = "AEMCLI2510001972";
+    public static String LTFOOD = "AEMCLI2510001988";//TODO: Old Metso client id : AEMCLI2110001671
 }

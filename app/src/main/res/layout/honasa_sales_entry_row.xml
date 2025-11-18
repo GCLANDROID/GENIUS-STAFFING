@@ -158,8 +158,37 @@
 
 
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Closing Stock"
+                        android:textSize="12sp"
+                        android:textColor="@color/colorPrimary"/>
+                    <EditText
+                        android:id="@+id/txtClosingStock"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="5dp"
+                        android:inputType="number"
+                        android:textSize="14sp"
+                        android:imeOptions="actionDone"
+                        android:paddingHorizontal="10dp"
+                        android:background="@drawable/lldesign"
+                        android:backgroundTint="@color/bar1"
+                        android:textColor="@color/black"/>
+
+
+                </LinearLayout>
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -205,34 +234,7 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="17dp">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="5dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Closing Stock"
-                        android:textSize="12sp"
-                        android:textColor="@color/colorPrimary"/>
-                    <EditText
-                        android:id="@+id/txtClosingStock"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="5dp"
-                        android:inputType="number"
-                        android:textSize="14sp"
-                        android:imeOptions="actionDone"
-                        android:paddingHorizontal="10dp"
-                        android:background="@drawable/lldesign"
-                        android:backgroundTint="@color/bar1"
-                        android:textColor="@color/black"/>
-
-
-                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"

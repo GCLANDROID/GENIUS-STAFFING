@@ -712,11 +712,12 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                 }*/
                                 else if (pref.getEmpClintId().equals(ClientID.METSO)){
                                     itemList.add(new MenuItemModel("PMS","201"));
-                                }else if (pref.getEmpClintId().equals("AEMCLI2310001780")){
+                                }else if (pref.getEmpClintId().equals(ClientID.LTFOOD) ){
                                     itemList.add(new MenuItemModel("Sales Management","4"));
                                 }else {
                                     //itemList.add(new MenuItemModel("Leave Management","12"));
                                 }
+
 
                                 MenuItemAdapter menuItemAdapter=new MenuItemAdapter(itemList,getApplicationContext(),PFLink,leaveFlag,EmployeeDashBoardActivity.this);
                                 rvItem.setAdapter(menuItemAdapter);

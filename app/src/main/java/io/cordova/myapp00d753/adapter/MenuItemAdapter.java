@@ -146,7 +146,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                         mContex.startActivity(intent);
                     }else {
-                        Intent intent=new Intent(mContex, SalesManagementDashboardActivity.class);
+                        Intent intent=new Intent(mContex, HonasaSalesDashboardActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                         mContex.startActivity(intent);
                     }
