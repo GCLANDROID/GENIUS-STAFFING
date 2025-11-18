@@ -26,6 +26,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
@@ -71,6 +72,7 @@ import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -143,7 +145,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
     ImageView imgDate;
     String monthname;
     private String encodedImage;
-    private Uri imageUri;
+    private Uri imageUri,imageUri1,imageUri2,imageUri3,imageUri4;
     String pdfFilePath, pdfFileName;
     private static final int CAMERA_REQUEST = 1;
     private static final int CAMERA_REQUEST1 = 2;
@@ -421,6 +423,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                 Intent openGalleryIntent = new Intent(Intent.ACTION_PICK);
                 openGalleryIntent.setType("image/*");
                 startActivityForResult(openGalleryIntent, REQUEST_GALLERY_CODE_ONE);
+                //checkPermission(1);
             }
         });
 
@@ -430,6 +433,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                 Intent openGalleryIntent = new Intent(Intent.ACTION_PICK);
                 openGalleryIntent.setType("image/*");
                 startActivityForResult(openGalleryIntent, REQUEST_GALLERY_CODE_TWO);
+                //checkPermission(2);
             }
         });
         imgBack.setOnClickListener(new View.OnClickListener() {
@@ -1910,10 +1914,10 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, "Profile Picture");
         values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera");
-        imageUri = getContentResolver().insert(
+        imageUri1 = getContentResolver().insert(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri1);
         startActivityForResult(cameraIntent, CAMERA_REQUEST1);
     }
 
@@ -1921,10 +1925,10 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, "Profile Picture");
         values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera");
-        imageUri = getContentResolver().insert(
+        imageUri2 = getContentResolver().insert(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri2);
         startActivityForResult(cameraIntent, CAMERA_REQUEST2);
     }
 
@@ -1932,10 +1936,10 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, "Profile Picture");
         values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera");
-        imageUri = getContentResolver().insert(
+        imageUri3 = getContentResolver().insert(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri3);
         startActivityForResult(cameraIntent, CAMERA_REQUEST3);
     }
 
@@ -1943,10 +1947,10 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, "Profile Picture");
         values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera");
-        imageUri = getContentResolver().insert(
+        imageUri4 = getContentResolver().insert(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri4);
         startActivityForResult(cameraIntent, CAMERA_REQUEST4);
     }
 
@@ -1962,6 +1966,16 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                         try {
                             String imageurl = /*"file://" +*/ getRealPathFromURI(imageUri);
                             file = new File(imageurl);
+                            //file = convertInputStreamToFile(imageUri,null);
+
+                            Picasso.with(MetsoNewReimbursementClaimActivity.this)
+                                    .load(R.drawable.loading_image)        // Load the image from the URL
+                                    .placeholder(R.drawable.loading_image)
+                                    .skipMemoryCache()
+                                    .error(R.drawable.warning)
+                                    .into(imgDoc1);
+                            String fileName = getFileName(imageUri);
+                            file = convertInputStreamToFile(imageUri,fileName);
                             if (flag == 0) {
                                 compressedImageFile = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
                                         .setQuality(100)
@@ -2004,14 +2018,20 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                                     .compressToFile(file);*/
                             //Log.d("imageSixw", String.valueOf(getReadableFileSize(compressedImageFile.length())));
 
-                            BitmapFactory.Options o = new BitmapFactory.Options();
+                            /*BitmapFactory.Options o = new BitmapFactory.Options();
                             o.inSampleSize = 2;
                             Bitmap bm = cropToSquare(BitmapFactory.decodeFile(imageurl, o));
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
                             bm.compress(Bitmap.CompressFormat.PNG, 10, baos); //bm is the bitmap object
                             byte[] b = baos.toByteArray();
                             encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-                            imgDoc1.setImageBitmap(bm);
+                            imgDoc1.setImageBitmap(bm);*/
+                            Picasso.with(MetsoNewReimbursementClaimActivity.this)
+                                    .load(imageUri)        // Load the image from the URL
+                                    .placeholder(R.drawable.loading_image)
+                                    .skipMemoryCache()
+                                    .error(R.drawable.warning)
+                                    .into(imgDoc1);
                             imgUnselect1.setVisibility(View.VISIBLE);
                             Log.d("images", encodedImage);
                             //flag = 1;
@@ -2038,6 +2058,15 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                         try {
                             String imageurl = /*"file://" +*/ getRealPathFromURI(imageUri);
                             file1 = new File(imageurl);
+
+                            Picasso.with(MetsoNewReimbursementClaimActivity.this)
+                                    .load(R.drawable.loading_image)        // Load the image from the URL
+                                    .placeholder(R.drawable.loading_image)
+                                    .skipMemoryCache()
+                                    .error(R.drawable.warning)
+                                    .into(imgDoc2);
+                            String fileName = getFileName(imageUri1);
+                            file1 = convertInputStreamToFile(imageUri1,fileName);
 
                             if (flag == 0) {
                                 compressedImageFile = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
@@ -2083,14 +2112,20 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                                     .compressToFile(file1);*/
                             //Log.d("imageSixw", String.valueOf(getReadableFileSize(compressedImageFile1.length())));
 
-                            BitmapFactory.Options o = new BitmapFactory.Options();
+                            /*BitmapFactory.Options o = new BitmapFactory.Options();
                             o.inSampleSize = 2;
                             Bitmap bm = cropToSquare(BitmapFactory.decodeFile(imageurl, o));
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
                             bm.compress(Bitmap.CompressFormat.PNG, 10, baos); //bm is the bitmap object
                             byte[] b = baos.toByteArray();
                             encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-                            imgDoc2.setImageBitmap(bm);
+                            imgDoc2.setImageBitmap(bm);*/
+                            Picasso.with(MetsoNewReimbursementClaimActivity.this)
+                                    .load(imageUri1)        // Load the image from the URL
+                                    .placeholder(R.drawable.loading_image)
+                                    .skipMemoryCache()
+                                    .error(R.drawable.warning)
+                                    .into(imgDoc2);
                             imgUnselect2.setVisibility(View.VISIBLE);
                             Log.d("images", encodedImage);
                             //flag = 2;
@@ -2117,6 +2152,16 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                         try {
                             String imageurl = /*"file://" +*/ getRealPathFromURI(imageUri);
                             file2 = new File(imageurl);
+
+                            Picasso.with(MetsoNewReimbursementClaimActivity.this)
+                                    .load(R.drawable.loading_image)        // Load the image from the URL
+                                    .placeholder(R.drawable.loading_image)
+                                    .skipMemoryCache()
+                                    .error(R.drawable.warning)
+                                    .into(imgDoc3);
+                            //uri = data.getData();
+                            String fileName = getFileName(imageUri2);
+                            file2 = convertInputStreamToFile(imageUri2,fileName);
 
                             if (flag == 0) {
                                 compressedImageFile = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
@@ -2161,14 +2206,20 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                                     .setMaxWidth(300)
                                     .setMaxHeight(300)
                                     .compressToFile(file2);*/
-                            BitmapFactory.Options o = new BitmapFactory.Options();
+                            /*BitmapFactory.Options o = new BitmapFactory.Options();
                             o.inSampleSize = 2;
                             Bitmap bm = cropToSquare(BitmapFactory.decodeFile(imageurl, o));
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
                             bm.compress(Bitmap.CompressFormat.PNG, 10, baos); //bm is the bitmap object
                             byte[] b = baos.toByteArray();
                             encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-                            imgDoc3.setImageBitmap(bm);
+                            imgDoc3.setImageBitmap(bm);*/
+                            Picasso.with(MetsoNewReimbursementClaimActivity.this)
+                                    .load(imageUri2)        // Load the image from the URL
+                                    .placeholder(R.drawable.loading_image)
+                                    .skipMemoryCache()
+                                    .error(R.drawable.warning)
+                                    .into(imgDoc3);
                             imgUnselect3.setVisibility(View.VISIBLE);
                             Log.d("images", encodedImage);
                             //flag = 3;
@@ -2195,6 +2246,16 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                         try {
                             String imageurl = /*"file://" +*/ getRealPathFromURI(imageUri);
                             file3 = new File(imageurl);
+
+                            Picasso.with(MetsoNewReimbursementClaimActivity.this)
+                                    .load(R.drawable.loading_image)        // Load the image from the URL
+                                    .placeholder(R.drawable.loading_image)
+                                    .skipMemoryCache()
+                                    .error(R.drawable.warning)
+                                    .into(imgDoc4);
+                            //uri = data.getData();
+                            String fileName = getFileName(imageUri3);
+                            file3 = convertInputStreamToFile(imageUri3,fileName);
 
                             if (flag == 0) {
                                 compressedImageFile = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
@@ -2237,14 +2298,20 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                                     .setMaxWidth(300)
                                     .setMaxHeight(300)
                                     .compressToFile(file3);*/
-                            BitmapFactory.Options o = new BitmapFactory.Options();
+                           /* BitmapFactory.Options o = new BitmapFactory.Options();
                             o.inSampleSize = 2;
                             Bitmap bm = cropToSquare(BitmapFactory.decodeFile(imageurl, o));
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
                             bm.compress(Bitmap.CompressFormat.PNG, 10, baos); //bm is the bitmap object
                             byte[] b = baos.toByteArray();
                             encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-                            imgDoc4.setImageBitmap(bm);
+                            imgDoc4.setImageBitmap(bm);*/
+                            Picasso.with(MetsoNewReimbursementClaimActivity.this)
+                                    .load(imageUri3)        // Load the image from the URL
+                                    .placeholder(R.drawable.loading_image)
+                                    .skipMemoryCache()
+                                    .error(R.drawable.warning)
+                                    .into(imgDoc4);
                             imgUnselect4.setVisibility(View.VISIBLE);
                             Log.d("images", encodedImage);
                             //flag = 4;
@@ -2271,6 +2338,16 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                             String imageurl = /*"file://" +*/ getRealPathFromURI(imageUri);
                             file4 = new File(imageurl);
                             //file4 = new File(imageurl);
+
+                            Picasso.with(MetsoNewReimbursementClaimActivity.this)
+                                    .load(R.drawable.loading_image)        // Load the image from the URL
+                                    .placeholder(R.drawable.loading_image)
+                                    .skipMemoryCache()
+                                    .error(R.drawable.warning)
+                                    .into(imgDoc5);
+                            //uri = data.getData();
+                            String fileName = getFileName(imageUri4);
+                            file4 = convertInputStreamToFile(imageUri4,fileName);
 
                             if (flag == 0) {
                                 compressedImageFile = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
@@ -2317,14 +2394,21 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                                     .setMaxWidth(300)
                                     .setMaxHeight(300)
                                     .compressToFile(file4);*/
-                            BitmapFactory.Options o = new BitmapFactory.Options();
+                            /*BitmapFactory.Options o = new BitmapFactory.Options();
                             o.inSampleSize = 2;
                             Bitmap bm = cropToSquare(BitmapFactory.decodeFile(imageurl, o));
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
                             bm.compress(Bitmap.CompressFormat.PNG, 10, baos); //bm is the bitmap object
                             byte[] b = baos.toByteArray();
                             encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-                            imgDoc5.setImageBitmap(bm);
+                            imgDoc5.setImageBitmap(bm);*/
+                            Picasso.with(MetsoNewReimbursementClaimActivity.this)
+                                    .load(imageUri4)        // Load the image from the URL
+                                    .placeholder(R.drawable.loading_image)
+                                    .skipMemoryCache()
+                                    .error(R.drawable.warning)
+                                    .into(imgDoc5);
+
                             imgUnselect5.setVisibility(View.VISIBLE);
                             Log.d("images", encodedImage);
                             //flag = 5;
@@ -2378,30 +2462,46 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                     InputStream imageStream = null;
                     try {
                         try {
+                            Picasso.with(MetsoNewReimbursementClaimActivity.this)
+                                    .load(R.drawable.loading_image)        // Load the image from the URL
+                                    .placeholder(R.drawable.loading_image)
+                                    .skipMemoryCache()
+                                    .error(R.drawable.warning)
+                                    .into(imgGalleryOne);
                             uri = data.getData();
-                            String filePath = getRealPathFromURIPath(uri, MetsoNewReimbursementClaimActivity.this);
-                            file = new File(filePath);
+                            //String filePath = getRealPathFromURIPath(uri, MetsoNewReimbursementClaimActivity.this);
+                            //file = new File(filePath);
+                            String fileName = getFileName(uri);
+                            file = convertInputStreamToFile(uri,fileName);
                             if (galleryFlag == 0) {
                                 compressedImageFile = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
                                         .setQuality(100)
                                         .setMaxWidth(300)
                                         .setMaxHeight(300)
                                         .compressToFile(file);
+                                Log.d(TAG, "compressedImageFile =" + compressedImageFile);
                             } else if (galleryFlag == 1) {
                                 compressedImageFile1 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
                                         .setQuality(100)
                                         .setMaxWidth(300)
                                         .setMaxHeight(300)
                                         .compressToFile(file);
+                                Log.d(TAG, "compressedImageFile =" + compressedImageFile1);
                             }
                             Log.d(TAG, "compressedImageFile =" + compressedImageFile);
                             imageStream = getContentResolver().openInputStream(uri);
-                            Bitmap bm = cropToSquare(BitmapFactory.decodeStream(imageStream));
+                            /*Bitmap bm = cropToSquare(BitmapFactory.decodeStream(imageStream));
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
                             bm.compress(Bitmap.CompressFormat.PNG, 10, baos); //bm is the bitmap object
                             byte[] b = baos.toByteArray();
                             encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-                            imgGalleryOne.setImageBitmap(bm);
+                            imgGalleryOne.setImageBitmap(bm);*/
+                            Picasso.with(MetsoNewReimbursementClaimActivity.this)
+                                    .load(uri)        // Load the image from the URL
+                                    .placeholder(R.drawable.loading_image)
+                                    .skipMemoryCache()
+                                    .error(R.drawable.warning)
+                                    .into(imgGalleryOne);
                             imgUnselectGalleryOne.setVisibility(View.VISIBLE);
                             galleryFlag++;
                             //flag++;
@@ -2419,9 +2519,17 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                     InputStream imageStream = null;
                     try {
                         try {
+                            Picasso.with(MetsoNewReimbursementClaimActivity.this)
+                                    .load(R.drawable.loading_image)        // Load the image from the URL
+                                    .placeholder(R.drawable.loading_image)
+                                    .skipMemoryCache()
+                                    .error(R.drawable.warning)
+                                    .into(imgGalleryTwo);
                             uri = data.getData();
                             String filePath = getRealPathFromURIPath(uri, MetsoNewReimbursementClaimActivity.this);
-                            file = new File(filePath);
+                            //file = new File(filePath);
+                            String fileName = getFileName(uri);
+                            file = convertInputStreamToFile(uri,fileName);
                             if (galleryFlag == 0) {
                                 compressedImageFile = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
                                         .setQuality(100)
@@ -2437,13 +2545,20 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                             }
 
                             //  Log.d(TAG, "filePath=" + filePath);
-                            imageStream = getContentResolver().openInputStream(uri);
+                            /*imageStream = getContentResolver().openInputStream(uri);
                             Bitmap bm = cropToSquare(BitmapFactory.decodeStream(imageStream));
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
                             bm.compress(Bitmap.CompressFormat.PNG, 10, baos); //bm is the bitmap object
                             byte[] b = baos.toByteArray();
                             encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-                            imgGalleryTwo.setImageBitmap(bm);
+                            imgGalleryTwo.setImageBitmap(bm);*/
+
+                            Picasso.with(MetsoNewReimbursementClaimActivity.this)
+                                    .load(uri)        // Load the image from the URL
+                                    .placeholder(R.drawable.loading_image)
+                                    .skipMemoryCache()
+                                    .error(R.drawable.warning)
+                                    .into(imgGalleryTwo);
                             imgUnselectGalleryTwo.setVisibility(View.VISIBLE);
                             galleryFlag++;
                             //flag++;
@@ -2461,33 +2576,37 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                 if (resultCode == Activity.RESULT_OK) {
                     Uri uri = data.getData();
                     Log.e(TAG, "onActivityResult: "+uri.getPath());
+                    pdfFileName= getFileName(uri);
                     String imagePath = uri.getPath();
-                    if (imagePath.contains("all_external") || imagePath.contains("document")){
-                        if (imagePath.contains("/document/msf") || imagePath.contains("/document/document")){
-                            pdfFilePath = getRealPath(MetsoNewReimbursementClaimActivity.this,uri);
-                            Log.e(TAG, "onActivityResult: ================== "+pdfFilePath);
-                            pdfFileName = FindDocumentInformation.FileNameFromURL(pdfFilePath);
-                        } else {
-                            pdfFileName = FindDocumentInformation.FileNameFromURL(imagePath);
-                        }
-                        pdfFile = convertInputStreamToFile(uri,pdfFileName);
-                        Log.e(TAG, "onActivityResult: "+pdfFile.getAbsolutePath());
-                    } else {
-                        try {
-                            pdfFilePath = getRealPath(MetsoNewReimbursementClaimActivity.this,uri);
-                            Log.e(TAG, "onActivityResult: ================== "+pdfFilePath);
-                            pdfFileName = FindDocumentInformation.FileNameFromURL(pdfFilePath);
-                        } catch (IllegalArgumentException e){
-                            //Todo: from WPS office document select
-                            pdfFileName = FindDocumentInformation.FileNameFromURL(imagePath);
+                    if(pdfFileName == null) {
+                        if (imagePath.contains("all_external") || imagePath.contains("document")){
+                            if (imagePath.contains("/document/msf") || imagePath.contains("/document/document")){
+                                pdfFilePath = getRealPath(MetsoNewReimbursementClaimActivity.this,uri);
+                                Log.e(TAG, "onActivityResult: ================== "+pdfFilePath);
+                                pdfFileName = FindDocumentInformation.FileNameFromURL(pdfFilePath);
+                            } else {
+                                pdfFileName = FindDocumentInformation.FileNameFromURL(imagePath);
+                            }
                             pdfFile = convertInputStreamToFile(uri,pdfFileName);
                             Log.e(TAG, "onActivityResult: "+pdfFile.getAbsolutePath());
+                        } else {
+                            try {
+                                pdfFilePath = getRealPath(MetsoNewReimbursementClaimActivity.this,uri);
+                                Log.e(TAG, "onActivityResult: ================== "+pdfFilePath);
+                                pdfFileName = FindDocumentInformation.FileNameFromURL(pdfFilePath);
+                            } catch (IllegalArgumentException e){
+                                //Todo: from WPS office document select
+                                pdfFileName = FindDocumentInformation.FileNameFromURL(imagePath);
+                                pdfFile = convertInputStreamToFile(uri,pdfFileName);
+                                Log.e(TAG, "onActivityResult: "+pdfFile.getAbsolutePath());
+                            }
+                            pdfFile = convertInputStreamToFile(uri,pdfFileName);
+
                         }
+                    } else {
                         pdfFile = convertInputStreamToFile(uri,pdfFileName);
-                        Log.e(TAG, "onActivityResult: Real Path: "+pdfFilePath);
-                        Log.e(TAG, "onActivityResult: PDF name: "+pdfFileName);
-                        Log.e(TAG, "onActivityResult: Final PDF path: "+pdfFile);
                     }
+
                     imgPDF.setVisibility(View.VISIBLE);
                     imgUnselectPdf.setVisibility(View.VISIBLE);
                     pdfflag = 1;
@@ -2613,11 +2732,11 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile.getName());
 
         RequestBody mFile1 = RequestBody.create(MediaType.parse(".PNG"), compressedImageFile1);
-        MultipartBody.Part fileToUpload1 = MultipartBody.Part.createFormData("file", compressedImageFile1.getName(), mFile);
+        MultipartBody.Part fileToUpload1 = MultipartBody.Part.createFormData("file", compressedImageFile1.getName(), mFile1);
         RequestBody filename1 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile1.getName());
 
         RequestBody mFile2 = RequestBody.create(MediaType.parse(".PNG"), compressedImageFile2);
-        MultipartBody.Part fileToUpload2 = MultipartBody.Part.createFormData("file", compressedImageFile2.getName(), mFile);
+        MultipartBody.Part fileToUpload2 = MultipartBody.Part.createFormData("file", compressedImageFile2.getName(), mFile2);
         RequestBody filename2 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile2.getName());
 
         Call<UploadObject> fileUpload = RetrofitClient
@@ -2662,15 +2781,15 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile.getName());
 
         RequestBody mFile1 = RequestBody.create(MediaType.parse(".PNG"), compressedImageFile1);
-        MultipartBody.Part fileToUpload1 = MultipartBody.Part.createFormData("file", compressedImageFile1.getName(), mFile);
+        MultipartBody.Part fileToUpload1 = MultipartBody.Part.createFormData("file", compressedImageFile1.getName(), mFile1);
         RequestBody filename1 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile1.getName());
 
         RequestBody mFile2 = RequestBody.create(MediaType.parse(".PNG"), compressedImageFile2);
-        MultipartBody.Part fileToUpload2 = MultipartBody.Part.createFormData("file", compressedImageFile2.getName(), mFile);
+        MultipartBody.Part fileToUpload2 = MultipartBody.Part.createFormData("file", compressedImageFile2.getName(), mFile2);
         RequestBody filename2 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile2.getName());
 
         RequestBody mFile3 = RequestBody.create(MediaType.parse(".PNG"), compressedImageFile3);
-        MultipartBody.Part fileToUpload3 = MultipartBody.Part.createFormData("file", compressedImageFile3.getName(), mFile);
+        MultipartBody.Part fileToUpload3 = MultipartBody.Part.createFormData("file", compressedImageFile3.getName(), mFile3);
         RequestBody filename3 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile3.getName());
 
         Call<UploadObject> fileUpload = RetrofitClient
@@ -2715,19 +2834,19 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile.getName());
 
         RequestBody mFile1 = RequestBody.create(MediaType.parse(".PNG"), compressedImageFile1);
-        MultipartBody.Part fileToUpload1 = MultipartBody.Part.createFormData("file", compressedImageFile1.getName(), mFile);
+        MultipartBody.Part fileToUpload1 = MultipartBody.Part.createFormData("file", compressedImageFile1.getName(), mFile1);
         RequestBody filename1 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile1.getName());
 
         RequestBody mFile2 = RequestBody.create(MediaType.parse(".PNG"), compressedImageFile2);
-        MultipartBody.Part fileToUpload2 = MultipartBody.Part.createFormData("file", compressedImageFile2.getName(), mFile);
+        MultipartBody.Part fileToUpload2 = MultipartBody.Part.createFormData("file", compressedImageFile2.getName(), mFile2);
         RequestBody filename2 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile2.getName());
 
         RequestBody mFile3 = RequestBody.create(MediaType.parse(".PNG"), compressedImageFile3);
-        MultipartBody.Part fileToUpload3 = MultipartBody.Part.createFormData("file", compressedImageFile3.getName(), mFile);
+        MultipartBody.Part fileToUpload3 = MultipartBody.Part.createFormData("file", compressedImageFile3.getName(), mFile3);
         RequestBody filename3 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile3.getName());
 
         RequestBody mFile4 = RequestBody.create(MediaType.parse(".PNG"), compressedImageFile4);
-        MultipartBody.Part fileToUpload4 = MultipartBody.Part.createFormData("file", compressedImageFile4.getName(), mFile);
+        MultipartBody.Part fileToUpload4 = MultipartBody.Part.createFormData("file", compressedImageFile4.getName(), mFile4);
         RequestBody filename4 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile4.getName());
 
 
@@ -3483,7 +3602,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                         String responseText = job1.optString("responseText");
                         boolean responseStatus = job1.optBoolean("responseStatus");
                         if (responseStatus) {
-                            postoneimage();
+                            posttwoimage();
                         } else {
                             Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
                         }
@@ -3568,6 +3687,17 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    private String getFileName(Uri uri) {
+        String result = null;
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+            result = cursor.getString(nameIndex);
+            cursor.close();
+        }
+        return result != null ? result : "unknown_file";
+    }
+
     private String getRealPathFromURIPath(Uri contentURI, Activity activity) {
         Cursor cursor = activity.getContentResolver().query(contentURI, null, null, null, null);
         if (cursor == null) {
@@ -3580,16 +3710,21 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
     }
 
     private void attachFileAPI() {
-        if (pdfflag == 1) {
+        /*if (pdfflag == 1) {
             Log.e(TAG, "attachFileAPI: uploadMultipart");
             uploadMultipart();
-        } else if (pdfflag == 1 && galleryFlag == 1) {
+        } else*/ if (pdfflag == 1 && galleryFlag == 1) {
             Log.e(TAG, "attachFileAPI: uploadMultipartwithfile");
-            uploadMultipartwithfile();
+            //uploadMultipartwithfile();
+            upload_pdf_and_one_image();
         } else if (pdfflag == 1 && galleryFlag == 2) {
             Log.e(TAG, "attachFileAPI: uploadMultipartwithTwofile");
-            uploadMultipartwithTwofile();
-        } else if (galleryFlag == 1) {
+            //uploadMultipartwithTwofile();
+            upload_pdf_and_two_image();
+        } else if(pdfflag == 1){
+            Log.e(TAG, "attachFileAPI: uploadMultipart");
+            uploadMultipart();
+        }else if (galleryFlag == 1) {
             Log.e(TAG, "attachFileAPI: postoneimage");
             postoneimage();
             //TODO: new api
@@ -3604,8 +3739,96 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         }
     }
 
+    private void upload_pdf_and_two_image() {
+        progressDialog.show();
+
+        //RequestBody mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        RequestBody mFile = RequestBody.create(MediaType.parse("application/pdf"), pdfFile);
+        MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", pdfFile.getName(), mFile);
+        RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), pdfFile.getName());
+
+        RequestBody mFile1 = RequestBody.create(MediaType.parse(".PNG"), compressedImageFile);
+        MultipartBody.Part fileToUpload1 = MultipartBody.Part.createFormData("file", compressedImageFile.getName(), mFile1);
+        RequestBody filename1 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile.getName());
+
+        RequestBody mFile2 = RequestBody.create(MediaType.parse(".PNG"), compressedImageFile1);
+        MultipartBody.Part fileToUpload2 = MultipartBody.Part.createFormData("file", compressedImageFile1.getName(), mFile2);
+        RequestBody filename2 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile1.getName());
+
+        Call<UploadObject> fileUpload = RetrofitClient
+                .getInstance()
+                .getApi()
+                .postMetsoReimbursementWithImage3(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, fileToUpload2, componentId, "0", "0", CostCentreId, WbsId, Siteid, SupervisorID,startDate,endDate);
+        fileUpload.enqueue(new Callback<UploadObject>() {
+            @Override
+            public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
+                progressDialog.dismiss();
+                UploadObject extraWorkingDayModel = response.body();
+                if (extraWorkingDayModel.isResponseStatus()) {
+                    //  Toast.makeText(getApplicationContext(), extraWorkingDayModel.getResponseText(), Toast.LENGTH_SHORT).show();
+                    successAlert(extraWorkingDayModel.getResponseText());
+
+
+                } else {
+                    //  Toast.makeText(getApplicationContext(), extraWorkingDayModel.getResponseText(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UploadObject> call, Throwable t) {
+                progressDialog.dismiss();
+
+                Log.e("error", "Error " + t.getMessage());
+                Toast.makeText(getApplicationContext(), "Something went wrong!Please try again", Toast.LENGTH_LONG).show();
+
+            }
+
+        });
+    }
+
+    private void upload_pdf_and_one_image() {
+        progressDialog.show();
+        Log.d("rem", "2");
+
+        //RequestBody mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        RequestBody mFile = RequestBody.create(MediaType.parse("application/pdf"), pdfFile);
+        MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", pdfFile.getName(), mFile);
+        RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), pdfFile.getName());
+
+        RequestBody mFile1 = RequestBody.create(MediaType.parse(".PNG"), compressedImageFile);
+        MultipartBody.Part fileToUpload1 = MultipartBody.Part.createFormData("file", compressedImageFile.getName(), mFile1);
+        RequestBody filename1 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile.getName());
+
+        Call<UploadObject> fileUpload = RetrofitClient
+                .getInstance()
+                .getApi()
+                .postMetsoReimbursementWithImage2(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, componentId, "0", "0", CostCentreId, WbsId, Siteid, SupervisorID,startDate,endDate);
+        fileUpload.enqueue(new Callback<UploadObject>() {
+            @Override
+            public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
+                progressDialog.dismiss();
+                UploadObject extraWorkingDayModel = response.body();
+                if (extraWorkingDayModel.isResponseStatus()) {
+                    //  Toast.makeText(getApplicationContext(), extraWorkingDayModel.getResponseText(), Toast.LENGTH_SHORT).show();
+                    successAlert(extraWorkingDayModel.getResponseText());
+
+                } else {
+                    //  Toast.makeText(getApplicationContext(), extraWorkingDayModel.getResponseText(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UploadObject> call, Throwable t) {
+                progressDialog.dismiss();
+                Log.e("error", "Error " + t.getMessage());
+                Toast.makeText(getApplicationContext(), "Something went wrong!Please try again", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
 
     private void checkPermission(int i) {
+        // implementation 'com.karumi:dexter:6.2.3'
         Dexter.withContext(this)
                 .withPermissions(
                         Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -3621,10 +3844,12 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                                 startActivityForResult(uploadIntent, REQUEST_SELECT_PDF);
                             } else if (i == 1) {
                                 Intent openGalleryIntent = new Intent(Intent.ACTION_PICK);
+                                openGalleryIntent.addCategory(Intent.CATEGORY_OPENABLE);
                                 openGalleryIntent.setType("image/*");
                                 startActivityForResult(openGalleryIntent, REQUEST_GALLERY_CODE_ONE);
                             } else if (i == 2) {
                                 Intent openGalleryIntent = new Intent(Intent.ACTION_PICK);
+                                openGalleryIntent.addCategory(Intent.CATEGORY_OPENABLE);
                                 openGalleryIntent.setType("image/*");
                                 startActivityForResult(openGalleryIntent, REQUEST_GALLERY_CODE_TWO);
                             }
