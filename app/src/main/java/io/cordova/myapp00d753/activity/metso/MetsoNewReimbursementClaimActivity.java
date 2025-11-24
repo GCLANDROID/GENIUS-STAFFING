@@ -1120,6 +1120,16 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
 
                                 JSONObject obj1=new JSONObject();
                                 try {
+                                    obj1.put("DDL_Type", "450");
+                                    obj1.put("ID1",pref.getMasterId());
+                                    obj1.put("SecurityCode",pref.getSecurityCode());
+                                    setComponentItem_NEW(obj1);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                /*JSONObject obj1=new JSONObject();
+                                try {
                                     obj1.put("DDL_Type", "160");
                                     obj1.put("ID1",pref.getEmpConId());
                                     obj1.put("ID2",pref.getEmpClintId());
@@ -1128,7 +1138,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                                     setComponenetItem(obj1);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
-                                }
+                                }*/
                             } else {
                                 hideAlert();
                             }
@@ -1197,6 +1207,75 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
 
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
+    }
+    private void setComponentItem_NEW(JSONObject jsonObject) {
+        AndroidNetworking.post(AppData.GET_COMMON_DROP_DOWN_FILL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "COMPONENT_ITEM: "+response.toString(4) );
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String comid = obj.optString("ID");
+                                    //Log.e(TAG,"comid: "+comid);
+                                    String value = obj.optString("VALUE");
+                                    componentList.add(value);
+                                    SpineerItemModel mainDocModule = new SpineerItemModel(value, comid);
+                                    moduleComponentList.add(mainDocModule);
+                                }
+                                componentSpinnerAdapter = new ComponentSpinnerAdapter(MetsoNewReimbursementClaimActivity.this, moduleComponentList);
+                                spComponent.setAdapter(componentSpinnerAdapter);
+                                spComponent.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                    @Override
+                                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                        SpineerItemModel clickedItem = (SpineerItemModel) adapterView.getItemAtPosition(i);
+                                        if (!clickedItem.getItemName().equals("Please Select Cost Center")) {
+                                            comeid = clickedItem.getItemId();
+                                            Log.e(TAG, "CostCentreId: " + CostCentreId);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                                    }
+                                });
+
+                                JSONObject obj1=new JSONObject();
+                                try {
+                                    obj1.put("DDL_Type", "CLCOSTC");
+                                    obj1.put("ID1","0");
+                                    obj1.put("ID2",pref.getEmpClintId());
+                                    obj1.put("ID3",0);
+                                    obj1.put("SecurityCode",pref.getSecurityCode());
+                                    getCostCenterList(obj1);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(MetsoNewReimbursementClaimActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "COMPONENT_ITEM_error: "+anError.getErrorBody());
+                    }
+                });
     }
 
     private void setComponenetItem(JSONObject jsonObject) {
