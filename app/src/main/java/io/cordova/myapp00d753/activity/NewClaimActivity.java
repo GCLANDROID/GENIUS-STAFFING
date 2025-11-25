@@ -76,9 +76,10 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 
-import id.zelory.compressor.Compressor;
+//import id.zelory.compressor.Compressor;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.metso.MetsoNewReimbursementClaimActivity;
+import io.cordova.myapp00d753.activity.metso.adapter.ComponentSpinnerAdapter;
 import io.cordova.myapp00d753.module.AttendanceService;
 import io.cordova.myapp00d753.module.SpineerItemModel;
 import io.cordova.myapp00d753.module.UploadObject;
@@ -158,7 +159,7 @@ public class NewClaimActivity extends AppCompatActivity {
     private static final int REQUEST_GALLERY_CODE_TWO = 500;
     private Uri uri;
 
-    String galleryflagone,galleryflagtwo;
+    String galleryflagone="",galleryflagtwo="";
     private static final int REQUEST_SELECT_PDF = 600;
     private static final int DEFAULT_BUFFER_SIZE = 2048;
     @Override
@@ -808,7 +809,17 @@ public class NewClaimActivity extends AppCompatActivity {
                                 }
                                 //setComponenetItem();
 
-                                JSONObject obj1=new JSONObject();
+                                /*JSONObject obj1=new JSONObject();
+                                try {
+                                    obj1.put("DDL_Type", "450");
+                                    obj1.put("ID1",pref.getMasterId());
+                                    obj1.put("SecurityCode",pref.getSecurityCode());
+                                    setComponentItem_NEW(obj1);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }*/
+
+                                /*JSONObject obj1=new JSONObject();
                                 try {
                                     obj1.put("ddltype", "160");
                                     obj1.put("id1",pref.getEmpConId());
@@ -818,7 +829,7 @@ public class NewClaimActivity extends AppCompatActivity {
                                     setComponenetItem(obj1);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
-                                }
+                                }*/
                             } else {
                                 hideAlert();
                                 /*JSONObject obj1=new JSONObject();
@@ -878,7 +889,17 @@ public class NewClaimActivity extends AppCompatActivity {
                                     Log.d("comvalue", value);
                                 }
 
-                                setComponenetItem();
+                                //setComponenetItem();
+
+                                JSONObject obj1=new JSONObject();
+                                try {
+                                    obj1.put("DDL_Type", "450");
+                                    obj1.put("ID1",pref.getMasterId());
+                                    obj1.put("SecurityCode",pref.getSecurityCode());
+                                    setComponentItem_NEW(obj1);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             } else {
                                     hideAlert();
 
@@ -906,6 +927,68 @@ public class NewClaimActivity extends AppCompatActivity {
 
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
+    }
+
+    private void setComponentItem_NEW(JSONObject jsonObject) {
+        AndroidNetworking.post(AppData.GET_COMMON_DROP_DOWN_FILL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "COMPONENT_ITEM: "+response.toString(4) );
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                componentList.add("Please Select Reimbursement Type");
+                                moduleComponentList.add(new SpineerItemModel("0","0"));
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String comid = obj.optString("ID");
+                                    //Log.e(TAG,"comid: "+comid);
+                                    String value = obj.optString("VALUE");
+                                    componentList.add(value);
+                                    SpineerItemModel mainDocModule = new SpineerItemModel(value, comid);
+                                    moduleComponentList.add(mainDocModule);
+                                }
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                        (NewClaimActivity.this, android.R.layout.simple_spinner_item,
+                                                componentList); //selected item will look like a spinner set from XML
+                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                spComponent.setSelection(0);
+                                spComponent.setAdapter(spinnerArrayAdapter);
+
+
+                                /*JSONObject obj1=new JSONObject();
+                                try {
+                                    obj1.put("DDL_Type", "CLCOSTC");
+                                    obj1.put("ID1","0");
+                                    obj1.put("ID2",pref.getEmpClintId());
+                                    obj1.put("ID3",0);
+                                    obj1.put("SecurityCode",pref.getSecurityCode());
+                                    getCostCenterList(obj1);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }*/
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(NewClaimActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "COMPONENT_ITEM_error: "+anError.getErrorBody());
+                    }
+                });
     }
 
     private void setComponenetItem(JSONObject jsonObject) {
