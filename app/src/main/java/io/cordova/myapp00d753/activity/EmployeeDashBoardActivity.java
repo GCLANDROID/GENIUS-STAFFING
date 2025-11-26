@@ -159,7 +159,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         if (pref.getMsgAlertStatus()){
             msgAlert();
         }else {
-            acceptance();
+          //  acceptance();
         }
         getPFURL();
         if (pref.getUAN_Active().equals("0")){

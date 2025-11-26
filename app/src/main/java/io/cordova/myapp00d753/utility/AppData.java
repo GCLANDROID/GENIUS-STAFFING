@@ -99,4 +99,5 @@ public class AppData {
     public static String Metso_Change_Employee_PMS_Approver = newv2url+"Metso/ChangeEmpPMSApprover";
     public static String NEED_TO_ACT ="https://gsppi.geniusconsultant.com/GENESS/api/needtoact";
     public static String LEAVE_BALANCE_VIEW_FLAG = "0";
+    public static String MAINTAINCEBREAK ="https://gsppi.geniusconsultant.com/GenESS/api/CheckMaintenanceBreak";
 }

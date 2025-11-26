@@ -40,6 +40,7 @@ allprojects {
         mavenLocal()
         jcenter()
         maven { url "https://jitpack.io" }
+        maven { url "https://maven.google.com" }
 
     }
 }
@@ -60,11 +61,11 @@ ext {
     buildToolsVersion = '31'
     compileSdkVersion = 31
     minSdkVersion = 22
-    targetSdkVersion = 33
+    targetSdkVersion = 35
     supportLibraryVersion = '25.3.1'
 
-    releaseVersionCode = 61
-    releaseVersionName = '53.3'
+    releaseVersionCode = 62
+    releaseVersionName = '53.4'
     androidBuildToolsVersion = '30.0.2'
     androidSupportSdkVersion = '25.3.1'
 }

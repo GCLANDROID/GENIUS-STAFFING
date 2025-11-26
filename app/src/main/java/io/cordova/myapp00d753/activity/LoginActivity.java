@@ -102,9 +102,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        initialize();
+        getMaintanceBreak();
 
-        onClick();
+
     }
 
     // throw new RuntimeException("Test Crash");
@@ -164,7 +164,7 @@ public class LoginActivity extends AppCompatActivity {
         captchaImageView.setCaptchaType(CaptchaImageView.CaptchaGenerator.BOTH);
 */
 
-
+        onClick();
 
 
 
@@ -476,7 +476,7 @@ public class LoginActivity extends AppCompatActivity {
                                     finish();
                                 }else {
                                     if (ConsentFlag.equals("1")){
-                                        Intent intent = new Intent(LoginActivity.this, ConsentActivity.class);
+                                        Intent intent = new Intent(LoginActivity.this, EmployeeDashBoardActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                         intent.putExtra("ConsentFlag",ConsentFlag);
                                         startActivity(intent);
@@ -751,5 +751,44 @@ public class LoginActivity extends AppCompatActivity {
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.CENTER);
         alerDialog1.show();
+    }
+
+    private void getMaintanceBreak() {
+        final ProgressDialog pd=new ProgressDialog(LoginActivity.this);
+        pd.setMessage("Loading.....");
+        pd.show();
+        AndroidNetworking.get(AppData.MAINTAINCEBREAK)
+                .addHeaders("SecurityKey", "gStbCQYjYBDCQ4fkGoQSUj7LYe8uVdZ1")
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        pd.dismiss();
+                        JSONObject job = response;
+                        boolean IsEnabled=job.optBoolean("IsEnabled");
+                        String Message=job.optString("Message");
+                        if (IsEnabled){
+                            Intent intent=new Intent(LoginActivity.this,MaintainceBreakActivity.class);
+                            intent.putExtra("breakText",Message);
+                            startActivity(intent);
+                            finish();
+
+
+                        }else {
+                            initialize();
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        pd.dismiss();
+
+
+                    }
+                });
     }
 }

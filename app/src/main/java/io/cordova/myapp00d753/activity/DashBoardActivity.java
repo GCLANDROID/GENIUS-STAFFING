@@ -39,6 +39,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -57,7 +61,9 @@ import java.util.ArrayList;
 import io.cordova.myapp00d753.R;
 
 import io.cordova.myapp00d753.adapter.DashboardItemAdapter;
+import io.cordova.myapp00d753.adapter.NeedToActAdapter;
 import io.cordova.myapp00d753.module.DashboardItemModel;
+import io.cordova.myapp00d753.module.NeedToActModel;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
@@ -87,9 +93,10 @@ public class DashBoardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dash_board);
 
 
-        initialize();
+
+        getMaintanceBreak();
         //PostCovidalerts();
-        onClick();
+
     }
 
     private void initialize() {
@@ -135,6 +142,7 @@ public class DashBoardActivity extends AppCompatActivity {
         }
 
         GeniusHRTechPopUp();
+        onClick();
 
 
 
@@ -486,6 +494,46 @@ public class DashBoardActivity extends AppCompatActivity {
         al1.show();
 
 
+    }
+
+
+    private void getMaintanceBreak() {
+        final ProgressDialog pd=new ProgressDialog(DashBoardActivity.this);
+        pd.setMessage("Loading.....");
+        pd.show();
+        AndroidNetworking.get(AppData.MAINTAINCEBREAK)
+                .addHeaders("SecurityKey", "gStbCQYjYBDCQ4fkGoQSUj7LYe8uVdZ1")
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        pd.dismiss();
+                        JSONObject job = response;
+                        boolean IsEnabled=job.optBoolean("IsEnabled");
+                        String Message=job.optString("Message");
+                        if (IsEnabled){
+                            Intent intent=new Intent(DashBoardActivity.this,MaintainceBreakActivity.class);
+                            intent.putExtra("breakText",Message);
+                            startActivity(intent);
+                            finish();
+
+
+                        }else {
+                            initialize();
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        pd.dismiss();
+
+
+                    }
+                });
     }
 
 

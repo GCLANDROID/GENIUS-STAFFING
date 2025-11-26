@@ -282,6 +282,7 @@
                     app:srcCompat="@drawable/helpdesk" />
 
                 <LinearLayout
+                    android:visibility="visible"
                     android:layout_gravity="center|right"
                     android:id="@+id/chatFabContainer"
                     android:layout_width="wrap_content"
@@ -302,7 +303,8 @@
                         android:layout_height="wrap_content"
                         android:src="@drawable/robot"
                         android:backgroundTint="#00FFFFFF"
-                        app:maxImageSize="60dp" />
+                        app:maxImageSize="60dp"
+                        />
                     <TextView
                         android:id="@+id/fabLabel"
                         android:layout_width="wrap_content"

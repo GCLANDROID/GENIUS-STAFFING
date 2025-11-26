@@ -32,6 +32,20 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.MobilePayslipActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".activity.MaintainceBreakActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".activity.ChatBotNewActivity"
             android:exported="false"
             android:theme="@style/FloatingChatTheme">
@@ -635,6 +649,9 @@
         <activity android:name=".activity.HolidayMarkingActivity" />
         <activity android:name=".AndroidXCamera.FrontBackAndroidXCameraActivity" />
         <activity android:name=".activity.attendance.GeoFenceAttendanceWithShiftActivity" />
+        <activity
+            android:name=".activity.SelfOnboardingChatBotActivity"
+            android:theme="@style/FloatingChatTheme" />
 
         <service
             android:name=".FirebaseNotification.MyFirebaseMessagingService"

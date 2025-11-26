@@ -4,7 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.PdfViewActivity">
+    tools:context=".activity.PdfViewActivity"
+    android:orientation="vertical">
+    <LinearLayout
+        android:id="@+id/llBack"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/maincolor">
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:id="@+id/imgBack"
+            android:src="@drawable/backimg"></ImageView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            android:layout_gravity="center"
+            android:textSize="14sp"
+            android:textColor="@color/white"></TextView>
+    </LinearLayout>
     <im.delight.android.webview.AdvancedWebView
         android:id="@+id/webview"
         android:layout_width="match_parent"

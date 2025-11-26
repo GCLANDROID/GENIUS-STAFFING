@@ -1,23 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="6dp">
+    android:padding="6dp"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/bot" />
 
-    <ImageView
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:src="@drawable/bot" />
+        <TextView
+            android:id="@+id/tvBotMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_bot_message"
+            android:padding="10dp"
+            android:autoLink="web"
+            android:textColorLink="@android:color/white"
+            android:textColor="@android:color/white"
+            android:layout_marginStart="6dp" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvBotMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_bot_message"
-        android:padding="10dp"
-        android:autoLink="web"
-        android:textColorLink="@android:color/white"
-        android:textColor="@android:color/white"
-        android:layout_marginStart="6dp" />
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/llPersonalDetails"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/bot" />
+
+        <Button
+            android:layout_marginStart="6dp"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/btnPersonalUpload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:text="Click here to Fill Up Personal Details"
+            android:background="@drawable/lldesign"
+            android:backgroundTint="@color/blue"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+
+
+
+
 </LinearLayout>

@@ -81,6 +81,7 @@ public class TempDashBoardActivity extends AppCompatActivity {
     private static final String IMAGE_DIRECTORY = "/signdemo";
     String android_id="1234556";
     Button btnAadhar;
+    LinearLayout chatFabContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,9 +149,17 @@ public class TempDashBoardActivity extends AppCompatActivity {
         String[] separated = menu.split(",");
         llCall=(LinearLayout)findViewById(R.id.llCall);
         llHelp=(LinearLayout)findViewById(R.id.llHelp);
-        if (ConsentFlag.equals("0")){
+       /* if (ConsentFlag.equals("0")){
             consnetLetter();
-        }
+        }*/
+        chatFabContainer=(LinearLayout)findViewById(R.id.chatFabContainer);
+        chatFabContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(TempDashBoardActivity.this,SelfOnboardingChatBotActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
     private void onClick(){

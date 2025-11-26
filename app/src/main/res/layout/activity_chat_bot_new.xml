@@ -38,6 +38,7 @@
             android:src="@drawable/paperplane" />
 
         <ImageView
+            android:visibility="visible"
             android:id="@+id/imgMic"
             android:layout_width="30dp"
             android:layout_height="30dp"

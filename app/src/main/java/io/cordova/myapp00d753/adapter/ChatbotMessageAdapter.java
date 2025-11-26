@@ -19,6 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.MobilePayslipActivity;
 import io.cordova.myapp00d753.module.BotMessageModule;
 
 public class ChatbotMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
@@ -104,12 +105,21 @@ public class ChatbotMessageAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
                     String finalUrl = url;
                     tv.setOnClickListener(v -> {
-                        try {
-                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(finalUrl));
-                            v.getContext().startActivity(intent);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        if (message.getMessage().contains("ESI Card") || message.getMessage().contains("Medical Card")){
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(finalUrl));
+                            browserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            v.getContext().startActivity(browserIntent);
+                        }else {
+                            try {
+                                Intent intent = new Intent(v.getContext(), MobilePayslipActivity.class);
+                                intent.putExtra("finalUrl", finalUrl);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                v.getContext().startActivity(intent);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
+
                     });
                 } else {
                     ((BotViewHolder) holder).tvBotMessage.setText(message.getMessage());

@@ -13,8 +13,8 @@ android {
         applicationId "io.cordova.myapp00d753"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 186
-        versionName "90.7"
+        versionCode 227
+        versionName "93.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary =true
@@ -79,7 +79,6 @@ dependencies {
     implementation 'net.gotev:uploadservice:2.1'
     implementation 'id.zelory:compressor:2.1.0'
     implementation 'com.github.amanjeetsingh150:ImageZipper:1.3'
-    implementation 'com.github.florent37:viewtooltip:1.1.8'
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.github.cdflynn:checkview:v1.1'
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
@@ -96,7 +95,7 @@ dependencies {
     }
     implementation 'com.amitshekhar.android:jackson-android-networking:1.0.2'
     implementation "com.squareup.picasso:picasso:2.4.0"
-    implementation 'com.tomergoldst.android:tooltips:1.0.10'
+    implementation 'com.tomergoldst.android:tooltips:1.1.1'
     implementation 'com.github.PhilJay:MPAndroidChart:v2.2.4'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.github.hsmnzaydn:imagezoom:1.3.0'
@@ -105,7 +104,7 @@ dependencies {
     implementation 'com.github.douglasjunior:android-simple-tooltip:1.1.0'
     //implementation 'com.google.android.play:core:1.8.0'
     implementation 'com.github.yuriy-budiyev:code-scanner:2.3.2'
-    implementation 'androidmads.library.qrgenearator:QRGenearator:1.0.3'
+
     //compile 'com.github.jineshfrancs:CaptchaImageView:1.0'
     implementation 'org.naishadhparmar.zcustomcalendar:zcustomcalendar:1.0.1'
 
@@ -138,7 +137,7 @@ dependencies {
     //for crop image
 
     implementation 'com.google.android.material:material:1.2.1'
-    implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.0'
+    implementation 'androidx.exifinterface:exifinterface:1.3.2'
     implementation 'com.google.android.gms:play-services-gcm:'
     implementation "androidx.camera:camera-core:1.1.0-alpha03"
     implementation "androidx.camera:camera-camera2:1.1.0-alpha03"
@@ -159,5 +158,11 @@ dependencies {
 
     implementation("com.google.android.play:app-update:2.1.0")
     implementation 'com.google.android.play:review:2.0.1'
+    implementation 'com.google.android.gms:play-services-vision:20.1.3'
+
+
+
 }
+
+
 
