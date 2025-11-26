@@ -102,6 +102,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FMSNewClaimActivity extends AppCompatActivity {
+    private static final String TAG = "FMSNewClaimActivity";
     private static final int DEFAULT_BUFFER_SIZE = 2048;
     ImageView imgBack, imgHome;
     Spinner spComponent;
@@ -475,10 +476,7 @@ public class FMSNewClaimActivity extends AppCompatActivity {
                                 attachFileAPI();
                             }else {
                                 Toast.makeText(getApplicationContext(), "Please Select Your Supervisor", Toast.LENGTH_LONG).show();
-
                             }
-
-
                         } else {
                             Toast.makeText(getApplicationContext(), "Please enter Claim Amount", Toast.LENGTH_LONG).show();
                         }
@@ -520,7 +518,6 @@ public class FMSNewClaimActivity extends AppCompatActivity {
                                     }
                                 }else {
                                     Toast.makeText(getApplicationContext(), "Please Select your Supervisor", Toast.LENGTH_LONG).show();
-
                                 }
                             } else {
                                 Toast.makeText(getApplicationContext(), "Please enter Claim Amount", Toast.LENGTH_LONG).show();
@@ -570,7 +567,17 @@ public class FMSNewClaimActivity extends AppCompatActivity {
 
 
                                 }
-                                setComponenetItem();
+                                //setComponenetItem();
+
+                                JSONObject obj1=new JSONObject();
+                                try {
+                                    obj1.put("DDL_Type", "450");
+                                    obj1.put("ID1",pref.getMasterId());
+                                    obj1.put("SecurityCode",pref.getSecurityCode());
+                                    setComponentItem_NEW(obj1);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
 
                             } else {
                                     hideAlert();
@@ -599,6 +606,56 @@ public class FMSNewClaimActivity extends AppCompatActivity {
 
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
+    }
+    private void setComponentItem_NEW(JSONObject jsonObject) {
+        getSupervisorList();
+        AndroidNetworking.post(AppData.GET_COMMON_DROP_DOWN_FILL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "COMPONENT_ITEM: "+response.toString(4) );
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            componentList.add("Please Select Reimbursement Type");
+                            moduleComponentList.add(new SpineerItemModel("0","0"));
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String comid = obj.optString("ID");
+                                    //Log.e(TAG,"comid: "+comid);
+                                    String value = obj.optString("VALUE");
+                                    componentList.add(value);
+                                    SpineerItemModel mainDocModule = new SpineerItemModel(value, comid);
+                                    moduleComponentList.add(mainDocModule);
+                                }
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                        (FMSNewClaimActivity.this, android.R.layout.simple_spinner_item,
+                                                componentList); //selected item will look like a spinner set from XML
+                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                spComponent.setSelection(0);
+                                spComponent.setAdapter(spinnerArrayAdapter);
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(FMSNewClaimActivity.this, "Something went to wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "COMPONENT_ITEM_error: "+anError.getErrorBody());
+                    }
+                });
     }
 
     private void setComponenetItem() {
