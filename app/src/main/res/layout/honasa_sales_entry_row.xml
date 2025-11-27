@@ -79,17 +79,18 @@
                         android:text="Stock in hand"
                         android:textSize="12sp"
                         android:textColor="@color/colorPrimary"/>
+
                     <EditText
                         android:id="@+id/txtStockInHand"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         android:layout_marginTop="5dp"
-                        android:enabled="false"
-                        android:textSize="14sp"
-                        android:paddingHorizontal="10dp"
                         android:background="@drawable/lldesign"
                         android:backgroundTint="@color/bar1"
-                        android:textColor="@color/black"/>
+                        android:enabled="true"
+                        android:paddingHorizontal="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
 
 
                 </LinearLayout>
