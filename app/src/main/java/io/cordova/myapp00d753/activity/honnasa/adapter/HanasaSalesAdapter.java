@@ -66,9 +66,71 @@ public class HanasaSalesAdapter extends RecyclerView.Adapter<HanasaSalesAdapter.
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (!editable.toString().isEmpty()){
-                    viewSalesList.get(position).setInStock(Integer.parseInt(editable.toString()));
+                try {
+                    int stockInHand = 0;
+                    int receivingStock = 0;
+                    int salesDone = 0;
+
+                    if (!holder.txtStockInHand.getText().toString().trim().isEmpty())
+                        stockInHand = Integer.parseInt(holder.txtStockInHand.getText().toString().trim());
+                    else
+                        stockInHand = 0;
+
+                    if (!holder.txtReceivingStock.getText().toString().isEmpty())
+                        receivingStock = Integer.parseInt(holder.txtReceivingStock.getText().toString());
+                    else
+                        receivingStock = 0;
+
+                    if (!holder.txtSalesDone.getText().toString().trim().isEmpty())
+                        salesDone = Integer.parseInt(holder.txtSalesDone.getText().toString());
+                    else
+                        salesDone = 0;
+
+                    if (salesDone != 0){
+                    //if (!editable.toString().isEmpty() ){
+                        Log.e(TAG, "afterTextChanged: 1");
+                        if (!holder.txtSalesDone.getText().toString().isEmpty()){
+                            Log.e(TAG, "afterTextChanged: 1.1");
+                            int sum = (stockInHand+
+                                    receivingStock)-salesDone;
+                            holder.txtClosingStock.setText(String.valueOf(sum));
+
+                            /*int sum = (Integer.parseInt(holder.txtStockInHand.getText().toString().trim())+
+                                    Integer.parseInt(holder.txtReceivingStock.getText().toString()))-Integer.parseInt(holder.txtSalesDone.getText().toString());
+                            holder.txtClosingStock.setText(String.valueOf(sum));*/
+                        } else {
+                            Log.e(TAG, "afterTextChanged: 1.2");
+                            int sum = stockInHand+receivingStock;
+                            //int sum = Integer.parseInt(holder.txtStockInHand.getText().toString().trim())+Integer.parseInt(holder.txtReceivingStock.getText().toString().trim());
+                            holder.txtClosingStock.setText(String.valueOf(sum));
+                        }
+                        viewSalesList.get(position).setReceivingStock(holder.txtReceivingStock.getText().toString().trim());
+                    } else {
+                        if (!holder.txtSalesDone.getText().toString().isEmpty()){
+                            Log.e(TAG, "afterTextChanged: 1.1");
+
+
+
+                            int sum = (stockInHand+ 0)-salesDone;
+                            holder.txtClosingStock.setText(String.valueOf(sum));
+
+                            /*int sum = (Integer.parseInt(holder.txtStockInHand.getText().toString().trim())+
+                                    0)-Integer.parseInt(holder.txtSalesDone.getText().toString());
+                            holder.txtClosingStock.setText(String.valueOf(sum));*/
+                        } else {
+                            Log.e(TAG, "afterTextChanged: 1.2");
+                            //int sum = Integer.parseInt(holder.txtStockInHand.getText().toString().trim()) + 0;
+                            holder.txtClosingStock.setText("");
+                        }
+                        viewSalesList.get(position).setReceivingStock(holder.txtReceivingStock.getText().toString().trim());
+                        viewSalesList.get(position).setInStock((!editable.toString().isEmpty())?Integer.parseInt(editable.toString()):0);
+                    }
+                } catch (IndexOutOfBoundsException e){
+
                 }
+                /*if (!editable.toString().isEmpty()){
+                    viewSalesList.get(position).setInStock(Integer.parseInt(editable.toString()));
+                }*/
             }
         });
 
@@ -134,13 +196,36 @@ public class HanasaSalesAdapter extends RecyclerView.Adapter<HanasaSalesAdapter.
             @Override
             public void afterTextChanged(Editable editable) {
                 try {
+                    int stockInHand = 0;
+                    int receivingStock = 0;
+                    int salesDone = 0;
                     if (!holder.txtSalesDone.getText().toString().isEmpty()){
                         Log.e(TAG, "afterTextChanged: 2");
                         if (!holder.txtReceivingStock.getText().toString().isEmpty()){
                             Log.e(TAG, "afterTextChanged: 2.1");
-                            int sum = (Integer.parseInt(holder.txtStockInHand.getText().toString().trim()) +
-                                    Integer.parseInt(holder.txtReceivingStock.getText().toString()))-Integer.parseInt(holder.txtSalesDone.getText().toString());
+
+                            if (!holder.txtStockInHand.getText().toString().trim().isEmpty())
+                                stockInHand = Integer.parseInt(holder.txtStockInHand.getText().toString().trim());
+                            else
+                                stockInHand = 0;
+
+                            if (!holder.txtReceivingStock.getText().toString().isEmpty())
+                                receivingStock = Integer.parseInt(holder.txtReceivingStock.getText().toString());
+                            else
+                                receivingStock = 0;
+
+                            if (!holder.txtSalesDone.getText().toString().trim().isEmpty())
+                                salesDone = Integer.parseInt(holder.txtSalesDone.getText().toString());
+                            else
+                                salesDone = 0;
+
+                            int sum = (stockInHand +
+                                    receivingStock)-salesDone;
                             holder.txtClosingStock.setText(String.valueOf(sum));
+
+                            /*int sum = (Integer.parseInt(holder.txtStockInHand.getText().toString().trim()) +
+                                    Integer.parseInt(holder.txtReceivingStock.getText().toString()))-Integer.parseInt(holder.txtSalesDone.getText().toString());
+                            holder.txtClosingStock.setText(String.valueOf(sum));*/
 
                             if (sum < 0){
                                 holder.txtError.setVisibility(View.VISIBLE);
@@ -160,7 +245,24 @@ public class HanasaSalesAdapter extends RecyclerView.Adapter<HanasaSalesAdapter.
                         } else {
                             Log.e(TAG, "afterTextChanged: 2.2");
                             //int sum = Integer.parseInt(holder.txtStockInHand.getText().toString().trim())+Integer.parseInt(holder.txtReceivingStock.getText().toString().trim());
-                            int sum = (Integer.parseInt(holder.txtStockInHand.getText().toString().trim()) + 0)-Integer.parseInt(holder.txtSalesDone.getText().toString());
+
+                            if (!holder.txtStockInHand.getText().toString().trim().isEmpty())
+                                stockInHand = Integer.parseInt(holder.txtStockInHand.getText().toString().trim());
+                            else
+                                stockInHand = 0;
+
+                            if (!holder.txtReceivingStock.getText().toString().isEmpty())
+                                receivingStock = Integer.parseInt(holder.txtReceivingStock.getText().toString());
+                            else
+                                receivingStock = 0;
+
+                            if (!holder.txtSalesDone.getText().toString().trim().isEmpty())
+                                salesDone = Integer.parseInt(holder.txtSalesDone.getText().toString());
+                            else
+                                salesDone = 0;
+
+                            int sum = (stockInHand + 0)-salesDone;
+                            //int sum = (Integer.parseInt(holder.txtStockInHand.getText().toString().trim()) + 0)-Integer.parseInt(holder.txtSalesDone.getText().toString());
 
                             holder.txtClosingStock.setText(String.valueOf(sum));
                             viewSalesList.get(position).setClosingStock(String.valueOf(sum));
@@ -174,7 +276,23 @@ public class HanasaSalesAdapter extends RecyclerView.Adapter<HanasaSalesAdapter.
                         }
 
                     } else {
-                        int sum = (Integer.parseInt(holder.txtStockInHand.getText().toString().trim()) + Integer.parseInt((holder.txtReceivingStock.getText().toString().isEmpty()) ? "0":  holder.txtReceivingStock.getText().toString() ))-0;
+                        if (!holder.txtStockInHand.getText().toString().trim().isEmpty())
+                            stockInHand = Integer.parseInt(holder.txtStockInHand.getText().toString().trim());
+                        else
+                            stockInHand = 0;
+
+                        if (!holder.txtReceivingStock.getText().toString().isEmpty())
+                            receivingStock = Integer.parseInt(holder.txtReceivingStock.getText().toString());
+                        else
+                            receivingStock = 0;
+
+                        if (!holder.txtSalesDone.getText().toString().trim().isEmpty())
+                            salesDone = Integer.parseInt(holder.txtSalesDone.getText().toString());
+                        else
+                            salesDone = 0;
+
+                        int sum = (stockInHand + receivingStock)-0;
+                        //int sum = (Integer.parseInt(holder.txtStockInHand.getText().toString().trim()) + Integer.parseInt((holder.txtReceivingStock.getText().toString().isEmpty()) ? "0":  holder.txtReceivingStock.getText().toString() ))-0;
 
                         holder.txtClosingStock.setText((String.valueOf(sum).toString().equals("0")?"":String.valueOf(sum)));
                         viewSalesList.get(position).setClosingStock(String.valueOf(sum));
