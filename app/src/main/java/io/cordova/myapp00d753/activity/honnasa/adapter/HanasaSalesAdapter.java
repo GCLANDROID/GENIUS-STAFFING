@@ -53,6 +53,25 @@ public class HanasaSalesAdapter extends RecyclerView.Adapter<HanasaSalesAdapter.
         holder.txtSalesValues.setText("");
         holder.txtClosingStock.setText("");
 
+        holder.txtStockInHand.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (!editable.toString().isEmpty()){
+                    viewSalesList.get(position).setInStock(Integer.parseInt(editable.toString()));
+                }
+            }
+        });
+
         holder.txtReceivingStock.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -189,6 +208,7 @@ public class HanasaSalesAdapter extends RecyclerView.Adapter<HanasaSalesAdapter.
             public void afterTextChanged(Editable editable) {
                 Log.e(TAG, "txtClosingStock: called");
                 try {
+                    viewSalesList.get(position).setClosingStock(editable.toString());
                     if (holder.txtClosingStock.getText().toString().isEmpty()){
                         viewSalesList.get(position).setModified(false);
                     } else {
