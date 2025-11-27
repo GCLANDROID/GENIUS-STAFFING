@@ -696,67 +696,7 @@ public class LeaveAdjustmentFragment extends Fragment {
         pd.setMessage("Loading");
         pd.setCancelable(false);
         pd.show();
-        AndroidNetworking.upload(AppData.ATT_SAVE_EMPLOYEE_DIGITAL_DOCUMENT)
-                .addMultipartParameter("CompanyID", pref.getEmpClintId())
-                .addMultipartParameter("EmployeeID", pref.getEmpId())
-                .addMultipartParameter("YearId", "19")
-                .addMultipartParameter("MonthId", month)
-                .addMultipartParameter("GatePassDate", effectiveDate + " 00:00:00.000")
-                .addMultipartParameter("EndDate", endDate + " 00:00:00.000")
-                .addMultipartParameter("Remarks", remarks)
-                .addMultipartParameter("StartTime", effectiveDate + " " + intime + ":00.000")
-                .addMultipartParameter("EndTime", effectiveDate + " " + outtime + ":00.000")
-                .addMultipartParameter("GatePassType", applicationComponentID)
-                .addMultipartParameter("clinetname", "")
-                .addMultipartParameter("clinetphn", "")
-                .addMultipartParameter("CreatedBy", pref.getEmpId())
-                .addMultipartParameter("AID", "0")
-                .addMultipartParameter("Oddaytype", mode)
-                .addMultipartParameter("OtMin", "0")
-                .addMultipartParameter("refdate", effectiveDate + " 00:00:00.000")
-                .addMultipartParameter("LtMin", "0")
-                .addMultipartParameter("SecurityCode", pref.getSecurityCode())
-                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
-                .setTag("uploadTest")
-                .setPriority(Priority.HIGH)
-                .build()
-                .setUploadProgressListener(new UploadProgressListener() {
-                    @Override
-                    public void onProgress(long bytesUploaded, long totalBytes) {
-
-
-                    }
-                })
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        pd.dismiss();
-
-
-                        JSONObject job = response;
-                        boolean responseStatus = job.optBoolean("responseStatus");
-                        if (responseStatus) {
-
-                            successAlert();
-                        }
-
-
-                        // boolean _status = job1.getBoolean("status");
-
-
-                        // do anything with response
-                    }
-
-                    @Override
-                    public void onError(ANError error) {
-                        // handle error
-                        pd.dismiss();
-                        Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
-
-                    }
-                });
-
-        /*AndroidNetworking.upload(AppData.url + "Post_EmployeeOTandODAdjustment")
+        /*AndroidNetworking.upload(AppData.ATT_SAVE_EMPLOYEE_DIGITAL_DOCUMENT)
                 .addMultipartParameter("CompanyID", pref.getEmpClintId())
                 .addMultipartParameter("EmployeeID", pref.getEmpId())
                 .addMultipartParameter("YearId", "19")
@@ -815,6 +755,66 @@ public class LeaveAdjustmentFragment extends Fragment {
 
                     }
                 });*/
+
+        AndroidNetworking.upload(AppData.url + "Post_EmployeeOTandODAdjustment")
+                .addMultipartParameter("CompanyID", pref.getEmpClintId())
+                .addMultipartParameter("EmployeeID", pref.getEmpId())
+                .addMultipartParameter("YearId", "19")
+                .addMultipartParameter("MonthId", month)
+                .addMultipartParameter("GatePassDate", effectiveDate + " 00:00:00.000")
+                .addMultipartParameter("EndDate", endDate + " 00:00:00.000")
+                .addMultipartParameter("Remarks", remarks)
+                .addMultipartParameter("StartTime", effectiveDate + " " + intime + ":00.000")
+                .addMultipartParameter("EndTime", effectiveDate + " " + outtime + ":00.000")
+                .addMultipartParameter("GatePassType", applicationComponentID)
+                .addMultipartParameter("clinetname", "")
+                .addMultipartParameter("clinetphn", "")
+                .addMultipartParameter("CreatedBy", pref.getEmpId())
+                .addMultipartParameter("AID", "0")
+                .addMultipartParameter("Oddaytype", mode)
+                .addMultipartParameter("OtMin", "0")
+                .addMultipartParameter("refdate", effectiveDate + " 00:00:00.000")
+                .addMultipartParameter("LtMin", "0")
+                .addMultipartParameter("SecurityCode", pref.getSecurityCode())
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+
+
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        pd.dismiss();
+
+
+                        JSONObject job = response;
+                        boolean responseStatus = job.optBoolean("responseStatus");
+                        if (responseStatus) {
+
+                            successAlert();
+                        }
+
+
+                        // boolean _status = job1.getBoolean("status");
+
+
+                        // do anything with response
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        pd.dismiss();
+                        Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
+
+                    }
+                });
     }
 
     private void postDataOD(String remarks) {
