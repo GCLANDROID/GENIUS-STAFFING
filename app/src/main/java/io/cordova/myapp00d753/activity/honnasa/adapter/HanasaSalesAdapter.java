@@ -105,6 +105,7 @@ public class HanasaSalesAdapter extends RecyclerView.Adapter<HanasaSalesAdapter.
                             holder.txtClosingStock.setText(String.valueOf(sum));
                         }
                         viewSalesList.get(position).setReceivingStock(holder.txtReceivingStock.getText().toString().trim());
+                        viewSalesList.get(position).setInStock(stockInHand);
                     } else {
                         if (!holder.txtSalesDone.getText().toString().isEmpty()){
                             Log.e(TAG, "afterTextChanged: 1.1");
@@ -122,8 +123,10 @@ public class HanasaSalesAdapter extends RecyclerView.Adapter<HanasaSalesAdapter.
                             int sum = stockInHand + receivingStock;
                             holder.txtClosingStock.setText(String.valueOf(sum));
                         }
-                        viewSalesList.get(position).setReceivingStock(holder.txtReceivingStock.getText().toString().trim());
-                        viewSalesList.get(position).setInStock((!editable.toString().isEmpty())?Integer.parseInt(editable.toString()):0);
+                        //viewSalesList.get(position).setReceivingStock(holder.txtReceivingStock.getText().toString().trim());
+                        viewSalesList.get(position).setReceivingStock(String.valueOf(receivingStock));
+                        //viewSalesList.get(position).setInStock((!editable.toString().isEmpty())?Integer.parseInt(editable.toString()):0);
+                        viewSalesList.get(position).setInStock(stockInHand);
                     }
                 } catch (IndexOutOfBoundsException e){
 
