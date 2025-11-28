@@ -95,6 +95,14 @@ public class HanasaSalesAdapter extends RecyclerView.Adapter<HanasaSalesAdapter.
                                     receivingStock)-salesDone;
                             holder.txtClosingStock.setText(String.valueOf(sum));
 
+                            if (sum < 0){
+                                holder.txtError.setVisibility(View.VISIBLE);
+                                ((HonasaSalesActivity) context).isSalesDoneIsLessThenClosingStock = false;
+                            } else {
+                                holder.txtError.setVisibility(View.GONE);
+                                ((HonasaSalesActivity) context).isSalesDoneIsLessThenClosingStock = true;
+                            }
+
                             /*int sum = (Integer.parseInt(holder.txtStockInHand.getText().toString().trim())+
                                     Integer.parseInt(holder.txtReceivingStock.getText().toString()))-Integer.parseInt(holder.txtSalesDone.getText().toString());
                             holder.txtClosingStock.setText(String.valueOf(sum));*/
@@ -103,7 +111,9 @@ public class HanasaSalesAdapter extends RecyclerView.Adapter<HanasaSalesAdapter.
                             int sum = stockInHand+receivingStock;
                             //int sum = Integer.parseInt(holder.txtStockInHand.getText().toString().trim())+Integer.parseInt(holder.txtReceivingStock.getText().toString().trim());
                             holder.txtClosingStock.setText(String.valueOf(sum));
+
                         }
+
                         viewSalesList.get(position).setReceivingStock(holder.txtReceivingStock.getText().toString().trim());
                         viewSalesList.get(position).setInStock(stockInHand);
                     } else {
@@ -177,12 +187,27 @@ public class HanasaSalesAdapter extends RecyclerView.Adapter<HanasaSalesAdapter.
                                     Integer.parseInt(holder.txtReceivingStock.getText().toString()))-Integer.parseInt(holder.txtSalesDone.getText().toString());*/
                             int sum = (stockInHand+ receivingStock)-salesDone;
                             holder.txtClosingStock.setText(String.valueOf(sum));
+                            if (sum < 0){
+                                holder.txtError.setVisibility(View.VISIBLE);
+                                ((HonasaSalesActivity) context).isSalesDoneIsLessThenClosingStock = false;
+                            } else {
+                                holder.txtError.setVisibility(View.GONE);
+                                ((HonasaSalesActivity) context).isSalesDoneIsLessThenClosingStock = true;
+                            }
                         } else {
                             Log.e(TAG, "afterTextChanged: 1.2");
                             //int sum = Integer.parseInt(holder.txtStockInHand.getText().toString().trim())+Integer.parseInt(holder.txtReceivingStock.getText().toString().trim());
                             int sum = stockInHand+receivingStock;
                             holder.txtClosingStock.setText(String.valueOf(sum));
+                            if (sum <= 0){
+                                holder.txtError.setVisibility(View.VISIBLE);
+                                ((HonasaSalesActivity) context).isSalesDoneIsLessThenClosingStock = false;
+                            } else {
+                                holder.txtError.setVisibility(View.GONE);
+                                ((HonasaSalesActivity) context).isSalesDoneIsLessThenClosingStock = true;
+                            }
                         }
+
                         viewSalesList.get(position).setReceivingStock(holder.txtReceivingStock.getText().toString().trim());
                     } else {
                         if (!holder.txtSalesDone.getText().toString().isEmpty()){
