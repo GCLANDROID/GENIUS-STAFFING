@@ -48,6 +48,13 @@
                 android:text="--"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textColor="@color/textcolor" />
+
+            <ImageView
+                android:id="@+id/imgPFEye"
+                android:layout_marginLeft="10dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_eye"></ImageView>
         </LinearLayout>
 
 
@@ -96,6 +103,12 @@
                 android:text="--"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textColor="@color/textcolor" />
+            <ImageView
+                android:id="@+id/imgESIEye"
+                android:layout_marginLeft="10dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_eye"></ImageView>
         </LinearLayout>
     </LinearLayout>
 
@@ -188,6 +201,13 @@
                 android:text="--"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textColor="@color/textcolor" />
+
+            <ImageView
+                android:id="@+id/imgACEye"
+                android:layout_marginLeft="10dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_eye"></ImageView>
         </LinearLayout>
     </LinearLayout>
 
@@ -234,6 +254,13 @@
                 android:text="--"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textColor="@color/textcolor" />
+
+            <ImageView
+                android:id="@+id/imgAadhaarEye"
+                android:layout_marginLeft="10dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_eye"></ImageView>
         </LinearLayout>
     </LinearLayout>
 
@@ -280,6 +307,13 @@
                 android:text="--"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textColor="@color/textcolor" />
+
+            <ImageView
+                android:id="@+id/imgUANEye"
+                android:layout_marginLeft="10dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_eye"></ImageView>
         </LinearLayout>
     </LinearLayout>
 

@@ -48,6 +48,53 @@
             android:backgroundTint="@color/blue"
             android:textColor="@android:color/white" />
     </LinearLayout>
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/llContactDetails"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/bot" />
+
+        <Button
+            android:layout_marginStart="6dp"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/btnContactUpload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:text="Click here to Fill Up Contact Details"
+            android:background="@drawable/lldesign"
+            android:backgroundTint="@color/blue"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/llAadhaarBack"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/bot" />
+
+        <Button
+            android:layout_marginStart="6dp"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/btnAadhaarBackUpload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:text="Click here to Upoload Aadhaar Back Side"
+            android:background="@drawable/lldesign"
+            android:backgroundTint="@color/blue"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
 
 
 

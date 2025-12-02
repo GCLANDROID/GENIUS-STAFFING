@@ -13,6 +13,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -116,7 +117,7 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = (EditText) findViewById(R.id.etPassword);
         connectionCheck = new NetworkConnectionCheck(this);
         pref = new Pref(LoginActivity.this);
-        refreshedToken = "1123444";
+        refreshedToken = getAndroidID(LoginActivity.this);
 
 //        Log.d("token",refreshedToken);
         etSecurityCode = (EditText) findViewById(R.id.etSecuritycode);
@@ -771,11 +772,12 @@ public class LoginActivity extends AppCompatActivity {
                         boolean IsEnabled=job.optBoolean("IsEnabled");
                         String Message=job.optString("Message");
                         if (IsEnabled){
-                            Intent intent=new Intent(LoginActivity.this,MaintainceBreakActivity.class);
+                           /* Intent intent=new Intent(LoginActivity.this,MaintainceBreakActivity.class);
                             intent.putExtra("breakText",Message);
                             startActivity(intent);
                             finish();
-
+*/
+                            initialize();
 
                         }else {
                             initialize();
@@ -790,5 +792,12 @@ public class LoginActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    private String getAndroidID(Context context) {
+        return Settings.Secure.getString(
+                context.getContentResolver(),
+                Settings.Secure.ANDROID_ID
+        );
     }
 }

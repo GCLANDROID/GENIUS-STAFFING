@@ -515,10 +515,11 @@ public class DashBoardActivity extends AppCompatActivity {
                         boolean IsEnabled=job.optBoolean("IsEnabled");
                         String Message=job.optString("Message");
                         if (IsEnabled){
-                            Intent intent=new Intent(DashBoardActivity.this,MaintainceBreakActivity.class);
+                            /*Intent intent=new Intent(DashBoardActivity.this,MaintainceBreakActivity.class);
                             intent.putExtra("breakText",Message);
                             startActivity(intent);
-                            finish();
+                            finish();*/
+                            initialize();
 
 
                         }else {

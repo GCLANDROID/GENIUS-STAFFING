@@ -93,14 +93,34 @@ public class SelfOnboardingChatbotMessageAdapter extends RecyclerView.Adapter<Re
 
             case BOT:
                 ((BotHolder) holder).txtBot.setText(msg.getMessage());
-                if (msg.getMessage().contains("Please enter your Personal Details.")){
+                if (msg.getMessage().contains("Please fill up Personal Details")){
                     ((BotHolder) holder).llPerosnalDetails.setVisibility(View.VISIBLE);
                 }else {
                     ((BotHolder) holder).llPerosnalDetails.setVisibility(View.GONE);
                 }
 
+                if (msg.getMessage().contains("Step -2")){
+                    ((BotHolder) holder).llContactDetails.setVisibility(View.VISIBLE);
+                }else {
+                    ((BotHolder) holder).llContactDetails.setVisibility(View.GONE);
+                }
+
+                if (msg.getMessage().contains("Aadhaar Card Back Side")){
+                    ((BotHolder) holder).llAadhaarBack.setVisibility(View.VISIBLE);
+                }else {
+                    ((BotHolder) holder).llAadhaarBack.setVisibility(View.GONE);
+                }
+
                 ((BotHolder) holder).btnPersonalUpload.setOnClickListener(v -> {
                     ((SelfOnboardingChatBotActivity)activity).personalDialog();
+                });
+
+                ((BotHolder) holder).btnAadhaarBackUpload.setOnClickListener(v -> {
+                    ((SelfOnboardingChatBotActivity)activity).showImagePickerForAadharBack();
+                });
+
+                ((BotHolder) holder).btnContactUpload.setOnClickListener(v -> {
+                    ((SelfOnboardingChatBotActivity)activity).contactDialog();
                 });
                 break;
 
@@ -140,13 +160,20 @@ public class SelfOnboardingChatbotMessageAdapter extends RecyclerView.Adapter<Re
 
     static class BotHolder extends RecyclerView.ViewHolder {
         TextView txtBot;
-        LinearLayout llPerosnalDetails;
-        Button btnPersonalUpload;
+        LinearLayout llPerosnalDetails,llContactDetails,llAadhaarBack;
+        Button btnPersonalUpload,btnContactUpload,btnAadhaarBackUpload;
         BotHolder(@NonNull View itemView) {
             super(itemView);
             txtBot = itemView.findViewById(R.id.tvBotMessage);
             llPerosnalDetails=(LinearLayout) itemView.findViewById(R.id.llPersonalDetails);
             btnPersonalUpload=itemView.findViewById(R.id.btnPersonalUpload);
+
+            llContactDetails=(LinearLayout) itemView.findViewById(R.id.llContactDetails);
+            btnContactUpload=itemView.findViewById(R.id.btnContactUpload);
+
+
+            llAadhaarBack=(LinearLayout) itemView.findViewById(R.id.llAadhaarBack);
+            btnAadhaarBackUpload=itemView.findViewById(R.id.btnAadhaarBackUpload);
         }
     }
 

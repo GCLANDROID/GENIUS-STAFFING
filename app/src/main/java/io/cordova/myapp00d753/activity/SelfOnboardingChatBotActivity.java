@@ -4,23 +4,34 @@ import static java.util.Calendar.DAY_OF_MONTH;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -31,6 +42,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,6 +55,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.androidnetworking.interfaces.UploadProgressListener;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
@@ -51,6 +65,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -59,9 +75,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.cordova.myapp00d753.R;
-import io.cordova.myapp00d753.activity.attendance.AttendanceReportActivity;
 import io.cordova.myapp00d753.adapter.SelfOnboardingChatbotMessageAdapter;
-import io.cordova.myapp00d753.bluedart.BlueDartAttendanceManageActivity;
+import io.cordova.myapp00d753.adapter.TempCommonFilterAdapter;
+import io.cordova.myapp00d753.adapter.TempCommonFilterForSelfOnboardingAdapter;
 import io.cordova.myapp00d753.module.BotMessageModule;
 import io.cordova.myapp00d753.module.MainDocModule;
 import io.cordova.myapp00d753.utility.AppController;
@@ -103,7 +119,35 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
     ArrayList<MainDocModule> mainBlood = new ArrayList<>();
     ArrayList<String> blood = new ArrayList<>();
     androidx.appcompat.app.AlertDialog personalDialog;
+    androidx.appcompat.app.AlertDialog contactDialog;
     String month;
+    String realationship="",realationshipID,dob="";
+    String sexGender="",sexGenderID;
+    String education="",educationID;
+    String martialstatus="",martialstatusID;
+    String bloodgrp="",bloodgrpID;
+    String frontID, backID;
+    File imageFile;
+    File backAadhaarFile;
+    Bitmap bitmap = null;
+    Bitmap bitmapforAadharBack = null;
+    private static final int REQ_CAMERA_AADHAAR_BACK = 103;
+    private static final int REQ_GALLERY_AADHAAR_BACK = 104;
+
+    ArrayList<String> percity = new ArrayList<>();
+    ArrayList<MainDocModule> mainPerCity = new ArrayList<>();
+    ArrayList<String> precity = new ArrayList<>();
+    ArrayList<MainDocModule> mainPreCity = new ArrayList<>();
+
+    ArrayList<String> state = new ArrayList<>();
+    ArrayList<MainDocModule> mainState = new ArrayList<>();
+    String presentstate,presentstateID;
+
+    String permanentState,permanentStateID="";
+    Dialog searchHolidayDialog;
+    TextView txtPresentCity,txtPermanentCity;
+    String presentcity,permanentcity,presentcityID="",permanentcityID="";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,8 +177,8 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        addBotMessage("Hi! I'm Genie🤖\n I'm here to assist you with your self-onboarding process.\n\nWe need your following details to complete the Self Onboarding.\n\n1.Personal Information.\n2.Contact Details\n3.Bank Details\n4Your Aadhaar Card Image (Front and Back) \n5.PAN Card Image\n6.Passport Size Image \n\nPlease upload your Aadhar card Front image to proceed further.");
 
-        addBotMessage("Hi! I'm Genie🤖\n I'm here to assist you with your self-onboarding process. \n\nPlease upload your Aadhar card image to proceed further.");
         addUploadButton();
 
 
@@ -178,7 +222,7 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
         // 🔹 Global commands
         if (msg.equals("restart")) {
             currentMenu = MenuState.MAIN;
-            addBotMessage("Hi! I'm Genie🤖\n I'm here to assist you with your self-onboarding process. \n\nPlease upload your Aadhar card image to proceed further.");
+            addBotMessage("Hi! I'm Genie🤖\n I'm here to assist you with your self-onboarding process.\n\nWe need your following details to complete the Self Onboarding.\n1.Personal Information.\n2.Contact Details\n3.Bank Details\nYour Aadhaar Card Image both Front and Back \nPAN Card\nPassport Size Image \n\nPlease upload your Aadhar card Front image to proceed further.");
             addUploadButton();
 
             return;
@@ -536,7 +580,7 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
 
     private void showImagePicker() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Upload Aadhar Image");
+        builder.setTitle("Upload Image");
         builder.setItems(new String[]{"Camera", "Gallery"}, (dialog, which) -> {
             if (which == 0) openCamera();
             else openGallery();
@@ -560,7 +604,7 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
 
         if (resultCode != RESULT_OK || data == null) return;
 
-        Bitmap bitmap = null;
+
 
         if (requestCode == REQ_CAMERA) {
             bitmap = (Bitmap) data.getExtras().get("data");
@@ -576,6 +620,29 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
         if (bitmap != null) {
             addImageBubble(bitmap);  // show inside chat
             runVisionOCR(bitmap);
+
+            // extract data
+
+
+        }
+
+
+        if (requestCode == REQ_CAMERA_AADHAAR_BACK) {
+            bitmapforAadharBack = (Bitmap) data.getExtras().get("data");
+        }
+
+        if (requestCode == REQ_GALLERY_AADHAAR_BACK) {
+            Uri uri = data.getData();
+            try {
+                bitmapforAadharBack = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+            } catch (Exception e) {}
+        }
+
+        if (bitmapforAadharBack != null) {
+            addImageBubble(bitmapforAadharBack);
+            aadharBackUpload();// show inside chat
+
+
             // extract data
 
 
@@ -736,6 +803,7 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
 
     private void checkAadhaarNumber(JSONObject jsonObject,String aadhaarNumber) {
        showTypingIndicator();
+       hideKeyboard();
 
         AndroidNetworking.post(AppData.KYC_GET_DETAILS)
                 .addJSONObjectBody(jsonObject)
@@ -868,36 +936,13 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
                             //image
 
                             AppData.AADAHARNUMBER = aadhaarNumber;
+                            aadharFrontUpload();
 
-                            addBotMessage("Thank you for confirming your Aadhaar details. We will proceed to the next step.");
-                            addBotMessage("Please enter your Personal Details. \n\nFor fill up Personal Details you will need to provide \n1.Date of Birth \n2.Father's/Husband's Name\n3.Relationship\n4.Gender\n5.Highest Qualification\n6.Martial Status\n7.Blood Group");
-
-                            // adharAlert(namevalue, dobvalue, AppData.AADAHARNUMBER, gendervalue, careof, state, pin, street, locality, house, postoffice, subDistrict, district, vtc, landmark, null, 1);
-
+                          // call Addahr front upload
                         } else {
-                            AppData.AADAHARNUMBER = aadhaarNumber;
-                            addBotMessage("Thank you for confirming your Aadhaar details. We will proceed to the next step.");
-                            addBotMessage("Please enter your Personal Details. \n\nFor fill up Personal Details you will need to provide \n1.Date of Birth \n2.Father's/Husband's Name\n3.Relationship\n4.Gender\n5.Highest Qualification\n6.Martial Status\n7.Blood Group");
 
+                            aadharFrontUpload();
 
-                            /*Intent intent = new Intent(TEMPAadharQRActivity.this, TempProfileActivity.class);
-                            intent.putExtra("namevalue", "");
-                            intent.putExtra("dobvalue", "");
-                            intent.putExtra("gendervalue", "");
-                            intent.putExtra("careof", "");
-                            intent.putExtra("state", "");
-                            intent.putExtra("pin", "");
-                            intent.putExtra("street", "");
-                            intent.putExtra("locality","");
-                            intent.putExtra("house", "");
-                            intent.putExtra("postoffice", "");
-                            intent.putExtra("subDistrict",  "");
-                            intent.putExtra("district", "");
-                            intent.putExtra("vtc", "");
-                            intent.putExtra("landmark", "");
-                            intent.putExtra("aadhaarflag", aadharflag);
-                            startActivity(intent);
-                            finish();*/
 
                         }
                     }
@@ -1154,7 +1199,14 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
         mainRealation.add(new MainDocModule("REL00000001", "Father"));
         mainRealation.add(new MainDocModule("REL00000008", "Husband"));
 
-
+        JSONObject obj=new JSONObject();
+        try {
+            obj.put("ddltype", "Doc_Aadhar");
+            obj.put("SecurityCode",pref.getSecurityCode());
+            getAddharFrontID(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 
 
@@ -1177,7 +1229,7 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            pd.dismiss();
+
 
                             JSONObject job1 = response;
                             String Response_Code = job1.optString("Response_Code");
@@ -1324,6 +1376,7 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
                             month = "December";
                         }
                         String DateOfBirth = d + " " + month + " " + y;
+                        dob=DateOfBirth;
 
 
                         tvEmpCodeDOB.setText(DateOfBirth);
@@ -1339,6 +1392,243 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
             }
         });
 
+        spRealation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                realationshipID = mainRealation.get(position).getDocumentType();
+                realationship = realation.get(position);
+
+                Log.d("realation", realationship);
+            }
+
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spGender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                sexGenderID = mainGender.get(position).getDocID();
+                sexGender = gender.get(position);
+                Log.d("sexgender", sexGender);
+                //spESICGender.setSelection(position);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spQualification.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+
+
+                educationID = mainQualification.get(position).getDocumentType();
+                education=qualification.get(position);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+        spMartial.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!mainMartial.get(position).getDocID().isEmpty()){
+                    martialstatusID = mainMartial.get(position).getDocID();
+                    martialstatus=martial.get(position);
+                    Log.d("martial", martialstatus);
+
+                } else {
+                    martialstatus = "";
+                }
+            }
+
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spBloodGrp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                //bloodgrp = mainBlood.get(position).getDocID();
+                bloodgrpID = mainBlood.get(position).getDocID();
+                bloodgrp = blood.get(position);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+        Button btnSave=dialogView.findViewById(R.id.btnSave);
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!dob.equals("")){
+                    if (etGurdianName.getText().toString().length()>0){
+                        if (!realationship.equals("")){
+                            if (!sexGender.equals("")){
+                                if (!education.equals("")){
+                                    if (!martialstatus.equals("")){
+                                        if (!bloodgrp.equals("")){
+                                            personalDialog.dismiss();
+                                            SpannableStringBuilder sb = new SpannableStringBuilder();
+
+                                            int color = ContextCompat.getColor(SelfOnboardingChatBotActivity.this, R.color.misscolor);  // change to your color
+
+// 1. Guardian Name
+                                            sb.append("Father's/Husband's Name: ");
+                                            sb.append("\n");
+                                            int start = sb.length();
+
+                                            sb.append(etGurdianName.getText().toString());
+                                            sb.setSpan(new ForegroundColorSpan(color), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                            sb.setSpan(new StyleSpan(Typeface.BOLD), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                            sb.append("\n\n");
+
+// 2. Relationship
+                                            sb.append("Relationship with Guardian: ");
+                                            sb.append("\n");
+                                            start = sb.length();
+
+                                            sb.append(realationship);
+                                            sb.setSpan(new ForegroundColorSpan(color), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                            sb.setSpan(new StyleSpan(Typeface.BOLD), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                            sb.append("\n\n");
+
+// 3. Gender
+                                            sb.append("Gender: ");
+                                            sb.append("\n");
+                                            start = sb.length();
+
+                                            sb.append(sexGender);
+                                            sb.setSpan(new ForegroundColorSpan(color), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                            sb.setSpan(new StyleSpan(Typeface.BOLD), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                            sb.append("\n\n");
+
+// 4. DOB
+                                            sb.append("Date of Birth: ");
+                                            sb.append("\n");
+                                            start = sb.length();
+
+                                            sb.append(dob);
+                                            sb.setSpan(new ForegroundColorSpan(color), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                            sb.setSpan(new StyleSpan(Typeface.BOLD), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                            sb.append("\n\n");
+
+// 5. Qualification
+                                            sb.append("Highest Qualification: ");
+                                            sb.append("\n");
+                                            start = sb.length();
+
+                                            sb.append(education);
+                                            sb.setSpan(new ForegroundColorSpan(color), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                            sb.setSpan(new StyleSpan(Typeface.BOLD), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                            sb.append("\n\n");
+
+// 6. Marital Status
+                                            sb.append("Marital Status: ");
+                                            sb.append("\n");
+                                            start = sb.length();
+
+                                            sb.append(martialstatus);
+                                            sb.setSpan(new ForegroundColorSpan(color), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                            sb.setSpan(new StyleSpan(Typeface.BOLD), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                            sb.append("\n\n");
+
+// 7. Blood Group
+                                            sb.append("Blood Group: ");
+                                            sb.append("\n");
+                                            start = sb.length();
+
+                                            sb.append(bloodgrp);
+                                            sb.setSpan(new ForegroundColorSpan(color), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                            sb.setSpan(new StyleSpan(Typeface.BOLD), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+// finally
+                                            addUserMessage(String.valueOf(sb));
+
+                                            JSONObject mainobject = new JSONObject();
+                                            try {
+                                                mainobject.put("DbOperation", "1");
+                                                mainobject.put("SecurityCode", pref.getSecurityCode());
+                                                JSONObject personalOBJ = new JSONObject();
+                                                personalOBJ.put("AEMEMPLOYEEID", pref.getEmpId());
+                                                personalOBJ.put("Sex", sexGenderID);
+                                                personalOBJ.put("GuardianName", etGurdianName.getText().toString());
+                                                personalOBJ.put("RelationShip", realationshipID);
+                                                personalOBJ.put("BloodGroup", bloodgrpID);
+                                                personalOBJ.put("DateOfBirth", dob);
+                                                personalOBJ.put("Qualification", educationID);
+                                                personalOBJ.put("UpdatedFrom", "ANDR");
+                                                personalOBJ.put("MaritalStatus", martialstatusID);
+                                                personalOBJ.put("EmployeeName", pref.getEmpName());
+                                                mainobject.put("PersonalDetails", personalOBJ);
+
+                                                uploadOfficalDetails(mainobject);
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+
+
+
+
+                                        }else {
+
+                                            Toast.makeText(SelfOnboardingChatBotActivity.this, "Please select Blood Group", Toast.LENGTH_SHORT).show();
+
+
+                                        }
+
+                                    }else {
+                                        Toast.makeText(SelfOnboardingChatBotActivity.this, "Please select Your Martial Status", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }else {
+                                    Toast.makeText(SelfOnboardingChatBotActivity.this, "Please select Your Highest Qualification", Toast.LENGTH_SHORT).show();
+                                }
+
+                            }else {
+                                Toast.makeText(SelfOnboardingChatBotActivity.this, "Please select Gender", Toast.LENGTH_SHORT).show();
+                            }
+
+                        }else {
+                            Toast.makeText(SelfOnboardingChatBotActivity.this, "Please select realationship with guardian", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }else {
+                        Toast.makeText(SelfOnboardingChatBotActivity.this, "Please enter your Father's/Husband's Name", Toast.LENGTH_SHORT).show();
+                    }
+
+                }else {
+                    Toast.makeText(SelfOnboardingChatBotActivity.this, "Please enter your Date of Birth", Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+        });
+
 
         personalDialog = dialogBuilder.create();
         personalDialog.setCancelable(true);
@@ -1349,6 +1639,1040 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
     }
 
 
+    private void uploadOfficalDetails(JSONObject jsonObject) {
+        showTypingIndicator();
+
+
+        //AndroidNetworking.post("http://171.16.2.105/GSPPI_API_V2/api/KYC/UpdateKYCDetails")
+        AndroidNetworking.post(AppData.newv2url + "KYC/UpdateKYCDetails")
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+
+                        int Response_Code = job1.optInt("Response_Code");
+                        if (Response_Code == 101) {
+
+                               hideTypingIndicator();
+                               addBotMessage("Thanks! Your Personal Details have been updated successfully.");
+                               addBotMessage("Step -2 : Fill Up Your Contact Details");
+                            //
+                        } else {
+                            hideTypingIndicator();
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+
+                        Intent intent = new Intent(SelfOnboardingChatBotActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+
+                    }
+                });
+    }
+
+    private void getAddharFrontID(JSONObject jsonObject) {
+        pd.show();
+        AndroidNetworking.post(AppData.COMMON_DDL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        JSONObject job1 = response;
+                        String Response_Code=job1.optString("Response_Code");
+                        if (Response_Code.equals("101")){
+                            JSONArray Response_Data=job1.optJSONArray("Response_Data");
+                            for (int i=0;i<Response_Data.length();i++){
+                                JSONObject obj=Response_Data.optJSONObject(i);
+                                String id=obj.optString("id");
+                                String value=obj.optString("value");
+                                if (value.equals("Aadhaar Card")){
+                                    frontID=id;
+                                }
+                                if (value.equals("Aadhar Card-Back")){
+                                    backID=id;
+                                }
+                            }
+
+                            JSONObject obj=new JSONObject();
+                            try {
+                                obj.put("ddltype", 3);
+                                obj.put("SecurityCode",pref.getSecurityCode());
+                                getState(obj);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            /*JSONObject obj=new JSONObject();
+                            try {
+                                obj.put("ddltype", "Doc_Pan");
+                                obj.put("SecurityCode",pref.getSecurityCode());
+                                getPANID(obj);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }*/
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                        pd.dismiss();
+                    }
+                });
+    }
+
+
+    private void aadharFrontUpload() {
+        showTypingIndicator();
+        saveBitmapAsync(bitmap, "myImage.jpg", new SaveCallback() {
+            @Override
+            public void onSuccess(File file) {
+                imageFile=file;
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+                e.printStackTrace();
+            }
+        });
+        AndroidNetworking.upload(AppData.SAVE_EMP_DIGITAL_DOCUMENT)
+                .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
+                .addMultipartParameter("DocumentID", frontID)
+                .addMultipartParameter("ReferenceNo", extractedAadhar)
+                .addMultipartParameter("SecurityCode", pref.getSecurityCode())
+                .addMultipartFile("SingleFile", imageFile)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setPercentageThresholdForCancelling(60)
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        JSONObject job1 = response;
+                        int Response_Code = job1.optInt("Response_Code");
+                        String Response_Data = job1.optString("Response_Data");
+                        if (Response_Code == 101) {
+                            hideTypingIndicator();
+                            addBotMessage("Thank you for uploading the front side of your Aadhaar Card.");
+                            addBotMessage("Please Upload Your Aadhaar Card Back Side");
+//                            addBotMessage("Thank you for confirming your Aadhaar details. We will proceed to the next step.");
+//                            addBotMessage("Please fill up Personal Details you will need to provide \n1.Date of Birth \n2.Father's/Husband's Name\n3.Relationship\n4.Gender\n5.Highest Qualification\n6.Martial Status\n7.Blood Group");
+
+
+
+                        } else {
+                            hideTypingIndicator();
+                            addBotMessage(Response_Data);
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                       hideTypingIndicator();
+                        Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+
+    }
+
+
+    private void saveBitmapAsync(Bitmap bitmap, String fileName, SaveCallback callback) {
+
+        new Thread(() -> {
+            File file = new File(getCacheDir(), fileName);
+
+            try (FileOutputStream out = new FileOutputStream(file)) {
+
+                // Compress in background — heavy task
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 85, out);
+                out.flush();
+
+                runOnUiThread(() -> callback.onSuccess(file));
+
+            } catch (Exception e) {
+                runOnUiThread(() -> callback.onError(e));
+            }
+
+        }).start();
+    }
+
+    interface SaveCallback {
+        void onSuccess(File file);
+        void onError(Exception e);
+    }
+
+    public void hideKeyboard() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+
+    public void showImagePickerForAadharBack() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Upload Image");
+        builder.setItems(new String[]{"Camera", "Gallery"}, (dialog, which) -> {
+            if (which == 0) openCameraForAadharBack();
+            else openGalleryForAadharBack();
+        });
+        builder.show();
+    }
+
+    private void openCameraForAadharBack() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, REQ_CAMERA_AADHAAR_BACK);
+    }
+
+    private void openGalleryForAadharBack() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, REQ_GALLERY_AADHAAR_BACK);
+    }
+
+
+    private void aadharBackUpload() {
+        showTypingIndicator();
+        saveBitmapAsync(bitmapforAadharBack, "myBackAadhaarImage.jpg", new SaveCallback() {
+            @Override
+            public void onSuccess(File file) {
+                backAadhaarFile=file;
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+                e.printStackTrace();
+            }
+        });
+        AndroidNetworking.upload(AppData.SAVE_EMP_DIGITAL_DOCUMENT)
+                .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
+                .addMultipartParameter("DocumentID", backID)
+                .addMultipartParameter("ReferenceNo", extractedAadhar)
+                .addMultipartParameter("SecurityCode", pref.getSecurityCode())
+                .addMultipartFile("SingleFile", backAadhaarFile)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setPercentageThresholdForCancelling(60)
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        hideTypingIndicator();
+                        JSONObject job1 = response;
+                        int Response_Code = job1.optInt("Response_Code");
+                        String Response_Data = job1.optString("Response_Data");
+                        if (Response_Code == 101) {
+                            hideTypingIndicator();
+                            addBotMessage("Thank you for confirming your Aadhaar details. We will proceed to the next step.");
+                            addBotMessage("Please fill up Personal Details you will need to provide \n1.Date of Birth \n2.Father's/Husband's Name\n3.Relationship\n4.Gender\n5.Highest Qualification\n6.Martial Status\n7.Blood Group");
+                        } else {
+                            hideTypingIndicator();
+                            addBotMessage(Response_Data);
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+
+                       hideTypingIndicator();
+                    }
+                });
+
+
+        //RequestBody mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        /*AndroidNetworking.upload(AppData.url+"post_empdigitaldocument")
+                .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
+                .addMultipartParameter("DocumentID", "00233")
+                .addMultipartParameter("ReferenceNo", etAddaharNo.getText().toString())
+                .addMultipartParameter("SecurityCode", pref.getSecurityCode())
+                .addMultipartFile("SingleFile", file)
+                .setPercentageThresholdForCancelling(60)
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                        progressDialog.show();
+
+
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        String responseText = job1.optString("responseText");
+                        boolean responseStatus = job1.optBoolean("responseStatus");
+
+                        if (responseStatus) {
+                            JSONObject jsonObject=new JSONObject();
+                            try {
+                                jsonObject.put("AEMEMPLOYEEID",pref.getEmpId());
+                                jsonObject.put("Type",1);
+                                jsonObject.put("Status",1);
+                                panAadharvalidFlag(jsonObject,progressDialog);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            btnAadharSave.setVisibility(View.GONE);
+                            responseflag=1;
+                            Toast.makeText(getApplicationContext(), "Your Aadhaar details has been updated Successfully", Toast.LENGTH_LONG).show();
+
+                        } else {
+                            progressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
+
+                        }
+
+
+                        // boolean _status = job1.getBoolean("status");
+
+
+
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        Log.e("errt", String.valueOf(error));
+                        progressDialog.dismiss();
+
+                        Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
+                    }
+                });*/
+
+    }
+
+
+    public void contactDialog() {
+        androidx.appcompat.app.AlertDialog.Builder dialogBuilder = new androidx.appcompat.app.AlertDialog.Builder(SelfOnboardingChatBotActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.contactdetails_popup, null);
+        dialogBuilder.setView(dialogView);
+        Spinner spPresentState = (Spinner) dialogView.findViewById(R.id.spPresentState);
+        Spinner spPresentCity = (Spinner)  dialogView.findViewById(R.id.spPresentCity);
+        Spinner spPermanentState = (Spinner)  dialogView.findViewById(R.id.spPermanentState);
+        Spinner spPermanentCity = (Spinner)  dialogView.findViewById(R.id.spPermanentCity);
+
+        EditText etPhnNumber = (EditText)  dialogView.findViewById(R.id.etPhnNumber);
+        EditText etMobNumber = (EditText)  dialogView.findViewById(R.id.etMobNumber);
+        EditText etEmailId = (EditText)  dialogView.findViewById(R.id.etEmail);
+        EditText etWhatssappNumber = (EditText)  dialogView.findViewById(R.id.etWhatssappNumber);
+        EditText etRefNumber = (EditText)  dialogView.findViewById(R.id.etRefNumber);
+        etRefNumber.setVisibility(View.GONE);
+        EditText etPrePinCode = (EditText)  dialogView.findViewById(R.id.etPrePinCode);
+        EditText etPreAddr = (EditText) dialogView.findViewById(R.id.etPreAddr);
+        EditText etPerPinCode = (EditText) dialogView.findViewById(R.id.etPerPinCode);
+        EditText etPerAddr = (EditText) dialogView.findViewById(R.id.etPerAddr);
+
+
+         txtPresentCity = (TextView)dialogView. findViewById(R.id.txtPresentCity);
+         txtPermanentCity = (TextView) dialogView.findViewById(R.id.txtPermanentCity);
+
+
+        txtPresentCity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openSearchCityDialog("present_city");
+            }
+        });
+
+        txtPermanentCity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openSearchCityDialog("permanent_city");
+            }
+        });
+
+
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                (SelfOnboardingChatBotActivity.this, android.R.layout.simple_spinner_item,
+                        state); //selected item will look like a spinner set from XML
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spPresentState.setAdapter(spinnerArrayAdapter);
+        spPermanentState.setAdapter(spinnerArrayAdapter);
+
+        spPresentState.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                presentstateID = mainState.get(position).getDocID();
+                presentstate=state.get(position);
+
+
+                if (position > 0){
+                    JSONObject obj=new JSONObject();
+                    try {
+                        obj.put("ddltype", 4);
+                        obj.put("id1",presentstateID);
+                        obj.put("SecurityCode",pref.getSecurityCode());
+                        setPreCity(obj,spPresentCity);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+        spPermanentState.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                permanentStateID = mainState.get(position).getDocID();
+                permanentState=state.get(position);
+
+
+                if (position > 0){
+                    JSONObject obj=new JSONObject();
+                    try {
+                        obj.put("ddltype", 4);
+                        obj.put("id1",permanentStateID);
+                        obj.put("SecurityCode",pref.getSecurityCode());
+                        setPerCity(obj,spPermanentCity);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+        spPermanentCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                permanentcityID = mainPerCity.get(position).getDocID();
+                permanentcity=percity.get(position);
+
+
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spPresentCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                presentcityID = mainPreCity.get(position).getDocID();
+                presentcity=precity.get(position);
+
+
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        Button btnSave=(Button) dialogView.findViewById(R.id.btnSave);
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (etMobNumber.getText().toString().length()==10){
+                    if (etWhatssappNumber.getText().toString().length()==10){
+                        if (etPhnNumber.getText().toString().length()==10){
+                            if (etEmailId.getText().toString().length()>0){
+                                if (etPrePinCode.getText().toString().length()==6){
+                                    if (!presentstateID.equals("")){
+                                        if (!presentcityID.equals("")){
+                                            if (etPreAddr.getText().toString().length()>3){
+                                                if (!permanentStateID.equals("")){
+                                                    if (!permanentcityID.equals("") ){
+                                                        if (etPerAddr.getText().toString().length()>3 ){
+                                                            contactDialog.dismiss();
+                                                            SpannableStringBuilder sb = new SpannableStringBuilder();
+
+                                                            int color = ContextCompat.getColor(SelfOnboardingChatBotActivity.this, R.color.misscolor);  // change to your color
+
+// 1. Guardian Name
+                                                            sb.append("Mobile Number: ");
+                                                            sb.append("\n");
+                                                            int start = sb.length();
+
+                                                            sb.append(etMobNumber.getText().toString());
+                                                            sb.setSpan(new ForegroundColorSpan(color), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                            sb.setSpan(new StyleSpan(Typeface.BOLD), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                            sb.append("\n\n");
+
+// 2. Relationship
+                                                            sb.append("Whatsapp Number: ");
+                                                            sb.append("\n");
+                                                            start = sb.length();
+
+                                                            sb.append(etWhatssappNumber.getText().toString());
+                                                            sb.setSpan(new ForegroundColorSpan(color), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                            sb.setSpan(new StyleSpan(Typeface.BOLD), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                            sb.append("\n\n");
+
+// 3. Gender
+                                                            sb.append("Emergency Number: ");
+                                                            sb.append("\n");
+                                                            start = sb.length();
+
+                                                            sb.append(etPhnNumber.getText().toString());
+                                                            sb.setSpan(new ForegroundColorSpan(color), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                            sb.setSpan(new StyleSpan(Typeface.BOLD), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                            sb.append("\n\n");
+
+// 4. DOB
+                                                            sb.append("Email ID: ");
+                                                            sb.append("\n");
+                                                            start = sb.length();
+
+                                                            sb.append(etEmailId.getText().toString());
+                                                            sb.setSpan(new ForegroundColorSpan(color), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                            sb.setSpan(new StyleSpan(Typeface.BOLD), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                            sb.append("\n\n");
+
+// 5. Qualification
+                                                            sb.append("Present PIN Code: ");
+                                                            sb.append("\n");
+                                                            start = sb.length();
+
+                                                            sb.append(etPrePinCode.getText().toString());
+                                                            sb.setSpan(new ForegroundColorSpan(color), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                            sb.setSpan(new StyleSpan(Typeface.BOLD), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                            sb.append("\n\n");
+
+// 6. Marital Status
+                                                            sb.append("Present State: ");
+                                                            sb.append("\n");
+                                                            start = sb.length();
+
+                                                            sb.append(presentstate);
+                                                            sb.setSpan(new ForegroundColorSpan(color), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                            sb.setSpan(new StyleSpan(Typeface.BOLD), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                            sb.append("\n\n");
+
+// 7. Blood Group
+                                                            sb.append("Present City: ");
+                                                            sb.append("\n");
+                                                            start = sb.length();
+
+                                                            sb.append(presentcity);
+                                                            sb.setSpan(new ForegroundColorSpan(color), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                            sb.setSpan(new StyleSpan(Typeface.BOLD), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                            sb.append("\n\n");
+
+
+                                                            sb.append("Present Address: ");
+                                                            sb.append("\n");
+                                                            start = sb.length();
+
+                                                            sb.append(etPreAddr.getText().toString());
+                                                            sb.setSpan(new ForegroundColorSpan(color), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                            sb.setSpan(new StyleSpan(Typeface.BOLD), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                            sb.append("\n\n");
+
+
+                                                            sb.append("Permanent PIN Code: ");
+                                                            sb.append("\n");
+                                                            start = sb.length();
+
+                                                            sb.append(etPerPinCode.getText().toString());
+                                                            sb.setSpan(new ForegroundColorSpan(color), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                            sb.setSpan(new StyleSpan(Typeface.BOLD), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                            sb.append("\n\n");
+
+// 6. Marital Status
+                                                            sb.append("Permanent State: ");
+                                                            sb.append("\n");
+                                                            start = sb.length();
+
+                                                            sb.append(permanentState);
+                                                            sb.setSpan(new ForegroundColorSpan(color), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                            sb.setSpan(new StyleSpan(Typeface.BOLD), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                            sb.append("\n\n");
+
+// 7. Blood Group
+                                                            sb.append("Permanent City: ");
+                                                            sb.append("\n");
+                                                            start = sb.length();
+
+                                                            sb.append(permanentcity);
+                                                            sb.setSpan(new ForegroundColorSpan(color), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                            sb.setSpan(new StyleSpan(Typeface.BOLD), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                            sb.append("\n\n");
+
+
+                                                            sb.append("Permanent Address: ");
+                                                            sb.append("\n");
+                                                            start = sb.length();
+
+                                                            sb.append(etPerAddr.getText().toString());
+                                                            sb.setSpan(new ForegroundColorSpan(color), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                            sb.setSpan(new StyleSpan(Typeface.BOLD), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                            sb.append("\n\n");
+// finally
+                                                            addUserMessage(String.valueOf(sb));
+
+
+
+                                                            //API CALL FOR CONTACT
+                                                            JSONObject mainobject = new JSONObject();
+                                                            try {
+                                                                mainobject.put("DbOperation", "2");
+                                                                mainobject.put("SecurityCode", pref.getSecurityCode());
+                                                                JSONObject innerobj = new JSONObject();
+                                                                innerobj.put("AEMEMPLOYEEID", pref.getEmpId());
+                                                                innerobj.put("PermanentAddress", etPerAddr.getText().toString());
+                                                                innerobj.put("PermanentStateID", permanentStateID);
+                                                                innerobj.put("PermanentCityID", permanentcityID);
+                                                                innerobj.put("PermanentPinCode", etPerPinCode.getText().toString());
+                                                                innerobj.put("PresentAddress", etPreAddr.getText().toString());
+                                                                innerobj.put("PresentStateID", presentstateID);
+                                                                innerobj.put("PresentCityID", presentcityID);
+                                                                innerobj.put("PresentPincode", etPrePinCode.getText().toString());
+                                                                innerobj.put("Phone", etWhatssappNumber.getText().toString());
+                                                                innerobj.put("Mobile", etMobNumber.getText().toString());
+                                                                innerobj.put("EmergencyContact", etPhnNumber.getText().toString());
+                                                                innerobj.put("EmailID", etEmailId.getText().toString());
+                                                                innerobj.put("RefContact", "9090909090");
+                                                                mainobject.put("ContactDetails", innerobj);
+                                                                uploadContactDetails(mainobject);
+                                                            } catch (JSONException e) {
+                                                                e.printStackTrace();
+                                                            }
+
+                                                        }else {
+                                                            Toast.makeText(SelfOnboardingChatBotActivity.this, "Please enter permanent address", Toast.LENGTH_SHORT).show();
+                                                        }
+
+                                                    }else {
+                                                        Toast.makeText(SelfOnboardingChatBotActivity.this, "Please select permanent city", Toast.LENGTH_SHORT).show();
+                                                    }
+
+                                                }else {
+                                                    Toast.makeText(SelfOnboardingChatBotActivity.this, "Please select permanent state", Toast.LENGTH_SHORT).show();
+                                                }
+
+                                            }else {
+                                                Toast.makeText(SelfOnboardingChatBotActivity.this, "Please enter present address", Toast.LENGTH_SHORT).show();
+                                            }
+
+                                        }else {
+                                            Toast.makeText(SelfOnboardingChatBotActivity.this, "Please select present city", Toast.LENGTH_SHORT).show();
+
+                                        }
+
+                                    }else {
+                                        Toast.makeText(SelfOnboardingChatBotActivity.this, "Please select present state", Toast.LENGTH_SHORT).show();
+
+                                    }
+
+                                }else {
+                                    Toast.makeText(SelfOnboardingChatBotActivity.this, "Please enter valid present address pincode", Toast.LENGTH_SHORT).show();
+
+                                }
+
+
+                            }else {
+                                Toast.makeText(SelfOnboardingChatBotActivity.this, "Please enter email id", Toast.LENGTH_SHORT).show();
+                            }
+
+                        }else {
+                            Toast.makeText(SelfOnboardingChatBotActivity.this, "Please enter emergency number", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }else {
+                        Toast.makeText(SelfOnboardingChatBotActivity.this, "Please enter whatsapp number", Toast.LENGTH_SHORT).show();
+                    }
+
+                }else {
+                        Toast.makeText(SelfOnboardingChatBotActivity.this, "Please enter valid mobile number", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+        CheckBox ckMobileSame=(CheckBox)dialogView.findViewById(R.id.ckMobileSame);
+        ckMobileSame.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    etWhatssappNumber.setText(etMobNumber.getText().toString());
+                }else{
+                    etWhatssappNumber.setText("");
+                }
+            }
+        });
+
+        CheckBox ckAddressSame=(CheckBox)dialogView.findViewById(R.id.ckAddressSame);
+        ckAddressSame.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b){
+                    etPerAddr.setText(etPreAddr.getText().toString());
+                    etPerPinCode.setText(etPrePinCode.getText().toString());
+                    int indexState=state.indexOf(presentstate);
+                    spPermanentState.setSelection(indexState);
+                    int indexCity=state.indexOf(presentcity);
+                    spPermanentCity.setSelection(indexCity);
+                }
+            }
+        });
+
+
+
+
+
+
+        contactDialog = dialogBuilder.create();
+        contactDialog.setCancelable(true);
+        Window window = contactDialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        contactDialog.show();
+    }
+
+
+    private void getState(JSONObject jsonObject) {
+        pd.show();
+        AndroidNetworking.post(AppData.COMMON_DDL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+
+                            pd.dismiss();
+                            mainState.clear();
+                            state.clear();
+                            state.add("Please Select");
+                            mainState.add(new MainDocModule("",""));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String deptvalue = obj.optString("value");
+                                    String id = obj.optString("id");
+                                    state.add(deptvalue);
+                                    MainDocModule mainDocModule = new MainDocModule(id, deptvalue);
+                                    mainState.add(mainDocModule);
+                                    // clientname.add(value);
+                                }
+
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                       pd.dismiss();
+                    }
+                });
+    }
+
+    private void setPerCity(JSONObject jsonObject,Spinner sp) {
+
+        ProgressDialog pd=new ProgressDialog(this);
+        pd.setMessage("Loading...");
+        pd.setCancelable(false);
+        pd.show();
+        AndroidNetworking.post(AppData.COMMON_DDL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+
+                            //llLoader.setVisibility(View.GONE);
+                            //llMain.setVisibility(View.VISIBLE);
+                            pd.dismiss();
+                            percity.clear();
+                            mainPerCity.clear();
+                            percity.add("Please Select");
+                            mainPerCity.add(new MainDocModule("", ""));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String qualivalue = obj.optString("value");
+                                    String qualiid = obj.optString("id");
+                                    percity.add(qualivalue);
+                                    MainDocModule mainDocModule = new MainDocModule(qualiid, qualivalue);
+                                    mainPerCity.add(mainDocModule);
+                                }
+
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                        (SelfOnboardingChatBotActivity.this, android.R.layout.simple_spinner_item,
+                                                percity); //selected item will look like a spinner set from XML
+                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                sp.setAdapter(spinnerArrayAdapter);
+
+
+
+
+
+
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                        pd.dismiss();
+
+                    }
+                });
+    }
+
+    private void setPreCity(JSONObject jsonObject,Spinner sp) {
+
+        ProgressDialog pd=new ProgressDialog(this);
+        pd.setMessage("Loading...");
+        pd.setCancelable(false);
+        pd.show();
+        AndroidNetworking.post(AppData.COMMON_DDL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+
+                            //llLoader.setVisibility(View.GONE);
+                            //llMain.setVisibility(View.VISIBLE);
+                            pd.dismiss();
+                            precity.clear();
+                            mainPreCity.clear();
+                            precity.add("Please Select");
+                            mainPreCity.add(new MainDocModule("", ""));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String qualivalue = obj.optString("value");
+                                    String qualiid = obj.optString("id");
+                                    precity.add(qualivalue);
+                                    MainDocModule mainDocModule = new MainDocModule(qualiid, qualivalue);
+                                    mainPreCity.add(mainDocModule);
+                                }
+
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                                        (SelfOnboardingChatBotActivity.this, android.R.layout.simple_spinner_item,
+                                                precity); //selected item will look like a spinner set from XML
+                                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                sp.setAdapter(spinnerArrayAdapter);
+
+
+
+
+
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                        pd.dismiss();
+
+                    }
+                });
+    }
+
+
+    private void openSearchCityDialog(String from) {
+        searchHolidayDialog.setContentView(R.layout.wbs_code_search_layout);
+        searchHolidayDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        searchHolidayDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        searchHolidayDialog.setCancelable(true);
+
+        TextView txtPopupHeadline = searchHolidayDialog.findViewById(R.id.txtPopupHeadline);
+        SearchView wbsCodeSearchView = (SearchView) searchHolidayDialog.findViewById(R.id.wbsCodeSearchView);
+        ImageView imgCancel = searchHolidayDialog.findViewById(R.id.imgCancel);
+        RecyclerView rvWbsCode = searchHolidayDialog.findViewById(R.id.rvWbsCode);
+        rvWbsCode.setLayoutManager(new LinearLayoutManager(SelfOnboardingChatBotActivity.this));
+        TempCommonFilterForSelfOnboardingAdapter tempCommonFilterAdapter;
+        if (from.equals("present_city")){
+            wbsCodeSearchView.setQueryHint("Search Present city");
+            txtPopupHeadline.setText("Select Present City");
+
+            ArrayList<MainDocModule>  mainPreCityCopy = (ArrayList<MainDocModule>) mainPreCity.clone();
+            tempCommonFilterAdapter = new TempCommonFilterForSelfOnboardingAdapter(SelfOnboardingChatBotActivity.this,mainPreCityCopy,from);
+            rvWbsCode.setAdapter(tempCommonFilterAdapter);
+        } else {
+            wbsCodeSearchView.setQueryHint("Search Permanent city");
+            txtPopupHeadline.setText("Select Permanent City");
+
+            ArrayList<MainDocModule>  mainPerCityCopy = (ArrayList<MainDocModule>) mainPerCity.clone();
+            tempCommonFilterAdapter = new TempCommonFilterForSelfOnboardingAdapter(SelfOnboardingChatBotActivity.this,mainPerCityCopy,from);
+            rvWbsCode.setAdapter(tempCommonFilterAdapter);
+        }
+
+
+        wbsCodeSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                tempCommonFilterAdapter.getFilter().filter(s);
+                return false;
+            }
+        });
+
+
+        imgCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchHolidayDialog.dismiss();
+            }
+        });
+        searchHolidayDialog.show();
+    }
+
+    public void setText(String cityID,String selectedItem, String selectFor){
+        if (selectFor.equals("present_city")){
+
+            txtPresentCity.setText(selectedItem);
+            presentcity = cityID;
+        } else  {
+
+            txtPermanentCity.setText(selectedItem);
+            permanentcity = cityID;
+        }
+
+        searchHolidayDialog.dismiss();
+    }
+
+    private void uploadContactDetails(JSONObject jsonObject) {
+       showTypingIndicator();
+        //AndroidNetworking.post("http://171.16.2.105/GSPPI_API_V2/api/KYC/UpdateKYCDetails")
+        AndroidNetworking.post(AppData.newv2url + "KYC/UpdateKYCDetails")
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+
+
+                        int Response_Code = job1.optInt("Response_Code");
+                        if (Response_Code == 101) {
+                            hideTypingIndicator();
+                            addBotMessage("Thanks! Your Contact Details have been updated successfully.");
+                            addBotMessage("Step -3 : Fill Up Your Bank Details");
+
+                            // Toast.makeText(TempProfileActivity.this, "Contact Details has been updated Successfully", Toast.LENGTH_LONG).show();
+
+                        } else {
+                            hideTypingIndicator();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+
+                        hideTypingIndicator();
+
+                    }
+                });
+    }
 
 
 
