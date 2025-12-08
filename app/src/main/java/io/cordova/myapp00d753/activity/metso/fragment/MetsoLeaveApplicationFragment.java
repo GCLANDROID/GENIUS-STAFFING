@@ -2294,6 +2294,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
                 actApproverName.setText(selectedItem.getApproverName());
                 tvApproverName.setText("Approver Name :"+selectedItem.getApproverName());
                 approverID = selectedItem.approverId;
+                Log.e(TAG, "approverID: "+approverID);
                 txtErrorApprover.setVisibility(View.GONE);
             }
         });
