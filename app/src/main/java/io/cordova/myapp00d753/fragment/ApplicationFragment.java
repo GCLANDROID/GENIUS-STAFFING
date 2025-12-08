@@ -474,9 +474,9 @@ public class ApplicationFragment extends Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
                         Log.d("responseAttendance", response);
                         llLoader.setVisibility(View.GONE);
+
 
                         // attendabceInfiList.clear();
 
@@ -991,7 +991,9 @@ public class ApplicationFragment extends Fragment {
                         }
                         if (striDate.getTime() > strDate.getTime() ||striDate.getTime() == strDate.getTime()) {
 
-                            if (pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID) || pref.getEmpClintId().equals(ClientID.SKF_ITS) || pref.getEmpClintId().equals(ClientID.SKF_MSP)){
+                            if (pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID) || pref.getEmpClintId().equals(ClientID.SKF_ITS) || pref.getEmpClintId().equals(ClientID.SKF_MSP)
+                                    || pref.getEmpClintId().equals(ClientID.SKF_ENGINEERING_LUB)
+                                    || pref.getEmpClintId().equals(ClientID.SKF_INDUSTRIAL)){
                                 SKF_ValidationCheck();
                             } else {
                                 validationChecking();
