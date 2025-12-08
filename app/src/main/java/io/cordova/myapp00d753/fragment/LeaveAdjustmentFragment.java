@@ -128,7 +128,9 @@ public class LeaveAdjustmentFragment extends Fragment {
         if (pref.getEmpClintId().equals(ClientID.METSO)
                 || pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID)
                 || pref.getEmpClintId().equals(ClientID.SKF_ITS)
-                || pref.getEmpClintId().equals(ClientID.SKF_MSP)) {
+                || pref.getEmpClintId().equals(ClientID.SKF_MSP)
+                || pref.getEmpClintId().equals(ClientID.SKF_ENGINEERING_LUB)
+                || pref.getEmpClintId().equals(ClientID.SKF_INDUSTRIAL)) {
             modelist.add("Full Day");
         } else {
             modelist.add("Full Day");
@@ -572,7 +574,9 @@ public class LeaveAdjustmentFragment extends Fragment {
                 if (applicationComponent.equalsIgnoreCase("On Duty")) {
                     postDataOD(etReason.getText().toString());
                 } else if (applicationComponent.equalsIgnoreCase("Comp Off")) {
-                    if (pref.getEmpClintId().equalsIgnoreCase(ClientID.SKF_CLIENT_ID) || pref.getEmpClintId().equalsIgnoreCase(ClientID.SKF_MSP)) {
+                    if (pref.getEmpClintId().equalsIgnoreCase(ClientID.SKF_CLIENT_ID) || pref.getEmpClintId().equalsIgnoreCase(ClientID.SKF_MSP)
+                            || pref.getEmpClintId().equals(ClientID.SKF_ENGINEERING_LUB)
+                            || pref.getEmpClintId().equals(ClientID.SKF_INDUSTRIAL)) {
                         postDataCompOff(etReason.getText().toString(), "0");
                     } else if (pref.getEmpClintId().equalsIgnoreCase(ClientID.SKY_ROOT)){
                         postDataCompOff(etReason.getText().toString(), "0");
