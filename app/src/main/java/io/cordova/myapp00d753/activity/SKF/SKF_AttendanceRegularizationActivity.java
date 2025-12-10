@@ -122,7 +122,9 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
         progressDialog.setCancelable(false);
         if (pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_CLIENT_ID)
                 || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_ITS)
-                || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_MSP)){
+                || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_MSP)
+                || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_ENGINEERING_LUB)
+                || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_INDUSTRIAL)){
             llRegularisationCount.setVisibility(View.VISIBLE);
         } else {
             llRegularisationCount.setVisibility(View.GONE);
@@ -284,7 +286,9 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
         String regularizationSubmitString="";
         if (pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_CLIENT_ID)
                 || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_ITS)
-                || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_MSP)){
+                || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_MSP)
+                || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_ENGINEERING_LUB)
+                || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_INDUSTRIAL)){
             for (int i = 0; i < blockLogList.size(); i++) {
                 Log.e(TAG, "submitOperation: Remarks: "+blockLogList.get(i).getRemarks());
                 if (blockLogList.get(i).isSelected()){
@@ -324,7 +328,9 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
             //Log.e(TAG, "BACKLOG_SAVE_INPUT: "+obj);
             if (pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_CLIENT_ID)
                     || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_ITS)
-                    || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_MSP)){
+                    || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_MSP)
+                    || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_ENGINEERING_LUB)
+                    || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_INDUSTRIAL)){
                 regularizationSaveApiCall(obj);
             } else {
                 regularizationSave_New_ApiCall(obj);

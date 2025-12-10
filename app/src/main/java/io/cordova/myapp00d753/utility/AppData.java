@@ -100,4 +100,9 @@ public class AppData {
     public static String NEED_TO_ACT ="https://gsppi.geniusconsultant.com/GENESS/api/needtoact";
     public static String LEAVE_BALANCE_VIEW_FLAG = "0";
     public static String MAINTAINCEBREAK ="https://gsppi.geniusconsultant.com/GenESS/api/CheckMaintenanceBreak";
+
+    public static String LAMS_GetSubServiceMenu =newv2url+"LAMS/GetSubServiceMenu";
+    public static String LAMS_SaveAttendance =newv2url+"Attendance/LAMS_SaveAttendance";
+
+
 }

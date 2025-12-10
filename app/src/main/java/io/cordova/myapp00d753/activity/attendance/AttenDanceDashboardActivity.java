@@ -75,6 +75,8 @@ import io.cordova.myapp00d753.activity.DailyDashBoardActivity;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.activity.HolidayMarkingActivity;
 import io.cordova.myapp00d753.activity.LeaveApplicationActivity;
+import io.cordova.myapp00d753.activity.NEW.NEW_AttendanceMarkingActivity;
+import io.cordova.myapp00d753.activity.NEW.NEW_HolidayMarkingActivity;
 import io.cordova.myapp00d753.activity.QRCodeScannerActivity;
 import io.cordova.myapp00d753.activity.SKF.HolidayViewActivity;
 import io.cordova.myapp00d753.activity.SKF.SKF_AttendanceRegularizationActivity;
@@ -122,12 +124,17 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     ArrayList<String> dateList = new ArrayList<>();
 
     TextView tvPresent, tvDetails, tvOK;
-    LinearLayout lnStatus, llAdjustment,llHoliday,llHolidayView;
+    LinearLayout lnStatus, llAdjustment,llHoliday,llHolidayView,llOptionalHoliday;
     int date;
     GPSTracker gps;
     int leaveFlag;
     ImageView imgHome;
+    String holidayFlag="0",OptionalHolidayFlag="0";
+    String HolidayDetails_Array="";
 
+    String MarkAttnFromMobileWithImage="", MarkAttnFromMobileWithGeoFencingLocation="",
+            MarkAttnFromMobileWithWorkPlaceSelection="",MarkAttnFromMobileWithShiftSelection="",MarkAttnFromMobileWithHierarchySelection="";
+    String isLiveStatus_MarkAttnFromMobile ="", isLiveStatus_HolidayMarking ="", isLiveStatus_OHolidayMarking;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -183,6 +190,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         llAttenRegularize = (LinearLayout) findViewById(R.id.llAttenRegularize);
         llWeekly = (LinearLayout) findViewById(R.id.llWeekly);
         llHoliday = (LinearLayout) findViewById(R.id.llHoliday);
+        llOptionalHoliday = (LinearLayout) findViewById(R.id.llOptionalHoliday);
         llHolidayView = (LinearLayout) findViewById(R.id.llHolidayView);
         llViewLeaveBalance = (LinearLayout) findViewById(R.id.llViewLeaveBalance);
         tvCancel = (TextView) findViewById(R.id.tvCancel);
@@ -202,6 +210,8 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         if (pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID)
                 || pref.getEmpClintId().equals(ClientID.SKF_ITS)
                 || pref.getEmpClintId().equals(ClientID.SKF_MSP)
+                || pref.getEmpClintId().equals(ClientID.SKF_ENGINEERING_LUB)
+                || pref.getEmpClintId().equals(ClientID.SKF_INDUSTRIAL)
                 ||pref.getEmpClintId().equals(ClientID.SVF)){
             llHoliday.setVisibility(View.VISIBLE);
         } else {
@@ -245,6 +255,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         llAttendanceReport.setOnClickListener(this);
         llWeekly.setOnClickListener(this);
         llHoliday.setOnClickListener(this);
+        llOptionalHoliday.setOnClickListener(this);
         llBackAttendance.setOnClickListener(this);
         llAttenRegularize.setOnClickListener(this);
         llAdjustment.setOnClickListener(this);
@@ -722,7 +733,12 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             if (pref.getEmpClintId().equals(ClientID.METSO)
                     || pref.getEmpClintOffId().equals(BrunchId.CBRE_HARYANA_AMERICAN_EXPRESS)
                     || pref.getEmpClintOffId().equals(BrunchId.CBRE_KARNATAKA_AMERICAN_EXPRESS)
-                    || pref.getEmpClintOffId().equals(BrunchId.CBRE_Tamil_Nadu_American_Express)) {
+                    || pref.getEmpClintOffId().equals(BrunchId.CBRE_Tamil_Nadu_American_Express)
+                    || pref.getEmpClintOffId().equals(BrunchId.CBRE_HARYANA_KEY_SITE)
+                    || pref.getEmpClintOffId().equals(BrunchId.CBRE_DELHI_KEY_SITE)
+                    || pref.getEmpClintOffId().equals(BrunchId.CBRE_KARNATAKA_KEY_SITE)
+                    || pref.getEmpClintOffId().equals(BrunchId.CBRE_TELANGANA_KEY_SITE)
+            ) {
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, MetsoAttendanceReportActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -745,6 +761,8 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             }  else if(pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID)
                     || pref.getEmpClintId().equals(ClientID.SKF_ITS)
                     || pref.getEmpClintId().equals(ClientID.SKF_MSP)
+                    || pref.getEmpClintId().equals(ClientID.SKF_ENGINEERING_LUB)
+                    || pref.getEmpClintId().equals(ClientID.SKF_INDUSTRIAL)
                     || pref.getEmpClintId().equals(ClientID.HONASA)
                     || pref.getEmpClintId().equals(ClientID.SVF)
                     || pref.getEmpClintId().equals(ClientID.FED_BANK)
@@ -776,7 +794,9 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             }else if( pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID)
                     || pref.getEmpClintId().equals(ClientID.SKF_ITS)
                     || pref.getEmpClintId().equals(ClientID.SKF_MSP)
-                    || pref.getEmpClintId().equals(ClientID.SVF))  {  //WO APplication with location ->SKF PUNE
+                    || pref.getEmpClintId().equals(ClientID.SKF_ENGINEERING_LUB)
+                    || pref.getEmpClintId().equals(ClientID.SKF_INDUSTRIAL)
+                    || pref.getEmpClintId().equals(ClientID.SVF)) {  //WO APplication with location ->SKF PUNE
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, WOHOHActivity.class);
                 intent.putExtra("leaveFlag",leaveFlag);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -787,10 +807,33 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 startActivity(intent);
             }
         } else if (view == llHoliday) {
-            Intent intent = new Intent(AttenDanceDashboardActivity.this, HolidayMarkingActivity.class);
-            intent.putExtra("leaveFlag",leaveFlag);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            if (isLiveStatus_HolidayMarking.equals("1")){
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, NEW_HolidayMarkingActivity.class);
+                intent.putExtra("holidayFlag","1");
+                intent.putExtra("OptionalHolidayFlag","0");
+                intent.putExtra("leaveFlag",leaveFlag);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, HolidayMarkingActivity.class);
+                intent.putExtra("leaveFlag",leaveFlag);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        }else if (view == llOptionalHoliday) {
+            if (isLiveStatus_OHolidayMarking.equals("1")){
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, NEW_HolidayMarkingActivity.class);
+                intent.putExtra("holidayFlag","0");
+                intent.putExtra("OptionalHolidayFlag","1");
+                intent.putExtra("leaveFlag",leaveFlag);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, HolidayMarkingActivity.class);
+                intent.putExtra("leaveFlag",leaveFlag);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
         } else if (view == imgSearch) {
             searchAlert();
         } else if (view == tvCancel) {
@@ -1079,6 +1122,19 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         } catch (JSONException e) {
             e.printStackTrace();
         }
+       /* JSONObject objSubmenu=new JSONObject();
+        try {
+            objSubmenu.put("ConsultantID", pref.getEmpConId());
+            objSubmenu.put("ClientID", pref.getEmpClintId());
+            objSubmenu.put("EmployeeID", pref.getEmpId());
+            objSubmenu.put("ModuleName", "Service Menu");
+            objSubmenu.put("PunchDate", "");
+            objSubmenu.put("SecurityCode", pref.getSecurityCode());
+            Log.e(TAG, "objSubmenu: "+objSubmenu.toString(4));
+            getSubmenu(objSubmenu);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }*/
     }
 
     private void getShift(JSONObject jsonObject) {
@@ -1161,7 +1217,12 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
 
                             if (pref.getEmpClintOffId().equals(BrunchId.CBRE_HARYANA_AMERICAN_EXPRESS)
                                     || pref.getEmpClintOffId().equals(BrunchId.CBRE_KARNATAKA_AMERICAN_EXPRESS)
-                                    || pref.getEmpClintOffId().equals(BrunchId.CBRE_Tamil_Nadu_American_Express)){
+                                    || pref.getEmpClintOffId().equals(BrunchId.CBRE_Tamil_Nadu_American_Express)
+                                    || pref.getEmpClintOffId().equals(BrunchId.CBRE_HARYANA_KEY_SITE)
+                                    || pref.getEmpClintOffId().equals(BrunchId.CBRE_DELHI_KEY_SITE)
+                                    || pref.getEmpClintOffId().equals(BrunchId.CBRE_KARNATAKA_KEY_SITE)
+                                    || pref.getEmpClintOffId().equals(BrunchId.CBRE_TELANGANA_KEY_SITE)
+                            ){
                                 Intent intent = new Intent(AttenDanceDashboardActivity.this, GeoFenceAttendanceWithShiftActivity.class);
                                 //intent.putExtra("intt", "2");
                                 //intent.putExtra("shiftStatus", ShiftStatus);
@@ -1496,7 +1557,15 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     }
 
     private void openMarkAttendanceActivities() {
-        if (pref.getEmpClintId().equals("AEMCLI2210001697") || pref.getEmpClintId().equals("AEMCLI2210001698")) {
+        if (isLiveStatus_MarkAttnFromMobile.equals("1")) {
+            Intent intent = new Intent(AttenDanceDashboardActivity.this, NEW_AttendanceMarkingActivity.class);
+            intent.putExtra("MarkAttnFromMobileWithImage", MarkAttnFromMobileWithImage);
+            intent.putExtra("MarkAttnFromMobileWithGeoFencingLocation", MarkAttnFromMobileWithGeoFencingLocation);
+            intent.putExtra("MarkAttnFromMobileWithWorkPlaceSelection", MarkAttnFromMobileWithWorkPlaceSelection);
+            intent.putExtra("MarkAttnFromMobileWithShiftSelection", MarkAttnFromMobileWithShiftSelection);
+            intent.putExtra("MarkAttnFromMobileWithHierarchySelection", MarkAttnFromMobileWithHierarchySelection);
+            startActivity(intent);
+        }else if (pref.getEmpClintId().equals("AEMCLI2210001697") || pref.getEmpClintId().equals("AEMCLI2210001698")) {
             Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceManageWithoutLocActivity.class);
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -1519,7 +1588,9 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             startActivity(intent);
         }else if (pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID)
                 || pref.getEmpClintId().equals(ClientID.SKF_ITS)
-                || pref.getEmpClintId().equals(ClientID.SKF_MSP)) {
+                || pref.getEmpClintId().equals(ClientID.SKF_MSP)
+                || pref.getEmpClintId().equals(ClientID.SKF_ENGINEERING_LUB)
+                || pref.getEmpClintId().equals(ClientID.SKF_INDUSTRIAL)) {
             Intent intent = new Intent(AttenDanceDashboardActivity.this, ProtectorGambleAttendanceActivity.class);
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -1539,7 +1610,18 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-        } else {
+        } else if (pref.getEmpClintOffId().equals(BrunchId.CBRE_HARYANA_KEY_SITE)
+                        || pref.getEmpClintOffId().equals(BrunchId.CBRE_DELHI_KEY_SITE)
+                        || pref.getEmpClintOffId().equals(BrunchId.CBRE_KARNATAKA_KEY_SITE)
+                        || pref.getEmpClintOffId().equals(BrunchId.CBRE_TELANGANA_KEY_SITE)){
+            Intent intent = new Intent(AttenDanceDashboardActivity.this, GeoFenceAttendanceWithShiftActivity.class);
+            //intent.putExtra("intt", "2");
+            //intent.putExtra("shiftStatus", ShiftStatus);
+            //intent.putExtra("shiftArray", shiftArray.toString());
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+
+        }else {
             Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceManageActivity.class);
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -1628,5 +1710,294 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
 
+    }
+    void getSubmenu(JSONObject objSubmenu){
+        Log.e(TAG, "getSubmenu: "+objSubmenu);
+       //AndroidNetworking.post("https://gsppi.geniusconsultant.com/GSPPI_API_V2/api/LAMS/GetSubServiceMenu")
+       AndroidNetworking.post(AppData.LAMS_GetSubServiceMenu)
+               .addJSONObjectBody(objSubmenu)
+               //.addHeaders("SecurityKey", "gStbCQYjYBDCQ4fkGoQSUj7LYe8uVdZ1")
+               .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+               .setTag("uploadTest")
+               .setPriority(Priority.HIGH)
+               .build()
+               .getAsJSONObject(new JSONObjectRequestListener() {
+                   @Override
+                   public void onResponse(JSONObject response) {
+                       try {
+                           Log.e(TAG, "SUB_MENU: "+response.toString(4));
+                           JSONObject job1 = response;
+                           String Response_Code = job1.optString("Response_Code");
+                           JSONObject Response_Data = job1.optJSONObject("Response_Data");
+                           if(Response_Code.equals("101")){
+                               Log.e(TAG, "Response_Data: "+Response_Data);
+                               Log.e(TAG, "ServiceMenuAccessDetails_Array: "+Response_Data.optJSONArray("ServiceMenuAccessDetails"));
+                               JSONArray ServiceMenuAccessDetails_Array = Response_Data.optJSONArray("ServiceMenuAccessDetails");
+                               JSONObject ServiceMenuAccessDetails_OBJ = ServiceMenuAccessDetails_Array.getJSONObject(0);
+                               String WorkPlaceDetails_Array = Response_Data.optString("WorkPlaceDetails");
+                               pref.saveLocationList(WorkPlaceDetails_Array);
+                               String WorkingShiftDetails_Array = Response_Data.optString("WorkingShiftDetails");
+                               pref.saveShiftList(WorkingShiftDetails_Array);
+                               String HierarchyDetails_Array = Response_Data.optString("HierarchyDetails");
+                               pref.saveApproverList(HierarchyDetails_Array);
+                               HolidayDetails_Array = Response_Data.optString("HolidayDetails");
+                               pref.saveHolidayList(HolidayDetails_Array);
+                               String OptionalHolidayDetails_Array = Response_Data.optString("OptionalHolidayDetails");
+                               pref.saveOptionalHolidayList(OptionalHolidayDetails_Array);
+                                //TODO: Daily Attendance
+                               if (ServiceMenuAccessDetails_OBJ.has("MarkAttnFromMobile")){
+                                   String MarkAttnFromMobile = ServiceMenuAccessDetails_OBJ.optString("MarkAttnFromMobile");
+                                   if (!MarkAttnFromMobile.equals("null") || !MarkAttnFromMobile.isEmpty()){
+                                       String[] DailyAttendanceArr = MarkAttnFromMobile.split("_");
+                                       String isRequired_MarkAttnFromMobile = DailyAttendanceArr[0];
+                                       isLiveStatus_MarkAttnFromMobile = DailyAttendanceArr[1];
+                                       if (isLiveStatus_MarkAttnFromMobile.equals("1")){
+                                           llAttandanceManage.setVisibility(isRequired_MarkAttnFromMobile.equals("1")?View.VISIBLE:View.GONE);
+                                           MarkAttnFromMobileWithImage =  ServiceMenuAccessDetails_OBJ.optString("MarkAttnFromMobileWithImage");
+                                           MarkAttnFromMobileWithGeoFencingLocation =  ServiceMenuAccessDetails_OBJ.optString("MarkAttnFromMobileWithGeoFencingLocation");
+                                           MarkAttnFromMobileWithWorkPlaceSelection =  ServiceMenuAccessDetails_OBJ.optString("MarkAttnFromMobileWithWorkPlaceSelection");
+                                           MarkAttnFromMobileWithShiftSelection =  ServiceMenuAccessDetails_OBJ.optString("MarkAttnFromMobileWithShiftSelection");
+                                           MarkAttnFromMobileWithHierarchySelection =  ServiceMenuAccessDetails_OBJ.optString("MarkAttnFromMobileWithHierarchySelection");
+                                       } else {
+                                           previousConfiguration_Attendance_Manage();
+                                       }
+                                   } else {
+                                       previousConfiguration_Attendance_Manage();
+                                   }
+                               } else {
+                                   previousConfiguration_Attendance_Manage();
+                               }
+
+                               //TODO: Attendance Report
+                               if (ServiceMenuAccessDetails_OBJ.has("DailyAttendanceView")){
+                                   String DailyAttendanceView = ServiceMenuAccessDetails_OBJ.optString("DailyAttendanceView");
+                                   if(!DailyAttendanceView.equals("null") || !DailyAttendanceView.isEmpty() ){
+                                       String[] DailyAttendanceViewArr = DailyAttendanceView.split("_");
+                                       String isRequired_DailyAttendanceView = DailyAttendanceViewArr[0];
+                                       String isConfigure_DailyAttendanceView = DailyAttendanceViewArr[1];
+                                       if (isConfigure_DailyAttendanceView.equals("1")){
+                                           llAttendanceReport.setVisibility(isRequired_DailyAttendanceView.equals("1")?View.VISIBLE:View.GONE);
+                                       } else {
+                                           previousConfiguration_AttendanceReport();
+                                       }
+                                   } else {
+                                       previousConfiguration_AttendanceReport();
+                                   }
+                               } else {
+                                   previousConfiguration_AttendanceReport();
+                               }
+
+
+                               //TODO: Attendance Regularisation
+                               if (ServiceMenuAccessDetails_OBJ.has("AttendanceRegularisationAccessFromMobile")){
+                                   String AttendanceRegularisation = ServiceMenuAccessDetails_OBJ.optString("AttendanceRegularisationAccessFromMobile");
+                                   if(AttendanceRegularisation != null ||AttendanceRegularisation.equals("null")|| !AttendanceRegularisation.isEmpty()){
+                                       String[] AttReg = AttendanceRegularisation.split("_");
+                                       String isRequired_AttReg = AttReg[0];
+                                       String isConfigure_AttReg = AttReg[1];
+                                       if (isConfigure_AttReg.equals("1")){
+                                           if (isRequired_AttReg.equals("1")) {
+                                               llBackAttendance.setVisibility(View.VISIBLE);
+                                               llAttenRegularize.setVisibility(View.VISIBLE);
+                                           } else {
+                                               llBackAttendance.setVisibility(View.GONE);
+                                               llAttenRegularize.setVisibility(View.GONE);
+                                           }
+                                       } else {
+                                           previousConfiguration_AttenRegularize();
+                                       }
+                                   } else {
+                                       previousConfiguration_AttenRegularize();
+                                   }
+                               } else {
+                                   previousConfiguration_AttenRegularize();
+                               }
+
+
+
+                               //TODO: Weekly Off
+                               if ( ServiceMenuAccessDetails_OBJ.has("WeeklyOffMarkingFromMobile")){
+                                   String WeeklyOff = ServiceMenuAccessDetails_OBJ.optString("WeeklyOffMarkingFromMobile");
+                                   if (!WeeklyOff.isEmpty() || !WeeklyOff.equals("null")){
+                                       String[] WeeklyOffArr = WeeklyOff.split("_");
+                                       String isRequired_WeeklyOff = WeeklyOffArr[0];
+                                       String isConfigure_WeeklyOff= WeeklyOffArr[1];
+                                       if(isConfigure_WeeklyOff.equals("1")){
+                                           llWeekly.setVisibility(isRequired_WeeklyOff.equals("1") ? View.VISIBLE : View.GONE);
+                                       } else {
+                                           previousConfiguration_WeeklyOFF();
+                                       }
+                                   }else {
+                                       previousConfiguration_WeeklyOFF();
+                                   }
+                               } else {
+                                   previousConfiguration_WeeklyOFF();
+                               }
+
+
+                               //TODO: Holiday Marking
+                               if (ServiceMenuAccessDetails_OBJ.has("NormalHolidayMarkingFromMobileOption")){
+                                   String HolidayMarking = ServiceMenuAccessDetails_OBJ.optString("NormalHolidayMarkingFromMobileOption");
+                                   if (!HolidayMarking.isEmpty() || !HolidayMarking.equals("null")){
+                                       String[] HolidayMarkingArr = HolidayMarking.split("_");
+                                       String isRequired_HolidayMarking = HolidayMarkingArr[0];
+                                       isLiveStatus_HolidayMarking = HolidayMarkingArr[1];
+                                       if(isLiveStatus_HolidayMarking.equals("1")){
+                                           holidayFlag="1";
+                                           llHoliday.setVisibility(isRequired_HolidayMarking.equals("1") ? View.VISIBLE : View.GONE);
+                                       } else {
+                                           previousConfiguration_HolidayMarking();
+                                       }
+                                   } else {
+                                       previousConfiguration_HolidayMarking();
+                                   }
+                               } else {
+                                   previousConfiguration_HolidayMarking();
+                               }
+                               //TODO: Optional Holiday Marking
+                               if (ServiceMenuAccessDetails_OBJ.has("OptionalHolidayMarkingFromMobileOption")){
+                                   String OptionalHolidayMarking = ServiceMenuAccessDetails_OBJ.optString("OptionalHolidayMarkingFromMobileOption");
+                                   if (!OptionalHolidayMarking.isEmpty() || !OptionalHolidayMarking.equals("null")){
+                                       String[] OptionalHolidayMarkingArr = OptionalHolidayMarking.split("_");
+                                       String isRequired_OHolidayMarking = OptionalHolidayMarkingArr[0];
+                                       isLiveStatus_OHolidayMarking = OptionalHolidayMarkingArr[1];
+                                       if(isLiveStatus_OHolidayMarking.equals("1")){
+                                           OptionalHolidayFlag="1";
+                                           llOptionalHoliday.setVisibility(isRequired_OHolidayMarking.equals("1") ? View.VISIBLE : View.GONE);
+                                       } else {
+                                           previousConfiguration_HolidayMarking();
+                                       }
+                                   } else {
+                                       previousConfiguration_HolidayMarking();
+                                   }
+                               } else {
+                                   previousConfiguration_HolidayMarking();
+                               }
+
+                               //TODO: Adjustment Application
+                               if (ServiceMenuAccessDetails_OBJ.has("AdjustmentApplicationAccessFromMobile")){
+                                   String AdjustmentApplication = ServiceMenuAccessDetails_OBJ.optString("AdjustmentApplicationAccessFromMobile");
+                                   if (!AdjustmentApplication.isEmpty() || !AdjustmentApplication.equals("null")){
+                                       String[] AdjustmentApplicationOffArr = AdjustmentApplication.split("_");
+                                       String isRequired_Adjustment= AdjustmentApplicationOffArr[0];
+                                       String isConfigure_Adjustment= AdjustmentApplicationOffArr[1];
+                                       if(isConfigure_Adjustment.equals("1")){
+                                            llAdjustment.setVisibility(isRequired_Adjustment.equals("1") ? View.VISIBLE : View.GONE);
+                                       } else {
+                                           previousConfiguration_Adjustment();
+                                       }
+                                   } else {
+                                       previousConfiguration_Adjustment();
+                                   }
+                               } else {
+                                   previousConfiguration_Adjustment();
+                               }
+
+                               /*if (ServiceMenuAccessDetails_OBJ.has("NormalHolidayViewFromMobile") || ServiceMenuAccessDetails_OBJ.has("OptionalHolidayViewFromMobile") ){
+                                   String HolidayView = ServiceMenuAccessDetails_OBJ.optString("AdjustmentApplicationAccessFromMobile");
+                                   if (!HolidayView.isEmpty() || !HolidayView.equals("null")){
+                                       String[] LeaveBalanceManagementArr = LeaveBalanceManagement.split("_");
+                                       String isRequired_LeaveBalanceManagement= LeaveBalanceManagementArr[0];
+                                       String isConfigure_LeaveBalanceManagement= LeaveBalanceManagementArr[1];
+                                   }
+                               }*/
+
+                               //TODO: Leave Balance Management
+                               if (ServiceMenuAccessDetails_OBJ.has("LeaveBalanceViewFromMobile")){
+                                   String LeaveBalanceManagement = ServiceMenuAccessDetails_OBJ.optString("LeaveBalanceViewFromMobile");
+                                   if (!LeaveBalanceManagement.isEmpty() || !LeaveBalanceManagement.equals("null")){
+                                       String[] LeaveBalanceManagementArr = LeaveBalanceManagement.split("_");
+                                       String isRequired_LeaveBalanceManagement= LeaveBalanceManagementArr[0];
+                                       String isConfigure_LeaveBalanceManagement= LeaveBalanceManagementArr[1];
+                                       if(isConfigure_LeaveBalanceManagement.equals("1")){
+                                           llViewLeaveBalance.setVisibility(isRequired_LeaveBalanceManagement.equals("1") ? View.VISIBLE : View.GONE);
+                                       } else {
+                                           previousConfiguration_LeaveBalanceManagement();
+                                       }
+                                   } else {
+                                       previousConfiguration_LeaveBalanceManagement();
+                                   }
+                               } else {
+                                   previousConfiguration_LeaveBalanceManagement();
+                               }
+
+
+                           }
+                       } catch (JSONException e) {
+                           e.printStackTrace();
+                       }
+                   }
+
+                   @Override
+                   public void onError(ANError anError) {
+                       Log.e(TAG, "SUB_MENU_error: "+anError.getErrorBody());
+                   }
+               });
+   }
+
+   void previousConfiguration_WeeklyOFF(){
+       if (pref.getOnLeave().equals("1")) {
+           llWeekly.setVisibility(View.VISIBLE);
+       } else {
+           llWeekly.setVisibility(View.GONE);
+       }
+   }
+   void previousConfiguration_AttenRegularize(){
+        if (pref.getBackAttd().equals("1")) {
+            llBackAttendance.setVisibility(View.VISIBLE);
+            llAttenRegularize.setVisibility(View.VISIBLE);
+        } else {
+            llBackAttendance.setVisibility(View.GONE);
+            llAttenRegularize.setVisibility(View.GONE);
+        }
+    }
+    void previousConfiguration_Attendance_Manage(){
+        if (pref.getEmpClintId().equals(ClientID.SHALIMAR_WIRES)){
+            llAttandanceManage.setVisibility(View.GONE);
+            llAttendanceReport.setVisibility(View.GONE);
+            btnMarkAttendance.setVisibility(View.GONE);
+        } else {
+            llAttandanceManage.setVisibility(View.VISIBLE);
+            llAttendanceReport.setVisibility(View.VISIBLE);
+            btnMarkAttendance.setVisibility(View.VISIBLE);
+        }
+    }
+    void previousConfiguration_AttendanceReport(){
+        if (pref.getEmpClintId().equals(ClientID.SHALIMAR_WIRES)){
+            llAttendanceReport.setVisibility(View.GONE);
+        } else {
+            llAttendanceReport.setVisibility(View.VISIBLE);
+        }
+    }
+
+    void previousConfiguration_HolidayMarking(){
+        if (pref.getEmpClintId().equals(ClientID.SKF_CLIENT_ID)
+                || pref.getEmpClintId().equals(ClientID.SKF_ITS)
+                || pref.getEmpClintId().equals(ClientID.SKF_MSP)
+                || pref.getEmpClintId().equals(ClientID.SKF_ENGINEERING_LUB)
+                || pref.getEmpClintId().equals(ClientID.SKF_INDUSTRIAL)
+                ||pref.getEmpClintId().equals(ClientID.SVF)
+                ||pref.getEmpClintId().equals(ClientID.DEMO)
+        ){
+            llHoliday.setVisibility(View.VISIBLE);
+        } else {
+            llHoliday.setVisibility(View.GONE);
+        }
+    }
+
+    void previousConfiguration_LeaveBalanceManagement(){
+        if (AppData.LEAVE_BALANCE_VIEW_FLAG.equals("1")){
+            llViewLeaveBalance.setVisibility(View.VISIBLE);
+        } else {
+            llViewLeaveBalance.setVisibility(View.GONE);
+        }
+    }
+
+    void previousConfiguration_Adjustment(){
+        if (pref.getAdjustmentStatus().equals("1")) {
+            llAdjustment.setVisibility(View.VISIBLE);
+        } else {
+            llAdjustment.setVisibility(View.GONE);
+        }
     }
 }

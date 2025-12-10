@@ -1064,5 +1064,50 @@ public class Pref {
     public String getAdjustmentStatus(){
         return _pref.getString("Adjustment_Status","");
     }
+
+    public void saveApproverList(String ApproverList){
+        _editorPref.putString("ApproverList", ApproverList);
+        _editorPref.commit();
+    }
+
+    public String getApproverList(){
+        return _pref.getString("ApproverList","");
+    }
+
+    public void saveShiftList(String ShiftList){
+        _editorPref.putString("ShiftList", ShiftList);
+        _editorPref.commit();
+    }
+
+    public String getShiftList(){
+        return _pref.getString("ShiftList","");
+    }
+
+    public void saveLocationList(String LocationList){
+        _editorPref.putString("LocationList", LocationList);
+        _editorPref.commit();
+    }
+
+    public String getLocationList(){
+        return _pref.getString("LocationList","");
+    }
+
+    public void saveHolidayList(String HolidayList){
+        _editorPref.putString("HolidayList", HolidayList);
+        _editorPref.commit();
+    }
+
+    public String getHolidayList(){
+        return _pref.getString("HolidayList","");
+    }
+
+    public void saveOptionalHolidayList(String OptionalHolidayList){
+        _editorPref.putString("OptionalHolidayList", OptionalHolidayList);
+        _editorPref.commit();
+    }
+
+    public String getOptionalHolidayList(){
+        return _pref.getString("OptionalHolidayList","");
+    }
 }
 

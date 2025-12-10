@@ -165,6 +165,53 @@
         android:layout_marginTop="5dp"
         android:layout_marginStart="30dp"/>
 
+
+    <LinearLayout
+        android:id="@+id/llApprover"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Approver"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="20dp"/>
+
+        <TextView
+            android:id="@+id/txtSelectApprover"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="Select Approver"
+            android:textSize="13.5sp"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="10dp"
+            android:gravity="center_vertical"
+            android:drawableEnd="@drawable/ic_arrow_drop_down_24"
+            android:drawableTint="@color/colorPrimary"
+            android:background="@drawable/border_background"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"/>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/txtErrorApprover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please select approver"
+        android:textColor="#F44336"
+        android:textSize="12sp"
+        android:visibility="gone"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="30dp"/>
+
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnMarkedYourAttendance"
         android:layout_width="match_parent"
