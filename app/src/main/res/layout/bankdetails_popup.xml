@@ -34,7 +34,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorPrimary"
                             android:textAppearance="?android:textAppearanceSmall"
-                            android:text="Bank Name:"/>
+                            android:text="@string/bank_required"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="0dp"
@@ -82,7 +82,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorPrimary"
                             android:textAppearance="?android:textAppearanceSmall"
-                            android:text="Account Number:"/>
+                            android:text="@string/account_required"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="0dp"
@@ -115,7 +115,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorPrimary"
                             android:textAppearance="?android:textAppearanceSmall"
-                            android:text="Document Type:"/>
+                            android:text="@string/document_type_required"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="0dp"
@@ -147,7 +147,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorPrimary"
                             android:textAppearance="?android:textAppearanceSmall"
-                            android:text="Document"/>
+                            android:text="@string/document_required"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -189,7 +189,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorPrimary"
                             android:textAppearance="?android:textAppearanceSmall"
-                            android:text="IFSC Code:"/>
+                            android:text="@string/ifsc_required"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="0dp"
@@ -296,7 +296,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorPrimary"
                             android:textAppearance="?android:textAppearanceSmall"
-                            android:text="First Name as per Bank:"/>
+                            android:text="@string/First_Name_required"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="0dp"
@@ -328,7 +328,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorPrimary"
                             android:textAppearance="?android:textAppearanceSmall"
-                            android:text="Last Name as per Bank:"/>
+                            android:text="@string/Lirst_Name_required"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="0dp"

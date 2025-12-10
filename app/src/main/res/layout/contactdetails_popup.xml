@@ -27,7 +27,7 @@
 
                     <TextView
 
-                        android:text="Mobile Number"
+                        android:text="@string/mobile_required"
                         android:id="@+id/tvMobTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:text="Whatsapp Number"
+                        android:text="@string/whatsapp_required"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
@@ -159,7 +159,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Emergency Number"
+                        android:text="@string/emergency_required"
                         android:textSize="12sp"
                         android:textColor="@color/textcolor" />
                 </LinearLayout>
@@ -203,7 +203,7 @@
                     android:layout_weight="0.5">
 
                     <TextView
-                        android:text="Email ID"
+                        android:text="@string/email_required"
                         android:id="@+id/tvEmailTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -316,7 +316,7 @@
                         android:layout_weight="0.5">
 
                         <TextView
-                            android:text="PIN Code"
+                            android:text="@string/pin_required"
                             android:id="@+id/tvPrePin"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -358,7 +358,7 @@
                         android:layout_weight="0.5">
 
                         <TextView
-                            android:text="State"
+                            android:text="@string/state_required"
                             android:id="@+id/tvPreState"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -464,7 +464,7 @@
                         android:layout_weight="0.5">
 
                         <TextView
-                            android:text="Address"
+                            android:text="@string/address_required"
                             android:id="@+id/tvPerAddr"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -542,7 +542,7 @@
                         android:layout_weight="0.5">
 
                         <TextView
-                            android:text="Permanent Pin Code"
+                            android:text="@string/pin_required"
                             android:id="@+id/tvPerPin"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -590,7 +590,7 @@
                         android:layout_weight="0.5">
 
                         <TextView
-                            android:text="Permanent State"
+                            android:text="@string/state_required"
                             android:id="@+id/tvPerState"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -635,7 +635,7 @@
                         android:layout_weight="0.5">
 
                         <TextView
-                            android:text="Permanent City"
+                            android:text="@string/city_required"
                             android:id="@+id/tvPerCity"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -691,7 +691,7 @@
                         android:layout_weight="0.5">
 
                         <TextView
-                            android:text="Permanent Address"
+                            android:text="@string/address_required"
 
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

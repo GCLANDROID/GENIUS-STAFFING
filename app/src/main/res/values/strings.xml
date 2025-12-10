@@ -58,4 +58,31 @@ local language.</string>
     <string name="pick_image_intent_chooser_title">Select source</string>
 
     <string name="crop_image_activity_no_permissions">Cancelling, required permissions are not granted</string>
+    <string name="dob_required">Date of Birth <font color='#FF0000'>*</font></string>
+    <string name="guardian_name_required">Father\'s/Husband\'s Name<font color='#FF0000'>*</font></string>
+    <string name="relationship_required">Relationship <font color='#FF0000'>*</font></string>
+    <string name="gender_required">Gender <font color='#FF0000'>*</font></string>
+    <string name="qualification_required">Highest Qualification <font color='#FF0000'>*</font></string>
+    <string name="martial_required">Martial Status <font color='#FF0000'>*</font></string>
+    <string name="blood_required">Blood Group <font color='#FF0000'>*</font></string>
+    <string name="mobile_required">Mobile Number <font color='#FF0000'>*</font></string>
+    <string name="whatsapp_required">Whatsapp Number <font color='#FF0000'>*</font></string>
+    <string name="emergency_required">Emergency Number <font color='#FF0000'>*</font></string>
+    <string name="email_required">Email ID <font color='#FF0000'>*</font></string>
+    <string name="pin_required">PIN Code <font color='#FF0000'>*</font></string>
+    <string name="state_required">State <font color='#FF0000'>*</font></string>
+    <string name="city_required">City <font color='#FF0000'>*</font></string>
+    <string name="address_required">Address <font color='#FF0000'>*</font></string>
+    <string name="bank_required">Bank Name <font color='#FF0000'>*</font></string>
+    <string name="account_required">Account Number <font color='#FF0000'>*</font></string>
+    <string name="document_type_required">Document Type <font color='#FF0000'>*</font></string>
+    <string name="document_required">Document <font color='#FF0000'>*</font></string>
+    <string name="ifsc_required">IFSC Code <font color='#FF0000'>*</font></string>
+    <string name="First_Name_required">First Name as per Bank <font color='#FF0000'>*</font></string>
+    <string name="Lirst_Name_required">Last Name as per Bank <font color='#FF0000'>*</font></string>
+
+
+
+
+
 </resources>

@@ -1865,7 +1865,7 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
                             bitmapforAadharBack=null;
                             hideTypingIndicator();
                             addBotMessage("Thank you for confirming your Aadhaar details. We will proceed to the next step.");
-                            addBotMessage("To continue, please enter your Personal Details: \n1.Date of Birth \n2.Father's/Husband's Name\n3.Relationship\n4.Gender\n5.Highest Qualification\n6.Martial Status\n7.Blood Group");
+                            addBotMessage("To proceed, please provide the following information required for your Personal Details: \n\n1.Date of Birth \n2.Father's/Husband's Name\n3.Relationship\n4.Gender\n5.Highest Qualification\n6.Martial Status\n7.Blood Group");
                         } else {
                             hideTypingIndicator();
                             addBotMessage(Response_Data);
@@ -3119,7 +3119,7 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
 
                             addBotMessage("Great! Your PAN details have been verified and updated.");
                             //give Success message of self onboarding
-                            addBotMessage("Congratulations! You have successfully completed the self-onboarding process.");
+                            addBotMessage("\uD83C\uDF89 Congratulations! Your all details have been submitted and are currently being processed. Welcome aboard!");
                             addBotMessage("Type “exit” to leave the chat.");
 
 

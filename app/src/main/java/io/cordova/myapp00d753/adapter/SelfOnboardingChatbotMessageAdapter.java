@@ -93,7 +93,7 @@ public class SelfOnboardingChatbotMessageAdapter extends RecyclerView.Adapter<Re
 
             case BOT:
                 ((BotHolder) holder).txtBot.setText(msg.getMessage());
-                if (msg.getMessage().contains("please enter your Personal Details:")){
+                if (msg.getMessage().contains("your Personal Details:")){
                     ((BotHolder) holder).llPerosnalDetails.setVisibility(View.VISIBLE);
                 }else {
                     ((BotHolder) holder).llPerosnalDetails.setVisibility(View.GONE);

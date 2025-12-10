@@ -28,7 +28,7 @@
                 android:layout_weight="0.5">
 
                 <TextView
-                    android:text="Date of Birth"
+                    android:text="@string/dob_required"
                     android:id="@+id/tvDOBTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
                 android:layout_weight="0.5">
 
                 <TextView
-                    android:text="Father's/Husband's Name"
+                    android:text="@string/guardian_name_required"
                     android:id="@+id/tvGurdianTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -116,7 +116,7 @@
                 android:layout_weight="0.5">
 
                 <TextView
-                    android:text="Relationship"
+                    android:text="@string/relationship_required"
                     android:id="@+id/tvRealationTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -170,7 +170,7 @@
                 android:layout_weight="0.5">
 
                 <TextView
-                    android:text="Gender"
+                    android:text="@string/gender_required"
                     android:id="@+id/tvGenderTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -227,7 +227,7 @@
                 android:layout_weight="0.5">
 
                 <TextView
-                    android:text="Highest Qualification"
+                    android:text="@string/qualification_required"
                     android:id="@+id/tvQualificationtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -283,7 +283,7 @@
                 android:layout_weight="0.5">
 
                 <TextView
-                    android:text="Martial Status"
+                    android:text="@string/martial_required"
                     android:id="@+id/tvMartialTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -335,7 +335,7 @@
                 android:layout_weight="0.5">
 
                 <TextView
-                    android:text="Blood Group"
+                    android:text="@string/blood_required"
                     android:id="@+id/tvBloodTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
