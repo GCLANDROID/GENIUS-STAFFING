@@ -78,7 +78,7 @@ public class ChatBotNewActivity extends AppCompatActivity {
         recyclerChat.setAdapter(adapter);
         recyclerChat.setLayoutManager(new LinearLayoutManager(this));
 
-        addBotMessage("Hi! I'm Genie🤖\nPlease select one option from below \n\n1️⃣ Payroll Query\n2️⃣ PF Query\n3️⃣ ESI Card \n4️⃣ Medical Card");
+        addBotMessage("Hi! I'm Genie🤖\nPlease enter your choice (1, 2, 3, 4 or 5) to continue \n\n1️⃣ Payroll Query\n2️⃣ PF Query\n3️⃣ ESIC Card \n4️⃣ Medical Card\n5️⃣ Know Your SPOC");
 
         btnSend.setOnClickListener(v -> {
             String msg = etMessage.getText().toString().trim();
@@ -120,7 +120,7 @@ public class ChatBotNewActivity extends AppCompatActivity {
         // 🔹 Global commands
         if (msg.equals("restart")) {
             currentMenu = MenuState.MAIN;
-            addBotMessage("Please select one option from below \n\n1️⃣ Payroll Query\n2️⃣ PF Query\n3️⃣ ESI Card \n4️⃣ Medical Card");
+            addBotMessage("Hi! I'm Genie🤖\nPlease enter your choice (1, 2, 3, 4 or 5) to continue \n\n1️⃣ Payroll Query\n2️⃣ PF Query\n3️⃣ ESIC Card \n4️⃣ Medical Card\n5️⃣ Know Your SPOC");
             return;
         }
 
@@ -140,7 +140,7 @@ public class ChatBotNewActivity extends AppCompatActivity {
                     case "payroll":
                     case "payroll query":
                         currentMenu = MenuState.PAYROLL;
-                        addBotMessage("Please choose any option:\n\n1️⃣ Last Month Salary Slip\n2️⃣ CTC Information\n3️⃣ Primary Options\n4️⃣ Exit Chat");
+                        addBotMessage("Please enter your choice (1, 2, 3 or 4) to continue \n\n1️⃣ Last Month’s Salary Slip\n2️⃣ CTC Information\n3️⃣ Primary Options\n4️⃣ Exit Chat");
                         break;
 
                     case "2":
@@ -148,7 +148,7 @@ public class ChatBotNewActivity extends AppCompatActivity {
                     case "pf":
                     case "pf query":
                         currentMenu = MenuState.PF;
-                        addBotMessage("Please choose any option:\n1️⃣ UAN Number\n2️⃣ PF Passbook\n3️⃣ Any other PF Related Query\n4️⃣ Primary Options\n5️⃣ Exit Chat");
+                        addBotMessage("Please enter your choice (1, 2, 3, 4 or 5) to continue\n \n1️⃣ UAN Number\n2️⃣ PF Passbook\n3️⃣ Any Other PF-Related Query\n4️⃣ Primary Options\n5️⃣ Exit Chat");
                         break;
 
                     case "3":
@@ -189,10 +189,18 @@ public class ChatBotNewActivity extends AppCompatActivity {
                         }
 
                         break;
+                    case "5":
+                    case "five":
+                    case "spoc":
+                    case "my spoc":
+                    case "know my spoc":
+                        getSpokePersonListOne();
+
+                        break;
 
                     default:
                         // 🔸 Default handler for MAIN
-                        addBotMessage("Please choose a valid option 🙂\n1️⃣ Payroll \n2️⃣ PF \n3️⃣ ESI Card \n4️⃣ Medical Card");
+                        addBotMessage("Oops! I didn’t quite get that\n\nPlease enter your choice (1, 2, 3, 4 or 5) to continue🙂\n\n1️⃣ Payroll Query\n2️⃣ PF Query\n3️⃣ ESIC Card \n4️⃣ Medical Card\n5️⃣ Know Your SPOC");
                 }
                 break;
 
@@ -223,7 +231,7 @@ public class ChatBotNewActivity extends AppCompatActivity {
                     case "ctc information":
                     case "ctc view":
                         String ctcUrl = pref.getCTCURL(); // your real URL
-                        String maskedText = "<a href=\"" + ctcUrl + "\">Click to View</a>";
+                        String maskedText = "<a href=\"" + ctcUrl + "\">Tap to View</a>";
                         addBotMessage("Here is your CTC information 🔒:\n" + maskedText);
                         break;
                     case "3":
@@ -231,7 +239,7 @@ public class ChatBotNewActivity extends AppCompatActivity {
                     case "primary":
                     case "primary option":
                         currentMenu = MenuState.MAIN;
-                        addBotMessage("Please select one option from below \n\n1️⃣ Payroll Query\n2️⃣ PF Query\n3️⃣ ESI Card \n4️⃣ Medical Card");
+                        addBotMessage("Please enter your choice (1, 2, 3, 4 or 5) to continue\n\n1️⃣ Payroll Query\n2️⃣ PF Query\n3️⃣ ESIC Card \n4️⃣ Medical Card\n5️⃣ Know Your SPOC");
                         break;
                     case "4":
                     case "four":
@@ -242,7 +250,7 @@ public class ChatBotNewActivity extends AppCompatActivity {
                         break;
                     default:
                         // 🔸 Default handler for PAYROLL
-                        addBotMessage("Please choose a valid Payroll option (1–4):\n1️⃣ Last Month Salary Slip\n2️⃣ CTC View\n3️⃣ Primary Options\n4️⃣ Exit Chat");
+                        addBotMessage("Please enter your choice (1, 2, 3, 4 or 5) to continue\n\n1️⃣ Month’s Salary Slip\n2️⃣ CTC View\n3️⃣ Primary Options\n4️⃣ Exit Chat\n5️⃣ Know Your SPOC");
                 }
                 break;
 
@@ -273,21 +281,21 @@ public class ChatBotNewActivity extends AppCompatActivity {
                     case "two":
                     case "pf passbook":
                     case "passbook":
-                        addBotMessage("Please view your PF Passbook here 📘\nhttps://www.epfindia.gov.in");
+                        addBotMessage("View your PF Passbook \nTap to Open 📘\nhttps://www.epfindia.gov.in");
                         break;
                     case "3":
                     case "three":
                     case "query":
                     case "pf related query":
                     case "another query":
-                        addBotMessage("For any other PF-related queries \nPlease contact our toll-free helpline at \n\n7313604174 (available from 10:00 AM to 6:00 PM)");
+                        addBotMessage("For any other PF-related queries \nPlease contact our toll-free helpline\n\n7313604174 (10:00 AM to 6:00 PM)");
                         break;
                     case "4":
                     case "four":
                     case "primary":
                     case "primary option":
                         currentMenu = MenuState.MAIN;
-                        addBotMessage("Please select one option from below \n\n1️⃣ Payroll Query\n2️⃣ PF Query\n3️⃣ ESI Card \n4️⃣ Medical Card");
+                        addBotMessage("Please enter your choice (1, 2, 3, 4 or 5) to continue \n\n1️⃣ Payroll Query\n2️⃣ PF Query\n3️⃣ ESIC Card \n4️⃣ Medical Card\n5️⃣ Know Your SPOC");
                         break;
                     case "5":
                     case "five":
@@ -297,7 +305,7 @@ public class ChatBotNewActivity extends AppCompatActivity {
                         break;
                     default:
                         // 🔸 Default handler for PF
-                        addBotMessage("Please choose a valid PF option (1–5):\n1️⃣ UAN Number\n2️⃣ PF Passbook\n3️⃣ Any other PF Related Query\n4️⃣ Primary Options\n5️⃣ Exit Chat");
+                        addBotMessage("Please choose a valid PF option (1–5):\n1️⃣ UAN Number\n2️⃣ PF Passbook\n3️⃣ Any Other PF-Related Query\n4️⃣ Primary Options\n5️⃣ Exit Chat");
                 }
                 break;
 
@@ -419,8 +427,8 @@ public class ChatBotNewActivity extends AppCompatActivity {
                                 String url = obj.optString("url");
                                 Log.d("SalarySlipURL", url);
                                 String ctcUrl = url; // your real URL
-                                String maskedText = "<a href=\"" + url + "\">Click to View</a>";
-                                addBotMessage("Here’s your Last Month Salary Slip 📑\n" + maskedText);
+                                String maskedText = "<a href=\"" + url + "\">Tap to View</a>";
+                                addBotMessage("Here’s your last month’s salary slip 📑\n" + maskedText);
 
 
                             } else {
@@ -473,8 +481,8 @@ public class ChatBotNewActivity extends AppCompatActivity {
                                     if (DocumentName.equalsIgnoreCase("Esi Card")) {
                                         hideTypingIndicator();
                                         esiCardFound = true;
-                                        String maskedText = "<a href=\"" + DocLink + "\">Click to View</a>";
-                                        addBotMessage("Here’s your ESI Card 📑\n" + maskedText);
+                                        String maskedText = "<a href=\"" + DocLink + "\">Tap to View</a>";
+                                        addBotMessage("Your ESIC Card is ready 📑\n" + maskedText);
                                         break;
 
                                     }
@@ -495,7 +503,7 @@ public class ChatBotNewActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError anError) {
                         hideTypingIndicator();
-                        addBotMessage("Error fetching ESI Card details. Please try again later ❌");
+                        addBotMessage("Error fetching ESIC Card details. Please try again later ❌");
 
                     }
                 });
@@ -527,8 +535,8 @@ public class ChatBotNewActivity extends AppCompatActivity {
                                     if (DocumentName.equalsIgnoreCase("Medical Card")) {
                                         hideTypingIndicator();
                                         medicalCardFound = true;
-                                        String maskedText = "<a href=\"" + DocLink + "\">Click to View</a>";
-                                        addBotMessage("Here’s your Medical Card 📑\n" + maskedText);
+                                        String maskedText = "<a href=\"" + DocLink + "\">Tap to View</a>";
+                                        addBotMessage("Your Medical Card is ready 📑\n" + maskedText);
                                         break;
 
                                     }
@@ -549,7 +557,7 @@ public class ChatBotNewActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError anError) {
                         hideTypingIndicator();
-                        addBotMessage("Error fetching ESI Card details. Please try again later ❌");
+                        addBotMessage("Error fetching ESIC Card details. Please try again later ❌");
 
                     }
                 });
@@ -586,6 +594,65 @@ public class ChatBotNewActivity extends AppCompatActivity {
                                 String Name = obj.optString("Name");
                                 String Mobile = obj.optString("Mobile");
                                 addBotMessage("No details found \n\nFor further query please contact with: " + Name + "\nContact Number: " + Mobile);
+
+                            } else {
+                                hideTypingIndicator();
+                                addBotMessage("Please contact our toll-free helpline at \n\n7313604174 (available from 10:00 AM to 6:00 PM)");
+                            }
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            // Toast.makeText(AttendanceReportActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
+
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                hideTypingIndicator();
+
+                // Toast.makeText(AttendanceReportActivity.this, "volly 2"+error.toString(), Toast.LENGTH_LONG).show();
+                Log.e("ert", error.toString());
+            }
+        }) {
+
+        };
+        AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
+    }
+    private void getSpokePersonListOne() {
+        showTypingIndicator();
+        String surl = AppData.url + "gcl_GeniusSpocList?ID=" + pref.getEmpId() + "&SecurityCode=" + pref.getSecurityCode();
+        Log.d("input", surl);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("responseAttendance", response);
+                        hideTypingIndicator();
+
+
+                        // attendabceInfiList.clear();
+
+                        try {
+                            JSONObject job1 = new JSONObject(response);
+                            Log.e("response12", "@@@@@@" + job1);
+                            String responseText = job1.optString("responseText");
+
+                            boolean responseStatus = job1.optBoolean("responseStatus");
+
+
+                            // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
+                            JSONArray responseData = job1.optJSONArray("responseData");
+                            if (responseData.length() > 0) {
+                                hideTypingIndicator();
+                                JSONObject obj = responseData.optJSONObject(0);
+                                String Name = obj.optString("Name");
+                                String Mobile = obj.optString("Mobile");
+                                String Email= obj.optString("Email");
+                                addBotMessage("Your designated SPOC is " + Name + "\nContact Number: " + Mobile+"\nEmail ID: "+Email);
 
                             } else {
                                 hideTypingIndicator();

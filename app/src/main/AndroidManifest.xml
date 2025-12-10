@@ -48,7 +48,8 @@
         <activity
             android:name=".activity.ChatBotNewActivity"
             android:exported="false"
-            android:theme="@style/FloatingChatTheme">
+            android:theme="@style/FloatingChatTheme"
+           >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

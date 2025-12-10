@@ -1216,7 +1216,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                             JSONArray responseData=job1.optJSONArray("responseData");
                             spokepersonArray=responseData;
                             if (responseData.length()>0) {
-                                fbSpoke.setVisibility(View.VISIBLE);
+                                fbSpoke.setVisibility(View.GONE);
                             }else {
                                 fbSpoke.setVisibility(View.GONE);
                             }

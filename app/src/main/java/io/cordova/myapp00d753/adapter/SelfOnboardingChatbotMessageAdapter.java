@@ -93,19 +93,31 @@ public class SelfOnboardingChatbotMessageAdapter extends RecyclerView.Adapter<Re
 
             case BOT:
                 ((BotHolder) holder).txtBot.setText(msg.getMessage());
-                if (msg.getMessage().contains("Please fill up Personal Details")){
+                if (msg.getMessage().contains("please enter your Personal Details:")){
                     ((BotHolder) holder).llPerosnalDetails.setVisibility(View.VISIBLE);
                 }else {
                     ((BotHolder) holder).llPerosnalDetails.setVisibility(View.GONE);
                 }
 
-                if (msg.getMessage().contains("Step -2")){
+                if (msg.getMessage().contains("Step 2:")){
                     ((BotHolder) holder).llContactDetails.setVisibility(View.VISIBLE);
                 }else {
                     ((BotHolder) holder).llContactDetails.setVisibility(View.GONE);
                 }
 
-                if (msg.getMessage().contains("Aadhaar Card Back Side")){
+                if (msg.getMessage().contains("Step 3:")){
+                    ((BotHolder) holder).llBankDetails.setVisibility(View.VISIBLE);
+                }else {
+                    ((BotHolder) holder).llBankDetails.setVisibility(View.GONE);
+                }
+
+                if (msg.getMessage().contains("Step 4:")){
+                    ((BotHolder) holder).llPAN.setVisibility(View.VISIBLE);
+                }else {
+                    ((BotHolder) holder).llPAN.setVisibility(View.GONE);
+                }
+
+                if (msg.getMessage().contains("Aadhaar back side")){
                     ((BotHolder) holder).llAadhaarBack.setVisibility(View.VISIBLE);
                 }else {
                     ((BotHolder) holder).llAadhaarBack.setVisibility(View.GONE);
@@ -121,6 +133,14 @@ public class SelfOnboardingChatbotMessageAdapter extends RecyclerView.Adapter<Re
 
                 ((BotHolder) holder).btnContactUpload.setOnClickListener(v -> {
                     ((SelfOnboardingChatBotActivity)activity).contactDialog();
+                });
+
+                ((BotHolder) holder).btnBankUpload.setOnClickListener(v -> {
+                    ((SelfOnboardingChatBotActivity)activity).bankDialog();
+                });
+
+                ((BotHolder) holder).btnPANUpload.setOnClickListener(v -> {
+                    ((SelfOnboardingChatBotActivity)activity).showImagePickerForPAN();
                 });
                 break;
 
@@ -160,8 +180,8 @@ public class SelfOnboardingChatbotMessageAdapter extends RecyclerView.Adapter<Re
 
     static class BotHolder extends RecyclerView.ViewHolder {
         TextView txtBot;
-        LinearLayout llPerosnalDetails,llContactDetails,llAadhaarBack;
-        Button btnPersonalUpload,btnContactUpload,btnAadhaarBackUpload;
+        LinearLayout llPerosnalDetails,llContactDetails,llAadhaarBack,llBankDetails,llPAN;
+        Button btnPersonalUpload,btnContactUpload,btnAadhaarBackUpload,btnBankUpload,btnPANUpload;
         BotHolder(@NonNull View itemView) {
             super(itemView);
             txtBot = itemView.findViewById(R.id.tvBotMessage);
@@ -174,6 +194,12 @@ public class SelfOnboardingChatbotMessageAdapter extends RecyclerView.Adapter<Re
 
             llAadhaarBack=(LinearLayout) itemView.findViewById(R.id.llAadhaarBack);
             btnAadhaarBackUpload=itemView.findViewById(R.id.btnAadhaarBackUpload);
+
+            llBankDetails=(LinearLayout) itemView.findViewById(R.id.llBankDetails);
+            btnBankUpload=itemView.findViewById(R.id.btnBankUpload);
+
+            llPAN=(LinearLayout) itemView.findViewById(R.id.llPAN);
+            btnPANUpload=itemView.findViewById(R.id.btnPANUpload);
         }
     }
 

@@ -105,7 +105,7 @@ public class ChatbotMessageAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
                     String finalUrl = url;
                     tv.setOnClickListener(v -> {
-                        if (message.getMessage().contains("ESI Card") || message.getMessage().contains("Medical Card")){
+                        if (message.getMessage().contains("ESIC Card") || message.getMessage().contains("Medical Card")){
                             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(finalUrl));
                             browserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             v.getContext().startActivity(browserIntent);

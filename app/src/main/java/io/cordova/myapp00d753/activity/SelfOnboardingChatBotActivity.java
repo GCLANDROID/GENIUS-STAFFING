@@ -76,13 +76,15 @@ import java.util.regex.Pattern;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.adapter.SelfOnboardingChatbotMessageAdapter;
-import io.cordova.myapp00d753.adapter.TempCommonFilterAdapter;
 import io.cordova.myapp00d753.adapter.TempCommonFilterForSelfOnboardingAdapter;
 import io.cordova.myapp00d753.module.BotMessageModule;
 import io.cordova.myapp00d753.module.MainDocModule;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class SelfOnboardingChatBotActivity extends AppCompatActivity {
     private RecyclerView recyclerChat;
@@ -104,6 +106,7 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
     private static final int REQ_GALLERY = 102;
     private Bitmap capturedBitmap;
     boolean awaitingAadharConfirmation;
+    boolean awaitingPANConfirmation;
     boolean aadharflag;
     private String extractedAadhar = "";
     ProgressDialog pd;
@@ -120,6 +123,7 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
     ArrayList<String> blood = new ArrayList<>();
     androidx.appcompat.app.AlertDialog personalDialog;
     androidx.appcompat.app.AlertDialog contactDialog;
+    androidx.appcompat.app.AlertDialog bankDialog;
     String month;
     String realationship="",realationshipID,dob="";
     String sexGender="",sexGenderID;
@@ -129,10 +133,20 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
     String frontID, backID;
     File imageFile;
     File backAadhaarFile;
+    File bankFile;
+    File panFile;
     Bitmap bitmap = null;
     Bitmap bitmapforAadharBack = null;
+    Bitmap bitmapforBank = null;
     private static final int REQ_CAMERA_AADHAAR_BACK = 103;
     private static final int REQ_GALLERY_AADHAAR_BACK = 104;
+
+    private static final int REQ_CAMERA_BANK_DOC = 105;
+    private static final int REQ_GALLERY_BANK_DOC = 106;
+
+    Bitmap bitmapPAN = null;
+    private static final int REQ_CAMERA_PAN = 108;
+    private static final int REQ_GALLERY_PAN = 109;
 
     ArrayList<String> percity = new ArrayList<>();
     ArrayList<MainDocModule> mainPerCity = new ArrayList<>();
@@ -147,6 +161,15 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
     Dialog searchHolidayDialog;
     TextView txtPresentCity,txtPermanentCity;
     String presentcity,permanentcity,presentcityID="",permanentcityID="";
+    ArrayList<MainDocModule> mainBankName = new ArrayList<>();
+    ArrayList<String> bankName = new ArrayList<>();
+
+    ArrayList<MainDocModule> mainDocType = new ArrayList<>();
+    ArrayList<String> doctype = new ArrayList<>();
+    String bankdocid="",bankdoc,bankname,banknameID="";
+    ImageView imgDoc;
+    String panID;
+    String PANnumber;
 
 
     @Override
@@ -177,9 +200,8 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        addBotMessage("Hi! I'm Genie🤖\n I'm here to assist you with your self-onboarding process.\n\nWe need your following details to complete the Self Onboarding.\n\n1.Personal Information.\n2.Contact Details\n3.Bank Details\n4Your Aadhaar Card Image (Front and Back) \n5.PAN Card Image\n6.Passport Size Image \n\nPlease upload your Aadhar card Front image to proceed further.");
 
-        addUploadButton();
+
 
 
         btnSend.setOnClickListener(v -> {
@@ -222,7 +244,7 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
         // 🔹 Global commands
         if (msg.equals("restart")) {
             currentMenu = MenuState.MAIN;
-            addBotMessage("Hi! I'm Genie🤖\n I'm here to assist you with your self-onboarding process.\n\nWe need your following details to complete the Self Onboarding.\n1.Personal Information.\n2.Contact Details\n3.Bank Details\nYour Aadhaar Card Image both Front and Back \nPAN Card\nPassport Size Image \n\nPlease upload your Aadhar card Front image to proceed further.");
+            addBotMessage("Hi! I'm Genie🤖\n I'm here to guide you through your self-onboarding process.\n\nTo complete your onboarding, I’ll need the following information:\n\n1.Personal Information.\n2.Contact Details\n3.Bank Details\n4.Aadhaar Card Image (Front and Back) \n5.PAN Card Image. \n\nPlease upload your Aadhaar Card Front Image to continue.");
             addUploadButton();
 
             return;
@@ -257,7 +279,41 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
             }
             else if (msg.equals("2")) {
                 awaitingAadharConfirmation = false;
-                addBotMessage("Okay, please upload your Aadhaar again.");
+                addBotMessage("Please upload your Aadhaar card again so we can proceed further.");
+                addUploadButton();  // Camera/Gallery
+                return;
+            }
+            else {
+                addBotMessage("Please press 1 for YES or 2 for NO.");
+                return;
+            }
+        }
+
+
+        if (awaitingPANConfirmation) {
+
+
+
+            if (msg.equals("1")) {
+                awaitingPANConfirmation = false;
+                //hitAadhaarAPI(extractedAadhar);
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("AEMConsultantID", pref.getEmpConId());
+                    jsonObject.put("AEMClientID", pref.getEmpClintId());
+                    jsonObject.put("AEMClientOfficeID", pref.getEmpClintOffId());
+                    jsonObject.put("AEMEmployeeID", pref.getMasterId());
+                    jsonObject.put("WorkingStatus", "1");
+                    jsonObject.put("Operation", "12");
+                    panUpload();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return;
+            }
+            else if (msg.equals("2")) {
+                awaitingPANConfirmation = false;
+                addBotMessage("Please upload your PAN card again so we can proceed further.");
                 addUploadButton();  // Camera/Gallery
                 return;
             }
@@ -302,214 +358,6 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
         }
     }
 
-    private void getUANNumber(JSONObject jsonObject) {
-        showTypingIndicator();
-        AndroidNetworking.post(AppData.GCL_KYC)
-                .addJSONObjectBody(jsonObject)
-                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
-                .setTag("uploadTest")
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        try {
-
-                            JSONObject job1 = response;
-                            String Response_Code = job1.optString("Response_Code");
-                            if (Response_Code.equals("101")) {
-                                hideTypingIndicator();
-                                String Response_Data = job1.optString("Response_Data");
-
-                                JSONArray jsonArray = new JSONArray(Response_Data);
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    JSONObject obj = jsonArray.getJSONObject(i);
-
-
-                                    String UanNo = obj.optString("UANNumber");
-                                    addBotMessage("Your UAN Number is: " + UanNo);
-
-                                }
-
-
-                            }
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-
-                        hideTypingIndicator();
-                        addBotMessage("Error fetching UAN details. Please try again later ❌");
-
-
-                    }
-                });
-    }
-
-    private void getSalaryList(JSONObject jsonObject) {
-        showTypingIndicator();
-        AndroidNetworking.post(AppData.GET_EMPLOYEE_SALARY)
-                .addJSONObjectBody(jsonObject)
-                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
-                .setTag("uploadTest")
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-
-                            JSONObject job1 = response;
-                            String Response_Code = job1.optString("Response_Code");
-                            if (Response_Code.equals("101")) {
-                                hideTypingIndicator();
-                                String Response_Data = job1.optString("Response_Data");
-                                JSONArray jsonArray = new JSONArray(Response_Data);
-
-                                JSONObject obj = jsonArray.getJSONObject(0);
-
-                                String url = obj.optString("url");
-                                Log.d("SalarySlipURL", url);
-                                String ctcUrl = url; // your real URL
-                                String maskedText = "<a href=\"" + url + "\">Click to View</a>";
-                                addBotMessage("Here’s your Last Month Salary Slip 📑\n" + maskedText);
-
-
-                            } else {
-                                hideTypingIndicator();
-                                addBotMessage("No Salary details found ❌");
-                                //Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
-
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            hideTypingIndicator();
-                            addBotMessage("Error fetching Salary details. Please try again later ❌");
-
-                        }
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-                        hideTypingIndicator();
-                        addBotMessage("Error fetching Salary details. Please try again later ❌");
-
-
-                    }
-                });
-    }
-
-    private void getDocList(JSONObject jsonObject) {
-        showTypingIndicator();
-        AndroidNetworking.post(AppData.EMPLOYEE_DOCUMENT_MANAGE)
-                .addJSONObjectBody(jsonObject)
-                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
-                .setTag("uploadTest")
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-
-                            JSONObject job1 = response;
-                            String Response_Code = job1.optString("Response_Code");
-                            if (Response_Code.equals("101")) {
-
-                                String Response_Data = job1.optString("Response_Data");
-                                JSONArray jsonArray = new JSONArray(Response_Data);
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    JSONObject obj = jsonArray.getJSONObject(i);
-                                    String DocumentName = obj.optString("DocumentName");
-                                    String DocLink = obj.optString("Mobilelink");
-                                    if (DocumentName.equalsIgnoreCase("Esi Card")) {
-                                        hideTypingIndicator();
-                                        esiCardFound = true;
-                                        String maskedText = "<a href=\"" + DocLink + "\">Click to View</a>";
-                                        addBotMessage("Here’s your ESI Card 📑\n" + maskedText);
-                                        break;
-
-                                    }
-                                }
-
-                                if (!esiCardFound) {
-                                    getSpokePersonList();
-                                }
-
-                            } else {
-                                hideTypingIndicator();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-                        hideTypingIndicator();
-                        addBotMessage("Error fetching ESI Card details. Please try again later ❌");
-
-                    }
-                });
-    }
-
-    private void getMedicalCard(JSONObject jsonObject) {
-        showTypingIndicator();
-        AndroidNetworking.post(AppData.EMPLOYEE_DOCUMENT_MANAGE)
-                .addJSONObjectBody(jsonObject)
-                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
-                .setTag("uploadTest")
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-
-                            JSONObject job1 = response;
-                            String Response_Code = job1.optString("Response_Code");
-                            if (Response_Code.equals("101")) {
-
-                                String Response_Data = job1.optString("Response_Data");
-                                JSONArray jsonArray = new JSONArray(Response_Data);
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    JSONObject obj = jsonArray.getJSONObject(i);
-                                    String DocumentName = obj.optString("DocumentName");
-                                    String DocLink = obj.optString("Mobilelink");
-                                    if (DocumentName.equalsIgnoreCase("Medical Card")) {
-                                        hideTypingIndicator();
-                                        medicalCardFound = true;
-                                        String maskedText = "<a href=\"" + DocLink + "\">Click to View</a>";
-                                        addBotMessage("Here’s your Medical Card 📑\n" + maskedText);
-                                        break;
-
-                                    }
-                                }
-
-                                if (!medicalCardFound) {
-                                    getSpokePersonList();
-                                }
-
-                            } else {
-                                hideTypingIndicator();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-                        hideTypingIndicator();
-                        addBotMessage("Error fetching ESI Card details. Please try again later ❌");
-
-                    }
-                });
-    }
 
     private void getSpokePersonList() {
         showTypingIndicator();
@@ -641,12 +489,49 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
         if (bitmapforAadharBack != null) {
             addImageBubble(bitmapforAadharBack);
             aadharBackUpload();// show inside chat
+            }
 
+
+        if (requestCode == REQ_CAMERA_BANK_DOC) {
+            bitmapforBank = (Bitmap) data.getExtras().get("data");
+        }
+
+        if (requestCode == REQ_GALLERY_BANK_DOC) {
+            Uri uri = data.getData();
+            try {
+                bitmapforBank = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+            } catch (Exception e) {}
+        }
+
+        if (bitmapforBank != null) {
+            imgDoc.setImageBitmap(bitmapforBank);
+        }
+
+
+        //PAN
+
+        if (requestCode == REQ_CAMERA_PAN) {
+            bitmapPAN = (Bitmap) data.getExtras().get("data");
+        }
+
+        if (requestCode == REQ_GALLERY_PAN) {
+            Uri uri = data.getData();
+            try {
+                bitmapPAN = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+            } catch (Exception e) {}
+        }
+
+        if (bitmapPAN != null) {
+            addImageBubble(bitmapPAN);  // show inside chat
+            runVisionOCRForPAN(bitmapPAN);
 
             // extract data
 
 
         }
+
+
+
     }
 
     private void addImageBubble(Bitmap bitmap) {
@@ -783,6 +668,81 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
         if (text.toLowerCase().contains("female")) return "Female";
         if (text.toLowerCase().contains("male")) return "Male";
         return "";
+    }
+
+
+
+    private void runVisionOCRForPAN(Bitmap bitmap) {
+
+        TextRecognizer recognizer = new TextRecognizer.Builder(getApplicationContext()).build();
+
+        if (!recognizer.isOperational()) {
+            addBotMessage("OCR not supported on this device.");
+
+            return;
+        }
+
+        Frame frame = new Frame.Builder().setBitmap(bitmap).build();
+        SparseArray<TextBlock> items = recognizer.detect(frame);
+
+        StringBuilder fullText = new StringBuilder();
+
+        for (int i = 0; i < items.size(); i++) {
+            TextBlock block = items.valueAt(i);
+            fullText.append(block.getValue());
+            fullText.append("\n");
+        }
+
+        extractPANData(fullText.toString());
+    }
+
+    private void extractPANData(String text) {
+
+        String pan = extractPANNumber(text);
+
+        // ----------------------------
+        //    PAN VALIDATION
+        // ----------------------------
+        if (pan == null || pan.trim().length() != 10) {
+            addBotMessage("❌ Unable to extract PAN details.\nPlease upload a clearer PAN card image.");
+            return;
+        }
+
+        // Show result
+        String result = "🪪 PAN: " + pan;
+
+        showPANConfirmation(pan);
+    }
+
+    private void showPANConfirmation(String aadhar) {
+
+        addBotMessage(
+                "Your PAN Number: " + aadhar +
+                        "\n\nIs this correct?" +
+                        "\nPress 1️⃣ for YES" +
+                        "\nPress 2️⃣ for NO"
+        );
+
+        // extractedAadhar = aadhar.replaceAll(" ","");
+        PANnumber =aadhar ;
+
+        awaitingPANConfirmation = true;
+    }
+
+    private String extractPANNumber(String text) {
+        if (text == null) return null;
+
+        // Normalize text
+        String cleanText = text.toUpperCase().replaceAll("[^A-Z0-9]", "");
+
+        // PAN format: 5 letters + 4 digits + 1 letter
+        Pattern pattern = Pattern.compile("[A-Z]{5}[0-9]{4}[A-Z]");
+        Matcher matcher = pattern.matcher(cleanText);
+
+        if (matcher.find()) {
+            return matcher.group(0);   // Extracted PAN number
+        }
+        return null;
     }
 
     private void showAadhaarConfirmation(String aadhar) {
@@ -1028,7 +988,7 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
 
 
     private void setQualification(JSONObject jsonObject) {
-       pd.show();
+       showTypingIndicator();
         AndroidNetworking.post(AppData.COMMON_DDL)
                 .addJSONObjectBody(jsonObject)
                 .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
@@ -1041,6 +1001,7 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
                         try {
 
                             JSONObject job1 = response;
+                            hideTypingIndicator();
                             String Response_Code = job1.optString("Response_Code");
                             qualification.add("Please select");
                             mainQualification.add(new MainDocModule("",""));
@@ -1075,13 +1036,13 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError anError) {
-                      pd.dismiss();
+                        hideTypingIndicator();
                     }
                 });
     }
 
     private void setMarital(JSONObject jsonObject) {
-        pd.show();
+        showTypingIndicator();
         AndroidNetworking.post(AppData.COMMON_DDL)
                 .addJSONObjectBody(jsonObject)
                 .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
@@ -1092,7 +1053,7 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-
+                            hideTypingIndicator();
                             JSONObject job1 = response;
                             String Response_Code = job1.optString("Response_Code");
                             martial.add("Please Select");
@@ -1127,14 +1088,14 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError anError) {
-                       pd.dismiss();
+                        hideTypingIndicator();
                     }
                 });
     }
 
 
     private void setGender(JSONObject jsonObject) {
-        pd.show();
+        showTypingIndicator();
 
         AndroidNetworking.post(AppData.COMMON_DDL)
                 .addJSONObjectBody(jsonObject)
@@ -1147,7 +1108,7 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
 
-
+                            hideTypingIndicator();
                             gender.clear();
                             mainGender.clear();
                             gender.add("Please select");
@@ -1187,7 +1148,7 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError anError) {
-                       pd.dismiss();
+                        hideTypingIndicator();
                     }
                 });
     }
@@ -1218,7 +1179,7 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
     }
 
     private void setBlood(JSONObject jsonObject) {
-        pd.show();
+        showTypingIndicator();
         AndroidNetworking.post(AppData.COMMON_DDL)
                 .addJSONObjectBody(jsonObject)
                 .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
@@ -1230,7 +1191,7 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
 
-
+                            hideTypingIndicator();
                             JSONObject job1 = response;
                             String Response_Code = job1.optString("Response_Code");
                             blood.add("Please select");
@@ -1270,7 +1231,7 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError anError) {
 
-                       pd.dismiss();
+                        hideTypingIndicator();
                     }
                 });
     }
@@ -1661,8 +1622,8 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
                         if (Response_Code == 101) {
 
                                hideTypingIndicator();
-                               addBotMessage("Thanks! Your Personal Details have been updated successfully.");
-                               addBotMessage("Step -2 : Fill Up Your Contact Details");
+                               addBotMessage("Thank you! Your personal details have been updated successfully.");
+                               addBotMessage("Step 2: To continue, please provide your contact details.");
                             //
                         } else {
                             hideTypingIndicator();
@@ -1682,7 +1643,7 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
     }
 
     private void getAddharFrontID(JSONObject jsonObject) {
-        pd.show();
+        showTypingIndicator();
         AndroidNetworking.post(AppData.COMMON_DDL)
                 .addJSONObjectBody(jsonObject)
                 .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
@@ -1693,7 +1654,7 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
 
-
+                        hideTypingIndicator();
                         JSONObject job1 = response;
                         String Response_Code=job1.optString("Response_Code");
                         if (Response_Code.equals("101")){
@@ -1735,7 +1696,7 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError anError) {
 
-                        pd.dismiss();
+                        hideTypingIndicator();
                     }
                 });
     }
@@ -1780,9 +1741,10 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
                         int Response_Code = job1.optInt("Response_Code");
                         String Response_Data = job1.optString("Response_Data");
                         if (Response_Code == 101) {
+                            bitmap=null;
                             hideTypingIndicator();
-                            addBotMessage("Thank you for uploading the front side of your Aadhaar Card.");
-                            addBotMessage("Please Upload Your Aadhaar Card Back Side");
+                            addBotMessage("Great! I’ve received the front side of your Aadhaar card.");
+                            addBotMessage("Kindly upload the Aadhaar back side as well.");
 //                            addBotMessage("Thank you for confirming your Aadhaar details. We will proceed to the next step.");
 //                            addBotMessage("Please fill up Personal Details you will need to provide \n1.Date of Birth \n2.Father's/Husband's Name\n3.Relationship\n4.Gender\n5.Highest Qualification\n6.Martial Status\n7.Blood Group");
 
@@ -1900,9 +1862,10 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
                         int Response_Code = job1.optInt("Response_Code");
                         String Response_Data = job1.optString("Response_Data");
                         if (Response_Code == 101) {
+                            bitmapforAadharBack=null;
                             hideTypingIndicator();
                             addBotMessage("Thank you for confirming your Aadhaar details. We will proceed to the next step.");
-                            addBotMessage("Please fill up Personal Details you will need to provide \n1.Date of Birth \n2.Father's/Husband's Name\n3.Relationship\n4.Gender\n5.Highest Qualification\n6.Martial Status\n7.Blood Group");
+                            addBotMessage("To continue, please enter your Personal Details: \n1.Date of Birth \n2.Father's/Husband's Name\n3.Relationship\n4.Gender\n5.Highest Qualification\n6.Martial Status\n7.Blood Group");
                         } else {
                             hideTypingIndicator();
                             addBotMessage(Response_Data);
@@ -2393,7 +2356,7 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
 
 
     private void getState(JSONObject jsonObject) {
-        pd.show();
+        showTypingIndicator();
         AndroidNetworking.post(AppData.COMMON_DDL)
                 .addJSONObjectBody(jsonObject)
                 .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
@@ -2405,7 +2368,16 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
 
-                            pd.dismiss();
+                            JSONObject bankobj=new JSONObject();
+                            try {
+                                bankobj.put("ddltype", 5);
+                                bankobj.put("id1",pref.getEmpConId());;
+                                bankobj.put("SecurityCode",pref.getSecurityCode());
+                                setBank(bankobj);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            hideTypingIndicator();
                             mainState.clear();
                             state.clear();
                             state.add("Please Select");
@@ -2434,7 +2406,7 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError anError) {
 
-                       pd.dismiss();
+                        hideTypingIndicator();
                     }
                 });
     }
@@ -2655,8 +2627,8 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
                         int Response_Code = job1.optInt("Response_Code");
                         if (Response_Code == 101) {
                             hideTypingIndicator();
-                            addBotMessage("Thanks! Your Contact Details have been updated successfully.");
-                            addBotMessage("Step -3 : Fill Up Your Bank Details");
+                            addBotMessage("Thank you! Your contact details have been updated successfully.");
+                            addBotMessage("Step 3: To continue, please provide your bank details.");
 
                             // Toast.makeText(TempProfileActivity.this, "Contact Details has been updated Successfully", Toast.LENGTH_LONG).show();
 
@@ -2672,6 +2644,502 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+
+    private void setBank(JSONObject jsonObject) {
+        showTypingIndicator();
+        AndroidNetworking.post(AppData.COMMON_DDL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            hideTypingIndicator();
+                            bankName.clear();
+                            mainBankName.clear();
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String qualivalue = obj.optString("value");
+                                    String qualiid = obj.optString("id");
+                                    bankName.add(qualivalue);
+                                    MainDocModule mainDocModule = new MainDocModule(qualiid, qualivalue);
+                                    mainBankName.add(mainDocModule);
+
+                                }
+
+                                //setBankDocType();
+                                JSONObject obj=new JSONObject();
+                                try {
+                                    obj.put("ddltype", 11);
+                                    obj.put("id1",pref.getEmpConId());;
+                                    obj.put("SecurityCode",pref.getSecurityCode());
+                                    setBankDocType(obj);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        hideTypingIndicator();
+                    }
+                });
+    }
+
+    private void setBankDocType(JSONObject jsonObject) {
+        showTypingIndicator();
+        AndroidNetworking.post(AppData.COMMON_DDL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+
+                            JSONObject PANobj=new JSONObject();
+                            try {
+                                PANobj.put("ddltype", "Doc_Pan");
+                                PANobj.put("SecurityCode",pref.getSecurityCode());
+                                getPANID(PANobj);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            hideTypingIndicator();
+                            doctype.clear();
+                            mainDocType.clear();
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray jsonArray = new JSONArray(Response_Data);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String qualivalue = obj.optString("value");
+                                    String qualiid = obj.optString("id");
+                                    doctype.add(qualivalue);
+                                    MainDocModule mainDocModule = new MainDocModule(qualiid, qualivalue);
+                                    mainDocType.add(mainDocModule);
+
+                                }
+
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        hideTypingIndicator();
+                    }
+                });
+    }
+
+
+    public void bankDialog() {
+        androidx.appcompat.app.AlertDialog.Builder dialogBuilder = new androidx.appcompat.app.AlertDialog.Builder(SelfOnboardingChatBotActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.bankdetails_popup, null);
+        dialogBuilder.setView(dialogView);
+        Spinner spBankName = (Spinner) dialogView.findViewById(R.id.spBankName);
+        Spinner spDocType = (Spinner) dialogView.findViewById(R.id.spDocType);
+        EditText etAccNumber = (EditText) dialogView.findViewById(R.id.etAccNumber);
+        EditText etIFSC = (EditText) dialogView.findViewById(R.id.etIFSC);
+        EditText etFName = (EditText)dialogView. findViewById(R.id.etFName);
+        EditText etLName = (EditText)dialogView. findViewById(R.id.etLName);
+        ImageView imgCamera = (ImageView)dialogView. findViewById(R.id.imgCamera);
+        imgDoc = (ImageView) dialogView.findViewById(R.id.imgDoc);
+
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                (SelfOnboardingChatBotActivity.this, android.R.layout.simple_spinner_item,
+                        bankName); //selected item will look like a spinner set from XML
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spBankName.setAdapter(spinnerArrayAdapter);
+
+        ArrayAdapter<String> spinnerDocArrayAdapter = new ArrayAdapter<String>
+                (SelfOnboardingChatBotActivity.this, android.R.layout.simple_spinner_item, doctype); //selected item will look like a spinner set from XML
+        spinnerDocArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spDocType.setAdapter(spinnerDocArrayAdapter);
+
+
+        spBankName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                banknameID = mainBankName.get(position).getDocID();
+                bankname = bankName.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        spDocType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                bankdocid = mainDocType.get(position).getDocID();
+                bankdoc= doctype.get(position);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        imgCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showImagePickerForBankDoc();
+            }
+        });
+        Button btnSave=dialogView.findViewById(R.id.btnSave);
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!bankname.isEmpty()) {
+                    if (etAccNumber.getText().toString().length() > 0) {
+                        if (bitmapforBank != null) {
+                            if (etIFSC.getText().toString().length() == 11) {
+                                if (etFName.getText().toString().length() > 0) {
+                                    if (etLName.getText().toString().length() > 0) {
+                                        bankDialog.dismiss();
+                                        SpannableStringBuilder sb = new SpannableStringBuilder();
+
+                                        int color = ContextCompat.getColor(SelfOnboardingChatBotActivity.this, R.color.misscolor);  // change to your color
+
+// 1. Guardian Name
+                                        sb.append("Bank Name: ");
+                                        sb.append("\n");
+                                        int start = sb.length();
+
+                                        sb.append(bankname);
+                                        sb.setSpan(new ForegroundColorSpan(color), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                        sb.setSpan(new StyleSpan(Typeface.BOLD), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                        sb.append("\n\n");
+
+// 2. Relationship
+                                        sb.append("Account Number: ");
+                                        sb.append("\n");
+                                        start = sb.length();
+
+                                        sb.append(etAccNumber.getText().toString());
+                                        sb.setSpan(new ForegroundColorSpan(color), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                        sb.setSpan(new StyleSpan(Typeface.BOLD), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                        sb.append("\n\n");
+
+// 3. Gender
+                                        sb.append("Bank Document: ");
+                                        sb.append("\n");
+                                        start = sb.length();
+
+                                        sb.append(bankdoc);
+                                        sb.setSpan(new ForegroundColorSpan(color), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                        sb.setSpan(new StyleSpan(Typeface.BOLD), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                        sb.append("\n\n");
+
+// 4. DOB
+                                        sb.append("IFSC Code: ");
+                                        sb.append("\n");
+                                        start = sb.length();
+
+                                        sb.append(etIFSC.getText().toString());
+                                        sb.setSpan(new ForegroundColorSpan(color), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                        sb.setSpan(new StyleSpan(Typeface.BOLD), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                        sb.append("\n\n");
+
+// 5. Qualification
+                                        sb.append("First Name as Per Bank: ");
+                                        sb.append("\n");
+                                        start = sb.length();
+
+                                        sb.append(etFName.getText().toString());
+                                        sb.setSpan(new ForegroundColorSpan(color), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                        sb.setSpan(new StyleSpan(Typeface.BOLD), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                        sb.append("\n\n");
+
+// 6. Marital Status
+                                        sb.append("Last Name as Per Bank: ");
+                                        sb.append("\n");
+                                        start = sb.length();
+
+                                        sb.append(etLName.getText().toString());
+                                        sb.setSpan(new ForegroundColorSpan(color), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                        sb.setSpan(new StyleSpan(Typeface.BOLD), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                        sb.append("\n\n");
+
+
+                                        addUserMessage(String.valueOf(sb));
+                                        BankDetailsSubmit(etAccNumber.getText().toString(),etFName.getText().toString(),etLName.getText().toString(),etIFSC.getText().toString());
+
+
+
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "Please enter Last Name as per Bank ", Toast.LENGTH_LONG).show();
+
+                                    }
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Please enter First Name as per Bank", Toast.LENGTH_LONG).show();
+
+                                }
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Please enter 11 digits IFSC code", Toast.LENGTH_LONG).show();
+
+                            }
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Please upload Bank Document", Toast.LENGTH_LONG).show();
+                            //llDocumentType.setBackgroundResource(R.drawable.lldesign_error);
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Please enter Account Number", Toast.LENGTH_LONG).show();
+
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "Please Select Bank Name", Toast.LENGTH_LONG).show();
+
+                }
+            }
+        });
+
+
+        bankDialog = dialogBuilder.create();
+        bankDialog.setCancelable(true);
+        Window window = bankDialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        bankDialog.show();
+    }
+
+    public void showImagePickerForBankDoc() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Upload Image");
+        builder.setItems(new String[]{"Camera", "Gallery"}, (dialog, which) -> {
+            if (which == 0) openCameraBankDoc();
+            else openGalleryBankDoc();
+        });
+        builder.show();
+    }
+
+    private void openCameraBankDoc() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, REQ_CAMERA_BANK_DOC);
+    }
+
+    private void openGalleryBankDoc() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, REQ_GALLERY_BANK_DOC);
+    }
+
+
+    private void BankDetailsSubmit(String accNumber,String fName,String lName,String Ifsc ) {
+        showTypingIndicator();
+        saveBitmapAsync(bitmapforBank, "bankDocImage.jpg", new SaveCallback() {
+            @Override
+            public void onSuccess(File file) {
+                bankFile=file;
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+
+        String accnumbet = accNumber;
+        String fname = fName;
+        String lname = lName;
+        String ifsc = Ifsc;
+        String masterid = pref.getMasterId();
+        String AEMEmployeeID = pref.getEmpId();
+
+        AndroidNetworking.upload(AppData.SAVE_DUMMY_EMP_BANK_DOCUMENT)
+                .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
+                .addMultipartParameter("FirstNameAsperBank",fname)
+                .addMultipartParameter("LastNameAsperBank",lname)
+                .addMultipartParameter("BankName",banknameID)
+                .addMultipartParameter("AccountNumber",accnumbet)
+                .addMultipartParameter("IFSCode",ifsc)
+                .addMultipartParameter("SecurityCode",pref.getSecurityCode())
+                .addMultipartParameter("DocumentID",bankdocid)
+                .addMultipartFile("SingleFile", bankFile)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setPercentageThresholdForCancelling(60)
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        JSONObject job1 = response;
+                        int Response_Code = job1.optInt("Response_Code");
+                        String Response_Data = job1.optString("Response_Data");
+                        if (Response_Code == 101) {
+                            bitmapforBank = null;
+                            hideTypingIndicator();
+                            addBotMessage("Awesome! Your bank details are updated.");
+                            addBotMessage("Step 4: Please upload your PAN card image.");
+
+                        } else {
+                            hideTypingIndicator();
+                            addBotMessage(Response_Data);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        hideTypingIndicator();
+                    }
+                });
+
+
+
+    }
+
+
+    public void showImagePickerForPAN() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Upload Image");
+        builder.setItems(new String[]{"Camera", "Gallery"}, (dialog, which) -> {
+            if (which == 0) openCameraPAN();
+            else openGalleryPAN();
+        });
+        builder.show();
+    }
+
+    private void openCameraPAN() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, REQ_CAMERA_PAN);
+    }
+
+    private void openGalleryPAN() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, REQ_GALLERY_PAN);
+    }
+
+
+    private void getPANID(JSONObject jsonObject) {
+        showTypingIndicator();
+        AndroidNetworking.post(AppData.COMMON_DDL)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        hideTypingIndicator();
+                        JSONObject job1 = response;
+                        addBotMessage("Hi! I'm Genie🤖\n I'm here to guide you through your self-onboarding process.\n\nTo complete your onboarding, I’ll need the following information:\n\n1.Personal Information.\n2.Contact Details\n3.Bank Details\n4.Aadhaar Card Image (Front and Back) \n5.PAN Card Image. \n\nPlease upload your Aadhaar Card Front Image to continue.");
+                        addUploadButton();
+                        String Response_Code=job1.optString("Response_Code");
+                        if (Response_Code.equals("101")){
+                            JSONArray Response_Data=job1.optJSONArray("Response_Data");
+                            for (int i=0;i<Response_Data.length();i++){
+                                JSONObject obj=Response_Data.optJSONObject(i);
+                                panID=obj.optString("id");
+
+
+                            }
+
+
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        hideTypingIndicator();
+                    }
+                });
+    }
+
+    private void panUpload() {
+        showTypingIndicator();
+        saveBitmapAsync(bitmapPAN, "panDocImage.jpg", new SaveCallback() {
+            @Override
+            public void onSuccess(File file) {
+                panFile=file;
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+                e.printStackTrace();
+            }
+        });
+        AndroidNetworking.upload(AppData.SAVE_EMP_DIGITAL_DOCUMENT)
+                .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
+                .addMultipartParameter("DocumentID", panID)
+                .addMultipartParameter("ReferenceNo", PANnumber)
+                .addMultipartParameter("SecurityCode", pref.getSecurityCode())
+                .addMultipartFile("SingleFile", panFile)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setPercentageThresholdForCancelling(60)
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        JSONObject job1 = response;
+                        int Response_Code = job1.optInt("Response_Code");
+                        String Response_Data = job1.optString("Response_Data");
+                        if (Response_Code == 101) {
+                            bitmapPAN=null;
+                            hideTypingIndicator();
+
+                            addBotMessage("Great! Your PAN details have been verified and updated.");
+                            //give Success message of self onboarding
+                            addBotMessage("Congratulations! You have successfully completed the self-onboarding process.");
+                            addBotMessage("Type “exit” to leave the chat.");
+
+
+                        } else {
+                            hideTypingIndicator();
+                            Toast.makeText(getApplicationContext(), Response_Data, Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        Log.e("errt", String.valueOf(error));
+                        hideTypingIndicator();
+                        Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+
     }
 
 
