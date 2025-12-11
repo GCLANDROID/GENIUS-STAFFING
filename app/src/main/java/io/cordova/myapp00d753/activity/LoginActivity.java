@@ -57,8 +57,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.utility.AppController;
@@ -70,7 +75,7 @@ import io.cordova.myapp00d753.utility.Util;
 
 public class LoginActivity extends AppCompatActivity {
     TextView tvSignIn;
-    EditText etUserId, etPassword,etForgotUserId;
+    EditText etUserId, etPassword, etForgotUserId;
     String userId, password;
     LinearLayout llSignIn;
     NetworkConnectionCheck connectionCheck;
@@ -93,11 +98,13 @@ public class LoginActivity extends AppCompatActivity {
     EditText etCaptcha;
     Button submitButton;
     // CaptchaImageView captchaImageView;
-    String phoneNumber="0000";
-    LinearLayout llWorkForce,llSupervisior,llSecurityCode,llTEMP;
-    ImageView imgWorkForce,imgSupTick,imgTEMP;
-    public static String SECRET_KEY="74074750353890398886017484399862";
+    String phoneNumber = "0000";
+    LinearLayout llWorkForce, llSupervisior, llSecurityCode, llTEMP;
+    ImageView imgWorkForce, imgSupTick, imgTEMP;
+    public static String SECRET_KEY = "74074750353890398886017484399862";
     String ConsentFlag;
+    int WorkingStatus;
+    String ip, sessionId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,11 +160,14 @@ public class LoginActivity extends AppCompatActivity {
         llWorkForce = (LinearLayout) findViewById(R.id.llWorkForce);
         llSupervisior = (LinearLayout) findViewById(R.id.llSupervisior);
         llSecurityCode = (LinearLayout) findViewById(R.id.llSecurityCode);
-        llTEMP=(LinearLayout)findViewById(R.id.llTEMP);
+        llTEMP = (LinearLayout) findViewById(R.id.llTEMP);
 
-        imgSupTick=(ImageView) findViewById(R.id.imgSupTick);
-        imgWorkForce=(ImageView) findViewById(R.id.imgWorkForce);
-        imgTEMP=(ImageView) findViewById(R.id.imgTEMP);
+        imgSupTick = (ImageView) findViewById(R.id.imgSupTick);
+        imgWorkForce = (ImageView) findViewById(R.id.imgWorkForce);
+        imgTEMP = (ImageView) findViewById(R.id.imgTEMP);
+
+        ip = getIPAddress(true);
+        sessionId = generateSessionID("Staffing_Mobile");
 
        /* refreshButton= (ImageView) findViewById(R.id.regen);
         etCaptcha= (EditText) findViewById(R.id.etCaptcha);
@@ -168,9 +178,7 @@ public class LoginActivity extends AppCompatActivity {
         onClick();
 
 
-
-
-        }
+    }
 
     private void onClick() {
        /* refreshButton.setOnClickListener(new View.OnClickListener() {
@@ -224,12 +232,12 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (etUserId.getText().toString().contains("TEMP") || etUserId.getText().toString().contains("temp")|| etUserId.getText().toString().contains("GCL")|| etUserId.getText().toString().contains("gcl")) {
+                if (etUserId.getText().toString().contains("TEMP") || etUserId.getText().toString().contains("temp") || etUserId.getText().toString().contains("GCL") || etUserId.getText().toString().contains("gcl")) {
                     etPassword.setText("password");
                 } else {
                     etPassword.setText("");
                 }
-                if (etUserId.getText().toString().contains("AEM") || etUserId.getText().toString().contains("FMS")|| etUserId.getText().toString().contains("ITS")|| etUserId.getText().toString().contains("SEC")|| etUserId.getText().toString().contains("NAPS")|| etUserId.getText().toString().contains("GMSP")|| etUserId.getText().toString().contains("FSS")|| etUserId.getText().toString().contains("NPS")){
+                if (etUserId.getText().toString().contains("AEM") || etUserId.getText().toString().contains("FMS") || etUserId.getText().toString().contains("ITS") || etUserId.getText().toString().contains("SEC") || etUserId.getText().toString().contains("NAPS") || etUserId.getText().toString().contains("GMSP") || etUserId.getText().toString().contains("FSS") || etUserId.getText().toString().contains("NPS")) {
                     llSecurityCode.setVisibility(View.GONE);
                 } else if (etUserId.getText().toString().isEmpty()) {
                     llSecurityCode.setVisibility(View.GONE);
@@ -244,50 +252,52 @@ public class LoginActivity extends AppCompatActivity {
                 if (etUserId.getText().toString().length() > 0) {
                     if (etPassword.getText().toString().length() > 0) {
                         if (connectionCheck.isNetworkAvailable()) {
-                          //  if(etCaptcha.getText().toString().equals(captchaImageView.getCaptchaCode())){
-                                //loginFunction();
-                            if (etUserId.getText().toString().contains("AEM")){
-                                security_code="0000";
-                            }else if (etUserId.getText().toString().contains("FMS")){
-                                security_code="222";
-                            }else if (etUserId.getText().toString().contains("ITS")){
-                                security_code="888";
-                            }else if (etUserId.getText().toString().contains("SEC")){
-                                security_code="333";
-                            }else if (etUserId.getText().toString().contains("NAPS")){
-                                security_code="444";
-                            }else if (etUserId.getText().toString().contains("NPS")){
-                                security_code="444";
-                            }else if (etUserId.getText().toString().contains("GMSP")){
-                                security_code="666";
-                            }else if (etUserId.getText().toString().contains("MSP")){
-                                security_code="666";
-                            }else if (etUserId.getText().toString().contains("FSS")){
-                                security_code="0000";
-                            }else {
-                                if (etSecurityCode.getText().toString().length()>0){
-                                    security_code=etSecurityCode.getText().toString();
-                                }else {
-                                    security_code="0000";
+                            //  if(etCaptcha.getText().toString().equals(captchaImageView.getCaptchaCode())){
+                            //loginFunction();
+                            if (etUserId.getText().toString().contains("AEM")) {
+                                security_code = "0000";
+                            } else if (etUserId.getText().toString().contains("FMS")) {
+                                security_code = "222";
+                            } else if (etUserId.getText().toString().contains("ITS")) {
+                                security_code = "888";
+                            } else if (etUserId.getText().toString().contains("SEC")) {
+                                security_code = "333";
+                            } else if (etUserId.getText().toString().contains("NAPS")) {
+                                security_code = "444";
+                            } else if (etUserId.getText().toString().contains("NPS")) {
+                                security_code = "444";
+                            } else if (etUserId.getText().toString().contains("GMSP")) {
+                                security_code = "666";
+                            } else if (etUserId.getText().toString().contains("MSP")) {
+                                security_code = "666";
+                            } else if (etUserId.getText().toString().contains("FSS")) {
+                                security_code = "0000";
+                            } else {
+                                if (etSecurityCode.getText().toString().length() > 0) {
+                                    security_code = etSecurityCode.getText().toString();
+                                } else {
+                                    security_code = "0000";
                                 }
                             }
-                            JSONObject obj=new JSONObject();
+                            JSONObject obj = new JSONObject();
                             try {
-                                obj.put("MasterID", Util.encrypt(etUserId.getText().toString(),SECRET_KEY));
-                                obj.put("Password",Util.encrypt(etPassword.getText().toString(),SECRET_KEY));
-                                obj.put("IMEI","0000");
-                                obj.put("DeviceID",refreshedToken);
-                                obj.put("DeviceType","A");
-                                obj.put("SecurityCode",security_code);
-                                login(obj);
+                                obj.put("MasterID", Util.encrypt(etUserId.getText().toString(), SECRET_KEY));
+                                obj.put("Password", Util.encrypt(etPassword.getText().toString(), SECRET_KEY));
+                                obj.put("IPAddress", ip);
+                                obj.put("AppSessionID", sessionId);
+                                obj.put("UUID", refreshedToken);
+                                obj.put("GUID", refreshedToken);
+                                obj.put("MachineDetails", "GeniusStaffing_Android");
+                                obj.put("SecurityCode", security_code);
+                                loginv2(obj);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                                Date d = new Date();
-                                SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
-                                String currentDateTimeString = sdf.format(d);
-                                Log.d("ctime", currentDateTimeString);
-                                pref.saveCtime(currentDateTimeString);
+                            Date d = new Date();
+                            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
+                            String currentDateTimeString = sdf.format(d);
+                            Log.d("ctime", currentDateTimeString);
+                            pref.saveCtime(currentDateTimeString);
                           /*  }else{
                                 Toast.makeText(LoginActivity.this, "Not Matching", Toast.LENGTH_SHORT).show();
                             }*/
@@ -349,14 +359,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
     private void login(JSONObject jsonObject) {
-        Log.e("LOGIN", "login: "+jsonObject.toString());
+        Log.e("LOGIN", "login: " + jsonObject.toString());
         final ProgressDialog pd = new ProgressDialog(LoginActivity.this);
         pd.setMessage("Loading..");
         pd.setCancelable(false);
         pd.show();
-        AndroidNetworking.post(AppData.newv2url+"Login/UserLogin")
+        AndroidNetworking.post(AppData.newv2url + "Login/UserLogin")
                 .addJSONObjectBody(jsonObject)
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
@@ -374,7 +383,7 @@ public class LoginActivity extends AppCompatActivity {
                             // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
 
                             pref.saveUserLoginID(etUserId.getText().toString().trim());
-                            Log.e("UserLoginId", "UserLoginId: "+pref.getUserLoginId());
+                            Log.e("UserLoginId", "UserLoginId: " + pref.getUserLoginId());
 
                             String responseData = job1.optString("Response_Data");
                             try {
@@ -417,47 +426,47 @@ public class LoginActivity extends AppCompatActivity {
                                     String IsSupervisor = obj.optString("IsSupervisor");
                                     pref.saveSup(IsSupervisor);
                                     String CompanyName = obj.optString("CompanyName");
-                                    Log.e("Log", "CompanyName: "+CompanyName);
+                                    Log.e("Log", "CompanyName: " + CompanyName);
                                     pref.saveCompanyName(CompanyName);
                                     pref.saveSecurityCode(security_code);
                                     String FlagAddr = obj.optString("FlagAddr");
                                     pref.saveFlagLocation(FlagAddr);
                                     String Password = obj.optString("Password");
                                     pref.savePassword(etPassword.getText().toString());
-                                    String OffAttFlag=obj.optString("OffAttFlag");
+                                    String OffAttFlag = obj.optString("OffAttFlag");
                                     pref.saveOffAttnFlag(OffAttFlag);
-                                    if (pref.getCheckFlag().equals("1")){
+                                    if (pref.getCheckFlag().equals("1")) {
                                         pref.saveIntentFlag("1");
                                     }
 
-                                    String  DemoFlag=obj.optString("DemoFlag");
+                                    String DemoFlag = obj.optString("DemoFlag");
                                     pref.saveDemoFlag(DemoFlag);
-                                    String GeoConfFlag=obj.optString("GeoConfFlag");
+                                    String GeoConfFlag = obj.optString("GeoConfFlag");
                                     pref.saveFenceConfigFlag(GeoConfFlag);
-                                    String GeoFenceMenuFlag=obj.optString("GeoFenceMenuFlag");
+                                    String GeoFenceMenuFlag = obj.optString("GeoFenceMenuFlag");
                                     pref.saveFenceMenuFlag(GeoFenceMenuFlag);
-                                    String GeoFenceAttFlag=obj.optString("GeoFenceAttFlag");
+                                    String GeoFenceAttFlag = obj.optString("GeoFenceAttFlag");
                                     pref.saveFenceAttnFlag(GeoFenceAttFlag);
-                                    boolean AppRenameFlag=obj.optBoolean("AppRenameFlag");
-                                    String AppRenameText=obj.optString("AppRenameText");
+                                    boolean AppRenameFlag = obj.optBoolean("AppRenameFlag");
+                                    String AppRenameText = obj.optString("AppRenameText");
 
                                     pref.saveMsgAlertStatus(AppRenameFlag);
                                     pref.saveMsg(AppRenameText);
-                                    String PFConsolidateURL=obj.optString("PFConsolidateURL");
+                                    String PFConsolidateURL = obj.optString("PFConsolidateURL");
                                     pref.savePFURL(PFConsolidateURL);
-                                    String Leave=obj.optString("Leave");
+                                    String Leave = obj.optString("Leave");
                                     pref.saveShiftFlag(Leave);
                                     pref.saveEmpClintId(AEMClientID);
                                     pref.saveMsgAlertStatus(AppRenameFlag);
                                     pref.saveMsg(AppRenameText);
                                     pref.savePFURL(PFConsolidateURL);
-                                    String PF_Notify_URL=obj.optString("PF_Notify_URL");
+                                    String PF_Notify_URL = obj.optString("PF_Notify_URL");
                                     pref.savePFNotificationURL(PF_Notify_URL);
-                                    String Genius_Access_Token=obj.optString("Genius_Access_Token").trim();
+                                    String Genius_Access_Token = obj.optString("Genius_Access_Token").trim();
                                     pref.saveAccessToken(Genius_Access_Token);
-                                    ConsentFlag=obj.optString("ConsentFlag");
-                                    String LeaveBalanceView=obj.optString("LeaveBalanceView");
-                                    AppData.LEAVE_BALANCE_VIEW_FLAG=LeaveBalanceView;
+                                    ConsentFlag = obj.optString("ConsentFlag");
+                                    String LeaveBalanceView = obj.optString("LeaveBalanceView");
+                                    AppData.LEAVE_BALANCE_VIEW_FLAG = LeaveBalanceView;
                                     String UAN_Active = obj.optString("UAN_Active");
                                     pref.saveUAN_Active(UAN_Active);
                                     String UAN_Mandatory = obj.optString("UAN_Mandatory");
@@ -470,22 +479,22 @@ public class LoginActivity extends AppCompatActivity {
                             }
 
                             if (UserType.equals("1")) {
-                                if (etPassword.getText().toString().equalsIgnoreCase("password")){
+                                if (etPassword.getText().toString().equalsIgnoreCase("password")) {
                                     Intent intent = new Intent(LoginActivity.this, ChangePasswordActivity.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                     startActivity(intent);
                                     finish();
-                                }else {
-                                    if (ConsentFlag.equals("1")){
+                                } else {
+                                    if (ConsentFlag.equals("1")) {
                                         Intent intent = new Intent(LoginActivity.this, EmployeeDashBoardActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        intent.putExtra("ConsentFlag",ConsentFlag);
+                                        intent.putExtra("ConsentFlag", ConsentFlag);
                                         startActivity(intent);
                                         finish();
-                                    }else {
+                                    } else {
                                         Intent intent = new Intent(LoginActivity.this, EmployeeDashBoardActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        intent.putExtra("ConsentFlag",ConsentFlag);
+                                        intent.putExtra("ConsentFlag", ConsentFlag);
                                         startActivity(intent);
                                         finish();
                                     }
@@ -500,7 +509,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                     Intent intent = new Intent(LoginActivity.this, TempDashBoardActivity.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    intent.putExtra("ConsentFlag",ConsentFlag);
+                                    intent.putExtra("ConsentFlag", ConsentFlag);
                                     startActivity(intent);
                                     finish();
                                 } else {
@@ -521,7 +530,6 @@ public class LoginActivity extends AppCompatActivity {
                         }
 
 
-
                         // boolean _status = job1.getBoolean("status");
 
 
@@ -530,7 +538,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError error) {
-                        Log.e("LOGIN", "onError: "+error );
+                        Log.e("LOGIN", "onError: " + error);
                         pd.dismiss();
 
 
@@ -543,6 +551,30 @@ public class LoginActivity extends AppCompatActivity {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_invalidcredential, null);
         dialogBuilder.setView(dialogView);
+        Button btnOk = (Button) dialogView.findViewById(R.id.btnOk);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog = dialogBuilder.create();
+        alertDialog.setCancelable(false);
+        Window window = alertDialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        alertDialog.show();
+
+
+    }
+
+    private void shoeDialogDynamicMsg(String msg) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(LoginActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.dialog_invalidcredential, null);
+        dialogBuilder.setView(dialogView);
+        TextView tvTitle=dialogView.findViewById(R.id.tvTitle);
+        tvTitle.setText(msg);
         Button btnOk = (Button) dialogView.findViewById(R.id.btnOk);
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -604,7 +636,7 @@ public class LoginActivity extends AppCompatActivity {
                 alert1.dismiss();
             }
         });
-        TextView tvInvalidDialog=(TextView)dialogView.findViewById(R.id.tvInvalidDialog);
+        TextView tvInvalidDialog = (TextView) dialogView.findViewById(R.id.tvInvalidDialog);
         tvInvalidDialog.setText("Something went wrong.Please try again");
         alert1 = dialogBuilder.create();
         alert1.setCancelable(true);
@@ -645,7 +677,7 @@ public class LoginActivity extends AppCompatActivity {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.fotgotpassworddialog, null);
         dialogBuilder.setView(dialogView);
-        ImageView imgClose=(ImageView)dialogView.findViewById(R.id.imgClose);
+        ImageView imgClose = (ImageView) dialogView.findViewById(R.id.imgClose);
         imgClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -660,12 +692,12 @@ public class LoginActivity extends AppCompatActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (etForgotUserId.getText().toString().length() > 0  ) {
+                if (etForgotUserId.getText().toString().length() > 0) {
 
                     changePassword();
 
                     popUp.dismiss();
-                }else {
+                } else {
                     Toast.makeText(LoginActivity.this, "Please enter userid ", Toast.LENGTH_LONG).show();
                 }
 
@@ -680,11 +712,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void changePassword() {
-        ProgressDialog pd=new ProgressDialog(LoginActivity.this);
+        ProgressDialog pd = new ProgressDialog(LoginActivity.this);
         pd.setMessage("Loading");
         pd.show();
         pd.setCancelable(false);
-        String surl = " https://gsppi.geniusconsultant.com/GENESS/Account/RetrievePassword?UserID="+etForgotUserId.getText().toString();
+        String surl = " https://gsppi.geniusconsultant.com/GENESS/Account/RetrievePassword?UserID=" + etForgotUserId.getText().toString();
         Log.d("inputLogin", surl);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, surl,
                 new Response.Listener<String>() {
@@ -695,13 +727,12 @@ public class LoginActivity extends AppCompatActivity {
 
                         try {
                             JSONObject job1 = new JSONObject(response);
-                            int isSuccess=job1.optInt("isSuccess");
-                            if (isSuccess==1){
+                            int isSuccess = job1.optInt("isSuccess");
+                            if (isSuccess == 1) {
                                 successAlert("Password sent to your registered email id");
-                            }else {
+                            } else {
 
                             }
-
 
 
                         } catch (JSONException e) {
@@ -736,7 +767,7 @@ public class LoginActivity extends AppCompatActivity {
         dialogBuilder.setView(dialogView);
         TextView tvInvalidDate = (TextView) dialogView.findViewById(R.id.tvSuccess);
 
-            tvInvalidDate.setText(msg);
+        tvInvalidDate.setText(msg);
 
         Button btnOk = (Button) dialogView.findViewById(R.id.btnOk);
         btnOk.setOnClickListener(new View.OnClickListener() {
@@ -755,7 +786,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void getMaintanceBreak() {
-        final ProgressDialog pd=new ProgressDialog(LoginActivity.this);
+        final ProgressDialog pd = new ProgressDialog(LoginActivity.this);
         pd.setMessage("Loading.....");
         pd.show();
         AndroidNetworking.get(AppData.MAINTAINCEBREAK)
@@ -769,9 +800,9 @@ public class LoginActivity extends AppCompatActivity {
 
                         pd.dismiss();
                         JSONObject job = response;
-                        boolean IsEnabled=job.optBoolean("IsEnabled");
-                        String Message=job.optString("Message");
-                        if (IsEnabled){
+                        boolean IsEnabled = job.optBoolean("IsEnabled");
+                        String Message = job.optString("Message");
+                        if (IsEnabled) {
                            /* Intent intent=new Intent(LoginActivity.this,MaintainceBreakActivity.class);
                             intent.putExtra("breakText",Message);
                             startActivity(intent);
@@ -779,7 +810,7 @@ public class LoginActivity extends AppCompatActivity {
 */
                             initialize();
 
-                        }else {
+                        } else {
                             initialize();
                         }
 
@@ -799,5 +830,275 @@ public class LoginActivity extends AppCompatActivity {
                 context.getContentResolver(),
                 Settings.Secure.ANDROID_ID
         );
+    }
+
+    private void loginv2(JSONObject jsonObject) {
+        Log.e("LOGIN", "login: " + jsonObject.toString());
+        final ProgressDialog pd = new ProgressDialog(LoginActivity.this);
+        pd.setMessage("Loading..");
+        pd.setCancelable(false);
+        pd.show();
+        AndroidNetworking.post(AppData.newv2url + "Login/EssLogin")
+                .addJSONObjectBody(jsonObject)
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        JSONObject job1 = response;
+                        Log.e("LOGIN", "@@@@@@" + job1);
+                        pd.dismiss();
+
+                        String Response_Code = job1.optString("Response_Code");
+                        String Response_Message = job1.optString("Response_Message");
+
+                        if (Response_Code.equals("1")) {
+                            // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
+
+                            pref.saveUserLoginID(etUserId.getText().toString().trim());
+                            Log.e("UserLoginId", "UserLoginId: " + pref.getUserLoginId());
+
+                            JSONArray responseData = job1.optJSONArray("Response_Data");
+                            try {
+
+                                for (int i = 0; i < responseData.length(); i++) {
+                                    JSONObject obj = responseData.getJSONObject(i);
+                                    AEMEmployeeID = obj.optString("UserID");
+                                    pref.saveEmpId(AEMEmployeeID);
+
+                                    String Name = obj.optString("UserName");
+                                    pref.saveEmpName(Name);
+                                    String AEMConsultantID = obj.optString("AEMConsultantID");
+                                    pref.saveEmpConId(AEMConsultantID);
+
+                                    String AEMClientID = obj.optString("ClientID");
+                                    pref.saveEmpClintId(AEMClientID);
+                                    pref.saveEmpClintId(AEMClientID);
+
+                                    UserType = obj.optString("UserType");
+                                    pref.saveUserType(UserType);
+
+                                    String Password = obj.optString("Password");
+                                    pref.savePassword(etPassword.getText().toString());
+
+                                    WorkingStatus = obj.optInt("WorkingStatus");
+
+                                    String Genius_Access_Token = obj.optString("Genius_Access_Token").trim();
+                                    pref.saveAccessToken(Genius_Access_Token);
+
+                                    if (WorkingStatus == 1) {
+                                        JSONObject obj1 = new JSONObject();
+                                        try {
+                                            obj1.put("MasterID", etUserId.getText().toString());
+                                            obj1.put("SecurityCode", security_code);
+                                            logindetails(obj1);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    } else {
+                                        //re direct to resign page
+                                        Intent intent = new Intent(LoginActivity.this, ResignEmployeeDashboardActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+
+
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+
+                        } else {
+                            shoeDialogDynamicMsg(Response_Message);
+
+
+                        }
+
+
+                        // boolean _status = job1.getBoolean("status");
+
+
+                        // do anything with response
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        Log.e("LOGIN", "onError: " + error);
+                        pd.dismiss();
+
+
+                    }
+                });
+    }
+
+
+    private void logindetails(JSONObject jsonObject) {
+        Log.e("LOGIN", "login: " + jsonObject.toString());
+        final ProgressDialog pd = new ProgressDialog(LoginActivity.this);
+        pd.setMessage("Loading..");
+        pd.setCancelable(false);
+        pd.show();
+        AndroidNetworking.post(AppData.newv2url + "Login/UseMenuDetails")
+                .addJSONObjectBody(jsonObject)
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        JSONObject job1 = response;
+                        Log.e("LOGIN", "@@@@@@" + job1);
+                        pd.dismiss();
+
+                        String Response_Code = job1.optString("Response_Code");
+                        String Response_Message = job1.optString("Response_Message");
+
+                        if (Response_Code.equals("1")) {
+                            // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
+
+                            pref.saveUserLoginID(etUserId.getText().toString().trim());
+                            Log.e("UserLoginId", "UserLoginId: " + pref.getUserLoginId());
+
+                            JSONArray responseData = job1.optJSONArray("Response_Data");
+                            try {
+
+                                for (int i = 0; i < responseData.length(); i++) {
+                                    JSONObject obj = responseData.getJSONObject(i);
+
+
+                                    String LoginDateTime = obj.optString("LoginDateTime");
+                                    pref.saveloginTime(LoginDateTime);
+
+                                    String FlagMenu = obj.optString("FlagMenu");
+                                    pref.saveMenu(FlagMenu);
+                                    String AEMClientOfficeID = obj.optString("AEMClientOfficeID");
+                                    pref.saveEmpClintOffId(AEMClientOfficeID);
+                                    String MasterID = obj.optString("MasterID");
+                                    pref.saveMasterId(MasterID);
+                                    String CTCUrl = obj.optString("CTCUrl");
+                                    pref.saveCTCURL(CTCUrl);
+                                    String LeaveApply = obj.optString("LeaveApply");
+                                    pref.saveOnLeave(LeaveApply);
+                                    String AttdImage = obj.optString("AttdImage");
+                                    pref.saveAttdImg(AttdImage);
+
+                                    String BackAttd = obj.optString("BackDateAttendance");
+                                    pref.saveBackAttd(BackAttd);
+                                    pref.saveSecurityCode(security_code);
+
+                                    String FlagAddr = obj.optString("FlagAddr");
+                                    pref.saveFlagLocation(FlagAddr);
+                                    boolean AppRenameFlag = obj.optBoolean("AppRenameFlag");
+                                    pref.saveMsgAlertStatus(AppRenameFlag);
+                                    pref.saveMsgAlertStatus(AppRenameFlag);
+                                    String AppRenameText = obj.optString("AppRenameText");
+                                    pref.saveMsg(AppRenameText);
+                                    pref.saveMsg(AppRenameText);
+                                    String Leave = obj.optString("Leave");
+                                    pref.saveShiftFlag(Leave);
+                                    String PF_Notify_URL = obj.optString("PF_Notify_URL");
+                                    pref.savePFNotificationURL(PF_Notify_URL);
+                                    ConsentFlag = obj.optString("ConsentFlag");
+                                    String UAN_Active = obj.optString("UAN_Active");
+                                    pref.saveUAN_Active(UAN_Active);
+                                    String UAN_Mandatory = obj.optString("UAN_Mandatory");
+                                    pref.saveUAN_Mandatory(UAN_Mandatory);
+                                    String Adjustment_Status = obj.optString("Adjustment");
+                                    pref.saveAdjustmentStatus(Adjustment_Status);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            if (UserType.equals("1")) {
+                                if (etPassword.getText().toString().equalsIgnoreCase("password")) {
+                                    Intent intent = new Intent(LoginActivity.this, ChangePasswordActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+
+                                    Intent intent = new Intent(LoginActivity.this, EmployeeDashBoardActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    intent.putExtra("ConsentFlag", ConsentFlag);
+                                    startActivity(intent);
+                                    finish();
+
+                                }
+                            } else if (UserType.equals("3")) {
+                                Intent intent = new Intent(LoginActivity.this, SuperVisiorDashBoardActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
+                            } else if (UserType.equals("2")) {
+
+
+                                Intent intent = new Intent(LoginActivity.this, TempDashBoardActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.putExtra("ConsentFlag", ConsentFlag);
+                                startActivity(intent);
+                                finish();
+
+                            }
+
+
+                        } else {
+                            shoeDialogDynamicMsg(Response_Message);
+
+
+                        }
+
+
+                        // boolean _status = job1.getBoolean("status");
+
+
+                        // do anything with response
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        Log.e("LOGIN", "onError: " + error);
+                        pd.dismiss();
+
+
+                    }
+                });
+    }
+
+    public String getIPAddress(boolean useIPv4) {
+        try {
+            List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
+            for (NetworkInterface intf : interfaces) {
+                List<InetAddress> addrs = Collections.list(intf.getInetAddresses());
+                for (InetAddress addr : addrs) {
+                    if (!addr.isLoopbackAddress()) {
+                        String sAddr = addr.getHostAddress();
+                        boolean isIPv4 = sAddr.indexOf(':') < 0;
+
+                        if (useIPv4) {
+                            if (isIPv4)
+                                return sAddr;
+                        } else {
+                            if (!isIPv4) {
+                                int index = sAddr.indexOf('%');
+                                return index < 0 ? sAddr.toUpperCase() : sAddr.substring(0, index).toUpperCase();
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception ex) {
+        }
+        return "";
+    }
+
+    public static String generateSessionID(String userId) {
+        return userId + "_" + System.currentTimeMillis() + "_" + UUID.randomUUID().toString();
     }
 }

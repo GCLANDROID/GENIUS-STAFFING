@@ -19,6 +19,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
     <application
         android:name=".utility.AppController"
@@ -45,6 +46,10 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <activity android:name=".activity.ResignEmployeeDashboardActivity"
+            android:screenOrientation="userPortrait"></activity>
+        <activity android:name=".activity.ResignEmpSalaryActivity"
+            android:screenOrientation="userPortrait"></activity>
         <activity
             android:name=".activity.ChatBotNewActivity"
             android:exported="false"
