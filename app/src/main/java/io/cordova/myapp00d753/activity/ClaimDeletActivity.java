@@ -72,6 +72,8 @@ public class ClaimDeletActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_claim_delet);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE);
         initialize();
         //TODO: new api
         /*JSONObject obj = new JSONObject();
