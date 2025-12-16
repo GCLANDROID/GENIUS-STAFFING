@@ -66,7 +66,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 
-import id.zelory.compressor.Compressor;
+//import id.zelory.compressor.Compressor;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.module.AttendanceService;
 import io.cordova.myapp00d753.module.SpineerItemModel;
@@ -149,6 +149,8 @@ public class RecktitRemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recktit_rem);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE);
         initialize();
         setLocationItem();
         //TODO: new api
