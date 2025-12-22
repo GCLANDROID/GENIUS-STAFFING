@@ -105,5 +105,7 @@ public class AppData {
     public static String LAMS_GetSubServiceMenu =newv2url+"LAMS/GetSubServiceMenu";
     public static String LAMS_SaveAttendance =newv2url+"Attendance/LAMS_SaveAttendance";
 
+    public static String FORM_16_VIEW = newv2url+"TdsForms/ViewForm16";
+
 
 }

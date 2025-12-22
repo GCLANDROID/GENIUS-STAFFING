@@ -875,7 +875,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                     String AEMClientID = obj.optString("ClientID");
                                     pref.saveEmpClintId(AEMClientID);
-                                    pref.saveEmpClintId(AEMClientID);
+
 
                                     UserType = obj.optString("UserType");
                                     pref.saveUserType(UserType);
@@ -889,14 +889,23 @@ public class LoginActivity extends AppCompatActivity {
                                     pref.saveAccessToken(Genius_Access_Token);
 
                                     if (WorkingStatus == 1) {
-                                        JSONObject obj1 = new JSONObject();
-                                        try {
-                                            obj1.put("MasterID", etUserId.getText().toString());
-                                            obj1.put("SecurityCode", security_code);
-                                            logindetails(obj1);
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
+                                        if (UserType.equals("1")  || UserType.equals("3")){
+                                            JSONObject obj1 = new JSONObject();
+                                            try {
+                                                obj1.put("MasterID", etUserId.getText().toString());
+                                                obj1.put("SecurityCode", security_code);
+                                                logindetails(obj1);
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }else {
+                                            Intent intent = new Intent(LoginActivity.this, TempDashBoardActivity.class);
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            intent.putExtra("ConsentFlag", ConsentFlag);
+                                            startActivity(intent);
+                                            finish();
                                         }
+
 
                                     } else {
                                         //re direct to resign page

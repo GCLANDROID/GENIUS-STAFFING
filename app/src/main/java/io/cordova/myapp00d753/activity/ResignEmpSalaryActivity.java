@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.adapter.ResignEmpSalaryAdapter;
 import io.cordova.myapp00d753.adapter.SalaryAdapter;
 import io.cordova.myapp00d753.module.SalaryModule;
 import io.cordova.myapp00d753.utility.AppController;
@@ -50,7 +51,7 @@ public class ResignEmpSalaryActivity extends AppCompatActivity  {
     private static final String TAG = "SalaryActivity";
     RecyclerView rvSalary;
     ArrayList<SalaryModule> salaryList = new ArrayList<>();
-    SalaryAdapter salaryAdapter;
+    ResignEmpSalaryAdapter salaryAdapter;
     String[] spYearList = {"----select----", "2015", "2016", "2017", "2018", "2019"};
     ArrayList<String> splist = new ArrayList<>();
     Spinner spYear;
@@ -358,7 +359,7 @@ public class ResignEmpSalaryActivity extends AppCompatActivity  {
     }
 
     private void setAdapter() {
-        salaryAdapter = new SalaryAdapter(salaryList, ResignEmpSalaryActivity.this);
+        salaryAdapter = new ResignEmpSalaryAdapter(salaryList, ResignEmpSalaryActivity.this);
         rvSalary.setAdapter(salaryAdapter);
     }
 
