@@ -106,6 +106,7 @@ public class AppData {
     public static String LAMS_SaveAttendance =newv2url+"Attendance/LAMS_SaveAttendance";
 
     public static String FORM_16_VIEW = newv2url+"TdsForms/ViewForm16";
+    public static String FORM_16_PAYMENT = newv2url+"TdsForms/F16PaymentInitialize";
 
 
 }

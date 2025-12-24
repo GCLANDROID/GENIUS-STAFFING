@@ -1,11 +1,16 @@
 package io.cordova.myapp00d753.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -25,6 +30,7 @@ import io.cordova.myapp00d753.adapter.FormSixteenAdapter;
 import io.cordova.myapp00d753.module.FormSixteenModule;
 import io.cordova.myapp00d753.module.SalaryModule;
 import io.cordova.myapp00d753.utility.AppData;
+import io.cordova.myapp00d753.utility.Pref;
 
 public class FormSixteenActivity extends AppCompatActivity {
 
@@ -32,6 +38,8 @@ public class FormSixteenActivity extends AppCompatActivity {
     RecyclerView rvItemList;
     ArrayList<FormSixteenModule> itemList = new ArrayList<>();
     FormSixteenAdapter adapter;
+    Pref pref;
+    ImageView imgBack;
 
 
     @Override
@@ -42,11 +50,34 @@ public class FormSixteenActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        pref=new Pref(FormSixteenActivity.this);
         llLoader = (LinearLayout) findViewById(R.id.llLoader);
         llMain = (LinearLayout) findViewById(R.id.llMain);
         llNodata = (LinearLayout) findViewById(R.id.llNodata);
 
         rvItemList = (RecyclerView) findViewById(R.id.rvItemList);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(FormSixteenActivity.this, LinearLayoutManager.VERTICAL, false);
+        rvItemList.setLayoutManager(layoutManager);
+
+        JSONObject obj=new JSONObject();
+        try {
+
+            obj.put("Operation","1");
+            obj.put("UserID",pref.getEmpId());
+            obj.put("SecurityCode",pref.getSecurityCode());
+            getItemList(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        imgBack=(ImageView) findViewById(R.id.imgBack);
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
 
 
 
@@ -130,6 +161,69 @@ public class FormSixteenActivity extends AppCompatActivity {
     private void setAdapter() {
         adapter = new FormSixteenAdapter( itemList,FormSixteenActivity.this);
         rvItemList.setAdapter(adapter);
+    }
+
+
+    public void paymentOption(int pos,String part){
+        JSONObject jsonObject=new JSONObject();
+        try {
+            jsonObject.put("AEMEmployeeId",pref.getEmpId());
+            jsonObject.put("Part",part);
+            jsonObject.put("FinYear",itemList.get(pos).getFinancialYear());
+            jsonObject.put("Charges",itemList.get(pos).getCharges());
+            jsonObject.put("SecurityCode",pref.getSecurityCode());
+            getPaymentLink(jsonObject);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    private void getPaymentLink(JSONObject jsonObject) {
+        ProgressDialog pd=new ProgressDialog(FormSixteenActivity.this);
+        pd.setMessage("Please wait...");
+        pd.setCancelable(false);
+        pd.show();
+        AndroidNetworking.post(AppData.FORM_16_PAYMENT)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        JSONObject job1 = response;
+                        String Response_Code = job1.optString("Response_Code");
+                        pd.dismiss();
+                        if (Response_Code.equals("101")) {
+                            String Response_Data = job1.optString("Response_Data");
+                            Uri uri = Uri.parse(Response_Data); // missing 'http://' will cause crashed
+                            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+
+
+                        } else {
+                            //Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
+                            llLoader.setVisibility(View.GONE);
+                            llMain.setVisibility(View.GONE);
+                            llNodata.setVisibility(View.VISIBLE);
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                        llLoader.setVisibility(View.GONE);
+                        llMain.setVisibility(View.GONE);
+                        llNodata.setVisibility(View.GONE);
+
+                    }
+                });
     }
 
 

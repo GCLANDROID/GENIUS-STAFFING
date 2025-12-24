@@ -701,6 +701,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                     MenuItemModel itemModel=new MenuItemModel(MenuItem,MenuID);
                                     itemList.add(itemModel);
                                 }
+                                itemList.add(9,new MenuItemModel("Income Tax","2100"));
 
 
 

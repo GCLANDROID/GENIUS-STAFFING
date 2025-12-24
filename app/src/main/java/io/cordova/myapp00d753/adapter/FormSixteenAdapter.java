@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.FormSixteenActivity;
 import io.cordova.myapp00d753.activity.SalaryActivity;
 import io.cordova.myapp00d753.module.FormSixteenModule;
 import io.cordova.myapp00d753.module.SalaryModule;
@@ -38,7 +39,7 @@ public class FormSixteenAdapter extends RecyclerView.Adapter<FormSixteenAdapter.
             @Override
             public void onClick(View view) {
                 if (itemList.get(i).getIsPaidService()==1){
-                    ((SalaryActivity)context).paymentOption(i);
+                    ((FormSixteenActivity)context).paymentOption(i,"PartA");
 
 
                 }else {
@@ -56,7 +57,7 @@ public class FormSixteenAdapter extends RecyclerView.Adapter<FormSixteenAdapter.
             @Override
             public void onClick(View view) {
                 if (itemList.get(i).getIsPaidService()==1){
-                    ((SalaryActivity)context).paymentOption(i);
+                    ((FormSixteenActivity)context).paymentOption(i,"PartB");
 
 
                 }else {

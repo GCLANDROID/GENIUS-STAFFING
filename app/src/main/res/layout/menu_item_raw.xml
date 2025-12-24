@@ -13,6 +13,13 @@
         android:gravity="center"
         android:orientation="vertical"
         android:padding="10dp">
+       <!-- <pl.droidsonroids.gif.GifImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/earth"
+            android:layout_gravity="center"
+            android:id="@+id/imgMenu"
+            />-->
         <ImageView
             android:id="@+id/imgMenu"
             android:layout_width="50dp"

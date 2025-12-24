@@ -74,6 +74,16 @@ public class ResignEmployeeDashboardActivity extends AppCompatActivity {
             }
         });
 
+        binding.llFormSixteen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(ResignEmployeeDashboardActivity.this,FormSixteenActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+
+            }
+        });
+
 
 
     }

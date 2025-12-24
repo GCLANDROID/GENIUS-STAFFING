@@ -15,10 +15,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.FormSixteenActivity;
 import io.cordova.myapp00d753.activity.attendance.AttenDanceDashboardActivity;
 import io.cordova.myapp00d753.activity.ChangePasswordActivity;
 import io.cordova.myapp00d753.activity.DailyDashBoardActivity;
@@ -33,7 +35,6 @@ import io.cordova.myapp00d753.activity.PFDashBoardActivity;
 import io.cordova.myapp00d753.activity.PayrollActivity;
 import io.cordova.myapp00d753.activity.ProfileActivity;
 import io.cordova.myapp00d753.activity.RemDashBoardActivity;
-import io.cordova.myapp00d753.activity.SalesManagementDashboardActivity;
 import io.cordova.myapp00d753.activity.VoiceAssistantActivity;
 import io.cordova.myapp00d753.activity.honnasa.HonasaSalesDashboardActivity;
 import io.cordova.myapp00d753.activity.metso.MetsoPMSTargetAchivementActivity;
@@ -41,6 +42,7 @@ import io.cordova.myapp00d753.bluedart.BlueDartAttenDanceDashboardActivity;
 import io.cordova.myapp00d753.facereogntion.LoginDashboardActivity;
 import io.cordova.myapp00d753.module.MenuItemModel;
 import io.cordova.myapp00d753.utility.Pref;
+import pl.droidsonroids.gif.GifImageView;
 
 public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyViewHolder> {
     ArrayList<MenuItemModel> itemList=new ArrayList<>();
@@ -64,51 +66,141 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
         myViewHolder.tvMenuItem.setText(itemList.get(i).getMenuName());
 
         if (itemList.get(i).getMenuId().equalsIgnoreCase("1")){
-            myViewHolder.imgMenu.setImageResource(R.drawable.profile);
+            //myViewHolder.imgMenu.setImageResource(R.drawable.profile_giff);
+            Glide.with(mContex)
+                    .asGif()
+                    .load(R.drawable.profile_giff)
+                    .into( myViewHolder.imgMenu);
         }
         else if (itemList.get(i).getMenuId().equalsIgnoreCase("2")){
-            myViewHolder.imgMenu.setImageResource(R.drawable.attendance);
-        }
+         //  myViewHolder.imgMenu.setImageResource(R.drawable.click);
+            Glide.with(mContex)
+                    .asGif()
+                    .load(R.drawable.click)
+                    .into( myViewHolder.imgMenu);
+       }
         else if (itemList.get(i).getMenuId().equalsIgnoreCase("3")){
-            myViewHolder.imgMenu.setImageResource(R.drawable.payroll);
+           // myViewHolder.imgMenu.setImageResource(R.drawable.salary_giff);
+            Glide.with(mContex)
+                    .asGif()
+                    .load(R.drawable.salary_giff)
+                    .into( myViewHolder.imgMenu);
         }
         else if (itemList.get(i).getMenuId().equalsIgnoreCase("4")){
-            myViewHolder.imgMenu.setImageResource(R.drawable.sales_management);
+           // myViewHolder.imgMenu.setImageResource(R.drawable.sale_giff);
+            Glide.with(mContex)
+                    .asGif()
+                    .load(R.drawable.sale_giff)
+                    .into( myViewHolder.imgMenu);
         }
         else if (itemList.get(i).getMenuId().equalsIgnoreCase("5")){
-            myViewHolder.imgMenu.setImageResource(R.drawable.pf_trust);
+            //myViewHolder.imgMenu.setImageResource(R.drawable.website);
+            Glide.with(mContex)
+                    .asGif()
+                    .load(R.drawable.website)
+                    .into( myViewHolder.imgMenu);
         }
         else if (itemList.get(i).getMenuId().equalsIgnoreCase("6")){
-            myViewHolder.imgMenu.setImageResource(R.drawable.kyc);
+           // myViewHolder.imgMenu.setImageResource(R.drawable.folder);
+
+            Glide.with(mContex)
+                    .asGif()
+                    .load(R.drawable.folder)
+                    .into( myViewHolder.imgMenu);
         }
         else if (itemList.get(i).getMenuId().equalsIgnoreCase("7")){
-            myViewHolder.imgMenu.setImageResource(R.drawable.reimbursement);
+           // myViewHolder.imgMenu.setImageResource(R.drawable.coins);
+
+            Glide.with(mContex)
+                    .asGif()
+                    .load(R.drawable.coins)
+                    .into( myViewHolder.imgMenu);
         }
         else if (itemList.get(i).getMenuId().equalsIgnoreCase("8")){
-            myViewHolder.imgMenu.setImageResource(R.drawable.feedback);
+            //myViewHolder.imgMenu.setImageResource(R.drawable.customerreview);
+
+            Glide.with(mContex)
+                    .asGif()
+                    .load(R.drawable.customerreview)
+                    .into( myViewHolder.imgMenu);
         }
-        else if (itemList.get(i).getMenuId().equalsIgnoreCase("9")){
-            myViewHolder.imgMenu.setImageResource(R.drawable.geo_fencing);
-        }
-        else if (itemList.get(i).getMenuId().equalsIgnoreCase("10")){
-            myViewHolder.imgMenu.setImageResource(R.drawable.daily_log);
-        }
+//        else if (itemList.get(i).getMenuId().equalsIgnoreCase("9")){
+//            myViewHolder.imgMenu.setImageResource(R.drawable.geo_fencing);
+//        }
+//        else if (itemList.get(i).getMenuId().equalsIgnoreCase("10")){
+//            myViewHolder.imgMenu.setImageResource(R.drawable.daily_log);
+//        }
         else if (itemList.get(i).getMenuId().equalsIgnoreCase("11")){
-            myViewHolder.imgMenu.setImageResource(R.drawable.chage_password);
-        }else if (itemList.get(i).getMenuId().equalsIgnoreCase("12")){
-            myViewHolder.imgMenu.setImageResource(R.drawable.leave_management);
-        }else if (itemList.get(i).getMenuId().equalsIgnoreCase("0")){
-            myViewHolder.imgMenu.setImageResource(R.drawable.voice);
-        }else if (itemList.get(i).getMenuId().equalsIgnoreCase("200")){
-            myViewHolder.imgMenu.setImageResource(R.drawable.survey);
-        }else if (itemList.get(i).getMenuId().equalsIgnoreCase("20")){
-            myViewHolder.imgMenu.setImageResource(R.drawable.insurance);
-        }else if (itemList.get(i).getMenuId().equalsIgnoreCase("300")){
-            myViewHolder.imgMenu.setImageResource(R.drawable.interview);
-        }else if (itemList.get(i).getMenuId().equalsIgnoreCase("201")){
-            myViewHolder.imgMenu.setImageResource(R.drawable.pms);
-        }else if (itemList.get(i).getMenuId().equalsIgnoreCase("21")){
-            myViewHolder.imgMenu.setImageResource(R.drawable.resignation);
+           // myViewHolder.imgMenu.setImageResource(R.drawable.patternlock);
+
+            Glide.with(mContex)
+                    .asGif()
+                    .load(R.drawable.patternlock)
+                    .into( myViewHolder.imgMenu);
+        }
+        else if (itemList.get(i).getMenuId().equalsIgnoreCase("12")){
+           // myViewHolder.imgMenu.setImageResource(R.drawable.registration_giff);
+
+            Glide.with(mContex)
+                    .asGif()
+                    .load(R.drawable.registration_giff)
+                    .into( myViewHolder.imgMenu);
+        }
+        else if (itemList.get(i).getMenuId().equalsIgnoreCase("0")){
+           // myViewHolder.imgMenu.setImageResource(R.drawable.voice_giff);
+
+            Glide.with(mContex)
+                    .asGif()
+                    .load(R.drawable.voice_giff)
+                    .into( myViewHolder.imgMenu);
+        }
+        else if (itemList.get(i).getMenuId().equalsIgnoreCase("200")){
+           // myViewHolder.imgMenu.setImageResource(R.drawable.documentanalysis);
+
+            Glide.with(mContex)
+                    .asGif()
+                    .load(R.drawable.documentanalysis)
+                    .into( myViewHolder.imgMenu);
+        }
+        else if (itemList.get(i).getMenuId().equalsIgnoreCase("20")){
+           // myViewHolder.imgMenu.setImageResource(R.drawable.protection);
+
+            Glide.with(mContex)
+                    .asGif()
+                    .load(R.drawable.protection)
+                    .into( myViewHolder.imgMenu);
+        }
+        else if (itemList.get(i).getMenuId().equalsIgnoreCase("300")){
+            //myViewHolder.imgMenu.setImageResource(R.drawable.protection);
+
+            Glide.with(mContex)
+                    .asGif()
+                    .load(R.drawable.protection)
+                    .into( myViewHolder.imgMenu);
+        }
+        else if (itemList.get(i).getMenuId().equalsIgnoreCase("201")){
+           // myViewHolder.imgMenu.setImageResource(R.drawable.performance);
+
+            Glide.with(mContex)
+                    .asGif()
+                    .load(R.drawable.performance)
+                    .into( myViewHolder.imgMenu);
+        }
+        else if (itemList.get(i).getMenuId().equalsIgnoreCase("21")){
+          //  myViewHolder.imgMenu.setImageResource(R.drawable.resignation_giff);
+
+            Glide.with(mContex)
+                    .asGif()
+                    .load(R.drawable.resignation_giff)
+                    .into( myViewHolder.imgMenu);
+        }
+        else if (itemList.get(i).getMenuId().equalsIgnoreCase("2100")) {
+            //myViewHolder.imgMenu.setImageResource(R.drawable.tax_giff);
+
+            Glide.with(mContex)
+                    .asGif()
+                    .load(R.drawable.tax_giff)
+                    .into( myViewHolder.imgMenu);
         }else {
             myViewHolder.itemView.setVisibility(View.GONE);
         }
@@ -214,6 +306,11 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                 }else if (itemList.get(i).getMenuId().equals("201")){
                     //interview
                     Intent intent=new Intent(mContex, MetsoPMSTargetAchivementActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContex.startActivity(intent);
+                }else if (itemList.get(i).getMenuId().equals("2100")){
+                    //interview
+                    Intent intent=new Intent(mContex, FormSixteenActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
                 }else if (itemList.get(i).getMenuId().equals("21")){
