@@ -10,6 +10,8 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.utility.Pref;
 
@@ -18,6 +20,7 @@ public class PFDashBoardActivity extends AppCompatActivity {
     Pref pref;
     ImageView imgBack,imgHome;
     String PFLink;
+    ImageView imgManual;
 
 
     @Override
@@ -36,6 +39,12 @@ public class PFDashBoardActivity extends AppCompatActivity {
 
         imgBack=(ImageView)findViewById(R.id.imgBack);
         imgHome=(ImageView)findViewById(R.id.imgHome);
+        imgManual=(ImageView)findViewById(R.id.imgManual);
+
+        Glide.with(PFDashBoardActivity.this)
+                .asGif()
+                .load(R.drawable.manual_giff)
+                .into( imgManual);
 
     }
 

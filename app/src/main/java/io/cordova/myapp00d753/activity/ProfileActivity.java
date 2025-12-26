@@ -25,6 +25,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.bumptech.glide.Glide;
 
 
 import org.json.JSONArray;
@@ -135,6 +136,10 @@ public class ProfileActivity extends AppCompatActivity {
 
         //official
         imgOfficial.setVisibility(View.VISIBLE);
+        Glide.with(ProfileActivity.this)
+                .asGif()
+                .load(R.drawable.user_giff)
+                .into(imgOfficial);
         imgOfficial1.setVisibility(View.GONE);
         tvOffical.setVisibility(View.VISIBLE);
         tvOffical1.setVisibility(View.GONE);
@@ -187,6 +192,7 @@ public class ProfileActivity extends AppCompatActivity {
         tvContact1.setVisibility(View.VISIBLE);
 
 
+
         //personal
         imgPersonal.setVisibility(View.VISIBLE);
         imgPersonal1.setVisibility(View.GONE);
@@ -201,6 +207,10 @@ public class ProfileActivity extends AppCompatActivity {
 
         tvToolBar.setText("Profile - Personal");
 
+        Glide.with(ProfileActivity.this)
+                .asGif()
+                .load(R.drawable.personal_giff)
+                .into(imgPersonal);
 
 
 
@@ -230,6 +240,11 @@ public class ProfileActivity extends AppCompatActivity {
         imgContact1.setVisibility(View.GONE);
         tvContact.setVisibility(View.VISIBLE);
         tvContact1.setVisibility(View.GONE);
+
+        Glide.with(ProfileActivity.this)
+                .asGif()
+                .load(R.drawable.mobilephone_giff)
+                .into(imgContact);
 
 
         //personal
@@ -286,6 +301,13 @@ public class ProfileActivity extends AppCompatActivity {
         tvMis1.setVisibility(View.GONE);
 
         tvToolBar.setText("Profile - Miscellaneous");
+
+
+        Glide.with(ProfileActivity.this)
+                .asGif()
+                .load(R.drawable.compass_giff)
+                .into(imgMis);
+
 
 
 

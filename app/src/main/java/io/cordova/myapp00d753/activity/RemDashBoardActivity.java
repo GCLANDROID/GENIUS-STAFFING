@@ -9,6 +9,8 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.metso.MetsoReimbursementReportActivity;
 import io.cordova.myapp00d753.utility.ClientID;
@@ -18,6 +20,7 @@ public class RemDashBoardActivity extends AppCompatActivity {
     ImageView imgBack,imgHome;
     LinearLayout llManage,llReport;
     Pref pref;
+    ImageView imgReport,imgManage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +35,18 @@ public class RemDashBoardActivity extends AppCompatActivity {
         imgHome=(ImageView)findViewById(R.id.imhHome);
         llManage=(LinearLayout)findViewById(R.id.llManage);
         llReport=(LinearLayout)findViewById(R.id.llReport);
+        imgManage=findViewById(R.id.imgManage);
+        imgReport=findViewById(R.id.imgReport);
+
+        Glide.with(RemDashBoardActivity.this)
+                .asGif()
+                .load(R.drawable.manage_giff)
+                .into( imgManage);
+
+        Glide.with(RemDashBoardActivity.this)
+                .asGif()
+                .load(R.drawable.chart_giff)
+                .into( imgReport);
     }
 
     private void onClick(){

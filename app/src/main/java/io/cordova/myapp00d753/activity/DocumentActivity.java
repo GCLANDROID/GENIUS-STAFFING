@@ -11,6 +11,8 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
@@ -24,6 +26,8 @@ public class DocumentActivity extends AppCompatActivity {
     Pref pref;
 
     String from="";
+
+    ImageView imgManage,imgReport;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +49,19 @@ public class DocumentActivity extends AppCompatActivity {
         imgHome=(ImageView)findViewById(R.id.imgHome);
         llManage=(LinearLayout)findViewById(R.id.llManage);
         llReport=(LinearLayout)findViewById(R.id.llReport);
+
+        imgReport=findViewById(R.id.imgReport);
+        imgManage=findViewById(R.id.imgManage);
+
+        Glide.with(DocumentActivity.this)
+                .asGif()
+                .load(R.drawable.manage_giff)
+                .into( imgManage);
+
+        Glide.with(DocumentActivity.this)
+                .asGif()
+                .load(R.drawable.chart_giff)
+                .into( imgReport);
     }
 
     private void onClick(){

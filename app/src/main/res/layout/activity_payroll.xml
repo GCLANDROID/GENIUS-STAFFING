@@ -89,6 +89,7 @@
                     android:gravity="center"
                     android:background="@drawable/lldesign9">
                     <ImageView
+                        android:id="@+id/imgSalary"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:src="@drawable/salary"/>
@@ -118,6 +119,7 @@
                     android:background="@drawable/lldesign9"
                     android:gravity="center">
                     <ImageView
+                        android:id="@+id/imgCTC"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:src="@drawable/ctc"/>
@@ -153,6 +155,7 @@
                     android:background="@drawable/lldesign9"
                     android:gravity="center">
                     <ImageView
+                        android:id="@+id/imgOtherPayment"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:src="@drawable/payoutothers"/>

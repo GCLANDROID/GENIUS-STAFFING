@@ -9,6 +9,8 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.metso.MetsoNewReimbursementClaimActivity;
 import io.cordova.myapp00d753.activity.metso.MetsoReimbursementDeleteActivity;
@@ -19,6 +21,7 @@ public class RemManageDashBoardActivity extends AppCompatActivity {
     ImageView imgBack, imgHome;
     LinearLayout llManage, llDelete;
     Pref pref;
+    ImageView imgManage,imgDelete;
 
 
     @Override
@@ -37,6 +40,20 @@ public class RemManageDashBoardActivity extends AppCompatActivity {
 
         imgBack = (ImageView) findViewById(R.id.imgBack);
         imgHome = (ImageView) findViewById(R.id.imhHome);
+
+        imgManage = (ImageView) findViewById(R.id.imgManage);
+        imgDelete = (ImageView) findViewById(R.id.imgDelete);
+
+
+        Glide.with(RemManageDashBoardActivity.this)
+                .asGif()
+                .load(R.drawable.claim_manage_giff)
+                .into( imgManage);
+
+        Glide.with(RemManageDashBoardActivity.this)
+                .asGif()
+                .load(R.drawable.delete_giff)
+                .into( imgDelete);
 
 
     }

@@ -107,6 +107,7 @@
                     android:background="@drawable/lldesign9"
                     android:gravity="center">
                     <ImageView
+                        android:id="@+id/imgManage"
                         android:layout_width="@dimen/imagesize"
                         android:layout_height="@dimen/imagesize"
                         android:src="@drawable/manage"/>
@@ -138,6 +139,7 @@
                     android:background="@drawable/lldesign9"
                     android:gravity="center">
                     <ImageView
+                        android:id="@+id/imgDelete"
                         android:layout_width="@dimen/imagesize"
                         android:layout_height="@dimen/imagesize"
                         android:src="@drawable/delete"/>

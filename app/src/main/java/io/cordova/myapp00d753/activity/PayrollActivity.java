@@ -11,12 +11,14 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.utility.Pref;
 
 public class PayrollActivity extends AppCompatActivity {
     LinearLayout llSalary,llCTC,llPayout;
-    ImageView imgBack,imgHome;
+    ImageView imgBack,imgHome,imgSalary,imgCTC,imgOtherPayment;
     Pref pref;
 
 
@@ -36,6 +38,25 @@ public class PayrollActivity extends AppCompatActivity {
         llPayout=(LinearLayout)findViewById(R.id.llPayout);
         imgBack=(ImageView)findViewById(R.id.imgBack);
         imgHome=(ImageView)findViewById(R.id.imgHome);
+
+        imgSalary=(ImageView)findViewById(R.id.imgSalary);
+        imgCTC=(ImageView)findViewById(R.id.imgCTC);
+        imgOtherPayment=(ImageView)findViewById(R.id.imgOtherPayment);
+
+        Glide.with(PayrollActivity.this)
+                .asGif()
+                .load(R.drawable.salary_gif)
+                .into( imgSalary);
+
+        Glide.with(PayrollActivity.this)
+                .asGif()
+                .load(R.drawable.ctc_giff)
+                .into( imgCTC);
+
+        Glide.with(PayrollActivity.this)
+                .asGif()
+                .load(R.drawable.payment_giff)
+                .into( imgOtherPayment);
 
     }
 
