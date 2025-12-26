@@ -16,15 +16,16 @@ import java.util.Collection;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.HolidayMarkingActivity;
-import io.cordova.myapp00d753.activity.metso.adapter.SupervisorFilterAdapter;
+import io.cordova.myapp00d753.activity.NEW.NEW_HolidayMarkingActivity;
 import io.cordova.myapp00d753.module.HolidayMarkModel;
-import io.cordova.myapp00d753.module.SpineerItemModel;
 
 public class HolidayFilterAdapter extends RecyclerView.Adapter<HolidayFilterAdapter.MyViewHolder>{
 
     Context context;
     ArrayList<HolidayMarkModel> holidayList;
     ArrayList<HolidayMarkModel> holidayListAll;
+    NEW_HolidayMarkingActivity.SelectHolidayDateListener mSelectHolidayDateListener;
+
     public HolidayFilterAdapter(Context context, ArrayList<HolidayMarkModel> holidayList) {
         this.context = context;
         this.holidayList = holidayList;
@@ -45,7 +46,17 @@ public class HolidayFilterAdapter extends RecyclerView.Adapter<HolidayFilterAdap
         holder.txtFilterItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((HolidayMarkingActivity) context).dateFormat(holidayList.get(position).getHoliday(),holidayList.get(position).getHolidayDate());
+                try{
+                    ((HolidayMarkingActivity) context).dateFormat(holidayList.get(position).getHoliday(),holidayList.get(position).getHolidayDate());
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                try{
+                    mSelectHolidayDateListener.onSelect(holidayList.get(position).getHolidayDate(),holidayList.get(position).getHoliday());
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
             }
         });
     }
@@ -93,5 +104,9 @@ public class HolidayFilterAdapter extends RecyclerView.Adapter<HolidayFilterAdap
             super(itemView);
             txtFilterItem = itemView.findViewById(R.id.txtFilterItem);
         }
+    }
+
+    public void setSelectHolidayDateListener(NEW_HolidayMarkingActivity.SelectHolidayDateListener mSelectHolidayDateListener) {
+        this.mSelectHolidayDateListener = mSelectHolidayDateListener;
     }
 }

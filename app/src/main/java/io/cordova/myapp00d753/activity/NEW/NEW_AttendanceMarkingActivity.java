@@ -67,8 +67,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -83,27 +81,22 @@ import java.util.Locale;
 import io.cordova.myapp00d753.AndroidXCamera.AndroidXCameraActivity;
 import io.cordova.myapp00d753.AndroidXCamera.FrontAndroidXCameraActivity;
 import io.cordova.myapp00d753.R;
-import io.cordova.myapp00d753.Retrofit.RetrofitClient;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
-import io.cordova.myapp00d753.activity.attendance.MetsoAttendanceActivity;
+import io.cordova.myapp00d753.activity.NEW.adapter.NEW_LocationSpinnerAdapter;
+import io.cordova.myapp00d753.activity.NEW.model.LocationModel;
 import io.cordova.myapp00d753.activity.attendance.MetsoAttendanceReportActivity;
 import io.cordova.myapp00d753.activity.metso.MetsoNewReimbursementClaimActivity;
-import io.cordova.myapp00d753.activity.metso.adapter.LocationSpinnerAdapter;
 import io.cordova.myapp00d753.activity.metso.adapter.ShiftSpinnerAdapter;
 import io.cordova.myapp00d753.activity.metso.adapter.SupervisorFilterAdapter;
-import io.cordova.myapp00d753.activity.metso.model.LocationSpinnerModel;
 import io.cordova.myapp00d753.activity.metso.model.MetsoLocationModel;
 import io.cordova.myapp00d753.activity.metso.model.MetsoShiftModel;
 import io.cordova.myapp00d753.activity.metso.model.ShiftSpinnerModel;
-import io.cordova.myapp00d753.module.HolidayMarkModel;
 import io.cordova.myapp00d753.module.SpineerItemModel;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.GPSTracker;
 import io.cordova.myapp00d753.utility.Pref;
+import io.cordova.myapp00d753.utility.RequiredListClass;
 import io.cordova.myapp00d753.utility.ShowDialog;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener{
     private static final String TAG = "NEW_AttendanceMarkingAc";
@@ -118,13 +111,13 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
     private Dialog shiftAndLocationDialog;
     AppCompatButton btnSubmit;
     ShiftSpinnerAdapter shiftSpinnerAdapter;
-    LocationSpinnerAdapter locationSpinnerAdapter;
+    NEW_LocationSpinnerAdapter locationSpinnerAdapter;
+    NEW_LocationSpinnerAdapter otherLocationSpinnerAdapter;
     ArrayList<ShiftSpinnerModel> shiftList;
     ArrayList<MetsoShiftModel> metsoShiftList;
-    ArrayList<LocationSpinnerModel> locationList;
     ArrayAdapter<String> shiftListAdapter;
     ArrayList<String> stringsShiftList;
-    String latitude = "", longitude = "", currentAddresses = "", ClientID = "", Shiftid = "", Siteid = "", MasterID = "";
+    String latitude = "", longitude = "", currentAddresses = "", ClientID = "", Shiftid = "", Siteid = "", MasterID = "",otherLocationID="";
     TextView txtCurrentLocation;
     ImageView imgBack,imgAttachImage;
     double currentLatitude, currentLongitude;
@@ -132,7 +125,8 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
     LatLng latLng;
     Dialog searchWbsCodeDialog;
     private GoogleMap mMap;
-    ArrayList<MetsoLocationModel> metsoLocationArrayList;
+    ArrayList<LocationModel> locationArrayList = new ArrayList<>();
+    ArrayList<LocationModel> otherLocationList = new ArrayList<>();
     ProgressDialog progressDialog;
     //LocationManager locationManager;
     private LocationCallback locationCallback;
@@ -150,7 +144,7 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
     ArrayList<SpineerItemModel> supervisorList = new ArrayList<>();
     Uri image_uri;
     File compressedImageFile;
-    String isImageRequired="",isWorkPlaceRequired="",isShiftRequired="",isApproverRequired="";
+    String isImageRequired="",isWorkPlaceRequired="",isShiftRequired="",isApproverRequired="", isPunchLocationRequired ="";
     int imageSelectionFlag=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,7 +190,7 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
         progressDialog.setCancelable(false);
         phoneNumber=getAndroidID(NEW_AttendanceMarkingActivity.this);
 
-        JSONObject obj = new JSONObject();
+        /*JSONObject obj = new JSONObject();
         try {
             obj.put("CompanyID", pref.getEmpClintId());
             obj.put("EmployeeID", pref.getEmpId());
@@ -207,7 +201,7 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
             savedeviceID(obj);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
 
         imhHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -238,6 +232,9 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
         String[] MarkAttnFromMobileWithHierarchySelectionArr = MarkAttnFromMobileWithHierarchySelection.split("_");
         isApproverRequired = MarkAttnFromMobileWithHierarchySelectionArr[0];
         //isApproverRequired = "1";
+        String MarkAttnFromMobileWithPunchLocationSelection = getIntent().getStringExtra("MarkAttnFromMobileWithPunchLocationSelection");
+        String[] MarkAttnFromMobileWithPunchLocationSelectionArr = MarkAttnFromMobileWithPunchLocationSelection.split("_");
+        isPunchLocationRequired = MarkAttnFromMobileWithPunchLocationSelectionArr[0];
         Log.e(TAG, "intiView: \nisImageRequired: "+isImageRequired
                 +"\nisWorkPlaceRequired: "+isWorkPlaceRequired
                 +"\nisShiftRequired: "+isShiftRequired
@@ -248,7 +245,7 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
     private void getRequiredList() {
         progressDialog.show();
         try {
-            metsoShiftList = getShiftData(pref.getShiftList());
+            metsoShiftList = RequiredListClass.getShiftData(pref.getShiftList());
         } catch (Exception e){
             e.printStackTrace();
         } finally {
@@ -256,15 +253,23 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
         }
 
         try {
-            metsoLocationArrayList = getLocationData(pref.getLocationList());
+            Log.e(TAG, "getRequiredList: "+pref.getLocationList());
+            locationArrayList = RequiredListClass.getLocationData(pref.getLocationList());
         } catch (Exception e){
             e.printStackTrace();
         } finally {
-            locationSpinnerAdapter = new LocationSpinnerAdapter(NEW_AttendanceMarkingActivity.this, metsoLocationArrayList);
+            locationSpinnerAdapter = new NEW_LocationSpinnerAdapter(NEW_AttendanceMarkingActivity.this, locationArrayList);
+        }
+        try {
+            otherLocationList = RequiredListClass.getOtherLocationData(pref.getOtherLocation());
+        } catch (Exception e){
+            e.printStackTrace();
+        } finally {
+            otherLocationSpinnerAdapter = new NEW_LocationSpinnerAdapter(NEW_AttendanceMarkingActivity.this,otherLocationList);
         }
 
         try {
-            supervisorList = getApproverData(pref.getApproverList());
+            supervisorList = RequiredListClass.getApproverData(pref.getApproverList());
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -277,7 +282,7 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
             public void onClick(View view) {
                 if (isImageRequired.equals("1") && imageSelectionFlag == 0) {
                     Toast.makeText(NEW_AttendanceMarkingActivity.this,"Please capture your image",Toast.LENGTH_SHORT).show();
-                }else if (isShiftRequired.equals("1") || isWorkPlaceRequired.equals("1")|| isApproverRequired.equals("1")){
+                }else if (isShiftRequired.equals("1") || isWorkPlaceRequired.equals("1")|| isApproverRequired.equals("1") || isPunchLocationRequired.equals("1")){
                     openShiftAndLocationPopup();
                 } else {
                     submitAttendance();
@@ -376,86 +381,7 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
         }
     }
 
-    private void getMetsoShift() {
-        progressDialog.show();
-        Call<JsonObject> call = RetrofitClient
-                .getInstance()
-                .getApi()
-                .GetMetsoAttendanceData("2", ClientID, "0000");
 
-        call.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                Log.e(TAG, "onResponse: " + new Gson().toJson(response.body()));
-                try {
-                    JSONObject object = new JSONObject(String.valueOf(response.body()));
-                    if (object.getBoolean("responseStatus") == true) {
-                        JSONArray jsonArray = object.getJSONArray("responseData");
-                        metsoShiftList = new ArrayList<>();
-                        metsoShiftList.add(new MetsoShiftModel(0, "Select Shift"));
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject objectResponse = jsonArray.getJSONObject(i);
-                            MetsoShiftModel metsoLocationModel = new MetsoShiftModel(objectResponse.getLong("WorkingShiftID"),
-                                    objectResponse.getString("Column1"));
-                            metsoShiftList.add(metsoLocationModel);
-                        }
-
-                        shiftSpinnerAdapter = new ShiftSpinnerAdapter(NEW_AttendanceMarkingActivity.this, metsoShiftList);
-
-                        getMetsoLocationData();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-
-            }
-        });
-    }
-
-    private void getMetsoLocationData() {
-        Log.e(TAG, "ClientID: " + ClientID);
-        Call<JsonObject> call = RetrofitClient
-                .getInstance()
-                .getApi()
-                .GetMetsoAttendanceData("1", ClientID, "0000");
-
-        call.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                Log.e(TAG, "onResponse: Location: " + new Gson().toJson(response.body()));
-                try {
-                    JSONObject object = new JSONObject(String.valueOf(response.body()));
-                    if (object.getBoolean("responseStatus") == true) {
-                        JSONArray jsonArray = object.getJSONArray("responseData");
-                        metsoLocationArrayList = new ArrayList<>();
-                        metsoLocationArrayList.add(new MetsoLocationModel(0, "Select Location"));
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject objectResponse = jsonArray.getJSONObject(i);
-                            MetsoLocationModel metsoLocationModel = new MetsoLocationModel(objectResponse.getInt("Siteid"),
-                                    (String) objectResponse.getString("SiteName"));
-                            metsoLocationArrayList.add(metsoLocationModel);
-                        }
-                        Log.e(TAG, "onResponse: SIZE: " + metsoLocationArrayList.size());
-                        locationSpinnerAdapter = new LocationSpinnerAdapter(NEW_AttendanceMarkingActivity.this, metsoLocationArrayList);
-
-                        progressDialog.cancel();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                Log.e(TAG, "onFailure: " + t.getMessage());
-            }
-        });
-    }
 
     private void openShiftAndLocationPopup2() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(NEW_AttendanceMarkingActivity.this, R.style.CustomDialogNew2);
@@ -501,21 +427,23 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
         LinearLayout lnCancel = shiftAndLocationDialog.findViewById(R.id.lnCancel);
         LinearLayout llShift = shiftAndLocationDialog.findViewById(R.id.llShift);
         LinearLayout llLocation = shiftAndLocationDialog.findViewById(R.id.llLocation);
+        LinearLayout llOtherLocation = shiftAndLocationDialog.findViewById(R.id.llOtherLocation);
         LinearLayout llApprover = shiftAndLocationDialog.findViewById(R.id.llApprover);
         TextView txtSelectShift = shiftAndLocationDialog.findViewById(R.id.txtSelectShift);
         TextView txtSelectLocation = shiftAndLocationDialog.findViewById(R.id.txtSelectLocation);
+        TextView txtSelectOtherLocation = shiftAndLocationDialog.findViewById(R.id.txtSelectLocation);
         TextView txtSelectApprover = shiftAndLocationDialog.findViewById(R.id.txtSelectApprover);
         TextView txtErrorShift = shiftAndLocationDialog.findViewById(R.id.txtErrorShift);
         TextView txtErrorLocation = shiftAndLocationDialog.findViewById(R.id.txtErrorLocation);
+        TextView txtErrorOtherLocation = shiftAndLocationDialog.findViewById(R.id.txtErrorOtherLocation);
         TextView txtErrorApprover = shiftAndLocationDialog.findViewById(R.id.txtErrorApprover);
         Spinner spShift = shiftAndLocationDialog.findViewById(R.id.spShift);
         Spinner spLocation = shiftAndLocationDialog.findViewById(R.id.spLocation);
+        Spinner spOtherLocation = shiftAndLocationDialog.findViewById(R.id.spOtherLocation);
         AppCompatButton btnMarkedYourAttendance = shiftAndLocationDialog.findViewById(R.id.btnMarkedYourAttendance);
-        if (isApproverRequired.equals("1")){
-            llApprover.setVisibility(View.VISIBLE);
-        } else {
-            llApprover.setVisibility(View.GONE);
-        }
+
+        llApprover.setVisibility(isApproverRequired.equals("1")?View.VISIBLE:View.GONE);
+        llOtherLocation.setVisibility(isPunchLocationRequired.equals("1")?View.VISIBLE:View.GONE);
 
         if (isShiftRequired.equals("1")){
             spShift.setAdapter(shiftSpinnerAdapter);
@@ -539,15 +467,16 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
             llShift.setVisibility(View.GONE);
         }
 
-        if(isWorkPlaceRequired.equals("1")){
+        if(isPunchLocationRequired.equals("1")){
             spLocation.setAdapter(locationSpinnerAdapter);
             spLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    MetsoLocationModel clickedItem = (MetsoLocationModel) adapterView.getItemAtPosition(i);
+                    LocationModel clickedItem = (LocationModel) adapterView.getItemAtPosition(i);
                     if (!clickedItem.getSiteName().equals("Select Location")) {
                         txtSelectLocation.setText(clickedItem.getSiteName());
-                        Siteid = String.valueOf(clickedItem.getSiteid());
+                        Siteid = clickedItem.getSiteid();
+                        Log.e(TAG, "Siteid: "+Siteid);
                         txtErrorLocation.setVisibility(View.GONE);
                     }
                 }
@@ -560,6 +489,30 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
         } else {
             llLocation.setVisibility(View.GONE);
         }
+
+        if(isWorkPlaceRequired.equals("1")){
+            spOtherLocation.setAdapter(otherLocationSpinnerAdapter);
+            spOtherLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    LocationModel clickedItem = (LocationModel) adapterView.getItemAtPosition(i);
+                    if (!clickedItem.getSiteName().equals("Select Location")) {
+                        txtSelectOtherLocation.setText(clickedItem.getSiteName());
+                        otherLocationID = clickedItem.getSiteid();
+                        Log.e(TAG, "Siteid: "+Siteid);
+                        txtErrorLocation.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+        } else {
+            llOtherLocation.setVisibility(View.GONE);
+        }
+
 
 
         txtSelectShift.setOnClickListener(new View.OnClickListener() {
@@ -605,6 +558,10 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
                     txtErrorLocation.setVisibility(View.VISIBLE);
                     return;
                 }
+                if (isPunchLocationRequired.equals("1") && txtSelectOtherLocation.getText().toString().trim().isEmpty()){
+                    txtErrorOtherLocation.setVisibility(View.VISIBLE);
+                    return;
+                }
                 if (isApproverRequired.equals("1") && txtSelectApprover.getText().toString().trim().isEmpty()){
                     txtErrorApprover.setVisibility(View.VISIBLE);
                     return;
@@ -630,7 +587,8 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
                 + "\nAEMEmployeeID: "+pref.getEmpId()
                 + "\nAddress: "+address
                 + "\nShiftid: "+Shiftid
-                + "\nWorkPlaceID: "+Siteid
+                + "\nPunchGeoFenchLocation"+Siteid
+                + "\nWorkPlaceID: "+otherLocationID
                 + "\nApproverid: "+SupervisorID
                 + "\nLongitude: "+longitude
                 + "\nLatitude: "+latitude
@@ -646,7 +604,8 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
                 .addMultipartParameter("Longitude", longitude)
                 .addMultipartParameter("Latitude", latitude)
                 .addMultipartParameter("Shiftid", Shiftid)
-                .addMultipartParameter("WorkPlaceID", Siteid)
+                .addMultipartParameter("PunchGeoFenchLocation",Siteid)
+                .addMultipartParameter("WorkPlaceID", otherLocationID)
                 .addMultipartParameter("Approverid", SupervisorID)
                 .addMultipartFile("Image1", compressedImageFile)
                 .addMultipartParameter("SecurityCode", pref.getSecurityCode())

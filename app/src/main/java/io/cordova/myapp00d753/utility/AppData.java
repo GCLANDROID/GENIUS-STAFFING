@@ -104,6 +104,10 @@ public class AppData {
 
     public static String LAMS_GetSubServiceMenu =newv2url+"LAMS/GetSubServiceMenu";
     public static String LAMS_SaveAttendance =newv2url+"Attendance/LAMS_SaveAttendance";
+    public static String LAMS_SaveHolidayWO =newv2url+"SKF/LAMS_SaveHolidayWO";
+    public static String LAMS_SaveAttendanceRegularization =localurl+"Attendance/LAMS_SaveAttendanceRegularization";
+    public static String LAMS_DropDownData ="http://171.16.1.33/GSPPI_API_V2/api/Attendance/LAMS_DropDownData";
+    public static String LAMS_AllApplicationView ="http://171.16.1.33/GSPPI_API_V2/api/Attendance/LAMS_AllApplicationView";
 
     public static String FORM_16_VIEW = newv2url+"TdsForms/ViewForm16";
     public static String FORM_16_PAYMENT = newv2url+"TdsForms/F16PaymentInitialize";

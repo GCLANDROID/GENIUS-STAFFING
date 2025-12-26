@@ -10,20 +10,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.NEW.adapter.NEW_BacklogAdapter;
 
 public class SKF_DayTypeAdapter extends RecyclerView.Adapter<SKF_DayTypeAdapter.MyViewHolder> {
 
     Context context;
     ArrayList<String> dayTypeArray;
     SKF_BacklogAdapter.setOnDayTypeSelect setOnDayTypeSelect;
-    public SKF_DayTypeAdapter(Context context,  ArrayList<String> dayTypeArray) {
+    NEW_BacklogAdapter.setOnDayTypeSelect setNewOnDayTypeSelect;
+    public SKF_DayTypeAdapter(Context context, ArrayList<String> dayTypeArray) {
         this.context = context;
         this.dayTypeArray = dayTypeArray;
     }
@@ -42,6 +40,7 @@ public class SKF_DayTypeAdapter extends RecyclerView.Adapter<SKF_DayTypeAdapter.
             @Override
             public void onClick(View view) {
                 setOnDayTypeSelect.onClick(position,dayTypeArray.get(position));
+                setNewOnDayTypeSelect.onClick(position,dayTypeArray.get(position));
             }
         });
     }
@@ -61,5 +60,8 @@ public class SKF_DayTypeAdapter extends RecyclerView.Adapter<SKF_DayTypeAdapter.
 
     public void setSetOnGradSelect(SKF_BacklogAdapter.setOnDayTypeSelect setOnGradSelect) {
         this.setOnDayTypeSelect = setOnGradSelect;
+    }
+    public void setNewSetOnGradSelect(NEW_BacklogAdapter.setOnDayTypeSelect setOnGradSelect) {
+        this.setNewOnDayTypeSelect = setOnGradSelect;
     }
 }

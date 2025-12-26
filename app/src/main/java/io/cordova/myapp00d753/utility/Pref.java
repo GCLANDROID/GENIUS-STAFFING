@@ -1109,5 +1109,13 @@ public class Pref {
     public String getOptionalHolidayList(){
         return _pref.getString("OptionalHolidayList","");
     }
+
+    public void saveOtherLocation(String OtherLocation){
+        _editorPref.putString("OtherLocation", OtherLocation);
+        _editorPref.commit();
+    }
+    public String getOtherLocation(){
+        return _pref.getString("OtherLocation","");
+    }
 }
 

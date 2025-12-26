@@ -2,6 +2,7 @@ package io.cordova.myapp00d753.activity.NEW;
 
 import static io.cordova.myapp00d753.activity.attendance.ProtectorGambleAttendanceActivity.SKF_PUNE_CLIENT_OFFICE_ID;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -16,6 +17,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -47,19 +49,25 @@ import java.util.Calendar;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.Retrofit.RetrofitClient;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
+import io.cordova.myapp00d753.activity.WeeklyOffAttendanceActivity;
 import io.cordova.myapp00d753.activity.attendance.AttenDanceDashboardActivity;
+import io.cordova.myapp00d753.activity.metso.MetsoNewReimbursementClaimActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.LocationSpinnerAdapter;
 import io.cordova.myapp00d753.activity.metso.adapter.ShiftSpinnerAdapter;
+import io.cordova.myapp00d753.activity.metso.adapter.SupervisorFilterAdapter;
 import io.cordova.myapp00d753.activity.metso.model.MetsoLocationModel;
 import io.cordova.myapp00d753.activity.metso.model.MetsoShiftModel;
 import io.cordova.myapp00d753.adapter.HolidayCustomAdapter;
 import io.cordova.myapp00d753.adapter.HolidayFilterAdapter;
 import io.cordova.myapp00d753.databinding.ActivityHolidayMarkingBinding;
+import io.cordova.myapp00d753.databinding.ActivityNewHolidayMarkingBinding;
 import io.cordova.myapp00d753.module.HolidayMarkModel;
 import io.cordova.myapp00d753.module.SpineerItemModel;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.ClientID;
 import io.cordova.myapp00d753.utility.Pref;
+import io.cordova.myapp00d753.utility.RequiredListClass;
+import io.cordova.myapp00d753.utility.ShowDialog;
 import io.cordova.myapp00d753.utility.Util;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -67,12 +75,12 @@ import retrofit2.Response;
 
 public class NEW_HolidayMarkingActivity extends AppCompatActivity {
     private static final String TAG = "HolidayMarkingActivity";
-    ActivityHolidayMarkingBinding binding;
+    ActivityNewHolidayMarkingBinding binding;
     Pref pref;
     Spinner spHoliday;
     LinearLayout llHolidayMark,llOptionalHolidayMark;
     TextView tvDate;
-    ArrayList<HolidayMarkModel> holidayList= new ArrayList<>();;
+    ArrayList<HolidayMarkModel> holidayList= new ArrayList<>();
     HolidayCustomAdapter holidayCustomAdapter;
     String holidayDate="";
     private Dialog shiftAndLocationDialog;
@@ -89,16 +97,22 @@ public class NEW_HolidayMarkingActivity extends AppCompatActivity {
     int leaveFlag;
     String OptionalHolidayFlag,holidayFlag,HolidayList;
     ProgressDialog progressDialog;
+    String isOptionalHolidayListRequired="",isOptionalHolidayHierarchyRequired="",
+            isNormalHolidayListRequired="",isNormalHolidayHierarchyRequired="";
+    String newdate;
+    Dialog searchWbsCodeDialog;
+    String SupervisorID="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_holiday_marking);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_holiday_marking);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_new_holiday_marking);
         initView();
 
     }
 
     private void initView() {
+        getRequiredStatus();
         pref = new Pref(NEW_HolidayMarkingActivity.this);
         progressDialog = new ProgressDialog(NEW_HolidayMarkingActivity.this);
         progressDialog.setMessage("Loading...");
@@ -107,8 +121,9 @@ public class NEW_HolidayMarkingActivity extends AppCompatActivity {
         leaveFlag=getIntent().getIntExtra("leaveFlag",1);
         holidayFlag=getIntent().getStringExtra("holidayFlag");
         OptionalHolidayFlag=getIntent().getStringExtra("OptionalHolidayFlag");
+        searchWbsCodeDialog = new Dialog(NEW_HolidayMarkingActivity.this, R.style.CustomDialogNew2);
         searchHolidayDialog = new Dialog(NEW_HolidayMarkingActivity.this, R.style.CustomDialogNew2);
-        spHoliday = findViewById(R.id.spHoliday);
+        //spHoliday = findViewById(R.id.spHoliday);
         llHolidayMark = findViewById(R.id.llHolidayMark);
         llOptionalHolidayMark = findViewById(R.id.llOptionalHolidayMark);
         tvDate = findViewById(R.id.tvDate);
@@ -116,20 +131,16 @@ public class NEW_HolidayMarkingActivity extends AppCompatActivity {
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 
         if (holidayFlag.equals("1")){
-            llHolidayMark.setVisibility(View.VISIBLE);
+            binding.llHolidayMark.setVisibility(View.VISIBLE);
+            binding.tvHolidayTypeName.setText("Please select holiday");
         } else {
-            llHolidayMark.setVisibility(View.GONE);
+            binding.llHolidayMark.setVisibility(View.GONE);
         }
         if (OptionalHolidayFlag.equals("1")){
-            llOptionalHolidayMark.setVisibility(View.VISIBLE);
+            binding.llOptionalHolidayMark.setVisibility(View.VISIBLE);
+            binding.tvHolidayTypeName.setText("Please select optional holiday");
         } else {
-            llOptionalHolidayMark.setVisibility(View.GONE);
-        }
-
-        try {
-            getHolidayData(HolidayList);
-        } catch (Exception e){
-            e.printStackTrace();
+            binding.llOptionalHolidayMark.setVisibility(View.GONE);
         }
 
 
@@ -151,46 +162,31 @@ public class NEW_HolidayMarkingActivity extends AppCompatActivity {
             }
         });
 
-        llHolidayMark.setOnClickListener(new View.OnClickListener() {
+        binding.llHolidayMark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!holidayDate.equals("")) {
-                    if (SKF_PUNE_CLIENT_OFFICE_ID.equals(pref.getEmpClintOffId())){
-                        openShiftAndLocationPopup("1");
-                    } else {
-                        /*JSONObject jsonObject = new JSONObject();
-                        try {
-                            jsonObject.put("ClientID", pref.getEmpClintId());
-                            jsonObject.put("EmployeeID", pref.getEmpId());
-                            jsonObject.put("Type", "1");
-                            jsonObject.put("StartDate", holidayDate);
-                            jsonObject.put("DbOperation", "3");
-                            jsonObject.put("Shiftid", "");
-                            jsonObject.put("SiteId", "");
-                            jsonObject.put("SecurityCode", pref.getSecurityCode());
-                            attendance(jsonObject);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }*/
-                        JSONObject jsonObject = new JSONObject();
-                        try {
-                            jsonObject.put("ConsultantID", pref.getEmpConId());
-                            jsonObject.put("ClientID", pref.getEmpClintId());
-                            jsonObject.put("EmployeeID", pref.getEmpId());
-                            jsonObject.put("Type", "H");
-                            jsonObject.put("StartDate", holidayDate);
-                            jsonObject.put("Reason", "");
-                            jsonObject.put("DbOperation", "3");
-                            jsonObject.put("Shiftid", "");
-                            jsonObject.put("SiteId", "");
-                            jsonObject.put("ApproverID", "");
-                            jsonObject.put("SecurityCode", pref.getSecurityCode());
-                            saveHolidayMarking(jsonObject);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                    if (binding.llMainApprover.getVisibility() == View.VISIBLE && SupervisorID.isEmpty()){
+                        Toast.makeText(NEW_HolidayMarkingActivity.this, "Please select approver", Toast.LENGTH_LONG).show();
+                        return;
                     }
-
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("ConsultantID", pref.getEmpConId());
+                        jsonObject.put("ClientID", pref.getEmpClintId());
+                        jsonObject.put("EmployeeID", pref.getEmpId());
+                        jsonObject.put("Type", "H");
+                        jsonObject.put("StartDate", holidayDate);
+                        jsonObject.put("Reason", "");
+                        jsonObject.put("DbOperation", "3");
+                        jsonObject.put("Shiftid", "");
+                        jsonObject.put("SiteId", "");
+                        jsonObject.put("ApproverID", SupervisorID);
+                        jsonObject.put("SecurityCode", pref.getSecurityCode());
+                        saveHolidayMarking(jsonObject);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     binding.tvMan.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(NEW_HolidayMarkingActivity.this, "please select date", Toast.LENGTH_LONG).show();
@@ -198,29 +194,31 @@ public class NEW_HolidayMarkingActivity extends AppCompatActivity {
             }
         });
 
-        llOptionalHolidayMark.setOnClickListener(new View.OnClickListener() {
+        binding.llOptionalHolidayMark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!holidayDate.equals("")) {
-                    if (SKF_PUNE_CLIENT_OFFICE_ID.equals(pref.getEmpClintOffId())){
-                        openShiftAndLocationPopup("2");
-                    } else {
-                        JSONObject jsonObject = new JSONObject();
-                        try {
-                            jsonObject.put("ClientID", pref.getEmpClintId());
-                            jsonObject.put("EmployeeID", pref.getEmpId());
-                            jsonObject.put("Type", "2");
-                            jsonObject.put("StartDate", holidayDate);
-                            jsonObject.put("DbOperation", "3");
-                            jsonObject.put("Shiftid", "");
-                            jsonObject.put("SiteId", "");
-                            jsonObject.put("SecurityCode", pref.getSecurityCode());
-                            attendance(jsonObject);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                    if (binding.llMainApprover.getVisibility() == View.VISIBLE && SupervisorID.isEmpty()){
+                        Toast.makeText(NEW_HolidayMarkingActivity.this, "Please select approver", Toast.LENGTH_LONG).show();
+                        return;
                     }
-
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("ConsultantID", pref.getEmpConId());
+                        jsonObject.put("ClientID", pref.getEmpClintId());
+                        jsonObject.put("EmployeeID", pref.getEmpId());
+                        jsonObject.put("Type", "OH");
+                        jsonObject.put("StartDate", holidayDate);
+                        jsonObject.put("Reason", "");
+                        jsonObject.put("DbOperation", "3");
+                        jsonObject.put("Shiftid", "");
+                        jsonObject.put("SiteId", "");
+                        jsonObject.put("ApproverID", SupervisorID);
+                        jsonObject.put("SecurityCode", pref.getSecurityCode());
+                        saveHolidayMarking(jsonObject);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     binding.tvMan.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(NEW_HolidayMarkingActivity.this, "please select date", Toast.LENGTH_LONG).show();
@@ -228,92 +226,146 @@ public class NEW_HolidayMarkingActivity extends AppCompatActivity {
             }
         });
 
-        tvDate.setOnClickListener(new View.OnClickListener() {
+        binding.tvDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //spHoliday.performClick();
-                openSearchHolidayDialog();
+                if (isNormalHolidayListRequired.equals("1") || isOptionalHolidayListRequired.equals("1")){
+                    openSearchHolidayDialog();
+                } else {
+                    selectHolidayDate();
+                }
+            }
+        });
+        binding.tvApprover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openSupervisorPopUp();
             }
         });
         getRequiredList();
     }
 
+    private void selectHolidayDate() {
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        if (!pref.getEmpClintId().equals(ClientID.HONASA)){
+            c.add(Calendar.DAY_OF_MONTH, -7);
+        }
+
+        final DatePickerDialog dialog = new DatePickerDialog(NEW_HolidayMarkingActivity.this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int y, int m, int d) {
+                newdate = y + "-" + (m + 1) + "-" + d;
+                tvDate.setVisibility(View.VISIBLE);
+                tvDate.setText(newdate);
+                holidayDate = newdate;
+
+            }
+        }, year, month, day);
+        if (pref.getEmpClintId().equals(ClientID.HONASA)){
+            dialog.getDatePicker().setMinDate(c.getTimeInMillis());
+        } else {
+            dialog.getDatePicker();
+        }
+        dialog.show();
+    }
+
+    private void getRequiredStatus() {
+        Log.e(TAG, "OptionalHolidayMarkingWithHolidaySelection: "+getIntent().getStringExtra("OptionalHolidayMarkingWithHolidaySelection"));
+        Log.e(TAG, "OptionalHolidayMarkingWithHierarchySelection: "+getIntent().getStringExtra("OptionalHolidayMarkingWithHierarchySelection"));
+        Log.e(TAG, "NormalHolidayMarkingWithHolidaySelection: "+getIntent().getStringExtra("NormalHolidayMarkingWithHolidaySelection"));
+        Log.e(TAG, "NormalHolidayMarkingWithHierarchySelection: "+getIntent().getStringExtra("NormalHolidayMarkingWithHierarchySelection"));
+        String OHolidayMarkingList = getIntent().getStringExtra("OptionalHolidayMarkingWithHolidaySelection");
+        String[] OHolidayMarkingListArr = OHolidayMarkingList.split("_");
+        isOptionalHolidayListRequired = OHolidayMarkingListArr[0];
+        String OHolidayMarkingHierarchy = getIntent().getStringExtra("OptionalHolidayMarkingWithHierarchySelection");
+        String[] OHolidayMarkingHierarchyArr = OHolidayMarkingHierarchy.split("_");
+        isOptionalHolidayHierarchyRequired = OHolidayMarkingHierarchyArr[0];
+        String NHolidayMarkingList = getIntent().getStringExtra("NormalHolidayMarkingWithHolidaySelection");
+        String[] NHolidayMarkingListArr = NHolidayMarkingList.split("_");
+        isNormalHolidayListRequired = NHolidayMarkingListArr[0];
+        String NHolidayMarkingSelection = getIntent().getStringExtra("NormalHolidayMarkingWithHierarchySelection");
+        String[] NHolidayMarkingSelectionArr = NHolidayMarkingSelection.split("_");
+        isNormalHolidayHierarchyRequired = NHolidayMarkingSelectionArr[0];
+        Log.e(TAG, "getRequiredStatus: \nisOptionalHolidayListRequired: "+isOptionalHolidayListRequired
+                +"\nisOptionalHolidayHierarchyRequired: "+isOptionalHolidayHierarchyRequired
+                +"\nisNormalHolidayListRequired: "+isNormalHolidayListRequired
+                +"\nisNormalHolidayHierarchyRequired: "+isNormalHolidayHierarchyRequired);
+        if (isNormalHolidayHierarchyRequired.equals("1") ||  isOptionalHolidayHierarchyRequired.equals("1")){
+            binding.llMainApprover.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void getRequiredList() {
         progressDialog.show();
-      /*  try {
-            metsoShiftList = getShiftData(pref.getShiftList());
-        } catch (Exception e){
-            e.printStackTrace();
-        } finally {
-            shiftSpinnerAdapter = new ShiftSpinnerAdapter(NEW_HolidayMarkingActivity.this, metsoShiftList);
-        }*/
-
-       /* try {
-            metsoLocationArrayList = getLocationData(pref.getLocationList());
-        } catch (Exception e){
-            e.printStackTrace();
-        } finally {
-            locationSpinnerAdapter = new LocationSpinnerAdapter(NEW_HolidayMarkingActivity.this, metsoLocationArrayList);
-        }*/
-
+        Log.e(TAG, "Holiday List: "+pref.getHolidayList());
+        Log.e(TAG, "Optional Holiday List: "+pref.getOptionalHolidayList());
         try {
-            supervisorList = getApproverData(pref.getApproverList());
+            supervisorList = RequiredListClass.getApproverData(pref.getApproverList());
         } catch (Exception e){
             e.printStackTrace();
+        }
+        if (isNormalHolidayListRequired.equals("1")){
+            try {
+                holidayList = RequiredListClass.getNormalHolidayList(pref.getHolidayList());
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        } else{
+            try {
+                holidayList = RequiredListClass.getOptionalHolidayList(pref.getOptionalHolidayList());
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
         progressDialog.dismiss();
     }
 
-    private ArrayList<MetsoShiftModel> getShiftData(String ShiftList) throws JSONException {
-        ArrayList<MetsoShiftModel> mShiftList = new ArrayList<>();
-        JSONArray ShiftListArray = new JSONArray(ShiftList);
-        mShiftList.add(new MetsoShiftModel(0,"Select Shift"));
-        if (ShiftListArray.length()>0){
-            for (int i = 0; i < ShiftListArray.length(); i++) {
-                JSONObject obj = ShiftListArray.optJSONObject(i);
-                long WorkingShiftID = obj.optLong("WorkingShiftID");
-                String WorkingShiftName = obj.optString("WorkingShiftName");
-                mShiftList.add(new MetsoShiftModel(WorkingShiftID,WorkingShiftName));
-            }
-        }
-        return mShiftList;
-    }
 
-    private ArrayList<MetsoLocationModel> getLocationData(String LocationList) throws JSONException {
-        Log.e(TAG, "getLocationData: "+LocationList );
-        ArrayList<MetsoLocationModel> mLocationArrayList = new ArrayList<>();
-        JSONArray LocationjsonArray = new JSONArray(LocationList);
-        mLocationArrayList.add(new MetsoLocationModel(0,"Select Location"));
-       /* mLocationArrayList.add(new MetsoLocationModel(2,"Location 1"));
-        mLocationArrayList.add(new MetsoLocationModel(1,"Location 2"));*/
-        if(LocationjsonArray.length()>0){
-            if (LocationjsonArray.length() > 0){
-                for (int i = 0; i < LocationjsonArray.length(); i++) {
-                    JSONObject obj = LocationjsonArray.optJSONObject(i);
-                    int SiteId = obj.optInt("WorkPlaceID");
-                    String SiteName = obj.getString("WorkPlaceName");
-                    mLocationArrayList.add(new MetsoLocationModel(SiteId,SiteName));
-                }
-            }
-        }
-        return mLocationArrayList;
-    }
 
-    private ArrayList<SpineerItemModel> getApproverData(String ApproverList) throws JSONException {
-        ArrayList<SpineerItemModel> mSupervisorList = new ArrayList<>();
-        JSONArray ApproverjsonArray = new JSONArray(ApproverList);
-        if (ApproverjsonArray.length()>0){
-            for (int i = 0; i < ApproverjsonArray.length(); i++) {
-                JSONObject obj = ApproverjsonArray.optJSONObject(i);
-                String Code = obj.optString("Code");
-                String UserName = obj.optString("UserName");
-                mSupervisorList.add(new SpineerItemModel(UserName,Code));
-            }
-        }
-        return mSupervisorList;
-    }
 
     private void saveHolidayMarking(JSONObject jsonObject) {
+        progressDialog.show();
+        AndroidNetworking.post(AppData.LAMS_SaveHolidayWO)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        progressDialog.dismiss();
+                        try {
+                            JSONObject object = new JSONObject(String.valueOf(response));
+                            String Response_Message = object.optString("Response_Message");
+                            String Response_Code = object.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                ShowDialog.showSuccessDialog(NEW_HolidayMarkingActivity.this, Response_Message, new ShowDialog.ResultListener() {
+                                    @Override
+                                    public void onSuccess() {
+                                        Intent intent = new Intent(NEW_HolidayMarkingActivity.this, AttenDanceDashboardActivity.class);
+                                        intent.putExtra("leaveFlag",leaveFlag);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(intent);
+                                    }
+                                });
+                            } else {
+                                progressDialog.cancel();
+                                ShowDialog.showErrorDialog(NEW_HolidayMarkingActivity.this,Response_Message);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.dismiss();
+                    }
+                });
     }
 
     private void openSearchHolidayDialog() {
@@ -336,7 +388,14 @@ public class NEW_HolidayMarkingActivity extends AppCompatActivity {
         HolidayFilterAdapter holidayFilterAdapter = new HolidayFilterAdapter(NEW_HolidayMarkingActivity.this, holidayListCopy);
         rvWbsCode.setAdapter(holidayFilterAdapter);
 
-
+        holidayFilterAdapter.setSelectHolidayDateListener(new SelectHolidayDateListener() {
+            @Override
+            public void onSelect(String date, String holidayName) {
+                tvDate.setText(holidayName);
+                holidayDate = Util.changeAnyDateFormat(date, "yyyy-MM-dd'T'HH:mm:ss", "MM/dd/yyyy");
+                searchHolidayDialog.dismiss();
+            }
+        });
         wbsCodeSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -508,15 +567,18 @@ public class NEW_HolidayMarkingActivity extends AppCompatActivity {
                     shiftAndLocationDialog.cancel();
                     JSONObject jsonObject = new JSONObject();
                     try {
+                        jsonObject.put("ConsultantID", pref.getEmpConId());
                         jsonObject.put("ClientID", pref.getEmpClintId());
                         jsonObject.put("EmployeeID", pref.getEmpId());
-                        jsonObject.put("Type", holidayType);
+                        jsonObject.put("Type", "H");
                         jsonObject.put("StartDate", holidayDate);
+                        jsonObject.put("Reason", "");
                         jsonObject.put("DbOperation", "3");
                         jsonObject.put("Shiftid", "");
-                        jsonObject.put("SiteId", Siteid);
+                        jsonObject.put("SiteId", "");
+                        jsonObject.put("ApproverID", SupervisorID);
                         jsonObject.put("SecurityCode", pref.getSecurityCode());
-                        attendance(jsonObject);
+                        saveHolidayMarking(jsonObject);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -666,5 +728,59 @@ public class NEW_HolidayMarkingActivity extends AppCompatActivity {
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.CENTER);
         al1.show();
+    }
+    private void openSupervisorPopUp() {
+        searchWbsCodeDialog = new Dialog(NEW_HolidayMarkingActivity.this, R.style.CustomDialogNew2);
+        searchWbsCodeDialog.setContentView(R.layout.wbs_code_search_layout);
+        searchWbsCodeDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        searchWbsCodeDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        searchWbsCodeDialog.setCancelable(true);
+
+        TextView txtPopupHeadline = searchWbsCodeDialog.findViewById(R.id.txtPopupHeadline);
+        SearchView wbsCodeSearchView = (SearchView) searchWbsCodeDialog.findViewById(R.id.wbsCodeSearchView);
+        ImageView imgCancel = searchWbsCodeDialog.findViewById(R.id.imgCancel);
+        RecyclerView rvWbsCode = searchWbsCodeDialog.findViewById(R.id.rvWbsCode);
+
+        wbsCodeSearchView.setQueryHint("Search Approver");
+        txtPopupHeadline.setText("Select Approver");
+        rvWbsCode.setLayoutManager(new LinearLayoutManager(NEW_HolidayMarkingActivity.this));
+        ArrayList<SpineerItemModel> supervisorListCopy = new ArrayList<>();
+        supervisorListCopy = (ArrayList<SpineerItemModel>) supervisorList.clone();
+        SupervisorFilterAdapter supervisorFilterAdapter = new SupervisorFilterAdapter(NEW_HolidayMarkingActivity.this, supervisorListCopy);
+        rvWbsCode.setAdapter(supervisorFilterAdapter);
+
+        wbsCodeSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                supervisorFilterAdapter.getFilter().filter(s);
+                return false;
+            }
+        });
+
+        supervisorFilterAdapter.setSupervisorSelectListener(new MetsoNewReimbursementClaimActivity.SupervisorSelectListener() {
+            @Override
+            public void onClick(String supervisor_id, String supervisor) {
+                SupervisorID = supervisor_id;
+                binding.tvApprover.setText(supervisor);
+                searchWbsCodeDialog.dismiss();
+            }
+        });
+
+        imgCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchWbsCodeDialog.dismiss();
+            }
+        });
+        searchWbsCodeDialog.show();
+    }
+
+    public interface SelectHolidayDateListener{
+        void onSelect(String date, String holidayName);
     }
 }

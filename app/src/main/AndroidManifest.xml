@@ -664,6 +664,11 @@
         <activity android:name=".AndroidXCamera.FrontBackAndroidXCameraActivity" />
         <activity android:name=".activity.attendance.GeoFenceAttendanceWithShiftActivity" />
         <activity android:name=".activity.NEW.NEW_AttendanceMarkingActivity" />
+        <activity android:name=".activity.NEW.NEW_AttendanceRegularizationActivity" />
+        <activity android:name=".activity.NEW.NEW_HolidayMarkingActivity" />
+        <activity android:name=".activity.NEW.NEW_WeeklyOffAttendanceActivity" />
+        <activity android:name=".activity.NEW.NEW_AdjustmentActivity" />
+        <activity android:name=".activity.NEW.AllApplicationViewActivity" />
         <activity
             android:name=".activity.SelfOnboardingChatBotActivity"
             android:theme="@style/FloatingChatTheme" />
