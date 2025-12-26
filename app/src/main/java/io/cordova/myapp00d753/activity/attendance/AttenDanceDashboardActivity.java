@@ -1,14 +1,5 @@
 package io.cordova.myapp00d753.activity.attendance;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -34,6 +25,15 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -75,8 +75,11 @@ import io.cordova.myapp00d753.activity.DailyDashBoardActivity;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.activity.HolidayMarkingActivity;
 import io.cordova.myapp00d753.activity.LeaveApplicationActivity;
+import io.cordova.myapp00d753.activity.NEW.AllApplicationViewActivity;
 import io.cordova.myapp00d753.activity.NEW.NEW_AttendanceMarkingActivity;
+import io.cordova.myapp00d753.activity.NEW.NEW_AttendanceRegularizationActivity;
 import io.cordova.myapp00d753.activity.NEW.NEW_HolidayMarkingActivity;
+import io.cordova.myapp00d753.activity.NEW.NEW_WeeklyOffAttendanceActivity;
 import io.cordova.myapp00d753.activity.QRCodeScannerActivity;
 import io.cordova.myapp00d753.activity.SKF.HolidayViewActivity;
 import io.cordova.myapp00d753.activity.SKF.SKF_AttendanceRegularizationActivity;
@@ -124,7 +127,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     ArrayList<String> dateList = new ArrayList<>();
 
     TextView tvPresent, tvDetails, tvOK;
-    LinearLayout lnStatus, llAdjustment,llHoliday,llHolidayView,llOptionalHoliday;
+    LinearLayout lnStatus, llAdjustment,llHoliday,llHolidayView,llOptionalHoliday,llAllApplicationView;
     int date;
     GPSTracker gps;
     int leaveFlag;
@@ -133,8 +136,15 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     String HolidayDetails_Array="";
 
     String MarkAttnFromMobileWithImage="", MarkAttnFromMobileWithGeoFencingLocation="",
-            MarkAttnFromMobileWithWorkPlaceSelection="",MarkAttnFromMobileWithShiftSelection="",MarkAttnFromMobileWithHierarchySelection="";
-    String isLiveStatus_MarkAttnFromMobile ="", isLiveStatus_HolidayMarking ="", isLiveStatus_OHolidayMarking;
+            MarkAttnFromMobileWithWorkPlaceSelection="",MarkAttnFromMobileWithShiftSelection="",MarkAttnFromMobileWithHierarchySelection="",
+            MarkAttnFromMobileWithPunchLocationSelection="";
+    String AttendanceRegularisationWithDayTypeSelection="", AttendanceRegularisationWithWorkPlaceSelection="",
+            AttendanceRegularisationWithWorkingShiftSelection="", AttendanceRegularisationWithHierarchySelection="";
+    String OptionalHolidayMarkingWithHolidaySelection ="",OptionalHolidayMarkingWithHierarchySelection="",
+            NormalHolidayMarkingWithHolidaySelection ="",NormalHolidayMarkingWithHierarchySelection="";
+    String WOMarkingWithHierarchySelection="",isLiveStatus_WeeklyOff="";
+    String isLiveStatus_MarkAttnFromMobile ="", isLiveStatus_HolidayMarking ="",
+            isLiveStatus_OHolidayMarking="",isLiveStatus_AttReg="",isLiveStatus_HolidayView="",isLiveSatus_Adjustment="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -193,6 +203,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         llOptionalHoliday = (LinearLayout) findViewById(R.id.llOptionalHoliday);
         llHolidayView = (LinearLayout) findViewById(R.id.llHolidayView);
         llViewLeaveBalance = (LinearLayout) findViewById(R.id.llViewLeaveBalance);
+        llAllApplicationView = (LinearLayout) findViewById(R.id.llAllApplicationView);
         tvCancel = (TextView) findViewById(R.id.tvCancel);
         llBottom = (LinearLayout) findViewById(R.id.llBottom);
         if (pref.getEmpClintId().equals("AEMCLI0910000315")) {
@@ -261,6 +272,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         llAdjustment.setOnClickListener(this);
         llHolidayView.setOnClickListener(this);
         llViewLeaveBalance.setOnClickListener(this);
+        llAllApplicationView.setOnClickListener(this);
         tvCancel.setOnClickListener(this);
 
         y = Calendar.getInstance().get(Calendar.YEAR);
@@ -730,7 +742,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         } else if (view == llAttandanceManage) {
             turnGPSOn();
         } else if (view == llAttendanceReport) {
-            if (pref.getEmpClintId().equals(ClientID.METSO)
+             if (pref.getEmpClintId().equals(ClientID.METSO)
                     || pref.getEmpClintOffId().equals(BrunchId.CBRE_HARYANA_AMERICAN_EXPRESS)
                     || pref.getEmpClintOffId().equals(BrunchId.CBRE_KARNATAKA_AMERICAN_EXPRESS)
                     || pref.getEmpClintOffId().equals(BrunchId.CBRE_Tamil_Nadu_American_Express)
@@ -754,7 +766,15 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             }
         } else if (view == llBackAttendance) {
             Log.e(TAG, "onClick: llBackAttendance");
-            if (pref.getEmpClintId().equals(ClientID.METSO)) {
+            if (isLiveStatus_AttReg.equals("1")){
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, NEW_AttendanceRegularizationActivity.class);
+                intent.putExtra("AttendanceRegularisationWithDayTypeSelection",AttendanceRegularisationWithDayTypeSelection);
+                intent.putExtra("AttendanceRegularisationWithHierarchySelection",AttendanceRegularisationWithHierarchySelection);
+                intent.putExtra("AttendanceRegularisationWithWorkingShiftSelection",AttendanceRegularisationWithWorkingShiftSelection);
+                intent.putExtra("AttendanceRegularisationWithWorkPlaceSelection",AttendanceRegularisationWithWorkPlaceSelection);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            } else if (pref.getEmpClintId().equals(ClientID.METSO)) {
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, MetsoAttendanceRegularizationActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -776,8 +796,15 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 startActivity(intent);
             }
         } else if (view == llAttenRegularize) {
-            Log.e(TAG, "onClick: llAttenRegularize");
-            if (pref.getEmpClintId().equals(ClientID.METSO)) {
+            if (isLiveStatus_AttReg.equals("1")){
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, NEW_AttendanceRegularizationActivity.class);
+                intent.putExtra("AttendanceRegularisationWithDayTypeSelection",AttendanceRegularisationWithDayTypeSelection);
+                intent.putExtra("AttendanceRegularisationWithHierarchySelection",AttendanceRegularisationWithHierarchySelection);
+                intent.putExtra("AttendanceRegularisationWithWorkingShiftSelection",AttendanceRegularisationWithWorkingShiftSelection);
+                intent.putExtra("AttendanceRegularisationWithWorkPlaceSelection",AttendanceRegularisationWithWorkPlaceSelection);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            } else if (pref.getEmpClintId().equals(ClientID.METSO)) {
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, MetsoAttendanceRegularizationActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -787,7 +814,12 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 startActivity(intent);
             }
         } else if (view == llWeekly) {
-            if (pref.getEmpClintId().equals("AEMCLI2210001707") || pref.getEmpClintId().equals("AEMCLI2210001697") || pref.getEmpClintId().equals("AEMCLI2210001698") || pref.getEmpClintId().equals("AEMCLI2310001805")|| pref.getEmpClintId().equals(ClientID.METSO)|| pref.getEmpClintId().equals(ClientID.HONASA)|| pref.getEmpClintId().equals(ClientID.MAHINDRA_MAHINDRA)) {
+            if (isLiveStatus_WeeklyOff.equals("1")){
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, NEW_WeeklyOffAttendanceActivity.class);
+                intent.putExtra("WOMarkingWithHierarchySelection",WOMarkingWithHierarchySelection);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            } else if (pref.getEmpClintId().equals("AEMCLI2210001707") || pref.getEmpClintId().equals("AEMCLI2210001697") || pref.getEmpClintId().equals("AEMCLI2210001698") || pref.getEmpClintId().equals("AEMCLI2310001805")|| pref.getEmpClintId().equals(ClientID.METSO)|| pref.getEmpClintId().equals(ClientID.HONASA)|| pref.getEmpClintId().equals(ClientID.MAHINDRA_MAHINDRA)) {
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, WeeklyOffAttendanceActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -812,6 +844,10 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 intent.putExtra("holidayFlag","1");
                 intent.putExtra("OptionalHolidayFlag","0");
                 intent.putExtra("leaveFlag",leaveFlag);
+                intent.putExtra("NormalHolidayMarkingWithHolidaySelection", NormalHolidayMarkingWithHolidaySelection);
+                intent.putExtra("NormalHolidayMarkingWithHierarchySelection",NormalHolidayMarkingWithHierarchySelection);
+                intent.putExtra("OptionalHolidayMarkingWithHierarchySelection","");
+                intent.putExtra("OptionalHolidayMarkingWithHolidaySelection","");
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             } else {
@@ -826,6 +862,10 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 intent.putExtra("holidayFlag","0");
                 intent.putExtra("OptionalHolidayFlag","1");
                 intent.putExtra("leaveFlag",leaveFlag);
+                intent.putExtra("NormalHolidayMarkingWithHolidaySelection","");
+                intent.putExtra("NormalHolidayMarkingWithHierarchySelection","");
+                intent.putExtra("OptionalHolidayMarkingWithHierarchySelection",OptionalHolidayMarkingWithHierarchySelection);
+                intent.putExtra("OptionalHolidayMarkingWithHolidaySelection", OptionalHolidayMarkingWithHolidaySelection);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             } else {
@@ -851,15 +891,31 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         } else if (view == tvOK) {
             lnStatus.setVisibility(View.GONE);
         } else if (view == llAdjustment) {
+            /*Intent intent = new Intent(AttenDanceDashboardActivity.this, NEW_AdjustmentActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);*/
             Intent intent = new Intent(AttenDanceDashboardActivity.this, AdjustmentActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+           /* if (isLiveSatus_Adjustment.equals("1")){
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, NEW_AdjustmentActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, AdjustmentActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }*/
         } else if (view == llHolidayView) {
             Intent intent = new Intent(AttenDanceDashboardActivity.this, HolidayViewActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else if(view == llViewLeaveBalance){
             Intent intent = new Intent(AttenDanceDashboardActivity.this, ViewLeaveBalanceActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }else if(view == llAllApplicationView){
+            Intent intent = new Intent(AttenDanceDashboardActivity.this, AllApplicationViewActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else if (view == imgHome) {
@@ -1111,18 +1167,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     @Override
     protected void onResume() {
         super.onResume();
-        JSONObject obj=new JSONObject();
-        try {
-            obj.put("AemEmployeeid", pref.getEmpId());
-            obj.put("AemClientid",pref.getEmpClintId());
-            obj.put("Monthid",m);
-            obj.put("yearid",y);
-            obj.put("SecurityCode",pref.getSecurityCode());
-            getAttendanceList(obj);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-       /* JSONObject objSubmenu=new JSONObject();
+        /*JSONObject objSubmenu=new JSONObject();
         try {
             objSubmenu.put("ConsultantID", pref.getEmpConId());
             objSubmenu.put("ClientID", pref.getEmpClintId());
@@ -1135,6 +1180,18 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         } catch (JSONException e) {
             e.printStackTrace();
         }*/
+        JSONObject obj=new JSONObject();
+        try {
+            obj.put("AemEmployeeid", pref.getEmpId());
+            obj.put("AemClientid",pref.getEmpClintId());
+            obj.put("Monthid",m);
+            obj.put("yearid",y);
+            obj.put("SecurityCode",pref.getSecurityCode());
+            getAttendanceList(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void getShift(JSONObject jsonObject) {
@@ -1564,6 +1621,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             intent.putExtra("MarkAttnFromMobileWithWorkPlaceSelection", MarkAttnFromMobileWithWorkPlaceSelection);
             intent.putExtra("MarkAttnFromMobileWithShiftSelection", MarkAttnFromMobileWithShiftSelection);
             intent.putExtra("MarkAttnFromMobileWithHierarchySelection", MarkAttnFromMobileWithHierarchySelection);
+            intent.putExtra("MarkAttnFromMobileWithPunchLocationSelection", MarkAttnFromMobileWithPunchLocationSelection);
             startActivity(intent);
         }else if (pref.getEmpClintId().equals("AEMCLI2210001697") || pref.getEmpClintId().equals("AEMCLI2210001698")) {
             Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceManageWithoutLocActivity.class);
@@ -1744,6 +1802,8 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                                pref.saveHolidayList(HolidayDetails_Array);
                                String OptionalHolidayDetails_Array = Response_Data.optString("OptionalHolidayDetails");
                                pref.saveOptionalHolidayList(OptionalHolidayDetails_Array);
+                               String OtherLocation_Array = Response_Data.optString("OtherLocation");
+                               pref.saveOtherLocation(OtherLocation_Array);
                                 //TODO: Daily Attendance
                                if (ServiceMenuAccessDetails_OBJ.has("MarkAttnFromMobile")){
                                    String MarkAttnFromMobile = ServiceMenuAccessDetails_OBJ.optString("MarkAttnFromMobile");
@@ -1758,6 +1818,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                                            MarkAttnFromMobileWithWorkPlaceSelection =  ServiceMenuAccessDetails_OBJ.optString("MarkAttnFromMobileWithWorkPlaceSelection");
                                            MarkAttnFromMobileWithShiftSelection =  ServiceMenuAccessDetails_OBJ.optString("MarkAttnFromMobileWithShiftSelection");
                                            MarkAttnFromMobileWithHierarchySelection =  ServiceMenuAccessDetails_OBJ.optString("MarkAttnFromMobileWithHierarchySelection");
+                                           MarkAttnFromMobileWithPunchLocationSelection =  ServiceMenuAccessDetails_OBJ.optString("MarkAttnFromMobileWithPunchLocationSelection");
                                        } else {
                                            previousConfiguration_Attendance_Manage();
                                        }
@@ -1794,11 +1855,15 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                                    if(AttendanceRegularisation != null ||AttendanceRegularisation.equals("null")|| !AttendanceRegularisation.isEmpty()){
                                        String[] AttReg = AttendanceRegularisation.split("_");
                                        String isRequired_AttReg = AttReg[0];
-                                       String isConfigure_AttReg = AttReg[1];
-                                       if (isConfigure_AttReg.equals("1")){
+                                       isLiveStatus_AttReg = AttReg[1];
+                                       if (isLiveStatus_AttReg.equals("1")){
                                            if (isRequired_AttReg.equals("1")) {
                                                llBackAttendance.setVisibility(View.VISIBLE);
                                                llAttenRegularize.setVisibility(View.VISIBLE);
+                                               AttendanceRegularisationWithDayTypeSelection = ServiceMenuAccessDetails_OBJ.optString("AttendanceRegularisationWithDayTypeSelection");
+                                               AttendanceRegularisationWithWorkPlaceSelection = ServiceMenuAccessDetails_OBJ.optString("AttendanceRegularisationWithWorkPlaceSelection");
+                                               AttendanceRegularisationWithWorkingShiftSelection = ServiceMenuAccessDetails_OBJ.optString("AttendanceRegularisationWithWorkingShiftSelection");
+                                               AttendanceRegularisationWithHierarchySelection = ServiceMenuAccessDetails_OBJ.optString("AttendanceRegularisationWithHierarchySelection");
                                            } else {
                                                llBackAttendance.setVisibility(View.GONE);
                                                llAttenRegularize.setVisibility(View.GONE);
@@ -1816,13 +1881,14 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
 
 
                                //TODO: Weekly Off
-                               if ( ServiceMenuAccessDetails_OBJ.has("WeeklyOffMarkingFromMobile")){
-                                   String WeeklyOff = ServiceMenuAccessDetails_OBJ.optString("WeeklyOffMarkingFromMobile");
+                               if ( ServiceMenuAccessDetails_OBJ.has("WOMarkingFromMobileApp")){
+                                   String WeeklyOff = ServiceMenuAccessDetails_OBJ.optString("WOMarkingFromMobileApp");
                                    if (!WeeklyOff.isEmpty() || !WeeklyOff.equals("null")){
                                        String[] WeeklyOffArr = WeeklyOff.split("_");
                                        String isRequired_WeeklyOff = WeeklyOffArr[0];
-                                       String isConfigure_WeeklyOff= WeeklyOffArr[1];
-                                       if(isConfigure_WeeklyOff.equals("1")){
+                                       isLiveStatus_WeeklyOff= WeeklyOffArr[1];
+                                       if(isLiveStatus_WeeklyOff.equals("1")){
+                                           WOMarkingWithHierarchySelection = ServiceMenuAccessDetails_OBJ.optString("WOMarkingWithHierarchySelection");
                                            llWeekly.setVisibility(isRequired_WeeklyOff.equals("1") ? View.VISIBLE : View.GONE);
                                        } else {
                                            previousConfiguration_WeeklyOFF();
@@ -1836,15 +1902,22 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
 
 
                                //TODO: Holiday Marking
-                               if (ServiceMenuAccessDetails_OBJ.has("NormalHolidayMarkingFromMobileOption")){
-                                   String HolidayMarking = ServiceMenuAccessDetails_OBJ.optString("NormalHolidayMarkingFromMobileOption");
+                               if (ServiceMenuAccessDetails_OBJ.has("NormalHolidayMarkingFromMobileApp")){
+                                   String HolidayMarking = ServiceMenuAccessDetails_OBJ.optString("NormalHolidayMarkingFromMobileApp");
                                    if (!HolidayMarking.isEmpty() || !HolidayMarking.equals("null")){
                                        String[] HolidayMarkingArr = HolidayMarking.split("_");
                                        String isRequired_HolidayMarking = HolidayMarkingArr[0];
-                                       isLiveStatus_HolidayMarking = HolidayMarkingArr[1];
+                                       isLiveStatus_HolidayMarking= HolidayMarkingArr[1];
                                        if(isLiveStatus_HolidayMarking.equals("1")){
+                                           //llHoliday.setVisibility(isRequired_HolidayMarking.equals("1") ? View.VISIBLE : View.GONE);
+                                           if (isRequired_HolidayMarking.equals("1")){
+                                               llHoliday.setVisibility(View.VISIBLE);
+                                           } else {
+                                               llHoliday.setVisibility(View.GONE);
+                                           }
                                            holidayFlag="1";
-                                           llHoliday.setVisibility(isRequired_HolidayMarking.equals("1") ? View.VISIBLE : View.GONE);
+                                           NormalHolidayMarkingWithHolidaySelection = ServiceMenuAccessDetails_OBJ.optString("NormalHolidayMarkingWithHolidaySelection");
+                                           NormalHolidayMarkingWithHierarchySelection = ServiceMenuAccessDetails_OBJ.optString("NormalHolidayMarkingWithHierarchySelection");
                                        } else {
                                            previousConfiguration_HolidayMarking();
                                        }
@@ -1854,53 +1927,59 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                                } else {
                                    previousConfiguration_HolidayMarking();
                                }
+
                                //TODO: Optional Holiday Marking
-                               if (ServiceMenuAccessDetails_OBJ.has("OptionalHolidayMarkingFromMobileOption")){
-                                   String OptionalHolidayMarking = ServiceMenuAccessDetails_OBJ.optString("OptionalHolidayMarkingFromMobileOption");
+                               if (ServiceMenuAccessDetails_OBJ.has("OptionalHolidayMarkingFromMobileApp")){
+                                   String OptionalHolidayMarking = ServiceMenuAccessDetails_OBJ.optString("OptionalHolidayMarkingFromMobileApp");
                                    if (!OptionalHolidayMarking.isEmpty() || !OptionalHolidayMarking.equals("null")){
                                        String[] OptionalHolidayMarkingArr = OptionalHolidayMarking.split("_");
                                        String isRequired_OHolidayMarking = OptionalHolidayMarkingArr[0];
                                        isLiveStatus_OHolidayMarking = OptionalHolidayMarkingArr[1];
                                        if(isLiveStatus_OHolidayMarking.equals("1")){
                                            OptionalHolidayFlag="1";
+                                           OptionalHolidayMarkingWithHolidaySelection = ServiceMenuAccessDetails_OBJ.optString("OptionalHolidayMarkingWithHolidaySelection");
+                                           OptionalHolidayMarkingWithHierarchySelection = ServiceMenuAccessDetails_OBJ.optString("OptionalHolidayMarkingWithHierarchySelection");
                                            llOptionalHoliday.setVisibility(isRequired_OHolidayMarking.equals("1") ? View.VISIBLE : View.GONE);
                                        } else {
-                                           previousConfiguration_HolidayMarking();
+                                           //previousConfiguration_HolidayMarking();
                                        }
                                    } else {
-                                       previousConfiguration_HolidayMarking();
+                                       //previousConfiguration_HolidayMarking();
                                    }
                                } else {
-                                   previousConfiguration_HolidayMarking();
+                                   //previousConfiguration_HolidayMarking();
                                }
 
-                               //TODO: Adjustment Application
-                               if (ServiceMenuAccessDetails_OBJ.has("AdjustmentApplicationAccessFromMobile")){
-                                   String AdjustmentApplication = ServiceMenuAccessDetails_OBJ.optString("AdjustmentApplicationAccessFromMobile");
-                                   if (!AdjustmentApplication.isEmpty() || !AdjustmentApplication.equals("null")){
-                                       String[] AdjustmentApplicationOffArr = AdjustmentApplication.split("_");
-                                       String isRequired_Adjustment= AdjustmentApplicationOffArr[0];
-                                       String isConfigure_Adjustment= AdjustmentApplicationOffArr[1];
-                                       if(isConfigure_Adjustment.equals("1")){
-                                            llAdjustment.setVisibility(isRequired_Adjustment.equals("1") ? View.VISIBLE : View.GONE);
-                                       } else {
-                                           previousConfiguration_Adjustment();
-                                       }
-                                   } else {
-                                       previousConfiguration_Adjustment();
-                                   }
+                               //TODO: Adjustment Application (Com-off,WFH,OD)
+                               if (ServiceMenuAccessDetails_OBJ.has("AttnAdjCOApplicationAccessFromMobile")){
+                                   AdjustmentStatusChecking(ServiceMenuAccessDetails_OBJ.optString("AttnAdjCOApplicationAccessFromMobile"));
+                               } else if (ServiceMenuAccessDetails_OBJ.has("AttnAdjWFHApplicationAccessFromMobile")){
+                                   AdjustmentStatusChecking(ServiceMenuAccessDetails_OBJ.optString("AttnAdjWFHApplicationAccessFromMobile"));
+                               } else if (ServiceMenuAccessDetails_OBJ.has("AttnAdjODAccessFromMobileApp")){
+                                   AdjustmentStatusChecking(ServiceMenuAccessDetails_OBJ.optString("AttnAdjODAccessFromMobileApp"));
                                } else {
                                    previousConfiguration_Adjustment();
                                }
 
-                               /*if (ServiceMenuAccessDetails_OBJ.has("NormalHolidayViewFromMobile") || ServiceMenuAccessDetails_OBJ.has("OptionalHolidayViewFromMobile") ){
-                                   String HolidayView = ServiceMenuAccessDetails_OBJ.optString("AdjustmentApplicationAccessFromMobile");
-                                   if (!HolidayView.isEmpty() || !HolidayView.equals("null")){
-                                       String[] LeaveBalanceManagementArr = LeaveBalanceManagement.split("_");
-                                       String isRequired_LeaveBalanceManagement= LeaveBalanceManagementArr[0];
-                                       String isConfigure_LeaveBalanceManagement= LeaveBalanceManagementArr[1];
+
+                               //TODO: Holiday View
+                               if (ServiceMenuAccessDetails_OBJ.has("NormalHolidayViewFromMobile")){
+                                   String NormalHolidayViewFromMobile = ServiceMenuAccessDetails_OBJ.optString("NormalHolidayViewFromMobile");
+                                   if(!NormalHolidayViewFromMobile.isEmpty()){
+                                       HolidayViewStatusChecking(NormalHolidayViewFromMobile);
+                                   } else {
+                                       previousConfiguration_HolidayView();
                                    }
-                               }*/
+                               }
+                               if(ServiceMenuAccessDetails_OBJ.has("OptionalHolidayViewFromMobile")){
+                                   String OptionalHolidayViewFromMobile = ServiceMenuAccessDetails_OBJ.optString("OptionalHolidayViewFromMobile");
+                                   if(!OptionalHolidayViewFromMobile.isEmpty()){
+                                       HolidayViewStatusChecking(OptionalHolidayViewFromMobile);
+                                   } else {
+                                       previousConfiguration_HolidayView();
+                                   }
+                               }
+
 
                                //TODO: Leave Balance Management
                                if (ServiceMenuAccessDetails_OBJ.has("LeaveBalanceViewFromMobile")){
@@ -1977,7 +2056,6 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 || pref.getEmpClintId().equals(ClientID.SKF_ENGINEERING_LUB)
                 || pref.getEmpClintId().equals(ClientID.SKF_INDUSTRIAL)
                 ||pref.getEmpClintId().equals(ClientID.SVF)
-                ||pref.getEmpClintId().equals(ClientID.DEMO)
         ){
             llHoliday.setVisibility(View.VISIBLE);
         } else {
@@ -1997,7 +2075,43 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         if (pref.getAdjustmentStatus().equals("1")) {
             llAdjustment.setVisibility(View.VISIBLE);
         } else {
-            llAdjustment.setVisibility(View.GONE);
+            llAdjustment.setVisibility(View.VISIBLE);
+        }
+    }
+    void previousConfiguration_HolidayView(){
+        if (pref.getEmpClintId().equals(ClientID.SKY_ROOT) || pref.getEmpClintId().equals(ClientID.WACKER) || pref.getEmpClintId().equals(ClientID.ABFRL)){
+            llHolidayView.setVisibility(View.VISIBLE);
+        } else {
+            llHolidayView.setVisibility(View.GONE);
+        }
+    }
+    void AdjustmentStatusChecking(String status){
+        if (!status.isEmpty() || !status.equals("null")){
+            String[] AdjustmentApplicationOffArr = status.split("_");
+            String isRequired_Adjustment= AdjustmentApplicationOffArr[0];
+            isLiveSatus_Adjustment= AdjustmentApplicationOffArr[1];
+            if(isLiveSatus_Adjustment.equals("1")){
+                llAdjustment.setVisibility(isRequired_Adjustment.equals("1")?View.VISIBLE : View.GONE);
+            } else {
+                previousConfiguration_Adjustment();
+            }
+        } else {
+            previousConfiguration_Adjustment();
+        }
+    }
+
+    void HolidayViewStatusChecking(String statusHolidayView){
+        if (!statusHolidayView.isEmpty() || !statusHolidayView.equals("null")){
+            String[] HolidayViewArr = statusHolidayView.split("_");
+            String isRequired_HolidayView= HolidayViewArr[0];
+            isLiveStatus_HolidayView= HolidayViewArr[1];
+            if(isLiveStatus_OHolidayMarking.equals("1")){
+                llHolidayView.setVisibility(isRequired_HolidayView.equals("1")?View.VISIBLE:View.GONE);
+            } else {
+                previousConfiguration_HolidayView();
+            }
+        } else {
+            previousConfiguration_HolidayView();
         }
     }
 }
