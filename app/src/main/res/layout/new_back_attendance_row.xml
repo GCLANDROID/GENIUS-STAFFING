@@ -127,6 +127,21 @@
             android:textColor="#000000"
             tools:text="Regularisation Request Already Exists...Further Request Not Allowed!"/>
     </LinearLayout>
+
+    <EditText
+        android:id="@+id/edtRemarks"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/border_background"
+        android:hint="Remarks"
+        android:paddingStart="15dp"
+        android:paddingEnd="10dp"
+        android:textSize="11.5sp" />
+
     <TextView
         android:id="@+id/tvShift"
         android:layout_width="match_parent"
@@ -142,7 +157,7 @@
         android:paddingStart="15dp"
         android:paddingEnd="10dp"
         android:background="@drawable/border_background"
-        android:text="Select Shift"
+        android:hint="Select Shift"
         android:textColor="@android:color/black"
         android:textSize="12sp"
         android:drawableEnd="@drawable/ic_arrow_drop_down_24"/>
@@ -162,13 +177,13 @@
         android:paddingStart="15dp"
         android:paddingEnd="10dp"
         android:background="@drawable/border_background"
-        android:text="Select Location"
+        android:hint="Select Location"
         android:textColor="@android:color/black"
         android:textSize="12sp"
         android:drawableEnd="@drawable/ic_arrow_drop_down_24"/>
 
     <TextView
-        android:id="@+id/tvApprovar"
+        android:id="@+id/tvApprover"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_gravity="center"
@@ -182,7 +197,7 @@
         android:paddingStart="15dp"
         android:paddingEnd="10dp"
         android:background="@drawable/border_background"
-        android:text="Select Approvar"
+        android:hint="Select Approvar"
         android:textColor="@android:color/black"
         android:textSize="12sp"
         android:drawableEnd="@drawable/ic_arrow_drop_down_24"/>
