@@ -58,7 +58,7 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:id="@+id/imhHome"
+                    android:id="@+id/imgHome"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:src="@drawable/homeimg" />
@@ -81,7 +81,7 @@
             android:weightSum="3">
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="50dp"
+                android:layout_height="65dp"
                 android:layout_weight="1.2"
 
                 android:layout_marginTop="10dp"
@@ -90,17 +90,34 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/llHeader">
 
-                <TextView
-                    android:id="@+id/tvYear"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/llwhiterectanglewithborder"
-                    android:drawableEnd="@drawable/arrow_drop_down_24"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="Select"
-                    android:textColor="@color/black" />
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Select Year"
+                        android:textColor="@color/color1"
+                        android:textStyle="bold"
+                        android:textSize="11sp"/>
+
+                    <TextView
+                        android:id="@+id/tvYear"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/llwhiterectanglewithborder"
+                        android:drawableEnd="@drawable/arrow_drop_down_24"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="Select"
+                        android:layout_marginTop="3dp"
+                        android:textColor="@color/black" />
+
+                </LinearLayout>
+
+
 
                 <Spinner
                     android:id="@+id/spYear"
@@ -111,7 +128,7 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="50dp"
+                android:layout_height="65dp"
                 android:layout_weight="1.8"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical"
@@ -119,24 +136,38 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/llHeader">
-
-                <TextView
-                    android:id="@+id/tvMonth"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/llwhiterectanglewithborder"
-                    android:drawableEnd="@drawable/arrow_drop_down_24"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="Select"
-                    android:textColor="@color/black" />
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Select Month"
+                        android:textColor="@color/color1"
+                        android:textStyle="bold"
+                        android:textSize="11sp"/>
+                    <TextView
+                        android:id="@+id/tvMonth"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/llwhiterectanglewithborder"
+                        android:drawableEnd="@drawable/arrow_drop_down_24"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="10dp"
+                        android:paddingEnd="10dp"
+                        android:layout_marginTop="3dp"
+                        android:text="Select"
+                        android:textColor="@color/black" />
+                    <Spinner
+                        android:id="@+id/spMonth"
+                        android:layout_width="match_parent"
+                        android:layout_height=".1dp"
+                        android:visibility="invisible" />
+                </LinearLayout>
 
-                <Spinner
-                    android:id="@+id/spMonth"
-                    android:layout_width="match_parent"
-                    android:layout_height=".1dp"
-                    android:visibility="invisible" />
+
+
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
@@ -147,11 +178,19 @@
             <LinearLayout
                 android:id="@+id/llApproveStatus"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="65dp"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical"
                 android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Select Applied Type"
+                    android:textColor="@color/color1"
+                    android:textStyle="bold"
+                    android:textSize="11sp"/>
 
                 <TextView
                     android:id="@+id/tvDropDown"
@@ -162,6 +201,7 @@
                     android:gravity="center_vertical"
                     android:paddingLeft="10dp"
                     android:paddingEnd="10dp"
+                    android:layout_marginTop="3dp"
                     android:text="Select"
                     android:textColor="@color/black" />
 
@@ -177,9 +217,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:text="SHOW"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="10dp"/>
+                android:text="Show"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:layout_gravity="bottom"
+                android:backgroundTint="@color/colorPrimaryDark"
+                android:layout_marginHorizontal="10dp"/>
         </LinearLayout>
 
 
@@ -193,6 +236,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -201,5 +245,53 @@
         app:layout_constraintVertical_bias="0.0"
         tools:listitem="@layout/all_application_view_row" />
 
+    <LinearLayout
+        android:id="@+id/llNoData"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/llMain">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/problemicon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="No data found"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llLoading"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/llMain">
+
+        <ProgressBar
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:indeterminateTint="@color/colorPrimary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Loading..."
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
