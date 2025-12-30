@@ -34,12 +34,15 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
+import io.cordova.myapp00d753.activity.attendance.AttenDanceDashboardActivity;
+import io.cordova.myapp00d753.activity.attendance.MetsoAttendanceReportActivity;
 import io.cordova.myapp00d753.activity.metso.MetsoNewReimbursementClaimActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.SupervisorFilterAdapter;
 import io.cordova.myapp00d753.adapter.CustomSpinnerAdapter;
@@ -47,6 +50,7 @@ import io.cordova.myapp00d753.module.SpineerItemModel;
 import io.cordova.myapp00d753.module.SpinnerModel;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
+import io.cordova.myapp00d753.utility.ShowDialog;
 
 public class NEW_AdjustmentActivity extends AppCompatActivity {
     private static final String TAG = "NEW_AdjustmentActivity";
@@ -59,8 +63,8 @@ public class NEW_AdjustmentActivity extends AppCompatActivity {
     TextView tvDropDown;
     LinearLayout llStartEndDate,llEffectiveDate,llMode,llInOutTime, llEndDate,llEndTime,llInTime,llOutTime,llApprover,llLabelApprover;
     TextView tvStartDateName,tvEffectiveDate,tvEndDate,tvStrtDate,tvInTime,tvOutTime,tvDayMode,tvApprover;
-    String effectiveDate="",startDate = "",endDate = "",dayType="",intime="",outtime="";
-    ArrayList<String> dayModeList = new ArrayList<>();
+    String effectiveDate="",startDate = "",endDate = "",dayType="",dayTypeId="",intime="",outtime="";
+    ArrayList<SpinnerModel> dayModeList = new ArrayList<>();
     Button btnSave;
     String applicationComponent = "";
     String applicationComponentID = "";
@@ -93,7 +97,6 @@ public class NEW_AdjustmentActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        getRequiredStatus();
         pref = new Pref(this);
         imgHome=(ImageView)findViewById(R.id.imgHome);
         imgBack=(ImageView)findViewById(R.id.imgBack);
@@ -117,17 +120,22 @@ public class NEW_AdjustmentActivity extends AppCompatActivity {
         tvDayMode = (TextView)findViewById(R.id.tvDayMode);
         llInTime = (LinearLayout) findViewById(R.id.llInTime);
         llOutTime = (LinearLayout) findViewById(R.id.llOutTime);
+        tvApprover = (TextView) findViewById(R.id.tvApprover);
         etReason = findViewById(R.id.etReason);
         btnSave = findViewById(R.id.btnSave);
+        getRequiredStatus();
         progressDialog = new ProgressDialog(NEW_AdjustmentActivity.this);
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
-        dayModeList.add("Full Day");
-        ArrayAdapter<String> spinnerModeArrayAdapter = new ArrayAdapter<String>
+        dayModeList.add(new SpinnerModel("Full Day","FD"));
+        dayModeList.add(new SpinnerModel("First Half Day","FHD"));
+        dayModeList.add(new SpinnerModel("Second Half Day","SHD"));
+        /*ArrayAdapter<String> spinnerModeArrayAdapter = new ArrayAdapter<String>
                 (NEW_AdjustmentActivity.this, R.layout.custom_spinner_list,
                         R.id.txtShiftTime,
-                        dayModeList); //selected item will look like a spinner set from XML
-        spinnerModeArrayAdapter.setDropDownViewResource(R.layout.custom_spinner_list);
+                        dayModeList);*/ //selected item will look like a spinner set from XML
+        //spinnerModeArrayAdapter.setDropDownViewResource(R.layout.custom_spinner_list);
+        CustomSpinnerAdapter spinnerModeArrayAdapter = new CustomSpinnerAdapter(this,dayModeList);
         spMode.setAdapter(spinnerModeArrayAdapter);
     }
 
@@ -240,18 +248,27 @@ public class NEW_AdjustmentActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 applicationComponent = dropDownList.get(i).getItem();
                 applicationComponentID = dropDownList.get(i).getItemId();
+                Log.e(TAG, "onItemSelected: "+applicationComponentID);
                 tvDropDown.setText(applicationComponent);
-                if (applicationComponent.equalsIgnoreCase("On Duty")) {
+                if (applicationComponentID.equalsIgnoreCase("OD")) {
+                    tvStartDateName.setText("Start Date");
                     llStartEndDate.setVisibility(View.VISIBLE);
-                    llEffectiveDate.setVisibility(View.GONE);
-                    llMode.setVisibility(View.VISIBLE);
-                    llInOutTime.setVisibility(View.GONE);
-                } else if (applicationComponent.equalsIgnoreCase("OT Application")) {
-                    llStartEndDate.setVisibility(View.VISIBLE);
+                    llEndTime.setVisibility(View.GONE);
                     llEffectiveDate.setVisibility(View.GONE);
                     llMode.setVisibility(View.GONE);
                     llInOutTime.setVisibility(View.VISIBLE);
-                } else if (applicationComponent.equalsIgnoreCase("Comp. Off")) {
+                } else if (applicationComponentID.equalsIgnoreCase("WFH")) {
+                    llStartEndDate.setVisibility(View.VISIBLE);
+                    llEndTime.setVisibility(View.GONE);
+                    llEffectiveDate.setVisibility(View.GONE);
+                    llMode.setVisibility(View.GONE);
+                    llInOutTime.setVisibility(View.VISIBLE);
+                    /*llStartEndDate.setVisibility(View.VISIBLE);
+                    llEffectiveDate.setVisibility(View.GONE);
+                    llMode.setVisibility(View.GONE);
+                    llInOutTime.setVisibility(View.VISIBLE);*/
+                } else if (applicationComponentID.equalsIgnoreCase("CO")) {
+                    tvStartDateName.setText("Referral date");
                     llStartEndDate.setVisibility(View.VISIBLE);
                     llEffectiveDate.setVisibility(View.VISIBLE);
                     llMode.setVisibility(View.VISIBLE);
@@ -269,8 +286,9 @@ public class NEW_AdjustmentActivity extends AppCompatActivity {
         spMode.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                dayType = dayModeList.get(i);
-                tvDayMode.setText(dayModeList.get(i));
+                dayType = dayModeList.get(i).getItem();
+                dayTypeId = dayModeList.get(i).getItemId();
+                tvDayMode.setText(dayModeList.get(i).getItem());
             }
 
             @Override
@@ -286,85 +304,72 @@ public class NEW_AdjustmentActivity extends AppCompatActivity {
                     Toast.makeText(NEW_AdjustmentActivity.this, "Please select approver", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (applicationComponent.equalsIgnoreCase("On Duty")) {
-                    JSONObject jsonObject = new JSONObject();
-                    try {
-                        jsonObject.put("ConsultantID", pref.getEmpConId());
-                        jsonObject.put("ClientID", pref.getEmpClintId());
-                        jsonObject.put("EmployeeID", pref.getEmpId());
-                        jsonObject.put("YearId", "");
-                        jsonObject.put("MonthId", "");
-                        jsonObject.put("GatePassDate", startDate + " 00:00:00.000");
-                        jsonObject.put("EndDate", endDate + " 00:00:00.000");
-                        jsonObject.put("Remarks", etReason.getText().toString().trim());
-                        jsonObject.put("StartTime", startDate + " 00:00:00.000");
-                        jsonObject.put("EndTime", startDate + " 00:00:00.000");
-                        jsonObject.put("GatePassType", applicationComponentID);
-                        jsonObject.put("clinetname", "");
-                        jsonObject.put("clinetphn", "");
-                        jsonObject.put("CreatedBy", pref.getEmpId());
-                        jsonObject.put("AID", "0");
-                        jsonObject.put("Oddaytype", dayType);
-                        jsonObject.put("OtMin", "");
-                        jsonObject.put("refdate", effectiveDate + " 00:00:00.000");
-                        jsonObject.put("LtMin", "");
-                        jsonObject.put("Approverid", SupervisorID);
-                        saveAdjustmentApplication(jsonObject);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } else if (applicationComponent.equalsIgnoreCase("Comp Off")) {
-                    JSONObject jsonObject = new JSONObject();
-                    try {
-                        jsonObject.put("ConsultantID", pref.getEmpConId());
-                        jsonObject.put("ClientID", pref.getEmpClintId());
-                        jsonObject.put("EmployeeID", pref.getEmpId());
-                        jsonObject.put("YearId", "");
-                        jsonObject.put("MonthId", "");
-                        jsonObject.put("GatePassDate", effectiveDate + " 00:00:00.000");
-                        jsonObject.put("EndDate", effectiveDate + " 00:00:00.000");
-                        jsonObject.put("Remarks", etReason.getText().toString().trim());
-                        jsonObject.put("StartTime", effectiveDate + " 00:00:00.000");
-                        jsonObject.put("EndTime", effectiveDate + " 00:00:00.000");
-                        jsonObject.put("GatePassType", applicationComponentID);
-                        jsonObject.put("clinetname", "");
-                        jsonObject.put("clinetphn", "");
-                        jsonObject.put("CreatedBy", pref.getEmpId());
-                        jsonObject.put("AID", "0");
-                        jsonObject.put("Oddaytype", dayType);
-                        jsonObject.put("OtMin", "");
-                        jsonObject.put("refdate", "");
-                        jsonObject.put("LtMin", "");
-                        jsonObject.put("Approverid", SupervisorID);
-                        saveAdjustmentApplication(jsonObject);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } else {
+                if (applicationComponentID.equalsIgnoreCase("OD")) {
                     intime = tvInTime.getText().toString().trim();
                     outtime = tvOutTime.getText().toString();
                     JSONObject jsonObject = new JSONObject();
                     try {
-                        jsonObject.put("ConsultantID", pref.getEmpConId());
-                        jsonObject.put("ClientID", pref.getEmpClintId());
                         jsonObject.put("EmployeeID", pref.getEmpId());
-                        jsonObject.put("YearId", "");
-                        jsonObject.put("MonthId", "");
-                        jsonObject.put("GatePassDate", effectiveDate + " 00:00:00.000");
-                        jsonObject.put("EndDate", effectiveDate + " 00:00:00.000");
+                        jsonObject.put("AppliedType", applicationComponentID);
+                        jsonObject.put("AppliedDate", startDate);
+                        jsonObject.put("EndDate", startDate);
                         jsonObject.put("Remarks", etReason.getText().toString().trim());
-                        jsonObject.put("StartTime", effectiveDate + " " + intime + ":00.000");
-                        jsonObject.put("EndTime", effectiveDate + " " + outtime + ":00.000");
-                        jsonObject.put("GatePassType", applicationComponentID);
+                        jsonObject.put("StartTime", intime);
+                        jsonObject.put("EndTime", intime);
                         jsonObject.put("clinetname", "");
                         jsonObject.put("clinetphn", "");
-                        jsonObject.put("CreatedBy", pref.getEmpId());
-                        jsonObject.put("AID", "0");
-                        jsonObject.put("Oddaytype", dayType);
+                        jsonObject.put("Oddaytype", "");
                         jsonObject.put("OtMin", "");
-                        jsonObject.put("refdate", "");
                         jsonObject.put("LtMin", "");
+                        jsonObject.put("refdate", "");
                         jsonObject.put("Approverid", SupervisorID);
+                        jsonObject.put("SecurityCode", pref.getSecurityCode());
+                        saveAdjustmentApplication(jsonObject);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else if (applicationComponentID.equalsIgnoreCase("CO")) {
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("EmployeeID", pref.getEmpId());
+                        jsonObject.put("AppliedType", applicationComponentID);
+                        jsonObject.put("AppliedDate", effectiveDate);
+                        jsonObject.put("EndDate", effectiveDate);
+                        jsonObject.put("Remarks", etReason.getText().toString().trim());
+                        jsonObject.put("StartTime", "");
+                        jsonObject.put("EndTime", "");
+                        jsonObject.put("clinetname", "");
+                        jsonObject.put("clinetphn", "");
+                        jsonObject.put("Oddaytype", "");
+                        jsonObject.put("OtMin", "");
+                        jsonObject.put("LtMin", "");
+                        jsonObject.put("refdate", startDate);
+                        jsonObject.put("Approverid", SupervisorID);
+                        jsonObject.put("SecurityCode", pref.getSecurityCode());
+                        saveAdjustmentApplication(jsonObject);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else if (applicationComponentID.equalsIgnoreCase("WFH")){
+                    intime = tvInTime.getText().toString().trim();
+                    outtime = tvOutTime.getText().toString();
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("EmployeeID", pref.getEmpId());
+                        jsonObject.put("AppliedType", applicationComponentID);
+                        jsonObject.put("AppliedDate", startDate);
+                        jsonObject.put("EndDate", startDate);
+                        jsonObject.put("Remarks", etReason.getText().toString().trim());
+                        jsonObject.put("StartTime", intime);
+                        jsonObject.put("EndTime", outtime);
+                        jsonObject.put("clinetname", "");
+                        jsonObject.put("clinetphn", "");
+                        jsonObject.put("Oddaytype", "");
+                        jsonObject.put("OtMin", "");
+                        jsonObject.put("LtMin", "");
+                        jsonObject.put("refdate", "");
+                        jsonObject.put("Approverid", SupervisorID);
+                        jsonObject.put("SecurityCode", pref.getSecurityCode());
                         saveAdjustmentApplication(jsonObject);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -377,7 +382,7 @@ public class NEW_AdjustmentActivity extends AppCompatActivity {
 
     private void saveAdjustmentApplication(JSONObject jsonObject) {
         progressDialog.show();
-        AndroidNetworking.post(AppData.LAMS_DropDownData)
+        AndroidNetworking.post(AppData.LAMS_Save_OD_CO_WFH)
                 .addJSONObjectBody(jsonObject)
                 .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
                 .setTag("uploadTest")
@@ -389,6 +394,21 @@ public class NEW_AdjustmentActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                         try {
                             Log.e(TAG, "SAVE_ADJUSTMENT_APPLICATION: "+response.toString(4));
+                            JSONObject object = new JSONObject(String.valueOf(response));
+                            String Response_Message = object.optString("Response_Message");
+                            String Response_Code = object.optString("Response_Code");
+                            if (Response_Code.equals("101")) {
+                                ShowDialog.showSuccessDialog(NEW_AdjustmentActivity.this, Response_Message, new ShowDialog.ResultListener() {
+                                    @Override
+                                    public void onSuccess() {
+                                        Intent intent = new Intent(NEW_AdjustmentActivity.this, AttenDanceDashboardActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                });
+                            } else {
+                                Toast.makeText(NEW_AdjustmentActivity.this, Response_Message, Toast.LENGTH_SHORT).show();
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

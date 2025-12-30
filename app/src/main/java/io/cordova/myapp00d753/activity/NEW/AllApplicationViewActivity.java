@@ -1,6 +1,7 @@
 package io.cordova.myapp00d753.activity.NEW;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -29,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.activity.NEW.adapter.AllApplicationViewAdapter;
 import io.cordova.myapp00d753.activity.NEW.model.AllApplicationViewModel;
 import io.cordova.myapp00d753.adapter.CustomSpinnerAdapter;
@@ -50,6 +54,8 @@ public class AllApplicationViewActivity extends AppCompatActivity {
     Spinner spMonth,spYear;
     String selectedYear="",selectedMonth="",selectedAppliedType="";
     Button btnShow;
+    ImageView imgHome,imgBack;
+    LinearLayout llNoData,llLoading;
     ArrayList<AllApplicationViewModel> applicationViewList = new ArrayList<>();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,8 +72,12 @@ public class AllApplicationViewActivity extends AppCompatActivity {
         tvDropDown = findViewById(R.id.tvDropDown);
         tvMonth = findViewById(R.id.tvMonth);
         tvYear = findViewById(R.id.tvYear);
+        imgHome = findViewById(R.id.imgHome);
+        imgBack = findViewById(R.id.imgBack);
         spMonth = findViewById(R.id.spMonth);
         spYear = findViewById(R.id.spYear);
+        llNoData = findViewById(R.id.llNoData);
+        llLoading = findViewById(R.id.llLoading);
         btnShow = findViewById(R.id.btnShow);
         setUpYearMonthSpinner();
         progressDialog = new ProgressDialog(AllApplicationViewActivity.this);
@@ -224,6 +234,20 @@ public class AllApplicationViewActivity extends AppCompatActivity {
 
             }
         });
+        imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(AllApplicationViewActivity.this, EmployeeDashBoardActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         btnShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -246,7 +270,10 @@ public class AllApplicationViewActivity extends AppCompatActivity {
     }
 
     private void getApplicationList(JSONObject jsonObject) {
-        progressDialog.show();
+        //progressDialog.show();
+        llLoading.setVisibility(View.VISIBLE);
+        rvItemView.setVisibility(View.GONE);
+        llNoData.setVisibility(View.GONE);
         AndroidNetworking.post(AppData.LAMS_AllApplicationView)
                 .addJSONObjectBody(jsonObject)
                 .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
@@ -257,11 +284,12 @@ public class AllApplicationViewActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            progressDialog.dismiss();
-                            Log.e(TAG, "ALL_APPLICATION_LIST: "+response.toString(0));
+                            //progressDialog.dismiss();
+                            Log.e(TAG, "ALL_APPLICATION_LIST: "+response.toString(4));
                             JSONObject object = new JSONObject(String.valueOf(response));
                             String Response_Message = object.optString("Response_Message");
                             String Response_Code = object.optString("Response_Code");
+                            applicationViewList.clear();
                             if (Response_Code.equals("101")) {
                                 JSONObject Response_Data = object.getJSONObject("Response_Data");
                                 JSONArray jsonArray = Response_Data.getJSONArray("Table");
@@ -289,9 +317,14 @@ public class AllApplicationViewActivity extends AppCompatActivity {
                                     rvItemView.setLayoutManager(new LinearLayoutManager(AllApplicationViewActivity.this));
                                     AllApplicationViewAdapter allApplicationAdapter = new AllApplicationViewAdapter(AllApplicationViewActivity.this,applicationViewList);
                                     rvItemView.setAdapter(allApplicationAdapter);
+                                    llNoData.setVisibility(View.GONE);
+                                    rvItemView.setVisibility(View.VISIBLE);
+                                    llLoading.setVisibility(View.GONE);
                                 }
                             } else {
-
+                                llNoData.setVisibility(View.VISIBLE);
+                                rvItemView.setVisibility(View.GONE);
+                                llLoading.setVisibility(View.GONE);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -300,8 +333,11 @@ public class AllApplicationViewActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError anError) {
-                        progressDialog.dismiss();
+                        //progressDialog.dismiss();
                         Log.e(TAG, "ALL_APPLICATION_LIST_error: "+anError.getErrorBody());
+                        llNoData.setVisibility(View.VISIBLE);
+                        rvItemView.setVisibility(View.GONE);
+                        llLoading.setVisibility(View.GONE);
                     }
                 });
     }
