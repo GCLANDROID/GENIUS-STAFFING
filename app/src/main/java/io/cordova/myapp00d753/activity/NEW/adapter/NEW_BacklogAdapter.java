@@ -246,7 +246,7 @@ public class NEW_BacklogAdapter extends RecyclerView.Adapter<NEW_BacklogAdapter.
             }
         });
 
-        if (itemList.get(position).getRemarks().equals("C")){
+        /*if (itemList.get(position).getRemarks().equals("C")){
             holder.txtRemarks.setVisibility(View.GONE);
         } else {
             holder.txtRemarks.setVisibility(View.VISIBLE);
@@ -265,7 +265,7 @@ public class NEW_BacklogAdapter extends RecyclerView.Adapter<NEW_BacklogAdapter.
                 holder.txtRemarks.setTextColor(Color.parseColor("#FFF44336"));
                 holder.txtRemarks.setText(itemList.get(position).getRemarks());
             }
-        }
+        }*/
     }
 
     @Override
