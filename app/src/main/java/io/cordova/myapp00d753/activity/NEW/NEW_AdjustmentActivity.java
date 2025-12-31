@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -34,7 +33,6 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,7 +40,6 @@ import java.util.Calendar;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.activity.attendance.AttenDanceDashboardActivity;
-import io.cordova.myapp00d753.activity.attendance.MetsoAttendanceReportActivity;
 import io.cordova.myapp00d753.activity.metso.MetsoNewReimbursementClaimActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.SupervisorFilterAdapter;
 import io.cordova.myapp00d753.adapter.CustomSpinnerAdapter;
@@ -50,6 +47,7 @@ import io.cordova.myapp00d753.module.SpineerItemModel;
 import io.cordova.myapp00d753.module.SpinnerModel;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
+import io.cordova.myapp00d753.utility.RequiredListClass;
 import io.cordova.myapp00d753.utility.ShowDialog;
 import io.cordova.myapp00d753.utility.Util;
 
@@ -138,6 +136,18 @@ public class NEW_AdjustmentActivity extends AppCompatActivity {
         //spinnerModeArrayAdapter.setDropDownViewResource(R.layout.custom_spinner_list);
         CustomSpinnerAdapter spinnerModeArrayAdapter = new CustomSpinnerAdapter(this,dayModeList);
         spMode.setAdapter(spinnerModeArrayAdapter);
+        try {
+            getRequiredList();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    private void getRequiredList() throws JSONException {
+        progressDialog.show();
+        supervisorList = RequiredListClass.getApproverData(pref.getApproverList());
+        progressDialog.dismiss();
     }
 
     private void getRequiredStatus() {
