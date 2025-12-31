@@ -236,11 +236,12 @@ public class NEW_AttendanceRegularizationActivity extends AppCompatActivity impl
                             obj.put("todate",endDate);
                             obj.put("SecurityCode",pref.getSecurityCode());*/
 
-                            obj.put("DbOperation","1");
+                            obj.put("ConsultantID",pref.getEmpConId());
+                            obj.put("clientid", pref.getEmpClintId());
                             obj.put("empid",pref.getEmpId());
-                            obj.put("clientid",pref.getEmpClintId());
                             obj.put("fromdate",startDate);
                             obj.put("todate",endDate);
+                            obj.put("dt","");
                             obj.put("SecurityCode",pref.getSecurityCode());
                             getBackLogData(obj);
                         } catch (JSONException e) {
@@ -481,7 +482,7 @@ public class NEW_AttendanceRegularizationActivity extends AppCompatActivity impl
                                 //Toast.makeText(SKF_AttendanceRegularizationActivity.this,Response_Message,Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {
-                            throw new RuntimeException(e);
+                            e.printStackTrace();
                         }
                     }
 
@@ -574,17 +575,114 @@ public class NEW_AttendanceRegularizationActivity extends AppCompatActivity impl
                 });
     }
 
-
     private void getBackLogData(JSONObject jsonObject) {
+        Log.e(TAG, "getBackLogData: INPUT" + jsonObject);
+        llLoader.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.GONE);
+        llNodata.setVisibility(View.GONE);
+        //blockLogList.clear();
+        //AndroidNetworking.post(AppData.GET_ATTENDANCE_REGULARIZATION_LOCAL_IP)
+        AndroidNetworking.post(AppData.LAMS_AttnRegularisationDate)
+                .addJSONObjectBody(jsonObject)
+                //.addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "NEW_BACK_LOG_DATA: " + response.toString(4));
+                            blockLogList = new ArrayList<>();
+
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code.equals("101")) {
+                                btnSubmit.setVisibility(View.VISIBLE);
+                                JSONObject Response_Data = job1.optJSONObject("Response_Data");
+                                JSONArray Table4 = Response_Data.optJSONArray("Table4"); //TODO: DATE LIST
+                                Log.e(TAG, "Table4: " + Table4);
+                                JSONArray Table5 = Response_Data.optJSONArray("Table5");
+                                Log.e(TAG, "Table5: " + Table5);
+
+                                JSONObject objectRequestCount = Table5.getJSONObject(0);
+                                txtRegularisationCount.setText(String.valueOf(objectRequestCount.getInt("RegularisationRequestCount")));
+
+                                if (objectRequestCount.getInt("RegularisationRequestCount") < 4) {
+                                    if (Table4.length() > 0) {
+                                        for (int i = 0; i < Table4.length(); i++) {
+                                            JSONObject obj = Table4.getJSONObject(i);
+                                            String AttDate = obj.optString("DATES");
+                                            String InTime = obj.optString("Intime");
+                                            String OutTime = obj.optString("Outtime");
+                                            String Daytype = obj.optString("Daytype");
+                                            //String Remarks=obj.optString("Remark");
+                                            //Log.e(TAG, "Remarks: "+obj.optString("Remark") );
+
+                                            //Log.e(TAG, "Remarks: "+Remarks);
+
+                                            NEW_BackLogAttendanceModel blockModule = new NEW_BackLogAttendanceModel(AttDate, InTime, OutTime);
+                                            blockModule.setDayType(Daytype);
+                                            //blockModule.setRemarks(Remarks);
+                                            blockLogList.add(blockModule);
+                                            //item1.add(pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+AttDate + "_" + InTime + "_" + OutTime + "_"+Remarks);
+                                        }
+                                        llLoader.setVisibility(View.GONE);
+                                        llMain.setVisibility(View.VISIBLE);
+                                        llNodata.setVisibility(View.GONE);
+                                        llWarning.setVisibility(View.GONE);
+                                        skfBacklogAdapter = new NEW_BacklogAdapter(blockLogList, dayTypeArray, NEW_AttendanceRegularizationActivity.this,
+                                                metsoShiftList, locationArrayList, supervisorList);
+                                        skfBacklogAdapter.setIsApproverRequired(isApproverRequired);
+                                        skfBacklogAdapter.setIsDayTypeSelectionRequired(isDayTypeSelectionRequired);
+                                        skfBacklogAdapter.setIsShiftSelectionRequired(isShiftSelectionRequired);
+                                        skfBacklogAdapter.setIsLocationSelectionRequired(isLocationSelectionRequired);
+                                        rvItem.setAdapter(skfBacklogAdapter);
+                                    } else {
+                                        llLoader.setVisibility(View.GONE);
+                                        llMain.setVisibility(View.GONE);
+                                        llNodata.setVisibility(View.VISIBLE);
+                                        llWarning.setVisibility(View.GONE);
+                                    }
+                                } else {
+                                    //TODO: Exceed Request Limit message;
+                                    llLoader.setVisibility(View.GONE);
+                                    llMain.setVisibility(View.GONE);
+                                    llNodata.setVisibility(View.GONE);
+                                    llWarning.setVisibility(View.VISIBLE);
+                                }
+                                //tvCount.setText("Total Day(s) Count : "+jsonArray.length());
+                            } else {
+                                llLoader.setVisibility(View.GONE);
+                                llMain.setVisibility(View.GONE);
+                                llNodata.setVisibility(View.VISIBLE);
+                                llWarning.setVisibility(View.GONE);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "SKF_BACK_LOG_DATA_error: " + anError.getErrorBody());
+                        llLoader.setVisibility(View.VISIBLE);
+                        llMain.setVisibility(View.GONE);
+                        llNodata.setVisibility(View.GONE);
+                    }
+                });
+    }
+    /*private void getBackLogData(JSONObject jsonObject) {
         Log.e(TAG, "getBackLogData: INPUT"+jsonObject);
         llLoader.setVisibility(View.VISIBLE);
         llMain.setVisibility(View.GONE);
         llNodata.setVisibility(View.GONE);
         //blockLogList.clear();
         //AndroidNetworking.post(AppData.GET_ATTENDANCE_REGULARIZATION_LOCAL_IP)
-        AndroidNetworking.post(AppData.GET_ATTENDANCE_REGULARIZATION)
+        AndroidNetworking.post(AppData.LAMS_AttnRegularisationDate)
                 .addJSONObjectBody(jsonObject)
-                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                //.addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
@@ -600,16 +698,16 @@ public class NEW_AttendanceRegularizationActivity extends AppCompatActivity impl
                             String Response_Message = job1.optString("Response_Message");
                             if (Response_Code.equals("101")) {
                                 btnSubmit.setVisibility(View.VISIBLE);
-                                String Response_Data = job1.optString("Response_Data");
+                                JSONArray Response_Data = job1.optJSONArray("Response_Data");
                                 JSONObject Response_Data_obj = new JSONObject(Response_Data);
                                 String Table = Response_Data_obj.optString("Table");
                                 Log.e(TAG, "Table: "+Table);
                                 String Table1 = Response_Data_obj.optString("Table1");
                                 Log.e(TAG, "Table1: "+Table1);
-                               /* JSONArray Table1Array = new JSONArray(Table1);
+                               *//* JSONArray Table1Array = new JSONArray(Table1);
                                 JSONObject table1Obj = Table1Array.getJSONObject(0);
                                 txtRegularisationCount.setText(String.valueOf(table1Obj.getInt("RegularisationRequestCount")));
-                                if(table1Obj.getInt("RegularisationRequestCount") < 4) {*/
+                                if(table1Obj.getInt("RegularisationRequestCount") < 4) {*//*
                                     JSONArray jsonArray = new JSONArray(Table);
                                     //if (jsonArray.length() > 0){
                                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -640,19 +738,19 @@ public class NEW_AttendanceRegularizationActivity extends AppCompatActivity impl
                                         skfBacklogAdapter.setIsShiftSelectionRequired(isShiftSelectionRequired);
                                         skfBacklogAdapter.setIsLocationSelectionRequired(isLocationSelectionRequired);
                                         rvItem.setAdapter(skfBacklogAdapter);
-                                    /*} else {
+                                    *//*} else {
                                         llLoader.setVisibility(View.GONE);
                                         llMain.setVisibility(View.GONE);
                                         llNodata.setVisibility(View.VISIBLE);
                                         llWarning.setVisibility(View.GONE);
-                                    }*/
-                               /* } else {
+                                    }*//*
+                               *//* } else {
                                     //TODO: Exceed Request Limit message;
                                     llLoader.setVisibility(View.GONE);
                                     llMain.setVisibility(View.GONE);
                                     llNodata.setVisibility(View.GONE);
                                     llWarning.setVisibility(View.VISIBLE);
-                                }*/
+                                }*//*
                                 //tvCount.setText("Total Day(s) Count : "+jsonArray.length());
                             } else {
                                 llLoader.setVisibility(View.GONE);
@@ -673,7 +771,7 @@ public class NEW_AttendanceRegularizationActivity extends AppCompatActivity impl
                         llNodata.setVisibility(View.GONE);
                     }
                 });
-    }
+    }*/
 
 
 
