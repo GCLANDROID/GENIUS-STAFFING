@@ -51,6 +51,7 @@ import io.cordova.myapp00d753.module.SpinnerModel;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.ShowDialog;
+import io.cordova.myapp00d753.utility.Util;
 
 public class NEW_AdjustmentActivity extends AppCompatActivity {
     private static final String TAG = "NEW_AdjustmentActivity";
@@ -495,7 +496,7 @@ public class NEW_AdjustmentActivity extends AppCompatActivity {
 
                         int month = (monthOfYear + 1);
                         effectiveDate = year + "-" + month + "-" + dayOfMonth;
-                        tv.setText(effectiveDate);
+                        tv.setText(Util.changeAnyDateFormat(effectiveDate,"yyyy-MM-dd","d-MMMM-yyyy"));
 
                     }
                 }, mYear, mMonth, mDay);
@@ -520,7 +521,7 @@ public class NEW_AdjustmentActivity extends AppCompatActivity {
 
                         int month = (monthOfYear + 1);
                         endDate = year + "-" + month + "-" + dayOfMonth;
-                        tv.setText(endDate);
+                        tv.setText(Util.changeAnyDateFormat(endDate,"yyyy-MM-dd","d-MMMM-yyyy"));
                         if (startDate.equalsIgnoreCase(endDate)) {
                             spAdjustment.setEnabled(true);
                         } else {
@@ -552,7 +553,7 @@ public class NEW_AdjustmentActivity extends AppCompatActivity {
 
                         int month = (monthOfYear + 1);
                         startDate = year + "-" + month + "-" + dayOfMonth;
-                        tv.setText(startDate);
+                        tv.setText(Util.changeAnyDateFormat(startDate,"yyyy-MM-dd","d-MMMM-yyyy"));
 
                     }
                 }, mYear, mMonth, mDay);
