@@ -34,8 +34,11 @@ public class AllApplicationViewAdapter extends RecyclerView.Adapter<AllApplicati
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.tvAdjustmentType.setText(applicationViewList.get(position).appliedType);
         holder.tvApplicationDate.setText(applicationViewList.get(position).applicationDate);
+        holder.tvAppliedDate.setText(applicationViewList.get(position).appliedDate);
+        holder.tvReferralDate.setText(applicationViewList.get(position).refDate);
         holder.tvInTime.setText(applicationViewList.get(position).intime);
         holder.tvOutTime.setText(applicationViewList.get(position).outtime);
+        holder.tvReason.setText(applicationViewList.get(position).reason);
         //holder.tvClientName.setText(applicationViewList.get(position).);
         holder.tvWorkPlace.setText(applicationViewList.get(position).selectedWorkPlace);
         holder.tvApprover.setText(applicationViewList.get(position).selectedApprover);
@@ -51,7 +54,7 @@ public class AllApplicationViewAdapter extends RecyclerView.Adapter<AllApplicati
 
     class MyViewHolder extends RecyclerView.ViewHolder{
         TextView tvAdjustmentType,tvApplicationDate,tvStrtDate,tvEndDate,tvInTime,tvOutTime,tvClientName,tvWorkPlace,tvReason,
-                RefDate,tvStatus,tvFStatus,tvApprover,tvAprovalDetails;
+                RefDate,tvStatus,tvFStatus,tvApprover,tvAprovalDetails,tvAppliedDate,tvReferralDate;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tvAdjustmentType = itemView.findViewById(R.id.tvAdjustmentType);
@@ -67,6 +70,8 @@ public class AllApplicationViewAdapter extends RecyclerView.Adapter<AllApplicati
             tvFStatus = itemView.findViewById(R.id.tvFStatus);
             tvApprover = itemView.findViewById(R.id.tvApprover);
             tvAprovalDetails = itemView.findViewById(R.id.tvAprovalDetails);
+            tvAppliedDate = itemView.findViewById(R.id.tvAppliedDate);
+            tvReferralDate = itemView.findViewById(R.id.tvReferralDate);
 
         }
     }
