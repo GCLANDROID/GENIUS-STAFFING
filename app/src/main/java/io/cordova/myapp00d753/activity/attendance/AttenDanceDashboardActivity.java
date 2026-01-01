@@ -76,9 +76,11 @@ import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.activity.HolidayMarkingActivity;
 import io.cordova.myapp00d753.activity.LeaveApplicationActivity;
 import io.cordova.myapp00d753.activity.NEW.AllApplicationViewActivity;
+import io.cordova.myapp00d753.activity.NEW.NEW_AdjustmentActivity;
 import io.cordova.myapp00d753.activity.NEW.NEW_AttendanceMarkingActivity;
 import io.cordova.myapp00d753.activity.NEW.NEW_AttendanceRegularizationActivity;
 import io.cordova.myapp00d753.activity.NEW.NEW_HolidayMarkingActivity;
+import io.cordova.myapp00d753.activity.NEW.NEW_HolidayViewActivity;
 import io.cordova.myapp00d753.activity.NEW.NEW_WeeklyOffAttendanceActivity;
 import io.cordova.myapp00d753.activity.QRCodeScannerActivity;
 import io.cordova.myapp00d753.activity.SKF.HolidayViewActivity;
@@ -142,6 +144,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             AttendanceRegularisationWithWorkingShiftSelection="", AttendanceRegularisationWithHierarchySelection="";
     String OptionalHolidayMarkingWithHolidaySelection ="",OptionalHolidayMarkingWithHierarchySelection="",
             NormalHolidayMarkingWithHolidaySelection ="",NormalHolidayMarkingWithHierarchySelection="";
+    String AttnAdjCOAppliocationWithMarkedHierarchy="",AttnAdjWFHAppliocationWithMarkedHierarchy="",AttnAdjODMarkHierarchyAtEntry="";
     String WOMarkingWithHierarchySelection="",isLiveStatus_WeeklyOff="";
     String isLiveStatus_MarkAttnFromMobile ="", isLiveStatus_HolidayMarking ="",
             isLiveStatus_OHolidayMarking="",isLiveStatus_AttReg="",isLiveStatus_HolidayView="",isLiveSatus_Adjustment="";
@@ -491,6 +494,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         } else {
             llAdjustment.setVisibility(View.GONE);
         }
+        AllApplicationViewConfiguration();
     }
 
     private void getAttendanceList(JSONObject jsonObject) {
@@ -715,7 +719,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
 
                             }
                         } catch (JSONException e) {
-                            throw new RuntimeException(e);
+                            e.printStackTrace();
                         }
                     }
 
@@ -891,25 +895,31 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         } else if (view == tvOK) {
             lnStatus.setVisibility(View.GONE);
         } else if (view == llAdjustment) {
-            /*Intent intent = new Intent(AttenDanceDashboardActivity.this, NEW_AdjustmentActivity.class);
+           /* Intent intent = new Intent(AttenDanceDashboardActivity.this, AdjustmentActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);*/
-            Intent intent = new Intent(AttenDanceDashboardActivity.this, AdjustmentActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-           /* if (isLiveSatus_Adjustment.equals("1")){
+            if (isLiveSatus_Adjustment.equals("1")){
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, NEW_AdjustmentActivity.class);
+                intent.putExtra("AttnAdjCOAppliocationWithMarkedHierarchy",AttnAdjCOAppliocationWithMarkedHierarchy);
+                intent.putExtra("AttnAdjWFHAppliocationWithMarkedHierarchy",AttnAdjWFHAppliocationWithMarkedHierarchy);
+                intent.putExtra("AttnAdjODMarkHierarchyAtEntry",AttnAdjODMarkHierarchyAtEntry);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             } else {
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, AdjustmentActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-            }*/
+            }
         } else if (view == llHolidayView) {
-            Intent intent = new Intent(AttenDanceDashboardActivity.this, HolidayViewActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            if (isLiveStatus_HolidayView.equals("1")) {
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, NEW_HolidayViewActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, HolidayViewActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
         } else if(view == llViewLeaveBalance){
             Intent intent = new Intent(AttenDanceDashboardActivity.this, ViewLeaveBalanceActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -1167,7 +1177,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     @Override
     protected void onResume() {
         super.onResume();
-        /*JSONObject objSubmenu=new JSONObject();
+       /* JSONObject objSubmenu=new JSONObject();
         try {
             objSubmenu.put("ConsultantID", pref.getEmpConId());
             objSubmenu.put("ClientID", pref.getEmpClintId());
@@ -1329,7 +1339,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         switch (newMonth.get(Calendar.MONTH)) {
             case Calendar.JANUARY:
                 Calendar calendar = Calendar.getInstance();
-                calendar.set(y, 0, 1);
+                calendar.set(newMonth.get(Calendar.YEAR), 0, 1);
                 //getAttendanceListForNav(y, 1, calendar);
 
                 JSONObject obj1=new JSONObject();
@@ -1337,7 +1347,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                     obj1.put("AemEmployeeid", pref.getEmpId());
                     obj1.put("AemClientid",pref.getEmpClintId());
                     obj1.put("Monthid","1");
-                    obj1.put("yearid",y);
+                    obj1.put("yearid",newMonth.get(Calendar.YEAR));
                     obj1.put("SecurityCode",pref.getSecurityCode());
                     getAttendanceListForNav(obj1,calendar);
                 } catch (JSONException e) {
@@ -1346,7 +1356,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 break;
             case Calendar.FEBRUARY:
                 Calendar calendar1 = Calendar.getInstance();
-                calendar1.set(y, 1, 1);
+                calendar1.set(newMonth.get(Calendar.YEAR), 1, 1);
 
                 //getAttendanceListForNav(y, 2, calendar1);
 
@@ -1355,7 +1365,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                     obj2.put("AemEmployeeid", pref.getEmpId());
                     obj2.put("AemClientid",pref.getEmpClintId());
                     obj2.put("Monthid","2");
-                    obj2.put("yearid",y);
+                    obj2.put("yearid",newMonth.get(Calendar.YEAR));
                     obj2.put("SecurityCode",pref.getSecurityCode());
                     getAttendanceListForNav(obj2,calendar1);
                 } catch (JSONException e) {
@@ -1365,7 +1375,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 break;
             case Calendar.MARCH:
                 Calendar calendar2 = Calendar.getInstance();
-                calendar2.set(y, 2, 1);
+                calendar2.set(newMonth.get(Calendar.YEAR), 2, 1);
 
                 //getAttendanceListForNav(y, 3, calendar2);
 
@@ -1374,7 +1384,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                     obj3.put("AemEmployeeid", pref.getEmpId());
                     obj3.put("AemClientid",pref.getEmpClintId());
                     obj3.put("Monthid","3");
-                    obj3.put("yearid",y);
+                    obj3.put("yearid",newMonth.get(Calendar.YEAR));
                     obj3.put("SecurityCode",pref.getSecurityCode());
                     getAttendanceListForNav(obj3,calendar2);
                 } catch (JSONException e) {
@@ -1384,7 +1394,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 break;
             case Calendar.APRIL:
                 Calendar calendar3 = Calendar.getInstance();
-                calendar3.set(y, 3, 1);
+                calendar3.set(newMonth.get(Calendar.YEAR), 3, 1);
 
                 //getAttendanceListForNav(y, 4, calendar3);
 
@@ -1393,7 +1403,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                     obj4.put("AemEmployeeid", pref.getEmpId());
                     obj4.put("AemClientid",pref.getEmpClintId());
                     obj4.put("Monthid","4");
-                    obj4.put("yearid",y);
+                    obj4.put("yearid",newMonth.get(Calendar.YEAR));
                     obj4.put("SecurityCode",pref.getSecurityCode());
                     getAttendanceListForNav(obj4,calendar3);
                 } catch (JSONException e) {
@@ -1402,7 +1412,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 break;
             case Calendar.MAY:
                 Calendar calendar4 = Calendar.getInstance();
-                calendar4.set(y, 4, 1);
+                calendar4.set(newMonth.get(Calendar.YEAR), 4, 1);
 
                 //getAttendanceListForNav(y, 5, calendar4);
 
@@ -1411,7 +1421,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                     obj5.put("AemEmployeeid", pref.getEmpId());
                     obj5.put("AemClientid",pref.getEmpClintId());
                     obj5.put("Monthid","5");
-                    obj5.put("yearid",y);
+                    obj5.put("yearid",newMonth.get(Calendar.YEAR));
                     obj5.put("SecurityCode",pref.getSecurityCode());
                     getAttendanceListForNav(obj5,calendar4);
                 } catch (JSONException e) {
@@ -1420,7 +1430,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 break;
             case Calendar.JUNE:
                 Calendar calendar5 = Calendar.getInstance();
-                calendar5.set(y, 5, 1);
+                calendar5.set(newMonth.get(Calendar.YEAR), 5, 1);
 
                 //getAttendanceListForNav(y, 6, calendar5);
 
@@ -1429,7 +1439,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                     obj6.put("AemEmployeeid", pref.getEmpId());
                     obj6.put("AemClientid",pref.getEmpClintId());
                     obj6.put("Monthid","6");
-                    obj6.put("yearid",y);
+                    obj6.put("yearid",newMonth.get(Calendar.YEAR));
                     obj6.put("SecurityCode",pref.getSecurityCode());
                     getAttendanceListForNav(obj6,calendar5);
                 } catch (JSONException e) {
@@ -1438,7 +1448,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 break;
             case Calendar.JULY:
                 Calendar calendar6 = Calendar.getInstance();
-                calendar6.set(y, 6, 1);
+                calendar6.set(newMonth.get(Calendar.YEAR), 6, 1);
 
                 //getAttendanceListForNav(y, 7, calendar6);
 
@@ -1447,7 +1457,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                     obj7.put("AemEmployeeid", pref.getEmpId());
                     obj7.put("AemClientid",pref.getEmpClintId());
                     obj7.put("Monthid","7");
-                    obj7.put("yearid",y);
+                    obj7.put("yearid",newMonth.get(Calendar.YEAR));
                     obj7.put("SecurityCode",pref.getSecurityCode());
                     getAttendanceListForNav(obj7,calendar6);
                 } catch (JSONException e) {
@@ -1456,7 +1466,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 break;
             case Calendar.AUGUST:
                 Calendar calendar7 = Calendar.getInstance();
-                calendar7.set(y, 7, 1);
+                calendar7.set(newMonth.get(Calendar.YEAR), 7, 1);
 
                 //getAttendanceListForNav(y, 8, calendar7);
 
@@ -1465,7 +1475,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                     obj8.put("AemEmployeeid", pref.getEmpId());
                     obj8.put("AemClientid",pref.getEmpClintId());
                     obj8.put("Monthid","8");
-                    obj8.put("yearid",y);
+                    obj8.put("yearid",newMonth.get(Calendar.YEAR));
                     obj8.put("SecurityCode",pref.getSecurityCode());
                     getAttendanceListForNav(obj8,calendar7);
                 } catch (JSONException e) {
@@ -1474,7 +1484,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 break;
             case Calendar.SEPTEMBER:
                 Calendar calendar8 = Calendar.getInstance();
-                calendar8.set(y, 8, 1);
+                calendar8.set(newMonth.get(Calendar.YEAR), 8, 1);
 
                 //getAttendanceListForNav(y, 9, calendar8);
 
@@ -1483,7 +1493,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                     obj9.put("AemEmployeeid", pref.getEmpId());
                     obj9.put("AemClientid",pref.getEmpClintId());
                     obj9.put("Monthid","9");
-                    obj9.put("yearid",y);
+                    obj9.put("yearid",newMonth.get(Calendar.YEAR));
                     obj9.put("SecurityCode",pref.getSecurityCode());
                     getAttendanceListForNav(obj9,calendar8);
                 } catch (JSONException e) {
@@ -1492,7 +1502,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 break;
             case Calendar.OCTOBER:
                 Calendar calendar9 = Calendar.getInstance();
-                calendar9.set(y, 9, 1);
+                calendar9.set(newMonth.get(Calendar.YEAR), 9, 1);
 
                 //getAttendanceListForNav(y, 10, calendar9);
 
@@ -1501,7 +1511,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                     obj10.put("AemEmployeeid", pref.getEmpId());
                     obj10.put("AemClientid",pref.getEmpClintId());
                     obj10.put("Monthid","10");
-                    obj10.put("yearid",y);
+                    obj10.put("yearid",newMonth.get(Calendar.YEAR));
                     obj10.put("SecurityCode",pref.getSecurityCode());
                     getAttendanceListForNav(obj10,calendar9);
                 } catch (JSONException e) {
@@ -1510,7 +1520,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 break;
             case Calendar.NOVEMBER:
                 Calendar calendar10 = Calendar.getInstance();
-                calendar10.set(y, 10, 1);
+                calendar10.set(newMonth.get(Calendar.YEAR), 10, 1);
 
                 //getAttendanceListForNav(y, 11, calendar10);
 
@@ -1519,7 +1529,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                     obj11.put("AemEmployeeid", pref.getEmpId());
                     obj11.put("AemClientid",pref.getEmpClintId());
                     obj11.put("Monthid","11");
-                    obj11.put("yearid",y);
+                    obj11.put("yearid",newMonth.get(Calendar.YEAR));
                     obj11.put("SecurityCode",pref.getSecurityCode());
                     getAttendanceListForNav(obj11,calendar10);
                 } catch (JSONException e) {
@@ -1528,7 +1538,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 break;
             case Calendar.DECEMBER:
                 Calendar calendar11 = Calendar.getInstance();
-                calendar11.set(y, 11, 1);
+                calendar11.set(newMonth.get(Calendar.YEAR), 11, 1);
 
                 //getAttendanceListForNav(y, 12, calendar11);
 
@@ -1537,7 +1547,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                     obj12.put("AemEmployeeid", pref.getEmpId());
                     obj12.put("AemClientid",pref.getEmpClintId());
                     obj12.put("Monthid","12");
-                    obj12.put("yearid",y);
+                    obj12.put("yearid",newMonth.get(Calendar.YEAR));
                     obj12.put("SecurityCode",pref.getSecurityCode());
                     getAttendanceListForNav(obj12,calendar11);
                 } catch (JSONException e) {
@@ -1953,10 +1963,13 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                                //TODO: Adjustment Application (Com-off,WFH,OD)
                                if (ServiceMenuAccessDetails_OBJ.has("AttnAdjCOApplicationAccessFromMobile")){
                                    AdjustmentStatusChecking(ServiceMenuAccessDetails_OBJ.optString("AttnAdjCOApplicationAccessFromMobile"));
+                                   AttnAdjCOAppliocationWithMarkedHierarchy = ServiceMenuAccessDetails_OBJ.optString("AttnAdjCOAppliocationWithMarkedHierarchy");
                                } else if (ServiceMenuAccessDetails_OBJ.has("AttnAdjWFHApplicationAccessFromMobile")){
                                    AdjustmentStatusChecking(ServiceMenuAccessDetails_OBJ.optString("AttnAdjWFHApplicationAccessFromMobile"));
+                                   AttnAdjWFHAppliocationWithMarkedHierarchy = ServiceMenuAccessDetails_OBJ.optString("AttnAdjWFHAppliocationWithMarkedHierarchy");
                                } else if (ServiceMenuAccessDetails_OBJ.has("AttnAdjODAccessFromMobileApp")){
                                    AdjustmentStatusChecking(ServiceMenuAccessDetails_OBJ.optString("AttnAdjODAccessFromMobileApp"));
+                                   AttnAdjODMarkHierarchyAtEntry = ServiceMenuAccessDetails_OBJ.optString("AttnAdjODMarkHierarchyAtEntry");
                                } else {
                                    previousConfiguration_Adjustment();
                                }
@@ -2000,7 +2013,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                                    previousConfiguration_LeaveBalanceManagement();
                                }
 
-
+                               AllApplicationViewConfiguration();
                            }
                        } catch (JSONException e) {
                            e.printStackTrace();
@@ -2075,7 +2088,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         if (pref.getAdjustmentStatus().equals("1")) {
             llAdjustment.setVisibility(View.VISIBLE);
         } else {
-            llAdjustment.setVisibility(View.VISIBLE);
+            llAdjustment.setVisibility(View.GONE);
         }
     }
     void previousConfiguration_HolidayView(){
@@ -2112,6 +2125,17 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             }
         } else {
             previousConfiguration_HolidayView();
+        }
+    }
+
+    void AllApplicationViewConfiguration(){
+        if (isLiveStatus_HolidayMarking.equals("1") || isLiveStatus_OHolidayMarking.equals("1")
+                || isLiveStatus_AttReg.equals("1")
+                || isLiveStatus_WeeklyOff.equals("1")
+                || isLiveSatus_Adjustment.equals("1")){
+            llAllApplicationView.setVisibility(View.VISIBLE);
+        } else {
+            llAllApplicationView.setVisibility(View.GONE);
         }
     }
 }
