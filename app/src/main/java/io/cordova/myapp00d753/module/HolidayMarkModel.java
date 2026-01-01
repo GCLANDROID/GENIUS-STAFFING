@@ -4,6 +4,7 @@ public class HolidayMarkModel {
     String holiday;
     String holidayDate;
     boolean isBefore;
+    String HolidayType;
     public HolidayMarkModel(String holiday, String holidayDate) {
         this.holiday = holiday;
         this.holidayDate = holidayDate;
@@ -37,5 +38,13 @@ public class HolidayMarkModel {
 
     public void setBefore(boolean before) {
         isBefore = before;
+    }
+
+    public String getHolidayType() {
+        return HolidayType;
+    }
+
+    public void setHolidayType(String holidayType) {
+        HolidayType = holidayType;
     }
 }
