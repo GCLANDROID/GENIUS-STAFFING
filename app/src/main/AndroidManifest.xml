@@ -669,6 +669,7 @@
         <activity android:name=".activity.NEW.NEW_WeeklyOffAttendanceActivity" />
         <activity android:name=".activity.NEW.NEW_AdjustmentActivity" />
         <activity android:name=".activity.NEW.AllApplicationViewActivity" />
+        <activity android:name=".activity.NEW.NEW_HolidayViewActivity" />
         <activity
             android:name=".activity.SelfOnboardingChatBotActivity"
             android:theme="@style/FloatingChatTheme" />
