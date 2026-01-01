@@ -161,10 +161,11 @@
                     <TextView
                         android:id="@+id/tvEffectiveDate"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:layout_marginLeft="5dp"
                         android:text="dd/MM/yyyy"
+                        android:gravity="center"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="12sp" />
 
@@ -273,6 +274,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginLeft="5dp"
+                        android:hint="--:--"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="12sp" />
 
@@ -300,6 +302,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:hint="--:--"
                         android:layout_marginLeft="5dp"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="12sp" />
@@ -432,7 +435,7 @@
 
                 <Button
                     android:id="@+id/btnSave"
-                    android:layout_width="100dp"
+                    android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:background="@drawable/lldesign"
                     android:backgroundTint="@color/colorPrimaryDark"
@@ -441,7 +444,7 @@
                     android:textColor="@color/white"
                     android:textSize="14sp" />
 
-                <Button
+               <!-- <Button
                     android:id="@+id/btnCancel"
                     android:layout_width="100dp"
                     android:layout_height="40dp"
@@ -451,7 +454,7 @@
                     android:text="Cancel"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textSize="14sp" />-->
             </LinearLayout>
 
 
