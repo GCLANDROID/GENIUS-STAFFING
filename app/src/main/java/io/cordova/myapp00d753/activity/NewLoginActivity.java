@@ -1,10 +1,8 @@
 package io.cordova.myapp00d753.activity;
 
-import static android.Manifest.permission.READ_PHONE_NUMBERS;
-import static android.Manifest.permission.READ_PHONE_STATE;
-import static android.Manifest.permission.READ_SMS;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
-import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,14 +10,11 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-
 import android.provider.Settings;
-import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -35,10 +30,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -51,12 +42,10 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.text.SimpleDateFormat;
@@ -66,14 +55,13 @@ import java.util.List;
 import java.util.UUID;
 
 import io.cordova.myapp00d753.R;
-import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.Util;
 
+public class NewLoginActivity extends AppCompatActivity {
 
-public class LoginActivity extends AppCompatActivity {
     TextView tvSignIn;
     EditText etUserId, etPassword, etForgotUserId;
     String userId, password;
@@ -109,13 +97,10 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_new_login);
         getMaintanceBreak();
-
-
     }
 
-    // throw new RuntimeException("Test Crash");
 
     private void initialize() {
         llSignIn = (LinearLayout) findViewById(R.id.llSignIn);
@@ -123,8 +108,8 @@ public class LoginActivity extends AppCompatActivity {
         etUserId = (EditText) findViewById(R.id.etUserId);
         etPassword = (EditText) findViewById(R.id.etPassword);
         connectionCheck = new NetworkConnectionCheck(this);
-        pref = new Pref(LoginActivity.this);
-        refreshedToken = getAndroidID(LoginActivity.this);
+        pref = new Pref(NewLoginActivity.this);
+        refreshedToken = getAndroidID(NewLoginActivity.this);
 
 //        Log.d("token",refreshedToken);
         etSecurityCode = (EditText) findViewById(R.id.etSecuritycode);
@@ -359,195 +344,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    private void login(JSONObject jsonObject) {
-        Log.e("LOGIN", "login: " + jsonObject.toString());
-        final ProgressDialog pd = new ProgressDialog(LoginActivity.this);
-        pd.setMessage("Loading..");
-        pd.setCancelable(false);
-        pd.show();
-        AndroidNetworking.post(AppData.newv2url + "Login/UserLogin")
-                .addJSONObjectBody(jsonObject)
-                .setTag("uploadTest")
-                .setPriority(Priority.HIGH)
-                .build()
-
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        JSONObject job1 = response;
-                        Log.e("LOGIN", "@@@@@@" + job1);
-                        pd.dismiss();
-
-                        String Response_Code = job1.optString("Response_Code");
-                        if (Response_Code.equals("101")) {
-                            // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
-
-                            pref.saveUserLoginID(etUserId.getText().toString().trim());
-                            Log.e("UserLoginId", "UserLoginId: " + pref.getUserLoginId());
-
-                            String responseData = job1.optString("Response_Data");
-                            try {
-                                JSONArray jarr = new JSONArray(responseData);
-                                for (int i = 0; i < jarr.length(); i++) {
-                                    JSONObject obj = jarr.getJSONObject(i);
-                                    AEMEmployeeID = obj.optString("EmployeeID");
-                                    pref.saveEmpId(AEMEmployeeID);
-                                    Log.d("aemp", pref.getEmpId());
-                                    String Name = obj.optString("Name");
-                                    pref.saveEmpName(Name);
-                                    String LoginDateTime = obj.optString("LoginDateTime");
-                                    pref.saveloginTime(LoginDateTime);
-                                    String FlagMenu = obj.optString("FlagMenu");
-                                    pref.saveMenu(FlagMenu);
-                                    Log.d("menud", pref.getMenu());
-                                    String AEMConsultantID = obj.optString("AEMConsultantID");
-                                    pref.saveEmpConId(AEMConsultantID);
-                                    String AEMClientID = obj.optString("AEMClientID");
-                                    pref.saveEmpClintId(AEMClientID);
-                                    String AEMClientOfficeID = obj.optString("AEMClientOfficeID");
-                                    pref.saveEmpClintOffId(AEMClientOfficeID);
-                                    String MasterID = obj.optString("MasterID");
-                                    pref.saveMasterId(MasterID);
-                                    Log.d("Master", MasterID);
-                                    UserType = obj.optString("UserType");
-                                    pref.saveUserType(UserType);
-                                    String CTCUrl = obj.optString("CTCUrl");
-                                    pref.saveCTCURL(CTCUrl);
-                                    String WeeklyOff = obj.optString("WeeklyOff");
-                                    pref.saveWeeklyoff(WeeklyOff);
-                                    String LeaveApply = obj.optString("LeaveApply");
-                                    pref.saveOnLeave(LeaveApply);
-                                    String LeaveUrl = obj.optString("LeaveUrl");
-                                    pref.saveLeaveUrl(LeaveUrl);
-                                    String AttdImage = obj.optString("AttdImage");
-                                    pref.saveAttdImg(AttdImage);
-                                    String BackAttd = obj.optString("BackDateAttendance");
-                                    pref.saveBackAttd(BackAttd);
-                                    String IsSupervisor = obj.optString("IsSupervisor");
-                                    pref.saveSup(IsSupervisor);
-                                    String CompanyName = obj.optString("CompanyName");
-                                    Log.e("Log", "CompanyName: " + CompanyName);
-                                    pref.saveCompanyName(CompanyName);
-                                    pref.saveSecurityCode(security_code);
-                                    String FlagAddr = obj.optString("FlagAddr");
-                                    pref.saveFlagLocation(FlagAddr);
-                                    String Password = obj.optString("Password");
-                                    pref.savePassword(etPassword.getText().toString());
-                                    String OffAttFlag = obj.optString("OffAttFlag");
-                                    pref.saveOffAttnFlag(OffAttFlag);
-                                    if (pref.getCheckFlag().equals("1")) {
-                                        pref.saveIntentFlag("1");
-                                    }
-
-                                    String DemoFlag = obj.optString("DemoFlag");
-                                    pref.saveDemoFlag(DemoFlag);
-                                    String GeoConfFlag = obj.optString("GeoConfFlag");
-                                    pref.saveFenceConfigFlag(GeoConfFlag);
-                                    String GeoFenceMenuFlag = obj.optString("GeoFenceMenuFlag");
-                                    pref.saveFenceMenuFlag(GeoFenceMenuFlag);
-                                    String GeoFenceAttFlag = obj.optString("GeoFenceAttFlag");
-                                    pref.saveFenceAttnFlag(GeoFenceAttFlag);
-                                    boolean AppRenameFlag = obj.optBoolean("AppRenameFlag");
-                                    String AppRenameText = obj.optString("AppRenameText");
-
-                                    pref.saveMsgAlertStatus(AppRenameFlag);
-                                    pref.saveMsg(AppRenameText);
-                                    String PFConsolidateURL = obj.optString("PFConsolidateURL");
-                                    pref.savePFURL(PFConsolidateURL);
-                                    String Leave = obj.optString("Leave");
-                                    pref.saveShiftFlag(Leave);
-                                    pref.saveEmpClintId(AEMClientID);
-                                    pref.saveMsgAlertStatus(AppRenameFlag);
-                                    pref.saveMsg(AppRenameText);
-                                    pref.savePFURL(PFConsolidateURL);
-                                    String PF_Notify_URL = obj.optString("PF_Notify_URL");
-                                    pref.savePFNotificationURL(PF_Notify_URL);
-                                    String Genius_Access_Token = obj.optString("Genius_Access_Token").trim();
-                                    pref.saveAccessToken(Genius_Access_Token);
-                                    ConsentFlag = obj.optString("ConsentFlag");
-                                    String LeaveBalanceView = obj.optString("LeaveBalanceView");
-                                    AppData.LEAVE_BALANCE_VIEW_FLAG = LeaveBalanceView;
-                                    String UAN_Active = obj.optString("UAN_Active");
-                                    pref.saveUAN_Active(UAN_Active);
-                                    String UAN_Mandatory = obj.optString("UAN_Mandatory");
-                                    pref.saveUAN_Mandatory(UAN_Mandatory);
-                                    String Adjustment_Status = obj.optString("Adjustment");
-                                    pref.saveAdjustmentStatus(Adjustment_Status);
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-                            if (UserType.equals("1")) {
-                                if (etPassword.getText().toString().equalsIgnoreCase("password")) {
-                                    Intent intent = new Intent(LoginActivity.this, ChangePasswordActivity.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    if (ConsentFlag.equals("1")) {
-                                        Intent intent = new Intent(LoginActivity.this, EmployeeDashBoardActivity.class);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        intent.putExtra("ConsentFlag", ConsentFlag);
-                                        startActivity(intent);
-                                        finish();
-                                    } else {
-                                        Intent intent = new Intent(LoginActivity.this, EmployeeDashBoardActivity.class);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        intent.putExtra("ConsentFlag", ConsentFlag);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                }
-                            } else if (UserType.equals("2")) {
-                                Intent intent = new Intent(LoginActivity.this, SuperVisiorDashBoardActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                                finish();
-                            } else if (UserType.equals("4")) {
-                                if (AEMEmployeeID.equals("0")) {
-
-                                    Intent intent = new Intent(LoginActivity.this, TempDashBoardActivity.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    intent.putExtra("ConsentFlag", ConsentFlag);
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    //Toast.makeText(LoginActivity.this,"your actual id generated",Toast.LENGTH_LONG).show();
-                                    showEmpDialog();
-
-                                }
-                            } else if (UserType.equals("3")) {
-                                Intent intent = new Intent(LoginActivity.this, HRMSDashBoardActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                                finish();
-                            }
-                        } else {
-                            shoeDialog();
-
-
-                        }
-
-
-                        // boolean _status = job1.getBoolean("status");
-
-
-                        // do anything with response
-                    }
-
-                    @Override
-                    public void onError(ANError error) {
-                        Log.e("LOGIN", "onError: " + error);
-                        pd.dismiss();
-
-
-                    }
-                });
-    }
-
     private void shoeDialog() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(LoginActivity.this, R.style.CustomDialogNew);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(NewLoginActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_invalidcredential, null);
         dialogBuilder.setView(dialogView);
@@ -569,7 +367,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void shoeDialogDynamicMsg(String msg) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(LoginActivity.this, R.style.CustomDialogNew);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(NewLoginActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_invalidcredential, null);
         dialogBuilder.setView(dialogView);
@@ -605,7 +403,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void showEmpDialog() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(LoginActivity.this, R.style.CustomDialogNew);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(NewLoginActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_empid, null);
         dialogBuilder.setView(dialogView);
@@ -625,7 +423,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void showInternetDialog() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(LoginActivity.this, R.style.CustomDialogNew);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(NewLoginActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_invaliddate, null);
         dialogBuilder.setView(dialogView);
@@ -648,7 +446,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void forgotpassworddialog() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(LoginActivity.this, R.style.CustomDialogNew);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(NewLoginActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_forgot_password, null);
         dialogBuilder.setView(dialogView);
@@ -673,7 +471,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void showForgotPasswordDialouge() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(LoginActivity.this, R.style.CustomDialogNew);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(NewLoginActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.fotgotpassworddialog, null);
         dialogBuilder.setView(dialogView);
@@ -698,7 +496,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     popUp.dismiss();
                 } else {
-                    Toast.makeText(LoginActivity.this, "Please enter userid ", Toast.LENGTH_LONG).show();
+                    Toast.makeText(NewLoginActivity.this, "Please enter userid ", Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -712,7 +510,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void changePassword() {
-        ProgressDialog pd = new ProgressDialog(LoginActivity.this);
+        ProgressDialog pd = new ProgressDialog(NewLoginActivity.this);
         pd.setMessage("Loading");
         pd.show();
         pd.setCancelable(false);
@@ -737,7 +535,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(LoginActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
+                            Toast.makeText(NewLoginActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
                         }
 
                     }
@@ -745,14 +543,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 pd.dismiss();
-                Toast.makeText(LoginActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(NewLoginActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
                 //showAlert();
                 Log.e("ert", error.toString());
             }
         }) {
 
         };
-        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(NewLoginActivity.this);
         requestQueue.add(stringRequest);
         stringRequest.setRetryPolicy(new DefaultRetryPolicy(
                 100000000,
@@ -761,7 +559,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void successAlert(String msg) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(LoginActivity.this, R.style.CustomDialogNew);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(NewLoginActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_success, null);
         dialogBuilder.setView(dialogView);
@@ -786,7 +584,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void getMaintanceBreak() {
-        final ProgressDialog pd = new ProgressDialog(LoginActivity.this);
+        final ProgressDialog pd = new ProgressDialog(NewLoginActivity.this);
         pd.setMessage("Loading.....");
         pd.show();
         AndroidNetworking.get(AppData.MAINTAINCEBREAK)
@@ -803,7 +601,7 @@ public class LoginActivity extends AppCompatActivity {
                         boolean IsEnabled = job.optBoolean("IsEnabled");
                         String Message = job.optString("Message");
                         if (IsEnabled) {
-                            Intent intent=new Intent(LoginActivity.this,MaintainceBreakActivity.class);
+                            Intent intent=new Intent(NewLoginActivity.this,MaintainceBreakActivity.class);
                             intent.putExtra("breakText",Message);
                             startActivity(intent);
                             finish();
@@ -833,7 +631,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loginv2(JSONObject jsonObject) {
         Log.e("LOGIN", "login: " + jsonObject.toString());
-        final ProgressDialog pd = new ProgressDialog(LoginActivity.this);
+        final ProgressDialog pd = new ProgressDialog(NewLoginActivity.this);
         pd.setMessage("Loading..");
         pd.setCancelable(false);
         pd.show();
@@ -898,7 +696,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 e.printStackTrace();
                                             }
                                         }else {
-                                            Intent intent = new Intent(LoginActivity.this, TempDashBoardActivity.class);
+                                            Intent intent = new Intent(NewLoginActivity.this, TempDashBoardActivity.class);
                                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                             intent.putExtra("ConsentFlag", ConsentFlag);
                                             startActivity(intent);
@@ -908,7 +706,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                     } else {
                                         //re direct to resign page
-                                        Intent intent = new Intent(LoginActivity.this, ResignEmployeeDashboardActivity.class);
+                                        Intent intent = new Intent(NewLoginActivity.this, ResignEmployeeDashboardActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(intent);
                                         finish();
@@ -947,7 +745,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void logindetails(JSONObject jsonObject) {
         Log.e("LOGIN", "login: " + jsonObject.toString());
-        final ProgressDialog pd = new ProgressDialog(LoginActivity.this);
+        final ProgressDialog pd = new ProgressDialog(NewLoginActivity.this);
         pd.setMessage("Loading..");
         pd.setCancelable(false);
         pd.show();
@@ -1026,13 +824,13 @@ public class LoginActivity extends AppCompatActivity {
 
                             if (UserType.equals("1")) {
                                 if (etPassword.getText().toString().equalsIgnoreCase("password")) {
-                                    Intent intent = new Intent(LoginActivity.this, ChangePasswordActivity.class);
+                                    Intent intent = new Intent(NewLoginActivity.this, ChangePasswordActivity.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                     startActivity(intent);
                                     finish();
                                 } else {
 
-                                    Intent intent = new Intent(LoginActivity.this, EmployeeDashBoardActivity.class);
+                                    Intent intent = new Intent(NewLoginActivity.this, EmployeeDashBoardActivity.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                     intent.putExtra("ConsentFlag", ConsentFlag);
                                     startActivity(intent);
@@ -1040,14 +838,14 @@ public class LoginActivity extends AppCompatActivity {
 
                                 }
                             } else if (UserType.equals("3")) {
-                                Intent intent = new Intent(LoginActivity.this, SuperVisiorDashBoardActivity.class);
+                                Intent intent = new Intent(NewLoginActivity.this, SuperVisiorDashBoardActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                                 finish();
                             } else if (UserType.equals("2")) {
 
 
-                                Intent intent = new Intent(LoginActivity.this, TempDashBoardActivity.class);
+                                Intent intent = new Intent(NewLoginActivity.this, TempDashBoardActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.putExtra("ConsentFlag", ConsentFlag);
                                 startActivity(intent);

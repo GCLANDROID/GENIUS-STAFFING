@@ -283,7 +283,8 @@
             android:layout_alignParentBottom="true"
 
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            >
 
             <!-- Floating label text -->
 

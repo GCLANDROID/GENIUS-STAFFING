@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -87,6 +88,8 @@ public class DashBoardActivity extends AppCompatActivity {
     LinearLayout llLogin;
     private ReviewManager reviewManager;
     TextView txtCompanyName;
+    LinearLayout llESS,llESSSelected,llPaperless,llPaperlessSelected;
+    int selectionflag=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,6 +144,12 @@ public class DashBoardActivity extends AppCompatActivity {
                     .apply();
         }
 
+        llESS=(LinearLayout)findViewById(R.id.llESS);
+        llESSSelected=(LinearLayout)findViewById(R.id.llESSSelected);
+
+        llPaperless=(LinearLayout)findViewById(R.id.llPaperless);
+        llPaperlessSelected=(LinearLayout)findViewById(R.id.llPaperlessSelected);
+
         GeniusHRTechPopUp();
         onClick();
 
@@ -150,13 +159,58 @@ public class DashBoardActivity extends AppCompatActivity {
 
     private void onClick() {
 
+        llESS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (llESSSelected.getVisibility()==View.GONE){
+                    llESSSelected.setVisibility(View.VISIBLE);
+                    llPaperlessSelected.setVisibility(View.GONE);
+                    selectionflag=1;
+                } else {
+                    llESSSelected.setVisibility(View.GONE);
+                    llPaperlessSelected.setVisibility(View.GONE);
+                    selectionflag=0;
+                }
+            }
+        });
+
+        llPaperless.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (llPaperlessSelected.getVisibility()==View.GONE){
+                    llESSSelected.setVisibility(View.GONE);
+                    llPaperlessSelected.setVisibility(View.VISIBLE);
+                    selectionflag=2;
+                } else {
+                    llESSSelected.setVisibility(View.GONE);
+                    llPaperlessSelected.setVisibility(View.VISIBLE);
+                    selectionflag=0;
+                }
+            }
+        });
+
        llLogin.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
 
-               Intent intent = new Intent(DashBoardActivity.this, LoginActivity.class);
-               startActivity(intent);
-               finish();
+               if (selectionflag==0){
+                   showAlert("Choose the service you want to access: Self Service or Paperless Onboarding.");
+                   return;
+               }
+
+               if (selectionflag==1){
+                   Intent intent = new Intent(DashBoardActivity.this, NewLoginActivity.class);
+                   startActivity(intent);
+                   finish();
+               }else {
+                   Intent intent = new Intent(DashBoardActivity.this, LoginActivity.class);
+                   startActivity(intent);
+                   finish();
+               }
+
+//               Intent intent = new Intent(DashBoardActivity.this, LoginActivity.class);
+//               startActivity(intent);
+//               finish();
 
            }
        });
@@ -515,11 +569,11 @@ public class DashBoardActivity extends AppCompatActivity {
                         boolean IsEnabled=job.optBoolean("IsEnabled");
                         String Message=job.optString("Message");
                         if (IsEnabled){
-                            /*Intent intent=new Intent(DashBoardActivity.this,MaintainceBreakActivity.class);
+                            Intent intent=new Intent(DashBoardActivity.this,MaintainceBreakActivity.class);
                             intent.putExtra("breakText",Message);
                             startActivity(intent);
-                            finish();*/
-                            initialize();
+                            finish();
+
 
 
                         }else {
@@ -535,6 +589,22 @@ public class DashBoardActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+
+    private void showAlert(String message) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DashBoardActivity.this);
+        alertDialogBuilder.setMessage(message);
+        alertDialogBuilder.setPositiveButton("ok",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        arg0.dismiss();
+                    }
+                });
+        alertDialogBuilder.show();
+
+
     }
 
 
