@@ -1,5 +1,6 @@
 package io.cordova.myapp00d753.activity.NEW;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,8 +8,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,7 +32,9 @@ import java.util.Calendar;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
+import io.cordova.myapp00d753.activity.NEW.fragment.HolidayViewFragment;
 import io.cordova.myapp00d753.activity.SKF.adapter.HolidayViewAdapter;
+import io.cordova.myapp00d753.fragment.ApplicationFragment;
 import io.cordova.myapp00d753.module.HolidayMarkModel;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.DateCalculation;
@@ -37,46 +44,49 @@ public class NEW_HolidayViewActivity extends AppCompatActivity {
     private static final String TAG = "HolidayViewActivity";
     RecyclerView rvHolidayView;
     Pref pref;
-    LinearLayout llNoData;
+    LinearLayout llNoData,llNormalHoliday,llOptionalHoliday;
     ImageView imgBack,imgHome;
-    ArrayList<HolidayMarkModel> holidayList = new ArrayList<>();
+    TextView tvOptionalHoliday,tvNormalHoliday;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_holiday_view);
         initView();
         btnClick();
+        loadNormalHolidayView();
     }
 
-
-
     private void initView() {
-        pref = new Pref(NEW_HolidayViewActivity.this);
-        rvHolidayView = findViewById(R.id.rvHolidayView);
-        rvHolidayView.setLayoutManager(new LinearLayoutManager(NEW_HolidayViewActivity.this));
-        llNoData = findViewById(R.id.llNoData);
+        pref = new Pref(this);
         imgBack = findViewById(R.id.imgBack);
         imgHome = findViewById(R.id.imgHome);
-        Calendar calendar = Calendar.getInstance();
-        int currentYear = calendar.get(Calendar.YEAR);
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("ClientID",pref.getEmpClintId());
-            jsonObject.put("ClientOfficeID",pref.getEmpClintOffId());
-            jsonObject.put("EmployeeID",pref.getEmpId());
-            jsonObject.put("Year",currentYear);
-            jsonObject.put("SecurityCode","0000");
-            getHolidayList(jsonObject);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
+        llNormalHoliday = findViewById(R.id.llNormalHoliday);
+        llOptionalHoliday = findViewById(R.id.llOptionalHoliday);
+        llNoData = findViewById(R.id.llNoData);
+        tvOptionalHoliday = findViewById(R.id.tvOptionalHoliday);
+        tvNormalHoliday = findViewById(R.id.tvNormalHoliday);
     }
 
     private void btnClick() {
+        llNormalHoliday = findViewById(R.id.llNormalHoliday);
+        llOptionalHoliday = findViewById(R.id.llOptionalHoliday);
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+
+        llNormalHoliday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadNormalHolidayView();
+            }
+        });
+        llOptionalHoliday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadOptionalHolidayView();
             }
         });
 
@@ -88,62 +98,32 @@ public class NEW_HolidayViewActivity extends AppCompatActivity {
                 finish();
             }
         });
-
     }
 
-    private void getHolidayList(JSONObject jsonObject) {
-        ProgressDialog pd = new ProgressDialog(NEW_HolidayViewActivity.this);
-        pd.setMessage("Loading...");
-        pd.setCancelable(false);
-        pd.show();
-        AndroidNetworking.post(AppData.SKF_GET_HOLIDAY_LIST)
-                .addJSONObjectBody(jsonObject)
-                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
-                .setTag("uploadTest")
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            Log.e(TAG, "HOLIDAY_VIEW_LIST: " + response.toString(4));
-                            pd.dismiss();
-                            JSONObject job1 = response;
-                            String Response_Code = job1.optString("Response_Code");
-                            String Response_Message = job1.optString("Response_Message");
-                            if (Response_Code.equals("101")) {
-                                String Response_Data = job1.optString("Response_Data");
-                                JSONArray responseData = new JSONArray(Response_Data);
-                                for (int i = 0; i < responseData.length(); i++) {
-                                    JSONObject obj = responseData.optJSONObject(i);
-                                    String date = obj.optString("HolidayDate");
-                                    String holiday = obj.optString("HolidayName");
-                                    String HolidayType = obj.optString("HolidayType");
-                                    String DayType = obj.optString("DayType");
-                                    boolean isBefore = DateCalculation.InputDateBeforeOrAfter(date);
-                                    HolidayMarkModel holidayMarkModel = new HolidayMarkModel(holiday, date, isBefore);
-                                    holidayMarkModel.setHolidayType(HolidayType);
-                                    holidayList.add(holidayMarkModel);
-                                }
-                                HolidayViewAdapter holidayViewAdapter = new HolidayViewAdapter(NEW_HolidayViewActivity.this, holidayList);
-                                rvHolidayView.setAdapter(holidayViewAdapter);
-                            } else {
-                                llNoData.setVisibility(View.VISIBLE);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-                        pd.dismiss();
-                        llNoData.setVisibility(View.VISIBLE);
-                        Log.e(TAG, "HOLIDAY_LIST_error: " + anError.getErrorBody());
-                    }
-                });
+    private void loadNormalHolidayView() {
+        llNormalHoliday.setBackgroundResource(R.drawable.background_7);
+        llOptionalHoliday.setBackgroundResource(0);
+        tvOptionalHoliday.setTextColor(ContextCompat.getColor(this, R.color.colorBlack));
+        tvNormalHoliday.setTextColor(ContextCompat.getColor(this, R.color.white));
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        HolidayViewFragment pfragment = new HolidayViewFragment().newInstance("Normal");
+        transaction.replace(R.id.fragmentContainer, pfragment);
+        transaction.commit();
     }
+
+    @SuppressLint("ResourceAsColor")
+    private void loadOptionalHolidayView() {
+        llOptionalHoliday.setBackgroundResource(R.drawable.background_7);
+        llNormalHoliday.setBackgroundResource(0);
+        tvNormalHoliday.setTextColor(ContextCompat.getColor(this, R.color.colorBlack));
+        tvOptionalHoliday.setTextColor(ContextCompat.getColor(this, R.color.white));
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        HolidayViewFragment pfragment = new HolidayViewFragment().newInstance("Optional");
+        transaction.replace(R.id.fragmentContainer, pfragment);
+        transaction.commit();
+    }
+
 
 }
