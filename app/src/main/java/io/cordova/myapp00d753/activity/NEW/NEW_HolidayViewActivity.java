@@ -50,7 +50,7 @@ public class NEW_HolidayViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_holiday_view);
+        setContentView(R.layout.activity_new_holiday_marking);
         initView();
         btnClick();
         loadNormalHolidayView();
