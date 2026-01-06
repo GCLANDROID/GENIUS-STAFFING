@@ -188,8 +188,10 @@ public class NEW_BacklogAdapter extends RecyclerView.Adapter<NEW_BacklogAdapter.
         holder.tvDayType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (dayTypeArray != null){
-                    openDayTypePopup(mContext,holder,position);
+                if (isDayTypeSelectionRequired.equalsIgnoreCase("1")){
+                    if (dayTypeArray != null){
+                        openDayTypePopup(mContext,holder,position);
+                    }
                 }
             }
         });

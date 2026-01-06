@@ -18,6 +18,34 @@ public class YearMonthUtil {
         return yearList;
     }
 
+    public static String getFinancialYear() {
+        String FinancialYear="";
+
+        Calendar calendar = Calendar.getInstance();
+        int currentYear = calendar.get(Calendar.YEAR);
+        String PreviousYear = String.valueOf(currentYear - 1);
+        String CurrentYear = String.valueOf(currentYear);
+        String NextYear = String.valueOf(currentYear + 1);
+        FinancialYear = CurrentYear+"-"+NextYear;
+        return FinancialYear;
+    }
+
+    public static ArrayList<String> getFinancialYearList() {
+        ArrayList<String> yearList = new ArrayList<>();
+
+        Calendar calendar = Calendar.getInstance();
+        int currentYear = calendar.get(Calendar.YEAR);
+        String PreviousYear = String.valueOf(currentYear - 1);
+        String CurrentYear = String.valueOf(currentYear);
+        String NextYear = String.valueOf(currentYear + 1);
+        String NextNextYear = String.valueOf(currentYear + 2);
+        yearList.add(PreviousYear+"-"+CurrentYear);
+        yearList.add(CurrentYear+"-"+NextYear);
+        yearList.add(NextYear+"-"+NextNextYear);
+        return yearList;
+    }
+
+
     public static ArrayList<String> getMonthNumberList() {
         ArrayList<String> monthList = new ArrayList<>();
         String[] months = new DateFormatSymbols().getMonths();

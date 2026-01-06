@@ -110,6 +110,8 @@ public class AppData {
     public static String LAMS_AllApplicationView ="http://171.16.1.33/GSPPI_API_V2/api/Attendance/LAMS_AllApplicationView";
     public static String LAMS_Save_OD_CO_WFH ="http://171.16.1.33/GSPPI_API_V2/api/LAMS_EmployeeOTandODAdjustment/SaveODandOTapplication";
     public static String LAMS_AttnRegularisationDate ="http://171.16.1.33/GSPPI_API_V2/api/Attendance/LAMS_AttnRegularisationDate";
+    public static String LAMS_DailyAttendanceReportEmp ="http://171.16.1.33/GSPPI_API_V2/api/Attendance/LAMS_DailyAttendanceReportEmp";
+    public static String LAMS_ViewHolidayList ="http://localhost/GSPPI_API_V2/api/Attendance/LAMS_ViewHolidayList";
 
     public static String FORM_16_VIEW = newv2url+"TdsForms/ViewForm16";
     public static String FORM_16_PAYMENT = newv2url+"TdsForms/F16PaymentInitialize";
