@@ -865,7 +865,7 @@ public class LoginActivity extends AppCompatActivity {
                                 for (int i = 0; i < responseData.length(); i++) {
                                     JSONObject obj = responseData.getJSONObject(i);
                                     AEMEmployeeID = obj.optString("UserID");
-                                    pref.saveEmpId(AEMEmployeeID);
+
 
                                     String Name = obj.optString("UserName");
                                     pref.saveEmpName(Name);
@@ -1019,6 +1019,9 @@ public class LoginActivity extends AppCompatActivity {
                                     pref.saveUAN_Mandatory(UAN_Mandatory);
                                     String Adjustment_Status = obj.optString("Adjustment");
                                     pref.saveAdjustmentStatus(Adjustment_Status);
+
+                                    String EmployeeID= obj.optString("EmployeeID");
+                                    pref.saveEmpId(EmployeeID);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

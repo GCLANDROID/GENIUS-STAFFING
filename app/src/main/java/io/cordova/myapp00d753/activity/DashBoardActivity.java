@@ -88,7 +88,7 @@ public class DashBoardActivity extends AppCompatActivity {
     LinearLayout llLogin;
     private ReviewManager reviewManager;
     TextView txtCompanyName;
-    LinearLayout llESS,llESSSelected,llPaperless,llPaperlessSelected;
+    LinearLayout llESS,llESSSelected,llPaperless,llPaperlessSelected,llAboutUs,llContactUS,llServices;
     int selectionflag=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +150,10 @@ public class DashBoardActivity extends AppCompatActivity {
         llPaperless=(LinearLayout)findViewById(R.id.llPaperless);
         llPaperlessSelected=(LinearLayout)findViewById(R.id.llPaperlessSelected);
 
+        llAboutUs=(LinearLayout)findViewById(R.id.llAboutUs);
+        llContactUS=(LinearLayout)findViewById(R.id.llContactUS);
+        llServices=(LinearLayout)findViewById(R.id.llServices);
+
         GeniusHRTechPopUp();
         onClick();
 
@@ -189,28 +193,56 @@ public class DashBoardActivity extends AppCompatActivity {
             }
         });
 
+        llAboutUs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(DashBoardActivity.this, AboutUsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+
+
+        llContactUS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(DashBoardActivity.this, ContactUsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+
+        llServices.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(DashBoardActivity.this, ServicesActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+
        llLogin.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
 
-               if (selectionflag==0){
-                   showAlert("Choose the service you want to access: Self Service or Paperless Onboarding.");
-                   return;
-               }
+//               if (selectionflag==0){
+//                   showAlert("Choose the service you want to access: Self Service or Paperless Onboarding.");
+//                   return;
+//               }
+//
+//               if (selectionflag==1){
+//                   Intent intent = new Intent(DashBoardActivity.this, NewLoginActivity.class);
+//                   startActivity(intent);
+//                   finish();
+//               }else {
+//                   Intent intent = new Intent(DashBoardActivity.this, LoginActivity.class);
+//                   startActivity(intent);
+//                   finish();
+//               }
 
-               if (selectionflag==1){
-                   Intent intent = new Intent(DashBoardActivity.this, NewLoginActivity.class);
-                   startActivity(intent);
-                   finish();
-               }else {
-                   Intent intent = new Intent(DashBoardActivity.this, LoginActivity.class);
-                   startActivity(intent);
-                   finish();
-               }
-
-//               Intent intent = new Intent(DashBoardActivity.this, LoginActivity.class);
-//               startActivity(intent);
-//               finish();
+               Intent intent = new Intent(DashBoardActivity.this, LoginActivity.class);
+               startActivity(intent);
+               finish();
 
            }
        });

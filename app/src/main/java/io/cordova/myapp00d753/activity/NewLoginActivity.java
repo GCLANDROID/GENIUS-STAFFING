@@ -93,6 +93,8 @@ public class NewLoginActivity extends AppCompatActivity {
     String ConsentFlag;
     int WorkingStatus;
     String ip, sessionId;
+    LinearLayout llEmp,llMobile,llEmpLogin;
+    ImageView imgEmpCheck,imgMobileCheck;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,6 +156,13 @@ public class NewLoginActivity extends AppCompatActivity {
         ip = getIPAddress(true);
         sessionId = generateSessionID("Staffing_Mobile");
 
+        llEmp=(LinearLayout)findViewById(R.id.llEmp);
+        llMobile=(LinearLayout)findViewById(R.id.llMobile);
+        llEmpLogin=(LinearLayout)findViewById(R.id.llEmpLogin);
+
+        imgEmpCheck=findViewById(R.id.imgEmpCheck);
+        imgMobileCheck=findViewById(R.id.imgMobileCheck);
+
        /* refreshButton= (ImageView) findViewById(R.id.regen);
         etCaptcha= (EditText) findViewById(R.id.etCaptcha);
         captchaImageView= (CaptchaImageView) findViewById(R.id.captchaimage);
@@ -172,6 +181,36 @@ public class NewLoginActivity extends AppCompatActivity {
                 captchaImageView.regenerate();
             }
         });*/
+
+        llEmp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (llEmpLogin.getVisibility()==View.GONE){
+                    llEmpLogin.setVisibility(View.VISIBLE);
+                    imgEmpCheck.setVisibility(View.VISIBLE);
+                    imgMobileCheck.setVisibility(View.GONE);
+                }else {
+                    llEmpLogin.setVisibility(View.GONE);
+                    imgEmpCheck.setVisibility(View.GONE);
+                    imgMobileCheck.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        llMobile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (imgMobileCheck.getVisibility()==View.GONE){
+                    llEmpLogin.setVisibility(View.GONE);
+                    imgEmpCheck.setVisibility(View.GONE);
+                    imgMobileCheck.setVisibility(View.VISIBLE);
+                }else {
+                    llEmpLogin.setVisibility(View.GONE);
+                    imgEmpCheck.setVisibility(View.GONE);
+                    imgMobileCheck.setVisibility(View.GONE);
+                }
+            }
+        });
 
         llWorkForce.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -663,7 +702,7 @@ public class NewLoginActivity extends AppCompatActivity {
                                 for (int i = 0; i < responseData.length(); i++) {
                                     JSONObject obj = responseData.getJSONObject(i);
                                     AEMEmployeeID = obj.optString("UserID");
-                                    pref.saveEmpId(AEMEmployeeID);
+
 
                                     String Name = obj.optString("UserName");
                                     pref.saveEmpName(Name);
@@ -817,6 +856,9 @@ public class NewLoginActivity extends AppCompatActivity {
                                     pref.saveUAN_Mandatory(UAN_Mandatory);
                                     String Adjustment_Status = obj.optString("Adjustment");
                                     pref.saveAdjustmentStatus(Adjustment_Status);
+
+                                    String EmployeeID= obj.optString("EmployeeID");
+                                    pref.saveEmpId(EmployeeID);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

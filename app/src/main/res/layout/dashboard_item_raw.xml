@@ -8,8 +8,8 @@
     <ImageView
         android:id="@+id/imgItemPic"
         android:src="@mipmap/aboutus"
-        android:layout_width="100dp"
-        android:layout_height="100dp"></ImageView>
+        android:layout_width="150dp"
+        android:layout_height="150dp"></ImageView>
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
