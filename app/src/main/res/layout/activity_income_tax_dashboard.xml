@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+   >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="?android:actionBarSize"
+            android:background="@color/colorPrimary"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5">
+
+                <ImageView
+                    android:id="@+id/imgBack"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/backimg" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Income Tax Dashboard"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/toolbartextsize" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:gravity="right">
+
+                <ImageView
+                    android:id="@+id/imgHome"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/homeimg" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/lldesign"
+            android:layout_marginBottom="10dp"
+            android:padding="10dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:background="#DDDBDB"
+                >
+                <LinearLayout
+                    android:id="@+id/llFormSixteen"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:background="@android:color/white">
+                    <LinearLayout
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:gravity="center"
+                        android:background="@drawable/lldesign9">
+                        <ImageView
+                            android:id="@+id/imgFormSixteen"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/frmsicteen"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Form-16"
+                        android:textSize="@dimen/toolbartextsize"
+                        android:textColor="@color/colorPrimary" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/llITView"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="visible"
+                    android:background="@android:color/white"
+                    >
+                    <LinearLayout
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:background="@drawable/lldesign9"
+                        android:gravity="center">
+                        <ImageView
+                            android:id="@+id/imgITView"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/calculator"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="IT Calculation View"
+                        android:textSize="@dimen/toolbartextsize"
+                        android:textColor="@color/colorPrimary" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:weightSum="2">
+                <LinearLayout
+                    android:id="@+id/llITDeclaration"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="visible"
+                    android:background="@android:color/white"
+                    >
+                    <LinearLayout
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:background="@drawable/lldesign9"
+                        android:gravity="center">
+                        <ImageView
+                            android:id="@+id/imgITDeclaration"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/itsubmit"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Submit IT Declaration"
+                        android:textSize="@dimen/toolbartextsize"
+                        android:textColor="@color/colorPrimary" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/llITForm"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="visible"
+                    android:background="@android:color/white"
+                    >
+                    <LinearLayout
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:background="@drawable/lldesign9"
+                        android:gravity="center">
+                        <ImageView
+                            android:id="@+id/imgITForm"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/itform"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="IT Declaration Form"
+                        android:textSize="@dimen/toolbartextsize"
+                        android:textColor="@color/colorPrimary" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"></LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"></LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</layout>

@@ -33,6 +33,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.IncomeTaxDashboardActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".activity.NewLoginActivity"
             android:exported="false">
             <meta-data
@@ -678,6 +685,7 @@
         <activity android:name=".activity.NEW.AllApplicationViewActivity" />
         <activity android:name=".activity.NEW.NEW_HolidayViewActivity" />
         <activity android:name=".activity.NEW.NEW_AttendanceReportActivity" />
+        <activity android:name=".activity.ITViewActivity" />
         <activity
             android:name=".activity.SelfOnboardingChatBotActivity"
             android:theme="@style/FloatingChatTheme" />

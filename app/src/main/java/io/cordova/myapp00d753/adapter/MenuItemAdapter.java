@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.FormSixteenActivity;
+import io.cordova.myapp00d753.activity.IncomeTaxDashboardActivity;
 import io.cordova.myapp00d753.activity.attendance.AttenDanceDashboardActivity;
 import io.cordova.myapp00d753.activity.ChangePasswordActivity;
 import io.cordova.myapp00d753.activity.DailyDashBoardActivity;
@@ -310,7 +311,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                     mContex.startActivity(intent);
                 }else if (itemList.get(i).getMenuId().equals("2100")){
                     //interview
-                    Intent intent=new Intent(mContex, FormSixteenActivity.class);
+                    Intent intent=new Intent(mContex, IncomeTaxDashboardActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
                 }else if (itemList.get(i).getMenuId().equals("21")){
