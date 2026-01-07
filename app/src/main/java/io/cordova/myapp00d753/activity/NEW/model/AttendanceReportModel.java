@@ -21,8 +21,9 @@ public class AttendanceReportModel {
         String selectedApprover;
         String regularisation;
         String approvalStatus;
+        String dayType;
 
-        public AttendanceReportModel(String slNo,String date, String intime, String outTime, String attendanceStatus, String firstHalfStatus, String secondHalfStatus, String workingHours, String inAddress, String inPunchSource, String outAddress, String outPunchSource, String fName, String inImage, String outImage, String location, String workingShift, String selectedApprover, String regularisation, String approvalStatus) {
+        public AttendanceReportModel(String slNo,String date, String intime, String outTime, String attendanceStatus, String firstHalfStatus, String secondHalfStatus, String workingHours, String inAddress, String inPunchSource, String outAddress, String outPunchSource, String fName, String inImage, String outImage, String location, String workingShift, String selectedApprover, String regularisation, String approvalStatus,String dayType) {
                 this.date = date;
                 this.intime = intime;
                 this.outTime = outTime;
@@ -42,6 +43,7 @@ public class AttendanceReportModel {
                 this.selectedApprover = selectedApprover;
                 this.regularisation = regularisation;
                 this.approvalStatus = approvalStatus;
+                this.dayType = dayType;
         }
 
         public String getSlNo() {
@@ -202,5 +204,13 @@ public class AttendanceReportModel {
 
         public void setApprovalStatus(String approvalStatus) {
                 this.approvalStatus = approvalStatus;
+        }
+
+        public String getDayType() {
+                return dayType;
+        }
+
+        public void setDayType(String dayType) {
+                this.dayType = dayType;
         }
 }
