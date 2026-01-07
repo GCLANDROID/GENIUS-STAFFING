@@ -127,9 +127,9 @@ public class HolidayViewActivity extends AppCompatActivity {
                                 llNoData.setVisibility(View.VISIBLE);
                             }
                         } catch (JSONException e) {
-                            throw new RuntimeException(e);
+                            e.printStackTrace();
                         } catch (ParseException e) {
-                            throw new RuntimeException(e);
+                            e.printStackTrace();
                         }
                     }
 

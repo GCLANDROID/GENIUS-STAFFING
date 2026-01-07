@@ -735,10 +735,4 @@ public class NEW_AttendanceReportActivity extends AppCompatActivity {
         alertDialog2.show();
 
     }
-
-
-
-
-
-
 }

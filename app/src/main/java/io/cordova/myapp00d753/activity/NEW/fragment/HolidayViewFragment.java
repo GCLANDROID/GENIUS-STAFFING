@@ -93,15 +93,14 @@ public class HolidayViewFragment extends Fragment {
         int currentYear = calendar.get(Calendar.YEAR);
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("ClientID",pref.getEmpClintId());
-            jsonObject.put("ClientOfficeID",pref.getEmpClintOffId());
-            jsonObject.put("EmployeeID",pref.getEmpId());
+            jsonObject.put("clientid",pref.getEmpClintId());
+            jsonObject.put("empid",pref.getEmpId());
             //jsonObject.put("Year","2025");
             jsonObject.put("Year",currentYear);
-            jsonObject.put("SecurityCode","0000");
+            jsonObject.put("SecurityCode",pref.getSecurityCode());
             getHolidayList(jsonObject);
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
@@ -109,7 +108,7 @@ public class HolidayViewFragment extends Fragment {
         llNoData.setVisibility(View.GONE);
         rvHolidayView.setVisibility(View.GONE);
         tvHolidayType.setVisibility(View.INVISIBLE);
-        AndroidNetworking.post(AppData.SKF_GET_HOLIDAY_LIST)
+        AndroidNetworking.post(AppData.LAMS_ViewHolidayList)
                 .addJSONObjectBody(jsonObject)
                 .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
@@ -128,7 +127,8 @@ public class HolidayViewFragment extends Fragment {
                             String Response_Message = job1.optString("Response_Message");
                             if (Response_Code.equals("101")) {
                                 String Response_Data = job1.optString("Response_Data");
-                                JSONArray responseData = new JSONArray(Response_Data);
+                                JSONObject jsonObject = new JSONObject(Response_Data);
+                                JSONArray responseData = jsonObject.getJSONArray("Table");
                                 for (int i = 0; i < responseData.length(); i++) {
                                     JSONObject obj = responseData.optJSONObject(i);
                                     String date = obj.optString("Date");

@@ -54,4 +54,19 @@ public class YearMonthUtil {
         }
         return monthList;
     }
+
+    public static String getCurrentFinancialYear() {
+        Calendar calendar = Calendar.getInstance();
+
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1; // Jan = 0
+
+        if (month >= 4) {
+            // April to December
+            return year + "-" + (year + 1);
+        } else {
+            // January to March
+            return (year - 1) + "-" + year;
+        }
+    }
 }
