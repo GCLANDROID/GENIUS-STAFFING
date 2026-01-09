@@ -582,23 +582,20 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
     private void submitAttendance() {
         progressDialog.show();
         Log.e(TAG, "submitAttendance: "
-                + "\nConsultantID: "+pref.getEmpConId()
-                + "\nClientID: "+pref.getEmpClintId()
                 + "\nAEMEmployeeID: "+pref.getEmpId()
                 + "\nAddress: "+address
-                + "\nShiftid: "+Shiftid
-                + "\nPunchGeoFenchLocation"+Siteid
-                + "\nWorkPlaceID: "+otherLocationID
-                + "\nApproverid: "+SupervisorID
                 + "\nLongitude: "+longitude
                 + "\nLatitude: "+latitude
+                + "\nShiftid: "+Shiftid
+                + "\nPunchGeoFenchLocation: "+Siteid
+                + "\nWorkPlaceID: "+otherLocationID
+                + "\nApproverid: "+SupervisorID
+                + "\nPunchSource: "+"Mobile"
+                + "\nOption: "+"2"
                 + "\nSecurityCode: "+pref.getSecurityCode()
         );
 
-
         AndroidNetworking.upload(AppData.LAMS_SaveAttendance)
-                .addMultipartParameter("ConsultantID", pref.getEmpConId())
-                .addMultipartParameter("ClientID", pref.getEmpClintId())
                 .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
                 .addMultipartParameter("Address", address)
                 .addMultipartParameter("Longitude", longitude)
@@ -607,6 +604,8 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
                 .addMultipartParameter("PunchGeoFenchLocation",Siteid)
                 .addMultipartParameter("WorkPlaceID", otherLocationID)
                 .addMultipartParameter("Approverid", SupervisorID)
+                .addMultipartParameter("PunchSource","Mobile")
+                .addMultipartParameter("Option","2")
                 .addMultipartFile("Image1", compressedImageFile)
                 .addMultipartParameter("SecurityCode", pref.getSecurityCode())
                 .setTag("uploadTest")
