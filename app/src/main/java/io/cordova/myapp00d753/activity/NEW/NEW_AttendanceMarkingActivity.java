@@ -652,8 +652,7 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
             @Override
             public void onClick(View view) {
                 alerDialog1.dismiss();
-                //Intent intent = new Intent(MetsoAttendanceActivity.this, AttendanceReportActivity.class);
-                Intent intent = new Intent(NEW_AttendanceMarkingActivity.this, MetsoAttendanceReportActivity.class);
+                Intent intent = new Intent(NEW_AttendanceMarkingActivity.this, NEW_AttendanceReportActivity.class);
                 startActivity(intent);
                 finish();
             }
