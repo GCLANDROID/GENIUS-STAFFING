@@ -10,8 +10,11 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -48,6 +51,7 @@ import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.RecyclerItemClickListener;
+import io.cordova.myapp00d753.utility.YearMonthUtil;
 
 public class SalaryActivity extends AppCompatActivity  {
     private static final String TAG = "SalaryActivity";
@@ -71,7 +75,7 @@ public class SalaryActivity extends AppCompatActivity  {
     LinearLayout llAgain;
     ImageView imgAgain,imgSearch;
     TextView tvToolBar;
-
+    ArrayList<String>yearList;
 
 
     @Override
@@ -144,10 +148,26 @@ public class SalaryActivity extends AppCompatActivity  {
         imgSearch=(ImageView)findViewById(R.id.imgSearch);
         tvToolBar=(TextView) findViewById(R.id.tvToolBar);
         tvToolBar.setText("Monthly Salary - \n"+year);
+        yearList = YearMonthUtil.getPreviousCurrentNextYearList();
+        ArrayAdapter<String> yearAdapter = new ArrayAdapter<>(
+                this,
+                R.layout.custom_spinner_list,
+                R.id.txtShiftTime,
+                yearList
+        );
+        yearAdapter.setDropDownViewResource(R.layout.custom_spinner_list);
+        spYear.setDropDownWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+        spYear.setAdapter(yearAdapter);
+        int index = yearList.indexOf(year);
+        spYear.setSelection(index);
     }
 
     private void getSalaryList(JSONObject jsonObject) {
         Log.e(TAG, "getSalaryList: "+jsonObject);
+        llLoader.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.GONE);
+        llNodata.setVisibility(View.GONE);
+        llAgain.setVisibility(View.GONE);
         AndroidNetworking.post(AppData.GET_EMPLOYEE_SALARY)
                 .addJSONObjectBody(jsonObject)
                 .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
@@ -389,6 +409,35 @@ public class SalaryActivity extends AppCompatActivity  {
             @Override
             public void onClick(View view) {
                     showYearDialog();
+            }
+        });
+
+        tvYear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                spYear.performClick();
+            }
+        });
+        spYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                //selectedYear = yearList.get(i);
+                tvYear.setText(yearList.get(i));
+                tvToolBar.setText("Monthly Salary - \n"+yearList.get(i));
+                JSONObject obj=new JSONObject();
+                try {
+                    obj.put("AEMEmployeeID",pref.getEmpId());
+                    obj.put("SalYear",yearList.get(i));
+                    obj.put("SecurityCode",pref.getSecurityCode());
+                    getSalaryList(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
     }
