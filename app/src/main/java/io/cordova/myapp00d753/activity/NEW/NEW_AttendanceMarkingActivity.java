@@ -190,7 +190,7 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
         progressDialog.setCancelable(false);
         phoneNumber=getAndroidID(NEW_AttendanceMarkingActivity.this);
 
-        /*JSONObject obj = new JSONObject();
+        JSONObject obj = new JSONObject();
         try {
             obj.put("CompanyID", pref.getEmpClintId());
             obj.put("EmployeeID", pref.getEmpId());
@@ -201,7 +201,7 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
             savedeviceID(obj);
         } catch (JSONException e) {
             e.printStackTrace();
-        }*/
+        }
 
         imhHome.setOnClickListener(new View.OnClickListener() {
             @Override

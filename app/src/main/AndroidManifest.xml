@@ -685,7 +685,9 @@
         <activity android:name=".activity.NEW.AllApplicationViewActivity" />
         <activity android:name=".activity.NEW.NEW_HolidayViewActivity" />
         <activity android:name=".activity.NEW.NEW_AttendanceReportActivity" />
+        <activity android:name=".activity.NewLoginTwoActivity" />
         <activity android:name=".activity.ITViewActivity" />
+        <activity android:name=".activity.MPIN_SetupActivity"/>
         <activity
             android:name=".activity.SelfOnboardingChatBotActivity"
             android:theme="@style/FloatingChatTheme" />
