@@ -908,6 +908,8 @@ public class LoginActivity extends AppCompatActivity {
 
                                     } else {
                                         //re direct to resign page
+                                        pref.saveEmpId(AEMEmployeeID);
+                                        pref.saveSecurityCode(security_code);
                                         Intent intent = new Intent(LoginActivity.this, ResignEmployeeDashboardActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(intent);
