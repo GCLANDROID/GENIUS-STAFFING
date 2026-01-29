@@ -281,8 +281,8 @@ public class LoginActivity extends AppCompatActivity {
                             }
                             JSONObject obj = new JSONObject();
                             try {
-                                obj.put("MasterID", Util.encrypt(etUserId.getText().toString(), SECRET_KEY));
-                                obj.put("Password", Util.encrypt(etPassword.getText().toString(), SECRET_KEY));
+                                obj.put("MasterID", Util.encrypt(etUserId.getText().toString().trim(), SECRET_KEY));
+                                obj.put("Password", Util.encrypt(etPassword.getText().toString().trim(), SECRET_KEY));
                                 obj.put("IPAddress", ip);
                                 obj.put("AppSessionID", sessionId);
                                 obj.put("UUID", refreshedToken);
