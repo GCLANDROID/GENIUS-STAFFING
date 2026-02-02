@@ -79,6 +79,7 @@ import io.cordova.myapp00d753.activity.NEW.AllApplicationViewActivity;
 import io.cordova.myapp00d753.activity.NEW.NEW_AdjustmentActivity;
 import io.cordova.myapp00d753.activity.NEW.NEW_AttendanceMarkingActivity;
 import io.cordova.myapp00d753.activity.NEW.NEW_AttendanceRegularizationActivity;
+import io.cordova.myapp00d753.activity.NEW.NEW_AttendanceReportActivity;
 import io.cordova.myapp00d753.activity.NEW.NEW_HolidayMarkingActivity;
 import io.cordova.myapp00d753.activity.NEW.NEW_HolidayViewActivity;
 import io.cordova.myapp00d753.activity.NEW.NEW_WeeklyOffAttendanceActivity;
@@ -147,7 +148,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     String AttnAdjCOAppliocationWithMarkedHierarchy="",AttnAdjWFHAppliocationWithMarkedHierarchy="",AttnAdjODMarkHierarchyAtEntry="";
     String WOMarkingWithHierarchySelection="",isLiveStatus_WeeklyOff="";
     String isLiveStatus_MarkAttnFromMobile ="", isLiveStatus_HolidayMarking ="",
-            isLiveStatus_OHolidayMarking="",isLiveStatus_AttReg="",isLiveStatus_HolidayView="",isLiveSatus_Adjustment="";
+            isLiveStatus_OHolidayMarking="",isLiveStatus_AttReg="",isLiveStatus_HolidayView="",isLiveSatus_Adjustment="",isLiveStatus_DailyAttendanceView="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -746,7 +747,11 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         } else if (view == llAttandanceManage) {
             turnGPSOn();
         } else if (view == llAttendanceReport) {
-             if (pref.getEmpClintId().equals(ClientID.METSO)
+            if(isLiveStatus_DailyAttendanceView.equals("1")){
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, NEW_AttendanceReportActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            } else if (pref.getEmpClintId().equals(ClientID.METSO)
                     || pref.getEmpClintOffId().equals(BrunchId.CBRE_HARYANA_AMERICAN_EXPRESS)
                     || pref.getEmpClintOffId().equals(BrunchId.CBRE_KARNATAKA_AMERICAN_EXPRESS)
                     || pref.getEmpClintOffId().equals(BrunchId.CBRE_Tamil_Nadu_American_Express)
@@ -790,7 +795,9 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                     || pref.getEmpClintId().equals(ClientID.HONASA)
                     || pref.getEmpClintId().equals(ClientID.SVF)
                     || pref.getEmpClintId().equals(ClientID.FED_BANK)
-                    || pref.getEmpClintId().equals(ClientID.PROTACTOR_GAMBLEID)) { // SKF Attendance Regularization
+                    || pref.getEmpClintId().equals(ClientID.PROTACTOR_GAMBLEID)
+                    || pref.getEmpClintId().equals(ClientID.BROSE_INDIA_AUTOMOTIVE_SYSTEMS)
+            ) {
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, SKF_AttendanceRegularizationActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -1177,7 +1184,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     @Override
     protected void onResume() {
         super.onResume();
-       /* JSONObject objSubmenu=new JSONObject();
+        /*JSONObject objSubmenu=new JSONObject();
         try {
             objSubmenu.put("ConsultantID", pref.getEmpConId());
             objSubmenu.put("ClientID", pref.getEmpClintId());
@@ -1845,8 +1852,8 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                                    if(!DailyAttendanceView.equals("null") || !DailyAttendanceView.isEmpty() ){
                                        String[] DailyAttendanceViewArr = DailyAttendanceView.split("_");
                                        String isRequired_DailyAttendanceView = DailyAttendanceViewArr[0];
-                                       String isConfigure_DailyAttendanceView = DailyAttendanceViewArr[1];
-                                       if (isConfigure_DailyAttendanceView.equals("1")){
+                                       isLiveStatus_DailyAttendanceView = DailyAttendanceViewArr[1];
+                                       if (isLiveStatus_DailyAttendanceView.equals("1")){
                                            llAttendanceReport.setVisibility(isRequired_DailyAttendanceView.equals("1")?View.VISIBLE:View.GONE);
                                        } else {
                                            previousConfiguration_AttendanceReport();
