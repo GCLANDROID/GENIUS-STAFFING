@@ -82,6 +82,7 @@ import io.cordova.myapp00d753.activity.attendance.MetsoAttendanceActivity;
 import io.cordova.myapp00d753.adapter.MenuItemAdapter;
 import io.cordova.myapp00d753.adapter.NeedToActAdapter;
 import io.cordova.myapp00d753.adapter.NotiAdapter;
+import io.cordova.myapp00d753.adapter.NotificationModel;
 import io.cordova.myapp00d753.adapter.PFDocumentAdapter;
 import io.cordova.myapp00d753.module.MenuItemModel;
 import io.cordova.myapp00d753.module.NeedToActModel;
@@ -129,7 +130,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
     boolean survey;
     String phoneNumber="0000";
 
-    ArrayList<String> contentList;
+    ArrayList<NotificationModel> contentList;
     int signFlag=0;
     private static final String IMAGE_DIRECTORY_CONSENT = "/signdemo";
     AlertDialog consnetdialog;
@@ -775,7 +776,8 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                 if (Content.length() > 0){
                                     for (int i = 0; i < Content.length(); i++) {
                                         JSONObject conOBJ=Content.optJSONObject(i);
-                                        contentList.add(conOBJ.optString("Content"));
+                                        //contentList.add(conOBJ.optString("Content"));
+                                        contentList.add(new NotificationModel(conOBJ.optString("Content"),conOBJ.optString("C_Url")));
                                     }
                                     tvNotifcation.setText(contentList.toString().replace("[","").replace("]","").replaceAll(",","\n\n"));
                                 }
