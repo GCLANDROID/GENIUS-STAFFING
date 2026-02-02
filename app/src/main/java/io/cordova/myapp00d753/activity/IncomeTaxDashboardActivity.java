@@ -48,7 +48,7 @@ public class IncomeTaxDashboardActivity extends AppCompatActivity {
         if (pref.getSecurityCode().equals("0000")) {
             domain = "FSS";
         } else if (pref.getSecurityCode().equals("222")) {
-            domain = "FSS";
+            domain = "FMS";
         } else if (pref.getSecurityCode().equals("888")) {
 
             domain = "ITS";
