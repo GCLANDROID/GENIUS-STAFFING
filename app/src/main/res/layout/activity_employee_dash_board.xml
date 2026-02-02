@@ -153,7 +153,7 @@
 
                         <LinearLayout
                             android:id="@+id/llNotification"
-                            android:backgroundTint="@color/optional_holiday"
+                            android:backgroundTint="#fedc97"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/lldesign9">
@@ -168,7 +168,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textSize="16sp"
-                                    android:textColor="@color/nessecarycolor"
+                                    android:textColor="#db3a34"
                                     android:text="Notification"></TextView>
                                 <TextView
                                     android:scrollHorizontally="false"
