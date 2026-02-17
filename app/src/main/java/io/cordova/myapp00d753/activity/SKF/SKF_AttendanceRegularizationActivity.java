@@ -542,7 +542,8 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
                                 JSONArray Table1Array = new JSONArray(Table1);
                                 JSONObject table1Obj = Table1Array.getJSONObject(0);
                                 txtRegularisationCount.setText(String.valueOf(table1Obj.getInt("RegularisationRequestCount")));
-                                if(table1Obj.getInt("RegularisationRequestCount") < 4) {
+                                //if(table1Obj.getInt("RegularisationRequestCount") < 4) {
+                                if(table1Obj.getInt("ExceedRequestLimit") == 0) {
                                     JSONArray jsonArray = new JSONArray(Table);
                                     if (jsonArray.length() > 0){
                                         for (int i = 0; i < jsonArray.length(); i++) {
