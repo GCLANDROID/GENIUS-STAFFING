@@ -839,7 +839,9 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                     || pref.getEmpClintId().equals(ClientID.SKF_MSP)
                     || pref.getEmpClintId().equals(ClientID.SKF_ENGINEERING_LUB)
                     || pref.getEmpClintId().equals(ClientID.SKF_INDUSTRIAL)
-                    || pref.getEmpClintId().equals(ClientID.SVF)) {  //WO APplication with location ->SKF PUNE
+                    || pref.getEmpClintId().equals(ClientID.SVF)
+                    || pref.getEmpClintId().equals(ClientID.BROSE_INDIA_AUTOMOTIVE_SYSTEMS)
+            ) {  //WO APplication with location ->SKF PUNE
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, WOHOHActivity.class);
                 intent.putExtra("leaveFlag",leaveFlag);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -1184,7 +1186,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     @Override
     protected void onResume() {
         super.onResume();
-        /*JSONObject objSubmenu=new JSONObject();
+       /* JSONObject objSubmenu=new JSONObject();
         try {
             objSubmenu.put("ConsultantID", pref.getEmpConId());
             objSubmenu.put("ClientID", pref.getEmpClintId());

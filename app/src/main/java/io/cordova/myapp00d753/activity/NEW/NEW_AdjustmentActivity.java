@@ -269,11 +269,11 @@ public class NEW_AdjustmentActivity extends AppCompatActivity {
                     llMode.setVisibility(View.GONE);
                     llInOutTime.setVisibility(View.VISIBLE);
                 } else if (applicationComponentID.equalsIgnoreCase("WFH")) {
-                    llStartEndDate.setVisibility(View.VISIBLE);
+                    llStartEndDate.setVisibility(View.GONE);
                     llEndTime.setVisibility(View.GONE);
                     llEffectiveDate.setVisibility(View.GONE);
-                    llMode.setVisibility(View.GONE);
-                    llInOutTime.setVisibility(View.VISIBLE);
+                    llMode.setVisibility(View.VISIBLE);
+                    llInOutTime.setVisibility(View.GONE);
                     /*llStartEndDate.setVisibility(View.VISIBLE);
                     llEffectiveDate.setVisibility(View.GONE);
                     llMode.setVisibility(View.GONE);

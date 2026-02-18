@@ -124,7 +124,9 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
                 || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_ITS)
                 || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_MSP)
                 || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_ENGINEERING_LUB)
-                || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_INDUSTRIAL)){
+                || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_INDUSTRIAL)
+                || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.BROSE_INDIA_AUTOMOTIVE_SYSTEMS)
+        ){
             llRegularisationCount.setVisibility(View.VISIBLE);
         } else {
             llRegularisationCount.setVisibility(View.GONE);
@@ -288,7 +290,9 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
                 || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_ITS)
                 || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_MSP)
                 || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_ENGINEERING_LUB)
-                || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_INDUSTRIAL)){
+                || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_INDUSTRIAL)
+                || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.BROSE_INDIA_AUTOMOTIVE_SYSTEMS)
+        ){
             for (int i = 0; i < blockLogList.size(); i++) {
                 Log.e(TAG, "submitOperation: Remarks: "+blockLogList.get(i).getRemarks());
                 if (blockLogList.get(i).isSelected()){
@@ -330,7 +334,9 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
                     || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_ITS)
                     || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_MSP)
                     || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_ENGINEERING_LUB)
-                    || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_INDUSTRIAL)){
+                    || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.SKF_INDUSTRIAL)
+                    || pref.getEmpClintId().equals(io.cordova.myapp00d753.utility.ClientID.BROSE_INDIA_AUTOMOTIVE_SYSTEMS)
+            ){
                 regularizationSaveApiCall(obj);
             } else {
                 regularizationSave_New_ApiCall(obj);
@@ -536,7 +542,8 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
                                 JSONArray Table1Array = new JSONArray(Table1);
                                 JSONObject table1Obj = Table1Array.getJSONObject(0);
                                 txtRegularisationCount.setText(String.valueOf(table1Obj.getInt("RegularisationRequestCount")));
-                                if(table1Obj.getInt("RegularisationRequestCount") < 4) {
+                                //if(table1Obj.getInt("RegularisationRequestCount") < 4) {
+                                if(table1Obj.getInt("ExceedRequestLimit") == 0) {
                                     JSONArray jsonArray = new JSONArray(Table);
                                     if (jsonArray.length() > 0){
                                         for (int i = 0; i < jsonArray.length(); i++) {
