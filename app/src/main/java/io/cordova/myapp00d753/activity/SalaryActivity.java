@@ -147,7 +147,7 @@ public class SalaryActivity extends AppCompatActivity  {
         });
         imgSearch=(ImageView)findViewById(R.id.imgSearch);
         tvToolBar=(TextView) findViewById(R.id.tvToolBar);
-        tvToolBar.setText("Monthly Salary - \n"+year);
+        tvToolBar.setText("Monthly Salary");
         yearList = YearMonthUtil.getPreviousCurrentNextYearList();
         ArrayAdapter<String> yearAdapter = new ArrayAdapter<>(
                 this,
@@ -180,6 +180,7 @@ public class SalaryActivity extends AppCompatActivity  {
                         try {
                             Log.e(TAG, "SALARY_LIST: "+response.toString(4));
                             JSONObject job1 = response;
+                            salaryList.clear();
                             String Response_Code = job1.optString("Response_Code");
                             if (Response_Code.equals("101")) {
                                 String Response_Data = job1.optString("Response_Data");
@@ -236,7 +237,7 @@ public class SalaryActivity extends AppCompatActivity  {
         JSONObject jsonObject=new JSONObject();
         try {
             jsonObject.put("AEMEmployeeId",pref.getEmpId());
-            jsonObject.put("SalYear",year);
+            jsonObject.put("SalYear",salaryList.get(pos).getYear());
             jsonObject.put("SalMonth",salaryList.get(pos).getMonth());
             jsonObject.put("Charges",salaryList.get(pos).getCharges());
             jsonObject.put("SecurityCode",pref.getSecurityCode());

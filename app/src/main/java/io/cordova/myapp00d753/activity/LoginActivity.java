@@ -105,6 +105,7 @@ public class LoginActivity extends AppCompatActivity {
     String ConsentFlag;
     int WorkingStatus;
     String ip, sessionId;
+    boolean tempFlag=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -234,8 +235,10 @@ public class LoginActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 if (etUserId.getText().toString().contains("TEMP") || etUserId.getText().toString().contains("temp") || etUserId.getText().toString().contains("GCL") || etUserId.getText().toString().contains("gcl")) {
                     etPassword.setText("password");
+                    tempFlag=true;
                 } else {
                     etPassword.setText("");
+                    tempFlag=false;
                 }
                 if (etUserId.getText().toString().contains("AEM") || etUserId.getText().toString().contains("FMS") || etUserId.getText().toString().contains("ITS") || etUserId.getText().toString().contains("SEC") || etUserId.getText().toString().contains("NAPS") || etUserId.getText().toString().contains("GMSP") || etUserId.getText().toString().contains("FSS") || etUserId.getText().toString().contains("NPS")) {
                     llSecurityCode.setVisibility(View.GONE);
@@ -279,20 +282,37 @@ public class LoginActivity extends AppCompatActivity {
                                     security_code = "0000";
                                 }
                             }
-                            JSONObject obj = new JSONObject();
-                            try {
-                                obj.put("MasterID", Util.encrypt(etUserId.getText().toString().trim(), SECRET_KEY));
-                                obj.put("Password", Util.encrypt(etPassword.getText().toString().trim(), SECRET_KEY));
-                                obj.put("IPAddress", ip);
-                                obj.put("AppSessionID", sessionId);
-                                obj.put("UUID", refreshedToken);
-                                obj.put("GUID", refreshedToken);
-                                obj.put("MachineDetails", "GeniusStaffing_Android");
-                                obj.put("SecurityCode", security_code);
-                                loginv2(obj);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+
+                            if (!tempFlag){
+                                JSONObject obj = new JSONObject();
+                                try {
+                                    obj.put("MasterID", Util.encrypt(etUserId.getText().toString().trim(), SECRET_KEY));
+                                    obj.put("Password", Util.encrypt(etPassword.getText().toString().trim(), SECRET_KEY));
+                                    obj.put("IPAddress", ip);
+                                    obj.put("AppSessionID", sessionId);
+                                    obj.put("UUID", refreshedToken);
+                                    obj.put("GUID", refreshedToken);
+                                    obj.put("MachineDetails", "GeniusStaffing_Android");
+                                    obj.put("SecurityCode", security_code);
+                                    loginv2(obj);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }else {
+                                JSONObject obj = new JSONObject();
+                                try {
+                                    obj.put("MasterID", Util.encrypt(etUserId.getText().toString(), SECRET_KEY));
+                                    obj.put("Password", Util.encrypt(etPassword.getText().toString(), SECRET_KEY));
+                                    obj.put("IMEI", refreshedToken);
+                                    obj.put("DeviceID", refreshedToken);
+                                    obj.put("DeviceType", "A");
+                                    obj.put("SecurityCode", security_code);
+                                    login(obj);
+                                }catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
+
                             Date d = new Date();
                             SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
                             String currentDateTimeString = sdf.format(d);
@@ -901,7 +921,9 @@ public class LoginActivity extends AppCompatActivity {
                                             Intent intent = new Intent(LoginActivity.this, TempDashBoardActivity.class);
                                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                             intent.putExtra("ConsentFlag", ConsentFlag);
+                                            pref.saveEmpId(AEMEmployeeID);
                                             startActivity(intent);
+
                                             finish();
                                         }
 

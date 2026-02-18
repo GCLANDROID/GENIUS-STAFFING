@@ -143,7 +143,7 @@ public class ResignEmpSalaryActivity extends AppCompatActivity  {
         });
         imgSearch=(ImageView)findViewById(R.id.imgSearch);
         tvToolBar=(TextView) findViewById(R.id.tvToolBar);
-        tvToolBar.setText("Monthly Salary - \n"+year);
+        tvToolBar.setText("Monthly Salary");
 
         yearList = YearMonthUtil.getPreviousCurrentNextYearList();
         ArrayAdapter<String> yearAdapter = new ArrayAdapter<>(
@@ -233,7 +233,7 @@ public class ResignEmpSalaryActivity extends AppCompatActivity  {
         JSONObject jsonObject=new JSONObject();
         try {
             jsonObject.put("AEMEmployeeId",pref.getEmpId());
-            jsonObject.put("SalYear",year);
+            jsonObject.put("SalYear",salaryList.get(pos).getYear());
             jsonObject.put("SalMonth",salaryList.get(pos).getMonth());
             jsonObject.put("Charges",salaryList.get(pos).getCharges());
             jsonObject.put("SecurityCode",pref.getSecurityCode());
