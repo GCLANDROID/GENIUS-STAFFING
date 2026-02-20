@@ -109,10 +109,14 @@ public class NewLoginTwoActivity extends AppCompatActivity {
     TextView txtSelfService,txtPaperlessOnboarding;
     LinearLayout clSelfService,clPaperlessOnboarding;
     FrameLayout fragmentContainer;
+    String FROM="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_login_three);
+        if (getIntent() != null){
+            FROM = getIntent().getStringExtra("from");
+        }
         getMaintanceBreak();
     }
 
@@ -195,7 +199,11 @@ public class NewLoginTwoActivity extends AppCompatActivity {
         captchaImageView= (CaptchaImageView) findViewById(R.id.captchaimage);
         captchaImageView.setCaptchaType(CaptchaImageView.CaptchaGenerator.BOTH);
 */
-        loadLoginWithCredentials();
+        if (FROM != null && FROM.equals("MPIN_setup")){
+            loadLoginWithEPIN();
+        } else {
+            loadLoginWithCredentials();
+        }
         onClick();
 
     }
