@@ -240,7 +240,7 @@ public class DashBoardActivity extends AppCompatActivity {
 //                   finish();
 //               }
 
-               Intent intent = new Intent(DashBoardActivity.this, LoginActivity.class);
+               Intent intent = new Intent(DashBoardActivity.this, NewLoginTwoActivity.class);
                startActivity(intent);
                finish();
 
