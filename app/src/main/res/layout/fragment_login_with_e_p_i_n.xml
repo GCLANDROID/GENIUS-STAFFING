@@ -48,7 +48,7 @@
             app:width="40dp"
             app:box_margin="6dp"
             app:hide_otp="true"
-            app:length="6"
+            app:length="4"
             app:otp=""/>
 
         <TextView
