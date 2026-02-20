@@ -6,205 +6,295 @@
     android:background="@mipmap/mpin_page_background"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
-        android:id="@+id/linearLayout10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
-        android:gravity="center"
-        android:orientation="vertical"
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-
-        <ImageView
-            android:id="@+id/imgMpin"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:scaleType="fitStart"
-            android:src="@drawable/finger_tap_keypad" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Enter Your MPIN"
-            android:textColor="@color/black" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:layout_marginTop="10dp"
-            android:text="Please security purposes, Please verify your MPIN" />
-
-
-        <TextView
-            android:id="@+id/tvMpinText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:layout_marginTop="10dp"
-            android:text="Enter your M-PIN"
-            android:textColor="@color/colorPrimary"
-            android:textStyle="bold"/>
-
-
-        <com.otpview.OTPTextView
-            android:id="@+id/otp_view"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:textColor="@android:color/black"
-            app:box_margin="10dp"
-            app:width="15dp"
-            app:height="15dp"
-            app:hide_otp="true"
-            app:hide_otp_drawable="@drawable/ovel_otp_box_hide"
-            app:length="4"
-            app:otp=""
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            app:otp_box_background="@drawable/ovel_epin_background"
-            app:otp_box_background_active="@drawable/ovel_otp_box_active"
-            app:otp_box_background_error="@drawable/ovel_otp_box_error"
-            app:otp_box_background_inactive="@drawable/ovel_epin_background"
-            app:otp_box_background_success="@drawable/ovel_epin_background"
-            app:otp_text_size="20sp"/>
-
-    </LinearLayout>
-
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/transparent_background_3"
-        android:columnCount="3"
-        android:layout_marginTop="20dp"
-        android:layout_marginHorizontal="35dp"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout10">
-        <TextView
-            android:id="@+id/tv1"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_columnWeight="1"
-            android:text="1"
-            android:textSize="17sp"
-            android:textColor="@color/colorPrimary"
-            android:gravity="center"/>
-
-        <TextView
-            android:id="@+id/tv2"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_columnWeight="1"
-            android:text="2"
-            android:textSize="17sp"
-            android:textColor="@color/colorPrimary"
-            android:gravity="center"/>
-
-        <TextView
-            android:id="@+id/tv3"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_columnWeight="1"
-            android:text="3"
-            android:textSize="17sp"
-            android:textColor="@color/colorPrimary"
-            android:gravity="center"/>
-        <TextView
-            android:id="@+id/tv4"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_columnWeight="1"
-            android:text="4"
-            android:textSize="17sp"
-            android:textColor="@color/colorPrimary"
-            android:gravity="center"/>
-
-        <TextView
-            android:id="@+id/tv5"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_columnWeight="1"
-            android:text="5"
-            android:textSize="17sp"
-            android:textColor="@color/colorPrimary"
-            android:gravity="center"/>
-
-        <TextView
-            android:id="@+id/tv6"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_columnWeight="1"
-            android:text="6"
-            android:textSize="17sp"
-            android:textColor="@color/colorPrimary"
-            android:gravity="center"/>
-        <TextView
-            android:id="@+id/tv7"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_columnWeight="1"
-            android:text="7"
-            android:textSize="17sp"
-            android:textColor="@color/colorPrimary"
-            android:gravity="center"/>
-
-        <TextView
-            android:id="@+id/tv8"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_columnWeight="1"
-            android:text="8"
-            android:textSize="17sp"
-            android:textColor="@color/colorPrimary"
-            android:gravity="center"/>
-
-        <TextView
-            android:id="@+id/tv9"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_columnWeight="1"
-            android:text="9"
-            android:textSize="17sp"
-            android:textColor="@color/colorPrimary"
-            android:gravity="center"/>
-
-        <TextView
-
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_columnWeight="1"
-            android:text=""
-            android:textSize="17sp"
-            android:textColor="@color/colorPrimary"
-            android:gravity="center"/>
-
-        <TextView
-            android:id="@+id/tv0"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_columnWeight="1"
-            android:text="0"
-            android:textSize="17sp"
-            android:textColor="@color/colorPrimary"
-            android:gravity="center"/>
-
         <LinearLayout
-            android:id="@+id/llBackspace"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_columnWeight="1"
-            android:textSize="17sp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
 
-            android:textColor="@color/colorPrimary"
-            android:gravity="center">
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/outline_backspace"/>
+            <LinearLayout
+                android:id="@+id/linearLayout10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="150dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <ImageView
+                    android:id="@+id/imgMpin"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:scaleType="fitStart"
+                    android:src="@drawable/finger_tap_keypad" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Enter Your MPIN"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Please security purposes, Please verify your MPIN"
+                    android:textSize="12sp" />
+
+                <LinearLayout
+                    android:id="@+id/llEnterNewMPIN"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/border_background_2"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvMpinText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Enter New M-PIN"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+
+                    <com.otpview.OTPTextView
+                        android:id="@+id/otp_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:textColor="@android:color/black"
+                        app:box_margin="10dp"
+                        app:height="15dp"
+                        app:hide_otp="true"
+                        app:hide_otp_drawable="@drawable/ovel_otp_box_hide"
+                        app:length="4"
+                        app:otp=""
+                        app:otp_box_background="@drawable/ovel_epin_background"
+                        app:otp_box_background_active="@drawable/ovel_otp_box_active"
+                        app:otp_box_background_error="@drawable/ovel_otp_box_error"
+                        app:otp_box_background_inactive="@drawable/ovel_epin_background"
+                        app:otp_box_background_success="@drawable/ovel_epin_background"
+                        app:otp_text_size="20sp"
+                        app:width="15dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llConfirmMPIN"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvConfirmMpinText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Confirm M-PIN"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+
+                    <com.otpview.OTPTextView
+                        android:id="@+id/otp_view_confirm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:textColor="@android:color/black"
+                        app:box_margin="10dp"
+                        app:height="15dp"
+                        app:hide_otp="true"
+                        app:hide_otp_drawable="@drawable/ovel_otp_box_hide"
+                        app:length="4"
+                        app:otp=""
+                        app:otp_box_background="@drawable/ovel_epin_background"
+                        app:otp_box_background_active="@drawable/ovel_otp_box_active"
+                        app:otp_box_background_error="@drawable/ovel_otp_box_error"
+                        app:otp_box_background_inactive="@drawable/ovel_epin_background"
+                        app:otp_box_background_success="@drawable/ovel_epin_background"
+                        app:otp_text_size="20sp"
+                        app:width="15dp" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="35dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/transparent_background_3"
+                android:columnCount="3"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout10">
+
+                <TextView
+                    android:id="@+id/tv1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/tv2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="2"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/tv3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="3"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/tv4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="4"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/tv5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="5"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/tv6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="6"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/tv7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="7"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/tv8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="8"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/tv9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="9"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="17sp" />
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text=""
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/tv0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="17sp" />
+
+                <LinearLayout
+                    android:id="@+id/llBackspace"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="17sp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/outline_backspace" />
+                </LinearLayout>
+            </GridLayout>
+
+            <Button
+                android:id="@+id/btnMPIN"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="30dp"
+                android:layout_marginHorizontal="35dp"
+                android:background="@drawable/button_background_2"
+                android:text="Setup M-PIN"
+                android:textAllCaps="false"
+                android:textColor="@color/white" />
         </LinearLayout>
-    </GridLayout>
+    </ScrollView>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
