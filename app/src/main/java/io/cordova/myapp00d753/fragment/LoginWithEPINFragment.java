@@ -1,5 +1,6 @@
 package io.cordova.myapp00d753.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,10 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.E_Pin_SetupLoginActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,6 +65,8 @@ public class LoginWithEPINFragment extends Fragment {
         }
     }
     ImageView imgMobileImage;
+    TextView txtSetUpEpin;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -74,13 +79,24 @@ public class LoginWithEPINFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
+        btnClick();
     }
 
     private void initView(View view) {
         imgMobileImage = view.findViewById(R.id.imgMobileImage);
+        txtSetUpEpin = view.findViewById(R.id.txtSetUpEpin);
         Glide.with(requireActivity())
                 .asGif()
                 .load(R.drawable.location_15591430)
                 .into(imgMobileImage);
+    }
+    private void btnClick() {
+        txtSetUpEpin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), E_Pin_SetupLoginActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }
