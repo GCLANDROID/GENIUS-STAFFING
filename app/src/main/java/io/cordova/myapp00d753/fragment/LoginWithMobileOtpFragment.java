@@ -3,6 +3,7 @@ package io.cordova.myapp00d753.fragment;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -37,6 +38,7 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.bumptech.glide.Glide;
 import com.dhims.timerview.TimerTextView;
+import com.otpview.OTPListener;
 import com.otpview.OTPTextView;
 
 import org.json.JSONArray;
@@ -48,9 +50,12 @@ import java.net.NetworkInterface;
 import java.security.SecureRandom;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.TempDashBoardActivity;
 import io.cordova.myapp00d753.utility.AppData;
+import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.Util;
 
 /**
@@ -112,11 +117,15 @@ public class LoginWithMobileOtpFragment extends Fragment {
     AlertDialog alertDialog;
     String androidID,ip;
     TextView tvOTPText;
-    String domain;
+    String domain,sessionId;
     String EmployeeID;
     TextView tvResendOTP;
     TimerTextView timerText;
-    private final static int INTERVAL = 1000 * 60 * 1;
+    private final static int INTERVAL = 1000 * 60 * 3;
+    Button btnLogin;
+    public static String SECRET_KEY = "74074750353890398886017484399862";
+    String security_code;
+    Pref pref;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -134,6 +143,7 @@ public class LoginWithMobileOtpFragment extends Fragment {
     }
 
     private void initView(View view) {
+        pref=new Pref(getContext());
         imgMobileImage = view.findViewById(R.id.imgMobileImage);
         btnSendOTP = view.findViewById(R.id.btnSendOTP);
         llOtpInput = view.findViewById(R.id.llOtpInput);
@@ -165,6 +175,8 @@ public class LoginWithMobileOtpFragment extends Fragment {
         tvOTPText=view.findViewById(R.id.tvOTPText);
         timerText=view.findViewById(R.id.tvTimerText);
         tvResendOTP=view.findViewById(R.id.tvResendOTP);
+        btnLogin=view.findViewById(R.id.btnLogin);
+        sessionId = generateSessionID("Staffing_Mobile");
     }
 
     private void btnClick() {
@@ -214,6 +226,46 @@ public class LoginWithMobileOtpFragment extends Fragment {
                     obj.put("MachineDetails", "GeniusStaffing_Android");
                     obj.put("AppName", "GeniusStaffing_Android");
                     generateOTP(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        otp_view.setOtpListener(new OTPListener() {
+            @Override
+            public void onInteractionListener() {
+
+            }
+
+            @Override
+            public void onOTPComplete(@NonNull String complete_otp) {
+
+                OTP = complete_otp;
+
+            }
+        });
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (OTP.isEmpty() ||  OTP.length() < 6) {
+                    shoeDialogDynamicMsg("Please enter OTP");
+                    return;
+                }
+
+                JSONObject obj = new JSONObject();
+                try {
+                    obj.put("MobileNo", Util.encrypt(etMob.getText().toString().trim(), SECRET_KEY));
+                    obj.put("OTP", Util.encrypt(OTP, SECRET_KEY));
+                    obj.put("IPAddress", ip);
+                    obj.put("AppSessionID", sessionId);
+                    obj.put("UUID", androidID);
+                    obj.put("GUID", loginCode);
+                    obj.put("MachineDetails", "GeniusStaffing_Android");
+                    obj.put("LoginType", "2");
+                    obj.put("SecurityCode", domain);
+                    loginv2(obj);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -271,7 +323,7 @@ public class LoginWithMobileOtpFragment extends Fragment {
                                 domain=frstOBJ.optString("Domain");
                                 loginCode=frstOBJ.optString("LoginRequestID");
                                 EmployeeID=frstOBJ.optString("EmployeeID");
-                                long futureTimestamp = System.currentTimeMillis() + (1 * 60 * 1000);
+                                long futureTimestamp = System.currentTimeMillis() + (3 * 60 * 1000);
                                 timerText.setEndTime(futureTimestamp);
 
                                 final Handler handler = new Handler();
@@ -370,5 +422,99 @@ public class LoginWithMobileOtpFragment extends Fragment {
         } catch (Exception ex) {
         }
         return "";
+    }
+
+
+    private void loginv2(JSONObject jsonObject) {
+        Log.e("LOGIN", "login: " + jsonObject.toString());
+        final ProgressDialog pd = new ProgressDialog(getContext());
+        pd.setMessage("Loading..");
+        pd.setCancelable(false);
+        pd.show();
+        AndroidNetworking.post(AppData.newv2url + "Login/EssLogin")
+                .addJSONObjectBody(jsonObject)
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        JSONObject job1 = response;
+                        Log.e("LOGIN", "@@@@@@" + job1);
+                        pd.dismiss();
+
+                        String Response_Code = job1.optString("Response_Code");
+                        String Response_Message = job1.optString("Response_Message");
+
+                        if (Response_Code.equals("1")) {
+                            // Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
+
+
+
+
+                            JSONArray responseData = job1.optJSONArray("Response_Data");
+                            try {
+
+                                for (int i = 0; i < responseData.length(); i++) {
+                                    JSONObject obj = responseData.getJSONObject(i);
+                                    String UserID=obj.optString("UserID");
+                                    pref.saveMasterId(UserID);
+                                    String Domain=obj.optString("Domain");
+                                    if (Domain.equals("FSS")) {
+                                        security_code = "0000";
+                                    } else if (Domain.equals("FMS")) {
+                                        security_code = "222";
+                                    } else if (Domain.equals("ITS")) {
+                                        security_code = "888";
+                                    } else if (Domain.equals("SEC")) {
+                                        security_code = "333";
+                                    } else if (Domain.equals("NAPS")) {
+                                        security_code = "444";
+                                    }  else if (Domain.equals("MSP")) {
+                                        security_code = "666";
+                                    }
+
+                                    pref.saveSecurityCode(security_code);
+
+                                    Intent intent = new Intent(getContext(), TempDashBoardActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+
+
+
+
+
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+
+                        } else {
+                            shoeDialogDynamicMsg(Response_Message);
+
+
+                        }
+
+
+                        // boolean _status = job1.getBoolean("status");
+
+
+                        // do anything with response
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        Log.e("LOGIN", "onError: " + error);
+                        pd.dismiss();
+
+
+                    }
+                });
+    }
+
+    public static String generateSessionID(String userId) {
+        return userId + "_" + System.currentTimeMillis() + "_" + UUID.randomUUID().toString();
     }
 }

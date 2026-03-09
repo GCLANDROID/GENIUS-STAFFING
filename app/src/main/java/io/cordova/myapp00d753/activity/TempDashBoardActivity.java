@@ -113,11 +113,11 @@ public class TempDashBoardActivity extends AppCompatActivity {
             android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
                     Settings.Secure.ANDROID_ID);
         }
-        if (getIntent().getStringExtra("ConsentFlag")!=null){
+  /*      if (getIntent().getStringExtra("ConsentFlag")!=null){
             ConsentFlag=getIntent().getStringExtra("ConsentFlag");
         }else {
 
-        }
+        }*/
 
         connectionCheck=new NetworkConnectionCheck(TempDashBoardActivity.this);
         llProfile = (LinearLayout) findViewById(R.id.llProfile);
