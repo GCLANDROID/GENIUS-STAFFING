@@ -183,7 +183,7 @@ public class TempDashBoardActivity extends AppCompatActivity {
         llLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(TempDashBoardActivity.this,LoginActivity.class);
+                Intent intent=new Intent(TempDashBoardActivity.this,NewLoginTwoActivity.class);
                 startActivity(intent);
                 finish();
             }

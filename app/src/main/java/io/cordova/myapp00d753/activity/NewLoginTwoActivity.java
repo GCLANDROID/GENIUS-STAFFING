@@ -110,18 +110,20 @@ public class NewLoginTwoActivity extends AppCompatActivity {
     LinearLayout clSelfService,clPaperlessOnboarding;
     FrameLayout fragmentContainer;
     String FROM="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_login_three);
-        if (getIntent() != null){
-            FROM = getIntent().getStringExtra("from");
-        }
+
         getMaintanceBreak();
     }
 
 
     private void initialize() {
+        if (getIntent() != null){
+            FROM = getIntent().getStringExtra("from");
+        }
         llSignIn = (LinearLayout) findViewById(R.id.llSignIn);
         etUserId = (EditText) findViewById(R.id.etUserId);
         etPassword = (EditText) findViewById(R.id.etPassword);
@@ -204,6 +206,12 @@ public class NewLoginTwoActivity extends AppCompatActivity {
         } else {
             loadLoginWithCredentials();
         }
+
+        if (pref.getLoginType().equalsIgnoreCase("cred")){
+            loadLoginWithCredentials();
+        }else {
+            loadLoginWithEPIN();
+        }
         onClick();
 
     }
@@ -223,6 +231,7 @@ public class NewLoginTwoActivity extends AppCompatActivity {
             clSelfService.setBackgroundResource(R.drawable.button_background_2);
             clPaperlessOnboarding.setBackgroundResource(0);
             llEP.setVisibility(View.VISIBLE);
+            llLM.setVisibility(View.GONE);
         });
         clPaperlessOnboarding.setOnClickListener(view -> {
             txtSelfService.setTextColor(getApplicationContext().getResources().getColorStateList(R.color.grey));
@@ -232,6 +241,7 @@ public class NewLoginTwoActivity extends AppCompatActivity {
             clPaperlessOnboarding.setBackgroundResource(R.drawable.button_background_2);
             clSelfService.setBackgroundResource(0);
             llEP.setVisibility(View.GONE);
+            llLM.setVisibility(View.VISIBLE);
             loadLoginWithCredentials();
         });
 

@@ -1117,5 +1117,14 @@ public class Pref {
     public String getOtherLocation(){
         return _pref.getString("OtherLocation","");
     }
+
+
+    public void saveLoginType(String LoginType){
+        _editorPref.putString("LoginType", LoginType);
+        _editorPref.commit();
+    }
+    public String getLoginType(){
+        return _pref.getString("LoginType","");
+    }
 }
 

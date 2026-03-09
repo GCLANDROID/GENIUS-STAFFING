@@ -79,6 +79,7 @@
 
 
             <TextView
+                android:id="@+id/txtForgotEpin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
@@ -93,6 +94,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -103,4 +105,20 @@
         android:text="LOGIN"
         android:textColor="@color/white" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:padding="10dp"
+        android:background="@drawable/lldesign"
+        android:backgroundTint="@color/red"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:text="The E-PIN option will be available only for active employees."
+            android:textAlignment="center"></TextView>
+    </LinearLayout>
 </LinearLayout>

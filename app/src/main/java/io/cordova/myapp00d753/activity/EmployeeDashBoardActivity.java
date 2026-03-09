@@ -152,6 +152,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
     ArrayList<NeedToActModel> needToActModelList = new ArrayList<>();
     RecyclerView rvNeedToAct;
     LinearLayout chatFabContainer;
+    String from;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -181,6 +182,9 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
 
 
     private void initialize() {
+        if (getIntent() != null){
+            from = getIntent().getStringExtra("from");
+        }
         pref = new Pref(EmployeeDashBoardActivity.this);
         android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
@@ -377,8 +381,9 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         imglogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(EmployeeDashBoardActivity.this, LoginActivity.class);
+                Intent intent = new Intent(EmployeeDashBoardActivity.this, NewLoginTwoActivity.class);
                 startActivity(intent);
+                intent.putExtra("from",from);
                 finish();
             }
         });

@@ -754,8 +754,8 @@ public class SelfOnboardingChatBotActivity extends AppCompatActivity {
                         "\nPress 2️⃣ for NO"
         );
 
-       // extractedAadhar = aadhar.replaceAll(" ","");
-        extractedAadhar ="901254115664" ;
+        extractedAadhar = aadhar.replaceAll(" ","");
+       // extractedAadhar ="901254115664" ;
 
         awaitingAadharConfirmation = true;
     }

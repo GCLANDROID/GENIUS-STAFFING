@@ -18,6 +18,7 @@
         android:layout_gravity="center"/>
 
     <LinearLayout
+        android:visibility="visible"
         android:id="@+id/llMobileNumberInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,10 +34,13 @@
             android:layout_gravity="center"/>
 
         <EditText
+            android:id="@+id/etMob"
+            android:maxLength="10"
+            android:inputType="phone"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginTop="10dp"
-            android:hint="Mobile Number"
+            android:hint="Please enter registered mobile number"
             android:textColorHint="@color/black"
             android:textSize="13sp"
             android:paddingStart="15dp"
@@ -67,7 +71,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enter the OTP sent to +91 123456789"
+            android:id="@+id/tvOTPText"
             android:textSize="13sp"
             android:textStyle="bold"
             android:layout_gravity="center"
@@ -105,6 +109,28 @@
             android:layout_marginTop="10dp"
             android:textColor="@color/white"
             android:layout_marginBottom="30dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right">
+            <TextView
+                android:enabled="false"
+                android:id="@+id/tvResendOTP"
+                android:textSize="14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="Resend OTP after"></TextView>
+            <com.dhims.timerview.TimerTextView
+                android:layout_marginLeft="2dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:id="@+id/tvTimerText"></com.dhims.timerview.TimerTextView>
+        </LinearLayout>
 
     </LinearLayout>
 
