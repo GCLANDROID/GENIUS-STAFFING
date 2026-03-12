@@ -209,10 +209,41 @@ public class NewLoginTwoActivity extends AppCompatActivity {
 
         if (pref.getLoginType().equalsIgnoreCase("cred")){
             loadLoginWithCredentials();
+        }else if (pref.getLoginType().equalsIgnoreCase("MPIN")){
+            loadLoginWithEPIN();
         }else {
             loadLoginWithEPIN();
         }
         onClick();
+        if (pref.getSelectionFlag().equals("1")){
+            txtSelfService.setTextColor(getApplicationContext().getResources().getColorStateList(R.color.white));
+            txtPaperlessOnboarding.setTextColor(getApplicationContext().getResources().getColorStateList(R.color.grey));
+            iconSelfService.setImageResource(R.drawable.self_service_white_icon);
+            iconPaperlessOnboarding.setImageResource(R.drawable.paperless_1);
+            clSelfService.setBackgroundResource(R.drawable.button_background_2);
+            clPaperlessOnboarding.setBackgroundResource(0);
+            llEP.setVisibility(View.VISIBLE);
+            llLM.setVisibility(View.GONE);
+        }else if (pref.getSelectionFlag().equals("2")){
+            txtSelfService.setTextColor(getApplicationContext().getResources().getColorStateList(R.color.grey));
+            txtPaperlessOnboarding.setTextColor(getApplicationContext().getResources().getColorStateList(R.color.white));
+            iconSelfService.setImageResource(R.drawable.self_service);
+            iconPaperlessOnboarding.setImageResource(R.drawable.paperless_whicte_icon);
+            clPaperlessOnboarding.setBackgroundResource(R.drawable.button_background_2);
+            clSelfService.setBackgroundResource(0);
+            llEP.setVisibility(View.GONE);
+            llLM.setVisibility(View.VISIBLE);
+            loadLoginWithCredentials();
+        }else {
+            txtSelfService.setTextColor(getApplicationContext().getResources().getColorStateList(R.color.white));
+            txtPaperlessOnboarding.setTextColor(getApplicationContext().getResources().getColorStateList(R.color.grey));
+            iconSelfService.setImageResource(R.drawable.self_service_white_icon);
+            iconPaperlessOnboarding.setImageResource(R.drawable.paperless_1);
+            clSelfService.setBackgroundResource(R.drawable.button_background_2);
+            clPaperlessOnboarding.setBackgroundResource(0);
+            llEP.setVisibility(View.VISIBLE);
+            llLM.setVisibility(View.GONE);
+        }
 
     }
 
@@ -232,6 +263,7 @@ public class NewLoginTwoActivity extends AppCompatActivity {
             clPaperlessOnboarding.setBackgroundResource(0);
             llEP.setVisibility(View.VISIBLE);
             llLM.setVisibility(View.GONE);
+            pref.saveSelectionFlag("1");
         });
         clPaperlessOnboarding.setOnClickListener(view -> {
             txtSelfService.setTextColor(getApplicationContext().getResources().getColorStateList(R.color.grey));
@@ -243,6 +275,7 @@ public class NewLoginTwoActivity extends AppCompatActivity {
             llEP.setVisibility(View.GONE);
             llLM.setVisibility(View.VISIBLE);
             loadLoginWithCredentials();
+            pref.saveSelectionFlag("2");
         });
 
         llLC.setOnClickListener(new View.OnClickListener() {

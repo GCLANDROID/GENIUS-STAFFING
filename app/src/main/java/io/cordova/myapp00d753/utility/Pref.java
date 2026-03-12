@@ -1126,5 +1126,13 @@ public class Pref {
     public String getLoginType(){
         return _pref.getString("LoginType","");
     }
+
+    public void saveSelectionFlag(String SelectionFlag){
+        _editorPref.putString("SelectionFlag", SelectionFlag);
+        _editorPref.commit();
+    }
+    public String getSelectionFlag(){
+        return _pref.getString("SelectionFlag","");
+    }
 }
 

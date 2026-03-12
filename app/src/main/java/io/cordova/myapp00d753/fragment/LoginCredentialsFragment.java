@@ -799,6 +799,7 @@ public class LoginCredentialsFragment extends Fragment {
                                 for (int i = 0; i < responseData.length(); i++) {
                                     JSONObject obj = responseData.getJSONObject(i);
                                     AEMEmployeeID = obj.optString("UserID");
+                                    pref.saveMasterId(AEMEmployeeID);
 
 
                                     String Name = obj.optString("UserName");
@@ -836,6 +837,7 @@ public class LoginCredentialsFragment extends Fragment {
                                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                             intent.putExtra("ConsentFlag", ConsentFlag);
                                             pref.saveEmpId(AEMEmployeeID);
+
                                             startActivity(intent);
 
 

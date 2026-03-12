@@ -87,8 +87,8 @@ public class DashBoardActivity extends AppCompatActivity {
     ArrayList<DashboardItemModel> itemList = new ArrayList<>();
     LinearLayout llLogin;
     private ReviewManager reviewManager;
-    TextView txtCompanyName;
-    LinearLayout llESS,llESSSelected,llPaperless,llPaperlessSelected,llAboutUs,llContactUS,llServices;
+
+    LinearLayout llESS,llESSSelected,llPaperless,llPaperlessSelected,llAboutUs,llContactUS,llServices,llBrochure;
     int selectionflag=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +104,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
     private void initialize() {
         reviewManager = ReviewManagerFactory.create(this);
-        txtCompanyName = (TextView) findViewById(R.id.txtCompanyName);
+
         llLogin=(LinearLayout)findViewById(R.id.llLogin);
         rvItem=(RecyclerView)findViewById(R.id.rvItem);
         rvItem.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -144,15 +144,16 @@ public class DashBoardActivity extends AppCompatActivity {
                     .apply();
         }
 
-        llESS=(LinearLayout)findViewById(R.id.llESS);
+        llESS=(LinearLayout)findViewById(R.id.llSelfService);
         llESSSelected=(LinearLayout)findViewById(R.id.llESSSelected);
 
-        llPaperless=(LinearLayout)findViewById(R.id.llPaperless);
+        llPaperless=(LinearLayout)findViewById(R.id.llNewUser);
         llPaperlessSelected=(LinearLayout)findViewById(R.id.llPaperlessSelected);
 
         llAboutUs=(LinearLayout)findViewById(R.id.llAboutUs);
         llContactUS=(LinearLayout)findViewById(R.id.llContactUS);
         llServices=(LinearLayout)findViewById(R.id.llServices);
+        llBrochure=(LinearLayout)findViewById(R.id.llBrochure);
 
         GeniusHRTechPopUp();
         onClick();
@@ -166,30 +167,21 @@ public class DashBoardActivity extends AppCompatActivity {
         llESS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (llESSSelected.getVisibility()==View.GONE){
-                    llESSSelected.setVisibility(View.VISIBLE);
-                    llPaperlessSelected.setVisibility(View.GONE);
-                    selectionflag=1;
-                } else {
-                    llESSSelected.setVisibility(View.GONE);
-                    llPaperlessSelected.setVisibility(View.GONE);
-                    selectionflag=0;
-                }
+                pref.saveSelectionFlag("1");
+                Intent intent = new Intent(DashBoardActivity.this, NewLoginTwoActivity.class);
+                startActivity(intent);
+                finish();
+
             }
         });
 
         llPaperless.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (llPaperlessSelected.getVisibility()==View.GONE){
-                    llESSSelected.setVisibility(View.GONE);
-                    llPaperlessSelected.setVisibility(View.VISIBLE);
-                    selectionflag=2;
-                } else {
-                    llESSSelected.setVisibility(View.GONE);
-                    llPaperlessSelected.setVisibility(View.VISIBLE);
-                    selectionflag=0;
-                }
+                pref.saveSelectionFlag("2");
+                Intent intent = new Intent(DashBoardActivity.this, NewLoginTwoActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
@@ -217,6 +209,14 @@ public class DashBoardActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent=new Intent(DashBoardActivity.this, ServicesActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+        llBrochure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse("https://www.geniusconsultant.com/PDF-doc/GCL_BROCHURE.pdf"); // missing 'http://' will cause crashed
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
             }
         });

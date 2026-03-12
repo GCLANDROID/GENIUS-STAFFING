@@ -25,6 +25,7 @@ import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 import io.cordova.myapp00d753.activity.DashBoardActivity;
+import io.cordova.myapp00d753.activity.NewLoginTwoActivity;
 import io.cordova.myapp00d753.utility.CreativePermission;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
@@ -49,8 +50,14 @@ public class SplashScreenActivity extends AppCompatActivity implements GoogleApi
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(io.cordova.myapp00d753.SplashScreenActivity.this, DashBoardActivity.class));
-                finish();
+                if (pref.getSelectionFlag().isEmpty()){
+                    startActivity(new Intent(io.cordova.myapp00d753.SplashScreenActivity.this, DashBoardActivity.class));
+                    finish();
+                }else {
+                    startActivity(new Intent(io.cordova.myapp00d753.SplashScreenActivity.this, NewLoginTwoActivity.class));
+                    finish();
+                }
+
             }
         }, 4000);
 

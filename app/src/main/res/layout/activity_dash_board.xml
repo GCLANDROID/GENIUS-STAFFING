@@ -6,28 +6,12 @@
     android:layout_height="match_parent"
     tools:context="io.cordova.myapp00d753.activity.DashBoardActivity"
     android:orientation="vertical"
-    android:background="@android:color/white"
-    android:fitsSystemWindows="true">
-   <LinearLayout
-       android:layout_gravity="center"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:gravity="center"
-       android:layout_marginTop="30dp">
-       <TextView
-           android:id="@+id/txtCompanyName"
-           android:gravity="center"
-           android:layout_gravity="center"
-           android:textStyle="bold"
-           android:fontFamily="sans-serif"
-           android:textColor="@color/textcolor"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:textSize="20sp"
-           android:text="@string/company_name"/>
+    android:background="@mipmap/background"
+    android:fitsSystemWindows="true"
+    android:gravity="center">
 
-   </LinearLayout>
     <LinearLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.5">
@@ -45,6 +29,7 @@
     </LinearLayout>
 
     <LinearLayout
+
         android:visibility="gone"
         android:layout_marginTop="26dp"
         android:layout_width="match_parent"
@@ -163,6 +148,7 @@
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
+        android:visibility="gone"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -191,7 +177,6 @@
         android:background="@color/bar2"
         android:paddingBottom="20dp">
         <LinearLayout
-            android:id="@+id/llAboutUs"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1">
@@ -210,7 +195,7 @@
                 android:text="About US"></TextView>
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/llContactUS"
+
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1">
@@ -229,7 +214,7 @@
                 android:text="Contact US"></TextView>
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/llServices"
+
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1">
@@ -249,6 +234,287 @@
         </LinearLayout>
 
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:layout_weight="0.6"
+        android:gravity="center">
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:layout_weight="1"
+        android:gravity="center">
+        <LinearLayout
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <androidx.cardview.widget.CardView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                card_view:cardCornerRadius="12dp"
+                card_view:cardElevation="4dp"
+                card_view:cardBackgroundColor="@android:color/white">
+
+                <LinearLayout
+                    android:id="@+id/llNewUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="12dp">
+
+                    <!-- Circle Icon Background -->
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/ic_new_user"
+                        android:background="@drawable/circle_icon_bg"
+                        android:padding="8dp"
+                        android:layout_marginBottom="8dp"
+                        />
+
+                    <!-- Title -->
+
+
+                    <!-- Subtitle -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Paperless Onboarding"
+                        android:textSize="14sp"
+                        android:textColor="#6E6E6E"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/llSelfService"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <androidx.cardview.widget.CardView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                card_view:cardCornerRadius="12dp"
+                card_view:cardElevation="4dp"
+                card_view:cardBackgroundColor="@android:color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="12dp">
+
+                    <!-- Circle Icon Background -->
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/register"
+                        android:background="@drawable/circle_icon_bg"
+                        android:padding="8dp"
+                        android:layout_marginBottom="8dp"
+                        />
+
+                    <!-- Title -->
+
+                    <!-- Subtitle -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Self Services"
+                        android:textSize="14sp"
+                        android:textColor="#6E6E6E"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:layout_weight="0.5"
+        android:paddingHorizontal="10dp">
+        <LinearLayout
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/service_bg">
+
+                <LinearLayout
+                    android:id="@+id/llServices"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="12dp">
+
+                    <!-- Circle Icon Background -->
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/serices"
+                        android:padding="8dp"
+                        android:layout_marginBottom="8dp"
+                        app:tint="@color/white" />
+
+                    <!-- Title -->
+
+
+                    <!-- Subtitle -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Services"
+                        android:textSize="12sp"
+                        android:textColor="@color/white"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginLeft="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/service_bg">
+
+            <LinearLayout
+                android:id="@+id/llContactUS"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="12dp">
+
+                <!-- Circle Icon Background -->
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/contactus"
+                    android:padding="8dp"
+                    android:layout_marginBottom="8dp"
+                    app:tint="@color/white" />
+
+                <!-- Title -->
+
+
+                <!-- Subtitle -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Contact Us"
+                    android:textSize="12sp"
+                    android:textColor="@color/white"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginLeft="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/service_bg">
+
+            <LinearLayout
+                android:id="@+id/llAboutUs"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="12dp">
+
+                <!-- Circle Icon Background -->
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/aboutus"
+                    android:padding="8dp"
+                    android:layout_marginBottom="8dp"
+                    app:tint="@color/white" />
+
+                <!-- Title -->
+
+
+                <!-- Subtitle -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="About Us"
+                    android:textSize="12sp"
+                    android:textColor="@color/white"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginLeft="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/service_bg">
+
+            <LinearLayout
+                android:id="@+id/llBrochure"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="12dp">
+
+                <!-- Circle Icon Background -->
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/brochure"
+                    android:padding="8dp"
+                    android:layout_marginBottom="8dp"
+                    app:tint="@color/white" />
+
+                <!-- Title -->
+
+
+                <!-- Subtitle -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Brochure"
+                    android:textSize="12sp"
+                    android:textColor="@color/white"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
 
 
 
