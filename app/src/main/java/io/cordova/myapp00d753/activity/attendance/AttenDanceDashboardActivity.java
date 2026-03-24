@@ -74,6 +74,7 @@ import io.cordova.myapp00d753.activity.BacklogAttendanceActivity;
 import io.cordova.myapp00d753.activity.DailyDashBoardActivity;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.activity.HolidayMarkingActivity;
+import io.cordova.myapp00d753.activity.ITViewActivity;
 import io.cordova.myapp00d753.activity.LeaveApplicationActivity;
 import io.cordova.myapp00d753.activity.NEW.AllApplicationViewActivity;
 import io.cordova.myapp00d753.activity.NEW.NEW_AdjustmentActivity;
@@ -83,6 +84,7 @@ import io.cordova.myapp00d753.activity.NEW.NEW_AttendanceReportActivity;
 import io.cordova.myapp00d753.activity.NEW.NEW_HolidayMarkingActivity;
 import io.cordova.myapp00d753.activity.NEW.NEW_HolidayViewActivity;
 import io.cordova.myapp00d753.activity.NEW.NEW_WeeklyOffAttendanceActivity;
+import io.cordova.myapp00d753.activity.PFDashBoardActivity;
 import io.cordova.myapp00d753.activity.QRCodeScannerActivity;
 import io.cordova.myapp00d753.activity.SKF.HolidayViewActivity;
 import io.cordova.myapp00d753.activity.SKF.SKF_AttendanceRegularizationActivity;
@@ -898,8 +900,13 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else if (view == btnLeave) {
-            Intent intent = new Intent(AttenDanceDashboardActivity.this, LeaveApplicationActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//            Intent intent = new Intent(AttenDanceDashboardActivity.this, LeaveApplicationActivity.class);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//            startActivity(intent);
+
+            Intent intent=new Intent(AttenDanceDashboardActivity.this, ITViewActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("url",pref.getLeaveApplicationURL());
             startActivity(intent);
         } else if (view == tvOK) {
             lnStatus.setVisibility(View.GONE);

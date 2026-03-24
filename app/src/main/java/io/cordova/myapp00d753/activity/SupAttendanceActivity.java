@@ -1,6 +1,7 @@
 package io.cordova.myapp00d753.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import android.view.View;
@@ -16,7 +17,7 @@ import io.cordova.myapp00d753.bluedart.ODOmeterApprvalActivity;
 import io.cordova.myapp00d753.utility.Pref;
 
 public class SupAttendanceActivity extends AppCompatActivity {
-    LinearLayout llAttandanceManage,llAttendanceReport,llApproval,llQR,llODOmeter;
+    LinearLayout llAttandanceManage,llAttendanceReport,llApproval,llQR,llODOmeter,llAdjApproval;
     ImageView imgBack,imgHome;
     Pref pref;
 
@@ -31,6 +32,7 @@ public class SupAttendanceActivity extends AppCompatActivity {
     private void initialize(){
         pref=new Pref(SupAttendanceActivity.this);
         llAttandanceManage=(LinearLayout)findViewById(R.id.llAttandanceManage);
+        llAdjApproval=findViewById(R.id.llAdjApproval);
         llAttendanceReport=(LinearLayout)findViewById(R.id.llAttendanceReport);
         llODOmeter=(LinearLayout)findViewById(R.id.llODOmeter);
         llApproval=(LinearLayout)findViewById(R.id.llApproval);
@@ -107,7 +109,32 @@ public class SupAttendanceActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent=new Intent(SupAttendanceActivity.this,AttenApprovalActivity.class);
+//                Intent intent=new Intent(SupAttendanceActivity.this,AttenApprovalActivity.class);
+//                startActivity(intent);
+
+
+
+                Intent intent=new Intent(SupAttendanceActivity.this,ITViewActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("url",pref.getRegApprovalURL());
+                startActivity(intent);
+
+            }
+        });
+
+
+        llAdjApproval.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+//                Intent intent=new Intent(SupAttendanceActivity.this,AttenApprovalActivity.class);
+//                startActivity(intent);
+
+
+
+                Intent intent=new Intent(SupAttendanceActivity.this,ITViewActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("url",pref.getAdjApprovalURL());
                 startActivity(intent);
 
             }

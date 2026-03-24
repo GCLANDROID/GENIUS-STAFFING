@@ -153,7 +153,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/toolbartextsize"
-                    android:text="Approval"
+                    android:text="Attendance Approval"
                     android:layout_marginTop="5dp"/>
             </LinearLayout>
         </LinearLayout>
@@ -212,6 +212,33 @@
                     android:text="ODOMeter Approval"
                     android:layout_marginTop="5dp"/>
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:id="@+id/llAdjApproval"
+                android:background="@android:color/white"
+                >
+
+                <ImageView
+                    android:layout_width="@dimen/imagesize"
+                    android:layout_height="@dimen/imagesize"
+                    android:src="@drawable/approved"/>
+
+
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/toolbartextsize"
+                    android:text="Adjustment Approval"
+                    android:layout_marginTop="5dp"/>
+            </LinearLayout>
+
 
         </LinearLayout>
     </LinearLayout>

@@ -1134,5 +1134,39 @@ public class Pref {
     public String getSelectionFlag(){
         return _pref.getString("SelectionFlag","");
     }
+
+
+    public void saveRegApprovalURL(String RegApprovalURL){
+        _editorPref.putString("RegApprovalURL", RegApprovalURL);
+        _editorPref.commit();
+    }
+    public String getRegApprovalURL(){
+        return _pref.getString("RegApprovalURL","");
+    }
+
+
+    public void saveLeaveApprovalURL(String LeaveApprovalURL){
+        _editorPref.putString("LeaveApprovalURL", LeaveApprovalURL);
+        _editorPref.commit();
+    }
+    public String getLeaveApprovalURL(){
+        return _pref.getString("LeaveApprovalURL","");
+    }
+
+    public void saveAdjApprovalURL(String AdjApprovalURL){
+        _editorPref.putString("AdjApprovalURL", AdjApprovalURL);
+        _editorPref.commit();
+    }
+    public String getAdjApprovalURL(){
+        return _pref.getString("AdjApprovalURL","");
+    }
+
+    public void saveLeaveApplicationURL(String LeaveApplicationURL){
+        _editorPref.putString("LeaveApplicationURL", LeaveApplicationURL);
+        _editorPref.commit();
+    }
+    public String getLeaveApplicationURL(){
+        return _pref.getString("LeaveApplicationURL","");
+    }
 }
 

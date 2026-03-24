@@ -962,6 +962,22 @@ public class LoginCredentialsFragment extends Fragment {
 
                                     String EmployeeID= obj.optString("EmployeeID");
                                     pref.saveEmpId(EmployeeID);
+
+                                    String RegApprovalUrl= obj.optString("RegApprovalUrl");
+                                    pref.saveRegApprovalURL(RegApprovalUrl);
+
+
+                                    String LeaveApplicationUrl= obj.optString("LeaveApplicationUrl");
+                                    pref.saveLeaveApprovalURL(LeaveApplicationUrl);
+
+                                    String AdjApplicationUrl= obj.optString("AdjApplicationUrl");
+                                    pref.saveAdjApprovalURL(AdjApplicationUrl);
+
+                                    String LeaveApplicationUrlNew= obj.optString("LeaveApplicationUrl");
+                                    pref.saveLeaveApplicationURL(LeaveApplicationUrlNew);
+
+
+
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

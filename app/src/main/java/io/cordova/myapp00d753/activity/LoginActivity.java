@@ -1064,6 +1064,11 @@ public class LoginActivity extends AppCompatActivity {
 
                                     String EmployeeID= obj.optString("EmployeeID");
                                     pref.saveEmpId(EmployeeID);
+
+                                    String RegApprovalUrl= obj.optString("RegApprovalUrl");
+                                    pref.saveRegApprovalURL(RegApprovalUrl);
+
+                                     UserType= obj.optString("UserType");
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

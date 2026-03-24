@@ -721,7 +721,7 @@ public class SuperVisiorDashBoardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 pref.saveEmpId("");
-                Intent intent=new Intent(SuperVisiorDashBoardActivity.this,LoginActivity.class);
+                Intent intent=new Intent(SuperVisiorDashBoardActivity.this,NewLoginTwoActivity.class);
                 startActivity(intent);
                 finish();
 
@@ -774,8 +774,9 @@ public class SuperVisiorDashBoardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent=new Intent(SuperVisiorDashBoardActivity.this,SupLeaveApprovalActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                Intent intent=new Intent(SuperVisiorDashBoardActivity.this,ITViewActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("url",pref.getLeaveApprovalURL());
                 startActivity(intent);
             }
         });
