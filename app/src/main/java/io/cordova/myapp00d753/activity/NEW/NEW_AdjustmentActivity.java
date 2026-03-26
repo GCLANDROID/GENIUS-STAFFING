@@ -326,7 +326,7 @@ public class NEW_AdjustmentActivity extends AppCompatActivity {
                         jsonObject.put("EndDate", startDate);
                         jsonObject.put("Remarks", etReason.getText().toString().trim());
                         jsonObject.put("StartTime", intime);
-                        jsonObject.put("EndTime", intime);
+                        jsonObject.put("EndTime", outtime);
                         jsonObject.put("clinetname", "");
                         jsonObject.put("clinetphn", "");
                         jsonObject.put("Oddaytype", "");
