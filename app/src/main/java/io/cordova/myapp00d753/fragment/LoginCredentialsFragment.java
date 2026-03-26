@@ -967,8 +967,8 @@ public class LoginCredentialsFragment extends Fragment {
                                     pref.saveRegApprovalURL(RegApprovalUrl);
 
 
-                                    String LeaveApplicationUrl= obj.optString("LeaveApplicationUrl");
-                                    pref.saveLeaveApprovalURL(LeaveApplicationUrl);
+                                    String LeaveApprovalUrl= obj.optString("LeaveApprovalUrl");
+                                    pref.saveLeaveApprovalURL(LeaveApprovalUrl);
 
                                     String AdjApplicationUrl= obj.optString("AdjApplicationUrl");
                                     pref.saveAdjApprovalURL(AdjApplicationUrl);

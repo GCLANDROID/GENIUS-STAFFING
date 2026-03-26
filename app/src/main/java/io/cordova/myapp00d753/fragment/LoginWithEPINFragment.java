@@ -163,6 +163,7 @@ public class LoginWithEPINFragment extends Fragment {
         } else {
             androidID = getAndroidID(getContext());
         }
+        Log.d("androidID",androidID);
 
         ip = getIPAddress(true);
         sessionId = generateSessionID("Staffing_Mobile");
