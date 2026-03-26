@@ -187,7 +187,7 @@ public class NEW_WeeklyOffAttendanceActivity extends AppCompatActivity {
                             jsonObject.put("Type", "WO");
                             jsonObject.put("StartDate", newdate);
                             jsonObject.put("Reason", "");
-                            jsonObject.put("DbOperation", "3");
+                            jsonObject.put("DbOperation", "2");
                             jsonObject.put("Shiftid", "");
                             jsonObject.put("SiteId", "");
                             jsonObject.put("ApproverID", SupervisorID);
@@ -289,11 +289,10 @@ public class NEW_WeeklyOffAttendanceActivity extends AppCompatActivity {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                alerDialog1.dismiss();
                 Intent intent=new Intent(NEW_WeeklyOffAttendanceActivity.this,EmployeeDashBoardActivity.class);
                 startActivity(intent);
                 finish();
-                alerDialog1.dismiss();
-
             }
         });
 
