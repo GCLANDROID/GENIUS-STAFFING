@@ -1035,13 +1035,13 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
 
                         int Response_Code = job1.optInt("Response_Code");
                         String Response_Message = job1.optString("Response_Message");
-                        if (Response_Code == 101) {
+                        /*if (Response_Code == 101) {
 
                         } else {
 
                             shoeErrorDialog(Response_Message);
 
-                        }
+                        }*/
                     }
 
                     @Override
