@@ -178,7 +178,7 @@ public class NEW_HolidayMarkingActivity extends AppCompatActivity {
                         jsonObject.put("Type", "H");
                         jsonObject.put("StartDate", holidayDate);
                         jsonObject.put("Reason", "");
-                        jsonObject.put("DbOperation", "3");
+                        jsonObject.put("DbOperation", "2");
                         jsonObject.put("Shiftid", "");
                         jsonObject.put("SiteId", "");
                         jsonObject.put("ApproverID", SupervisorID);
@@ -210,7 +210,7 @@ public class NEW_HolidayMarkingActivity extends AppCompatActivity {
                         jsonObject.put("Type", "OH");
                         jsonObject.put("StartDate", holidayDate);
                         jsonObject.put("Reason", "");
-                        jsonObject.put("DbOperation", "3");
+                        jsonObject.put("DbOperation", "2");
                         jsonObject.put("Shiftid", "");
                         jsonObject.put("SiteId", "");
                         jsonObject.put("ApproverID", SupervisorID);
