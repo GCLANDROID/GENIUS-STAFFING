@@ -1193,7 +1193,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     @Override
     protected void onResume() {
         super.onResume();
-       /* JSONObject objSubmenu=new JSONObject();
+        JSONObject objSubmenu=new JSONObject();
         try {
             objSubmenu.put("ConsultantID", pref.getEmpConId());
             objSubmenu.put("ClientID", pref.getEmpClintId());
@@ -1205,7 +1205,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             getSubmenu(objSubmenu);
         } catch (JSONException e) {
             e.printStackTrace();
-        }*/
+        }
         JSONObject obj=new JSONObject();
         try {
             obj.put("AemEmployeeid", pref.getEmpId());
