@@ -190,7 +190,7 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
         progressDialog.setCancelable(false);
         phoneNumber=getAndroidID(NEW_AttendanceMarkingActivity.this);
 
-        JSONObject obj = new JSONObject();
+        /*JSONObject obj = new JSONObject();
         try {
             obj.put("CompanyID", pref.getEmpClintId());
             obj.put("EmployeeID", pref.getEmpId());
@@ -201,7 +201,7 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
             savedeviceID(obj);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
 
         imhHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1035,13 +1035,13 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
 
                         int Response_Code = job1.optInt("Response_Code");
                         String Response_Message = job1.optString("Response_Message");
-                        /*if (Response_Code == 101) {
+                        if (Response_Code == 101) {
 
                         } else {
 
                             shoeErrorDialog(Response_Message);
 
-                        }*/
+                        }
                     }
 
                     @Override
