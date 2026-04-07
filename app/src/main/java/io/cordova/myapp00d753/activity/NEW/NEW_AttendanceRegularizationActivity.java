@@ -610,41 +610,49 @@ public class NEW_AttendanceRegularizationActivity extends AppCompatActivity impl
                                 txtRegularisationCount.setText(String.valueOf(objectRequestCount.getInt("RegularisationRequestCount")));
 
                                 if (objectRequestCount.getInt("RegularisationRequestCount") < 4) {
-                                    if (Table4.length() > 0) {
-                                        for (int i = 0; i < Table4.length(); i++) {
-                                            JSONObject obj = Table4.getJSONObject(i);
-                                            String AttDate = obj.optString("DATES");
-                                            String InTime = obj.optString("Intime");
-                                            String OutTime = obj.optString("Outtime");
-                                            String Daytype = obj.optString("Daytype");
-                                            //String Remarks=obj.optString("Remark");
-                                            //Log.e(TAG, "Remarks: "+obj.optString("Remark") );
+                                    if (Table4 != null) {
+                                        if (Table4.length() > 0) {
+                                            for (int i = 0; i < Table4.length(); i++) {
+                                                JSONObject obj = Table4.getJSONObject(i);
+                                                String AttDate = obj.optString("DATES");
+                                                String InTime = obj.optString("Intime");
+                                                String OutTime = obj.optString("Outtime");
+                                                String Daytype = obj.optString("Daytype");
+                                                //String Remarks=obj.optString("Remark");
+                                                //Log.e(TAG, "Remarks: "+obj.optString("Remark") );
 
-                                            //Log.e(TAG, "Remarks: "+Remarks);
+                                                //Log.e(TAG, "Remarks: "+Remarks);
 
-                                            NEW_BackLogAttendanceModel blockModule = new NEW_BackLogAttendanceModel(AttDate, InTime, OutTime);
-                                            blockModule.setDayType(Daytype);
-                                            //blockModule.setRemarks(Remarks);
-                                            blockLogList.add(blockModule);
-                                            //item1.add(pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+AttDate + "_" + InTime + "_" + OutTime + "_"+Remarks);
+                                                NEW_BackLogAttendanceModel blockModule = new NEW_BackLogAttendanceModel(AttDate, InTime, OutTime);
+                                                blockModule.setDayType(Daytype);
+                                                //blockModule.setRemarks(Remarks);
+                                                blockLogList.add(blockModule);
+                                                //item1.add(pref.getEmpId()+"_"+pref.getEmpClintId()+"_"+AttDate + "_" + InTime + "_" + OutTime + "_"+Remarks);
+                                            }
+                                            llLoader.setVisibility(View.GONE);
+                                            llMain.setVisibility(View.VISIBLE);
+                                            llNodata.setVisibility(View.GONE);
+                                            llWarning.setVisibility(View.GONE);
+                                            skfBacklogAdapter = new NEW_BacklogAdapter(blockLogList, dayTypeArray, NEW_AttendanceRegularizationActivity.this,
+                                                    metsoShiftList, locationArrayList, supervisorList);
+                                            skfBacklogAdapter.setIsApproverRequired(isApproverRequired);
+                                            skfBacklogAdapter.setIsDayTypeSelectionRequired(isDayTypeSelectionRequired);
+                                            skfBacklogAdapter.setIsShiftSelectionRequired(isShiftSelectionRequired);
+                                            skfBacklogAdapter.setIsLocationSelectionRequired(isLocationSelectionRequired);
+                                            rvItem.setAdapter(skfBacklogAdapter);
+                                        } else {
+                                            llLoader.setVisibility(View.GONE);
+                                            llMain.setVisibility(View.GONE);
+                                            llNodata.setVisibility(View.VISIBLE);
+                                            llWarning.setVisibility(View.GONE);
                                         }
-                                        llLoader.setVisibility(View.GONE);
-                                        llMain.setVisibility(View.VISIBLE);
-                                        llNodata.setVisibility(View.GONE);
-                                        llWarning.setVisibility(View.GONE);
-                                        skfBacklogAdapter = new NEW_BacklogAdapter(blockLogList, dayTypeArray, NEW_AttendanceRegularizationActivity.this,
-                                                metsoShiftList, locationArrayList, supervisorList);
-                                        skfBacklogAdapter.setIsApproverRequired(isApproverRequired);
-                                        skfBacklogAdapter.setIsDayTypeSelectionRequired(isDayTypeSelectionRequired);
-                                        skfBacklogAdapter.setIsShiftSelectionRequired(isShiftSelectionRequired);
-                                        skfBacklogAdapter.setIsLocationSelectionRequired(isLocationSelectionRequired);
-                                        rvItem.setAdapter(skfBacklogAdapter);
                                     } else {
                                         llLoader.setVisibility(View.GONE);
                                         llMain.setVisibility(View.GONE);
                                         llNodata.setVisibility(View.VISIBLE);
                                         llWarning.setVisibility(View.GONE);
                                     }
+
                                 } else {
                                     //TODO: Exceed Request Limit message;
                                     llLoader.setVisibility(View.GONE);

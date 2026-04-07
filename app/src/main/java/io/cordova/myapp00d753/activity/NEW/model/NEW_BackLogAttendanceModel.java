@@ -4,7 +4,7 @@ public class NEW_BackLogAttendanceModel {
     String date;
     String inTime;
     String outTime;
-    String remarks;
+    String remarks="";
     boolean selected=false;
     String dayType;
     long shiftID=0;
