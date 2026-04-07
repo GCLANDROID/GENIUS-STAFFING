@@ -117,5 +117,7 @@ public class AppData {
     public static String FORM_16_VIEW = newv2url+"TdsForms/ViewForm16";
     public static String FORM_16_PAYMENT = newv2url+"TdsForms/F16PaymentInitialize";
     public static String IT_FORM_DOWNLAOD = newv2url+"TdsForms/ITDeclarationForm";
-
+    public static String LAMS_Delete_H_OH_WO =newv2url+"SKF/LAMS_DeleteHOhWo";
+    public static String LAMS_Delete_OD_CO_WFH =newv2url+"SKF/LAMS_DeleteOdCoWfh";
+    public static String LAMS_Delete_Regularisation =newv2url+"SKF/LAMS_DeleteReg";
 }

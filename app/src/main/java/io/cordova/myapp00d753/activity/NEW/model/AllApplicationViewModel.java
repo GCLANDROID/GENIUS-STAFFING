@@ -14,8 +14,14 @@ public class AllApplicationViewModel {
     public String currentApprovalStatus;
     public String approvalDetails;
     public String finalApprovalStatus;
+    public int AllowDelete;
+    public String NotAllowDeleteReason;
+    public String AdjApplicationID;
+    public String AdjType;
+    public String RegApplicationMID;
+    public String RegApplicationDID;
 
-    public AllApplicationViewModel(String appliedType, String applicationDate, String appliedDate, String intime, String outtime, String reason, String refDate, String selectedWorkPlace, String selectedWorkingShift, String selectedApprover, String currentApprovalStatus, String approvalDetails, String finalApprovalStatus) {
+    public AllApplicationViewModel(String appliedType, String applicationDate, String appliedDate, String intime, String outtime, String reason, String refDate, String selectedWorkPlace, String selectedWorkingShift, String selectedApprover, String currentApprovalStatus, String approvalDetails, String finalApprovalStatus,int AllowDelete,String NotAllowDeleteReason,String AdjApplicationID,String AdjType,String RegApplicationMID,String RegApplicationDID) {
         this.appliedType = appliedType;
         this.applicationDate = applicationDate;
         this.appliedDate = appliedDate;
@@ -29,6 +35,12 @@ public class AllApplicationViewModel {
         this.currentApprovalStatus = currentApprovalStatus;
         this.approvalDetails = approvalDetails;
         this.finalApprovalStatus = finalApprovalStatus;
+        this.AllowDelete = AllowDelete;
+        this.NotAllowDeleteReason = NotAllowDeleteReason;
+        this.AdjApplicationID = AdjApplicationID;
+        this.AdjType = AdjType;
+        this.RegApplicationMID = RegApplicationMID;
+        this.RegApplicationDID = RegApplicationDID;
     }
 
     public String getAppliedType() {
@@ -133,5 +145,53 @@ public class AllApplicationViewModel {
 
     public void setFinalApprovalStatus(String finalApprovalStatus) {
         this.finalApprovalStatus = finalApprovalStatus;
+    }
+
+    public int getAllowDelete() {
+        return AllowDelete;
+    }
+
+    public void setAllowDelete(int allowDelete) {
+        AllowDelete = allowDelete;
+    }
+
+    public String getNotAllowDeleteReason() {
+        return NotAllowDeleteReason;
+    }
+
+    public void setNotAllowDeleteReason(String notAllowDeleteReason) {
+        NotAllowDeleteReason = notAllowDeleteReason;
+    }
+
+    public String getAdjApplicationID() {
+        return AdjApplicationID;
+    }
+
+    public void setAdjApplicationID(String adjApplicationID) {
+        AdjApplicationID = adjApplicationID;
+    }
+
+    public String getAdjType() {
+        return AdjType;
+    }
+
+    public void setAdjType(String adjType) {
+        AdjType = adjType;
+    }
+
+    public String getRegApplicationMID() {
+        return RegApplicationMID;
+    }
+
+    public void setRegApplicationMID(String regApplicationMID) {
+        RegApplicationMID = regApplicationMID;
+    }
+
+    public String getRegApplicationDID() {
+        return RegApplicationDID;
+    }
+
+    public void setRegApplicationDID(String regApplicationDID) {
+        RegApplicationDID = regApplicationDID;
     }
 }

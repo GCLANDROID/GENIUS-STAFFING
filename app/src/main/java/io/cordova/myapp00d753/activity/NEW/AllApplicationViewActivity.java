@@ -39,6 +39,7 @@ import io.cordova.myapp00d753.adapter.CustomSpinnerAdapter;
 import io.cordova.myapp00d753.module.SpinnerModel;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
+import io.cordova.myapp00d753.utility.ShowDialog;
 import io.cordova.myapp00d753.utility.YearMonthUtil;
 
 public class AllApplicationViewActivity extends AppCompatActivity {
@@ -309,9 +310,16 @@ public class AllApplicationViewActivity extends AppCompatActivity {
                                         String CurrentApprovalStatus = obj.getString("Current Approval Status");
                                         String ApprovalDetails = obj.getString("Approval Details");
                                         String FinalApprovalStatus = obj.getString("Final Approval Status");
+                                        int AllowDelete = obj.getInt("AllowDelete");
+                                        String NotAllowDeleteReason = obj.getString("NotAllowDeleteReason");
+                                        String AdjApplicationID = obj.getString("AdjApplicationID");
+                                        String AdjType = obj.getString("AdjType");
+                                        String RegApplicationMID = obj.getString("RegApplicationMID");
+                                        String RegApplicationDID = obj.getString("RegApplicationDID");
                                         applicationViewList.add(new AllApplicationViewModel(
                                                 AppliedType, ApplicationDate, AppliedDate, Intime, Outtime, Reason, RefDate,
-                                                SelectedWorkPlace, SelectedWorkingShift, SelectedApprover, CurrentApprovalStatus, ApprovalDetails, FinalApprovalStatus
+                                                SelectedWorkPlace, SelectedWorkingShift, SelectedApprover, CurrentApprovalStatus, ApprovalDetails, FinalApprovalStatus,
+                                                AllowDelete,NotAllowDeleteReason,AdjApplicationID,AdjType,RegApplicationMID,RegApplicationDID
                                         ));
                                     }
                                     rvItemView.setLayoutManager(new LinearLayoutManager(AllApplicationViewActivity.this));
@@ -341,4 +349,168 @@ public class AllApplicationViewActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
+    public void Delete_H_OH_WO(String AdjApplicationID){
+        progressDialog.setMessage("Please wait...");
+        progressDialog.show();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("ConsultantID", pref.getEmpConId());
+            jsonObject.put("ClientID", pref.getEmpClintId());
+            jsonObject.put("EmployeeID", pref.getEmpId());
+            jsonObject.put("AdjApplicationID", AdjApplicationID);
+            jsonObject.put("SecurityCode", pref.getSecurityCode());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        AndroidNetworking.post(AppData.LAMS_Delete_H_OH_WO)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "Delete_H_OH_WO: "+response.toString(4));
+                            progressDialog.dismiss();
+                            JSONObject job1 = response;
+                            int Response_Code = job1.optInt("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code == 101) {
+                                ShowDialog.showSuccessDialog(AllApplicationViewActivity.this, Response_Message, new ShowDialog.ResultListener() {
+                                    @Override
+                                    public void onSuccess() {
+                                        ShowDialog.onDismiss();
+                                        btnShow.performClick();
+                                    }
+                                });
+                            } else {
+                                ShowDialog.showErrorDialog(AllApplicationViewActivity.this,Response_Message);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.dismiss();
+                        Log.e(TAG, "Delete_H_OH_WO_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
+    public void Delete_OD_CO_WFH(String AppliedType,String AdjApplicationID){
+        progressDialog.setMessage("Please wait...");
+        progressDialog.show();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("EmployeeID",pref.getEmpId());
+            jsonObject.put("AppliedType",AppliedType);
+            jsonObject.put("StartDate","");
+            jsonObject.put("EndDate","");
+            jsonObject.put("AdjApplicationID",AdjApplicationID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        AndroidNetworking.post(AppData.LAMS_Delete_OD_CO_WFH)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressDialog.dismiss();
+                            Log.e(TAG, "Delete_OD_CO_WFH: "+response.toString(4) );
+                            JSONObject job1 = response;
+                            int Response_Code = job1.optInt("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code == 101) {
+                                ShowDialog.showSuccessDialog(AllApplicationViewActivity.this, Response_Message, new ShowDialog.ResultListener() {
+                                    @Override
+                                    public void onSuccess() {
+                                        ShowDialog.onDismiss();
+                                        btnShow.performClick();
+                                    }
+                                });
+                            } else {
+                                ShowDialog.showErrorDialog(AllApplicationViewActivity.this,Response_Message);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.dismiss();
+                        Log.e(TAG, "Delete_OD_CO_WFH_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
+    public void DeleteRegularisation(String AttendanceID,String RegAppDID,String RegAppMID){
+        progressDialog.setMessage("Please wait...");
+        progressDialog.show();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("EmployeeID", pref.getEmpId());
+            jsonObject.put("ConsultantID", pref.getEmpConId());
+            jsonObject.put("ClientID", pref.getEmpClintId());
+            jsonObject.put("AttendanceID", AttendanceID);
+            jsonObject.put("RegAppDID", RegAppDID);
+            jsonObject.put("RegAppMID", RegAppMID);
+            jsonObject.put("StartDate", "");
+            jsonObject.put("EndDate", "");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        AndroidNetworking.post(AppData.LAMS_Delete_Regularisation)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            progressDialog.dismiss();
+                            Log.e(TAG, "Delete_Regularisation: "+response.toString(4));
+                            JSONObject job1 = response;
+                            int Response_Code = job1.optInt("Response_Code");
+                            String Response_Message = job1.optString("Response_Message");
+                            if (Response_Code == 101) {
+                                ShowDialog.showSuccessDialog(AllApplicationViewActivity.this, Response_Message, new ShowDialog.ResultListener() {
+                                    @Override
+                                    public void onSuccess() {
+                                        ShowDialog.onDismiss();
+                                        btnShow.performClick();
+                                    }
+                                });
+                            } else {
+                                ShowDialog.showErrorDialog(AllApplicationViewActivity.this,Response_Message);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.dismiss();
+                        Log.e(TAG, "Delete_Regularisation_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
 }
