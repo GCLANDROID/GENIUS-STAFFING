@@ -1,17 +1,15 @@
 package io.cordova.myapp00d753.activity;
 
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -22,7 +20,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -32,8 +29,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -55,21 +50,17 @@ import org.json.JSONObject;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.text.SimpleDateFormat;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import io.cordova.myapp00d753.R;
-import io.cordova.myapp00d753.fragment.ApplicationFragment;
 import io.cordova.myapp00d753.fragment.LoginCredentialsFragment;
 import io.cordova.myapp00d753.fragment.LoginWithEPINFragment;
 import io.cordova.myapp00d753.fragment.LoginWithMobileOtpFragment;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
-import io.cordova.myapp00d753.utility.Util;
 
 public class NewLoginTwoActivity extends AppCompatActivity {
 
@@ -110,6 +101,8 @@ public class NewLoginTwoActivity extends AppCompatActivity {
     LinearLayout clSelfService,clPaperlessOnboarding;
     FrameLayout fragmentContainer;
     String FROM="";
+    String playversion;
+    android.app.AlertDialog updateDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,6 +144,7 @@ public class NewLoginTwoActivity extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+        checkBersion();
 
         ckRemember = (CheckBox) findViewById(R.id.ckRemember);
 
@@ -1124,4 +1118,105 @@ public class NewLoginTwoActivity extends AppCompatActivity {
         transaction.commit();
         fragmentContainer.setVisibility(View.VISIBLE);
     }
+
+    private void checkBersion() {
+        String surl = AppData.url+"gcl_apkVersionChecking?SecurityCode=0000";
+        final ProgressDialog progressBar = new ProgressDialog(this);
+        progressBar.setCancelable(true);//you can cancel it by pressing back button
+        progressBar.setMessage("Loading...");
+        progressBar.show();
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("responseLeave", response);
+                        progressBar.dismiss();
+                        try {
+                            JSONObject job1 = new JSONObject(response);
+                            Log.e("response12", "@@@@@@" + job1);
+
+                            JSONArray job=job1.getJSONArray("responseData");
+                            JSONObject onj=job.optJSONObject(0);
+                            playversion = onj.optString("Version");
+
+                            if (playversion.equals(version)){
+
+                            }else {
+
+                                upDateAlert();
+
+                            }
+
+                            // boolean _status = job1.getBoolean("status")
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(NewLoginTwoActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressBar.dismiss();
+                Toast.makeText(NewLoginTwoActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
+
+                Log.e("ert", error.toString());
+            }
+        }) {
+
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(NewLoginTwoActivity.this);
+        requestQueue.add(stringRequest);
+
+    }
+
+
+    private void upDateAlert() {
+        android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(NewLoginTwoActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.dialog_attendate, null);
+        dialogBuilder.setView(dialogView);
+        TextView tvAttenDate = (TextView) dialogView.findViewById(R.id.tvAttenDate);
+        tvAttenDate.setText("You are using lower version of app.Please update your app");
+
+        Button btnOk = (Button) dialogView.findViewById(R.id.btnOk);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse("market://details?id=" + getApplicationContext().getPackageName());
+                Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                // To count with Play market backstack, After pressing back button,
+                // to taken back to our application, we need to add following flags to intent.
+                goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                        Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                try {
+                    startActivity(goToMarket);
+                } catch (ActivityNotFoundException e) {
+                    startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("http://play.google.com/store/apps/details?id=" + getApplicationContext().getPackageName())));
+                }
+
+
+
+            }
+        });
+
+        Button btnSkip = (Button) dialogView.findViewById(R.id.btnSkip);
+
+
+        btnSkip.setVisibility(View.GONE);
+
+
+
+
+        updateDialog = dialogBuilder.create();
+        updateDialog.setCancelable(false);
+        Window window = updateDialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        updateDialog.show();
+    }
+
 }

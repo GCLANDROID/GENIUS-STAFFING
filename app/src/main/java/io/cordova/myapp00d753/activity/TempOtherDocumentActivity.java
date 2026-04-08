@@ -483,6 +483,10 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
         //progressDialog.show();
+        String SecurityCode=pref.getSecurityCode();
+        String AEMEmployeeID=pref.getEmpId();
+        Log.d("SecurityCode",SecurityCode);
+        Log.d("AEMEmployeeID",AEMEmployeeID);
 
         AndroidNetworking.upload(AppData.SAVE_EMP_DIGITAL_DOCUMENT)
                 .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
@@ -1002,6 +1006,7 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
                         // handle error
                         Log.e("errt", String.valueOf(error));
                         progressDialog.dismiss();
+                        successAlert("Your Form has been submitted successfully");
                         Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                     }
                 });

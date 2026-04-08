@@ -1233,59 +1233,59 @@ public class TempExperinceActivity extends AppCompatActivity {
                                                 binding.llExpericedForm.setVisibility(View.GONE);
                                             }
                                             is_Experience_Letter_Selected = true;
-                                            String exe = file_name.substring(file_name.lastIndexOf("."));
-                                            if (exe.equalsIgnoreCase(".pdf")){
-                                                binding.imgAttachImage.setVisibility(View.VISIBLE);
-                                                Picasso.with(TempExperinceActivity.this)
-                                                        .load(R.drawable.loading)        // Load the image from the URL
-                                                        .placeholder(R.drawable.loading)
-                                                        .skipMemoryCache()
-                                                        .error(R.drawable.warning)
-                                                        .into(binding.imgAttachImage);
-                                                new Thread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        Log.e(TAG, "Thread: called");
-                                                        compressedImageFile = downloadAndSavePDF(downloadCall1,experience_latter_url,file_name);
-                                                        Log.e(TAG, "run: "+compressedImageFile.getAbsolutePath());
-                                                        if (compressedImageFile != null){
-                                                            //is_Experience_Letter_Selected = true;
-                                                        }
-                                                        runOnUiThread(new Runnable() {
-                                                            @Override
-                                                            public void run() {
-                                                                Picasso.with(TempExperinceActivity.this)
-                                                                        .load(R.drawable.pdff)        // Load the image from the URL
-                                                                        .placeholder(R.drawable.loading)
-                                                                        .skipMemoryCache()
-                                                                        .error(R.drawable.warning)
-                                                                        .into(binding.imgAttachImage);
-                                                            }
-                                                        });
-                                                    }
-                                                }).start();
-                                            } else {
-                                                Picasso.with(TempExperinceActivity.this)
-                                                        .load(experience_latter_url)
-                                                        .placeholder(R.drawable.loading)
-                                                        .skipMemoryCache()// optional
-                                                        .error(R.drawable.warning)
-                                                        // optional
-                                                        .into(binding.imgAttachImage);
-
-                                                ImageDownloader.downloadImageAndSaveToFile(getApplication(), experience_latter_url, file_name, new ImageDownloader.SaveFileListener() {
-                                                    @Override
-                                                    public void onSaveFile(File file) {
-                                                        compressedImageFile = file;
-                                                        //is_Experience_Letter_Selected = true;
-                                                    }
-
-                                                    @Override
-                                                    public void onFileSaveFailure(String error) {
-                                                        Log.e(TAG, "onFileSaveFailure: "+error);
-                                                    }
-                                                });
-                                            }
+//                                            String exe = file_name.substring(file_name.lastIndexOf("."));
+//                                            if (exe.equalsIgnoreCase(".pdf")){
+//                                                binding.imgAttachImage.setVisibility(View.VISIBLE);
+//                                                Picasso.with(TempExperinceActivity.this)
+//                                                        .load(R.drawable.loading)        // Load the image from the URL
+//                                                        .placeholder(R.drawable.loading)
+//                                                        .skipMemoryCache()
+//                                                        .error(R.drawable.warning)
+//                                                        .into(binding.imgAttachImage);
+//                                                new Thread(new Runnable() {
+//                                                    @Override
+//                                                    public void run() {
+//                                                        Log.e(TAG, "Thread: called");
+//                                                        compressedImageFile = downloadAndSavePDF(downloadCall1,experience_latter_url,file_name);
+//
+//                                                        if (compressedImageFile != null){
+//                                                            //is_Experience_Letter_Selected = true;
+//                                                        }
+//                                                        runOnUiThread(new Runnable() {
+//                                                            @Override
+//                                                            public void run() {
+//                                                                Picasso.with(TempExperinceActivity.this)
+//                                                                        .load(R.drawable.pdff)        // Load the image from the URL
+//                                                                        .placeholder(R.drawable.loading)
+//                                                                        .skipMemoryCache()
+//                                                                        .error(R.drawable.warning)
+//                                                                        .into(binding.imgAttachImage);
+//                                                            }
+//                                                        });
+//                                                    }
+//                                                }).start();
+//                                            } else {
+//                                                Picasso.with(TempExperinceActivity.this)
+//                                                        .load(experience_latter_url)
+//                                                        .placeholder(R.drawable.loading)
+//                                                        .skipMemoryCache()// optional
+//                                                        .error(R.drawable.warning)
+//                                                        // optional
+//                                                        .into(binding.imgAttachImage);
+//
+//                                                ImageDownloader.downloadImageAndSaveToFile(getApplication(), experience_latter_url, file_name, new ImageDownloader.SaveFileListener() {
+//                                                    @Override
+//                                                    public void onSaveFile(File file) {
+//                                                        compressedImageFile = file;
+//                                                        //is_Experience_Letter_Selected = true;
+//                                                    }
+//
+//                                                    @Override
+//                                                    public void onFileSaveFailure(String error) {
+//                                                        Log.e(TAG, "onFileSaveFailure: "+error);
+//                                                    }
+//                                                });
+//                                            }
 
                                         } else {
                                             //TODO: Fresher

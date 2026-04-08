@@ -813,6 +813,7 @@ public class LoginCredentialsFragment extends Fragment {
 
                                     UserType = obj.optString("UserType");
                                     pref.saveUserType(UserType);
+                                    pref.saveSecurityCode(security_code);
 
                                     String Password = obj.optString("Password");
                                     pref.savePassword(etPassword.getText().toString());

@@ -1,16 +1,14 @@
 package io.cordova.myapp00d753.activity;
 
-import static android.Manifest.permission.READ_PHONE_NUMBERS;
-import static android.Manifest.permission.READ_PHONE_STATE;
-import static android.Manifest.permission.READ_SMS;
-
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 
 import android.provider.Settings;
@@ -19,7 +17,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -56,7 +53,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.text.SimpleDateFormat;
@@ -66,7 +62,6 @@ import java.util.List;
 import java.util.UUID;
 
 import io.cordova.myapp00d753.R;
-import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
@@ -106,6 +101,8 @@ public class LoginActivity extends AppCompatActivity {
     int WorkingStatus;
     String ip, sessionId;
     boolean tempFlag=false;
+    android.app.AlertDialog updateDialog;
+    String playversion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,6 +153,7 @@ public class LoginActivity extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+        checkBersion();
 
         ckRemember = (CheckBox) findViewById(R.id.ckRemember);
 
@@ -1158,5 +1156,106 @@ public class LoginActivity extends AppCompatActivity {
 
     public static String generateSessionID(String userId) {
         return userId + "_" + System.currentTimeMillis() + "_" + UUID.randomUUID().toString();
+    }
+
+
+    private void checkBersion() {
+        String surl = AppData.url+"gcl_apkVersionChecking?SecurityCode=0000";
+        final ProgressDialog progressBar = new ProgressDialog(this);
+        progressBar.setCancelable(true);//you can cancel it by pressing back button
+        progressBar.setMessage("Loading...");
+        progressBar.show();
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, surl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("responseLeave", response);
+                        progressBar.dismiss();
+                        try {
+                            JSONObject job1 = new JSONObject(response);
+                            Log.e("response12", "@@@@@@" + job1);
+
+                            JSONArray job=job1.getJSONArray("responseData");
+                            JSONObject onj=job.optJSONObject(0);
+                            playversion = onj.optString("Version");
+
+                            if (playversion.equals(version)){
+
+                            }else {
+
+                                upDateAlert();
+
+                            }
+
+                            // boolean _status = job1.getBoolean("status")
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(LoginActivity.this, "Volly Error", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressBar.dismiss();
+                Toast.makeText(LoginActivity.this, "volly 2" + error.toString(), Toast.LENGTH_LONG).show();
+
+                Log.e("ert", error.toString());
+            }
+        }) {
+
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+        requestQueue.add(stringRequest);
+
+    }
+
+
+    private void upDateAlert() {
+        android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(LoginActivity.this, R.style.CustomDialogNew);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.dialog_attendate, null);
+        dialogBuilder.setView(dialogView);
+        TextView tvAttenDate = (TextView) dialogView.findViewById(R.id.tvAttenDate);
+        tvAttenDate.setText("You are using lower version of app.Please update your app");
+
+        Button btnOk = (Button) dialogView.findViewById(R.id.btnOk);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse("market://details?id=" + getApplicationContext().getPackageName());
+                Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                // To count with Play market backstack, After pressing back button,
+                // to taken back to our application, we need to add following flags to intent.
+                goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                        Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                try {
+                    startActivity(goToMarket);
+                } catch (ActivityNotFoundException e) {
+                    startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("http://play.google.com/store/apps/details?id=" + getApplicationContext().getPackageName())));
+                }
+
+
+
+            }
+        });
+
+        Button btnSkip = (Button) dialogView.findViewById(R.id.btnSkip);
+
+
+            btnSkip.setVisibility(View.GONE);
+
+
+
+
+        updateDialog = dialogBuilder.create();
+        updateDialog.setCancelable(false);
+        Window window = updateDialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        updateDialog.show();
     }
 }

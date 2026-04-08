@@ -900,14 +900,14 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else if (view == btnLeave) {
-//            Intent intent = new Intent(AttenDanceDashboardActivity.this, LeaveApplicationActivity.class);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-//            startActivity(intent);
-
-            Intent intent=new Intent(AttenDanceDashboardActivity.this, ITViewActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra("url",pref.getLeaveApplicationURL());
+            Intent intent = new Intent(AttenDanceDashboardActivity.this, LeaveApplicationActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+
+//            Intent intent=new Intent(AttenDanceDashboardActivity.this, ITViewActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+//            intent.putExtra("url",pref.getLeaveApplicationURL());
+//            startActivity(intent);
         } else if (view == tvOK) {
             lnStatus.setVisibility(View.GONE);
         } else if (view == llAdjustment) {

@@ -286,15 +286,15 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
                 } else if (itemList.get(i).getMenuId().equals("12")){
-                    //leave
-//                    Intent intent=new Intent(mContex, LeaveApplicationActivity.class);
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    mContex.startActivity(intent);
-
-                    Intent intent=new Intent(mContex, ITViewActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("url",pref.getLeaveApplicationURL());
+                    //Leave Application
+                    Intent intent=new Intent(mContex, LeaveApplicationActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContex.startActivity(intent);
+
+//                    Intent intent=new Intent(mContex, ITViewActivity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    intent.putExtra("url",pref.getLeaveApplicationURL());
+//                    mContex.startActivity(intent);
                 } else if (itemList.get(i).getMenuId().equals("200")){
                     //feedback
                     Intent intent=new Intent(mContex, FeedBackRatingForJLLActivity.class);
