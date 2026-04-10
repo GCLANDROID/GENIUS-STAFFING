@@ -153,6 +153,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
     RecyclerView rvNeedToAct;
     LinearLayout chatFabContainer;
     String from;
+    String isLiveStatus_LeaveApplication="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -176,9 +177,21 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        JSONObject objSubmenu=new JSONObject();
+        try {
+            objSubmenu.put("ConsultantID", pref.getEmpConId());
+            objSubmenu.put("ClientID", pref.getEmpClintId());
+            objSubmenu.put("EmployeeID", pref.getEmpId());
+            objSubmenu.put("ModuleName", "Service Menu");
+            objSubmenu.put("PunchDate", "");
+            objSubmenu.put("SecurityCode", pref.getSecurityCode());
+            Log.e(TAG, "objSubmenu: "+objSubmenu.toString(4));
+            getSubmenu(objSubmenu);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
-
-
 
 
     private void initialize() {
@@ -726,7 +739,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                 }
 
 
-                                MenuItemAdapter menuItemAdapter=new MenuItemAdapter(itemList,getApplicationContext(),PFLink,leaveFlag,EmployeeDashBoardActivity.this);
+                                MenuItemAdapter menuItemAdapter=new MenuItemAdapter(itemList,getApplicationContext(),PFLink,leaveFlag,EmployeeDashBoardActivity.this,isLiveStatus_LeaveApplication);
                                 rvItem.setAdapter(menuItemAdapter);
 
                                 getFeedbackChecking();
@@ -1963,6 +1976,60 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         });
 
         UAN_Activation_Popup.show();
+    }
+
+    void getSubmenu(JSONObject objSubmenu){
+        final ProgressDialog pd=new ProgressDialog(EmployeeDashBoardActivity.this);
+        pd.setMessage("Loading.....");
+        pd.show();
+        Log.e(TAG, "getSubmenu: "+objSubmenu);
+        //AndroidNetworking.post("https://gsppi.geniusconsultant.com/GSPPI_API_V2/api/LAMS/GetSubServiceMenu")
+        AndroidNetworking.post(AppData.LAMS_GetSubServiceMenu)
+                .addJSONObjectBody(objSubmenu)
+                //.addHeaders("SecurityKey", "gStbCQYjYBDCQ4fkGoQSUj7LYe8uVdZ1")
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            pd.dismiss();
+                            Log.e(TAG, "SUB_MENU: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            JSONObject Response_Data = job1.optJSONObject("Response_Data");
+                            if(Response_Code.equals("101")){
+                                Log.e(TAG, "Response_Data: "+Response_Data);
+                                Log.e(TAG, "ServiceMenuAccessDetails_Array: "+Response_Data.optJSONArray("ServiceMenuAccessDetails"));
+                                JSONArray ServiceMenuAccessDetails_Array = Response_Data.optJSONArray("ServiceMenuAccessDetails");
+                                JSONObject ServiceMenuAccessDetails_OBJ = ServiceMenuAccessDetails_Array.getJSONObject(0);
+
+                                if (ServiceMenuAccessDetails_OBJ.has("LeaveApplicationAccessFromMobile")){
+                                    String LeaveApplicationAccessFromMobile = ServiceMenuAccessDetails_OBJ.optString("LeaveApplicationAccessFromMobile");
+                                    if (!LeaveApplicationAccessFromMobile.isEmpty() || !LeaveApplicationAccessFromMobile.equals("null")){
+                                        String[] LeaveApplicationAccessArray = LeaveApplicationAccessFromMobile.split("_");
+                                        String isRequired_LeaveApplicationAccess = LeaveApplicationAccessArray[0];
+                                        isLiveStatus_LeaveApplication = LeaveApplicationAccessArray[1];
+                                        Log.e(TAG, "isLiveStatus_LeaveApplication: "+isLiveStatus_LeaveApplication);
+                                    }
+                                } else {
+
+                                }
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        pd.dismiss();
+                        Log.e(TAG, "SUB_MENU_error: "+anError.getErrorBody());
+                    }
+                });
     }
 
 }
