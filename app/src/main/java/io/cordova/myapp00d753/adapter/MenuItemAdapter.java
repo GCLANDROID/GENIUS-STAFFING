@@ -53,6 +53,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
     Pref pref;
     int leaveFlag;
     Activity activity;
+    String isLiveStatus_LeaveApplication;
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -287,9 +288,17 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                     mContex.startActivity(intent);
                 } else if (itemList.get(i).getMenuId().equals("12")){
                     //Leave Application
-                    Intent intent=new Intent(mContex, LeaveApplicationActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
-                    mContex.startActivity(intent);
+                    if (isLiveStatus_LeaveApplication.equals("1")){
+                        Intent intent = new Intent(mContex, ITViewActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra("url", pref.getLeaveApplicationURL());
+                        mContex.startActivity(intent);
+                    } else {
+                        Intent intent=new Intent(mContex, LeaveApplicationActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
+                        mContex.startActivity(intent);
+                    }
+
 
 //                    Intent intent=new Intent(mContex, ITViewActivity.class);
 //                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -327,10 +336,6 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
 
             }
         });
-
-
-
-
     }
 
     @Override
@@ -354,12 +359,13 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
         }
     }
 
-    public MenuItemAdapter(ArrayList<MenuItemModel> itemList, Context mContext,String pfLink,int leaveFlag, Activity activity) {
+    public MenuItemAdapter(ArrayList<MenuItemModel> itemList, Context mContext,String pfLink,int leaveFlag, Activity activity,String isLiveStatus_LeaveApplication) {
         this.itemList = itemList;
         this.mContex=mContext;
         this.PFLink=pfLink;
         this.leaveFlag=leaveFlag;
         this.activity=activity;
+        this.isLiveStatus_LeaveApplication=isLiveStatus_LeaveApplication;
     }
 
     public void filterList(ArrayList<MenuItemModel> filterdNames) {
