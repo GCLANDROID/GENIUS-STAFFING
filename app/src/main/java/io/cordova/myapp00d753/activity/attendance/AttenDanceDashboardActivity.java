@@ -150,7 +150,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     String AttnAdjCOAppliocationWithMarkedHierarchy="",AttnAdjWFHAppliocationWithMarkedHierarchy="",AttnAdjODMarkHierarchyAtEntry="";
     String WOMarkingWithHierarchySelection="",isLiveStatus_WeeklyOff="";
     String isLiveStatus_MarkAttnFromMobile ="", isLiveStatus_HolidayMarking ="",
-            isLiveStatus_OHolidayMarking="",isLiveStatus_AttReg="",isLiveStatus_HolidayView="",isLiveSatus_Adjustment="",isLiveStatus_DailyAttendanceView="";
+            isLiveStatus_OHolidayMarking="",isLiveStatus_AttReg="",isLiveStatus_HolidayView="",isLiveSatus_Adjustment="",isLiveStatus_DailyAttendanceView="",isLiveStatus_LeaveApplication="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -900,9 +900,16 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else if (view == btnLeave) {
-            Intent intent = new Intent(AttenDanceDashboardActivity.this, LeaveApplicationActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            if (isLiveStatus_LeaveApplication.equals("1")) {
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, ITViewActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("url", pref.getLeaveApplicationURL());
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(AttenDanceDashboardActivity.this, LeaveApplicationActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
 
 //            Intent intent=new Intent(AttenDanceDashboardActivity.this, ITViewActivity.class);
 //            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -1674,7 +1681,9 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 || pref.getEmpClintId().equals(ClientID.SKF_ITS)
                 || pref.getEmpClintId().equals(ClientID.SKF_MSP)
                 || pref.getEmpClintId().equals(ClientID.SKF_ENGINEERING_LUB)
-                || pref.getEmpClintId().equals(ClientID.SKF_INDUSTRIAL)) {
+                || pref.getEmpClintId().equals(ClientID.SKF_INDUSTRIAL)
+                || pref.getEmpClintId().equals(ClientID.BROSE_INDIA_AUTOMOTIVE_SYSTEMS)
+        ) {
             Intent intent = new Intent(AttenDanceDashboardActivity.this, ProtectorGambleAttendanceActivity.class);
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -2027,6 +2036,20 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                                    }
                                } else {
                                    previousConfiguration_LeaveBalanceManagement();
+                               }
+
+                               //LeaveApplicationAccessFromMobile
+
+                               if (ServiceMenuAccessDetails_OBJ.has("LeaveApplicationAccessFromMobile")){
+                                   String LeaveApplicationAccessFromMobile = ServiceMenuAccessDetails_OBJ.optString("LeaveApplicationAccessFromMobile");
+                                   if (!LeaveApplicationAccessFromMobile.isEmpty() || !LeaveApplicationAccessFromMobile.equals("null")){
+                                       String[] LeaveApplicationAccessArray = LeaveApplicationAccessFromMobile.split("_");
+                                       String isRequired_LeaveApplicationAccess = LeaveApplicationAccessArray[0];
+                                       isLiveStatus_LeaveApplication = LeaveApplicationAccessArray[1];
+                                       Log.e(TAG, "isLiveStatus_LeaveApplication: "+isLiveStatus_LeaveApplication);
+                                   }
+                               } else {
+
                                }
 
                                AllApplicationViewConfiguration();
