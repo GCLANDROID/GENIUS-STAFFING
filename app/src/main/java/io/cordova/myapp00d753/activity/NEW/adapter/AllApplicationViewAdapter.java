@@ -1,6 +1,7 @@
 package io.cordova.myapp00d753.activity.NEW.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +53,7 @@ public class AllApplicationViewAdapter extends RecyclerView.Adapter<AllApplicati
         } else {
             holder.imgDelete.setVisibility(View.GONE);
         }
-
+        Log.e("log", "AdjType: "+applicationViewList.get(position).AdjType);
         holder.imgDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,7 +65,7 @@ public class AllApplicationViewAdapter extends RecyclerView.Adapter<AllApplicati
                         || applicationViewList.get(position).AdjType.equalsIgnoreCase("CO")
                         || applicationViewList.get(position).AdjType.equalsIgnoreCase("WFH")){
                     ((AllApplicationViewActivity) context).Delete_OD_CO_WFH(applicationViewList.get(position).appliedType,applicationViewList.get(position).AdjApplicationID);
-                } else {
+                } else if(applicationViewList.get(position).AdjType.equalsIgnoreCase("Reg")){
                     ((AllApplicationViewActivity) context).DeleteRegularisation(applicationViewList.get(position).AdjApplicationID,
                             applicationViewList.get(position).RegApplicationDID,applicationViewList.get(position).RegApplicationMID);
                 }
