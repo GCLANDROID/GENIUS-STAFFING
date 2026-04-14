@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,10 +18,11 @@ import io.cordova.myapp00d753.bluedart.ODOmeterApprvalActivity;
 import io.cordova.myapp00d753.utility.Pref;
 
 public class SupAttendanceActivity extends AppCompatActivity {
+    private static final String TAG = "SupAttendanceActivity";
     LinearLayout llAttandanceManage,llAttendanceReport,llApproval,llQR,llODOmeter,llAdjApproval;
     ImageView imgBack,imgHome;
     Pref pref;
-
+    String NewLMSAccess="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +33,9 @@ public class SupAttendanceActivity extends AppCompatActivity {
 
     private void initialize(){
         pref=new Pref(SupAttendanceActivity.this);
+        if(getIntent() != null){
+            NewLMSAccess = getIntent().getStringExtra("NewLMSAccess");
+        }
         llAttandanceManage=(LinearLayout)findViewById(R.id.llAttandanceManage);
         llAdjApproval=findViewById(R.id.llAdjApproval);
         llAttendanceReport=(LinearLayout)findViewById(R.id.llAttendanceReport);
@@ -108,17 +113,15 @@ public class SupAttendanceActivity extends AppCompatActivity {
         llApproval.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-//                Intent intent=new Intent(SupAttendanceActivity.this,AttenApprovalActivity.class);
-//                startActivity(intent);
-
-
-
-                Intent intent=new Intent(SupAttendanceActivity.this,ITViewActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("url",pref.getRegApprovalURL());
-                startActivity(intent);
-
+                if (NewLMSAccess.equals("1")) {
+                    Intent intent = new Intent(SupAttendanceActivity.this, ITViewActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("url", pref.getRegApprovalURL());
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(SupAttendanceActivity.this, AttenApprovalActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -126,21 +129,16 @@ public class SupAttendanceActivity extends AppCompatActivity {
         llAdjApproval.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-//                Intent intent=new Intent(SupAttendanceActivity.this,AttenApprovalActivity.class);
-//                startActivity(intent);
-
-
-
-                Intent intent=new Intent(SupAttendanceActivity.this,ITViewActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("url",pref.getAdjApprovalURL());
-                startActivity(intent);
-
+                if (NewLMSAccess.equals("1")) {
+                    Intent intent = new Intent(SupAttendanceActivity.this, ITViewActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("url", pref.getAdjApprovalURL());
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(SupAttendanceActivity.this, AttenApprovalActivity.class);
+                    startActivity(intent);
+                }
             }
         });
-
-
-
     }
 }
