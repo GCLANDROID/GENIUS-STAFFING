@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.murugappa.AttendanceDashboardActivity;
 import io.cordova.myapp00d753.adapter.ODOMeterApprovalAdapter;
 import io.cordova.myapp00d753.bluedart.ODOmeterApprvalActivity;
 import io.cordova.myapp00d753.utility.Pref;
@@ -78,8 +79,15 @@ public class SupAttendanceActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent=new Intent(SupAttendanceActivity.this,SupAttenManageActivity.class);
-                startActivity(intent);
+                if (pref.getEmpClintId().equalsIgnoreCase("AEMCLI2410001867")){
+                    Intent intent=new Intent(SupAttendanceActivity.this, AttendanceDashboardActivity.class);
+                    startActivity(intent);
+                }else {
+                    Intent intent=new Intent(SupAttendanceActivity.this,SupAttenManageActivity.class);
+                    startActivity(intent);
+                }
+
+
             }
         });
 

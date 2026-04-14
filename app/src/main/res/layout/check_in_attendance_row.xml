@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp">
+    <LinearLayout
+
+        android:paddingHorizontal="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        >
+        <LinearLayout
+            android:id="@+id/llTick"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="center"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/lldesign9"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/imgTick"
+                android:visibility="gone"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:src="@drawable/tick"></ImageView>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/tvEmpName"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@color/black"
+            android:text="Employee Name"></TextView>
+        <TextView
+            android:id="@+id/tvEmpID"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@color/black"
+            android:text="Employee ID"></TextView>
+        <LinearLayout
+            android:id="@+id/llTime"
+            android:layout_gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/tvTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/black"
+                android:text="Time"></TextView>
+            <ImageView
+                android:layout_marginLeft="5dp"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/clockicon"
+                app:tint="@color/black"></ImageView>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

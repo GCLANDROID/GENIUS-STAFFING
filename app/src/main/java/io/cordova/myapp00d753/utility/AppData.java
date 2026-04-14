@@ -120,4 +120,6 @@ public class AppData {
     public static String LAMS_Delete_H_OH_WO =newv2url+"SKF/LAMS_DeleteHOhWo";
     public static String LAMS_Delete_OD_CO_WFH =newv2url+"SKF/LAMS_DeleteOdCoWfh";
     public static String LAMS_Delete_Regularisation =newv2url+"SKF/LAMS_DeleteReg";
+
+    public static String CHECK_IN_EMPLIST = newv2url+"Attendance/LAMS_AttendancePunchGet";
 }

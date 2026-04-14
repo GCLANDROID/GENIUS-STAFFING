@@ -34,6 +34,20 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.murugappa.CheckInAttendanceActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".activity.murugappa.AttendanceDashboardActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".activity.IncomeTaxDashboardActivity"
             android:exported="false">
             <meta-data
@@ -688,8 +702,8 @@
         <activity android:name=".activity.NEW.NEW_AttendanceReportActivity" />
         <activity android:name=".activity.NewLoginTwoActivity" />
         <activity android:name=".activity.ITViewActivity" />
-        <activity android:name=".activity.MPIN_SetupActivity"/>
-        <activity android:name=".activity.E_Pin_SetupLoginActivity"/>
+        <activity android:name=".activity.MPIN_SetupActivity" />
+        <activity android:name=".activity.E_Pin_SetupLoginActivity" />
         <activity
             android:name=".activity.SelfOnboardingChatBotActivity"
             android:theme="@style/FloatingChatTheme" />
