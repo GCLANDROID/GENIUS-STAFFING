@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
@@ -30,6 +31,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,11 +44,13 @@ import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.attendance.AttenDanceDashboardActivity;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
 
 public class SuperVisiorDashBoardActivity extends AppCompatActivity {
+    private static final String TAG = "SuperVisiorDashBoardAct";
     LinearLayout llProfile, llAttandence, llPayroll, llPf, llFeedBack, llNotification, llDocument, llLogout,llGeoFenceApproval;
     Pref pref;
     TextView tvEmployeeName,tvGreeting,tvLoginDateTime;
@@ -56,7 +63,7 @@ public class SuperVisiorDashBoardActivity extends AppCompatActivity {
     LinearLayout llCall;
     android.app.AlertDialog alerDialog1;
     LinearLayout llSale,llLeave;
-
+    String NewLMSAccess="";
 
 
     @Override
@@ -65,7 +72,19 @@ public class SuperVisiorDashBoardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_super_visior_dash_board);
         initialize();
         onClick();
-
+        /*JSONObject objSubmenu=new JSONObject();
+        try {
+            objSubmenu.put("ConsultantID", pref.getEmpConId());
+            objSubmenu.put("ClientID", pref.getEmpClintId());
+            objSubmenu.put("EmployeeID", pref.getEmpId());
+            objSubmenu.put("ModuleName", "Service Menu");
+            objSubmenu.put("PunchDate", "");
+            objSubmenu.put("SecurityCode", pref.getSecurityCode());
+            Log.e(TAG, "objSubmenu: "+objSubmenu.toString(4));
+            getSubmenu(objSubmenu);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }*/
     }
 
     private  void  initialize(){
@@ -711,9 +730,6 @@ public class SuperVisiorDashBoardActivity extends AppCompatActivity {
         }else {
             llSale.setVisibility(View.GONE);
         }
-
-
-
     }
 
     private void onClick(){
@@ -773,11 +789,14 @@ public class SuperVisiorDashBoardActivity extends AppCompatActivity {
         llLeave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Intent intent=new Intent(SuperVisiorDashBoardActivity.this,ITViewActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("url",pref.getLeaveApprovalURL());
-                startActivity(intent);
+                if(NewLMSAccess.equals("1")){
+                    Intent intent=new Intent(SuperVisiorDashBoardActivity.this,ITViewActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("url",pref.getLeaveApprovalURL());
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(SuperVisiorDashBoardActivity.this, "Menu is not activated", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -809,6 +828,7 @@ public class SuperVisiorDashBoardActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 Intent intent=new Intent(SuperVisiorDashBoardActivity.this,SupAttendanceActivity.class);
+                intent.putExtra("NewLMSAccess",NewLMSAccess);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
@@ -997,5 +1017,48 @@ public class SuperVisiorDashBoardActivity extends AppCompatActivity {
         alerDialog1.show();
     }
 
+    void getSubmenu(JSONObject objSubmenu){
+        Log.e(TAG, "getSubmenu: "+objSubmenu);
+        ProgressDialog pd = new ProgressDialog(SuperVisiorDashBoardActivity.this);
+        pd.setMessage("Loading...");
+        pd.setCancelable(false);
+        pd.show();
+        //AndroidNetworking.post("https://gsppi.geniusconsultant.com/GSPPI_API_V2/api/LAMS/GetSubServiceMenu")
+        AndroidNetworking.post(AppData.LAMS_GetSubServiceMenu)
+        //AndroidNetworking.post("http://171.16.1.10/GSPPI_API_V2/api/LAMS/GetSubServiceMenu")
+                .addJSONObjectBody(objSubmenu)
+                //.addHeaders("SecurityKey", "gStbCQYjYBDCQ4fkGoQSUj7LYe8uVdZ1")
+                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            pd.dismiss();
+                            Log.e(TAG, "SUB_MENU: "+response.toString(4));
+                            JSONObject job1 = response;
+                            String Response_Code = job1.optString("Response_Code");
+                            JSONObject Response_Data = job1.optJSONObject("Response_Data");
+                            if(Response_Code.equals("101")){
+                                Log.e(TAG, "Response_Data: "+Response_Data);
+                                Log.e(TAG, "ServiceMenuAccessDetails_Array: "+Response_Data.optJSONArray("ServiceMenuAccessDetails"));
+                                JSONArray NewLMSAccessArray = Response_Data.optJSONArray("NewLMSAccess");
+                                JSONObject NewLMSAccessObj = NewLMSAccessArray.getJSONObject(0);
+                                NewLMSAccess = NewLMSAccessObj.getString("NewLMSAccess");
+                                Log.e(TAG, "NewLMSAccess: "+NewLMSAccess);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
 
+                    @Override
+                    public void onError(ANError anError) {
+                        pd.dismiss();
+                        Log.e(TAG, "SUB_MENU_error: "+anError.getErrorBody());
+                    }
+                });
+    }
 }
