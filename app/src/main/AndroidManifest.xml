@@ -41,6 +41,13 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".activity.murugappa.CheckOutAttendanceActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".activity.murugappa.AttendanceDashboardActivity"
             android:exported="false">
             <meta-data

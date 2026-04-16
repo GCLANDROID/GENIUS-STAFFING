@@ -122,4 +122,5 @@ public class AppData {
     public static String LAMS_Delete_Regularisation =newv2url+"SKF/LAMS_DeleteReg";
 
     public static String CHECK_IN_EMPLIST = newv2url+"Attendance/LAMS_AttendancePunchGet";
+    public static String POST_MURUGUPAA_ATTENDANCE = newv2url+"Attendance/LAMS_AttendancePunchPost";
 }

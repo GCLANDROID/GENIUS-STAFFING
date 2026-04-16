@@ -79,7 +79,7 @@ public class SupAttendanceActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if (pref.getEmpClintId().equalsIgnoreCase("AEMCLI2410001867")){
+                if (pref.getEmpClintId().equalsIgnoreCase("AEMCLI2410001867") || pref.getEmpClintId().equalsIgnoreCase("AEMCLI1310000782")){
                     Intent intent=new Intent(SupAttendanceActivity.this, AttendanceDashboardActivity.class);
                     startActivity(intent);
                 }else {

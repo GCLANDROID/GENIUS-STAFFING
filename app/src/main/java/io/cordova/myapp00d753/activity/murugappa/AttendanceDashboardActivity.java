@@ -41,5 +41,12 @@ public class AttendanceDashboardActivity extends AppCompatActivity {
                 startActivity(new Intent(AttendanceDashboardActivity.this, CheckInAttendanceActivity.class));
             }
         });
+
+        binding.llCheckOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(AttendanceDashboardActivity.this, CheckOutAttendanceActivity.class));
+            }
+        });
     }
 }

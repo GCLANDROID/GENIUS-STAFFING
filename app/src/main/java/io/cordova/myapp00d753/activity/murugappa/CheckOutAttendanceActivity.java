@@ -1,9 +1,5 @@
 package io.cordova.myapp00d753.activity.murugappa;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -15,10 +11,10 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
@@ -34,38 +30,35 @@ import java.util.Date;
 import java.util.Locale;
 
 import io.cordova.myapp00d753.R;
-import io.cordova.myapp00d753.activity.attendance.AttendanceReportActivity;
-import io.cordova.myapp00d753.adapter.AttendanceAdapter;
 import io.cordova.myapp00d753.adapter.CheckInAttendanceAdapter;
+import io.cordova.myapp00d753.adapter.CheckOutAttendanceAdapter;
 import io.cordova.myapp00d753.databinding.ActivityCheckInAttendanceBinding;
-import io.cordova.myapp00d753.module.AttendanceModule;
+import io.cordova.myapp00d753.databinding.ActivityCheckOutAttendanceBinding;
 import io.cordova.myapp00d753.module.CheckInOutAttendanceModel;
-import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.Util;
 
-public class CheckInAttendanceActivity extends AppCompatActivity {
-    ActivityCheckInAttendanceBinding binding;
+public class CheckOutAttendanceActivity extends AppCompatActivity {
+    ActivityCheckOutAttendanceBinding binding;
     LinearLayoutManager layoutManager;
     Pref pref;
     ArrayList<CheckInOutAttendanceModel>itemList=new ArrayList<>();
-    String currentDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding= DataBindingUtil.setContentView(this,R.layout.activity_check_in_attendance);
+        binding= DataBindingUtil.setContentView(this,R.layout.activity_check_out_attendance);
         initView();
     }
 
     private void initView(){
-        pref=new Pref(CheckInAttendanceActivity.this);
-        layoutManager = new LinearLayoutManager(CheckInAttendanceActivity.this, LinearLayoutManager.VERTICAL, false);
+        pref=new Pref(CheckOutAttendanceActivity.this);
+        layoutManager = new LinearLayoutManager(CheckOutAttendanceActivity.this, LinearLayoutManager.VERTICAL, false);
         binding.rvItem.setLayoutManager(layoutManager);
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
-         currentDate = sdf.format(new Date());
+        String currentDate = sdf.format(new Date());
         binding.tvCurrentDate.setText(currentDate);
 
         binding.imgBack.setOnClickListener(new View.OnClickListener() {
@@ -87,7 +80,7 @@ public class CheckInAttendanceActivity extends AppCompatActivity {
             jsonObject.put("ClientID",pref.getEmpClintId());
             jsonObject.put("ApproverID",pref.getMasterId());
             jsonObject.put("AttDate", Util.changeAnyDateFormat(currentDate,"dd-MMM-yyyy","MM/dd/yyyy"));
-            jsonObject.put("PunchFlag","I");
+            jsonObject.put("PunchFlag","O");
             jsonObject.put("SecurityCode",pref.getSecurityCode());
             getEmpList(jsonObject);
         } catch (JSONException e) {
@@ -103,7 +96,7 @@ public class CheckInAttendanceActivity extends AppCompatActivity {
     }
 
     private void getEmpList(JSONObject jsonObject) {
-       ProgressDialog pd=new ProgressDialog(CheckInAttendanceActivity.this);
+       ProgressDialog pd=new ProgressDialog(CheckOutAttendanceActivity.this);
         pd.setMessage("Loading...");
         pd.show();
         pd.setCancelable(false);
@@ -116,7 +109,6 @@ public class CheckInAttendanceActivity extends AppCompatActivity {
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        itemList.clear();
 
 
                         pd.dismiss();
@@ -130,8 +122,8 @@ public class CheckInAttendanceActivity extends AppCompatActivity {
                                 JSONObject jobj= Table.optJSONObject(i);
                                 String EmpID=jobj.optString("AEMEmployeeID");
                                 String EmpName=jobj.optString("EmpName");
-                                String InTime=jobj.optString("InTime");
-                                String OutTime=jobj.optString("OutTime");
+                                String InTime=jobj.optString("Intime");
+                                String OutTime=jobj.optString("Outtime");
                                 CheckInOutAttendanceModel model=new CheckInOutAttendanceModel();
                                 model.setAEMEmployeeID(EmpID);
                                 model.setEmpName(EmpName);
@@ -141,7 +133,7 @@ public class CheckInAttendanceActivity extends AppCompatActivity {
 
 
                             }
-                            CheckInAttendanceAdapter adapter=new CheckInAttendanceAdapter(itemList,CheckInAttendanceActivity.this);
+                            CheckOutAttendanceAdapter adapter=new CheckOutAttendanceAdapter(itemList, CheckOutAttendanceActivity.this);
                             binding.rvItem.setAdapter(adapter);
 
 
@@ -169,7 +161,7 @@ public class CheckInAttendanceActivity extends AppCompatActivity {
             mainJson.put("AttDate",
                     Util.changeAnyDateFormat(currentDate, "dd-MMM-yyyy", "MM/dd/yyyy"));
 
-            mainJson.put("PunchFlag", "I");
+            mainJson.put("PunchFlag", "O");
 
             JSONArray listArray = new JSONArray();
 
@@ -181,10 +173,10 @@ public class CheckInAttendanceActivity extends AppCompatActivity {
                     empObj.put("EmpID", model.getAEMEmployeeID());
 
                     // Example shift time (static or dynamic)
-                    empObj.put("ShiftTime", convertTo12HourFormat(model.getInTime()));
+                    empObj.put("ShiftTime", convertTo12HourFormat(model.getOuttime()));
 
                     // Selected check-in time from time picker
-                    empObj.put("CheckInTime", convertTo12HourFormat(model.getInTime()));
+                    empObj.put("CheckInTime", model.getInTime());
 
                     listArray.put(empObj);
                 }
@@ -226,7 +218,7 @@ public class CheckInAttendanceActivity extends AppCompatActivity {
 
 
     private void postAttendance(JSONObject jsonObject) {
-        ProgressDialog pd=new ProgressDialog(CheckInAttendanceActivity.this);
+        ProgressDialog pd=new ProgressDialog(CheckOutAttendanceActivity.this);
         pd.setMessage("Loading...");
         pd.show();
         pd.setCancelable(false);
@@ -247,7 +239,7 @@ public class CheckInAttendanceActivity extends AppCompatActivity {
                         String Response_Message = job1.optString("Response_Message");
                         if (Response_Code.equals("101")) {
 
-                            showProductStatusDialog(CheckInAttendanceActivity.this, response);
+                            showProductStatusDialog(CheckOutAttendanceActivity.this, response);
 
 
 
@@ -321,18 +313,6 @@ public class CheckInAttendanceActivity extends AppCompatActivity {
                     .setView(scrollView)
                     .setPositiveButton("OK", null)
                     .show();
-            JSONObject jsonObject=new JSONObject();
-            try {
-                jsonObject.put("ConsultantID",pref.getEmpConId());
-                jsonObject.put("ClientID",pref.getEmpClintId());
-                jsonObject.put("ApproverID",pref.getMasterId());
-                jsonObject.put("AttDate", Util.changeAnyDateFormat(currentDate,"dd-MMM-yyyy","MM/dd/yyyy"));
-                jsonObject.put("PunchFlag","I");
-                jsonObject.put("SecurityCode",pref.getSecurityCode());
-                getEmpList(jsonObject);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
 
         } catch (Exception e) {
             e.printStackTrace();
