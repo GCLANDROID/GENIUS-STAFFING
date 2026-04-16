@@ -72,7 +72,7 @@ public class SuperVisiorDashBoardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_super_visior_dash_board);
         initialize();
         onClick();
-        /*JSONObject objSubmenu=new JSONObject();
+        JSONObject objSubmenu=new JSONObject();
         try {
             objSubmenu.put("ConsultantID", pref.getEmpConId());
             objSubmenu.put("ClientID", pref.getEmpClintId());
@@ -84,7 +84,7 @@ public class SuperVisiorDashBoardActivity extends AppCompatActivity {
             getSubmenu(objSubmenu);
         } catch (JSONException e) {
             e.printStackTrace();
-        }*/
+        }
     }
 
     private  void  initialize(){
