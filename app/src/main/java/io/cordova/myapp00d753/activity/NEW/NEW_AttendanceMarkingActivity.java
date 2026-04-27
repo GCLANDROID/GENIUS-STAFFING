@@ -446,6 +446,7 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
         llOtherLocation.setVisibility(isPunchLocationRequired.equals("1")?View.VISIBLE:View.GONE);
 
         if (isShiftRequired.equals("1")){
+            llShift.setVisibility(View.VISIBLE);
             spShift.setAdapter(shiftSpinnerAdapter);
             spShift.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -468,6 +469,7 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
         }
 
         if(isPunchLocationRequired.equals("1")){
+            llLocation.setVisibility(View.VISIBLE);
             spLocation.setAdapter(locationSpinnerAdapter);
             spLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -491,6 +493,7 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
         }
 
         if(isWorkPlaceRequired.equals("1")){
+            llOtherLocation.setVisibility(View.VISIBLE);
             spOtherLocation.setAdapter(otherLocationSpinnerAdapter);
             spOtherLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -555,11 +558,11 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
                     return;
                 }
                 if (isWorkPlaceRequired.equals("1") && txtSelectLocation.getText().toString().trim().isEmpty()){
-                    txtErrorLocation.setVisibility(View.VISIBLE);
+                    txtErrorOtherLocation.setVisibility(View.VISIBLE);
                     return;
                 }
                 if (isPunchLocationRequired.equals("1") && txtSelectOtherLocation.getText().toString().trim().isEmpty()){
-                    txtErrorOtherLocation.setVisibility(View.VISIBLE);
+                    txtErrorLocation.setVisibility(View.VISIBLE);
                     return;
                 }
                 if (isApproverRequired.equals("1") && txtSelectApprover.getText().toString().trim().isEmpty()){
