@@ -46,6 +46,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.metso.adapter.ApproverAutoCompleteAdapter;
@@ -77,15 +78,35 @@ public class MetsoPMSTargetAchivementActivity extends AppCompatActivity {
     Button btnReport;
     Dialog searchWbsCodeDialog;
     ConstraintLayout clReportingManager;
+    String year="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_metso_pmstarget_achivement);
         initView();
         getPMSSubmitDetails();
-
+        calculateYear();
         onCLick();
     }
+
+    private void calculateYear() {
+        Calendar calendar = Calendar.getInstance();
+
+        int currentYear = calendar.get(Calendar.YEAR);
+        int currentMonth = calendar.get(Calendar.MONTH); // January = 0
+
+        // If month is April or after April -> take current year
+        if (currentMonth >= Calendar.APRIL) {
+            year = String.valueOf(currentYear);
+        } else {
+            // Before April -> take previous year
+            year = String.valueOf(currentYear - 1);
+        }
+
+        Log.e("YEAR", year);
+    }
+
+
 
     private void initView(){
         pref=new Pref(MetsoPMSTargetAchivementActivity.this);
@@ -667,7 +688,7 @@ public class MetsoPMSTargetAchivementActivity extends AppCompatActivity {
 
 
     private void getLastYearTargetDetails() {
-        String surl = AppData.url + "gcl_EmployeePMSReport_Metso?MasterID=" + pref.getMasterId() + "&Year=2025&Operation=2&SecurityCode=" + pref.getSecurityCode();
+        String surl = AppData.url + "gcl_EmployeePMSReport_Metso?MasterID=" + pref.getMasterId() + "&Year="+year+"&Operation=2&SecurityCode=" + pref.getSecurityCode();
         Log.d("attencinput", surl);
         final ProgressDialog progressBar = new ProgressDialog(this);
         progressBar.setCancelable(true);//you can cancel it by pressing back button
