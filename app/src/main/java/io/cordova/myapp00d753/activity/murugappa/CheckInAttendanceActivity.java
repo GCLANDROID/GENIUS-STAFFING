@@ -5,12 +5,14 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,10 +32,12 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.NEW.NEW_HolidayMarkingActivity;
 import io.cordova.myapp00d753.activity.attendance.AttendanceReportActivity;
 import io.cordova.myapp00d753.adapter.AttendanceAdapter;
 import io.cordova.myapp00d753.adapter.CheckInAttendanceAdapter;
@@ -42,6 +46,7 @@ import io.cordova.myapp00d753.module.AttendanceModule;
 import io.cordova.myapp00d753.module.CheckInOutAttendanceModel;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
+import io.cordova.myapp00d753.utility.ClientID;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.Util;
 
@@ -100,6 +105,12 @@ public class CheckInAttendanceActivity extends AppCompatActivity {
                 createSubmitJson();
             }
         });
+        binding.tvCurrentDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDatePicker();
+            }
+        });
     }
 
     private void getEmpList(JSONObject jsonObject) {
@@ -143,6 +154,7 @@ public class CheckInAttendanceActivity extends AppCompatActivity {
                             }
                             CheckInAttendanceAdapter adapter=new CheckInAttendanceAdapter(itemList,CheckInAttendanceActivity.this);
                             binding.rvItem.setAdapter(adapter);
+
 
 
                         }
@@ -338,6 +350,41 @@ public class CheckInAttendanceActivity extends AppCompatActivity {
             e.printStackTrace();
             Toast.makeText(context, "Error parsing response", Toast.LENGTH_SHORT).show();
         }
+    }
+
+
+    private void showDatePicker() {
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+
+        final DatePickerDialog dialog = new DatePickerDialog(CheckInAttendanceActivity.this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int y, int m, int d) {
+
+                currentDate = d + "-" + (m + 1) + "-" + y;
+                binding.tvCurrentDate.setText(Util.changeAnyDateFormat(currentDate,"dd-MM-yyyy","dd-MMM-yyyy"));
+                JSONObject jsonObject=new JSONObject();
+                try {
+                    jsonObject.put("ConsultantID",pref.getEmpConId());
+                    jsonObject.put("ClientID",pref.getEmpClintId());
+                    jsonObject.put("ApproverID",pref.getMasterId());
+                    jsonObject.put("AttDate", Util.changeAnyDateFormat(currentDate,"dd-MM-yyyy","MM/dd/yyyy"));
+                    jsonObject.put("PunchFlag","I");
+                    jsonObject.put("SecurityCode",pref.getSecurityCode());
+                    getEmpList(jsonObject);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, year, month, day);
+
+            dialog.getDatePicker().setMaxDate(c.getTimeInMillis());
+
+        dialog.show();
     }
 
 }

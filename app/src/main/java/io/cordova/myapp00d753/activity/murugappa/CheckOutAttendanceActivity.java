@@ -1,12 +1,14 @@
 package io.cordova.myapp00d753.activity.murugappa;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +28,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -36,6 +39,7 @@ import io.cordova.myapp00d753.databinding.ActivityCheckInAttendanceBinding;
 import io.cordova.myapp00d753.databinding.ActivityCheckOutAttendanceBinding;
 import io.cordova.myapp00d753.module.CheckInOutAttendanceModel;
 import io.cordova.myapp00d753.utility.AppData;
+import io.cordova.myapp00d753.utility.ClientID;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.Util;
 
@@ -44,6 +48,7 @@ public class CheckOutAttendanceActivity extends AppCompatActivity {
     LinearLayoutManager layoutManager;
     Pref pref;
     ArrayList<CheckInOutAttendanceModel>itemList=new ArrayList<>();
+    String currentDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +63,7 @@ public class CheckOutAttendanceActivity extends AppCompatActivity {
         binding.rvItem.setLayoutManager(layoutManager);
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
-        String currentDate = sdf.format(new Date());
+         currentDate = sdf.format(new Date());
         binding.tvCurrentDate.setText(currentDate);
 
         binding.imgBack.setOnClickListener(new View.OnClickListener() {
@@ -91,6 +96,13 @@ public class CheckOutAttendanceActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 createSubmitJson();
+            }
+        });
+
+        binding.tvCurrentDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDatePicker();
             }
         });
     }
@@ -318,6 +330,40 @@ public class CheckOutAttendanceActivity extends AppCompatActivity {
             e.printStackTrace();
             Toast.makeText(context, "Error parsing response", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void showDatePicker() {
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+
+        final DatePickerDialog dialog = new DatePickerDialog(CheckOutAttendanceActivity.this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int y, int m, int d) {
+
+                currentDate = d + "-" + (m + 1) + "-" + y;
+                binding.tvCurrentDate.setText(Util.changeAnyDateFormat(currentDate,"dd-MM-yyyy","dd-MMM-yyyy"));
+                JSONObject jsonObject=new JSONObject();
+                try {
+                    jsonObject.put("ConsultantID",pref.getEmpConId());
+                    jsonObject.put("ClientID",pref.getEmpClintId());
+                    jsonObject.put("ApproverID",pref.getMasterId());
+                    jsonObject.put("AttDate", Util.changeAnyDateFormat(currentDate,"dd-MM-yyyy","MM/dd/yyyy"));
+                    jsonObject.put("PunchFlag","O");
+                    jsonObject.put("SecurityCode",pref.getSecurityCode());
+                    getEmpList(jsonObject);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, year, month, day);
+
+        dialog.getDatePicker().setMaxDate(c.getTimeInMillis());
+
+        dialog.show();
     }
 
 }

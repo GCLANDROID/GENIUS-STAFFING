@@ -189,7 +189,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text="Login with E-PIN"
+                    android:text="Login with M-PIN"
                     android:textStyle="bold"
                     android:textColor="@color/black"/>
             </LinearLayout>

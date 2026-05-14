@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:text="Login using E-PIN"
+            android:text="Login using M-PIN"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -65,7 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:text="Set Up E-PIN"
+                android:text="Set Up M-PIN"
                 android:textColor="@color/colorPrimary"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -83,7 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:text="Forgot E-PIN"
+                android:text="Forgot M-PIN"
                 android:textColor="@color/colorPrimary"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -118,7 +118,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:textSize="12sp"
-            android:text="The E-PIN option will be available only for active employees."
+            android:text="The M-PIN option will be available only for active employees."
             android:textAlignment="center"></TextView>
     </LinearLayout>
 </LinearLayout>

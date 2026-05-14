@@ -70,7 +70,7 @@ public class CheckOutAttendanceAdapter extends RecyclerView.Adapter<CheckOutAtte
                         String selectedTime = String.format("%02d:%02d", selectedHour, selectedMinute);
 
                         myViewHolder.tvTime.setText(selectedTime);
-                        itemList.get(i).setInTime(selectedTime);
+                        itemList.get(i).setOuttime(selectedTime);
                     },
                     hour,
                     minute,

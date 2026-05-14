@@ -1,6 +1,7 @@
 package io.cordova.myapp00d753.activity;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -18,11 +19,16 @@ public class ITViewActivity extends AppCompatActivity implements AdvancedWebView
     private AdvancedWebView mWebView;
     String url;
     LinearLayout llBack;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pdf_view);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         llBack=findViewById(R.id.llBack);
         llBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,13 +83,25 @@ public class ITViewActivity extends AppCompatActivity implements AdvancedWebView
     }
 
     @Override
-    public void onPageStarted(String url, Bitmap favicon) { }
+    public void onPageStarted(String url, Bitmap favicon) {
+        if (progressDialog != null && !progressDialog.isShowing()) {
+            progressDialog.show();
+        }
+    }
 
     @Override
-    public void onPageFinished(String url) { }
+    public void onPageFinished(String url) {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
+    }
 
     @Override
-    public void onPageError(int errorCode, String description, String failingUrl) { }
+    public void onPageError(int errorCode, String description, String failingUrl) {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
+    }
 
     @Override
     public void onDownloadRequested(String url, String suggestedFilename, String mimeType, long contentLength, String contentDisposition, String userAgent) { }

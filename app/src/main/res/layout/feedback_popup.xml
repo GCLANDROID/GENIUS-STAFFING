@@ -47,6 +47,7 @@
             android:text="Give Feeedback"></TextView>
     </LinearLayout>
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/lnSkip"
         android:backgroundTint="@color/backcolor"
         android:layout_marginTop="20dp"

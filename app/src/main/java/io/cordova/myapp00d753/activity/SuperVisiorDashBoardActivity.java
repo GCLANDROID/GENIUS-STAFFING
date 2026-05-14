@@ -26,6 +26,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -41,10 +43,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.attendance.AttenDanceDashboardActivity;
+import io.cordova.myapp00d753.adapter.SupervisorMenuAdapter;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
@@ -64,6 +70,9 @@ public class SuperVisiorDashBoardActivity extends AppCompatActivity {
     android.app.AlertDialog alerDialog1;
     LinearLayout llSale,llLeave;
     String NewLMSAccess="";
+    String AttendanceAccess="";
+    RecyclerView rvItem;
+    LinearLayout llOldLms;
 
 
     @Override
@@ -72,6 +81,16 @@ public class SuperVisiorDashBoardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_super_visior_dash_board);
         initialize();
         onClick();
+
+    }
+
+    private  void  initialize(){
+        pref=new Pref(getApplicationContext());
+        tvEmployeeName=(TextView)findViewById(R.id.tvEmployeeName);
+        llOldLms=findViewById(R.id.llOldLms);
+        rvItem=findViewById(R.id.rvItem);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        rvItem.setLayoutManager(gridLayoutManager);
         JSONObject objSubmenu=new JSONObject();
         try {
             objSubmenu.put("ConsultantID", pref.getEmpConId());
@@ -85,11 +104,6 @@ public class SuperVisiorDashBoardActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    private  void  initialize(){
-        pref=new Pref(getApplicationContext());
-        tvEmployeeName=(TextView)findViewById(R.id.tvEmployeeName);
 
         tvEmployeeName.setText(pref.getEmpName());
         tvGreeting=(TextView)findViewById(R.id.tvGreeting);
@@ -1044,10 +1058,63 @@ public class SuperVisiorDashBoardActivity extends AppCompatActivity {
                             if(Response_Code.equals("101")){
                                 Log.e(TAG, "Response_Data: "+Response_Data);
                                 Log.e(TAG, "ServiceMenuAccessDetails_Array: "+Response_Data.optJSONArray("ServiceMenuAccessDetails"));
-                                JSONArray NewLMSAccessArray = Response_Data.optJSONArray("NewLMSAccess");
-                                JSONObject NewLMSAccessObj = NewLMSAccessArray.getJSONObject(0);
-                                NewLMSAccess = NewLMSAccessObj.getString("NewLMSAccess");
-                                Log.e(TAG, "NewLMSAccess: "+NewLMSAccess);
+//
+
+                                JSONArray supervisorMenu = Response_Data.getJSONArray("SupervisorMenu");
+                                JSONObject menuObj = supervisorMenu.getJSONObject(0);
+                                int NewLMSAccess = menuObj.optInt("NewLMSAccess");
+                                if (NewLMSAccess==1){
+                                    llOldLms.setVisibility(View.GONE);
+                                    rvItem.setVisibility(View.VISIBLE);
+                                }else {
+                                    llOldLms.setVisibility(View.VISIBLE);
+                                    rvItem.setVisibility(View.GONE);
+                                }
+
+                                ArrayList<HashMap<String, String>> menuList = new ArrayList<>();
+                                HashMap<String, String> teamReport = new HashMap<>();
+                                teamReport.put("id", "TeamProfile");
+                                teamReport.put("name", "Team Profile");
+
+                                menuList.add(teamReport);
+
+// Display name mapping
+                                HashMap<String, String> nameMap = new HashMap<>();
+                                //nameMap.put("NewLMSAccess", "New LMS");
+                                nameMap.put("AttendanceAccess", "Attendance");
+                                //nameMap.put("LeaveAccess", "Leave");
+                                //nameMap.put("AttnMarkAccess", "Attendance Mark");
+                                nameMap.put("LeaveApprovalAccess", "Leave Approval");
+                                //nameMap.put("AttnRegApprovalAccess", "Attendance Regularization Approval");
+                                //nameMap.put("AdjApprovalAccess", "Adjustment Approval");
+                                //nameMap.put("DailyAttnReportAccess", "Daily Attendance Report");
+                                //nameMap.put("LeaveApplicationReportAccess", "Leave Application Report");
+                                //nameMap.put("LeaveBalanceReportAccess", "Leave Balance Report");
+                                //nameMap.put("AttnAdjustmentReportAccess", "Attendance Adjustment Report");
+                                //nameMap.put("AttnRegReportAccess", "Attendance Regularization Report");
+                                nameMap.put("GeoFenchApprovalAccess", "Geo Fence Approval");
+
+                                Iterator<String> keys = menuObj.keys();
+
+                                while (keys.hasNext()) {
+                                    String key = keys.next();
+
+                                    if (menuObj.getInt(key) == 1 && nameMap.containsKey(key)) {
+
+                                        HashMap<String, String> map = new HashMap<>();
+                                        map.put("id", key);                  // API key as id
+                                        map.put("name", nameMap.get(key));  // Custom display name
+
+                                        menuList.add(map);
+                                    }
+                                }
+
+
+
+                                SupervisorMenuAdapter adapter =
+                                        new SupervisorMenuAdapter(SuperVisiorDashBoardActivity.this, menuList);
+
+                                rvItem.setAdapter(adapter);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

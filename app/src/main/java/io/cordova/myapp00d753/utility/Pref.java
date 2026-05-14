@@ -1168,5 +1168,34 @@ public class Pref {
     public String getLeaveApplicationURL(){
         return _pref.getString("LeaveApplicationURL","");
     }
+
+
+    public void saveSupDailyAttenReportUrlL(String SupDailyAttenReportUrl){
+        _editorPref.putString("SupDailyAttenReportUrl", SupDailyAttenReportUrl);
+        _editorPref.commit();
+    }
+    public String getSupDailyAttenReportUrl(){
+        return _pref.getString("SupDailyAttenReportUrl","");
+    }
+
+    public void saveSupAdjAndRegReportUrl(String SupAdjAndRegReportUrl){
+        _editorPref.putString("SupAdjAndRegReportUrl", SupAdjAndRegReportUrl);
+        _editorPref.commit();
+    }
+    public String getSupAdjAndRegReportUrl(){
+        return _pref.getString("SupAdjAndRegReportUrl","");
+    }
+
+    public void saveSupLeaveBalanceYTDReportUrl(String SupLeaveBalanceYTDReportUrl){
+        _editorPref.putString("SupLeaveBalanceYTDReportUrl", SupLeaveBalanceYTDReportUrl);
+        _editorPref.commit();
+    }
+    public String getSupLeaveBalanceYTDReportUrl(){
+        return _pref.getString("SupLeaveBalanceYTDReportUrl","");
+    }
+
+
+
+
 }
 

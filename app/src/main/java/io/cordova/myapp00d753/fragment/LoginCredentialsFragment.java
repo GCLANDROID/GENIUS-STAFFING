@@ -977,6 +977,15 @@ public class LoginCredentialsFragment extends Fragment {
                                     String LeaveApplicationUrlNew= obj.optString("LeaveApplicationUrl");
                                     pref.saveLeaveApplicationURL(LeaveApplicationUrlNew);
 
+                                    String SupDailyAttenReportUrl= obj.optString("SupDailyAttenReportUrl");
+                                    pref.saveSupDailyAttenReportUrlL(SupDailyAttenReportUrl);
+
+                                    String SupAdjAndRegReportUrl= obj.optString("SupAdjAndRegReportUrl");
+                                    pref.saveSupAdjAndRegReportUrl(SupAdjAndRegReportUrl);
+
+                                    String SupLeaveBalanceYTDReportUrl= obj.optString("SupLeaveBalanceYTDReportUrl");
+                                    pref.saveSupLeaveBalanceYTDReportUrl(SupLeaveBalanceYTDReportUrl);
+
 
 
                                 }
