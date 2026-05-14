@@ -208,7 +208,12 @@ public class NEW_BacklogAdapter extends RecyclerView.Adapter<NEW_BacklogAdapter.
 
             @Override
             public void afterTextChanged(Editable editable) {
-                itemList.get(position).setRemarks2(editable.toString().trim());
+                try{
+                    itemList.get(position).setRemarks2(editable.toString().trim());
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
             }
         });
         if (isShiftSelectionRequired.equals("1")){

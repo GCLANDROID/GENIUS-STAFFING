@@ -454,7 +454,7 @@ public class NEW_AttendanceRegularizationActivity extends AppCompatActivity impl
                                     successAlert();
                                 } else {
                                     blockLogList.clear();
-                                    btnSubmit.setVisibility(View.GONE);
+                                    btnSubmit.setVisibility(View.VISIBLE);
                                     //TODO: Failure
                                     for (int i = 0; i < TableArray.length(); i++) {
                                         Log.e(TAG, "Table: called");
@@ -609,7 +609,8 @@ public class NEW_AttendanceRegularizationActivity extends AppCompatActivity impl
                                 JSONObject objectRequestCount = Table5.getJSONObject(0);
                                 txtRegularisationCount.setText(String.valueOf(objectRequestCount.getInt("RegularisationRequestCount")));
 
-                                if (objectRequestCount.getInt("RegularisationRequestCount") < 4) {
+                                if (objectRequestCount.getInt("ExceedRequestLimit") == 0) {
+                                //if (objectRequestCount.getInt("RegularisationRequestCount") < 4) {
                                     if (Table4 != null) {
                                         if (Table4.length() > 0) {
                                             for (int i = 0; i < Table4.length(); i++) {
@@ -945,25 +946,8 @@ public class NEW_AttendanceRegularizationActivity extends AppCompatActivity impl
                 if (imgLike.getVisibility() == View.VISIBLE) {
                     imgLike.setVisibility(View.GONE);
                 }
+                btnShow.performClick();
                 alerDialog1.dismiss();
-
-
-                //getBackLogData();
-
-                JSONObject obj=new JSONObject();
-                try {
-                    obj.put("Option","1");
-                    obj.put("ConsultantID",pref.getEmpConId());
-                    obj.put("UserID",pref.getEmpId());
-                    obj.put("ClientID",pref.getEmpClintId());
-                    obj.put("FromDate",startDate);
-                    obj.put("ToDate",endDate);
-                    obj.put("SecurityCode",pref.getSecurityCode());
-                    getBackLogData(obj);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
             }
         });
 
