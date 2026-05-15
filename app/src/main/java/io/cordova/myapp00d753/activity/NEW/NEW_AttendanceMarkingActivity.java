@@ -238,7 +238,9 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
         Log.e(TAG, "intiView: \nisImageRequired: "+isImageRequired
                 +"\nisWorkPlaceRequired: "+isWorkPlaceRequired
                 +"\nisShiftRequired: "+isShiftRequired
-                +"\nisApproverRequired: "+isApproverRequired);
+                +"\nisApproverRequired: "+isApproverRequired
+                +"\nisPunchLocationRequired: "+isPunchLocationRequired
+        );
     }
 
 
@@ -356,7 +358,7 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 8001 && resultCode == 8001){
+        if (resultCode == 8001){
             Log.e("TAG", "onActivityResult: "+data.getExtras().get("picture"));
             Log.e("TAG", "onActivityResult: "+data.getExtras().get(AndroidXCameraActivity.IMAGE_PATH_KEY));
             image_uri =  Uri.parse(String.valueOf(data.getExtras().get("picture")));
@@ -595,6 +597,7 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
                 + "\nApproverid: "+SupervisorID
                 + "\nPunchSource: "+"Mobile"
                 + "\nOption: "+"2"
+                + "\nImage1: file"
                 + "\nSecurityCode: "+pref.getSecurityCode()
         );
 
