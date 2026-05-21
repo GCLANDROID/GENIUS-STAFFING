@@ -78,12 +78,14 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.attendance.AttenDanceDashboardActivity;
 import io.cordova.myapp00d753.activity.attendance.MetsoAttendanceActivity;
 import io.cordova.myapp00d753.adapter.MenuItemAdapter;
 import io.cordova.myapp00d753.adapter.NeedToActAdapter;
 import io.cordova.myapp00d753.adapter.NotiAdapter;
 import io.cordova.myapp00d753.adapter.NotificationModel;
 import io.cordova.myapp00d753.adapter.PFDocumentAdapter;
+import io.cordova.myapp00d753.bluedart.BlueDartAttenDanceDashboardActivity;
 import io.cordova.myapp00d753.module.MenuItemModel;
 import io.cordova.myapp00d753.module.NeedToActModel;
 import io.cordova.myapp00d753.module.PFDocumentModule;
@@ -173,7 +175,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         try {
             //objNeedToAct.put("MasterID", "AEMP001707000777");
             objNeedToAct.put("MasterID", pref.getMasterId());
-            getNeedToActData(objNeedToAct);
+            getNeedToActData(objNeedToAct,"");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -305,7 +307,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         //
     }
 
-    private void getNeedToActData(JSONObject objNeedToAct) {
+    public void getNeedToActData(JSONObject objNeedToAct,String flag) {
         final ProgressDialog pd=new ProgressDialog(EmployeeDashBoardActivity.this);
         pd.setMessage("Loading.....");
         pd.show();
@@ -323,9 +325,11 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                             pd.dismiss();
                             JSONObject job = response;
                             boolean isSuccess = job.optBoolean("Success");
+                            needToActModelList.clear();
                             if (isSuccess){
                                 JSONObject Data = job.getJSONObject("Data");
                                 JSONArray Table = Data.optJSONArray("Table");
+                                int mandatoryPopupCount = 0;
                                 if (Table.length() > 0){
                                     for (int i = 0; i < Table.length(); i++) {
                                         JSONObject object = Table.getJSONObject(i);
@@ -339,17 +343,82 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                         int IsMandatoryPopup = object.optInt("IsMandatoryPopup");
                                         String ActUrl = object.optString("ActUrl");
                                         if(IsMandatoryPopup == 1){
+                                            mandatoryPopupCount ++;
                                             openActionRequiredPopUp(DocName,ActUrl);
                                         }
 
                                         needToActModelList.add(new NeedToActModel(LetterID,MasterID,Domain,DocName,Category,ExpDate,
                                                 AcceptanceType,IsMandatoryPopup,ActUrl));
                                     }
-
+                                    if(mandatoryPopupCount == 0){
+                                        if(flag.equalsIgnoreCase("attendance")){
+                                            if (pref.getEmpClintId().equalsIgnoreCase("AEMCLI1810001410")) {
+                                                Intent intent = new Intent(EmployeeDashBoardActivity.this, BlueDartAttenDanceDashboardActivity.class);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                EmployeeDashBoardActivity.this.startActivity(intent);
+                                            } else {
+                                                Intent intent = new Intent(EmployeeDashBoardActivity.this, AttenDanceDashboardActivity.class);
+                                                intent.putExtra("leaveFlag",leaveFlag);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                EmployeeDashBoardActivity.this.startActivity(intent);
+                                            }
+                                        } else if(flag.equalsIgnoreCase("leave")){
+                                            if (isLiveStatus_LeaveApplication.equals("1")){
+                                                Intent intent = new Intent(EmployeeDashBoardActivity.this, ITViewActivity.class);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                intent.putExtra("url", pref.getLeaveApplicationURL());
+                                                EmployeeDashBoardActivity.this.startActivity(intent);
+                                            } else {
+                                                Intent intent=new Intent(EmployeeDashBoardActivity.this, LeaveApplicationActivity.class);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                EmployeeDashBoardActivity.this.startActivity(intent);
+                                            }
+                                        } else if(flag.equalsIgnoreCase("profile")){
+                                            Intent intent=new Intent(EmployeeDashBoardActivity.this, ProfileActivity.class);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            EmployeeDashBoardActivity.this.startActivity(intent);
+                                        } else if(flag.equalsIgnoreCase("payroll")) {
+                                            Intent intent=new Intent(EmployeeDashBoardActivity.this, PayrollActivity.class);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            EmployeeDashBoardActivity.this.startActivity(intent);
+                                        }
+                                    }
                                     NeedToActAdapter needToActAdapter = new NeedToActAdapter(EmployeeDashBoardActivity.this,needToActModelList);
                                     rvNeedToAct.setAdapter(needToActAdapter);
+
                                 } else {
                                     llNeedToAct.setVisibility(View.GONE);
+                                    if(flag.equalsIgnoreCase("attendance")){
+                                        if (pref.getEmpClintId().equalsIgnoreCase("AEMCLI1810001410")) {
+                                            Intent intent = new Intent(EmployeeDashBoardActivity.this, BlueDartAttenDanceDashboardActivity.class);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            EmployeeDashBoardActivity.this.startActivity(intent);
+                                        } else {
+                                            Intent intent = new Intent(EmployeeDashBoardActivity.this, AttenDanceDashboardActivity.class);
+                                            intent.putExtra("leaveFlag",leaveFlag);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            EmployeeDashBoardActivity.this.startActivity(intent);
+                                        }
+                                    } else if(flag.equalsIgnoreCase("leave")){
+                                        if (isLiveStatus_LeaveApplication.equals("1")){
+                                            Intent intent = new Intent(EmployeeDashBoardActivity.this, ITViewActivity.class);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            intent.putExtra("url", pref.getLeaveApplicationURL());
+                                            EmployeeDashBoardActivity.this.startActivity(intent);
+                                        } else {
+                                            Intent intent=new Intent(EmployeeDashBoardActivity.this, LeaveApplicationActivity.class);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            EmployeeDashBoardActivity.this.startActivity(intent);
+                                        }
+                                    } else if(flag.equalsIgnoreCase("profile")){
+                                        Intent intent=new Intent(EmployeeDashBoardActivity.this, ProfileActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        EmployeeDashBoardActivity.this.startActivity(intent);
+                                    } else if(flag.equalsIgnoreCase("payroll")) {
+                                        Intent intent=new Intent(EmployeeDashBoardActivity.this, PayrollActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        EmployeeDashBoardActivity.this.startActivity(intent);
+                                    }
                                 }
                             } else {
                                 llNeedToAct.setVisibility(View.GONE);
@@ -373,6 +442,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         dialog.setContentView(R.layout.action_requried_popup);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.setCancelable(false);
         TextView tvDocName = dialog.findViewById(R.id.tvDocName);
         Button btnAccept = dialog.findViewById(R.id.btnAccept);
         tvDocName.setText(docName);
@@ -739,7 +809,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
                                 }
 
 
-                                MenuItemAdapter menuItemAdapter=new MenuItemAdapter(itemList,getApplicationContext(),PFLink,leaveFlag,EmployeeDashBoardActivity.this,isLiveStatus_LeaveApplication);
+                                MenuItemAdapter menuItemAdapter=new MenuItemAdapter(itemList,EmployeeDashBoardActivity.this,PFLink,leaveFlag,EmployeeDashBoardActivity.this,isLiveStatus_LeaveApplication);
                                 rvItem.setAdapter(menuItemAdapter);
 
                                 getFeedbackChecking();
@@ -1035,6 +1105,7 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.feedback_popup, null);
         dialogBuilder.setView(dialogView);
+
         LinearLayout lnFeedback=(LinearLayout)dialogView.findViewById(R.id.lnFeedback);
         lnFeedback.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1054,13 +1125,13 @@ public class  EmployeeDashBoardActivity extends AppCompatActivity {
 
 
         feedbackpopupDialog = dialogBuilder.create();
-        feedbackpopupDialog.setCancelable(true);
+        feedbackpopupDialog.setCancelable(false);
         Window window = feedbackpopupDialog.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.CENTER);
-        feedbackpopupDialog.show();
-
-
+        if (!isFinishing() && !isDestroyed()) {
+            feedbackpopupDialog.show();
+        }
     }
 
     private void shoePFAknowledge() {
