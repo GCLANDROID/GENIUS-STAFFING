@@ -17,12 +17,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.FormSixteenActivity;
 import io.cordova.myapp00d753.activity.ITViewActivity;
 import io.cordova.myapp00d753.activity.IncomeTaxDashboardActivity;
+import io.cordova.myapp00d753.activity.ProfileNewActivity;
 import io.cordova.myapp00d753.activity.attendance.AttenDanceDashboardActivity;
 import io.cordova.myapp00d753.activity.ChangePasswordActivity;
 import io.cordova.myapp00d753.activity.DailyDashBoardActivity;
@@ -214,26 +218,31 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
             public void onClick(View v) {
                 if (itemList.get(i).getMenuId().equals("1")){
                     //Profile
-                    Intent intent=new Intent(mContex, ProfileActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
-                    mContex.startActivity(intent);
+                    JSONObject objNeedToAct=new JSONObject();
+                    try {
+                        objNeedToAct.put("MasterID", pref.getMasterId());
+                        ((EmployeeDashBoardActivity) mContex).getNeedToActData(objNeedToAct,"profile");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }else if (itemList.get(i).getMenuId().equals("2")) {
                     //Attendnace
-                    if (pref.getEmpClintId().equalsIgnoreCase("AEMCLI1810001410")) {
-                        Intent intent = new Intent(mContex, BlueDartAttenDanceDashboardActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        mContex.startActivity(intent);
-                    } else {
-                        Intent intent = new Intent(mContex, AttenDanceDashboardActivity.class);
-                        intent.putExtra("leaveFlag",leaveFlag);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        mContex.startActivity(intent);
+                    JSONObject objNeedToAct=new JSONObject();
+                    try {
+                        objNeedToAct.put("MasterID", pref.getMasterId());
+                        ((EmployeeDashBoardActivity) mContex).getNeedToActData(objNeedToAct,"attendance");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 } else if (itemList.get(i).getMenuId().equals("3")) {
                     //Payroll
-                    Intent intent=new Intent(mContex, PayrollActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
-                    mContex.startActivity(intent);
+                    JSONObject objNeedToAct=new JSONObject();
+                    try {
+                        objNeedToAct.put("MasterID", pref.getMasterId());
+                        ((EmployeeDashBoardActivity) mContex).getNeedToActData(objNeedToAct,"payroll");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 } else if (itemList.get(i).getMenuId().equals("4")) {
                     //Saales
                     if (pref.getEmpClintId().equalsIgnoreCase("AEMCLI2310001780")){
@@ -288,15 +297,12 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                     mContex.startActivity(intent);
                 } else if (itemList.get(i).getMenuId().equals("12")){
                     //Leave Application
-                    if (isLiveStatus_LeaveApplication.equals("1")){
-                        Intent intent = new Intent(mContex, ITViewActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra("url", pref.getLeaveApplicationURL());
-                        mContex.startActivity(intent);
-                    } else {
-                        Intent intent=new Intent(mContex, LeaveApplicationActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
-                        mContex.startActivity(intent);
+                    JSONObject objNeedToAct=new JSONObject();
+                    try {
+                        objNeedToAct.put("MasterID", pref.getMasterId());
+                        ((EmployeeDashBoardActivity) mContex).getNeedToActData(objNeedToAct,"leave");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
 
 
