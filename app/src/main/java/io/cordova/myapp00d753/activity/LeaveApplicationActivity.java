@@ -28,7 +28,7 @@ public class LeaveApplicationActivity extends AppCompatActivity {
     ImageView imgBack,imgHome;
     TextView tvApproval,tvDetails,tvApllication,tvToolBar,tvAdjustment,tvLeaveBalance;
     Pref pref;
-
+    View view1,view2,view3,view4,view5;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +60,12 @@ public class LeaveApplicationActivity extends AppCompatActivity {
         tvLeaveBalance=(TextView)findViewById(R.id.tvLeaveBalance);
         tvToolBar=(TextView)findViewById(R.id.tvToolBar);
 
+        view1 = findViewById(R.id.view1);
+        view2 = findViewById(R.id.view2);
+        view3 = findViewById(R.id.view3);
+        view4 = findViewById(R.id.view4);
+        view5 = findViewById(R.id.view5);
+
         if (pref.getEmpClintId().equals("AEMCLI0910000343") || pref.getEmpClintId().equals("AEMCLI0910000315")){
             llAdjustment.setVisibility(View.GONE);
         }else {
@@ -72,7 +78,11 @@ public class LeaveApplicationActivity extends AppCompatActivity {
         llApplication.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadApplicationFragment();
+                if (pref.getEmpClintId().equalsIgnoreCase(ClientID.METSO)) {
+                    loadMetsoApplicationFragment();
+                }else {
+                    loadApplicationFragment();
+                }
             }
         });
         llApproval.setOnClickListener(new View.OnClickListener() {
@@ -132,12 +142,12 @@ public class LeaveApplicationActivity extends AppCompatActivity {
         llLeaveBalanceReport.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.white));
 
         tvApllication.setTextColor(Color.parseColor("#FFFFFF"));
-        tvDetails.setTextColor(Color.parseColor("#4f8888"));
-        tvApproval.setTextColor(Color.parseColor("#4f8888"));
-        tvAdjustment.setTextColor(Color.parseColor("#4f8888"));
-        tvLeaveBalance.setTextColor(Color.parseColor("#4f8888"));
+        tvDetails.setTextColor(Color.parseColor("#FFFFFF"));
+        tvApproval.setTextColor(Color.parseColor("#FFFFFF"));
+        tvAdjustment.setTextColor(Color.parseColor("#FFFFFF"));
+        tvLeaveBalance.setTextColor(Color.parseColor("#FFFFFF"));
         tvToolBar.setText("Leave Application");
-
+        menuLineVisibleInVisible(1);
    }
 
     public void loadMetsoApplicationFragment() {
@@ -155,12 +165,12 @@ public class LeaveApplicationActivity extends AppCompatActivity {
         llLeaveBalanceReport.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.white));
 
         tvApllication.setTextColor(Color.parseColor("#FFFFFF"));
-        tvDetails.setTextColor(Color.parseColor("#4f8888"));
-        tvApproval.setTextColor(Color.parseColor("#4f8888"));
-        tvAdjustment.setTextColor(Color.parseColor("#4f8888"));
-        tvLeaveBalance.setTextColor(Color.parseColor("#4f8888"));
+        tvDetails.setTextColor(Color.parseColor("#FFFFFF"));
+        tvApproval.setTextColor(Color.parseColor("#FFFFFF"));
+        tvAdjustment.setTextColor(Color.parseColor("#FFFFFF"));
+        tvLeaveBalance.setTextColor(Color.parseColor("#FFFFFF"));
         tvToolBar.setText("Leave Application");
-
+        menuLineVisibleInVisible(1);
     }
 
     public void loadApproverFragment() {
@@ -177,12 +187,12 @@ public class LeaveApplicationActivity extends AppCompatActivity {
         llLeaveBalanceReport.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.white));
 
 
-        tvApllication.setTextColor(Color.parseColor("#4f8888"));
-        tvDetails.setTextColor(Color.parseColor("#4f8888"));
+        tvApllication.setTextColor(Color.parseColor("#FFFFFF"));
+        tvDetails.setTextColor(Color.parseColor("#FFFFFF"));
         tvApproval.setTextColor(Color.parseColor("#FFFFFF"));
-        tvAdjustment.setTextColor(Color.parseColor("#4f8888"));
-        tvLeaveBalance.setTextColor(Color.parseColor("#4f8888"));
-
+        tvAdjustment.setTextColor(Color.parseColor("#FFFFFF"));
+        tvLeaveBalance.setTextColor(Color.parseColor("#FFFFFF"));
+        menuLineVisibleInVisible(3);
     }
 
 
@@ -200,14 +210,14 @@ public class LeaveApplicationActivity extends AppCompatActivity {
         llLeaveBalanceReport.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.white));
 
 
-        tvApllication.setTextColor(Color.parseColor("#4f8888"));
+        tvApllication.setTextColor(Color.parseColor("#FFFFFF"));
         tvDetails.setTextColor(Color.parseColor("#FFFFFF"));
-        tvApproval.setTextColor(Color.parseColor("#4f8888"));
-        tvAdjustment.setTextColor(Color.parseColor("#4f8888"));
-        tvLeaveBalance.setTextColor(Color.parseColor("#4f8888"));
+        tvApproval.setTextColor(Color.parseColor("#FFFFFF"));
+        tvAdjustment.setTextColor(Color.parseColor("#FFFFFF"));
+        tvLeaveBalance.setTextColor(Color.parseColor("#FFFFFF"));
 
         tvToolBar.setText("Leave Application Details");
-
+        menuLineVisibleInVisible(2);
     }
 
     public void loadAdjustmentFragment() {
@@ -224,14 +234,14 @@ public class LeaveApplicationActivity extends AppCompatActivity {
         llLeaveBalanceReport.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.white));
 
 
-        tvApllication.setTextColor(Color.parseColor("#4f8888"));
-        tvDetails.setTextColor(Color.parseColor("#4f8888"));
-        tvApproval.setTextColor(Color.parseColor("#4f8888"));
+        tvApllication.setTextColor(Color.parseColor("#FFFFFF"));
+        tvDetails.setTextColor(Color.parseColor("#FFFFFF"));
+        tvApproval.setTextColor(Color.parseColor("#FFFFFF"));
         tvAdjustment.setTextColor(Color.parseColor("#FFFFFF"));
-        tvLeaveBalance.setTextColor(Color.parseColor("#4f8888"));
+        tvLeaveBalance.setTextColor(Color.parseColor("#FFFFFF"));
 
         tvToolBar.setText("Leave Adjustment");
-
+        menuLineVisibleInVisible(4);
     }
 
     public void loadBalanceReport() {
@@ -248,13 +258,14 @@ public class LeaveApplicationActivity extends AppCompatActivity {
         llLeaveBalanceReport.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.colorPrimaryDark));
 
 
-        tvApllication.setTextColor(Color.parseColor("#4f8888"));
-        tvDetails.setTextColor(Color.parseColor("#4f8888"));
-        tvApproval.setTextColor(Color.parseColor("#4f8888"));
-        tvAdjustment.setTextColor(Color.parseColor("#4f8888"));
+        tvApllication.setTextColor(Color.parseColor("#FFFFFF"));
+        tvDetails.setTextColor(Color.parseColor("#FFFFFF"));
+        tvApproval.setTextColor(Color.parseColor("#FFFFFF"));
+        tvAdjustment.setTextColor(Color.parseColor("#FFFFFF"));
         tvLeaveBalance.setTextColor(Color.parseColor("#FFFFFF"));
 
         tvToolBar.setText("Leave Balance Report");
+        menuLineVisibleInVisible(5);
     }
 
     public void  approverVisibility(){
@@ -263,5 +274,38 @@ public class LeaveApplicationActivity extends AppCompatActivity {
 
     public void  approverHidden(){
         llApproval.setVisibility(View.GONE);
+    }
+    void menuLineVisibleInVisible(int isVisible){
+        if (isVisible == 1){
+            view1.setVisibility(View.VISIBLE);
+            view2.setVisibility(View.GONE);
+            view3.setVisibility(View.GONE);
+            view4.setVisibility(View.GONE);
+            view5.setVisibility(View.GONE);
+        } else if(isVisible == 2){
+            view1.setVisibility(View.GONE);
+            view2.setVisibility(View.VISIBLE);
+            view3.setVisibility(View.GONE);
+            view4.setVisibility(View.GONE);
+            view5.setVisibility(View.GONE);
+        } else if(isVisible == 3){
+            view1.setVisibility(View.GONE);
+            view2.setVisibility(View.GONE);
+            view3.setVisibility(View.VISIBLE);
+            view4.setVisibility(View.GONE);
+            view5.setVisibility(View.GONE);
+        } else if (isVisible == 4){
+            view1.setVisibility(View.GONE);
+            view2.setVisibility(View.GONE);
+            view3.setVisibility(View.GONE);
+            view4.setVisibility(View.VISIBLE);
+            view5.setVisibility(View.GONE);
+        } else {
+            view1.setVisibility(View.GONE);
+            view2.setVisibility(View.GONE);
+            view3.setVisibility(View.GONE);
+            view4.setVisibility(View.GONE);
+            view5.setVisibility(View.VISIBLE);
+        }
     }
 }
