@@ -233,7 +233,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
         imgPic = (ImageView) v.findViewById(R.id.imgPic);
         llShow = (LinearLayout) v.findViewById(R.id.llShow);
 
-        tvAllApplication = (TextView) v.findViewById(R.id.tvAllApplication);
+        //tvAllApplication = (TextView) v.findViewById(R.id.tvAllApplication);
         tvCancel = (TextView) v.findViewById(R.id.tvCancel);
         tvApproval = (TextView) v.findViewById(R.id.tvApproval);
         txtFileSelectionPath = (TextView) v.findViewById(R.id.txtFileSelectionPath);
@@ -322,7 +322,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
             }
         });
 
-        imgStrtDay.setOnClickListener(new View.OnClickListener() {
+        tvStrtDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!typeId.equals("")) {
@@ -333,7 +333,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
             }
         });
 
-        imgEndDay.setOnClickListener(new View.OnClickListener() {
+        tvEndDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!tvStrtDate.getText().toString().equals("")) {
@@ -1239,10 +1239,18 @@ public class MetsoLeaveApplicationFragment extends Fragment {
 
 
     private void showDailyBrkUpDialog() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.CustomDialogNew);
+        /*AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.day_breakup_dialog, null);
-        dialogBuilder.setView(dialogView);
+        dialogBuilder.setView(dialogView);*/
+
+        Dialog dialogView = new Dialog(getContext(),R.style.CustomDialogNew2);
+        dialogView.setContentView(R.layout.day_breakup_dialog);
+        dialogView.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialogView.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialogView.getWindow().setGravity(Gravity.TOP);
+
+
         rvBrkupItem = (RecyclerView) dialogView.findViewById(R.id.rvBrkupItem);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -1269,7 +1277,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alert2.dismiss();
+                dialogView.dismiss();
                 if (category.equals("1") || category.equals("3")) {
                  //   showCompOffDialog();
                 } else {
@@ -1284,18 +1292,18 @@ public class MetsoLeaveApplicationFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 dayBreakupListDetails.clear();
-                alert2.dismiss();
+                dialogView.dismiss();
                 endDate="";
                 tvEndDate.setText("");
             }
         });
-
-        alert2 = dialogBuilder.create();
+        dialogView.show();
+        /*alert2 = dialogBuilder.create();
         alert2.setCancelable(false);
         Window window = alert2.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.TOP);
-        alert2.show();
+        alert2.show();*/
     }
 
 
@@ -1769,10 +1777,16 @@ public class MetsoLeaveApplicationFragment extends Fragment {
 
 
     private void showPreviewDialog() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.CustomDialogNew);
+        /*AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.preview_dialog, null);
-        dialogBuilder.setView(dialogView);
+        dialogBuilder.setView(dialogView);*/
+
+        Dialog dialogView = new Dialog(getContext(),R.style.CustomDialogNew2);
+        dialogView.setContentView(R.layout.preview_dialog);
+        dialogView.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialogView.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialogView.getWindow().setGravity(Gravity.TOP);
         rvPreviewItem = (RecyclerView) dialogView.findViewById(R.id.rvPreviewItem);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -1813,7 +1827,8 @@ public class MetsoLeaveApplicationFragment extends Fragment {
         btnDiscard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alert3.dismiss();
+                dialogView.cancel();
+                //alert3.dismiss();
             }
         });
 
@@ -1824,13 +1839,13 @@ public class MetsoLeaveApplicationFragment extends Fragment {
         tvType.setText("Type");
         btnDiscard.setText("Discard");
         btnSubmit.setText("Submit");
-
-        alert3 = dialogBuilder.create();
+        dialogView.show();
+       /* alert3 = dialogBuilder.create();
         alert3.setCancelable(false);
         Window window = alert3.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.TOP);
-        alert3.show();
+        alert3.show();*/
     }
 
     private void getPreviewItem(JSONObject jsonObject) {
@@ -2292,7 +2307,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 ApproverModel selectedItem = (ApproverModel) adapterView.getItemAtPosition(i);
                 actApproverName.setText(selectedItem.getApproverName());
-                tvApproverName.setText("Approver Name :"+selectedItem.getApproverName());
+                tvApproverName.setText(selectedItem.getApproverName());
                 approverID = selectedItem.approverId;
                 Log.e(TAG, "approverID: "+approverID);
                 txtErrorApprover.setVisibility(View.GONE);
