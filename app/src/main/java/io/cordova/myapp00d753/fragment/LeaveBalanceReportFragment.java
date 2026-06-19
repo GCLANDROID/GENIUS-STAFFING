@@ -113,10 +113,13 @@ public class LeaveBalanceReportFragment extends Fragment {
                                         final String Opening = balanceObject.optString("Opening");
                                         final String LeaveAvailed = balanceObject.optString("LeaveAvailed");
                                         final String Avaliable = balanceObject.optString("Avaliable");
+                                        final String LeaveName = balanceObject.optString("Name");
+
                                         String LeaveTypeID = balanceObject.optString("LeaveTypeID");
                                         //typeAvaild.add(LeaveTypeID + "_" + Avaliable);
 
                                         LeaveBalanceDetailsModel model = new LeaveBalanceDetailsModel(Code, Opening, LeaveAvailed, Avaliable);
+                                        model.setLeaveName(LeaveName);
                                         itemList.add(model);
                                     }
                                     leaveBalanceReportAdapter = new LeaveBalanceReportAdapter(getActivity(),itemList);
