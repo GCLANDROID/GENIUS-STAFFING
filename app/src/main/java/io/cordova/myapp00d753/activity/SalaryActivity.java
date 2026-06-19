@@ -82,8 +82,8 @@ public class SalaryActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_salary);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,
-                WindowManager.LayoutParams.FLAG_SECURE);
+        /*getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE);*/
         initialize();
         if (connectionCheck.isNetworkAvailable()) {
             //TODO: new api
@@ -124,7 +124,7 @@ public class SalaryActivity extends AppCompatActivity  {
         tvYear = (TextView) findViewById(R.id.tvYear);
         tvYear.setText(year);
         llLoader = (LinearLayout) findViewById(R.id.llLoader);
-        llMain = (LinearLayout) findViewById(R.id.llMain);
+        //llMain = (LinearLayout) findViewById(R.id.llMain);
         llNodata=(LinearLayout)findViewById(R.id.llNodata);
         llAgain=(LinearLayout)findViewById(R.id.llAgain);
         imgAgain=(ImageView)findViewById(R.id.imgAgain);
@@ -145,9 +145,9 @@ public class SalaryActivity extends AppCompatActivity  {
                 }
             }
         });
-        imgSearch=(ImageView)findViewById(R.id.imgSearch);
+        //imgSearch=(ImageView)findViewById(R.id.imgSearch);
         tvToolBar=(TextView) findViewById(R.id.tvToolBar);
-        tvToolBar.setText("Monthly Salary");
+        tvToolBar.setText("Monthly Salary - "+year);
         yearList = YearMonthUtil.getPreviousCurrentNextYearList();
         ArrayAdapter<String> yearAdapter = new ArrayAdapter<>(
                 this,
@@ -165,7 +165,7 @@ public class SalaryActivity extends AppCompatActivity  {
     private void getSalaryList(JSONObject jsonObject) {
         Log.e(TAG, "getSalaryList: "+jsonObject);
         llLoader.setVisibility(View.VISIBLE);
-        llMain.setVisibility(View.GONE);
+        rvSalary.setVisibility(View.GONE);
         llNodata.setVisibility(View.GONE);
         llAgain.setVisibility(View.GONE);
         AndroidNetworking.post(AppData.GET_EMPLOYEE_SALARY)
@@ -199,20 +199,20 @@ public class SalaryActivity extends AppCompatActivity  {
 
                                 if (salaryList.size() > 0) {
                                     llLoader.setVisibility(View.GONE);
-                                    llMain.setVisibility(View.VISIBLE);
+                                    rvSalary.setVisibility(View.VISIBLE);
                                     llNodata.setVisibility(View.GONE);
                                     llAgain.setVisibility(View.GONE);
                                     setAdapter();
                                 } else {
                                     llLoader.setVisibility(View.GONE);
-                                    llMain.setVisibility(View.GONE);
+                                    rvSalary.setVisibility(View.GONE);
                                     llNodata.setVisibility(View.GONE);
                                     llAgain.setVisibility(View.GONE);
                                 }
                             } else {
                                 //Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
                                 llLoader.setVisibility(View.GONE);
-                                llMain.setVisibility(View.GONE);
+                                rvSalary.setVisibility(View.GONE);
                                 llNodata.setVisibility(View.VISIBLE);
                                 llAgain.setVisibility(View.GONE);
                             }
@@ -226,7 +226,7 @@ public class SalaryActivity extends AppCompatActivity  {
                     public void onError(ANError anError) {
                         Log.e(TAG, "SALARY_LIST_error: "+anError.getErrorBody());
                         llLoader.setVisibility(View.GONE);
-                        llMain.setVisibility(View.GONE);
+                        rvSalary.setVisibility(View.GONE);
                         llNodata.setVisibility(View.GONE);
                         llAgain.setVisibility(View.VISIBLE);
                     }
@@ -280,7 +280,7 @@ public class SalaryActivity extends AppCompatActivity  {
                             } else {
                                 //Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
                                 llLoader.setVisibility(View.GONE);
-                                llMain.setVisibility(View.GONE);
+                                rvSalary.setVisibility(View.GONE);
                                 llNodata.setVisibility(View.VISIBLE);
                                 llAgain.setVisibility(View.GONE);
                             }
@@ -294,7 +294,7 @@ public class SalaryActivity extends AppCompatActivity  {
                     public void onError(ANError anError) {
                         Log.e(TAG, "SALARY_LIST_error: "+anError.getErrorBody());
                         llLoader.setVisibility(View.GONE);
-                        llMain.setVisibility(View.GONE);
+                        rvSalary.setVisibility(View.GONE);
                         llNodata.setVisibility(View.GONE);
                         llAgain.setVisibility(View.VISIBLE);
                     }
@@ -406,12 +406,12 @@ public class SalaryActivity extends AppCompatActivity  {
             }
         });
 
-        imgSearch.setOnClickListener(new View.OnClickListener() {
+        /*imgSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                     showYearDialog();
             }
-        });
+        });*/
 
         tvYear.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -424,7 +424,7 @@ public class SalaryActivity extends AppCompatActivity  {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 //selectedYear = yearList.get(i);
                 tvYear.setText(yearList.get(i));
-                tvToolBar.setText("Monthly Salary - \n"+yearList.get(i));
+                tvToolBar.setText("Monthly Salary - "+yearList.get(i));
                 JSONObject obj=new JSONObject();
                 try {
                     obj.put("AEMEmployeeID",pref.getEmpId());
