@@ -33,5 +33,15 @@
     <color name="weekly_comp_off">#673AB7</color>
     <color name="white">#FFFFFF</color>
     <color name="lightsky">#F2D3E7FF</color>
+    <color name="new_header_text_color">#481461</color>
+    <color name="text_color">#867575</color>
+    <color name="text_color_2">#AB4DC1</color>
+    <color name="text_color_3">#6e47a3</color>
+    <color name="text_color_4">#a29c9c</color>
+    <color name="text_color_5">#616060</color>
+    <color name="pink1">#e96d70</color>
+    <color name="green_2">#169246</color>
+    <color name="red">#d91943</color>
+    <color name="yellow">#ffba57</color>
 
 </resources>
