@@ -84,7 +84,6 @@
             android:layout_height="0dp"
             android:layout_gravity="center"
             android:visibility="gone"
-            android:background="@drawable/lldesign"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
