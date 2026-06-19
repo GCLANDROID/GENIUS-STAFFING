@@ -4,6 +4,7 @@ package io.cordova.myapp00d753.fragment;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -94,6 +95,7 @@ import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.ShowDialog;
 
 import static android.app.Activity.RESULT_OK;
+import static io.cordova.myapp00d753.R.id.tvApprovedName;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -186,7 +188,9 @@ public class ApplicationFragment extends Fragment {
     private void initView() {
         rvItem = (RecyclerView) v.findViewById(R.id.rvItem);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
-        rvItem.setLayoutManager(gridLayoutManager);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
+        rvItem.setLayoutManager(layoutManager);
+        //rvItem.setLayoutManager(gridLayoutManager);
         tvRequested = (TextView) v.findViewById(R.id.tvRequested);
         tvApporved = (TextView) v.findViewById(R.id.tvApporved);
         tvRejected = (TextView) v.findViewById(R.id.tvRejected);
@@ -228,7 +232,7 @@ public class ApplicationFragment extends Fragment {
         imgPic = (ImageView) v.findViewById(R.id.imgPic);
         llShow = (LinearLayout) v.findViewById(R.id.llShow);
 
-        tvAllApplication = (TextView) v.findViewById(R.id.tvAllApplication);
+        //tvAllApplication = (TextView) v.findViewById(R.id.tvAllApplication);
         tvCancel = (TextView) v.findViewById(R.id.tvCancel);
         tvApproval = (TextView) v.findViewById(R.id.tvApproval);
         pg = new ProgressDialog(getContext());
@@ -284,6 +288,7 @@ public class ApplicationFragment extends Fragment {
                     String[] sep = lId.split("_");
                     typeId = sep[0];
                     category = sep[1];
+                    Log.e(TAG, "typeId: "+typeId );
                     getLeaveMode();
 
                    /* JSONObject obj=new JSONObject();
@@ -297,6 +302,8 @@ public class ApplicationFragment extends Fragment {
                         e.printStackTrace();
                     }*/
                     //CompanyID=" + pref.getEmpClintId() + "&EmployeeID=" + applicantId + "&&LeaveTypeID=" + typeId + "&SecurityCode=" + pref.getSecurityCode();
+                } else {
+                    typeId = "0";
                 }
             }
 
@@ -318,10 +325,11 @@ public class ApplicationFragment extends Fragment {
             }
         });
 
-        imgStrtDay.setOnClickListener(new View.OnClickListener() {
+        //imgStrtDay.setOnClickListener(new View.OnClickListener() {
+        tvStrtDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!typeId.equals("")) {
+                if (!typeId.equals("") || !typeId.equals("0")) {
                     showStrtDatePicker();
                 } else {
                     Toast.makeText(getContext(), "Please select Leave type", Toast.LENGTH_LONG).show();
@@ -329,7 +337,8 @@ public class ApplicationFragment extends Fragment {
             }
         });
 
-        imgEndDay.setOnClickListener(new View.OnClickListener() {
+        //imgEndDay.setOnClickListener(new View.OnClickListener() {
+        tvEndDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!tvStrtDate.getText().toString().equals("")) {
@@ -481,7 +490,7 @@ public class ApplicationFragment extends Fragment {
                         // attendabceInfiList.clear();
 
                         leaveTypeList.add("Please select");
-                        mLeaveTypeList.add(new SpinnerModel("0", "0"));
+                        mLeaveTypeList.add(new SpinnerModel("Please select", "0"));
                         try {
                             JSONObject job1 = new JSONObject(response);
                             Log.e("response12", "@@@@@@" + job1);
@@ -553,7 +562,7 @@ public class ApplicationFragment extends Fragment {
                                 for (int i = 0; i < approverNameArray.length(); i++) {
                                     JSONObject approverObject = approverNameArray.optJSONObject(i);
                                     final String ApproverName = approverObject.optString("ApproverName");
-                                    tvApproverName.setText("Approver Name:" + ApproverName);
+                                    tvApproverName.setText(ApproverName);
                                 }
 
 
@@ -750,6 +759,7 @@ public class ApplicationFragment extends Fragment {
 
                             } else {
                                 applicantId = pref.getEmpId();
+                                Log.e(TAG, "applicantId: "+applicantId );
                                 getLeaveAllDetails();
                                 ((LeaveApplicationActivity) getContext()).approverHidden();
                                 // llShow.setVisibility(View.GONE);
@@ -1324,10 +1334,17 @@ public class ApplicationFragment extends Fragment {
 
 
     private void showDailyBrkUpDialog() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.CustomDialogNew);
+        /*AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.day_breakup_dialog, null);
-        dialogBuilder.setView(dialogView);
+        dialogBuilder.setView(dialogView);*/
+
+        Dialog dialogView = new Dialog(getContext(),R.style.CustomDialogNew2);
+        dialogView.setContentView(R.layout.day_breakup_dialog);
+        dialogView.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialogView.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialogView.getWindow().setGravity(Gravity.TOP);
+
         rvBrkupItem = (RecyclerView) dialogView.findViewById(R.id.rvBrkupItem);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -1352,7 +1369,7 @@ public class ApplicationFragment extends Fragment {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alert2.dismiss();
+                dialogView.dismiss();
                 if (category.equals("1") || category.equals("3")) {
                  //   showCompOffDialog();
                 } else {
@@ -1367,18 +1384,19 @@ public class ApplicationFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 dayBreakupListDetails.clear();
-                alert2.dismiss();
+                dialogView.dismiss();
                 endDate="";
                 tvEndDate.setText("");
             }
         });
+        dialogView.show();
 
-        alert2 = dialogBuilder.create();
+        /*alert2 = dialogBuilder.create();
         alert2.setCancelable(false);
         Window window = alert2.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.TOP);
-        alert2.show();
+        alert2.show();*/
     }
 
 
@@ -1834,10 +1852,18 @@ public class ApplicationFragment extends Fragment {
 
 
     private void showPreviewDialog() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.CustomDialogNew);
+        /*AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.preview_dialog, null);
-        dialogBuilder.setView(dialogView);
+        dialogBuilder.setView(dialogView);*/
+
+        Dialog dialogView = new Dialog(getContext(),R.style.CustomDialogNew2);
+        dialogView.setContentView(R.layout.preview_dialog);
+        dialogView.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialogView.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialogView.getWindow().setGravity(Gravity.TOP);
+
+
         rvPreviewItem = (RecyclerView) dialogView.findViewById(R.id.rvPreviewItem);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -1878,7 +1904,7 @@ public class ApplicationFragment extends Fragment {
         btnDiscard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alert3.dismiss();
+                dialogView.dismiss();
             }
         });
 
@@ -1891,15 +1917,14 @@ public class ApplicationFragment extends Fragment {
         btnDiscard.setText("Discard");
         btnSubmit.setText("Submit");
 
+        dialogView.show();
 
-        alert3 = dialogBuilder.create();
+        /*alert3 = dialogBuilder.create();
         alert3.setCancelable(false);
         Window window = alert3.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.TOP);
-        alert3.show();
-
-
+        alert3.show();*/
     }
 
     private void getPreviewItem(JSONObject jsonObject) {
@@ -2097,6 +2122,8 @@ public class ApplicationFragment extends Fragment {
                 +"\nSecurityCode:"+pref.getSecurityCode()
                 );
         AndroidNetworking.upload(AppData.url + "Leave/LeaveAdd")
+        //AndroidNetworking.upload("http://171.16.2.105/GeniusiOSApi/api/Leave/LeaveAdd")
+        //AndroidNetworking.upload(AppData.url + "Leave/LAMS_LeaveAdd")
                 .addMultipartParameter("CompanyID", pref.getEmpClintId())
                 .addMultipartParameter("EmployeeId", applicantId)
                 .addMultipartParameter("StartDate", startDate)
