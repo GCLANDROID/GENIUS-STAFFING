@@ -613,7 +613,7 @@
         <service
             android:name=".utility.LocationUpdaterService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="false" />
         <service
             android:name=".utility.LocationAlertIntentService"
             android:allowBackup="true" />
@@ -711,9 +711,12 @@
         <activity android:name=".activity.ITViewActivity" />
         <activity android:name=".activity.MPIN_SetupActivity" />
         <activity android:name=".activity.E_Pin_SetupLoginActivity" />
+        <activity android:name=".activity.ProfileNewActivity" />
+        <activity android:name=".activity.NewLeaveApplicationActivity"/>
         <activity
             android:name=".activity.SelfOnboardingChatBotActivity"
             android:theme="@style/FloatingChatTheme" />
+        <activity android:name=".activity.NewUserDashboardActivity"/>
 
         <service
             android:name=".FirebaseNotification.MyFirebaseMessagingService"
