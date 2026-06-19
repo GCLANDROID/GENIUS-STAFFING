@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.OfficalFragment"
+    android:orientation="vertical"
+    android:layout_marginStart="15dp"
+    android:layout_marginEnd="15dp"
+    android:paddingTop="10dp"
+    android:background="@drawable/background_16"
+    android:fitsSystemWindows="true">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:textSize="13sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Employee ID"
+                        android:textColor="@android:color/black"
+                        android:fontFamily="@font/open_sans_bold"/>
+                </LinearLayout>
+
+                <TextView
+                    android:textSize="14sp"
+                    android:id="@+id/tvEmplId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:paddingHorizontal="15dp"
+                    android:paddingVertical="5dp"
+                    android:minHeight="40dp"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/background_15"
+                    android:fontFamily="@font/open_sans_semi_bold"
+                    android:textColor="@color/text_color"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:visibility="invisible"
+                android:background="@color/barcolor"/>
+
+            <LinearLayout
+                android:id="@+id/lnEmpCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:textSize="13sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Employee Code"
+                        android:textColor="@android:color/black"
+                        android:fontFamily="@font/open_sans_bold"/>
+                </LinearLayout>
+
+                <TextView
+                    android:textSize="13sp"
+                    android:id="@+id/tvEmpCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:paddingHorizontal="15dp"
+                    android:paddingVertical="5dp"
+                    android:minHeight="40dp"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/background_15"
+                    android:fontFamily="@font/open_sans_semi_bold"
+                    android:textColor="@color/text_color"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:visibility="invisible"
+                android:background="@color/barcolor"></LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+
+                    <TextView
+                        android:textSize="13sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Employee Name"
+                        android:textAppearance="?android:textAppearanceSmall"
+                        android:textColor="@android:color/black"
+                        android:fontFamily="@font/open_sans_bold" />
+                </LinearLayout>
+
+                <TextView
+                    android:textSize="13sp"
+                    android:id="@+id/tvEmpName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:paddingHorizontal="15dp"
+                    android:paddingVertical="5dp"
+                    android:minHeight="40dp"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/background_15"
+                    android:fontFamily="@font/open_sans_semi_bold"
+                    android:textColor="@color/text_color"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:visibility="invisible"
+                android:background="@color/barcolor"></LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:textSize="13sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Date of Joining"
+                        android:textAppearance="?android:textAppearanceSmall"
+                        android:textColor="@android:color/black"
+                        android:fontFamily="@font/open_sans_bold"/>
+                </LinearLayout>
+
+                <TextView
+                    android:textSize="13sp"
+                    android:id="@+id/tvDOJ"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:paddingHorizontal="15dp"
+                    android:paddingVertical="5dp"
+                    android:minHeight="40dp"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/background_15"
+                    android:fontFamily="@font/open_sans_semi_bold"
+                    android:textColor="@color/text_color"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:visibility="invisible"
+                android:background="@color/barcolor"/>
+
+            <LinearLayout
+                android:id="@+id/lnDept"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:textSize="13sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Department"
+                        android:textAppearance="?android:textAppearanceSmall"
+                        android:textColor="@android:color/black"
+                        android:fontFamily="@font/open_sans_bold"/>
+                </LinearLayout>
+
+                <TextView
+                    android:textSize="13sp"
+                    android:id="@+id/tvDepartment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:paddingHorizontal="15dp"
+                    android:paddingVertical="5dp"
+                    android:minHeight="40dp"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/background_15"
+                    android:fontFamily="@font/open_sans_semi_bold"
+                    android:textColor="@color/text_color"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:visibility="invisible"
+                android:background="@color/barcolor"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5">
+
+                    <TextView
+                        android:textSize="13sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Designation"
+                        android:textAppearance="?android:textAppearanceSmall"
+                        android:textColor="@android:color/black"
+                        android:fontFamily="@font/open_sans_bold"/>
+                </LinearLayout>
+
+                <TextView
+                    android:textSize="13sp"
+                    android:id="@+id/tvDesignation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:paddingHorizontal="15dp"
+                    android:paddingVertical="5dp"
+                    android:minHeight="40dp"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/background_15"
+                    android:fontFamily="@font/open_sans_semi_bold"
+                    android:textColor="@color/text_color"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:visibility="invisible"
+                android:background="@color/barcolor"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="30dp"
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:textSize="13sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Location"
+                        android:textAppearance="?android:textAppearanceSmall"
+                        android:textColor="@android:color/black"
+                        android:fontFamily="@font/open_sans_bold" />
+                </LinearLayout>
+
+                <TextView
+                    android:textSize="13sp"
+                    android:id="@+id/tvLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:paddingHorizontal="15dp"
+                    android:paddingVertical="5dp"
+                    android:minHeight="40dp"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/background_15"
+                    android:fontFamily="@font/open_sans_semi_bold"
+                    android:textColor="@color/text_color"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:visibility="invisible"
+        android:background="@color/barcolor"/>
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+</LinearLayout>
