@@ -3,10 +3,209 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginBottom="10dp"
     android:orientation="vertical">
 
-    <androidx.cardview.widget.CardView
+    <LinearLayout
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="10dp"
+        android:elevation="7dp"
+        android:background="@drawable/lldesign20"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:paddingHorizontal="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/docs"/>
+            <TextView
+                android:id="@+id/tvDocumentName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Mediclaim_Card_2026"
+                android:layout_marginStart="5dp"
+                android:textColor="#5b5656"
+                android:textSize="13sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:fontFamily="@font/open_sans_semi_bold"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#f8f0f0"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="3dp"
+            android:layout_marginBottom="10dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/img1"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/paper_1"
+                    android:layout_marginStart="10dp"
+                    card_view:layout_constraintBottom_toBottomOf="parent"
+                    card_view:layout_constraintStart_toStartOf="parent"
+                    card_view:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/txtType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Type "
+                    android:textColor="@color/pink1"
+                    android:layout_marginStart="5dp"
+                    android:textSize="13sp"
+                    android:fontFamily="@font/open_sans_medium"
+                    card_view:layout_constraintBottom_toBottomOf="@+id/img1"
+                    card_view:layout_constraintStart_toEndOf="@+id/img1"
+                    card_view:layout_constraintTop_toTopOf="@+id/img1"/>
+
+                <TextView
+                    android:id="@+id/tvDocumentType"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginStart="5dp"
+                    android:text="Medical Card"
+                    android:textSize="13sp"
+                    android:textColor="#605858"
+                    android:fontFamily="@font/open_sans_semi_bold"
+                    card_view:layout_constraintBottom_toBottomOf="parent"
+                    card_view:layout_constraintEnd_toEndOf="parent"
+                    card_view:layout_constraintStart_toEndOf="@+id/txtType"
+                    card_view:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/img2"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/calendar_1"
+                    android:layout_marginStart="10dp"
+                    card_view:layout_constraintBottom_toBottomOf="parent"
+                    card_view:layout_constraintStart_toStartOf="parent"
+                    card_view:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/txtType1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Uploaded On :"
+                    android:textSize="13sp"
+                    android:textColor="@color/text_color_3"
+                    android:layout_marginStart="5dp"
+                    android:fontFamily="@font/open_sans_medium"
+                    card_view:layout_constraintBottom_toBottomOf="@+id/img2"
+                    card_view:layout_constraintStart_toEndOf="@+id/img2"
+                    card_view:layout_constraintTop_toTopOf="@+id/img2"/>
+
+                <TextView
+                    android:id="@+id/tvCreatedOn"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginStart="5dp"
+                    android:text="30 Jan 2026"
+                    android:fontFamily="@font/open_sans_medium"
+                    card_view:layout_constraintBottom_toBottomOf="parent"
+                    card_view:layout_constraintEnd_toEndOf="parent"
+                    card_view:layout_constraintStart_toEndOf="@+id/txtType1"
+                    card_view:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/img3"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/approved_order_1"
+                    android:layout_marginStart="10dp"
+                    card_view:layout_constraintBottom_toBottomOf="parent"
+                    card_view:layout_constraintStart_toStartOf="parent"
+                    card_view:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/txtType2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Approval Status : "
+                    android:textSize="13sp"
+                    android:textColor="@color/text_color_3"
+                    android:layout_marginStart="5dp"
+                    android:fontFamily="@font/open_sans_medium"
+                    card_view:layout_constraintBottom_toBottomOf="@+id/img3"
+                    card_view:layout_constraintStart_toEndOf="@+id/img3"
+                    card_view:layout_constraintTop_toTopOf="@+id/img3"/>
+
+                <TextView
+                    android:id="@+id/tvAEMStatusName"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginStart="5dp"
+                    android:text="Approved"
+                    android:textSize="13sp"
+                    android:fontFamily="@font/open_sans_medium"
+                    android:textColor="@color/black"
+                    card_view:layout_constraintBottom_toBottomOf="parent"
+                    card_view:layout_constraintEnd_toEndOf="parent"
+                    card_view:layout_constraintStart_toEndOf="@+id/txtType2"
+                    card_view:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            
+            <Button
+                android:id="@+id/btnViewDoc"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/buttondesign2"
+                android:backgroundTint="@color/pink1"
+                android:layout_marginTop="15dp"
+                android:text="View Uploaded Document"
+                android:textSize="13sp"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:fontFamily="@font/open_sans_semi_bold"
+                android:layout_marginBottom="15dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <!--<androidx.cardview.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -27,14 +226,13 @@
 
                 <TextView
                     android:textAlignment="center"
-                    android:id="@+id/tvDocumentName"
                     android:textStyle="bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/doccolor"
                     android:fontFamily="serif"
                     android:textSize="13sp"
-                    android:text="305.00"></TextView>
+                    android:text="305.00"/>
 
 
 
@@ -189,8 +387,5 @@
 
             </LinearLayout>
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-
-
+    </androidx.cardview.widget.CardView>-->
 </LinearLayout>

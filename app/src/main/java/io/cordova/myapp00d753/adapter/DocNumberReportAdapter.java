@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -31,6 +33,18 @@ public class DocNumberReportAdapter extends RecyclerView.Adapter<DocNumberReport
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, final int i) {
+        if (itemList.get(i).getDocName().equalsIgnoreCase("approved")){
+            myViewHolder.imgDoc.setImageResource(R.drawable.approve_doc);
+            myViewHolder.tvDocName.setTextColor(ContextCompat.getColor(context, R.color.text_color_2));
+        } else if(itemList.get(i).getDocName().equalsIgnoreCase("pending")
+                || itemList.get(i).getDocName().equalsIgnoreCase("approval pending")){
+            myViewHolder.imgDoc.setImageResource(R.drawable.pending_doc);
+            myViewHolder.tvDocName.setTextColor(ContextCompat.getColor(context, R.color.pink1));
+        } else if(itemList.get(i).getDocName().equalsIgnoreCase("reject")
+                || itemList.get(i).getDocName().equalsIgnoreCase("rejected")){
+            myViewHolder.imgDoc.setImageResource(R.drawable.rejected_doc);
+            myViewHolder.tvDocName.setTextColor(ContextCompat.getColor(context, R.color.red));
+        }
         myViewHolder.tvDocName.setText(itemList.get(i).getDocName());
         myViewHolder.tvTotalDoc.setText(itemList.get(i).getDocNumber());
         myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -42,8 +56,6 @@ public class DocNumberReportAdapter extends RecyclerView.Adapter<DocNumberReport
                 context.startActivity(intent);
             }
         });
-
-
     }
 
     @Override
@@ -53,11 +65,12 @@ public class DocNumberReportAdapter extends RecyclerView.Adapter<DocNumberReport
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvDocName,tvTotalDoc;
+        ImageView imgDoc;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tvDocName=(TextView)itemView.findViewById(R.id.tvDocName);
             tvTotalDoc=(TextView)itemView.findViewById(R.id.tvTotalDoc);
-
+            imgDoc = (ImageView)itemView.findViewById(R.id.imgDoc);
         }
     }
 
