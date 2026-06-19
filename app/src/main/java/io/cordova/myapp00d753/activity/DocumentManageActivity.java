@@ -62,7 +62,7 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 
-import id.zelory.compressor.Compressor;
+//import id.zelory.compressor.Compressor;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.module.AttendanceService;
 import io.cordova.myapp00d753.module.DocumentManageModule;
@@ -113,7 +113,8 @@ public class DocumentManageActivity extends AppCompatActivity {
     Pref pref;
     String subDocumentID;
     EditText etReferenceNumber;
-    LinearLayout llSave;
+    //LinearLayout llSave;
+    Button llSave;
     AlertDialog alerDialog1, alertDialog;
     String securityCode;
 
@@ -125,7 +126,7 @@ public class DocumentManageActivity extends AppCompatActivity {
     File pictureFile;
     AlertDialog alerDialog3;
     public int PIC_CODE=0;;
-
+    TextView tvDocumentType,tvDocumentSelect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,9 +148,12 @@ public class DocumentManageActivity extends AppCompatActivity {
         llUpload=(LinearLayout)findViewById(R.id.llUpload);
 
 
-        llSp = (LinearLayout) findViewById(R.id.llSp);
+        //llSp = (LinearLayout) findViewById(R.id.llSp);
         etReferenceNumber = (EditText) findViewById(R.id.etReferenceNumber);
-        llSave = (LinearLayout) findViewById(R.id.llSave);
+        tvDocumentType = (TextView) findViewById(R.id.tvDocumentType);
+        tvDocumentSelect = (TextView) findViewById(R.id.tvDocumentSelect);
+        llSave = (Button) findViewById(R.id.llSave);
+        //llSave = (LinearLayout) findViewById(R.id.llSave);
         setMainDoc();
         //TODO: new api
         /*JSONObject obj=new JSONObject();
@@ -221,7 +225,7 @@ public class DocumentManageActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
                 mainDocument = mainDocType.get(i).getDocID();
-
+                tvDocumentType.setText(mainDocType.get(i).getDocumentType());
                 setSubDocType();
                 //TODO: new api
                /* JSONObject obj=new JSONObject();
@@ -250,6 +254,7 @@ public class DocumentManageActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 subDocumentID = subDocType.get(i).getDocumentID();
                 document = subDocType.get(i).getDocument();
+                tvDocumentSelect.setText(subDocType.get(i).getDocument());
                 Log.d("document", subDocumentID);
             }
 
@@ -264,8 +269,18 @@ public class DocumentManageActivity extends AppCompatActivity {
                 openCameraDialog();
             }
         });
-
-
+        tvDocumentType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                spDocType.performClick();
+            }
+        });
+        tvDocumentSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                spDoc.performClick();
+            }
+        });
 
         llSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -566,7 +581,7 @@ public class DocumentManageActivity extends AppCompatActivity {
                      pictureFile = (File)data.getExtras().get("picture");
                     Log.d("fjjgk",pictureFile.toString());
                     try {
-                        compressedImageFile = new Compressor(this).compressToFile(pictureFile);
+                        compressedImageFile = new ImageZipper(this).compressToFile(pictureFile);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -784,7 +799,7 @@ public class DocumentManageActivity extends AppCompatActivity {
 
 
     private void setSubDocType() {
-        llSp.setVisibility(View.VISIBLE);
+        //llSp.setVisibility(View.VISIBLE);
         String surl = AppData.url+"gcl_DigitalDocumentType?DocID=1&DocumentID=" + mainDocument + "&DbOperation=2&SecurityCode=" + pref.getSecurityCode();
         final ProgressDialog progressBar = new ProgressDialog(this);
         progressBar.setCancelable(true);//you can cancel it by pressing back button
