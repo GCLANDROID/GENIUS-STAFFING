@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:aandroid="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragment.PersonalFragment"
+    android:orientation="vertical"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:paddingTop="20dp"
+    android:background="@drawable/background_16"
+    android:fitsSystemWindows="true">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/gender"/>
+
+                <TextView
+                    android:textSize="13sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Gender:"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@android:color/black"
+                    android:fontFamily="@font/open_sans_bold" />
+            </LinearLayout>
+
+            <TextView
+                android:textSize="13sp"
+                android:id="@+id/tvGender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
+                android:minHeight="40dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/background_15"
+                android:fontFamily="@font/open_sans_semi_bold"
+                android:textColor="@color/text_color"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/date_of_birth"/>
+
+                <TextView
+                    android:textSize="13sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Date of Birth:"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@android:color/black"
+                    android:fontFamily="@font/open_sans_bold"/>
+            </LinearLayout>
+
+            <TextView
+                android:textSize="13sp"
+                android:id="@+id/tvEmpCodeDOB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
+                android:minHeight="40dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/background_15"
+                android:fontFamily="@font/open_sans_semi_bold"
+                android:textColor="@color/text_color"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/family_1"/>
+
+                <TextView
+                    android:textSize="13sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Guardian Name:"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@android:color/black"
+                    android:fontFamily="@font/open_sans_bold" />
+            </LinearLayout>
+
+            <TextView
+                android:textSize="13sp"
+                android:id="@+id/tvGurdianName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
+                android:minHeight="40dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/background_15"
+                android:fontFamily="@font/open_sans_semi_bold"
+                android:textColor="@color/text_color"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/relationship_1"/>
+
+                <TextView
+                    android:textSize="13sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Relationship:"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@android:color/black"
+                    android:fontFamily="@font/open_sans_bold" />
+            </LinearLayout>
+
+            <TextView
+                android:textSize="13sp"
+                android:id="@+id/tvRealtionShip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
+                android:minHeight="40dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/background_15"
+                android:fontFamily="@font/open_sans_semi_bold"
+                android:textColor="@color/text_color"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/qualifications_1"/>
+
+                <TextView
+                    android:textSize="13sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Qualification:"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@android:color/black"
+                    android:fontFamily="@font/open_sans_bold"/>
+            </LinearLayout>
+
+            <TextView
+                android:textSize="13sp"
+                android:id="@+id/tvQualification"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
+                android:minHeight="40dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/background_15"
+                android:fontFamily="@font/open_sans_semi_bold"
+                android:textColor="@color/text_color"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/marital_stus_1"/>
+
+                <TextView
+                    android:textSize="13sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Marital Status:"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@android:color/black"
+                    android:fontFamily="@font/open_sans_bold"/>
+            </LinearLayout>
+
+            <TextView
+                android:textSize="13sp"
+                android:id="@+id/tvMarital"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
+                android:minHeight="40dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/background_15"
+                android:fontFamily="@font/open_sans_semi_bold"
+                android:textColor="@color/text_color"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/qualifications_1"/>
+
+                <TextView
+                    android:textSize="13sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Blood Group:"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@android:color/black"
+                    android:fontFamily="@font/open_sans_bold"/>
+            </LinearLayout>
+
+            <TextView
+                android:textSize="13sp"
+                android:id="@+id/tvBloodGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
+                android:minHeight="40dp"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="30dp"
+                android:background="@drawable/background_15"
+                android:fontFamily="@font/open_sans_semi_bold"
+                android:textColor="@color/text_color"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+
+</LinearLayout>
