@@ -100,7 +100,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
         RedColor = ContextCompat.getColor(this, R.color.misscolor);
         String color = "<font color='#EE0000'>*</font>";
 
-        newPassword="New Password:";
+        newPassword="New Password";
 
         tvNewPassword.setText(Html.fromHtml(newPassword + color));
 
