@@ -249,7 +249,8 @@ public class FeedBackRatingActivity extends AppCompatActivity {
         if (itemList.get(position).isSelected() == true) {
             item.add(itemList.get(position).getQuestionid() + "-" + itemList.get(position).getAnswervalue());
         } else {
-            item.remove(position);
+            item.remove(itemList.get(position).getQuestionid() + "-" + itemList.get(position).getAnswervalue());
+            //item.remove(position);
         }
         Log.d("arpan", item.toString());
         String i = item.toString();
