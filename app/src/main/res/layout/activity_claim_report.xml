@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,7 +8,335 @@
     android:orientation="vertical"
     android:background="@android:color/white"
     android:fitsSystemWindows="true">
-    <LinearLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:background="@mipmap/group_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/imgBack"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="35dp"
+        android:src="@drawable/arrow_left_new"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imgHome"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="35dp"
+        android:src="@drawable/home_new"
+        android:layout_marginEnd="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imgSearch"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/searchicon"
+        android:layout_marginEnd="10dp"
+        android:padding="3dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imgHome"
+        app:layout_constraintEnd_toStartOf="@+id/imgHome"
+        app:layout_constraintTop_toTopOf="@+id/imgHome" />
+
+    <TextView
+        android:id="@+id/tvToolBar"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="25dp"
+        android:background="@color/white"
+        android:fontFamily="@font/open_sans_semi_bold"
+        android:gravity="center"
+        android:text="Reimbursement Report"
+        android:textColor="@color/new_header_text_color"
+        android:textSize="15sp"
+        app:layout_constraintTop_toBottomOf="@+id/imgBack" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_gravity="center"
+        android:background="@drawable/background_16"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvToolBar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.6">
+
+                        <TextView
+                            android:id="@+id/tvSYear"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/open_sans_semi_bold"
+                            android:text="Select Year"
+                            android:textAppearance="?android:textAppearanceMedium"
+                            android:textColor="@android:color/black"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <LinearLayout
+                            android:id="@+id/llYear"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:background="@drawable/lldesign4"
+                            android:gravity="center">
+
+                            <TextView
+                                android:id="@+id/tvYear"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/open_sans_medium"
+                                android:text="Please select"
+                                android:textColor="@android:color/black" />
+
+                            <Spinner
+                                android:id="@+id/spYear"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:visibility="gone"></Spinner>
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.6">
+
+                        <TextView
+                            android:id="@+id/tvSMonth"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/open_sans_semi_bold"
+                            android:text="Select Month"
+                            android:textAppearance="?android:textAppearanceMedium"
+                            android:textColor="@android:color/black"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <LinearLayout
+                            android:id="@+id/llMonth"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:background="@drawable/lldesign4"
+                            android:gravity="center">
+
+                            <TextView
+                                android:id="@+id/tvMonth"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/open_sans_medium"
+                                android:text="Please select"
+                                android:textColor="@android:color/black" />
+
+                            <Spinner
+                                android:id="@+id/spMonth"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:visibility="gone"></Spinner>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp">
+
+                    <Button
+                        android:id="@+id/btnSubmit"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/buttondesign3"
+                        android:backgroundTint="@color/pink1"
+                        android:fontFamily="@font/open_sans_semi_bold"
+                        android:text="Search"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llLoader"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <ProgressBar
+                    android:layout_width="50dp"
+                    android:layout_height="50dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llSearch"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="60dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/gradientdesign1"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:text="Search"
+                    android:textAppearance="?android:textAppearanceSmall"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llMain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/lldesign"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvItem"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"></androidx.recyclerview.widget.RecyclerView>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llNodata"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="20dp"
+                    android:src="@drawable/problemicon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="No data found"
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llAgain"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/imgAgain"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/againicon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Try Again"
+                    android:textColor="@android:color/black" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!--<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="?android:actionBarSize"
         android:orientation="horizontal"
@@ -288,6 +616,301 @@
             android:text="Try Again"
             android:textColor="@android:color/black"
             android:layout_marginTop="10dp"/>
+    </LinearLayout>-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.ClaimReportActivity"
+    android:orientation="vertical"
+    android:background="@android:color/white"
+    android:fitsSystemWindows="true">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?android:actionBarSize"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            >
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/backimg"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center"
+                android:id="@+id/imgBack"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/toolbartextsize"
+                android:text="Reimbursement Report"
+                />
+            <TextView
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:id="@+id/tvReportMonth"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="right">
+            <ImageView
+                android:id="@+id/imgSearch"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/searchicon"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"/>
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/homeimg"
+                android:layout_gravity="center"
+                android:layout_marginRight="15dp"
+                android:id="@+id/imgHome"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6">
+                <TextView
+                    android:id="@+id/tvSYear"
+                    android:textSize="11sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@android:color/black"
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:text="Select Year"
+                    android:layout_marginTop="5dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:id="@+id/llYear"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/lldesign4"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/tvYear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="please select"
+                        android:textColor="@android:color/black" />
+
+                    <Spinner
+                        android:id="@+id/spYear"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone"></Spinner>
+                </LinearLayout>
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6">
+                <TextView
+                    android:id="@+id/tvSMonth"
+                    android:textSize="11sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@android:color/black"
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:text="Select Month"
+                    android:layout_marginTop="5dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:background="@drawable/lldesign4"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center"
+                    android:id="@+id/llMonth">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:text="please select"
+                        android:id="@+id/tvMonth"/>
+                    <Spinner
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/spMonth"
+                        android:visibility="gone"></Spinner>
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp">
+            <Button
+                android:id="@+id/btnSubmit"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/gradientdesign1"
+                android:textAllCaps="false"
+                android:textSize="14sp"
+                android:fontFamily="serif"
+                android:textColor="@android:color/white"
+                android:text="Search"/>
+        </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/llLoader"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="visible">
+        <ProgressBar
+            android:layout_width="50dp"
+            android:layout_height="50dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/gradientdesign1"
+        android:orientation="horizontal"
+        android:id="@+id/llSearch"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:layout_marginLeft="5dp"
+            android:textColor="@android:color/white"
+            android:text="Search"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:id="@+id/llMain"
+        android:background="@drawable/lldesign">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/rvItem"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"></androidx.recyclerview.widget.RecyclerView>
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:id="@+id/llNodata"
+        >
+        <ImageView
+            android:layout_marginTop="20dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/problemicon"/>
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No data found"
+            android:textStyle="bold"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@android:color/black"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:id="@+id/llAgain">
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/againicon"
+            android:id="@+id/imgAgain"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Try Again"
+            android:textColor="@android:color/black"
+            android:layout_marginTop="10dp"/>
+    </LinearLayout>
+
+</LinearLayout>-->
