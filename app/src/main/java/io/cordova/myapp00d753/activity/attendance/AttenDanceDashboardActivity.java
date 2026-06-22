@@ -84,6 +84,7 @@ import io.cordova.myapp00d753.activity.NEW.NEW_AttendanceReportActivity;
 import io.cordova.myapp00d753.activity.NEW.NEW_HolidayMarkingActivity;
 import io.cordova.myapp00d753.activity.NEW.NEW_HolidayViewActivity;
 import io.cordova.myapp00d753.activity.NEW.NEW_WeeklyOffAttendanceActivity;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.PFDashBoardActivity;
 import io.cordova.myapp00d753.activity.QRCodeScannerActivity;
 import io.cordova.myapp00d753.activity.SKF.HolidayViewActivity;
@@ -1036,7 +1037,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else if (view == imgHome) {
-            Intent intent = new Intent(AttenDanceDashboardActivity.this, EmployeeDashBoardActivity.class);
+            Intent intent = new Intent(AttenDanceDashboardActivity.this, NewUserDashboardActivity.class);
             startActivity(intent);
             finish();
         } else if(view == imgDrawerClose){
