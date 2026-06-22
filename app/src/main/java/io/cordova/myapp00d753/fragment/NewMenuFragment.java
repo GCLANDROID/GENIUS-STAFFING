@@ -3,6 +3,7 @@ package io.cordova.myapp00d753.fragment;
 import static io.cordova.myapp00d753.activity.EmployeeDashBoardActivity.getDaysDifference;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -63,26 +65,33 @@ import io.cordova.myapp00d753.activity.FMSNewClaimActivity;
 import io.cordova.myapp00d753.activity.FormSixteenActivity;
 import io.cordova.myapp00d753.activity.ITViewActivity;
 import io.cordova.myapp00d753.activity.IncomeTaxDashboardActivity;
+import io.cordova.myapp00d753.activity.LeaveApplicationActivity;
 import io.cordova.myapp00d753.activity.LoginActivity;
 import io.cordova.myapp00d753.activity.NewClaimActivity;
 import io.cordova.myapp00d753.activity.OthersPayoutActivity;
 import io.cordova.myapp00d753.activity.PFDashBoardActivity;
 import io.cordova.myapp00d753.activity.PFManualActivity;
 import io.cordova.myapp00d753.activity.PayrollActivity;
+import io.cordova.myapp00d753.activity.ProfileActivity;
+import io.cordova.myapp00d753.activity.ProfileNewActivity;
 import io.cordova.myapp00d753.activity.RecktitRemActivity;
 import io.cordova.myapp00d753.activity.RemDashBoardActivity;
 import io.cordova.myapp00d753.activity.RemManageDashBoardActivity;
 import io.cordova.myapp00d753.activity.SalaryActivity;
 import io.cordova.myapp00d753.activity.TempDashBoardActivity;
+import io.cordova.myapp00d753.activity.attendance.AttenDanceDashboardActivity;
 import io.cordova.myapp00d753.activity.metso.MetsoNewReimbursementClaimActivity;
 import io.cordova.myapp00d753.activity.metso.MetsoReimbursementDeleteActivity;
 import io.cordova.myapp00d753.activity.metso.MetsoReimbursementReportActivity;
 import io.cordova.myapp00d753.adapter.MenuItemAdapter;
+import io.cordova.myapp00d753.adapter.NeedToActAdapter;
 import io.cordova.myapp00d753.adapter.NewMenuAdapter;
 import io.cordova.myapp00d753.adapter.NotiAdapter;
 import io.cordova.myapp00d753.adapter.NotificationModel;
 import io.cordova.myapp00d753.adapter.PFDocumentAdapter;
+import io.cordova.myapp00d753.bluedart.BlueDartAttenDanceDashboardActivity;
 import io.cordova.myapp00d753.module.MenuItemModel;
+import io.cordova.myapp00d753.module.NeedToActModel;
 import io.cordova.myapp00d753.module.PFDocumentModule;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
@@ -1099,6 +1108,145 @@ public class NewMenuFragment extends Fragment {
         dayscalculation= Math.toIntExact(daysBetween);
         return  dayscalculation+1;
 
+    }
+
+    public void getNeedToActData(JSONObject objNeedToAct,String flag) {
+        final ProgressDialog pd=new ProgressDialog(getActivity());
+        pd.setMessage("Loading.....");
+        pd.show();
+        AndroidNetworking.post(AppData.NEED_TO_ACT)
+                .addJSONObjectBody(objNeedToAct)
+                .addHeaders("SecurityKey", "gStbCQYjYBDCQ4fkGoQSUj7LYe8uVdZ1")
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e(TAG, "NEED_TO_ACT: "+response.toString(4));
+                            pd.dismiss();
+                            JSONObject job = response;
+                            boolean isSuccess = job.optBoolean("Success");
+                            if (isSuccess){
+                                JSONObject Data = job.getJSONObject("Data");
+                                JSONArray Table = Data.optJSONArray("Table");
+                                int mandatoryPopupCount = 0;
+                                if (Table.length() > 0){
+                                    for (int i = 0; i < Table.length(); i++) {
+                                        JSONObject object = Table.getJSONObject(i);
+                                        /*int LetterID = object.optInt("LetterID");
+                                        String MasterID = object.optString("MasterID");
+                                        String Domain = object.optString("Domain");
+                                        String DocName = object.optString("DocName");
+                                        String Category = object.optString("Category");
+                                        String ExpDate = object.optString("ExpDate");
+                                        int AcceptanceType = object.optInt("AcceptanceType");*/
+                                        String DocName = object.optString("DocName");
+                                        int IsMandatoryPopup = object.optInt("IsMandatoryPopup");
+                                        String ActUrl = object.optString("ActUrl");
+                                        if(IsMandatoryPopup == 1){
+                                            mandatoryPopupCount ++;
+                                            openActionRequiredPopUp(DocName,ActUrl);
+                                        }
+                                    }
+                                    if(mandatoryPopupCount == 0){
+                                        if(flag.equalsIgnoreCase("attendance")){
+                                            if (pref.getEmpClintId().equalsIgnoreCase("AEMCLI1810001410")) {
+                                                Intent intent = new Intent(getActivity(), BlueDartAttenDanceDashboardActivity.class);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                getActivity().startActivity(intent);
+                                            } else {
+                                                Intent intent = new Intent(getActivity(), AttenDanceDashboardActivity.class);
+                                                intent.putExtra("leaveFlag",leaveFlag);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                getActivity().startActivity(intent);
+                                            }
+                                        } else if(flag.equalsIgnoreCase("leave")){
+                                            if (isLiveStatus_LeaveApplication.equals("1")){
+                                                Intent intent = new Intent(getActivity(), ITViewActivity.class);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                intent.putExtra("url", pref.getLeaveApplicationURL());
+                                                getActivity().startActivity(intent);
+                                            } else {
+                                                Intent intent=new Intent(getActivity(), LeaveApplicationActivity.class);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                getActivity().startActivity(intent);
+                                            }
+                                        } else if(flag.equalsIgnoreCase("profile")){
+                                            Intent intent=new Intent(getActivity(), ProfileNewActivity.class);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            getActivity().startActivity(intent);
+                                        } else if(flag.equalsIgnoreCase("payroll")) {
+                                            openPayrollPopUp();
+                                        }
+                                    }
+                                } else {
+                                    if(flag.equalsIgnoreCase("attendance")){
+                                        if (pref.getEmpClintId().equalsIgnoreCase("AEMCLI1810001410")) {
+                                            Intent intent = new Intent(getActivity(), BlueDartAttenDanceDashboardActivity.class);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            getActivity().startActivity(intent);
+                                        } else {
+                                            Intent intent = new Intent(getActivity(), AttenDanceDashboardActivity.class);
+                                            intent.putExtra("leaveFlag",leaveFlag);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            getActivity().startActivity(intent);
+                                        }
+                                    } else if(flag.equalsIgnoreCase("leave")){
+                                        if (isLiveStatus_LeaveApplication.equals("1")){
+                                            Intent intent = new Intent(getActivity(), ITViewActivity.class);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            intent.putExtra("url", pref.getLeaveApplicationURL());
+                                            getActivity().startActivity(intent);
+                                        } else {
+                                            Intent intent=new Intent(getActivity(), LeaveApplicationActivity.class);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            getActivity().startActivity(intent);
+                                        }
+                                    } else if(flag.equalsIgnoreCase("profile")){
+                                        Intent intent=new Intent(getActivity(), ProfileNewActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        getActivity().startActivity(intent);
+                                    } else if(flag.equalsIgnoreCase("payroll")) {
+                                        openPayrollPopUp();
+                                    }
+                                }
+                            } else {
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        pd.dismiss();
+                        Log.e(TAG, "NEED_TO_ACT_error: "+anError.getErrorBody());
+                    }
+                });
+    }
+
+    public void openActionRequiredPopUp(String docName, String actUrl){
+        Dialog dialog = new Dialog(getActivity(),R.style.CustomDialogNew2);
+        dialog.setContentView(R.layout.action_requried_popup);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.setCancelable(false);
+        TextView tvDocName = dialog.findViewById(R.id.tvDocName);
+        Button btnAccept = dialog.findViewById(R.id.btnAccept);
+        tvDocName.setText(docName);
+        btnAccept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(actUrl));
+                startActivity(intent);
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
 
