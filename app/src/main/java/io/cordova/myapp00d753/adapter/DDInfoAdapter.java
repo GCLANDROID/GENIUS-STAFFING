@@ -58,29 +58,6 @@ public class DDInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             if (position%2 == 0){
                 ((MyViewholder) holder).llMain.setBackgroundResource(R.drawable.background_12);
             }
-            /*if (ddInfoList.get(position).getStatus().equals("1")){
-                ((MyViewholder) holder).imgStatus.setImageDrawable(
-                        ContextCompat.getDrawable(context, R.drawable.available)
-                );
-            } else if(ddInfoList.get(position).getStatus().equals("2")){
-                ((MyViewholder) holder).imgStatus.setImageDrawable(
-                        ContextCompat.getDrawable(context, R.drawable.pending)
-                );
-            } else if(ddInfoList.get(position).getStatus().equals("3")){
-                ((MyViewholder) holder).imgStatus.setImageDrawable(
-                        ContextCompat.getDrawable(context, R.drawable.missing)
-                );
-            }*/
-
-            /*if (needToActModelList.get(position).acceptanceType == 0 || needToActModelList.get(position).acceptanceType == 3){
-                holder.txtButton.setText("View Document");
-                holder.actionImage.setImageResource(R.drawable.check_mark);
-                holder.llMain.setBackgroundResource(R.drawable.design_green_outline);
-            } else {
-                holder.txtButton.setText("Accept");
-                holder.actionImage.setImageResource(R.drawable.double_tap);
-                holder.llMain.setBackgroundResource(R.drawable.lldesign_error_2);
-            }*/
         } else {
 
         }
