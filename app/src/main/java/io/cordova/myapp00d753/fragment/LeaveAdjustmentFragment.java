@@ -1173,7 +1173,7 @@ public class LeaveAdjustmentFragment extends Fragment {
 
         ImageView imgCancel = dialogLocationPopUp.findViewById(R.id.imgCancel);
         TextView txtSelectLocation = dialogLocationPopUp.findViewById(R.id.txtSelectLocation);
-        TextView textView = dialogLocationPopUp.findViewById(R.id.textView);
+        TextView textView = dialogLocationPopUp.findViewById(R.id.txtPopupHeadline);
         TextView tvLocationTitle = dialogLocationPopUp.findViewById(R.id.tvLocationTitle);
         tvLocationTitle.setVisibility(View.GONE);
         txtSelectLocation.setVisibility(View.GONE);
