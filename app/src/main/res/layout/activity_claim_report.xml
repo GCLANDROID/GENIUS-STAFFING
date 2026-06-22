@@ -287,13 +287,14 @@
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_marginTop="20dp"
-                    android:src="@drawable/problemicon" />
+                    android:src="@drawable/problemicon"
+                    app:tint="@color/pink1"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -301,8 +302,8 @@
                     android:layout_marginTop="10dp"
                     android:text="No data found"
                     android:textAppearance="?android:textAppearanceMedium"
-                    android:textColor="@android:color/black"
-                    android:textStyle="bold" />
+                    android:textColor="@color/text_color_3"
+                    android:textStyle="bold"/>
             </LinearLayout>
 
             <LinearLayout
