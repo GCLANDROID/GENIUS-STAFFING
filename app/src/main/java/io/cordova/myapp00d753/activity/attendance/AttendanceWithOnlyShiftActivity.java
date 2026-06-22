@@ -130,7 +130,7 @@ public class AttendanceWithOnlyShiftActivity extends AppCompatActivity implement
     AlertDialog alertDialog;
     private static final int REQUEST_PHONE_STATE = 1;
     String phoneNumber;
-    ImageView imhHome;
+    ImageView imgHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -281,7 +281,7 @@ public class AttendanceWithOnlyShiftActivity extends AppCompatActivity implement
         txtCurrentLocation = findViewById(R.id.txtCurrentLocation);
         imgBack = findViewById(R.id.imgBack);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        imhHome=(ImageView)findViewById(R.id.imhHome);
+        imgHome =(ImageView)findViewById(R.id.imgHome);
         //smf = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fmGoogleMaps);
         //smf.getMapAsync(this);
 
@@ -307,7 +307,7 @@ public class AttendanceWithOnlyShiftActivity extends AppCompatActivity implement
             e.printStackTrace();
         }*/
 
-        imhHome.setOnClickListener(new View.OnClickListener() {
+        imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(AttendanceWithOnlyShiftActivity.this, EmployeeDashBoardActivity.class);
@@ -347,7 +347,7 @@ public class AttendanceWithOnlyShiftActivity extends AppCompatActivity implement
         TextView txtSelectLocation = shiftAndLocationDialog.findViewById(R.id.txtSelectLocation);
         TextView txtErrorShift = shiftAndLocationDialog.findViewById(R.id.txtErrorShift);
         TextView txtErrorLocation = shiftAndLocationDialog.findViewById(R.id.txtErrorLocation);
-        TextView textView=shiftAndLocationDialog.findViewById(R.id.textView);
+        TextView textView=shiftAndLocationDialog.findViewById(R.id.txtPopupHeadline);
         textView.setText("Select shift");
         Spinner spShift = shiftAndLocationDialog.findViewById(R.id.spShift);
         Spinner spLocation = shiftAndLocationDialog.findViewById(R.id.spLocation);
