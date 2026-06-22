@@ -5,6 +5,153 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:orientation="vertical"
+    android:background="@drawable/background_26">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:paddingRight="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <TextView
+            android:id="@+id/txtPopupHeadline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1.8"
+            android:gravity="center"
+            android:layout_marginTop="15dp"
+            android:text="Your Resignation Letter Status"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:fontFamily="@font/open_sans_semi_bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <LinearLayout
+            android:id="@+id/lnCancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="right"
+            android:layout_marginTop="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imgCancel"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:padding="5dp"
+                android:src="@drawable/close_1"/>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="15dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#595757"
+                android:text="Last Working Day"
+                android:fontFamily="@font/open_sans_regular"
+                android:layout_marginTop="5dp"/>
+            <TextView
+                android:textColor="@color/text_color_3"
+                android:id="@+id/tvLastDate"
+                android:textSize="13sp"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:fontFamily="@font/open_sans_medium"
+                android:background="@drawable/background_15"
+                android:hint="DD/MM/YYYY"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#595757"
+                android:textSize="12sp"
+                android:text="Reason"
+                android:fontFamily="@font/open_sans_regular"/>
+            <TextView
+                android:textColor="@color/text_color_3"
+                android:id="@+id/etReason"
+                android:textSize="13sp"
+                android:padding="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:fontFamily="@font/open_sans_medium"
+                android:background="@drawable/background_15"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:textColor="#595757"
+                android:textSize="12sp"
+                android:text="Approval Status"/>
+            <TextView
+                android:textColor="@color/text_color_3"
+                android:id="@+id/tvApprovalStatus"
+                android:textSize="13sp"
+                android:gravity="center_vertical"
+                android:paddingStart="5dp"
+                android:layout_gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/open_sans_medium"
+                android:background="@drawable/background_15"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
+<!--
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="320dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical"
     android:background="@drawable/lldesign7">
     <LinearLayout
         android:background="@color/maincolor"
@@ -125,3 +272,4 @@
 
 
 </LinearLayout>
+-->
