@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:orientation="vertical"
-    android:background="@drawable/lldesign7"
+    android:background="@drawable/background_26"
     android:padding="10dp">
     <ScrollView
         android:layout_width="match_parent"
@@ -18,14 +18,14 @@
                 android:id="@+id/tvAdjustmentType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/colorPrimaryDark"
-                android:text="Adjustment Type"
-                android:textStyle="bold"></TextView>
+                android:fontFamily="@font/open_sans_medium"
+                android:textColor="@color/text_color_3"
+                android:textSize="13sp"
+                android:text="Adjustment Type" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:background="@drawable/lldesign7"
+                android:background="@drawable/background_15"
                 android:layout_marginTop="5dp">
                 <Spinner
                     android:layout_width="match_parent"
@@ -41,26 +41,26 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:text="Effective Date"
-                    android:textStyle="bold"></TextView>
+                    android:fontFamily="@font/open_sans_medium"
+                    android:textColor="@color/text_color_3"
+                    android:textSize="13sp"
+                    android:text="Effective Date" />
                 <LinearLayout
                     android:id="@+id/lnEffectiveDate"
                     android:layout_width="320dp"
                     android:layout_height="40dp"
-                    android:background="@drawable/lldesign7"
-                    android:layout_marginTop="5dp"
-                    >
+                    android:background="@drawable/background_15"
+                    android:layout_marginTop="5dp">
                     <TextView
                         android:id="@+id/tvEffectiveDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
-                        android:textColor="@color/colorPrimaryDark"
+                        android:fontFamily="@font/open_sans_regular"
+                        android:textColor="@color/text_color"
                         android:layout_gravity="center"
                         android:layout_marginLeft="5dp"
-                        android:text="dd/MM/yyyy"></TextView>
+                        android:text="dd/MM/yyyy"/>
 
                 </LinearLayout>
             </LinearLayout>
@@ -74,15 +74,15 @@
                     android:id="@+id/tvStartDateName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:text="Start Date"
-                    android:textStyle="bold"></TextView>
+                    android:fontFamily="@font/open_sans_medium"
+                    android:textColor="@color/text_color_3"
+                    android:textSize="13sp"
+                    android:text="Start Date"/>
                 <LinearLayout
                     android:id="@+id/llStartDate"
                     android:layout_width="320dp"
                     android:layout_height="40dp"
-                    android:background="@drawable/lldesign7"
+                    android:background="@drawable/background_15"
                     android:layout_marginTop="5dp"
                     >
                     <TextView
@@ -90,10 +90,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
-                        android:textColor="@color/colorPrimaryDark"
+                        android:fontFamily="@font/open_sans_regular"
+                        android:textColor="@color/text_color"
                         android:layout_gravity="center"
                         android:layout_marginLeft="5dp"
-                        android:text="dd/MM/yyyy"></TextView>
+                        android:text="dd/MM/yyyy"/>
 
                 </LinearLayout>
                 <LinearLayout
@@ -106,15 +107,15 @@
                         android:id="@+id/tvEndDateName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:text="End Date"
-                        android:textStyle="bold"></TextView>
+                        android:fontFamily="@font/open_sans_medium"
+                        android:textColor="@color/text_color_3"
+                        android:textSize="13sp"
+                        android:text="End Date"/>
                     <LinearLayout
                         android:id="@+id/llEndDate"
                         android:layout_width="320dp"
                         android:layout_height="40dp"
-                        android:background="@drawable/lldesign7"
+                        android:background="@drawable/background_15"
                         android:layout_marginTop="5dp"
                         >
                         <TextView
@@ -122,10 +123,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="12sp"
-                            android:textColor="@color/colorPrimaryDark"
+                            android:fontFamily="@font/open_sans_regular"
+                            android:textColor="@color/text_color"
                             android:layout_gravity="center"
                             android:layout_marginLeft="5dp"
-                            android:text="dd/MM/yyyy"></TextView>
+                            android:text="dd/MM/yyyy"/>
 
                     </LinearLayout>
                 </LinearLayout>
@@ -141,15 +143,15 @@
                     android:id="@+id/tvInTimeName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:text="In Time"
-                    android:textStyle="bold"></TextView>
+                    android:fontFamily="@font/open_sans_medium"
+                    android:textColor="@color/text_color_3"
+                    android:textSize="13sp"
+                    android:text="In Time"/>
                 <LinearLayout
                     android:id="@+id/llInTime"
                     android:layout_width="320dp"
                     android:layout_height="40dp"
-                    android:background="@drawable/lldesign7"
+                    android:background="@drawable/background_15"
                     android:layout_marginTop="5dp"
                     >
                     <TextView
@@ -157,10 +159,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
-                        android:textColor="@color/colorPrimaryDark"
+                        android:fontFamily="@font/open_sans_regular"
+                        android:textColor="@color/text_color"
                         android:layout_gravity="center"
                         android:layout_marginLeft="5dp"
-                        ></TextView>
+                        />
 
                 </LinearLayout>
                 <TextView
@@ -168,15 +171,15 @@
                     android:id="@+id/tvOutTimeName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:text="Out Time"
-                    android:textStyle="bold"></TextView>
+                    android:fontFamily="@font/open_sans_medium"
+                    android:textColor="@color/text_color_3"
+                    android:textSize="13sp"
+                    android:text="Out Time"/>
                 <LinearLayout
                     android:id="@+id/llOutTime"
                     android:layout_width="320dp"
                     android:layout_height="40dp"
-                    android:background="@drawable/lldesign7"
+                    android:background="@drawable/background_15"
                     android:layout_marginTop="5dp"
                     >
                     <TextView
@@ -184,10 +187,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
-                        android:textColor="@color/colorPrimaryDark"
+                        android:fontFamily="@font/open_sans_regular"
+                        android:textColor="@color/text_color"
                         android:layout_gravity="center"
                         android:layout_marginLeft="5dp"
-                        ></TextView>
+                        />
 
                 </LinearLayout>
 
@@ -202,14 +206,14 @@
                     android:id="@+id/tvModeName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:text="Mode"
-                    android:textStyle="bold"></TextView>
+                    android:fontFamily="@font/open_sans_medium"
+                    android:textColor="@color/text_color_3"
+                    android:textSize="13sp"
+                    android:text="Mode"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:background="@drawable/lldesign7"
+                    android:background="@drawable/background_15"
                     android:layout_marginTop="5dp">
                     <Spinner
                         android:layout_width="match_parent"
@@ -227,20 +231,21 @@
                     android:id="@+id/tvReason"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:text="Reason"
-                    android:textStyle="bold"></TextView>
+                    android:fontFamily="@font/open_sans_medium"
+                    android:textColor="@color/text_color_3"
+                    android:textSize="13sp"
+                    android:text="Reason"/>
                 <EditText
                     android:id="@+id/etReason"
                     android:textSize="12sp"
-                    android:textColor="@color/colorPrimaryDark"
                     android:gravity="top"
                     android:paddingLeft="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:background="@drawable/lldesign7"
-                    android:layout_marginTop="5dp"></EditText>
+                    android:background="@drawable/background_15"
+                    android:fontFamily="@font/open_sans_regular"
+                    android:textColor="@color/text_color"
+                    android:layout_marginTop="5dp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -253,7 +258,7 @@
                     android:layout_width="100dp"
                     android:layout_height="40dp"
                     android:background="@drawable/lldesign"
-                    android:backgroundTint="@color/colorPrimaryDark"
+                    android:backgroundTint="@color/pink1"
                     android:textColor="@color/white"
                     android:textSize="14sp"
                     android:text="Save"
