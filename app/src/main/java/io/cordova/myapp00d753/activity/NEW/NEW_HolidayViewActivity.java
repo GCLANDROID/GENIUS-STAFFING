@@ -3,6 +3,8 @@ package io.cordova.myapp00d753.activity.NEW;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -115,6 +117,7 @@ public class NEW_HolidayViewActivity extends AppCompatActivity {
     @SuppressLint("ResourceAsColor")
     private void loadOptionalHolidayView() {
         llOptionalHoliday.setBackgroundResource(R.drawable.background_7);
+        llOptionalHoliday.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#e96d70")));
         llNormalHoliday.setBackgroundResource(0);
         tvNormalHoliday.setTextColor(ContextCompat.getColor(this, R.color.colorBlack));
         tvOptionalHoliday.setTextColor(ContextCompat.getColor(this, R.color.white));
