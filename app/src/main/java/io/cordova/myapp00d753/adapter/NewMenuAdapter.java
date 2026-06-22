@@ -14,6 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import io.cordova.myapp00d753.R;
@@ -146,24 +149,36 @@ public class NewMenuAdapter extends RecyclerView.Adapter<NewMenuAdapter.MyViewHo
                 if (itemList.get(position).getMenuId().equals("1")){
                     //Profile
                     //Intent intent=new Intent(context, ProfileActivity.class);
-                    Intent intent=new Intent(context, ProfileNewActivity.class);
+                    /*Intent intent=new Intent(context, ProfileNewActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
+                    context.startActivity(intent);*/
+                    JSONObject objNeedToAct=new JSONObject();
+                    try {
+                        objNeedToAct.put("MasterID", pref.getMasterId());
+                        newMenuFragment.getNeedToActData(objNeedToAct,"profile");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }else if (itemList.get(position).getMenuId().equals("2")) {
                     //Attendnace
-                    if (pref.getEmpClintId().equalsIgnoreCase("AEMCLI1810001410")) {
-                        Intent intent = new Intent(context, BlueDartAttenDanceDashboardActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(intent);
-                    } else {
-                        Intent intent = new Intent(context, AttenDanceDashboardActivity.class);
-                        intent.putExtra("leaveFlag",leaveFlag);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(intent);
+                    JSONObject objNeedToAct=new JSONObject();
+                    try {
+                        objNeedToAct.put("MasterID", pref.getMasterId());
+                        newMenuFragment.getNeedToActData(objNeedToAct,"attendance");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 } else if (itemList.get(position).getMenuId().equals("3")) {
                     //Payroll
-                    ((NewMenuFragment) fContext).openPayrollPopUp();
+
+                    JSONObject objNeedToAct=new JSONObject();
+                    try {
+                        objNeedToAct.put("MasterID", pref.getMasterId());
+                        newMenuFragment.getNeedToActData(objNeedToAct,"payroll");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                     /*Intent intent=new Intent(context, PayrollActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);*/
@@ -223,18 +238,16 @@ public class NewMenuAdapter extends RecyclerView.Adapter<NewMenuAdapter.MyViewHo
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                 } else if (itemList.get(position).getMenuId().equals("12")){
-                    if (isLiveStatus_LeaveApplication.equals("1")) {
-                        Intent intent = new Intent(context, ITViewActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra("url", pref.getLeaveApplicationURL());
-                        context.startActivity(intent);
-                    } else {
-                        Intent intent = new Intent(context, LeaveApplicationActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(intent);
+                    //TODO: LEAVE
+                    JSONObject objNeedToAct=new JSONObject();
+                    try {
+                        objNeedToAct.put("MasterID", pref.getMasterId());
+                        newMenuFragment.getNeedToActData(objNeedToAct,"leave");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 } else if (itemList.get(position).getMenuId().equals("200")){
-                    //feedback
+                    //TODO: Feedback
                     Intent intent=new Intent(context, FeedBackRatingForJLLActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
@@ -244,7 +257,6 @@ public class NewMenuAdapter extends RecyclerView.Adapter<NewMenuAdapter.MyViewHo
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                 }else if (itemList.get(position).getMenuId().equals("300")){
-                    //interview
                     Intent intent=new Intent(context, LoginDashboardActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
