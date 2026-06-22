@@ -134,7 +134,7 @@ public class ClaimReportActivity extends AppCompatActivity {
         else if (m==12){
             month="December";
         }
-        tvReportMonth=(TextView)findViewById(R.id.tvReportMonth);
+        //tvReportMonth=(TextView)findViewById(R.id.tvReportMonth);
        // tvReportMonth.setText("Month of "+month);
         tvYear=(TextView)findViewById(R.id.tvYear);
         tvMonth=(TextView)findViewById(R.id.tvMonth);
