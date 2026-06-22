@@ -40,6 +40,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -139,7 +140,8 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
     ImageView showImageView;
     boolean isImageSelected=false;
     ArrayList<BoschPunchTypeModel> boschPunchTypeList;
-
+    CardView cvImage,cvAddress;
+    LinearLayout llCaptureImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -235,13 +237,20 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
                 startActivity(intent);
             }
         });
-        btnOpenCamera.setOnClickListener(new View.OnClickListener() {
+       llCaptureImage.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               Intent intent = new Intent(BoschAttendanceActivity.this, BoschAndroidXCameraActivity.class);
+               startActivityForResult(intent, BoschAndroidXCameraActivity.LONG_IMAGE_RESULT_CODE);
+           }
+       });
+        /*btnOpenCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(BoschAttendanceActivity.this, BoschAndroidXCameraActivity.class);
                 startActivityForResult(intent, BoschAndroidXCameraActivity.LONG_IMAGE_RESULT_CODE);
             }
-        });
+        });*/
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -278,8 +287,11 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
         txtCurrentLocation = findViewById(R.id.txtCurrentLocation);
         imgBack = findViewById(R.id.imgBack);
         imgHome = findViewById(R.id.imgHome);
-        btnOpenCamera = findViewById(R.id.btnOpenCamera);
+        //btnOpenCamera = findViewById(R.id.btnOpenCamera);
         showImageView = findViewById(R.id.showImageView);
+        cvImage = findViewById(R.id.cvImage);
+        cvAddress = findViewById(R.id.cvAddress);
+        llCaptureImage = findViewById(R.id.llCaptureImage);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         //smf = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fmGoogleMaps);
@@ -383,6 +395,8 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
         if (llLoading.getVisibility() == View.VISIBLE){
             llLoading.setVisibility(View.GONE);
             llSubmit.setVisibility(View.VISIBLE);
+            cvImage.setVisibility(View.VISIBLE);
+            cvAddress.setVisibility(View.VISIBLE);
         }
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
