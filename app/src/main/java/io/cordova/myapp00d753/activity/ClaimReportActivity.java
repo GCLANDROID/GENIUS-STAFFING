@@ -146,7 +146,7 @@ public class ClaimReportActivity extends AppCompatActivity {
         llMonth=(LinearLayout) findViewById(R.id.llMonth);
         llYear=(LinearLayout) findViewById(R.id.llYear);
         btnSubmit=(Button) findViewById(R.id.btnSubmit);
-
+        imgSearch.setVisibility(View.GONE);
     }
 
     private void getItemList(JSONObject jsonObject) {
