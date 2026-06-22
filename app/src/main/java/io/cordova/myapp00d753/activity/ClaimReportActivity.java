@@ -198,7 +198,7 @@ public class ClaimReportActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(),"No data found",Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {
-                            throw new RuntimeException(e);
+                            e.printStackTrace();
                         }
                     }
 
