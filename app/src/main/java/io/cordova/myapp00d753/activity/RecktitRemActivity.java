@@ -123,7 +123,7 @@ public class RecktitRemActivity extends AppCompatActivity {
     File file1, file2, file3, file4,compressedImageFile,compressedImageFile1,compressedImageFile2,compressedImageFile3,compressedImageFile4;
     int flag = 0;
     AlertDialog alerDialog1, alertDialog2, alertDialog1,alert1;
-    TextView tvMonth, tvYear;
+    TextView tvMonth, tvYear,txtCamaraPicture,txtOnlyImage,tvOnlyPdfImage,txtBrowseFile;
     String comeid = "";
     LinearLayout llAttach, llBrowse;
     ImageView imgAttach, imgPDF;
@@ -251,6 +251,10 @@ public class RecktitRemActivity extends AppCompatActivity {
         tvMonth = (TextView) findViewById(R.id.tvMonth);
         tvYear = (TextView) findViewById(R.id.tvYear);
         tvMonth = (TextView) findViewById(R.id.tvMonth);
+        txtCamaraPicture = (TextView) findViewById(R.id.txtCamaraPicture);
+        txtBrowseFile = (TextView) findViewById(R.id.txtBrowseFile);
+        txtOnlyImage = (TextView) findViewById(R.id.txtOnlyImage);
+        tvOnlyPdfImage = (TextView) findViewById(R.id.tvOnlyPdfImage);
         tvYear.setText(year);
 
         Date d = Calendar.getInstance().getTime();
@@ -479,9 +483,10 @@ public class RecktitRemActivity extends AppCompatActivity {
                 cameraIntent4();
             }
         });
-        llBrowse.setOnClickListener(new View.OnClickListener() {
+
+        View.OnClickListener listenerBrowse = new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 if (llAttach.getVisibility() == View.GONE) {
                     llAttach.setVisibility(View.VISIBLE);
                     llCameraD.setVisibility(View.GONE);
@@ -492,7 +497,10 @@ public class RecktitRemActivity extends AppCompatActivity {
                     llCamera.setVisibility(View.VISIBLE);
                 }
             }
-        });
+        };
+        llBrowse.setOnClickListener(listenerBrowse);
+        tvOnlyPdfImage.setOnClickListener(listenerBrowse);
+        txtBrowseFile.setOnClickListener(listenerBrowse);
 
         imgMultiPle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -500,9 +508,9 @@ public class RecktitRemActivity extends AppCompatActivity {
                 LongImageCameraActivity.launch(RecktitRemActivity.this);
             }
         });
-        llCamera.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener listenerCamera = new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 if (llCameraD.getVisibility()==View.GONE){
                     llCameraD.setVisibility(View.VISIBLE);
                     llAttach.setVisibility(View.GONE);
@@ -513,7 +521,10 @@ public class RecktitRemActivity extends AppCompatActivity {
                     llBrowse.setVisibility(View.VISIBLE);
                 }
             }
-        });
+        };
+        llCamera.setOnClickListener(listenerCamera);
+        txtBrowseFile.setOnClickListener(listenerCamera);
+        tvOnlyPdfImage.setOnClickListener(listenerCamera);
 
         spLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
