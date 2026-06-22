@@ -48,6 +48,8 @@ import java.util.Map;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.AdjustmentActivity;
+import io.cordova.myapp00d753.activity.NewLoginTwoActivity;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.attendance.AttenDanceManageWithShiftActivity;
 import io.cordova.myapp00d753.activity.attendance.AttendanceReportActivity;
 import io.cordova.myapp00d753.activity.BacklogAttendanceActivity;
@@ -101,6 +103,7 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
     LinearLayout llTour;
     int date;
     LinearLayout llParentAttendance,llParentWeeklyOffHoliday,llParentAdjustment,llParentView;
+    ImageView imgHome;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,6 +121,7 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
         btnMarkAttendance = (Button) findViewById(R.id.btnMarkAttendance);
         btnMarkAttendance.setOnClickListener(this);
         imgSearch = (ImageView) findViewById(R.id.imgSearch);
+        imgHome = (ImageView) findViewById(R.id.imgHome);
         dlMain = (DrawerLayout) findViewById(R.id.dlMain);
         rvItem = (RecyclerView) findViewById(R.id.rvItem);
         tvAttendance = (TextView) findViewById(R.id.tvAttendance);
@@ -196,6 +200,7 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
         llAttenRegularize.setOnClickListener(this);
         llAdjustment.setOnClickListener(this);
         tvCancel.setOnClickListener(this);
+        imgHome.setOnClickListener(this);
 
         y = Calendar.getInstance().get(Calendar.YEAR);
         pastYear = y - 1;
@@ -701,9 +706,11 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+        } else if (view == imgHome){
+            Intent intent = new Intent(BlueDartAttenDanceDashboardActivity.this, NewUserDashboardActivity.class);
+            startActivity(intent);
+            finish();
         }
-
-
     }
 
     private void weeklyfunction() {
