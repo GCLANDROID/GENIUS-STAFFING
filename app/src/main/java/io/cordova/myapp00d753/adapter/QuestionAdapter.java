@@ -49,13 +49,13 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
 
 
 
-         if(i %2 == 1)
+         /*if(i %2 == 1)
         {
             myViewHolder.llItem.setBackgroundColor(Color.parseColor("#ffffff"));
             //  holder.imageView.setBackgroundColor(Color.parseColor("#FFFAF8FD"));
         }else {
              myViewHolder.llItem.setBackgroundColor(Color.parseColor("#ECECEC"));
-         }
+         }*/
 
 
 
