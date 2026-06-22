@@ -83,13 +83,6 @@ public class NewUserDashboardActivity extends AppCompatActivity {
         if (pref.getUAN_Active().equals("0")){
             Open_UAN_Activation_Popup();
         }
-        JSONObject objNeedToAct=new JSONObject();
-        try {
-            objNeedToAct.put("MasterID", pref.getMasterId());
-            getNeedToActData(objNeedToAct,"");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 
     private void initView() {
@@ -117,7 +110,9 @@ public class NewUserDashboardActivity extends AppCompatActivity {
         imgLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(NewUserDashboardActivity.this, NewLoginTwoActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }
@@ -550,156 +545,4 @@ public class NewUserDashboardActivity extends AppCompatActivity {
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
     }
-
-    public void getNeedToActData(JSONObject objNeedToAct,String flag) {
-        final ProgressDialog pd=new ProgressDialog(NewUserDashboardActivity.this);
-        pd.setMessage("Loading.....");
-        pd.show();
-        AndroidNetworking.post(AppData.NEED_TO_ACT)
-                .addJSONObjectBody(objNeedToAct)
-                .addHeaders("SecurityKey", "gStbCQYjYBDCQ4fkGoQSUj7LYe8uVdZ1")
-                .setTag("uploadTest")
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            Log.e(TAG, "NEED_TO_ACT: "+response.toString(4));
-                            pd.dismiss();
-                            JSONObject job = response;
-                            boolean isSuccess = job.optBoolean("Success");
-                            needToActModelList.clear();
-                            if (isSuccess){
-                                JSONObject Data = job.getJSONObject("Data");
-                                JSONArray Table = Data.optJSONArray("Table");
-                                int mandatoryPopupCount = 0;
-                                if (Table.length() > 0){
-                                    for (int i = 0; i < Table.length(); i++) {
-                                        JSONObject object = Table.getJSONObject(i);
-                                        int LetterID = object.optInt("LetterID");
-                                        String MasterID = object.optString("MasterID");
-                                        String Domain = object.optString("Domain");
-                                        String DocName = object.optString("DocName");
-                                        String Category = object.optString("Category");
-                                        String ExpDate = object.optString("ExpDate");
-                                        int AcceptanceType = object.optInt("AcceptanceType");
-                                        int IsMandatoryPopup = object.optInt("IsMandatoryPopup");
-                                        String ActUrl = object.optString("ActUrl");
-                                        if(IsMandatoryPopup == 1){
-                                            mandatoryPopupCount ++;
-                                            openActionRequiredPopUp(DocName,ActUrl);
-                                        }
-
-                                        needToActModelList.add(new NeedToActModel(LetterID,MasterID,Domain,DocName,Category,ExpDate,
-                                                AcceptanceType,IsMandatoryPopup,ActUrl));
-                                    }
-                                    /*if(mandatoryPopupCount == 0){
-                                        if(flag.equalsIgnoreCase("attendance")){
-                                            if (pref.getEmpClintId().equalsIgnoreCase("AEMCLI1810001410")) {
-                                                Intent intent = new Intent(NewUserDashboardActivity.this, BlueDartAttenDanceDashboardActivity.class);
-                                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                startActivity(intent);
-                                            } else {
-                                                Intent intent = new Intent(NewUserDashboardActivity.this, AttenDanceDashboardActivity.class);
-                                                intent.putExtra("leaveFlag",leaveFlag);
-                                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                startActivity(intent);
-                                            }
-                                        } else if(flag.equalsIgnoreCase("leave")){
-                                            if (isLiveStatus_LeaveApplication.equals("1")){
-                                                Intent intent = new Intent(NewUserDashboardActivity.this, ITViewActivity.class);
-                                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                intent.putExtra("url", pref.getLeaveApplicationURL());
-                                                startActivity(intent);
-                                            } else {
-                                                Intent intent=new Intent(NewUserDashboardActivity.this, LeaveApplicationActivity.class);
-                                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                startActivity(intent);
-                                            }
-                                        } else if(flag.equalsIgnoreCase("profile")){
-                                            Intent intent=new Intent(NewUserDashboardActivity.this, ProfileActivity.class);
-                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
-                                            startActivity(intent);
-                                        } else if(flag.equalsIgnoreCase("payroll")) {
-                                            Intent intent=new Intent(NewUserDashboardActivity.this, PayrollActivity.class);
-                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
-                                            startActivity(intent);
-                                        }
-                                    }
-                                    NeedToActAdapter needToActAdapter = new NeedToActAdapter(EmployeeDashBoardActivity.this,needToActModelList);
-                                    rvNeedToAct.setAdapter(needToActAdapter);*/
-
-                                } else {
-                                    /*llNeedToAct.setVisibility(View.GONE);
-                                    if(flag.equalsIgnoreCase("attendance")){
-                                        if (pref.getEmpClintId().equalsIgnoreCase("AEMCLI1810001410")) {
-                                            Intent intent = new Intent(EmployeeDashBoardActivity.this, BlueDartAttenDanceDashboardActivity.class);
-                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                            EmployeeDashBoardActivity.this.startActivity(intent);
-                                        } else {
-                                            Intent intent = new Intent(EmployeeDashBoardActivity.this, AttenDanceDashboardActivity.class);
-                                            intent.putExtra("leaveFlag",leaveFlag);
-                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                            EmployeeDashBoardActivity.this.startActivity(intent);
-                                        }
-                                    } else if(flag.equalsIgnoreCase("leave")){
-                                        if (isLiveStatus_LeaveApplication.equals("1")){
-                                            Intent intent = new Intent(EmployeeDashBoardActivity.this, ITViewActivity.class);
-                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                            intent.putExtra("url", pref.getLeaveApplicationURL());
-                                            EmployeeDashBoardActivity.this.startActivity(intent);
-                                        } else {
-                                            Intent intent=new Intent(EmployeeDashBoardActivity.this, LeaveApplicationActivity.class);
-                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
-                                            EmployeeDashBoardActivity.this.startActivity(intent);
-                                        }
-                                    } else if(flag.equalsIgnoreCase("profile")){
-                                        Intent intent=new Intent(EmployeeDashBoardActivity.this, ProfileActivity.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        EmployeeDashBoardActivity.this.startActivity(intent);
-                                    } else if(flag.equalsIgnoreCase("payroll")) {
-                                        Intent intent=new Intent(EmployeeDashBoardActivity.this, PayrollActivity.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        EmployeeDashBoardActivity.this.startActivity(intent);
-                                    }*/
-                                }
-                            } else {
-                                //llNeedToAct.setVisibility(View.GONE);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-                        pd.dismiss();
-                        //llNeedToAct.setVisibility(View.GONE);
-                        Log.e(TAG, "NEED_TO_ACT_error: "+anError.getErrorBody());
-                    }
-                });
-    }
-
-    public void openActionRequiredPopUp(String docName, String actUrl){
-        Dialog dialog = new Dialog(NewUserDashboardActivity.this,R.style.CustomDialogNew2);
-        dialog.setContentView(R.layout.action_requried_popup);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        dialog.setCancelable(false);
-        TextView tvDocName = dialog.findViewById(R.id.tvDocName);
-        Button btnAccept = dialog.findViewById(R.id.btnAccept);
-        tvDocName.setText(docName);
-        btnAccept.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(actUrl));
-                startActivity(intent);
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }
-
 }
