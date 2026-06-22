@@ -31,7 +31,6 @@ import io.cordova.myapp00d753.activity.ITViewActivity;
 import io.cordova.myapp00d753.activity.IncomeTaxDashboardActivity;
 import io.cordova.myapp00d753.activity.InsuranceActivity;
 import io.cordova.myapp00d753.activity.LeaveApplicationActivity;
-import io.cordova.myapp00d753.activity.NewLeaveApplicationActivity;
 import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.PFDashBoardActivity;
 import io.cordova.myapp00d753.activity.PayrollActivity;
