@@ -25,6 +25,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
+        android:maxLines="2"
+        android:ellipsize="end"
         android:text="Employee acceptance and offer confirmation records"
         android:textSize="11sp"/>
 
