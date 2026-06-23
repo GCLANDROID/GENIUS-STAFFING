@@ -92,6 +92,7 @@ import io.cordova.myapp00d753.module.SpinnerModel;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.ClientID;
 import io.cordova.myapp00d753.utility.Pref;
+import io.cordova.myapp00d753.utility.RealPathUtil;
 import io.cordova.myapp00d753.utility.ShowDialog;
 
 import static android.app.Activity.RESULT_OK;
@@ -171,7 +172,7 @@ public class ApplicationFragment extends Fragment {
     AlertDialog alert5;
     ArrayList<CompOffDetailsModel> compOffList = new ArrayList<>();
     RecyclerView rvCompOffItem;
-
+    TextView txtFileSelectionPath;
 
 
     @Override
@@ -200,6 +201,7 @@ public class ApplicationFragment extends Fragment {
         llRejected = (LinearLayout) v.findViewById(R.id.llRejected);
         llApproved = (LinearLayout) v.findViewById(R.id.llApproved);
         llRequested = (LinearLayout) v.findViewById(R.id.llRequested);
+        txtFileSelectionPath = (TextView) v.findViewById(R.id.txtFileSelectionPath);
         pref = new Pref(getContext());
         getApproverOrNot();
 
@@ -1798,6 +1800,7 @@ public class ApplicationFragment extends Fragment {
                             encodedImage = encodeFileToBase64Binary(file);
                             Log.d("encoded", encodedImage);
                             imgPic.setImageBitmap(bm);
+                            imgPic.setVisibility(View.VISIBLE);
                             attachmentFlag = 1;
                             alert4.dismiss();
                             String contentType = "image/jpg";
@@ -1821,6 +1824,10 @@ public class ApplicationFragment extends Fragment {
 
                     Uri selectedFileURI = data.getData();
                     pdffile = new File(getRealPDFPathFromURI(selectedFileURI));
+                    imgPic.setImageResource(R.drawable.pdff);
+                    imgPic.setVisibility(View.VISIBLE);
+                    txtFileSelectionPath.setVisibility(View.VISIBLE);
+                    txtFileSelectionPath.setText(RealPathUtil.getRealPath(getActivity(),selectedFileURI));
                     alert4.dismiss();
                     encodedImage = encodeFileToBase64Binary(pdffile);
                     String filePath = getRealPDFPathFromURI(selectedFileURI);
