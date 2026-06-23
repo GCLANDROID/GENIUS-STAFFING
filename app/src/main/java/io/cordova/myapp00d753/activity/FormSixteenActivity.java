@@ -26,6 +26,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.attendance.AttenDanceDashboardActivity;
+import io.cordova.myapp00d753.activity.attendance.MetsoAttendanceRegularizationActivity;
 import io.cordova.myapp00d753.adapter.FormSixteenAdapter;
 import io.cordova.myapp00d753.module.FormSixteenModule;
 import io.cordova.myapp00d753.module.SalaryModule;
@@ -39,7 +41,7 @@ public class FormSixteenActivity extends AppCompatActivity {
     ArrayList<FormSixteenModule> itemList = new ArrayList<>();
     FormSixteenAdapter adapter;
     Pref pref;
-    ImageView imgBack;
+    ImageView imgBack,imgHome;
 
 
     @Override
@@ -71,13 +73,21 @@ public class FormSixteenActivity extends AppCompatActivity {
         }
 
         imgBack=(ImageView) findViewById(R.id.imgBack);
+        imgHome=(ImageView) findViewById(R.id.imgHome);
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
             }
         });
-
+        imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FormSixteenActivity.this, NewUserDashboardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
 
 
 
