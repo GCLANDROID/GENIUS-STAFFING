@@ -82,7 +82,7 @@ public class DDInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public MyViewholder(@NonNull View itemView) {
             super(itemView);
             tvDocType = itemView.findViewById(R.id.tvDocType);
-            tvDescription = itemView.findViewById(R.id.tvDescription);
+            //tvDescription = itemView.findViewById(R.id.tvDescription);
             imgStatus = itemView.findViewById(R.id.imgStatus);
             llMain = itemView.findViewById(R.id.llMain);
         }
