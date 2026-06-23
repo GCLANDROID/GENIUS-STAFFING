@@ -64,9 +64,9 @@ public class PFManualActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(PFManualActivity.this,EmployeeDashBoardActivity.class);
+                Intent intent=new Intent(PFManualActivity.this,NewUserDashboardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish();
             }
         });
 
