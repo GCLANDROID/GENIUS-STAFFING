@@ -650,6 +650,7 @@ public class NewMenuFragment extends Fragment {
         clReimApp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                bottomSheetDialog.dismiss();
                 if (pref.getEmpClintId().equals("AEMCLI1110000501")) {
                     Intent intent = new Intent(getActivity(), RecktitRemActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -672,6 +673,7 @@ public class NewMenuFragment extends Fragment {
         clReimDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                bottomSheetDialog.dismiss();
                 if (pref.getEmpClintId().equals(ClientID.METSO)) {
                     Intent intent = new Intent(getActivity(), MetsoReimbursementDeleteActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -686,6 +688,7 @@ public class NewMenuFragment extends Fragment {
         clReimReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                bottomSheetDialog.dismiss();
                 if(pref.getEmpClintId().equals(ClientID.METSO)){
                     Intent intent=new Intent(getActivity(), MetsoReimbursementReportActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -727,6 +730,7 @@ public class NewMenuFragment extends Fragment {
         clMonthlySalary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                bottomSheetDialog.dismiss();
                 Intent intent=new Intent(getActivity(), SalaryActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -735,12 +739,14 @@ public class NewMenuFragment extends Fragment {
         clCTC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                bottomSheetDialog.dismiss();
                 openBrowser();
             }
         });
         clOtherPayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                bottomSheetDialog.dismiss();
                 Intent intent=new Intent(getActivity(), OthersPayoutActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -778,7 +784,6 @@ public class NewMenuFragment extends Fragment {
             public void onClick(View view) {
                 bottomSheetDialog.dismiss();
                 Intent intent=new Intent(getActivity(), PFManualActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
         });
@@ -993,33 +998,27 @@ public class NewMenuFragment extends Fragment {
     }
 
     public void resignationReportAlert(String lastWorkingDate,String reason,String approvalStatus) {
-        android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(getActivity(), R.style.CustomDialogNew);
-        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View dialogView = inflater.inflate(R.layout.dialog_self_resignation_report, null);
-        dialogBuilder.setView(dialogView);
+        Dialog dialogView = new Dialog(getContext(),R.style.CustomDialogNew2);
+        dialogView.setContentView(R.layout.dialog_self_resignation_report);
+        dialogView.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialogView.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialogView.getWindow().setGravity(Gravity.CENTER);
         TextView tvLastDate=(TextView)dialogView.findViewById(R.id.tvLastDate);
         TextView tvApprovalStatus=(TextView)dialogView.findViewById(R.id.tvApprovalStatus);
         TextView etReason=(TextView)dialogView.findViewById(R.id.etReason);
-        LinearLayout llCancel=(LinearLayout)dialogView.findViewById(R.id.llCancel);
-        llCancel.setOnClickListener(new View.OnClickListener() {
+        //LinearLayout llCancel=(LinearLayout)dialogView.findViewById(R.id.llCancel);
+        ImageView imgCancel = (ImageView) dialogView.findViewById(R.id.imgCancel);
+        //llCancel.setOnClickListener(new View.OnClickListener() {
+        imgCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selfresignDialog.dismiss();
+                dialogView.dismiss();
             }
         });
         tvApprovalStatus.setText(approvalStatus);
         tvLastDate.setText(lastWorkingDate);
         etReason.setText(reason);
-
-
-
-
-        selfresignDialog = dialogBuilder.create();
-        selfresignDialog.setCancelable(false);
-        Window window = selfresignDialog.getWindow();
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        window.setGravity(Gravity.CENTER);
-        selfresignDialog.show();
+        dialogView.show();
     }
 
     public void resignationAlert() {
