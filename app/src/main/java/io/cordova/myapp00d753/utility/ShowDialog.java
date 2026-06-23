@@ -20,27 +20,23 @@ public class ShowDialog {
     private static AlertDialog errorAlertDialog,successaAlertDialog;
 
     public static void showSuccessDialog(Context context, String text,ResultListener resultListener) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context, R.style.CustomDialogNew);
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View dialogView = inflater.inflate(R.layout.dialog_success, null);
-        dialogBuilder.setView(dialogView);
+        Dialog dialogView = new Dialog(context,R.style.CustomDialogNew2);
+        dialogView.setContentView(R.layout.alert_dialog_layout);
+        dialogView.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialogView.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
         TextView tvSuccess = (TextView) dialogView.findViewById(R.id.tvSuccess);
         tvSuccess.setText(text);
         Button btnOk = (Button) dialogView.findViewById(R.id.btnOk);
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dialogView.cancel();
                 resultListener.onSuccess();
 
             }
         });
-
-        successaAlertDialog = dialogBuilder.create();
-        successaAlertDialog.setCancelable(false);
-        Window window = successaAlertDialog.getWindow();
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        window.setGravity(Gravity.CENTER);
-        successaAlertDialog.show();
+        dialogView.show();
     }
 
     public static void showErrorDialog(Context context,String text) {
