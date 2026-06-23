@@ -95,10 +95,6 @@ public class NewHomeFragment extends Fragment implements OnChartValueSelectedLis
         rvPFEPFO = v.findViewById(R.id.rvPFEPFO);
         rvPFEPFO.setLayoutManager(new LinearLayoutManager(getContext()));
         ddInfoList = new ArrayList<>();
-        ddInfoList.add(new DDInfoModel("Acceptance Letters","Employee acceptance and offer confirmation records","1",true));
-        ddInfoList.add(new DDInfoModel("Acceptance Letters","Employee acceptance and offer confirmation records","1",false));
-        ddInfoList.add(new DDInfoModel("Archived Policies","Employee acceptance and offer confirmation records","2",false));
-        ddInfoList.add(new DDInfoModel("DPDP Act Compliance","Employee acceptance and offer confirmation records","3",false));
 
         pieChart = v.findViewById(R.id.chart1);
         dataListApi.add(new PieChartModel(34.5f, "Complete", "#00C853"));
