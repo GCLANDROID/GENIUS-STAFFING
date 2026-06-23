@@ -41,6 +41,8 @@ import java.util.Calendar;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
+import io.cordova.myapp00d753.activity.NewLeaveApplicationActivity;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.metso.MetsoNewReimbursementClaimActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.SupervisorFilterAdapter;
 import io.cordova.myapp00d753.module.SpineerItemModel;
@@ -157,7 +159,7 @@ public class NEW_WeeklyOffAttendanceActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(NEW_WeeklyOffAttendanceActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent = new Intent(NEW_WeeklyOffAttendanceActivity.this, NewUserDashboardActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 //finish();
