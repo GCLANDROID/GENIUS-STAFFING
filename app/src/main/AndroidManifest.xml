@@ -707,7 +707,8 @@
         <activity android:name=".activity.NEW.AllApplicationViewActivity" />
         <activity android:name=".activity.NEW.NEW_HolidayViewActivity" />
         <activity android:name=".activity.NEW.NEW_AttendanceReportActivity" />
-        <activity android:name=".activity.NewLoginTwoActivity" />
+        <activity android:name=".activity.NewLoginTwoActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".activity.ITViewActivity" />
         <activity android:name=".activity.MPIN_SetupActivity" />
         <activity android:name=".activity.E_Pin_SetupLoginActivity" />
@@ -716,7 +717,8 @@
         <activity
             android:name=".activity.SelfOnboardingChatBotActivity"
             android:theme="@style/FloatingChatTheme" />
-        <activity android:name=".activity.NewUserDashboardActivity"/>
+        <activity android:name=".activity.NewUserDashboardActivity"
+            android:screenOrientation="portrait"/>
 
         <service
             android:name=".FirebaseNotification.MyFirebaseMessagingService"
