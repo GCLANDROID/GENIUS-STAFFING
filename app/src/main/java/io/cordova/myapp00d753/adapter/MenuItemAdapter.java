@@ -26,7 +26,7 @@ import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.FormSixteenActivity;
 import io.cordova.myapp00d753.activity.ITViewActivity;
 import io.cordova.myapp00d753.activity.IncomeTaxDashboardActivity;
-import io.cordova.myapp00d753.activity.ProfileNewActivity;
+
 import io.cordova.myapp00d753.activity.attendance.AttenDanceDashboardActivity;
 import io.cordova.myapp00d753.activity.ChangePasswordActivity;
 import io.cordova.myapp00d753.activity.DailyDashBoardActivity;
