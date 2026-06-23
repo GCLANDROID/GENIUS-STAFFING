@@ -406,7 +406,7 @@ public class ClaimReportActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(ClaimReportActivity.this,EmployeeDashBoardActivity.class);
+                Intent intent=new Intent(ClaimReportActivity.this,NewUserDashboardActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
