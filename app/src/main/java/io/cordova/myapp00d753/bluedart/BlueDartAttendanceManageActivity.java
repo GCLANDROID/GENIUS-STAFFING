@@ -89,6 +89,7 @@ import io.cordova.myapp00d753.CropImage.CropImage;
 import io.cordova.myapp00d753.CropImage.CropImageView;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.attendance.AttendanceReportActivity;
 import io.cordova.myapp00d753.activity.metso.MetsoNewReimbursementClaimActivity;
 import io.cordova.myapp00d753.databinding.ActivityBlueDartAttendanceManageBinding;
@@ -222,7 +223,7 @@ public class BlueDartAttendanceManageActivity extends AppCompatActivity implemen
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(BlueDartAttendanceManageActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent = new Intent(BlueDartAttendanceManageActivity.this, NewUserDashboardActivity.class);
                 startActivity(intent);
                 finishAffinity();
             }
