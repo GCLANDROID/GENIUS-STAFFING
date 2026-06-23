@@ -2286,6 +2286,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
         dialogLocationPopUp.setContentView(R.layout.metso_att_location_selection_dialog);
         dialogLocationPopUp.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialogLocationPopUp.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialogLocationPopUp.setCancelable(false);
 
         ImageView imgCancel = dialogLocationPopUp.findViewById(R.id.imgCancel);
         TextView txtSelectLocation = dialogLocationPopUp.findViewById(R.id.txtSelectLocation);
@@ -2299,7 +2300,7 @@ public class MetsoLeaveApplicationFragment extends Fragment {
         Spinner spLocation = dialogLocationPopUp.findViewById(R.id.spLocation);
         LinearLayout llApprover = dialogLocationPopUp.findViewById(R.id.llApprover);
         AppCompatButton btnSubmit = dialogLocationPopUp.findViewById(R.id.btnSubmit);
-
+        imgCancel.setVisibility(View.INVISIBLE);
 
         actApproverName.setAdapter(approverAutoCompleteAdapter);
         actApproverName.setOnItemClickListener(new AdapterView.OnItemClickListener() {
