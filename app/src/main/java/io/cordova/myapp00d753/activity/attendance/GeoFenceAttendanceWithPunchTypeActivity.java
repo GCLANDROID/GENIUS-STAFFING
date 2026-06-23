@@ -86,6 +86,7 @@ import java.util.Locale;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.Retrofit.RetrofitClient;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.bosch.BoschAndroidXCameraActivity;
 import io.cordova.myapp00d753.activity.bosch.BoschAttendanceReportActivity;
 import io.cordova.myapp00d753.activity.bosch.adapter.PunchTypeAdapter;
@@ -240,7 +241,7 @@ public class GeoFenceAttendanceWithPunchTypeActivity extends AppCompatActivity i
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(GeoFenceAttendanceWithPunchTypeActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent = new Intent(GeoFenceAttendanceWithPunchTypeActivity.this, NewUserDashboardActivity.class);
                 startActivity(intent);
             }
         });
