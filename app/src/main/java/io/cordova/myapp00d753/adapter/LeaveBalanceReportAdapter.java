@@ -32,7 +32,7 @@ public class LeaveBalanceReportAdapter extends RecyclerView.Adapter<LeaveBalance
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.tvDate.setText(leaveBalanceArray.get(position).getLeave());
+        holder.tvDate.setText(leaveBalanceArray.get(position).getLeave() +" - "+leaveBalanceArray.get(position).getLeaveName());
         holder.tvOpening.setText(leaveBalanceArray.get(position).getLeaveBalance());
         holder.tvTaken.setText(leaveBalanceArray.get(position).getLeaveTaken());
         holder.tvAvailable.setText(leaveBalanceArray.get(position).getAvaliable());
