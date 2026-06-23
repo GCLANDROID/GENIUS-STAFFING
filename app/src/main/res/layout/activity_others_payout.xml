@@ -110,7 +110,7 @@
         </LinearLayout>
         <LinearLayout
             android:orientation="vertical"
-            android:visibility="visible"
+            android:visibility="gone"
             android:id="@+id/lnMain"
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
