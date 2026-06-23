@@ -202,15 +202,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
-        imgHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),EmployeeDashBoardActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
         etNewPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
