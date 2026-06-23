@@ -34,6 +34,7 @@ import java.util.Calendar;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.MetsoAttendanceReportAdapter;
 
 import io.cordova.myapp00d753.module.AttendanceModule;
@@ -126,7 +127,7 @@ public class MetsoAttendanceReportActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(MetsoAttendanceReportActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent=new Intent(MetsoAttendanceReportActivity.this, NewUserDashboardActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
