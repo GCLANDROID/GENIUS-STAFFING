@@ -142,7 +142,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ChangePasswordActivity.this, MetsoAttendanceRegularizationActivity.class);
+                Intent intent = new Intent(ChangePasswordActivity.this, NewUserDashboardActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
