@@ -330,9 +330,10 @@ public class RecktitRemActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RecktitRemActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent = new Intent(RecktitRemActivity.this, NewUserDashboardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish();
+                //finish();
             }
         });
         imgDate.setOnClickListener(new View.OnClickListener() {
