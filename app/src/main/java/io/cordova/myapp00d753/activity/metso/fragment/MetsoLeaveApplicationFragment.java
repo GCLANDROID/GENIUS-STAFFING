@@ -1743,7 +1743,8 @@ public class MetsoLeaveApplicationFragment extends Fragment {
                 if (requestCode == PDF_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
                     Uri selectedFileURI = data.getData();
                     pdffile = new File(RealPathUtil.getRealPath(getActivity(),selectedFileURI));
-                    imgPic.setVisibility(View.GONE);
+                    imgPic.setImageResource(R.drawable.pdff);
+                    imgPic.setVisibility(View.VISIBLE);
                     txtFileSelectionPath.setVisibility(View.VISIBLE);
                     txtFileSelectionPath.setText(RealPathUtil.getRealPath(getActivity(),selectedFileURI));
                     alert4.dismiss();
