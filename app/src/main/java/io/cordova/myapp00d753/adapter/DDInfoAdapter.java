@@ -1,7 +1,9 @@
 package io.cordova.myapp00d753.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.Image;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +60,14 @@ public class DDInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             if (position%2 == 0){
                 ((MyViewholder) holder).llMain.setBackgroundResource(R.drawable.background_12);
             }
+            ((MyViewholder) holder).llMain.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(ddInfoList.get(position).getActUrl()));
+                    context.startActivity(intent);
+                }
+            });
         } else {
 
         }
