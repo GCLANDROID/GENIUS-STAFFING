@@ -81,6 +81,7 @@ import io.cordova.myapp00d753.R;
 
 import io.cordova.myapp00d753.Retrofit.RetrofitClient;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.LocationSpinnerAdapter;
 import io.cordova.myapp00d753.activity.metso.adapter.ShiftSpinnerAdapter;
 import io.cordova.myapp00d753.activity.metso.model.LocationSpinnerModel;
@@ -315,7 +316,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(MetsoAttendanceActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent=new Intent(MetsoAttendanceActivity.this, NewUserDashboardActivity.class);
                 startActivity(intent);
                 finish();
             }
