@@ -226,7 +226,7 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(BacklogAttendanceActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent=new Intent(BacklogAttendanceActivity.this, NewUserDashboardActivity.class);
                 startActivity(intent);
                 finish();
             }
