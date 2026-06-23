@@ -67,6 +67,7 @@ import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.activity.HRMSDashBoardActivity;
 import io.cordova.myapp00d753.activity.LoginActivity;
 import io.cordova.myapp00d753.activity.MaintainceBreakActivity;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.ResignEmployeeDashboardActivity;
 import io.cordova.myapp00d753.activity.SuperVisiorDashBoardActivity;
 import io.cordova.myapp00d753.activity.TempDashBoardActivity;
@@ -508,14 +509,16 @@ public class LoginCredentialsFragment extends Fragment {
 
                                 } else {
                                     if (ConsentFlag.equals("1")) {
-                                        Intent intent = new Intent(getContext(), EmployeeDashBoardActivity.class);
+                                        //Intent intent = new Intent(getContext(), EmployeeDashBoardActivity.class);
+                                        Intent intent = new Intent(getContext(), NewUserDashboardActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                         intent.putExtra("ConsentFlag", ConsentFlag);
                                         intent.putExtra("from","Login_setup");
                                         startActivity(intent);
 
                                     } else {
-                                        Intent intent = new Intent(getContext(), EmployeeDashBoardActivity.class);
+                                        //Intent intent = new Intent(getContext(), EmployeeDashBoardActivity.class);
+                                        Intent intent = new Intent(getContext(), NewUserDashboardActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                         intent.putExtra("ConsentFlag", ConsentFlag);
                                         intent.putExtra("from","Login_setup");
@@ -1004,7 +1007,8 @@ public class LoginCredentialsFragment extends Fragment {
 
                                 } else {
 
-                                    Intent intent = new Intent(getContext(), EmployeeDashBoardActivity.class);
+                                    //Intent intent = new Intent(getContext(), EmployeeDashBoardActivity.class);
+                                    Intent intent = new Intent(getContext(), NewUserDashboardActivity.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                     intent.putExtra("ConsentFlag", ConsentFlag);
                                     intent.putExtra("from","Login_setup");
@@ -1082,7 +1086,5 @@ public class LoginCredentialsFragment extends Fragment {
     public static String generateSessionID(String userId) {
         return userId + "_" + System.currentTimeMillis() + "_" + UUID.randomUUID().toString();
     }
-
-
 
 }
