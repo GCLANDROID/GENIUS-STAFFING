@@ -77,6 +77,7 @@ import java.util.Locale;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.Retrofit.RetrofitClient;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.LocationSpinnerAdapter;
 import io.cordova.myapp00d753.activity.metso.adapter.ShiftSpinnerAdapter;
 import io.cordova.myapp00d753.activity.metso.model.LocationSpinnerModel;
@@ -310,7 +311,7 @@ public class AttendanceWithOnlyShiftActivity extends AppCompatActivity implement
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(AttendanceWithOnlyShiftActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent=new Intent(AttendanceWithOnlyShiftActivity.this, NewUserDashboardActivity.class);
                 startActivity(intent);
                 finish();
             }
