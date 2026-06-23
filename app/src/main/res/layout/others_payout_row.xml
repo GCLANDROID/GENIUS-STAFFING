@@ -3,6 +3,80 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <LinearLayout
+    android:background="@drawable/background_19"
+
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+    <TextView
+        android:id="@+id/tvBillType"
+        android:textAlignment="center"
+        android:layout_marginLeft="2dp"
+        android:textColor="@color/text_color_5"
+        android:textSize="13sp"
+        android:fontFamily="@font/open_sans_regular"
+        android:text="Bill Type"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="0.5"/>
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/pink1"/>
+    <TextView
+        android:id="@+id/tvYear"
+        android:textAlignment="center"
+        android:layout_marginLeft="2dp"
+        android:textColor="@color/text_color_5"
+        android:textSize="13sp"
+        android:fontFamily="@font/open_sans_regular"
+        android:text="Payable \nYear"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="0.5"/>
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/pink1"/>
+    <TextView
+        android:id="@+id/tvMonth"
+        android:textAlignment="center"
+        android:layout_marginLeft="2dp"
+        android:textColor="@color/text_color_5"
+        android:textSize="13sp"
+        android:fontFamily="@font/open_sans_regular"
+        android:text="Payable \nMonth"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="0.5"/>
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/pink1"/>
+    <TextView
+        android:id="@+id/tvAmt"
+        android:textAlignment="center"
+        android:layout_marginLeft="2dp"
+        android:textColor="@color/text_color_5"
+        android:textSize="13sp"
+        android:fontFamily="@font/open_sans_regular"
+        android:text="Disbursed \nAmt."
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="0.5"/>
+
+</LinearLayout>
+
+</LinearLayout>
+
+<!--
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="wrap_content">
+<LinearLayout
     android:background="@drawable/lldesign7"
 
     android:layout_width="match_parent"
@@ -17,7 +91,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_weight="0.5"></TextView>
+        android:layout_weight="0.5"/>
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
@@ -66,4 +140,4 @@
 
 </LinearLayout>
 
-</LinearLayout>
+</LinearLayout>-->
