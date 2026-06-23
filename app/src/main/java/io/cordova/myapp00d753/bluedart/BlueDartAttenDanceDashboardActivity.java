@@ -103,7 +103,7 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
     LinearLayout llTour;
     int date;
     LinearLayout llParentAttendance,llParentWeeklyOffHoliday,llParentAdjustment,llParentView;
-    ImageView imgHome;
+    ImageView imgHome,imgDrawerClose;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,6 +122,7 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
         btnMarkAttendance.setOnClickListener(this);
         imgSearch = (ImageView) findViewById(R.id.imgSearch);
         imgHome = (ImageView) findViewById(R.id.imgHome);
+        imgDrawerClose = (ImageView) findViewById(R.id.imgDrawerClose);
         dlMain = (DrawerLayout) findViewById(R.id.dlMain);
         rvItem = (RecyclerView) findViewById(R.id.rvItem);
         tvAttendance = (TextView) findViewById(R.id.tvAttendance);
@@ -201,6 +202,7 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
         llAdjustment.setOnClickListener(this);
         tvCancel.setOnClickListener(this);
         imgHome.setOnClickListener(this);
+        imgDrawerClose.setOnClickListener(this);
 
         y = Calendar.getInstance().get(Calendar.YEAR);
         pastYear = y - 1;
@@ -710,6 +712,8 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
             Intent intent = new Intent(BlueDartAttenDanceDashboardActivity.this, NewUserDashboardActivity.class);
             startActivity(intent);
             finish();
+        } else if(view == imgDrawerClose){
+            dlMain.close();
         }
     }
 
