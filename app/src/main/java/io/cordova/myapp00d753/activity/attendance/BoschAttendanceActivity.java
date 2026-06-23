@@ -85,6 +85,7 @@ import java.util.Locale;
 import io.cordova.myapp00d753.R;
 
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.bosch.BoschAndroidXCameraActivity;
 import io.cordova.myapp00d753.activity.bosch.BoschAttendanceReportActivity;
 import io.cordova.myapp00d753.activity.bosch.adapter.PunchTypeAdapter;
@@ -233,7 +234,8 @@ public class BoschAttendanceActivity extends AppCompatActivity implements OnMapR
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(BoschAttendanceActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent = new Intent(BoschAttendanceActivity.this, NewUserDashboardActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
         });
