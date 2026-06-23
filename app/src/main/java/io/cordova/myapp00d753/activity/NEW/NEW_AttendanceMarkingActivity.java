@@ -85,6 +85,7 @@ import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.activity.NEW.adapter.NEW_LocationSpinnerAdapter;
 import io.cordova.myapp00d753.activity.NEW.model.LocationModel;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.metso.MetsoNewReimbursementClaimActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.ShiftSpinnerAdapter;
 import io.cordova.myapp00d753.activity.metso.adapter.SupervisorFilterAdapter;
@@ -211,7 +212,7 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(NEW_AttendanceMarkingActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent=new Intent(NEW_AttendanceMarkingActivity.this, NewUserDashboardActivity.class);
                 startActivity(intent);
                 finish();
             }
