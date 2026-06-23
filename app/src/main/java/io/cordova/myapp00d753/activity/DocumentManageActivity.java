@@ -201,7 +201,7 @@ public class DocumentManageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (pref.getUserType().equals("1")) {
-                    Intent intent = new Intent(DocumentManageActivity.this, EmployeeDashBoardActivity.class);
+                    Intent intent = new Intent(DocumentManageActivity.this, NewUserDashboardActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 } else if (pref.getUserType().equals("4")) {
