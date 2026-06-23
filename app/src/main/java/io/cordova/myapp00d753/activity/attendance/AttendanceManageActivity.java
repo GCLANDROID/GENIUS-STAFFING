@@ -83,6 +83,7 @@ import io.cordova.myapp00d753.AndroidXCamera.FrontAndroidXCameraActivity;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.activity.FaceRecognitation;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.module.AttendanceManageModule;
 import io.cordova.myapp00d753.module.AttendanceService;
 import io.cordova.myapp00d753.utility.ApiClient;
@@ -293,7 +294,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(AttendanceManageActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent = new Intent(AttendanceManageActivity.this, NewUserDashboardActivity.class);
                 startActivity(intent);
                 finish();
             }
