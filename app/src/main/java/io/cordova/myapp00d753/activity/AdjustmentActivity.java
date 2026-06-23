@@ -24,7 +24,7 @@ public class AdjustmentActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(AdjustmentActivity.this,EmployeeDashBoardActivity.class);
+                Intent intent=new Intent(AdjustmentActivity.this,NewUserDashboardActivity.class);
                 startActivity(intent);
                 finish();
             }
