@@ -223,14 +223,16 @@
         </activity>
         <activity
             android:name=".activity.metso.MetsoPMSReportActivity"
-            android:exported="false">
+            android:exported="false"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".activity.metso.MetsoPMSTargetAchivementActivity"
-            android:exported="false">
+            android:exported="false"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -306,7 +308,8 @@
             android:exported="false" />
         <activity
             android:name=".activity.attendance.AttenDanceDashboardActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.VoiceAssistantActivity"
             android:screenOrientation="userPortrait" />
@@ -327,7 +330,8 @@
         <activity android:name=".activity.SupSaleDashboardActivity" />
         <activity android:name=".activity.SupEmpSaleActivity" />
         <activity android:name=".activity.PFDashBoardActivity" />
-        <activity android:name=".activity.DocumentNumberActivity" />
+        <activity android:name=".activity.DocumentNumberActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".activity.QRCodeScannerActivity" />
         <activity android:name=".activity.QRGeneratorActivity" />
         <activity
