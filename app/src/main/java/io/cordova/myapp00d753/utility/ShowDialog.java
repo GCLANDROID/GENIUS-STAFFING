@@ -21,7 +21,7 @@ public class ShowDialog {
 
     public static void showSuccessDialog(Context context, String text,ResultListener resultListener) {
         Dialog dialogView = new Dialog(context,R.style.CustomDialogNew2);
-        dialogView.setContentView(R.layout.alert_dialog_layout);
+        dialogView.setContentView(R.layout.dialog_success);
         dialogView.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialogView.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
