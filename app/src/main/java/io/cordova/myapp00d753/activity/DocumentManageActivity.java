@@ -505,6 +505,7 @@ public class DocumentManageActivity extends AppCompatActivity {
 
                             flag1 = 1;
                             imgDoc.setImageBitmap(bm);
+                            imgDoc.setVisibility(View.VISIBLE);
                             alerDialog3.dismiss();
 
 
@@ -538,7 +539,7 @@ public class DocumentManageActivity extends AppCompatActivity {
                             encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
                             alerDialog3.dismiss();
                             imgDoc.setImageBitmap(bm);
-
+                            imgDoc.setVisibility(View.VISIBLE);
                             flag1 = 2;
 
 
@@ -557,7 +558,8 @@ public class DocumentManageActivity extends AppCompatActivity {
 
                     Uri selectedFileURI = data.getData();
                     pdffile = new File(getRealPDFPathFromURI(selectedFileURI));
-
+                    imgDoc.setVisibility(View.VISIBLE);
+                    imgDoc.setImageResource(R.drawable.pdf_1);
                     flag1 = 3;
                     alerDialog1.dismiss();
 
@@ -577,6 +579,7 @@ public class DocumentManageActivity extends AppCompatActivity {
                     int newHeight = (int) (d.getHeight() * (512.0 / d.getWidth()));
                     Bitmap putImage = Bitmap.createScaledBitmap(d, 512, newHeight, true);
                     imgDoc.setImageBitmap(putImage);
+                    imgDoc.setVisibility(View.VISIBLE);
                     flag1 = 1;
                      pictureFile = (File)data.getExtras().get("picture");
                     Log.d("fjjgk",pictureFile.toString());
