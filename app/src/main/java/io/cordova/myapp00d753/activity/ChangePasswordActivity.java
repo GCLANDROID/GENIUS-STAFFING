@@ -147,7 +147,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
 
     private void onClick() {
