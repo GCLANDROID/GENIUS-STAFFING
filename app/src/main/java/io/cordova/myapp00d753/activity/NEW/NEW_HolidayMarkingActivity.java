@@ -260,7 +260,7 @@ public class NEW_HolidayMarkingActivity extends AppCompatActivity {
             public void onDateSet(DatePicker datePicker, int y, int m, int d) {
                 newdate = y + "-" + (m + 1) + "-" + d;
                 tvDate.setVisibility(View.VISIBLE);
-                tvDate.setText(newdate);
+                tvDate.setText(Util.changeAnyDateFormat(newdate,"yyyy-MM-dd","dd MMMM yyyy"));
                 holidayDate = newdate;
 
             }
