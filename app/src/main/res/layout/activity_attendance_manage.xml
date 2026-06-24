@@ -174,7 +174,27 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/llL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:elevation="10dp"
+        android:background="@drawable/background_15"
+        android:gravity="center"
+        android:visibility="gone"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <ProgressBar
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="20dp" />
+
+    </LinearLayout>
     <!--<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="?android:actionBarSize"
