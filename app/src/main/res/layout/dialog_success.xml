@@ -38,10 +38,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:layout_marginHorizontal="20dp"
             android:fontFamily="@font/open_sans_medium"
             android:text="Success"
-            android:textColor="@color/text_color_4"
-            android:textSize="13sp" />
+            android:textColor="@color/text_color_5"
+            android:textSize="14sp" />
 
         <Button
             android:layout_width="100dp"
