@@ -38,11 +38,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="14dp"
             android:fontFamily="@font/open_sans_medium"
-            android:text="Success"
+            android:text="Alert Message"
             android:gravity="center"
-            android:layout_marginHorizontal="10dp"
+            android:layout_marginHorizontal="15dp"
             android:textColor="@color/text_color_5"
             android:textSize="13sp" />
 
