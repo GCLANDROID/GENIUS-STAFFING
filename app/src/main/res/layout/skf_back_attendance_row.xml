@@ -21,9 +21,8 @@
             android:visibility="visible"
             android:id="@+id/llLike"
             android:gravity="center"
-            android:background="@drawable/lldesign"
+            android:background="@drawable/background_30"
             android:layout_gravity="center"
-            android:backgroundTint="@color/grey"
             android:layout_width="0dp"
             android:layout_height="20dp"
             android:layout_weight="0.1">
@@ -32,8 +31,9 @@
                 android:id="@+id/imgLike"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
+                android:padding="2dp"
                 android:src="@drawable/likeicon"
-                app:tint="@color/white"></ImageView>
+                app:tint="@color/text_color_3"/>
         </LinearLayout>
 
         <TextView
@@ -70,7 +70,7 @@
                 android:layout_height="20dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="5dp"
-                android:src="@drawable/clock" />
+                android:src="@drawable/clock_3" />
         </LinearLayout>
 
         <LinearLayout
@@ -97,7 +97,7 @@
                 android:layout_height="20dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="5dp"
-                android:src="@drawable/clock" />
+                android:src="@drawable/clock_3" />
         </LinearLayout>
 
         <TextView
