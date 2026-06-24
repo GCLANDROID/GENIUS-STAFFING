@@ -79,7 +79,7 @@ public class NEW_AttendanceRegularizationActivity extends AppCompatActivity impl
     String startDate="",endDate="",ClientID="",MasterID="";
     String prvMonth1stDate ="",currentDate="";
     ArrayList<NEW_BackLogAttendanceModel> blockLogList;
-    LinearLayout llTick;
+    LinearLayout llTick,llHeading;
     public boolean isSelectedAll = false;
     NEW_BacklogAdapter skfBacklogAdapter;
     int itemSelectCount=0;
@@ -116,6 +116,8 @@ public class NEW_AttendanceRegularizationActivity extends AppCompatActivity impl
         llNodata = findViewById(R.id.llNodata);
         llWarning = findViewById(R.id.llWarning);
         llTick = findViewById(R.id.llTick);
+        llHeading = findViewById(R.id.llHeading);
+        llHeading.setVisibility(View.GONE);
         imgHome = findViewById(R.id.imgHome);
         llRegularisationCount = findViewById(R.id.llRegularisationCount);
         imgLike = findViewById(R.id.imgLike);
