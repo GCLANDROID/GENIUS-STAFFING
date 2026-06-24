@@ -550,25 +550,29 @@
         <LinearLayout
             android:id="@+id/llNodata"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
+            android:layout_height="0dp"
             android:gravity="top|center"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout20">
 
             <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginTop="20dp"
-                android:src="@drawable/problemicon" />
+                android:src="@drawable/problemicon"
+                android:tint="@color/pink1"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="No data found"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:textColor="@android:color/black"
+                android:textSize="15sp"
+                android:textColor="@color/text_color_3"
                 android:textStyle="bold" />
         </LinearLayout>
 
