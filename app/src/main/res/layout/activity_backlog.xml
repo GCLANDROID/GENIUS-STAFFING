@@ -184,61 +184,70 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-                    <TextView
-                        android:layout_marginLeft="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="12sp"
-                        android:textColor="@android:color/holo_red_dark"
-                        android:text="Note:- \n* You can change your In Time/Out Time."></TextView>
+
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+
+                        android:background="@drawable/background_11">
                         <TextView
                             android:layout_marginLeft="10dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="12sp"
-                            android:textStyle="bold"
+                            android:layout_marginTop="10dp"
                             android:textColor="@android:color/holo_red_dark"
-                            android:text= "F:"></TextView>
-                        <TextView
-                            android:layout_width="wrap_content"
+                            android:text="Note:- \n* You can change your In Time/Out Time."></TextView>
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="12sp"
-                            android:textColor="@android:color/holo_red_dark"
-                            android:text= "Full Working Day"></TextView>
-                        <TextView
-                            android:layout_marginLeft="10dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:textColor="@android:color/holo_red_dark"
-                            android:text= "WO:"></TextView>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="12sp"
-                            android:textColor="@android:color/holo_red_dark"
-                            android:text= "Weekly Off"></TextView>
-                        <TextView
-                            android:layout_marginLeft="10dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:textColor="@android:color/holo_red_dark"
-                            android:text= "H:"></TextView>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="12sp"
-                            android:textColor="@android:color/holo_red_dark"
-                            android:text= "Holiday"></TextView>
+                            android:layout_marginBottom="10dp">
+                            <TextView
+                                android:layout_marginLeft="10dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:textColor="@android:color/holo_red_dark"
+                                android:text= "F:"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/holo_red_dark"
+                                android:text= "Full Working Day"/>
+                            <TextView
+                                android:layout_marginLeft="10dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:textColor="@android:color/holo_red_dark"
+                                android:text= "WO:"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/holo_red_dark"
+                                android:text= "Weekly Off"/>
+                            <TextView
+                                android:layout_marginLeft="10dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:textColor="@android:color/holo_red_dark"
+                                android:text= "H:"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="12sp"
+                                android:textColor="@android:color/holo_red_dark"
+                                android:text= "Holiday"/>
+                        </LinearLayout>
+
                     </LinearLayout>
-
-
 
                     <TextView
                         android:textStyle="bold"
@@ -246,8 +255,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
-                        android:textColor="@color/textcolor"
-                        android:id="@+id/tvCount"></TextView>
+                        android:textColor="@color/text_color_3"
+                        android:id="@+id/tvCount"/>
+
                     <LinearLayout
                         android:visibility="visible"
                         android:layout_width="match_parent"
@@ -261,8 +271,8 @@
                             android:background="@drawable/lldesign"
                             android:layout_gravity="center"
                             android:backgroundTint="@color/grey"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             >
                             <ImageView
                                 android:visibility="gone"
@@ -273,15 +283,16 @@
                                 app:tint="@color/white"></ImageView>
                         </LinearLayout>
                         <TextView
-                            android:textStyle="bold"
+                            android:fontFamily="@font/open_sans_medium"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="20sp"
-                            android:textColor="@color/textcolor"
+                            android:textSize="17sp"
+                            android:textColor="@color/text_color_3"
                             android:layout_gravity="center"
                             android:text="Select All"
-                            android:layout_marginLeft="5dp"></TextView>
+                            android:layout_marginLeft="5dp"/>
                     </LinearLayout>
+
 
                     <androidx.core.widget.NestedScrollView
                         android:layout_width="match_parent"
@@ -296,10 +307,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="40dp"
                                 android:layout_gravity="center"
-                                android:layout_marginLeft="5dp"
-                                android:layout_marginRight="5dp"
+
                                 android:layout_marginTop="15sp"
-                                android:background="@drawable/lldesign7"
+                                android:background="@drawable/background_24"
                                 android:orientation="horizontal">
                                 <LinearLayout
                                     android:visibility="gone"
@@ -347,7 +357,7 @@
                                     android:textSize="12sp"/>
                                 <TextView
                                     android:layout_marginRight="2dp"
-                                    android:gravity="right"
+                                    android:gravity="center"
                                     android:id="@+id/tvRemark"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -380,7 +390,7 @@
                                     android:layout_height="40dp"
                                     android:background="@drawable/lldesign"
                                     android:orientation="horizontal"
-                                    android:backgroundTint="@color/maincolor"
+                                    android:backgroundTint="@color/pink1"
 
                                     >
 
@@ -393,8 +403,8 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:textSize="14sp"
-                                            android:textColor="@android:color/white"
-                                            android:text="SAVE"></TextView>
+                                            android:textColor="@color/white"
+                                            android:text="Save"/>
                                     </LinearLayout>
                                 </LinearLayout>
                             </LinearLayout>
