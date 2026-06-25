@@ -73,6 +73,7 @@ public class NewUserDashboardActivity extends AppCompatActivity {
     String responseCode,DocLink,PFLink;
     android.app.AlertDialog alert3;
     ArrayList<NeedToActModel> needToActModelList = new ArrayList<>();
+    LinearLayout chatFabContainer;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +95,7 @@ public class NewUserDashboardActivity extends AppCompatActivity {
         imgLogout = findViewById(R.id.imgLogout);
         llDashboard = findViewById(R.id.llDashboard);
         llMenu = findViewById(R.id.llMenu);
+        chatFabContainer = findViewById(R.id.chatFabContainer);
         tvEmployeeName = findViewById(R.id.tvEmployeeName);
         tvEmployeeName.setText("Welcome "+pref.getEmpName());
         loadHomeFragment();
@@ -107,6 +109,14 @@ public class NewUserDashboardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 loadMenuFragment();
+            }
+        });
+        chatFabContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(NewUserDashboardActivity.this, ChatBotNewActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
         });
         imgLogout.setOnClickListener(new View.OnClickListener() {
