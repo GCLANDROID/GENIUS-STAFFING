@@ -3,9 +3,7 @@ package io.cordova.myapp00d753.fragment;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
@@ -63,10 +61,7 @@ import java.util.UUID;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.ChangePasswordActivity;
-import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.activity.HRMSDashBoardActivity;
-import io.cordova.myapp00d753.activity.LoginActivity;
-import io.cordova.myapp00d753.activity.MaintainceBreakActivity;
 import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.ResignEmployeeDashboardActivity;
 import io.cordova.myapp00d753.activity.SuperVisiorDashBoardActivity;
@@ -1001,7 +996,7 @@ public class LoginCredentialsFragment extends Fragment {
                             if (UserType.equals("1")) {
                                 if (etPassword.getText().toString().equalsIgnoreCase("password")) {
                                     Intent intent = new Intent(getContext(), ChangePasswordActivity.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(intent);
 
 
@@ -1009,7 +1004,7 @@ public class LoginCredentialsFragment extends Fragment {
 
                                     //Intent intent = new Intent(getContext(), EmployeeDashBoardActivity.class);
                                     Intent intent = new Intent(getContext(), NewUserDashboardActivity.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     intent.putExtra("ConsentFlag", ConsentFlag);
                                     intent.putExtra("from","Login_setup");
                                     startActivity(intent);
@@ -1018,7 +1013,7 @@ public class LoginCredentialsFragment extends Fragment {
                                 }
                             } else if (UserType.equals("3")) {
                                 Intent intent = new Intent(getContext(), SuperVisiorDashBoardActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
 
                             } else if (UserType.equals("2")) {
