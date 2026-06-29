@@ -63,6 +63,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:visibility="gone"
         android:id="@+id/imageView3"
         android:layout_width="match_parent"
         android:layout_height="100dp"
@@ -80,6 +81,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/llDashboard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -132,6 +134,46 @@
             android:text="Menu"
             android:textColor="@color/white" />
 
+    </LinearLayout>
+    <LinearLayout
+        android:visibility="visible"
+        android:layout_gravity="bottom|right"
+        android:id="@+id/chatFabContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginBottom="150dp">
+
+        <!-- Floating label text -->
+
+
+        <!-- Floating Action Button -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fbChatbot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/robot"
+            android:backgroundTint="#00FFFFFF"
+            app:maxImageSize="60dp"
+            />
+        <TextView
+            android:id="@+id/fabLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ask Genie 🤖"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:background="@drawable/fab_label_bg"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:layout_marginEnd="8dp"
+            android:elevation="6dp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -98,7 +98,8 @@ public class NewUserDashboardActivity extends AppCompatActivity {
         chatFabContainer = findViewById(R.id.chatFabContainer);
         tvEmployeeName = findViewById(R.id.tvEmployeeName);
         tvEmployeeName.setText("Welcome "+pref.getEmpName());
-        loadHomeFragment();
+        //loadHomeFragment();
+        loadMenuFragment();
         llDashboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -142,10 +143,10 @@ public class NewUserDashboardActivity extends AppCompatActivity {
     }
 
     public void loadMenuFragment() {
-        imgHome.setBackgroundResource(0);
-        imgHome.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#000000")));
-        imgMenu.setBackgroundResource(R.drawable.ovaldesign);
-        imgMenu.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#E95154")));
+//        imgHome.setBackgroundResource(0);
+//        imgHome.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#000000")));
+//        imgMenu.setBackgroundResource(R.drawable.ovaldesign);
+//        imgMenu.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#E95154")));
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         NewMenuFragment pfragment = new NewMenuFragment();

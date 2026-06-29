@@ -58,10 +58,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.naishadhparmar.zcustomcalendar.CustomCalendar;
-import org.naishadhparmar.zcustomcalendar.OnDateSelectedListener;
-import org.naishadhparmar.zcustomcalendar.OnNavigationButtonClickedListener;
-import org.naishadhparmar.zcustomcalendar.Property;
+
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -95,6 +92,10 @@ import io.cordova.myapp00d753.activity.WeeklyOffAttendanceActivity;
 import io.cordova.myapp00d753.activity.bosch.BoschAttendanceReportActivity;
 import io.cordova.myapp00d753.activity.metso.MetsoPMSTargetAchivementActivity;
 import io.cordova.myapp00d753.adapter.AttendanceCalenderAdapter;
+import io.cordova.myapp00d753.customcalender.CustomCalendar;
+import io.cordova.myapp00d753.customcalender.OnDateSelectedListener;
+import io.cordova.myapp00d753.customcalender.OnNavigationButtonClickedListener;
+import io.cordova.myapp00d753.customcalender.Property;
 import io.cordova.myapp00d753.module.AttendanceCalenderModel;
 import io.cordova.myapp00d753.module.SpineerItemModel;
 import io.cordova.myapp00d753.utility.AppController;
