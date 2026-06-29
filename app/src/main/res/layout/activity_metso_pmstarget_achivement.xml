@@ -1,4 +1,459 @@
 <?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".activity.metso.MetsoPMSTargetAchivementActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:background="@mipmap/group_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imgBack"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="35dp"
+        android:src="@drawable/arrow_left_new"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imgHome"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="15dp"
+        android:src="@drawable/home_new"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvHeader"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="25dp"
+        android:background="@color/white"
+        android:fontFamily="@font/open_sans_semi_bold"
+        android:gravity="center"
+        android:text="PMS"
+        android:textColor="@color/new_header_text_color"
+        android:textSize="15sp"
+        app:layout_constraintTop_toBottomOf="@+id/imgBack" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginVertical="10dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/background_16"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHeader">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:gravity="right">
+
+                    <Button
+                        android:id="@+id/btnReport"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="@drawable/lldesign"
+                        android:backgroundTint="@color/pink1"
+                        android:text="View PMS Report"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clReportingManager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_24"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="8dp">
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout6"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/btnChangeApprover"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/open_sans_medium"
+                            android:text="Reporting Manager/Approver:"
+                            android:textColor="@color/text_color_3"
+                            android:textSize="12.5sp" />
+
+                        <TextView
+                            android:id="@+id/tvApproverName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/open_sans_semi_bold"
+                            android:textColor="@color/black"
+                            android:textSize="14sp"
+                            tools:text="Reporting Manager" />
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/btnChangeApprover"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:background="@drawable/lldesign"
+                        android:backgroundTint="@color/textcolor"
+                        android:text="Change"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@+id/linearLayout6"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/linearLayout6" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:id="@+id/llLastYrTarget"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/txtYear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/open_sans_semi_bold"
+                        android:text="Your Last Year Target is :"
+                        android:textColor="@color/text_color_2"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvLastYearTarget"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/background_15"
+                        android:fontFamily="@font/open_sans_medium"
+                        android:minHeight="150dp"
+                        android:padding="10dp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvTargetAchievement"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/open_sans_semi_bold"
+                    android:text="Please Enter Your Taget"
+                    android:textColor="@color/text_color_2"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/etRemarks"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/background_15"
+                    android:fontFamily="@font/open_sans_medium"
+                    android:gravity="top"
+                    android:minHeight="150dp"
+                    android:padding="10dp"
+                    android:textColor="@color/text_color_5"
+                    android:textSize="14sp" />
+
+                <LinearLayout
+                    android:id="@+id/llRating"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/background_17"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="7dp"
+                    android:paddingTop="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/open_sans_semi_bold"
+                        android:text="Give your Self Ratings"
+                        android:textColor="@color/text_color_2"
+                        android:textSize="14sp"></TextView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+
+                        android:paddingBottom="10dp">
+
+                        <LinearLayout
+                            android:id="@+id/llExceptional"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <FrameLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center">
+
+                                <ImageView
+                                    android:id="@+id/imgExceptional"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:src="@drawable/excitedemoji1"
+                                    android:visibility="visible" />
+
+                                <ImageView
+
+                                    android:id="@+id/imgSelectedExceptional"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:src="@drawable/excitedemojiicon"
+                                    android:visibility="gone" />
+                            </FrameLayout>
+
+                            <TextView
+                                android:id="@+id/tvOp1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="5dp"
+                                android:fontFamily="@font/open_sans_medium"
+                                android:text="Exceptional"
+                                android:textAllCaps="false"
+                                android:textColor="@color/pink1"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/llExcellent"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <FrameLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center">
+
+                                <ImageView
+                                    android:id="@+id/imgExcellent"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:src="@drawable/verygoodemoji"
+                                    android:visibility="visible" />
+
+                                <ImageView
+                                    android:id="@+id/imgSelectedExcellent"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:src="@drawable/verygoodemoji1"
+                                    android:visibility="gone" />
+                            </FrameLayout>
+
+                            <TextView
+                                android:id="@+id/tvOp2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="5dp"
+                                android:fontFamily="@font/open_sans_medium"
+                                android:text="Excellent"
+                                android:textAllCaps="false"
+                                android:textColor="@color/pink1"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/llGood"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <FrameLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center">
+
+                                <ImageView
+                                    android:id="@+id/imgGood"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:src="@drawable/goodemoji"
+                                    android:visibility="visible" />
+
+                                <ImageView
+                                    android:id="@+id/imgSelectedGood"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:src="@drawable/goodemoji1"
+                                    android:visibility="gone" />
+                            </FrameLayout>
+
+                            <TextView
+                                android:id="@+id/tvOp3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="7dp"
+                                android:fontFamily="@font/open_sans_medium"
+                                android:text="Good"
+                                android:textAllCaps="false"
+                                android:textColor="@color/pink1"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/llImprovement"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <FrameLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center">
+
+                                <ImageView
+                                    android:id="@+id/imgImprovement"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:src="@drawable/averageemoji"
+                                    android:visibility="visible" />
+
+                                <ImageView
+                                    android:id="@+id/imgSelectedImprovement"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:src="@drawable/averageemoji1"
+                                    android:visibility="gone" />
+                            </FrameLayout>
+
+                            <TextView
+                                android:id="@+id/tvOp4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="7dp"
+                                android:fontFamily="@font/open_sans_medium"
+                                android:text="Need improvement"
+                                android:textAlignment="center"
+                                android:textAllCaps="false"
+                                android:textColor="@color/pink1"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/llNA"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <FrameLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center">
+
+                                <ImageView
+                                    android:id="@+id/imgNA"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:src="@drawable/sademoji"
+                                    android:visibility="visible" />
+
+                                <ImageView
+                                    android:id="@+id/imgSelectedNA"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:src="@drawable/sademoji1"
+                                    android:visibility="gone" />
+                            </FrameLayout>
+
+                            <TextView
+                                android:id="@+id/tvOp5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="7dp"
+                                android:fontFamily="@font/open_sans_medium"
+                                android:text="Not acceptable"
+                                android:textAlignment="center"
+                                android:textAllCaps="false"
+                                android:textColor="@color/pink1"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="right">
+
+                    <Button
+                        android:id="@+id/btnSave"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="@drawable/lldesign"
+                        android:backgroundTint="@color/pink1"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:text="Save"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"></Button>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout><!--
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -409,4 +864,4 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-</LinearLayout>
+</LinearLayout>-->

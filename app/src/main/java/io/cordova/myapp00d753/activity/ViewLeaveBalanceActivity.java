@@ -40,7 +40,7 @@ public class ViewLeaveBalanceActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ViewLeaveBalanceActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent = new Intent(ViewLeaveBalanceActivity.this, NewUserDashboardActivity.class);
                 startActivity(intent);
                 finish();
             }

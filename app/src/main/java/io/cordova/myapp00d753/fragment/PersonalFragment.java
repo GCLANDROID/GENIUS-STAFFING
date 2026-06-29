@@ -18,17 +18,16 @@ import io.cordova.myapp00d753.utility.Pref;
  */
 public class PersonalFragment extends Fragment {
 
-
    View view;
    TextView tvGender,tvEmpCodeDOB,tvGurdianName,tvRealtionShip,tvQualification,tvMarital,tvBloodGroup;
    Pref pref;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view= inflater.inflate(R.layout.fragment_personal, container, false);
+        //view= inflater.inflate(R.layout.fragment_personal, container, false);
+        view= inflater.inflate(R.layout.fragment_new_personal, container, false);
         iniItView();
         return view;
     }
@@ -48,7 +47,7 @@ public class PersonalFragment extends Fragment {
         tvMarital=(TextView)view.findViewById(R.id.tvMarital);
         tvMarital.setText(pref.getSMartial());
         tvBloodGroup=(TextView)view.findViewById(R.id.tvBloodGroup);
-        tvBloodGroup.setText(pref.getSBlood());
+        tvBloodGroup.setText((pref.getSBlood().equalsIgnoreCase("null"))?"N/A":pref.getSBlood());
     }
 
 }

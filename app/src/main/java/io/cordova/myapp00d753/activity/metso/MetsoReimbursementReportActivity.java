@@ -39,6 +39,7 @@ import java.util.Calendar;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.ClaimReportActivity;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.MetsoReimbursementReportAdapter;
 import io.cordova.myapp00d753.adapter.ClaimReportAdapter;
 import io.cordova.myapp00d753.module.ClaimModule;
@@ -366,7 +367,7 @@ public class MetsoReimbursementReportActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(MetsoReimbursementReportActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent=new Intent(MetsoReimbursementReportActivity.this, NewUserDashboardActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }

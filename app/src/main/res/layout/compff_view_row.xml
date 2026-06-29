@@ -30,25 +30,25 @@
                     <TextView
                         android:id="@+id/tvApplicationType"
                         android:textSize="10sp"
-                        android:textColor="@color/blue"
+                        android:textColor="@color/text_color_3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Application Date"></TextView>
+                        android:text="Application Date"/>
                     <TextView
                         android:layout_marginLeft="5dp"
                         android:textSize="10sp"
-                        android:textColor="@color/blue"
+                        android:textColor="@color/text_color_3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Application Date"></TextView>
+                        android:text="Application Date"/>
                     <TextView
                         android:id="@+id/tvApplicationDate"
                         android:layout_marginLeft="5dp"
                         android:textSize="10sp"
-                        android:textColor="@color/textcolor"
+                        android:textColor="@color/text_color"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Referal Date"></TextView>
+                        android:text="Referal Date"/>
                 </LinearLayout>
 
                 <TextView
@@ -57,12 +57,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/lldesign9"
-                    android:backgroundTint="@color/blue"
+                    android:backgroundTint="@color/text_color_3"
                     android:paddingLeft="10dp"
                     android:paddingTop="5dp"
                     android:paddingRight="10dp"
                     android:paddingBottom="5dp"
-                    android:textColor="@color/white"></TextView>
+                    android:textColor="@color/white"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -75,18 +75,19 @@
                     android:orientation="vertical">
                     <TextView
                         android:textSize="10sp"
-                        android:textColor="@color/blue"
+                        android:textColor="@color/text_color_3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Effective Date"></TextView>
+                        android:text="Effective Date"
+                        android:fontFamily="@font/open_sans_medium"/>
                     <TextView
                         android:id="@+id/tvEffectDate"
                         android:layout_marginTop="5dp"
                         android:textSize="10sp"
-                        android:textColor="@color/textcolor"
+                        android:textColor="@color/text_color"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Referal Date"></TextView>
+                        android:text="Referal Date"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="0dp"
@@ -95,18 +96,18 @@
                     android:orientation="vertical">
                     <TextView
                         android:textSize="10sp"
-                        android:textColor="@color/blue"
+                        android:textColor="@color/text_color_3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Referal Date"></TextView>
+                        android:text="Referal Date"/>
                     <TextView
                         android:id="@+id/tvReferalDate"
                         android:layout_marginTop="5dp"
                         android:textSize="10sp"
-                        android:textColor="@color/textcolor"
+                        android:textColor="@color/text_color"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Referal Date"></TextView>
+                        android:text="Referal Date"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -116,18 +117,18 @@
                     android:orientation="vertical">
                     <TextView
                         android:textSize="10sp"
-                        android:textColor="@color/blue"
+                        android:textColor="@color/text_color_3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Mode"></TextView>
+                        android:text="Mode"/>
                     <TextView
                         android:id="@+id/tvMode"
                         android:layout_marginTop="5dp"
                         android:textSize="10sp"
-                        android:textColor="@color/textcolor"
+                        android:textColor="@color/text_color"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Referal Date"></TextView>
+                        android:text="Referal Date"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="0dp"
@@ -136,18 +137,18 @@
                     android:orientation="vertical">
                     <TextView
                         android:textSize="10sp"
-                        android:textColor="@color/blue"
+                        android:textColor="@color/text_color_3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Reason"></TextView>
+                        android:text="Reason"/>
                     <TextView
                         android:id="@+id/tvReason"
                         android:layout_marginTop="5dp"
                         android:textSize="10sp"
-                        android:textColor="@color/textcolor"
+                        android:textColor="@color/text_color"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Referal Date"></TextView>
+                        android:text="Referal Date"/>
                 </LinearLayout>
             </LinearLayout>
 

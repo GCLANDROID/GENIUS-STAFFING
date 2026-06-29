@@ -4,6 +4,127 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/background_16"
+    android:fitsSystemWindows="true">
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="40dp"
+      android:layout_marginTop="20dp"
+      android:paddingHorizontal="10dp"
+      android:orientation="horizontal">
+    <LinearLayout
+        android:id="@+id/llStrtDate"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/background_21"
+        android:gravity="center">
+      <!--<ImageView
+          android:id="@+id/imgStrtDate"
+          android:layout_width="25dp"
+          android:layout_height="25dp"
+          android:src="@drawable/calendericon"/>-->
+      <TextView
+          android:text="Start Date"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:textSize="12sp"
+          android:paddingHorizontal="10dp"
+          android:gravity="center_vertical"
+          android:textColor="@color/text_color"
+          android:drawableEnd="@drawable/resize_calendar"
+          android:id="@+id/tvStrtDate"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/llEndDate"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/background_21"
+        android:layout_weight="1"
+        android:gravity="center">
+      <!--<ImageView
+          android:id="@+id/imgEndDate"
+          android:layout_width="25dp"
+          android:layout_height="25dp"
+          android:src="@drawable/calendericon"/>-->
+      <TextView
+          android:id="@+id/tvEndDate"
+          android:text="End Date"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:textSize="12sp"
+          android:paddingHorizontal="10dp"
+          android:gravity="center_vertical"
+          android:textColor="@color/text_color"
+          android:drawableEnd="@drawable/resize_calendar"
+          android:layout_marginLeft="5dp"/>
+    </LinearLayout>
+  </LinearLayout>
+  <Button
+      android:layout_width="150dp"
+      android:layout_height="40dp"
+      android:layout_gravity="center"
+      android:layout_marginTop="20dp"
+      android:background="@drawable/lldesign"
+      android:backgroundTint="@color/pink1"
+      android:textColor="@android:color/white"
+      android:textSize="13sp"
+      android:text="Show"
+      android:id="@+id/btnShow"/>
+
+  <LinearLayout
+      android:visibility="gone"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical"
+      android:id="@+id/llLoader"
+      android:gravity="center">
+    <ProgressBar
+        android:layout_width="50dp"
+        android:layout_height="50dp"/>
+  </LinearLayout>
+  <LinearLayout
+      android:visibility="gone"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:id="@+id/llMain"
+      android:orientation="vertical">
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rvItem"/>
+  </LinearLayout>
+  <LinearLayout
+      android:id="@+id/llNoData"
+      android:visibility="gone"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical"
+      android:gravity="center">
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/search"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:text="No data(s) found!"
+        android:textColor="@android:color/black"/>
+  </LinearLayout>
+
+
+
+
+</LinearLayout>
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
     android:fitsSystemWindows="true">
   <LinearLayout
       android:layout_width="match_parent"
@@ -107,4 +228,4 @@
 
 
 
-</LinearLayout>
+</LinearLayout>-->

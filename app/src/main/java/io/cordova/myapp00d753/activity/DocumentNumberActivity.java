@@ -44,7 +44,8 @@ import io.cordova.myapp00d753.utility.Pref;
 
 public class DocumentNumberActivity extends AppCompatActivity {
     private static final String TAG = "DocumentNumberActivity";
-    FloatingActionButton fbButton;
+    //FloatingActionButton fbButton;
+    ImageView fbButton;
     ImageView imgBack,imgHome;
     RecyclerView rvItem;
     TextView tvTotalDoc;
@@ -111,7 +112,8 @@ public class DocumentNumberActivity extends AppCompatActivity {
         }
         pref=new Pref(getApplicationContext());
 
-        fbButton=(FloatingActionButton)findViewById(R.id.fbButton);
+        //fbButton=(FloatingActionButton)findViewById(R.id.fbButton);
+        fbButton=(ImageView) findViewById(R.id.fbButton);
 
         imgBack=(ImageView)findViewById(R.id.imgBack);
         imgHome=(ImageView)findViewById(R.id.imgHome);
@@ -139,9 +141,9 @@ public class DocumentNumberActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),EmployeeDashBoardActivity.class);
+                Intent intent=new Intent(getApplicationContext(),NewUserDashboardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish();
             }
         });
 

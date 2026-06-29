@@ -2,6 +2,7 @@ package io.cordova.myapp00d753.module;
 
 public class LeaveBalanceDetailsModel {
     String leave,leaveBalance,leaveTaken,avaliable;
+    String leaveName;
 
     public LeaveBalanceDetailsModel(String leave, String leaveBalance, String leaveTaken) {
         this.leave = leave;
@@ -46,5 +47,13 @@ public class LeaveBalanceDetailsModel {
 
     public void setAvaliable(String avaliable) {
         this.avaliable = avaliable;
+    }
+
+    public String getLeaveName() {
+        return leaveName;
+    }
+
+    public void setLeaveName(String leaveName) {
+        this.leaveName = leaveName;
     }
 }

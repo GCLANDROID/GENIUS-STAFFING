@@ -40,6 +40,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.SearchView;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -84,7 +85,7 @@ import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.activity.NEW.adapter.NEW_LocationSpinnerAdapter;
 import io.cordova.myapp00d753.activity.NEW.model.LocationModel;
-import io.cordova.myapp00d753.activity.attendance.MetsoAttendanceReportActivity;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.metso.MetsoNewReimbursementClaimActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.ShiftSpinnerAdapter;
 import io.cordova.myapp00d753.activity.metso.adapter.SupervisorFilterAdapter;
@@ -139,13 +140,15 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
     AlertDialog alertDialog;
     private static final int REQUEST_PHONE_STATE = 1;
     String phoneNumber;
-    ImageView imhHome,btnImageClick;
+    ImageView imgHome,btnImageClick;
     String SupervisorID = "";
     ArrayList<SpineerItemModel> supervisorList = new ArrayList<>();
     Uri image_uri;
     File compressedImageFile;
     String isImageRequired="",isWorkPlaceRequired="",isShiftRequired="",isApproverRequired="", isPunchLocationRequired ="";
     int imageSelectionFlag=0;
+    CardView cvAddress,cvImage;
+    LinearLayout llCaptureImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -169,14 +172,17 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
         llLoading = findViewById(R.id.llLoading);
         llSubmit = findViewById(R.id.llSubmit);
         llCamera = findViewById(R.id.llCamera);
+        llCaptureImage = findViewById(R.id.llCaptureImage);
         tvTimer = findViewById(R.id.tvTimer);
         btnSubmit = findViewById(R.id.btnSubmit);
         btnImageClick = findViewById(R.id.btnImageClick);
         txtCurrentLocation = findViewById(R.id.txtCurrentLocation);
         imgBack = findViewById(R.id.imgBack);
         imgAttachImage = findViewById(R.id.imgAttachImage);
+        cvAddress = findViewById(R.id.cvAddress);
+        cvImage = findViewById(R.id.cvImage);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        imhHome=(ImageView)findViewById(R.id.imhHome);
+        imgHome =(ImageView)findViewById(R.id.imgHome);
         //smf = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fmGoogleMaps);
         //smf.getMapAsync(this);
 
@@ -203,10 +209,10 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
             e.printStackTrace();
         }*/
 
-        imhHome.setOnClickListener(new View.OnClickListener() {
+        imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(NEW_AttendanceMarkingActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent=new Intent(NEW_AttendanceMarkingActivity.this, NewUserDashboardActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -219,7 +225,8 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
         String[] MarkAttnFromMobileWithImageArr = MarkAttnFromMobileWithImage.split("_");
         isImageRequired = MarkAttnFromMobileWithImageArr[0];
         //isImageRequired = "0";
-        llCamera.setVisibility(isImageRequired.equals("1")?View.VISIBLE:View.GONE);
+        //llCamera.setVisibility(isImageRequired.equals("1")?View.VISIBLE:View.GONE);
+        cvImage.setVisibility(isImageRequired.equals("1")?View.VISIBLE:View.GONE);
         String MarkAttnFromMobileWithWorkPlaceSelection = getIntent().getStringExtra("MarkAttnFromMobileWithWorkPlaceSelection");
         String[] MarkAttnFromMobileWithWorkPlaceSelectionArr = MarkAttnFromMobileWithWorkPlaceSelection.split("_");
         isWorkPlaceRequired = MarkAttnFromMobileWithWorkPlaceSelectionArr[0];
@@ -289,6 +296,12 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
                 } else {
                     submitAttendance();
                 }
+            }
+        });
+        llCaptureImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FrontAndroidXCameraActivity.launch(NEW_AttendanceMarkingActivity.this, 8001);
             }
         });
         btnImageClick.setOnClickListener(new View.OnClickListener() {
@@ -780,6 +793,8 @@ public class NEW_AttendanceMarkingActivity extends AppCompatActivity implements 
 
         if (llLoading.getVisibility() == View.VISIBLE) {
             llLoading.setVisibility(View.GONE);
+            cvAddress.setVisibility(View.VISIBLE);
+            cvImage.setVisibility(isImageRequired.equals("1")?View.VISIBLE:View.GONE);
             llSubmit.setVisibility(View.VISIBLE);
             startTimer();
         }

@@ -40,6 +40,7 @@ import java.util.Calendar;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.ClaimDeletActivity;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.MetsoReimbursementClaimDeleteAdapter;
 import io.cordova.myapp00d753.adapter.ClaimDeleteAdapter;
 import io.cordova.myapp00d753.module.ClaimDeleteModule;
@@ -65,7 +66,7 @@ public class MetsoReimbursementDeleteActivity extends AppCompatActivity {
     MetsoReimbursementClaimDeleteAdapter delAdapter;
     LinearLayout llDelete;
     LinearLayout llHome;
-    ImageView imgBack;
+    ImageView imgBack,imgHome;
     ImageView imgSearch;
     int flag = 0;
     ProgressDialog progressBar;
@@ -137,11 +138,15 @@ public class MetsoReimbursementDeleteActivity extends AppCompatActivity {
         }
         llDelete=(LinearLayout)findViewById(R.id.llDelete);
         imgBack=(ImageView)findViewById(R.id.imgBack);
-        llHome=(LinearLayout)findViewById(R.id.llHome);
+        imgHome=(ImageView) findViewById(R.id.imgHome);
         imgSearch=(ImageView)findViewById(R.id.imgSearch);
     }
 
     private void getItemList(JSONObject jsonObject) {
+        llLoder.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.GONE);
+        llNodata.setVisibility(View.GONE);
+        llAgain.setVisibility(View.GONE);
         Log.e(TAG, "getItemList_METSO: "+ jsonObject);
         AndroidNetworking.post(AppData.GET_REIMBURSEMENT_CLAIM)
                 .addJSONObjectBody(jsonObject)
@@ -363,10 +368,10 @@ public class MetsoReimbursementDeleteActivity extends AppCompatActivity {
             }
         });
 
-        llHome.setOnClickListener(new View.OnClickListener() {
+        imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(MetsoReimbursementDeleteActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent=new Intent(MetsoReimbursementDeleteActivity.this, NewUserDashboardActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }

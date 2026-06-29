@@ -10,8 +10,8 @@
     <LinearLayout
         android:id="@+id/llBack"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/maincolor">
+        android:layout_height="45dp"
+        android:background="@mipmap/bottom_menu">
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"

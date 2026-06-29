@@ -47,20 +47,24 @@ public class InsuranceAdapter extends RecyclerView.Adapter<InsuranceAdapter.MyVi
         myViewHolder.tvCompanyURL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Uri uri = Uri.parse(itemList.get(i).getCompanyURL()); // missing 'http://' will cause crashed
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+                if (!itemList.get(i).getCompanyURL().equalsIgnoreCase("null")){
+                    Uri uri = Uri.parse(itemList.get(i).getCompanyURL()); // missing 'http://' will cause crashed
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                }
             }
         });
 
         myViewHolder.tvTutorial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Uri uri = Uri.parse(itemList.get(i).getTrainingURL()); // missing 'http://' will cause crashed
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+                if (!itemList.get(i).getTrainingURL().equalsIgnoreCase("null")){
+                    Uri uri = Uri.parse(itemList.get(i).getTrainingURL()); // missing 'http://' will cause crashed
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                }
             }
         });
         myViewHolder.imgCopy.setOnClickListener(new View.OnClickListener() {

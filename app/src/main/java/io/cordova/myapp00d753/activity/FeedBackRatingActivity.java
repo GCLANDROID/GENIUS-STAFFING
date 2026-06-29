@@ -217,9 +217,9 @@ public class FeedBackRatingActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FeedBackRatingActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent = new Intent(FeedBackRatingActivity.this, NewUserDashboardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -249,7 +249,8 @@ public class FeedBackRatingActivity extends AppCompatActivity {
         if (itemList.get(position).isSelected() == true) {
             item.add(itemList.get(position).getQuestionid() + "-" + itemList.get(position).getAnswervalue());
         } else {
-            item.remove(position);
+            item.remove(itemList.get(position).getQuestionid() + "-" + itemList.get(position).getAnswervalue());
+            //item.remove(position);
         }
         Log.d("arpan", item.toString());
         String i = item.toString();

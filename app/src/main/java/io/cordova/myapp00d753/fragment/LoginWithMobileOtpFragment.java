@@ -478,7 +478,7 @@ public class LoginWithMobileOtpFragment extends Fragment {
                                     pref.saveSecurityCode(security_code);
 
                                     Intent intent = new Intent(getContext(), TempDashBoardActivity.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(intent);
 
 

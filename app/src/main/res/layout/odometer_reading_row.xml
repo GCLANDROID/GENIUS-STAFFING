@@ -3,9 +3,214 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="5dp"
-    android:orientation="vertical"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/background_17"
+        android:elevation="4dp"
+        android:orientation="vertical"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
 
-    >
+            android:orientation="vertical"
+            android:gravity="center">
+            <!--<LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="5dp">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/calendericon"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textAppearance="?android:textAppearanceSmall"
+                    android:textColor="@android:color/black"
+                    android:text="12 August 2018"
+                    android:layout_marginLeft="3dp"
+                    android:id="@+id/tvDate"/>
+
+
+            </LinearLayout>-->
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/text_color_2"
+                android:gravity="center"
+                android:text="10-June-2026"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="12sp"
+                        android:paddingLeft="10dp"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:text="Journey Start Reading:"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvJrStrt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/open_sans_semi_bold"
+                        android:textColor="@color/pink1" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:paddingLeft="10dp"
+                        android:textSize="12sp"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:text="Journey Start Reading Image :" />
+                    <ImageView
+                        android:paddingLeft="10dp"
+                        android:id="@+id/imgJrStrt"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"></ImageView>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:paddingLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:text="Journey End Reading:" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:fontFamily="@font/open_sans_semi_bold"
+                        android:textColor="@color/pink1"
+                        android:id="@+id/tvJrEnd"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:paddingLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:text="Journey Start Reading Image :"/>
+                    <ImageView
+                        android:paddingLeft="10dp"
+                        android:id="@+id/imgJrEnd"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginHorizontal="10dp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    android:weightSum="2">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/black"
+                            android:paddingLeft="10dp"
+                            android:textSize="12sp"
+                            android:fontFamily="@font/open_sans_bold"
+                            android:text="Total Distance:" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/open_sans_semi_bold"
+                            android:textColor="@color/pink1"
+                            android:id="@+id/tvDistance"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/black"
+                            android:paddingLeft="10dp"
+                            android:textSize="12sp"
+                            android:fontFamily="@font/open_sans_bold"
+                            android:text="Approval Status:"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/open_sans_semi_bold"
+                            android:textColor="@color/pink1"
+                            android:id="@+id/tvApprovalStatus"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+
+
+
+</RelativeLayout>
+<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -267,4 +472,4 @@
 
 
 
-</RelativeLayout>
+</RelativeLayout>-->

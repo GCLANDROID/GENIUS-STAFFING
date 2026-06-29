@@ -98,6 +98,7 @@ import java.util.concurrent.TimeUnit;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.Retrofit.RetrofitClient;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.ApproverAutoCompleteAdapter;
 import io.cordova.myapp00d753.activity.metso.adapter.ComponentSpinnerAdapter;
 import io.cordova.myapp00d753.activity.metso.adapter.ComponentrFilterAdapter;
@@ -173,7 +174,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
     File file1, file2, file3, file4, compressedImageFile, compressedImageFile1, compressedImageFile2, compressedImageFile3, compressedImageFile4;
     int flag = 0, onlyImageSelectionFlag = 0;
     AlertDialog alerDialog1, alertDialog2, alertDialog1, alert1;
-    TextView tvMonth, tvYear;
+    TextView tvMonth, tvYear,tvOnlyPdfImage,txtOnlyImage;
     String comeid = "";
     LinearLayout llAttach, llBrowse;
     ImageView imgAttach, imgPDF;
@@ -214,13 +215,14 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
     TextView tvStartDate, tvEndDate;
     String component;
     static int dayscount;
+    LinearLayout llDoc1,llDoc2,llDoc3,llDoc4,llDoc5,llAttachPdf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_metso_new_reimbursement_claim);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,
-                WindowManager.LayoutParams.FLAG_SECURE);
+        /*getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE);*/
         initialize();
         //setHideItem();
 
@@ -243,6 +245,12 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         pref = new Pref(getApplicationContext());
         ClientID = pref.getEmpClintId();
         llDate = (LinearLayout) findViewById(R.id.llDate);
+        llDoc1 = (LinearLayout) findViewById(R.id.llDoc1);
+        llDoc2 = (LinearLayout) findViewById(R.id.llDoc2);
+        llDoc3 = (LinearLayout) findViewById(R.id.llDoc3);
+        llDoc4 = (LinearLayout) findViewById(R.id.llDoc4);
+        llDoc5 = (LinearLayout) findViewById(R.id.llDoc5);
+        llAttachPdf = (LinearLayout) findViewById(R.id.llAttachPdf);
         lnStartDate = (LinearLayout) findViewById(R.id.lnStartDate);
         lnEndDate = (LinearLayout) findViewById(R.id.lnEndDate);
         imgBack = (ImageView) findViewById(R.id.imgBack);
@@ -268,6 +276,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         txtSite = (TextView) findViewById(R.id.txtSite);
         txtBrowseFile = (TextView) findViewById(R.id.txtBrowseFile);
         txtCamaraPicture = (TextView) findViewById(R.id.txtCamaraPicture);
+        txtOnlyImage = (TextView) findViewById(R.id.txtOnlyImage);
         Date c = Calendar.getInstance().getTime();
         System.out.println("Current time => " + c);
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
@@ -382,6 +391,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         tvMonth = (TextView) findViewById(R.id.tvMonth);
         tvYear = (TextView) findViewById(R.id.tvYear);
         tvMonth = (TextView) findViewById(R.id.tvMonth);
+        tvOnlyPdfImage = (TextView) findViewById(R.id.tvOnlyPdfImage);
         tvYear.setText(year);
         tvMonth.setText(month);
         llBrowse = (LinearLayout) findViewById(R.id.llBrowse);
@@ -448,13 +458,15 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MetsoNewReimbursementClaimActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent = new Intent(MetsoNewReimbursementClaimActivity.this, NewUserDashboardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish();
+                //finish();
             }
         });
 
-        imgCamera1.setOnClickListener(new View.OnClickListener() {
+        //imgCamera1.setOnClickListener(new View.OnClickListener() {
+        llDoc1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cameraIntent();
@@ -530,19 +542,22 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
             }
         });
 
-        imgCamera2.setOnClickListener(new View.OnClickListener() {
+        //imgCamera2.setOnClickListener(new View.OnClickListener() {
+        llDoc2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cameraIntent1();
             }
         });
-        imgCamera3.setOnClickListener(new View.OnClickListener() {
+        //imgCamera3.setOnClickListener(new View.OnClickListener() {
+        llDoc3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cameraIntent2();
             }
         });
-        imgCamera4.setOnClickListener(new View.OnClickListener() {
+        //imgCamera4.setOnClickListener(new View.OnClickListener() {
+        llDoc4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cameraIntent3();
@@ -554,6 +569,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
 
             }
         });
+        //imgCamera5.setOnClickListener(new View.OnClickListener() {
         imgCamera5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -563,9 +579,9 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         });
 
         // llBrowse change to txtBrowseFile
-        txtBrowseFile.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener listenerBrowse = new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 if (llAttach.getVisibility() == View.GONE) {
                     llAttach.setVisibility(View.VISIBLE);
                     llCameraD.setVisibility(View.GONE);
@@ -576,12 +592,14 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                     llCamera.setVisibility(View.VISIBLE);
                 }
             }
-        });
+        };
+        llBrowse.setOnClickListener(listenerBrowse);
+        txtBrowseFile.setOnClickListener(listenerBrowse);
+        tvOnlyPdfImage.setOnClickListener(listenerBrowse);
 
-        // llCamera change to txtCamaraPicture
-        txtCamaraPicture.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener listenerCamera = new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 if (llCameraD.getVisibility() == View.GONE) {
                     llCameraD.setVisibility(View.VISIBLE);
                     llAttach.setVisibility(View.GONE);
@@ -592,7 +610,11 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                     llBrowse.setVisibility(View.VISIBLE);
                 }
             }
-        });
+        };
+
+        llCamera.setOnClickListener(listenerCamera);
+        txtCamaraPicture.setOnClickListener(listenerCamera);
+        txtOnlyImage.setOnClickListener(listenerCamera);
 
         imgMultiPle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -641,7 +663,8 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
             }
         });
 
-        imgAttach.setOnClickListener(new View.OnClickListener() {
+        //imgAttach.setOnClickListener(new View.OnClickListener() {
+        llAttachPdf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent uploadIntent = new Intent(Intent.ACTION_GET_CONTENT);

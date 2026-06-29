@@ -77,6 +77,9 @@ import java.util.regex.Pattern;
 import io.cordova.myapp00d753.CropImage.CropImage;
 import io.cordova.myapp00d753.CropImage.CropImageView;
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
+import io.cordova.myapp00d753.activity.attendance.AttenDanceDashboardActivity;
 import io.cordova.myapp00d753.activity.attendance.AttendanceReportActivity;
 import io.cordova.myapp00d753.databinding.ActivityBlueDartAttendanceManageBinding;
 import io.cordova.myapp00d753.utility.AppData;
@@ -200,6 +203,21 @@ public class BlueDartTourManageActivity extends AppCompatActivity implements OnM
                 id = 2;
                 //permission allowed, take picture
                 pickCamera();
+            }
+        });
+        binding.imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(BlueDartTourManageActivity.this, NewUserDashboardActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        binding.imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }

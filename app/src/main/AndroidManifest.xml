@@ -223,14 +223,16 @@
         </activity>
         <activity
             android:name=".activity.metso.MetsoPMSReportActivity"
-            android:exported="false">
+            android:exported="false"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".activity.metso.MetsoPMSTargetAchivementActivity"
-            android:exported="false">
+            android:exported="false"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -306,7 +308,8 @@
             android:exported="false" />
         <activity
             android:name=".activity.attendance.AttenDanceDashboardActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.VoiceAssistantActivity"
             android:screenOrientation="userPortrait" />
@@ -327,7 +330,8 @@
         <activity android:name=".activity.SupSaleDashboardActivity" />
         <activity android:name=".activity.SupEmpSaleActivity" />
         <activity android:name=".activity.PFDashBoardActivity" />
-        <activity android:name=".activity.DocumentNumberActivity" />
+        <activity android:name=".activity.DocumentNumberActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".activity.QRCodeScannerActivity" />
         <activity android:name=".activity.QRGeneratorActivity" />
         <activity
@@ -613,7 +617,7 @@
         <service
             android:name=".utility.LocationUpdaterService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="false" />
         <service
             android:name=".utility.LocationAlertIntentService"
             android:allowBackup="true" />
@@ -707,13 +711,18 @@
         <activity android:name=".activity.NEW.AllApplicationViewActivity" />
         <activity android:name=".activity.NEW.NEW_HolidayViewActivity" />
         <activity android:name=".activity.NEW.NEW_AttendanceReportActivity" />
-        <activity android:name=".activity.NewLoginTwoActivity" />
+        <activity android:name=".activity.NewLoginTwoActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".activity.ITViewActivity" />
         <activity android:name=".activity.MPIN_SetupActivity" />
         <activity android:name=".activity.E_Pin_SetupLoginActivity" />
+        <activity android:name=".activity.ProfileNewActivity" />
+        <activity android:name=".activity.NewLeaveApplicationActivity"/>
         <activity
             android:name=".activity.SelfOnboardingChatBotActivity"
             android:theme="@style/FloatingChatTheme" />
+        <activity android:name=".activity.NewUserDashboardActivity"
+            android:screenOrientation="portrait"/>
 
         <service
             android:name=".FirebaseNotification.MyFirebaseMessagingService"

@@ -30,7 +30,8 @@ public class ContactFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view= inflater.inflate(R.layout.fragment_contact, container, false);
+        //view= inflater.inflate(R.layout.fragment_contact, container, false);
+        view= inflater.inflate(R.layout.fragment_new_contact, container, false);
         initView();
         return view;
     }

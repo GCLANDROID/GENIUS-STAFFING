@@ -36,8 +36,8 @@ public class LeaveBalanceDetailsAdapter extends RecyclerView.Adapter<LeaveBalanc
         final ProgressDialog progressDialog=new ProgressDialog(context);
         progressDialog.setMessage("Loading..");
         progressDialog.setCancelable(false);
-        myViewHolder.tvTaken.setText(itemList.get(i).getLeaveTaken());
-        myViewHolder.tvBalance.setText(itemList.get(i).getLeaveBalance());
+        myViewHolder.tvTaken.setText("Used "+itemList.get(i).getLeaveTaken());
+        myViewHolder.tvBalance.setText("Available "+itemList.get(i).getLeaveBalance());
         myViewHolder.tvLeaveDetails.setText(itemList.get(i).getLeave());
         myViewHolder.tvLeaveDetails.setText(itemList.get(i).getLeave());
 

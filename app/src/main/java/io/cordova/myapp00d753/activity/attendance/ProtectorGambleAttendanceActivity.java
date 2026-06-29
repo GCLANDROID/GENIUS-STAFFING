@@ -75,6 +75,7 @@ import java.util.Locale;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.Retrofit.RetrofitClient;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.LocationSpinnerAdapter;
 import io.cordova.myapp00d753.activity.metso.adapter.ShiftSpinnerAdapter;
 import io.cordova.myapp00d753.activity.metso.model.LocationSpinnerModel;
@@ -109,7 +110,7 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
     ArrayList<String> stringsShiftList;
     String latitude = "", longitude = "", currentAddresses = "", ClientID = "", Shiftid = "", Siteid = "", MasterID = "";
     TextView txtCurrentLocation;
-    ImageView imgBack;
+    ImageView imgBack,imgHome;
     double currentLatitude, currentLongitude;
     Pref pref;
     LatLng latLng;
@@ -156,6 +157,14 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+        imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ProtectorGambleAttendanceActivity.this, NewUserDashboardActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
         });
     }
@@ -279,6 +288,7 @@ public class ProtectorGambleAttendanceActivity extends AppCompatActivity impleme
         tvTimer = findViewById(R.id.tvTimer);
         txtCurrentLocation = findViewById(R.id.txtCurrentLocation);
         imgBack = findViewById(R.id.imgBack);
+        imgHome = findViewById(R.id.imgHome);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         //smf = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fmGoogleMaps);

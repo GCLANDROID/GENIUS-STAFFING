@@ -50,6 +50,7 @@ import io.cordova.myapp00d753.activity.E_Pin_SetupLoginActivity;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.activity.LoginActivity;
 import io.cordova.myapp00d753.activity.MPIN_SetupActivity;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.ResignEmployeeDashboardActivity;
 import io.cordova.myapp00d753.activity.SuperVisiorDashBoardActivity;
 import io.cordova.myapp00d753.activity.TempDashBoardActivity;
@@ -442,7 +443,8 @@ public class LoginWithEPINFragment extends Fragment {
                             if (UserType.equals("1")) {
 
 
-                                    Intent intent = new Intent(getContext(), EmployeeDashBoardActivity.class);
+                                    //Intent intent = new Intent(getContext(), EmployeeDashBoardActivity.class);
+                                    Intent intent = new Intent(getContext(), NewUserDashboardActivity.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                     intent.putExtra("ConsentFlag", ConsentFlag);
                                     intent.putExtra("from","MPIN_setup");

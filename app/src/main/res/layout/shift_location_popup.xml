@@ -6,6 +6,299 @@
     android:layout_gravity="center"
     android:layout_marginStart="30dp"
     android:layout_marginEnd="30dp"
+    android:elevation="10dp"
+    android:background="@drawable/background_26"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:paddingRight="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <TextView
+            android:id="@+id/txtPopupHeadline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1.8"
+            android:gravity="center"
+            android:layout_marginTop="15dp"
+            android:text="Select Attendance Details"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:fontFamily="@font/open_sans_semi_bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <LinearLayout
+            android:id="@+id/lnCancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="right"
+            android:layout_marginTop="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imgCancel"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:padding="5dp"
+                android:src="@drawable/close_1"/>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/llShift"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Shift"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            android:textColor="#595757"
+            android:fontFamily="@font/open_sans_regular"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="20dp"/>
+
+        <TextView
+            android:id="@+id/txtSelectShift"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="Select Shift"
+            android:textSize="13.5sp"
+            android:paddingStart="20dp"
+            android:paddingEnd="8dp"
+            android:gravity="center_vertical"
+            android:background="@drawable/background_17"
+            android:drawableEnd="@drawable/ic_arrow_drop_down_24"
+            android:drawableTint="@color/pink1"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"/>
+    </LinearLayout>
+
+
+
+    <TextView
+        android:id="@+id/txtErrorShift"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please select shift"
+        android:textColor="#F44336"
+        android:textSize="12sp"
+        android:visibility="gone"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="30dp"/>
+
+    <Spinner
+        android:id="@+id/spShift"
+        android:layout_width="match_parent"
+        android:layout_height=".01dp"
+        android:padding="5dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:visibility="invisible" />
+
+    <LinearLayout
+        android:id="@+id/llLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Location"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            android:textColor="#595757"
+            android:fontFamily="@font/open_sans_regular"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="20dp"/>
+
+        <TextView
+            android:id="@+id/txtSelectLocation"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="Select Location"
+            android:textSize="13.5sp"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="10dp"
+            android:gravity="center_vertical"
+            android:drawableEnd="@drawable/ic_arrow_drop_down_24"
+            android:drawableTint="@color/pink1"
+            android:background="@drawable/background_17"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"/>
+    </LinearLayout>
+
+
+
+    <Spinner
+        android:id="@+id/spLocation"
+        android:layout_width="match_parent"
+        android:layout_height=".01dp"
+        android:padding="5dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/txtErrorLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please select location"
+        android:textColor="#F44336"
+        android:textSize="12sp"
+        android:visibility="gone"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="30dp"/>
+
+    <LinearLayout
+        android:id="@+id/llOtherLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Other Location"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            android:textColor="#595757"
+            android:fontFamily="@font/open_sans_regular"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="20dp"/>
+
+        <TextView
+            android:id="@+id/txtSelectOtherLocation"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="Select Other Location"
+            android:textSize="13.5sp"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="10dp"
+            android:gravity="center_vertical"
+            android:drawableEnd="@drawable/ic_arrow_drop_down_24"
+            android:drawableTint="@color/pink1"
+            android:background="@drawable/background_17"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"/>
+        <Spinner
+            android:id="@+id/spOtherLocation"
+            android:layout_width="match_parent"
+            android:layout_height=".01dp"
+            android:padding="5dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:visibility="invisible" />
+        <TextView
+            android:id="@+id/txtErrorOtherLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Please select location"
+            android:textColor="#F44336"
+            android:textSize="12sp"
+            android:visibility="gone"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="30dp"/>
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/llApprover"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Approver"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            android:textColor="#595757"
+            android:fontFamily="@font/open_sans_regular"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="20dp"/>
+
+        <TextView
+            android:id="@+id/txtSelectApprover"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="Select Approver"
+            android:textSize="13.5sp"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="10dp"
+            android:gravity="center_vertical"
+            android:drawableEnd="@drawable/ic_arrow_drop_down_24"
+            android:drawableTint="@color/pink1"
+            android:background="@drawable/background_17"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"/>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/txtErrorApprover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please select approver"
+        android:textColor="#F44336"
+        android:textSize="12sp"
+        android:visibility="gone"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="30dp"/>
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnMarkedYourAttendance"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="25dp"
+        android:paddingTop="3dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:fontFamily="@font/open_sans_semi_bold"
+        android:background="@drawable/buttondesign2"
+        android:backgroundTint="@color/pink1"
+        android:text="Submit"
+        android:paddingBottom="2dp"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="14sp"/>
+</LinearLayout>
+
+<!--
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginStart="30dp"
+    android:layout_marginEnd="30dp"
     android:background="@color/white"
     android:orientation="vertical">
 
@@ -281,4 +574,4 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="14sp"/>
-</LinearLayout>
+</LinearLayout>-->

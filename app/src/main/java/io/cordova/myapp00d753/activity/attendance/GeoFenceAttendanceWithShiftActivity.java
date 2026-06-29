@@ -102,7 +102,7 @@ public class GeoFenceAttendanceWithShiftActivity extends AppCompatActivity  impl
     AppCompatButton btnSubmit;
     ProgressDialog progressDialog;
     Pref pref;
-    ImageView imgBack;
+    ImageView imgBack,imgHome;
     LinearLayout llHome;
     ArrayList<MetsoShiftModel> shiftList;
     ArrayList<MetsoLocationModel> locationList;
@@ -143,7 +143,8 @@ public class GeoFenceAttendanceWithShiftActivity extends AppCompatActivity  impl
         btnSubmit = findViewById(R.id.btnSubmit);
         tvTimer = findViewById(R.id.tvTimer);
         imgBack = findViewById(R.id.imgBack);
-        llHome = findViewById(R.id.llLogout);
+        //llHome = findViewById(R.id.llLogout);
+        imgHome = findViewById(R.id.imgHome);
         txtCurrentLocation = findViewById(R.id.txtCurrentLocation);
         mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
@@ -167,7 +168,8 @@ public class GeoFenceAttendanceWithShiftActivity extends AppCompatActivity  impl
                 finish();
             }
         });
-        llHome.setOnClickListener(new View.OnClickListener() {
+        //llHome.setOnClickListener(new View.OnClickListener() {
+        imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(GeoFenceAttendanceWithShiftActivity.this, EmployeeDashBoardActivity.class);

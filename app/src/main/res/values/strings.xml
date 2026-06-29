@@ -80,8 +80,6 @@ local language.</string>
     <string name="ifsc_required">IFSC Code <font color='#FF0000'>*</font></string>
     <string name="First_Name_required">First Name as per Bank <font color='#FF0000'>*</font></string>
     <string name="Lirst_Name_required">Last Name as per Bank <font color='#FF0000'>*</font></string>
-
-    //
-
-
+    <string name="notification_text">Dear All, Please review your Income Tax Computation and select your Tax Regime. If no selection is made, the New Tax Regime will be applied by default. Choosing the Old Regime requires submitting your Tax Declaration and supporting documents on time. - <font color='#FF0000'>View Document</font></string>
+    <string name="change_password_note"><font color='#FF0000'>Note: </font><font color='#F2000000'>Please change your default password before login</font></string>
 </resources>

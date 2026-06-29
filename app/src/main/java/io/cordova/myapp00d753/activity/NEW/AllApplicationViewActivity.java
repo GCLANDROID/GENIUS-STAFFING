@@ -35,6 +35,7 @@ import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.activity.NEW.adapter.AllApplicationViewAdapter;
 import io.cordova.myapp00d753.activity.NEW.model.AllApplicationViewModel;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.adapter.CustomSpinnerAdapter;
 import io.cordova.myapp00d753.module.SpinnerModel;
 import io.cordova.myapp00d753.utility.AppData;
@@ -238,7 +239,7 @@ public class AllApplicationViewActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(AllApplicationViewActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent=new Intent(AllApplicationViewActivity.this, NewUserDashboardActivity.class);
                 startActivity(intent);
                 finish();
             }

@@ -8,29 +8,41 @@
 
     <TextView
         android:id="@+id/tvHolidayType"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
         android:layout_marginHorizontal="10dp"
         android:paddingHorizontal="15dp"
-        android:background="@drawable/background_6"
         android:gravity="center"
         android:text="Holiday Type"
         android:layout_marginTop="10dp"
-        android:textColor="@color/black"
-        android:visibility="invisible"
+        android:textColor="@color/text_color"
+        android:visibility="visible"
+        android:textSize="16sp"
+        android:fontFamily="@font/open_sans_medium"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/viewSeparator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/pink1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHolidayType" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvHolidayView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:visibility="visible"
+        android:paddingTop="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvHolidayType"
+        app:layout_constraintTop_toBottomOf="@+id/viewSeparator"
         tools:listitem="@layout/holiday_view_item" />
 
     <LinearLayout

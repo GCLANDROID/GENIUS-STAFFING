@@ -3,6 +3,8 @@ package io.cordova.myapp00d753.activity.NEW;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,6 +35,7 @@ import java.util.Calendar;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.activity.NEW.fragment.HolidayViewFragment;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.SKF.adapter.HolidayViewAdapter;
 import io.cordova.myapp00d753.fragment.ApplicationFragment;
 import io.cordova.myapp00d753.module.HolidayMarkModel;
@@ -93,7 +96,7 @@ public class NEW_HolidayViewActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(NEW_HolidayViewActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent = new Intent(NEW_HolidayViewActivity.this, NewUserDashboardActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -115,6 +118,7 @@ public class NEW_HolidayViewActivity extends AppCompatActivity {
     @SuppressLint("ResourceAsColor")
     private void loadOptionalHolidayView() {
         llOptionalHoliday.setBackgroundResource(R.drawable.background_7);
+        llOptionalHoliday.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#e96d70")));
         llNormalHoliday.setBackgroundResource(0);
         tvNormalHoliday.setTextColor(ContextCompat.getColor(this, R.color.colorBlack));
         tvOptionalHoliday.setTextColor(ContextCompat.getColor(this, R.color.white));

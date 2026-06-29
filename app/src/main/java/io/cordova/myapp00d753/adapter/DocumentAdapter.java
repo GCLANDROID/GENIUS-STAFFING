@@ -4,19 +4,23 @@ package io.cordova.myapp00d753.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.module.DocumentManageModule;
+import io.cordova.myapp00d753.utility.Util;
 
 public class DocumentAdapter extends RecyclerView.Adapter<DocumentAdapter.MyViewHolder> {
     ArrayList<DocumentManageModule>documentList=new ArrayList<>();
@@ -33,10 +37,19 @@ public class DocumentAdapter extends RecyclerView.Adapter<DocumentAdapter.MyView
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         myViewHolder.tvDocumentName.setText(documentList.get(i).getDocumentName());
         myViewHolder.tvDocumentType.setText( documentList.get(i).getDocumentType());
-        myViewHolder.tvCreatedOn.setText(documentList.get(i).getCreatedOn());
         myViewHolder.tvAEMStatusName.setText(documentList.get(i).getaEMStatusName());
+        if (documentList.get(i).getaEMStatusName().equalsIgnoreCase("approved")){
+            myViewHolder.tvAEMStatusName.setTextColor(ContextCompat.getColor(context, R.color.green_2));
+        } else if(documentList.get(i).getaEMStatusName().equalsIgnoreCase("pending")){
+            myViewHolder.tvAEMStatusName.setTextColor(ContextCompat.getColor(context, R.color.yellow));
+        } else if(documentList.get(i).getaEMStatusName().equalsIgnoreCase("reject")
+                || documentList.get(i).getaEMStatusName().equalsIgnoreCase("rejected")){
+            myViewHolder.tvAEMStatusName.setTextColor(ContextCompat.getColor(context, R.color.red));
+        }
 
-        myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+        myViewHolder.tvCreatedOn.setText(Util.changeAnyDateFormat(documentList.get(i).getCreatedOn(),"yyyy-MM-dd'T'HH:mm:ss.SS","dd MMM yyyy"));        myViewHolder.tvAEMStatusName.setText(documentList.get(i).getaEMStatusName());
+        Log.e("info", "onBindViewHolder: "+documentList.get(i).getDocLink() );
+        myViewHolder.btnViewDoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Uri uri = Uri.parse(documentList.get(i).getDocLink()); // missing 'http://' will cause crashed
@@ -58,6 +71,7 @@ public class DocumentAdapter extends RecyclerView.Adapter<DocumentAdapter.MyView
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvDocumentName,tvDocumentType,tvApprovalRemarks,tvCreatedOn,tvAEMStatusName;
+        Button btnViewDoc;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tvDocumentName=(TextView)itemView.findViewById(R.id.tvDocumentName);
@@ -65,6 +79,7 @@ public class DocumentAdapter extends RecyclerView.Adapter<DocumentAdapter.MyView
 
             tvCreatedOn=(TextView)itemView.findViewById(R.id.tvCreatedOn);
             tvAEMStatusName=(TextView)itemView.findViewById(R.id.tvAEMStatusName);
+            btnViewDoc=(Button) itemView.findViewById(R.id.btnViewDoc);
 
         }
     }

@@ -9,6 +9,92 @@
     android:layout_marginEnd="15dp"
     android:layout_marginTop="20dp"
     android:layout_marginBottom="20dp"
+    android:elevation="10dp"
+
+    android:background="@drawable/background_17">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:paddingRight="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <TextView
+            android:id="@+id/txtPopupHeadline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1.8"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="Select WBS Code"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:fontFamily="@font/open_sans_semi_bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <LinearLayout
+            android:id="@+id/lnCancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imgCancel"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:padding="5dp"
+                android:src="@drawable/close_1"/>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/wbsCodeSearchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:defaultQueryHint="Search Wbs Code"
+        android:focusableInTouchMode="true"
+        app:showAsAction="always"
+        app:iconifiedByDefault="false"
+        android:layout_marginHorizontal="20dp"
+        android:background="@drawable/background_17"
+        android:theme="@style/AppSearchView"/>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvWbsCode"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        tools:listitem="@layout/wbs_code_filter_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"/>
+
+
+</LinearLayout>
+<!--
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_marginStart="15dp"
+    android:layout_marginEnd="15dp"
+    android:layout_marginTop="20dp"
+    android:layout_marginBottom="20dp"
     android:background="@color/white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -80,4 +166,4 @@
         android:layout_marginHorizontal="10dp"/>
 
 
-</LinearLayout>
+</LinearLayout>-->

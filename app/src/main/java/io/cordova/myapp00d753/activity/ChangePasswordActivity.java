@@ -45,6 +45,8 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.attendance.AttenDanceDashboardActivity;
+import io.cordova.myapp00d753.activity.attendance.MetsoAttendanceRegularizationActivity;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
@@ -100,7 +102,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
         RedColor = ContextCompat.getColor(this, R.color.misscolor);
         String color = "<font color='#EE0000'>*</font>";
 
-        newPassword="New Password:";
+        newPassword="New Password";
 
         tvNewPassword.setText(Html.fromHtml(newPassword + color));
 
@@ -131,9 +133,20 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
         imgBack=(ImageView)findViewById(R.id.imgBack);
         imgHome=(ImageView)findViewById(R.id.imgHome);
-
-
-
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ChangePasswordActivity.this, NewUserDashboardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
     }
 
     private void onClick() {
@@ -187,15 +200,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
-            }
-        });
-
-        imgHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),EmployeeDashBoardActivity.class);
-                startActivity(intent);
-                finish();
             }
         });
         etNewPassword.addTextChangedListener(new TextWatcher() {

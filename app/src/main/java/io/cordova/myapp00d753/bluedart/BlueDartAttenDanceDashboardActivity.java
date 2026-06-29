@@ -48,6 +48,8 @@ import java.util.Map;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.AdjustmentActivity;
+import io.cordova.myapp00d753.activity.NewLoginTwoActivity;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.attendance.AttenDanceManageWithShiftActivity;
 import io.cordova.myapp00d753.activity.attendance.AttendanceReportActivity;
 import io.cordova.myapp00d753.activity.BacklogAttendanceActivity;
@@ -87,14 +89,21 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
     JSONArray attendanceArray;
     Button btnLeave;
     ArrayList<String> presentDays = new ArrayList<>();
+    ArrayList<String> absentDays = new ArrayList<>();
+    ArrayList<String> weeklyOffDays = new ArrayList<>();
+    ArrayList<String> leaveDays = new ArrayList<>();
+    ArrayList<String> holidayDays = new ArrayList<>();
+    ArrayList<String> optionalHolidayDays = new ArrayList<>();
+    ArrayList<String> halfDays = new ArrayList<>();
     ArrayList<String> dateList = new ArrayList<>();
 
-    TextView tvPresent, tvDetails, tvOK;
+    TextView tvPresent, tvDetails, tvOK,txtPresentDay,txtLeaveTaken,txtWeeklyOff,txtAbsentDay,txtAttendanceDetails,txtHolidayDay,txtOptionalHoliday;
     LinearLayout lnStatus, llAdjustment,llODOMeter;
     TextView tvAttendance;
     LinearLayout llTour;
     int date;
-
+    LinearLayout llParentAttendance,llParentWeeklyOffHoliday,llParentAdjustment,llParentView;
+    ImageView imgHome,imgDrawerClose;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,12 +121,20 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
         btnMarkAttendance = (Button) findViewById(R.id.btnMarkAttendance);
         btnMarkAttendance.setOnClickListener(this);
         imgSearch = (ImageView) findViewById(R.id.imgSearch);
+        imgHome = (ImageView) findViewById(R.id.imgHome);
+        imgDrawerClose = (ImageView) findViewById(R.id.imgDrawerClose);
         dlMain = (DrawerLayout) findViewById(R.id.dlMain);
         rvItem = (RecyclerView) findViewById(R.id.rvItem);
         tvAttendance = (TextView) findViewById(R.id.tvAttendance);
         tvAttendance.setText("Mark Attendance");
         llTour.setVisibility(View.VISIBLE);
-
+        txtPresentDay = findViewById(R.id.txtPresentDay);
+        txtAbsentDay = findViewById(R.id.txtAbsentDay);
+        txtLeaveTaken = findViewById(R.id.txtLeaveTaken);
+        txtWeeklyOff = findViewById(R.id.txtWeeklyOff);
+        txtHolidayDay = findViewById(R.id.txtHolidayDay);
+        txtOptionalHoliday = findViewById(R.id.txtOptionalHoliday);
+        txtAttendanceDetails = findViewById(R.id.txtAttendanceDetails);
 
         pref = new Pref(BlueDartAttenDanceDashboardActivity.this);
         rvItem.setLayoutManager(new GridLayoutManager(this, 3));
@@ -155,6 +172,10 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
         llWeekly.setVisibility(View.VISIBLE);
         tvCancel = (TextView) findViewById(R.id.tvCancel);
         llBottom = (LinearLayout) findViewById(R.id.llBottom);
+        llParentAttendance = (LinearLayout) findViewById(R.id.llParentAttendance);
+        llParentWeeklyOffHoliday = (LinearLayout) findViewById(R.id.llParentWeeklyOffHoliday);
+        llParentView = (LinearLayout) findViewById(R.id.llParentView);
+        llParentAdjustment = (LinearLayout) findViewById(R.id.llParentAdjustment);
         if (pref.getEmpClintId().equals("AEMCLI0910000315")) {
             llQR.setVisibility(View.VISIBLE);
         } else {
@@ -180,6 +201,8 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
         llAttenRegularize.setOnClickListener(this);
         llAdjustment.setOnClickListener(this);
         tvCancel.setOnClickListener(this);
+        imgHome.setOnClickListener(this);
+        imgDrawerClose.setOnClickListener(this);
 
         y = Calendar.getInstance().get(Calendar.YEAR);
         pastYear = y - 1;
@@ -350,13 +373,22 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
         }
         llTour.setOnClickListener(this);
         llODOMeter.setOnClickListener(this);
-
+        llParentAttendance.setVisibility(isVisible_parentAttendanceMenu()?View.VISIBLE:View.GONE);
+        llParentWeeklyOffHoliday.setVisibility(View.GONE);
+        llParentView.setVisibility(View.GONE);
+        llParentAdjustment.setVisibility(isVisible_parentAdjustmentView()?View.VISIBLE:View.GONE);
 
     }
 
 
     private void getAttendanceList(int year, int month) {
         presentDays = new ArrayList<>();
+        leaveDays.clear();
+        weeklyOffDays.clear();
+        absentDays.clear();
+        optionalHolidayDays.clear();
+        holidayDays.clear();
+        halfDays.clear();
         dateList = new ArrayList<>();
         HashMap<Integer, Object> dateHashmap = new HashMap<>();
 
@@ -414,6 +446,24 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
                                     if (Status.equalsIgnoreCase("present")) {
                                         presentDays.add(Day);
                                     }
+                                    if (Status.equalsIgnoreCase("absent")) {
+                                        absentDays.add(Day);
+                                    }
+                                    if (Status.equalsIgnoreCase("wo")) {
+                                        weeklyOffDays.add(Day);
+                                    }
+                                    if (Status.equalsIgnoreCase("leave")) {
+                                        leaveDays.add(Day);
+                                    }
+                                    if (Status.equalsIgnoreCase("h")) {
+                                        holidayDays.add(Day);
+                                    }
+                                    if (Status.equalsIgnoreCase("oh")) {
+                                        optionalHolidayDays.add(Day);
+                                    }
+                                    if (Status.equalsIgnoreCase("hd")) {
+                                        halfDays.add(Day);
+                                    }
 
                                     dateHashmap.put(date, Status);
 
@@ -421,7 +471,14 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
                                 }
 
                                 customCalendar.setDate(calendar, dateHashmap);
-                                tvPresent.setText("" + presentDays.size());
+                                float totalPresentDay = presentDays.size() + ((float) halfDays.size() / 2);
+                                tvPresent.setText("" + totalPresentDay);
+                                txtPresentDay.setText("" + totalPresentDay);
+                                txtAbsentDay.setText("" + absentDays.size());
+                                txtWeeklyOff.setText("" + weeklyOffDays.size());
+                                txtLeaveTaken.setText("" + leaveDays.size());
+                                txtHolidayDay.setText("" + holidayDays.size());
+                                txtOptionalHoliday.setText("" + optionalHolidayDays.size());
                                 setAdapter();
 
 
@@ -456,6 +513,12 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
     private void getAttendanceListForNav(int year, int month, Calendar calendar) {
         HashMap<Integer, Object> dateHashmap = new HashMap<>();
         presentDays = new ArrayList<>();
+        leaveDays.clear();
+        weeklyOffDays.clear();
+        absentDays.clear();
+        optionalHolidayDays.clear();
+        holidayDays.clear();
+        halfDays.clear();
         dateList = new ArrayList<>();
         // initialize calendar
 
@@ -506,11 +569,36 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
                                     if (Status.equalsIgnoreCase("present")) {
                                         presentDays.add(Day);
                                     }
+                                    if (Status.equalsIgnoreCase("absent")) {
+                                        absentDays.add(Day);
+                                    }
+                                    if (Status.equalsIgnoreCase("wo")) {
+                                        weeklyOffDays.add(Day);
+                                    }
+                                    if (Status.equalsIgnoreCase("leave")) {
+                                        leaveDays.add(Day);
+                                    }
+                                    if (Status.equalsIgnoreCase("h")) {
+                                        holidayDays.add(Day);
+                                    }
+                                    if (Status.equalsIgnoreCase("oh")) {
+                                        optionalHolidayDays.add(Day);
+                                    }
+                                    if (Status.equalsIgnoreCase("hd")) {
+                                        halfDays.add(Day);
+                                    }
                                     dateHashmap.put(date, Status);
                                 }
 
                                 customCalendar.setDate(calendar, dateHashmap);
-                                tvPresent.setText("" + presentDays.size());
+                                float totalPresentDay = presentDays.size() + ((float) halfDays.size() / 2);
+                                tvPresent.setText("" + totalPresentDay);
+                                txtPresentDay.setText("" + totalPresentDay);
+                                txtAbsentDay.setText("" + absentDays.size());
+                                txtWeeklyOff.setText("" + weeklyOffDays.size());
+                                txtLeaveTaken.setText("" + leaveDays.size());
+                                txtHolidayDay.setText("" + holidayDays.size());
+                                txtOptionalHoliday.setText("" + optionalHolidayDays.size());
 
                                 setAdapter();
 
@@ -620,9 +708,13 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
             intent.putExtra("intt", "2");
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+        } else if (view == imgHome){
+            Intent intent = new Intent(BlueDartAttenDanceDashboardActivity.this, NewUserDashboardActivity.class);
+            startActivity(intent);
+            finish();
+        } else if(view == imgDrawerClose){
+            dlMain.close();
         }
-
-
     }
 
     private void weeklyfunction() {
@@ -949,5 +1041,21 @@ public class BlueDartAttenDanceDashboardActivity extends AppCompatActivity imple
 
 
         return arr;
+    }
+
+    boolean isVisible_parentAttendanceMenu(){
+        if( llAttandanceManage.getVisibility() == View.VISIBLE || llBackAttendance.getVisibility() == View.VISIBLE
+                || llAttendanceReport.getVisibility() == View.VISIBLE || llTour.getVisibility() == View.VISIBLE  || llODOMeter.getVisibility() == View.VISIBLE ){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    boolean isVisible_parentAdjustmentView(){
+        if( llAdjustment.getVisibility() == View.VISIBLE){
+            return true;
+        } else {
+            return false;
+        }
     }
 }

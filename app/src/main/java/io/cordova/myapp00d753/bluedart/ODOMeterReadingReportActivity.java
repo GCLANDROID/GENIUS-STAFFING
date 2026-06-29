@@ -5,10 +5,12 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -26,6 +28,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
+import io.cordova.myapp00d753.activity.attendance.AttenDanceDashboardActivity;
+import io.cordova.myapp00d753.activity.attendance.MetsoAttendanceRegularizationActivity;
 import io.cordova.myapp00d753.adapter.LeaveDetailsAdapter;
 import io.cordova.myapp00d753.adapter.ODOMeterReadingAdapter;
 import io.cordova.myapp00d753.databinding.ActivityOdometerReadingReportBinding;
@@ -40,7 +45,6 @@ public class ODOMeterReadingReportActivity extends AppCompatActivity {
     String startDate="",endDate="";
     ArrayList<ODOMeterReadingModule>itemList=new ArrayList<>();
     Pref pref;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +70,20 @@ public class ODOMeterReadingReportActivity extends AppCompatActivity {
                 showEndDatePicker();
             }
         });
-
+        binding.imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+        binding.imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ODOMeterReadingReportActivity.this, NewUserDashboardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
         binding.btnShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

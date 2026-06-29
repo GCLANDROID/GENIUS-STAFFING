@@ -60,8 +60,8 @@ public class DocumentReportActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_document_report);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,
-                WindowManager.LayoutParams.FLAG_SECURE);
+        /*getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE);*/
         initialize();
         if (connectionCheck.isNetworkAvailable()) {
 
@@ -156,7 +156,7 @@ public class DocumentReportActivity extends AppCompatActivity  {
             @Override
             public void onClick(View view) {
                 if (pref.getUserType().equals("1")) {
-                    Intent intent = new Intent(DocumentReportActivity.this, EmployeeDashBoardActivity.class);
+                    Intent intent = new Intent(DocumentReportActivity.this, NewUserDashboardActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 }else if (pref.getUserType().equals("4")){

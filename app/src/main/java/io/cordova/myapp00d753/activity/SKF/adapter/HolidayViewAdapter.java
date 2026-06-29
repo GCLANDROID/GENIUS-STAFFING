@@ -41,9 +41,12 @@ public class HolidayViewAdapter extends RecyclerView.Adapter<HolidayViewAdapter.
         holder.txtHoliday.setText(holidayList.get(position).getHoliday());
 
         if (holidayList.get(position).isBefore()){
-            holder.llMainCard.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FFE91E63")));
+            holder.llMainCard.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#f53683")));
         } else {
-            holder.llMainCard.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#008EFF")));
+            holder.llMainCard.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#3d64e4")));
+        }
+        if (position == holidayList.size()-1 ){
+            holder.viewLine.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -55,11 +58,13 @@ public class HolidayViewAdapter extends RecyclerView.Adapter<HolidayViewAdapter.
     class MyViewHolder extends RecyclerView.ViewHolder{
         TextView txtHolidayDate,txtHoliday;
         LinearLayout llMainCard;
+        View viewLine;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             txtHolidayDate = itemView.findViewById(R.id.txtHolidayDate);
             txtHoliday = itemView.findViewById(R.id.txtHoliday);
             llMainCard = itemView.findViewById(R.id.llMainCard);
+            viewLine = itemView.findViewById(R.id.viewLine);
         }
     }
 }

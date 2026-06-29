@@ -27,6 +27,7 @@ import java.util.Calendar;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.SKF.adapter.HolidayViewAdapter;
 import io.cordova.myapp00d753.module.HolidayMarkModel;
 import io.cordova.myapp00d753.utility.AppData;
@@ -83,7 +84,7 @@ public class HolidayViewActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HolidayViewActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent = new Intent(HolidayViewActivity.this, NewUserDashboardActivity.class);
                 startActivity(intent);
                 finish();
             }

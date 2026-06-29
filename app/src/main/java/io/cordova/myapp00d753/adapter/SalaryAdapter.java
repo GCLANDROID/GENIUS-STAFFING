@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
@@ -36,7 +37,7 @@ public class SalaryAdapter extends RecyclerView.Adapter<SalaryAdapter.MyViewHold
         myViewHolder.tvMonth.setText(salryinfoList.get(i).getMonth());
         myViewHolder.tvSalary.setText(salryinfoList.get(i).getAmount());
 
-        myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+        myViewHolder.llViewPaySlip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (salryinfoList.get(i).getIsPaidService()==1){
@@ -67,12 +68,14 @@ public class SalaryAdapter extends RecyclerView.Adapter<SalaryAdapter.MyViewHold
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvYear,tvMonth,tvSalary,tvPayslip;
+        LinearLayout llViewPaySlip;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tvYear=(TextView)itemView.findViewById(R.id.tvYear);
             tvMonth=(TextView)itemView.findViewById(R.id.tvMonth);
             tvSalary=(TextView)itemView.findViewById(R.id.tvSalary);
             tvPayslip=(TextView)itemView.findViewById(R.id.tvPayslip);
+            llViewPaySlip=(LinearLayout) itemView.findViewById(R.id.llViewPaySlip);
         }
     }
 

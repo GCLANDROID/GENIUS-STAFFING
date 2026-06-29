@@ -8,86 +8,68 @@
     android:orientation="vertical"
     android:fitsSystemWindows="true">
 
-    <LinearLayout
-        android:id="@+id/linearLayout7"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout3"
         android:layout_width="match_parent"
-        android:layout_height="?android:actionBarSize"
-        android:background="@color/colorPrimary"
-        android:orientation="horizontal"
+        android:layout_height="280dp"
+        android:background="@mipmap/group_header"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"/>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5">
+    <ImageView
+        android:id="@+id/imgBack"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="35dp"
+        android:src="@drawable/arrow_left_new"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/imgBack"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:src="@drawable/backimg" />
-        </LinearLayout>
+    <ImageView
+        android:id="@+id/imgHome"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="35dp"
+        android:src="@drawable/home_new"
+        android:layout_marginEnd="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/tvToolBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Adjustment"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/toolbartextsize" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            android:gravity="right">
-
-            <ImageView
-                android:id="@+id/imgHome"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:layout_marginRight="15dp"
-                android:src="@drawable/homeimg" />
-        </LinearLayout>
-    </LinearLayout>
-   <!-- <LinearLayout
+    <TextView
+        android:id="@+id/tvToolBar"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-        <FrameLayout
-            android:layout_margin="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/frameLayout"
-            ></FrameLayout>
-    </LinearLayout>-->
+        android:layout_height="45dp"
+        android:layout_marginTop="25dp"
+        android:background="@color/white"
+        android:fontFamily="@font/open_sans_semi_bold"
+        android:gravity="center"
+        android:text="Adjustment"
+        android:textColor="@color/new_header_text_color"
+        android:textSize="15sp"
+        app:layout_constraintTop_toBottomOf="@+id/imgBack" />
+
 
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginHorizontal="15dp"
-
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/background_16"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout7"
-        tools:layout_editor_absoluteX="15dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvToolBar"
+        app:layout_constraintVertical_bias="1.0">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="30dp"
             android:orientation="vertical"
             android:visibility="visible">
 
@@ -96,9 +78,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Adjustment Type"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/open_sans_medium"
+                android:textColor="@color/text_color_3"
+                android:textSize="13sp"/>
             <!-- <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -121,13 +103,15 @@
                     android:id="@+id/tvDropDown"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/lldesign7"
-                    android:drawableEnd="@drawable/arrow_drop_down_24"
                     android:gravity="center_vertical"
                     android:paddingLeft="10dp"
                     android:paddingEnd="10dp"
                     android:text="Select"
-                    android:textColor="@color/black" />
+                    android:background="@drawable/background_15"
+                    android:textColor="@color/text_color"
+                    android:drawableEnd="@drawable/arrow_drop_down_24"
+                    android:fontFamily="@font/open_sans_regular"
+                    android:drawableTint="@color/pink1"/>
 
                 <Spinner
                     android:id="@+id/spAdjustment"
@@ -147,16 +131,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Effective Date"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/open_sans_medium"
+                    android:textColor="@color/text_color_3"
+                    android:textSize="13sp"/>
 
                 <LinearLayout
                     android:id="@+id/lnEffectiveDate"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/lldesign7">
+                    android:background="@drawable/background_15">
 
                     <TextView
                         android:id="@+id/tvEffectiveDate"
@@ -164,9 +148,10 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:layout_marginLeft="5dp"
-                        android:text="dd/MM/yyyy"
                         android:gravity="center"
-                        android:textColor="@color/colorPrimaryDark"
+                        android:text="dd/MM/yyyy"
+                        android:textColor="@color/text_color"
+                        android:fontFamily="@font/open_sans_regular"
                         android:textSize="12sp" />
 
                 </LinearLayout>
@@ -184,16 +169,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Start Date"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/open_sans_medium"
+                    android:textColor="@color/text_color_3"
+                    android:textSize="13sp"/>
 
                 <LinearLayout
                     android:id="@+id/llStartDate"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/lldesign7">
+                    android:background="@drawable/background_15">
 
                     <TextView
                         android:id="@+id/tvStrtDate"
@@ -202,7 +187,8 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="5dp"
                         android:text="dd/MM/yyyy"
-                        android:textColor="@color/colorPrimaryDark"
+                        android:textColor="@color/text_color"
+                        android:fontFamily="@font/open_sans_regular"
                         android:textSize="12sp" />
 
                 </LinearLayout>
@@ -219,16 +205,16 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="End Date"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:fontFamily="@font/open_sans_medium"
+                        android:textColor="@color/text_color_3"
+                        android:textSize="13sp"/>
 
                     <LinearLayout
                         android:id="@+id/llEndDate"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_marginTop="5dp"
-                        android:background="@drawable/lldesign7">
+                        android:background="@drawable/background_15">
 
                         <TextView
                             android:id="@+id/tvEndDate"
@@ -237,7 +223,8 @@
                             android:layout_gravity="center"
                             android:layout_marginLeft="5dp"
                             android:text="dd/MM/yyyy"
-                            android:textColor="@color/colorPrimaryDark"
+                            android:textColor="@color/text_color"
+                            android:fontFamily="@font/open_sans_regular"
                             android:textSize="12sp" />
 
                     </LinearLayout>
@@ -257,16 +244,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="In Time"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/open_sans_medium"
+                    android:textColor="@color/text_color_3"
+                    android:textSize="13sp"/>
 
                 <LinearLayout
                     android:id="@+id/llInTime"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/lldesign7">
+                    android:background="@drawable/background_15">
 
                     <TextView
                         android:id="@+id/tvInTime"
@@ -275,7 +262,8 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="5dp"
                         android:hint="--:--"
-                        android:textColor="@color/colorPrimaryDark"
+                        android:textColor="@color/text_color"
+                        android:fontFamily="@font/open_sans_regular"
                         android:textSize="12sp" />
 
                 </LinearLayout>
@@ -286,25 +274,26 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="Out Time"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/open_sans_medium"
+                    android:textColor="@color/text_color_3"
+                    android:textSize="13sp"/>
 
                 <LinearLayout
                     android:id="@+id/llOutTime"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/lldesign7">
+                    android:background="@drawable/background_15">
 
                     <TextView
                         android:id="@+id/tvOutTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:hint="--:--"
                         android:layout_marginLeft="5dp"
-                        android:textColor="@color/colorPrimaryDark"
+                        android:hint="--:--"
+                        android:textColor="@color/text_color"
+                        android:fontFamily="@font/open_sans_regular"
                         android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -321,9 +310,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Mode"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/open_sans_medium"
+                    android:textColor="@color/text_color_3"
+                    android:textSize="13sp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -336,13 +325,15 @@
                         android:id="@+id/tvDayMode"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/lldesign7"
+                        android:background="@drawable/background_15"
                         android:drawableEnd="@drawable/arrow_drop_down_24"
                         android:gravity="center_vertical"
                         android:paddingLeft="10dp"
                         android:paddingEnd="10dp"
                         android:text="Select"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/text_color"
+                        android:fontFamily="@font/open_sans_regular"
+                        android:drawableTint="@color/pink1"/>
 
                     <Spinner
                         android:id="@+id/spMode"
@@ -364,19 +355,21 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="Reason"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/open_sans_medium"
+                    android:textColor="@color/text_color_3"
+                    android:textSize="13sp"
+                    />
 
                 <EditText
                     android:id="@+id/etReason"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/lldesign7"
+                    android:background="@drawable/background_15"
                     android:gravity="top"
                     android:paddingLeft="5dp"
-                    android:textColor="@color/colorPrimaryDark"
+                    android:textColor="@color/text_color"
+                    android:fontFamily="@font/open_sans_regular"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -410,12 +403,12 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:layout_marginLeft="5dp"
-                        android:hint="Select Approver"
+                        android:drawableEnd="@drawable/arrow_drop_down_24"
                         android:gravity="center_vertical"
+                        android:hint="Select Approver"
                         android:paddingStart="5dp"
                         android:paddingEnd="10dp"
                         android:textColor="@color/colorPrimaryDark"
-                        android:drawableEnd="@drawable/arrow_drop_down_24"
                         android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -425,7 +418,7 @@
                 android:id="@+id/linearLayout8"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="50dp"
                 android:gravity="center"
                 android:paddingTop="20dp"
                 android:paddingBottom="20dp"
@@ -438,13 +431,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:background="@drawable/lldesign"
-                    android:backgroundTint="@color/colorPrimaryDark"
+                    android:backgroundTint="@color/pink1"
                     android:text="Save"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
 
-               <!-- <Button
+                <!-- <Button
                     android:id="@+id/btnCancel"
                     android:layout_width="100dp"
                     android:layout_height="40dp"
@@ -462,3 +455,467 @@
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".activity.AdjustmentActivity"
+android:orientation="vertical"
+android:fitsSystemWindows="true">
+
+<LinearLayout
+    android:id="@+id/linearLayout7"
+    android:layout_width="match_parent"
+    android:layout_height="?android:actionBarSize"
+    android:background="@color/colorPrimary"
+    android:orientation="horizontal"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5">
+
+        <ImageView
+            android:id="@+id/imgBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/backimg" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/tvToolBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Adjustment"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/toolbartextsize" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5"
+        android:gravity="right">
+
+        <ImageView
+            android:id="@+id/imgHome"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/homeimg" />
+    </LinearLayout>
+</LinearLayout>
+&lt;!&ndash; <LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="0dp"
+     android:layout_weight="1">
+     <FrameLayout
+         android:layout_margin="10dp"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:id="@+id/frameLayout"
+         ></FrameLayout>
+ </LinearLayout>&ndash;&gt;
+
+<ScrollView
+    android:id="@+id/scrollView2"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_marginHorizontal="15dp"
+
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/linearLayout7"
+    tools:layout_editor_absoluteX="15dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/tvAdjustmentType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Adjustment Type"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+        &lt;!&ndash; <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/lldesign7"
+            android:layout_marginTop="5dp">
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/spAdjustment"/>
+        </LinearLayout>&ndash;&gt;
+        <LinearLayout
+            android:id="@+id/llApproveStatus"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvDropDown"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/lldesign7"
+                android:drawableEnd="@drawable/arrow_drop_down_24"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:paddingEnd="10dp"
+                android:text="Select"
+                android:textColor="@color/black" />
+
+            <Spinner
+                android:id="@+id/spAdjustment"
+                android:layout_width="match_parent"
+                android:layout_height=".1dp"
+                android:visibility="invisible" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llEffectiveDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Effective Date"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/lnEffectiveDate"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/lldesign7">
+
+                <TextView
+                    android:id="@+id/tvEffectiveDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:text="dd/MM/yyyy"
+                    android:gravity="center"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llStartEndDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvStartDateName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start Date"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/llStartDate"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/lldesign7">
+
+                <TextView
+                    android:id="@+id/tvStrtDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:text="dd/MM/yyyy"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llEndTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvEndDateName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="End Date"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/llEndDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/lldesign7">
+
+                    <TextView
+                        android:id="@+id/tvEndDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="5dp"
+                        android:text="dd/MM/yyyy"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llInOutTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvInTimeName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="In Time"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/llInTime"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/lldesign7">
+
+                <TextView
+                    android:id="@+id/tvInTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:hint="&#45;&#45;:&#45;&#45;"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvOutTimeName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Out Time"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/llOutTime"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/lldesign7">
+
+                <TextView
+                    android:id="@+id/tvOutTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="&#45;&#45;:&#45;&#45;"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llMode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvModeName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mode"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvDayMode"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/lldesign7"
+                    android:drawableEnd="@drawable/arrow_drop_down_24"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:paddingEnd="10dp"
+                    android:text="Select"
+                    android:textColor="@color/black" />
+
+                <Spinner
+                    android:id="@+id/spMode"
+                    android:layout_width="match_parent"
+                    android:layout_height=".1dp"
+                    android:visibility="invisible" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvReason"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Reason"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/etReason"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/lldesign7"
+                android:gravity="top"
+                android:paddingLeft="5dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llLabelApprover"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tvLabelApprover"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Approver"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/llApprover"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/lldesign7">
+
+                <TextView
+                    android:id="@+id/tvApprover"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:hint="Select Approver"
+                    android:gravity="center_vertical"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="10dp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:drawableEnd="@drawable/arrow_drop_down_24"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/linearLayout8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/lldesign"
+                android:backgroundTint="@color/colorPrimaryDark"
+                android:text="Save"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            &lt;!&ndash; <Button
+                 android:id="@+id/btnCancel"
+                 android:layout_width="100dp"
+                 android:layout_height="40dp"
+                 android:layout_marginLeft="10dp"
+                 android:background="@drawable/lldesign"
+                 android:backgroundTint="@color/democolor1"
+                 android:text="Cancel"
+                 android:textAllCaps="false"
+                 android:textColor="@color/white"
+                 android:textSize="14sp" />&ndash;&gt;
+        </LinearLayout>
+
+
+    </LinearLayout>
+</ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>-->

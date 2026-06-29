@@ -5,10 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SplashScreenActivity"
+    android:background="@mipmap/splash_screen"
     android:orientation="vertical"
     android:gravity="center"
     >
-    <LinearLayout
+  <!--  <LinearLayout
         android:background="@drawable/gradientdesign"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -28,7 +29,7 @@
 
         </LinearLayout>
 
-       <!-- <TextView
+       &lt;!&ndash; <TextView
             android:layout_marginTop="10dp"
             android:textSize="22sp"
             android:textColor="@color/white"
@@ -36,8 +37,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="italic|bold"
-            android:text="Welcome to Genius Staffing"></TextView>-->
-    </LinearLayout>
+            android:text="Welcome to Genius Staffing"></TextView>&ndash;&gt;
+    </LinearLayout>-->
 
 
 

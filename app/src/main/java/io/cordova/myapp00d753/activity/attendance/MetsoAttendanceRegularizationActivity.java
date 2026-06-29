@@ -45,6 +45,7 @@ import java.util.Calendar;
 
 import io.cordova.myapp00d753.R;
 
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.ApproverAutoCompleteAdapter;
 import io.cordova.myapp00d753.activity.metso.adapter.LocationSpinnerAdapter;
 import io.cordova.myapp00d753.activity.metso.adapter.MetsoAttendanceAdapter;
@@ -69,7 +70,7 @@ public class MetsoAttendanceRegularizationActivity extends AppCompatActivity imp
     LocationSpinnerAdapter locationSpinnerAdapter1;
     ApproverAutoCompleteAdapter approverAutoCompleteAdapter;
     ProgressDialog progressDialog;
-    ImageView imgBack;
+    ImageView imgBack,imgHome;
     LinearLayout lnStartDate,lnEndDate,llMain,llLoader,llNodata;
     String startDate="",endDate="",ClientID="",MasterID="";
     TextView tvStartDate,tvEndDate;
@@ -101,6 +102,7 @@ public class MetsoAttendanceRegularizationActivity extends AppCompatActivity imp
         rvItem = findViewById(R.id.rvItem);
         btnSubmit = findViewById(R.id.btnSubmit);
         imgBack = findViewById(R.id.imgBack);
+        imgHome = findViewById(R.id.imgHome);
         lnStartDate = findViewById(R.id.lnStartDate);
         lnEndDate = findViewById(R.id.lnEndDate);
         tvStartDate = findViewById(R.id.tvStartDate);
@@ -113,6 +115,7 @@ public class MetsoAttendanceRegularizationActivity extends AppCompatActivity imp
 
         btnSubmit.setOnClickListener(this);
         imgBack.setOnClickListener(this);
+        imgHome.setOnClickListener(this);
         lnStartDate.setOnClickListener(this);
         lnEndDate.setOnClickListener(this);
         btnShow.setOnClickListener(this);
@@ -168,6 +171,11 @@ public class MetsoAttendanceRegularizationActivity extends AppCompatActivity imp
                 break;
             case R.id.imgBack:
                 finish();
+                break;
+            case R.id.imgHome:
+                Intent intent = new Intent(MetsoAttendanceRegularizationActivity.this, NewUserDashboardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
                 break;
             case R.id.lnStartDate:
                 showStartDatePicker();

@@ -65,7 +65,7 @@ public class ClaimDeletActivity extends AppCompatActivity {
     ClaimDeleteAdapter delAdapter;
     LinearLayout llDelete;
     LinearLayout llHome;
-    ImageView imgBack;
+    ImageView imgBack,imgHome;
     ImageView imgSearch;
 
     @Override
@@ -135,6 +135,7 @@ public class ClaimDeletActivity extends AppCompatActivity {
         }
         llDelete=(LinearLayout)findViewById(R.id.llDelete);
         imgBack=(ImageView)findViewById(R.id.imgBack);
+        imgHome=(ImageView)findViewById(R.id.imgHome);
         llHome=(LinearLayout)findViewById(R.id.llHome);
         imgSearch=(ImageView)findViewById(R.id.imgSearch);
     }
@@ -361,10 +362,11 @@ public class ClaimDeletActivity extends AppCompatActivity {
             }
         });
 
-        llHome.setOnClickListener(new View.OnClickListener() {
+        //llHome.setOnClickListener(new View.OnClickListener() {
+        imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(ClaimDeletActivity.this,EmployeeDashBoardActivity.class);
+                Intent intent=new Intent(ClaimDeletActivity.this,NewUserDashboardActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }

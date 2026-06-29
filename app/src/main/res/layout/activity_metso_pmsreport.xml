@@ -3,6 +3,366 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="280dp"
+            android:background="@mipmap/group_header"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imgBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="35dp"
+            android:src="@drawable/arrow_left_new"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imgHome"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginEnd="15dp"
+            android:src="@drawable/home_new"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvHeader"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="25dp"
+            android:background="@color/white"
+            android:fontFamily="@font/open_sans_semi_bold"
+            android:gravity="center"
+            android:text="PMS Report"
+            android:textColor="@color/new_header_text_color"
+            android:textSize="15sp"
+            app:layout_constraintTop_toBottomOf="@+id/imgBack" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginVertical="10dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/background_16"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvHeader">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Please Select Year:"
+                    android:textColor="@color/text_color_3"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/open_sans_medium"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/background_30">
+
+                    <Spinner
+                        android:id="@+id/spYear"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnShow"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/lldesign9"
+                    android:backgroundTint="@color/pink1"
+                    android:text="Show"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
+
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/scView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/clReportingManager"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/background_19"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="5dp"
+                        android:paddingVertical="5dp">
+
+                        <LinearLayout
+                            android:id="@+id/linearLayout6"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="5dp"
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/btnChangeApprover"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Reporting Manager/Approver:"
+                                android:textColor="@color/text_color_3"
+                                android:fontFamily="@font/open_sans_medium"
+                                android:textSize="12.5sp"/>
+
+                            <TextView
+                                android:id="@+id/tvApproverName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Reporting Manager"
+                                android:fontFamily="@font/open_sans_semi_bold"
+                                android:textColor="@color/black"
+                                android:textSize="14sp"/>
+                        </LinearLayout>
+
+                        <Button
+                            android:id="@+id/btnChangeApprover"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:background="@drawable/lldesign"
+                            android:backgroundTint="@color/text_color_3"
+                            android:text="Update"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white"
+                            app:layout_constraintBottom_toBottomOf="@+id/linearLayout6"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/linearLayout6" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Target set by Self:"
+                            android:textColor="@color/text_color_3"
+                            android:fontFamily="@font/open_sans_medium"
+                            android:textSize="14sp"/>
+
+                        <TextView
+                            android:id="@+id/tvSelfTarget"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="80dp"
+                            android:background="@drawable/background_15"
+                            android:layout_marginTop="10dp"
+                            android:padding="10dp"
+                            android:textColor="@color/text_color_5"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvTargetApproverName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/text_color_3"
+                            android:fontFamily="@font/open_sans_medium"
+                            tools:text="Target Approver Name"
+                            android:textSize="14sp"/>
+
+                        <TextView
+                            android:id="@+id/tvApproverTarget"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:minHeight="50dp"
+                            android:padding="10dp"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/text_color_5"
+                            android:background="@drawable/background_15"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Your Achievement: "
+                            android:textColor="@color/text_color_3"
+                            android:fontFamily="@font/open_sans_medium"
+                            android:textSize="14sp"/>
+
+                        <TextView
+                            android:id="@+id/tvSelfAcheivement"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:minHeight="50dp"
+                            android:gravity="center_vertical"
+                            android:padding="10dp"
+                            android:background="@drawable/background_15"
+                            android:textColor="@color/text_color_5"
+                            android:textSize="14sp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Self Rating: "
+                            android:textColor="@color/text_color_3"
+                            android:fontFamily="@font/open_sans_medium"
+                            android:textSize="14sp"/>
+
+                        <TextView
+                            android:id="@+id/tvSelfRating"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:textSize="14sp"
+                            android:padding="10dp"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/text_color_5"
+                            android:background="@drawable/background_15"
+                            android:minHeight="50dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvAchievementApproverName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Achievement set by Approver: "
+                            android:textColor="@color/text_color_3"
+                            android:fontFamily="@font/open_sans_medium"
+                            android:textSize="14sp"/>
+
+                        <TextView
+                            android:id="@+id/tvApproverAchievement"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:textSize="14sp"
+                            android:padding="10dp"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/text_color_5"
+                            android:background="@drawable/background_15"
+                            android:minHeight="50dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Rating given by Approver: "
+                            android:textColor="@color/text_color_3"
+                            android:fontFamily="@font/open_sans_medium"
+                            android:textSize="14sp"/>
+
+                        <TextView
+                            android:id="@+id/tvApproverRating"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/background_15"
+                            android:minHeight="50dp"
+                            android:padding="10dp"
+                            android:textColor="@color/text_color_5"
+                            android:gravity="center_vertical"
+                            android:textSize="14sp"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+
+            <LinearLayout
+                android:id="@+id/llNoDataFound"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/search" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="PMS Details Not Found"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout><!--
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -323,4 +683,4 @@
         </LinearLayout>
     </LinearLayout>
 
-</layout>
+</layout>-->

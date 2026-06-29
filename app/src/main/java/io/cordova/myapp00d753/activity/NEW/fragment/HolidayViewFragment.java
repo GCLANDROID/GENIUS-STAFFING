@@ -154,10 +154,11 @@ public class HolidayViewFragment extends Fragment {
                             } else {
                                 llNoData.setVisibility(View.VISIBLE);
                             }
-                        } catch (JSONException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
-                        } catch (ParseException e) {
-                            e.printStackTrace();
+                            llNoData.setVisibility(View.VISIBLE);
+                            llLoading.setVisibility(View.GONE);
+                            tvHolidayType.setVisibility(View.INVISIBLE);
                         }
                     }
 

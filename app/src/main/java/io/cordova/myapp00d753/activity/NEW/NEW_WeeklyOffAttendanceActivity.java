@@ -41,6 +41,7 @@ import java.util.Calendar;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.metso.MetsoNewReimbursementClaimActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.SupervisorFilterAdapter;
 import io.cordova.myapp00d753.module.SpineerItemModel;
@@ -50,6 +51,7 @@ import io.cordova.myapp00d753.utility.NetworkConnectionCheck;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.RequiredListClass;
 import io.cordova.myapp00d753.utility.ShowDialog;
+import io.cordova.myapp00d753.utility.Util;
 
 public class NEW_WeeklyOffAttendanceActivity extends AppCompatActivity {
     private static final String TAG = "WeeklyOffAttendanceActi";
@@ -134,7 +136,7 @@ public class NEW_WeeklyOffAttendanceActivity extends AppCompatActivity {
                         newdate = y + "-" + (m + 1) + "-" + d;
 
                         tvDate.setVisibility(View.VISIBLE);
-                        tvDate.setText(newdate);
+                        tvDate.setText(Util.changeAnyDateFormat(newdate,"yyyy-MM-dd","dd MMMM yyyy"));
 
                     }
                 }, year, month, day);
@@ -157,7 +159,7 @@ public class NEW_WeeklyOffAttendanceActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(NEW_WeeklyOffAttendanceActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent = new Intent(NEW_WeeklyOffAttendanceActivity.this, NewUserDashboardActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 //finish();
@@ -232,10 +234,23 @@ public class NEW_WeeklyOffAttendanceActivity extends AppCompatActivity {
                             String Response_Message = object.optString("Response_Message");
                             String Response_Code = object.optString("Response_Code");
                             if (Response_Code.equals("101")) {
-                                successAlert(Response_Message);
+                                //successAlert(Response_Message);
+                                ShowDialog.showSuccessDialog(NEW_WeeklyOffAttendanceActivity.this, Response_Message, new ShowDialog.ResultListener() {
+                                    @Override
+                                    public void onSuccess() {
+                                        Intent intent=new Intent(NEW_WeeklyOffAttendanceActivity.this,NewUserDashboardActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                });
                             } else {
                                 progressDialog.cancel();
-                                ShowDialog.showErrorDialog(NEW_WeeklyOffAttendanceActivity.this,Response_Message);
+                                ShowDialog.showAlertDialog(NEW_WeeklyOffAttendanceActivity.this, Response_Message, new ShowDialog.ResultListener() {
+                                    @Override
+                                    public void onSuccess() {
+
+                                    }
+                                });
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

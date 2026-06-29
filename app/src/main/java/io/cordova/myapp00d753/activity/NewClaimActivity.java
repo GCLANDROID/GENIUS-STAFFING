@@ -135,7 +135,7 @@ public class NewClaimActivity extends AppCompatActivity {
     File file1, file2, file3, file4,compressedImageFile,compressedImageFile1,compressedImageFile2,compressedImageFile3,compressedImageFile4;
     int  flag = 0;
     AlertDialog alerDialog1, alertDialog2, alertDialog1,alert1;
-    TextView tvMonth, tvYear;
+    TextView tvMonth, tvYear,txtBrowseFile,tvOnlyPdfImage,txtCamaraPicture,txtOnlyImage;
     String comeid = "";
     LinearLayout llAttach, llBrowse;
     ImageView imgAttach, imgPDF;
@@ -162,6 +162,7 @@ public class NewClaimActivity extends AppCompatActivity {
     String galleryflagone="",galleryflagtwo="";
     private static final int REQUEST_SELECT_PDF = 600;
     private static final int DEFAULT_BUFFER_SIZE = 2048;
+    LinearLayout llCamera1, llCamera2, llCamera3, llCamera4, llCamera5,llMultipleImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -271,6 +272,10 @@ public class NewClaimActivity extends AppCompatActivity {
         tvMonth = (TextView) findViewById(R.id.tvMonth);
         tvYear = (TextView) findViewById(R.id.tvYear);
         tvMonth = (TextView) findViewById(R.id.tvMonth);
+        txtBrowseFile = (TextView) findViewById(R.id.txtBrowseFile);
+        tvOnlyPdfImage = (TextView) findViewById(R.id.tvOnlyPdfImage);
+        txtCamaraPicture = (TextView) findViewById(R.id.txtCamaraPicture);
+        txtOnlyImage = (TextView) findViewById(R.id.txtOnlyImage);
         tvYear.setText(year);
         tvMonth.setText(month);
         llBrowse = (LinearLayout) findViewById(R.id.llBrowse);
@@ -280,6 +285,12 @@ public class NewClaimActivity extends AppCompatActivity {
         btnSubmit = (Button) findViewById(R.id.btnSubmit);
         llCamera=(LinearLayout)findViewById(R.id.llCamera);
         llCameraD=(LinearLayout)findViewById(R.id.llCameraD);
+        llCamera1=(LinearLayout)findViewById(R.id.llCamera1);
+        llCamera2=(LinearLayout)findViewById(R.id.llCamera2);
+        llCamera3=(LinearLayout)findViewById(R.id.llCamera3);
+        llCamera4=(LinearLayout)findViewById(R.id.llCamera4);
+        llCamera5=(LinearLayout)findViewById(R.id.llCamera5);
+        llMultipleImage=(LinearLayout)findViewById(R.id.llMultipleImage);
         imgMultiPleImg=(ImageView) findViewById(R.id.imgMultiPleImg);
         imgMultiPle=(ImageView)findViewById(R.id.imgMultiPle);
 
@@ -320,9 +331,10 @@ public class NewClaimActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(NewClaimActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent = new Intent(NewClaimActivity.this, NewUserDashboardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish();
+                //finish();
             }
         });
         imgDate.setOnClickListener(new View.OnClickListener() {
@@ -331,7 +343,8 @@ public class NewClaimActivity extends AppCompatActivity {
 
             }
         });
-        imgCamera1.setOnClickListener(new View.OnClickListener() {
+        //imgCamera1.setOnClickListener(new View.OnClickListener() {
+        llCamera1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cameraIntent();
@@ -400,19 +413,22 @@ public class NewClaimActivity extends AppCompatActivity {
             }
         });
 
-        imgCamera2.setOnClickListener(new View.OnClickListener() {
+        //imgCamera2.setOnClickListener(new View.OnClickListener() {
+        llCamera2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cameraIntent1();
             }
         });
-        imgCamera3.setOnClickListener(new View.OnClickListener() {
+        //imgCamera3.setOnClickListener(new View.OnClickListener() {
+        llCamera3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cameraIntent2();
             }
         });
-        imgCamera4.setOnClickListener(new View.OnClickListener() {
+        //imgCamera4.setOnClickListener(new View.OnClickListener() {
+        llCamera4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cameraIntent3();
@@ -424,15 +440,16 @@ public class NewClaimActivity extends AppCompatActivity {
 
             }
         });
-        imgCamera5.setOnClickListener(new View.OnClickListener() {
+        //imgCamera5.setOnClickListener(new View.OnClickListener() {
+        llCamera5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cameraIntent4();
             }
         });
-        llBrowse.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener listenerBrowse = new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 if (llAttach.getVisibility() == View.GONE) {
                     llAttach.setVisibility(View.VISIBLE);
                     llCameraD.setVisibility(View.GONE);
@@ -443,10 +460,14 @@ public class NewClaimActivity extends AppCompatActivity {
                     llCamera.setVisibility(View.VISIBLE);
                 }
             }
-        });
-        llCamera.setOnClickListener(new View.OnClickListener() {
+        };
+        llBrowse.setOnClickListener(listenerBrowse);
+        txtBrowseFile.setOnClickListener(listenerBrowse);
+        tvOnlyPdfImage.setOnClickListener(listenerBrowse);
+
+        View.OnClickListener listenerCamera = new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 if (llCameraD.getVisibility()==View.GONE){
                     llCameraD.setVisibility(View.VISIBLE);
                     llAttach.setVisibility(View.GONE);
@@ -457,9 +478,14 @@ public class NewClaimActivity extends AppCompatActivity {
                     llBrowse.setVisibility(View.VISIBLE);
                 }
             }
-        });
+        };
+        llCamera.setOnClickListener(listenerCamera);
+        txtCamaraPicture.setOnClickListener(listenerCamera);
+        txtOnlyImage.setOnClickListener(listenerCamera);
 
-        imgMultiPle.setOnClickListener(new View.OnClickListener() {
+
+        //imgMultiPle.setOnClickListener(new View.OnClickListener() {
+        llMultipleImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LongImageCameraActivity.launch(NewClaimActivity.this);

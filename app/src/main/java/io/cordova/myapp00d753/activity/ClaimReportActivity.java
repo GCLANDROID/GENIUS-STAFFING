@@ -134,7 +134,7 @@ public class ClaimReportActivity extends AppCompatActivity {
         else if (m==12){
             month="December";
         }
-        tvReportMonth=(TextView)findViewById(R.id.tvReportMonth);
+        //tvReportMonth=(TextView)findViewById(R.id.tvReportMonth);
        // tvReportMonth.setText("Month of "+month);
         tvYear=(TextView)findViewById(R.id.tvYear);
         tvMonth=(TextView)findViewById(R.id.tvMonth);
@@ -146,7 +146,7 @@ public class ClaimReportActivity extends AppCompatActivity {
         llMonth=(LinearLayout) findViewById(R.id.llMonth);
         llYear=(LinearLayout) findViewById(R.id.llYear);
         btnSubmit=(Button) findViewById(R.id.btnSubmit);
-
+        imgSearch.setVisibility(View.GONE);
     }
 
     private void getItemList(JSONObject jsonObject) {
@@ -198,7 +198,7 @@ public class ClaimReportActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(),"No data found",Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {
-                            throw new RuntimeException(e);
+                            e.printStackTrace();
                         }
                     }
 
@@ -406,7 +406,7 @@ public class ClaimReportActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(ClaimReportActivity.this,EmployeeDashBoardActivity.class);
+                Intent intent=new Intent(ClaimReportActivity.this,NewUserDashboardActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }

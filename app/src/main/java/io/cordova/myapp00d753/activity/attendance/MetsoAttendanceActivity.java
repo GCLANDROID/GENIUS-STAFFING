@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -80,6 +81,7 @@ import io.cordova.myapp00d753.R;
 
 import io.cordova.myapp00d753.Retrofit.RetrofitClient;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.metso.adapter.LocationSpinnerAdapter;
 import io.cordova.myapp00d753.activity.metso.adapter.ShiftSpinnerAdapter;
 import io.cordova.myapp00d753.activity.metso.model.LocationSpinnerModel;
@@ -89,6 +91,7 @@ import io.cordova.myapp00d753.activity.metso.model.ShiftSpinnerModel;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.GPSTracker;
 import io.cordova.myapp00d753.utility.Pref;
+import io.cordova.myapp00d753.utility.ShowDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -133,8 +136,8 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
     AlertDialog alertDialog;
     private static final int REQUEST_PHONE_STATE = 1;
     String phoneNumber;
-    ImageView imhHome;
-
+    ImageView imgHome;
+    CardView cvAddress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -283,7 +286,8 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
         txtCurrentLocation = findViewById(R.id.txtCurrentLocation);
         imgBack = findViewById(R.id.imgBack);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        imhHome=(ImageView)findViewById(R.id.imhHome);
+        imgHome=(ImageView)findViewById(R.id.imgHome);
+        cvAddress = (CardView) findViewById(R.id.cvAddress);
         //smf = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fmGoogleMaps);
         //smf.getMapAsync(this);
 
@@ -309,10 +313,10 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
             e.printStackTrace();
         }
 
-        imhHome.setOnClickListener(new View.OnClickListener() {
+        imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(MetsoAttendanceActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent=new Intent(MetsoAttendanceActivity.this, NewUserDashboardActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -434,12 +438,15 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
 
     private void submitAttendance() {
         progressDialog.show();
-        Log.e(TAG, "submitAttendance: MasterID: " + MasterID
-                + "\ncurrentAddresses: " + currentAddresses
+        Log.e(TAG, "submitAttendance: AEMEmployeeID: " + pref.getEmpId()
+                + "\nAddress: " + address
                 + "\nShiftid: " + Shiftid
                 + "\nSiteid: " + Siteid
-                + "\nlongitude: " + longitude
-                + "\nlatitude: " + latitude);
+                + "\nLongitude: " + longitude
+                + "\nLatitude: " + latitude
+                + "\nSecurityCode: " + pref.getSecurityCode()
+        );
+
 
         /* //TODO: Also working
         RequestBody AEMEmployeeID = RequestBody.create(MasterID, MediaType.parse("text/plain"));
@@ -664,6 +671,7 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
         if (llLoading.getVisibility() == View.VISIBLE) {
             llLoading.setVisibility(View.GONE);
             llSubmit.setVisibility(View.VISIBLE);
+            cvAddress.setVisibility(View.VISIBLE);
             startTimer();
         }
 
@@ -930,7 +938,16 @@ public class MetsoAttendanceActivity extends AppCompatActivity implements OnMapR
 
                         } else {
 
-                            shoeErrorDialog(Response_Message);
+                            //shoeErrorDialog(Response_Message);
+                            ShowDialog.showAlertDialog(MetsoAttendanceActivity.this, Response_Message,
+                                    new ShowDialog.ResultListener() {
+                                @Override
+                                public void onSuccess() {
+                                    finish();
+                                }
+                            });
+
+
 
                         }
                     }

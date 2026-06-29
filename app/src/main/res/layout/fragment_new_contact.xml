@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.ContactFragment"
+    android:orientation="vertical"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:paddingTop="20dp"
+    android:paddingHorizontal="15dp"
+    android:background="@drawable/background_16"
+    android:fitsSystemWindows="true">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/map_pin"/>
+
+                <TextView
+                    android:textSize="13sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="Permanent Address:"
+                    android:textColor="@android:color/black"
+                    android:fontFamily="@font/open_sans_bold"/>
+            </LinearLayout>
+
+            <TextView
+                android:textSize="13sp"
+                android:id="@+id/tvParAddr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:layout_marginTop="10dp"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
+                android:minHeight="50dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/background_15"
+                android:fontFamily="@font/open_sans_semi_bold"
+                android:textColor="@color/text_color" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/map_pin"/>
+
+                <TextView
+                    android:textSize="13sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Present Address:"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@android:color/black"
+                    android:fontFamily="@font/open_sans_bold"/>
+            </LinearLayout>
+
+            <TextView
+                android:textSize="13sp"
+                android:id="@+id/tvPreAddr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:layout_marginTop="10dp"
+                android:paddingHorizontal="15dp"
+                android:minHeight="50dp"
+                android:paddingVertical="5dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/background_15"
+                android:fontFamily="@font/open_sans_semi_bold"
+                android:textColor="@color/text_color"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/phone_call"/>
+
+                <TextView
+                    android:textSize="13sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Phone Number:"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@android:color/black"
+                    android:fontFamily="@font/open_sans_bold"/>
+            </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/background_15">
+
+                <TextView
+                    android:id="@+id/tvPhnNumber"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    tools:text="891000001"
+                    android:fontFamily="@font/open_sans_semi_bold"
+                    android:textColor="@color/text_color"
+                    android:textSize="13sp"
+
+                    android:gravity="center_vertical"
+                    android:paddingStart="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/imgPhnEye"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+                <ImageView
+                    android:id="@+id/imgPhnEye"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/eye"
+                    app:tint="@color/text_color_2"
+                    android:layout_marginEnd="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/mail"/>
+
+                <TextView
+                    android:textSize="13sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email ID:"
+                    android:paddingStart="5dp"
+                    android:textColor="@android:color/black"
+                    android:fontFamily="@font/open_sans_bold"/>
+            </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/background_15">
+
+                <TextView
+                    android:id="@+id/tvEmail"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    tools:text="--"
+                    android:gravity="center_vertical"
+                    android:paddingStart="15dp"
+                    android:fontFamily="@font/open_sans_semi_bold"
+                    android:textColor="@color/text_color"
+                    android:textSize="13sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/imgEmailEye"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imgEmailEye"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/eye"
+                    app:tint="@color/text_color_2"
+                    android:layout_marginEnd="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+
+
+
+
+
+
+    <!--<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:visibility="invisible"
+        android:background="@color/barcolor"/>-->
+
+</LinearLayout>

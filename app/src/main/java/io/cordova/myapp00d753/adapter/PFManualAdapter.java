@@ -34,7 +34,7 @@ public class PFManualAdapter extends RecyclerView.Adapter<PFManualAdapter.MyView
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         myViewHolder.tvPFDoc.setText(itemList.get(i).getCaption());
         if (itemList.get(i).getDoc_Type().equals("1")){
-            myViewHolder.imgDoc.setImageDrawable(context.getResources().getDrawable(R.drawable.pdff));
+            myViewHolder.imgDoc.setImageDrawable(context.getResources().getDrawable(R.drawable.pdf_1));
         }else if (itemList.get(i).getDoc_Type().equals("2")){
             myViewHolder.imgDoc.setImageDrawable(context.getResources().getDrawable(R.drawable.youtube));
         }else if (itemList.get(i).getDoc_Type().equals("2")){

@@ -49,6 +49,7 @@ import java.util.Calendar;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.Retrofit.RetrofitClient;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.WeeklyOffAttendanceActivity;
 import io.cordova.myapp00d753.activity.attendance.AttenDanceDashboardActivity;
 import io.cordova.myapp00d753.activity.metso.MetsoNewReimbursementClaimActivity;
@@ -156,7 +157,7 @@ public class NEW_HolidayMarkingActivity extends AppCompatActivity {
         binding.imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(NEW_HolidayMarkingActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent = new Intent(NEW_HolidayMarkingActivity.this, NewUserDashboardActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
@@ -226,7 +227,8 @@ public class NEW_HolidayMarkingActivity extends AppCompatActivity {
             }
         });
 
-        binding.tvDate.setOnClickListener(new View.OnClickListener() {
+        //binding.tvDate.setOnClickListener(new View.OnClickListener() {
+        binding.llDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (isNormalHolidayListRequired.equals("1") || isOptionalHolidayListRequired.equals("1")){
@@ -259,7 +261,7 @@ public class NEW_HolidayMarkingActivity extends AppCompatActivity {
             public void onDateSet(DatePicker datePicker, int y, int m, int d) {
                 newdate = y + "-" + (m + 1) + "-" + d;
                 tvDate.setVisibility(View.VISIBLE);
-                tvDate.setText(newdate);
+                tvDate.setText(Util.changeAnyDateFormat(newdate,"yyyy-MM-dd","dd MMMM yyyy"));
                 holidayDate = newdate;
 
             }
@@ -354,7 +356,12 @@ public class NEW_HolidayMarkingActivity extends AppCompatActivity {
                                 });
                             } else {
                                 progressDialog.cancel();
-                                ShowDialog.showErrorDialog(NEW_HolidayMarkingActivity.this,Response_Message);
+                                ShowDialog.showAlertDialog(NEW_HolidayMarkingActivity.this, Response_Message, new ShowDialog.ResultListener() {
+                                    @Override
+                                    public void onSuccess() {
+
+                                    }
+                                });
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -393,6 +400,7 @@ public class NEW_HolidayMarkingActivity extends AppCompatActivity {
             public void onSelect(String date, String holidayName) {
                 tvDate.setText(holidayName);
                 holidayDate = Util.changeAnyDateFormat(date, "yyyy-MM-dd'T'HH:mm:ss", "MM/dd/yyyy");
+                binding.imgSampleArrow.setVisibility(View.GONE);
                 searchHolidayDialog.dismiss();
             }
         });

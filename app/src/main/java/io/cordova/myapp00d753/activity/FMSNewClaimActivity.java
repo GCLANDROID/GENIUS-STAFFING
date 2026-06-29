@@ -163,7 +163,7 @@ public class FMSNewClaimActivity extends AppCompatActivity {
     private Uri uri;
 
     String galleryflagone,galleryflagtwo;
-    TextView txtSupervisor;
+    TextView txtSupervisor,txtBrowseFile,tvOnlyPdfImage,txtCamaraPicture,txtOnlyImage;
     Dialog searchWbsCodeDialog;
     ArrayList<SpineerItemModel> supervisorList = new ArrayList<>();
     String SupervisorID="";
@@ -265,6 +265,10 @@ public class FMSNewClaimActivity extends AppCompatActivity {
         tvMonth = (TextView) findViewById(R.id.tvMonth);
         tvYear = (TextView) findViewById(R.id.tvYear);
         tvMonth = (TextView) findViewById(R.id.tvMonth);
+        txtBrowseFile = (TextView) findViewById(R.id.txtBrowseFile);
+        tvOnlyPdfImage = (TextView) findViewById(R.id.tvOnlyPdfImage);
+        txtCamaraPicture = (TextView) findViewById(R.id.txtCamaraPicture);
+        txtOnlyImage = (TextView) findViewById(R.id.txtOnlyImage);
         tvYear.setText(year);
         tvMonth.setText(month);
         llBrowse = (LinearLayout) findViewById(R.id.llBrowse);
@@ -322,7 +326,7 @@ public class FMSNewClaimActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FMSNewClaimActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent = new Intent(FMSNewClaimActivity.this, NewUserDashboardActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -432,9 +436,9 @@ public class FMSNewClaimActivity extends AppCompatActivity {
                 cameraIntent4();
             }
         });
-        llBrowse.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener listenerBrowse = new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 if (llAttach.getVisibility() == View.GONE) {
                     llAttach.setVisibility(View.VISIBLE);
                     llCameraD.setVisibility(View.GONE);
@@ -445,10 +449,14 @@ public class FMSNewClaimActivity extends AppCompatActivity {
                     llCamera.setVisibility(View.VISIBLE);
                 }
             }
-        });
-        llCamera.setOnClickListener(new View.OnClickListener() {
+        };
+        llBrowse.setOnClickListener(listenerBrowse);
+        tvOnlyPdfImage.setOnClickListener(listenerBrowse);
+        txtBrowseFile.setOnClickListener(listenerBrowse);
+
+        View.OnClickListener listenerCamera = new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 if (llCameraD.getVisibility()==View.GONE){
                     llCameraD.setVisibility(View.VISIBLE);
                     llAttach.setVisibility(View.GONE);
@@ -459,7 +467,14 @@ public class FMSNewClaimActivity extends AppCompatActivity {
                     llBrowse.setVisibility(View.VISIBLE);
                 }
             }
-        });
+        };
+        llCamera.setOnClickListener(listenerCamera);
+        txtCamaraPicture.setOnClickListener(listenerCamera);
+        txtOnlyImage.setOnClickListener(listenerCamera);
+
+        llCamera.setOnClickListener(listenerCamera);
+        txtOnlyImage.setOnClickListener(listenerCamera);
+        txtCamaraPicture.setOnClickListener(listenerCamera);
 
         imgMultiPle.setOnClickListener(new View.OnClickListener() {
             @Override

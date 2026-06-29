@@ -39,6 +39,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -85,6 +86,7 @@ import java.util.Locale;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.Retrofit.RetrofitClient;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.bosch.BoschAndroidXCameraActivity;
 import io.cordova.myapp00d753.activity.bosch.BoschAttendanceReportActivity;
 import io.cordova.myapp00d753.activity.bosch.adapter.PunchTypeAdapter;
@@ -97,6 +99,7 @@ import io.cordova.myapp00d753.activity.metso.model.ShiftSpinnerModel;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.GPSTracker;
 import io.cordova.myapp00d753.utility.Pref;
+import io.cordova.myapp00d753.utility.ShowDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -143,7 +146,8 @@ public class GeoFenceAttendanceWithPunchTypeActivity extends AppCompatActivity i
     boolean isImageSelected=false;
     ArrayList<BoschPunchTypeModel> boschPunchTypeList;
     LinearLayout llCapImage;
-
+    CardView cvImage,cvAddress;
+    LinearLayout llCaptureImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -237,11 +241,11 @@ public class GeoFenceAttendanceWithPunchTypeActivity extends AppCompatActivity i
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(GeoFenceAttendanceWithPunchTypeActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent = new Intent(GeoFenceAttendanceWithPunchTypeActivity.this, NewUserDashboardActivity.class);
                 startActivity(intent);
             }
         });
-        btnOpenCamera.setOnClickListener(new View.OnClickListener() {
+        llCaptureImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(GeoFenceAttendanceWithPunchTypeActivity.this, BoschAndroidXCameraActivity.class);
@@ -277,15 +281,19 @@ public class GeoFenceAttendanceWithPunchTypeActivity extends AppCompatActivity i
         };
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BETWEEN_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, locationListener);*/
         llLoading = findViewById(R.id.llLoading);
-        llCapImage=(LinearLayout)findViewById(R.id.llCapImage);
-        llCapImage.setVisibility(View.GONE);
+        /*llCapImage=(LinearLayout)findViewById(R.id.llCapImage);
+        llCapImage.setVisibility(View.GONE)*/;
         llSubmit = findViewById(R.id.llSubmit);
         btnSubmit = findViewById(R.id.btnSubmit);
         txtCurrentLocation = findViewById(R.id.txtCurrentLocation);
         imgBack = findViewById(R.id.imgBack);
         imgHome = findViewById(R.id.imgHome);
-        btnOpenCamera = findViewById(R.id.btnOpenCamera);
-        showImageView = findViewById(R.id.showImageView);
+        /*btnOpenCamera = findViewById(R.id.btnOpenCamera);
+        showImageView = findViewById(R.id.showImageView);*/
+        cvImage = findViewById(R.id.cvImage);
+        cvAddress = findViewById(R.id.cvAddress);
+        cvImage.setVisibility(View.GONE);
+        llCaptureImage = findViewById(R.id.llCaptureImage);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         //smf = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fmGoogleMaps);
@@ -389,6 +397,8 @@ public class GeoFenceAttendanceWithPunchTypeActivity extends AppCompatActivity i
         if (llLoading.getVisibility() == View.VISIBLE){
             llLoading.setVisibility(View.GONE);
             llSubmit.setVisibility(View.VISIBLE);
+            cvAddress.setVisibility(View.VISIBLE);
+            cvImage.setVisibility(View.GONE);
         }
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -728,7 +738,16 @@ public class GeoFenceAttendanceWithPunchTypeActivity extends AppCompatActivity i
                             if (Response_Code.equals("101")) {
 
                                 shiftAndLocationDialog.cancel();
-                                successAlert(object.getString("Response_Message"));
+                                //successAlert(object.getString("Response_Message"));
+                                ShowDialog.showSuccessDialog(GeoFenceAttendanceWithPunchTypeActivity.this,
+                                        object.getString("Response_Message"), new ShowDialog.ResultListener() {
+                                    @Override
+                                    public void onSuccess() {
+                                        Intent intent = new Intent(GeoFenceAttendanceWithPunchTypeActivity.this, BoschAttendanceReportActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(intent);
+                                    }
+                                });
                             } else {
                                 progressDialog.cancel();
                                 Toast.makeText(GeoFenceAttendanceWithPunchTypeActivity.this, object.getString("Response_Message"), Toast.LENGTH_SHORT).show();
@@ -746,17 +765,17 @@ public class GeoFenceAttendanceWithPunchTypeActivity extends AppCompatActivity i
                 });
     }
 
-    private void successAlert(String message) {
+    /*private void successAlert(String message) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(GeoFenceAttendanceWithPunchTypeActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_success, null);
         dialogBuilder.setView(dialogView);
         TextView tvInvalidDate = (TextView) dialogView.findViewById(R.id.tvSuccess);
-        /*if (addflag == 1) {
+        *//*if (addflag == 1) {
             tvInvalidDate.setText("Your attendnace has been saved successfully");
         } else {
             tvInvalidDate.setText("Your attendnace has been saved successfully");
-        }*/
+        }*//*
         tvInvalidDate.setText(message);
         Button btnOk = (Button) dialogView.findViewById(R.id.btnOk);
         btnOk.setOnClickListener(new View.OnClickListener() {
@@ -765,6 +784,7 @@ public class GeoFenceAttendanceWithPunchTypeActivity extends AppCompatActivity i
                 alerDialog1.dismiss();
                 //Intent intent = new Intent(MetsoAttendanceActivity.this, AttendanceReportActivity.class);
                 Intent intent = new Intent(GeoFenceAttendanceWithPunchTypeActivity.this, BoschAttendanceReportActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
             }
@@ -776,7 +796,7 @@ public class GeoFenceAttendanceWithPunchTypeActivity extends AppCompatActivity i
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.CENTER);
         alerDialog1.show();
-    }
+    }*/
 
 
     private void getPunchLocationData() {

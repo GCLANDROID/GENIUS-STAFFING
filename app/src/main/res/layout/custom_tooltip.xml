@@ -5,13 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@drawable/lldesign"
-    android:backgroundTint="@color/maincolor">
+    android:backgroundTint="@color/text_color_2">
     <TextView
         android:id="@+id/tv_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:text="Ask to Genius Voice Assistant"
+        android:fontFamily="@font/open_sans_medium"
         android:textSize="14sp"
         tools:ignore="RtlHardcoded"
         android:textColor="@color/white"/>
@@ -20,6 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:text="GOT IT" />
+        android:text="GOT IT"
+        android:background="@color/white"/>
 
 </LinearLayout>

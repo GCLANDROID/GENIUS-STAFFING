@@ -62,7 +62,7 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 
-import id.zelory.compressor.Compressor;
+//import id.zelory.compressor.Compressor;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.module.AttendanceService;
 import io.cordova.myapp00d753.module.DocumentManageModule;
@@ -113,7 +113,8 @@ public class DocumentManageActivity extends AppCompatActivity {
     Pref pref;
     String subDocumentID;
     EditText etReferenceNumber;
-    LinearLayout llSave;
+    //LinearLayout llSave;
+    Button llSave;
     AlertDialog alerDialog1, alertDialog;
     String securityCode;
 
@@ -125,7 +126,7 @@ public class DocumentManageActivity extends AppCompatActivity {
     File pictureFile;
     AlertDialog alerDialog3;
     public int PIC_CODE=0;;
-
+    TextView tvDocumentType,tvDocumentSelect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,9 +148,12 @@ public class DocumentManageActivity extends AppCompatActivity {
         llUpload=(LinearLayout)findViewById(R.id.llUpload);
 
 
-        llSp = (LinearLayout) findViewById(R.id.llSp);
+        //llSp = (LinearLayout) findViewById(R.id.llSp);
         etReferenceNumber = (EditText) findViewById(R.id.etReferenceNumber);
-        llSave = (LinearLayout) findViewById(R.id.llSave);
+        tvDocumentType = (TextView) findViewById(R.id.tvDocumentType);
+        tvDocumentSelect = (TextView) findViewById(R.id.tvDocumentSelect);
+        llSave = (Button) findViewById(R.id.llSave);
+        //llSave = (LinearLayout) findViewById(R.id.llSave);
         setMainDoc();
         //TODO: new api
         /*JSONObject obj=new JSONObject();
@@ -197,7 +201,7 @@ public class DocumentManageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (pref.getUserType().equals("1")) {
-                    Intent intent = new Intent(DocumentManageActivity.this, EmployeeDashBoardActivity.class);
+                    Intent intent = new Intent(DocumentManageActivity.this, NewUserDashboardActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 } else if (pref.getUserType().equals("4")) {
@@ -221,7 +225,7 @@ public class DocumentManageActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
                 mainDocument = mainDocType.get(i).getDocID();
-
+                tvDocumentType.setText(mainDocType.get(i).getDocumentType());
                 setSubDocType();
                 //TODO: new api
                /* JSONObject obj=new JSONObject();
@@ -250,6 +254,7 @@ public class DocumentManageActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 subDocumentID = subDocType.get(i).getDocumentID();
                 document = subDocType.get(i).getDocument();
+                tvDocumentSelect.setText(subDocType.get(i).getDocument());
                 Log.d("document", subDocumentID);
             }
 
@@ -264,8 +269,18 @@ public class DocumentManageActivity extends AppCompatActivity {
                 openCameraDialog();
             }
         });
-
-
+        tvDocumentType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                spDocType.performClick();
+            }
+        });
+        tvDocumentSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                spDoc.performClick();
+            }
+        });
 
         llSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -490,6 +505,7 @@ public class DocumentManageActivity extends AppCompatActivity {
 
                             flag1 = 1;
                             imgDoc.setImageBitmap(bm);
+                            imgDoc.setVisibility(View.VISIBLE);
                             alerDialog3.dismiss();
 
 
@@ -523,7 +539,7 @@ public class DocumentManageActivity extends AppCompatActivity {
                             encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
                             alerDialog3.dismiss();
                             imgDoc.setImageBitmap(bm);
-
+                            imgDoc.setVisibility(View.VISIBLE);
                             flag1 = 2;
 
 
@@ -542,7 +558,8 @@ public class DocumentManageActivity extends AppCompatActivity {
 
                     Uri selectedFileURI = data.getData();
                     pdffile = new File(getRealPDFPathFromURI(selectedFileURI));
-
+                    imgDoc.setVisibility(View.VISIBLE);
+                    imgDoc.setImageResource(R.drawable.pdf_1);
                     flag1 = 3;
                     alerDialog1.dismiss();
 
@@ -562,11 +579,12 @@ public class DocumentManageActivity extends AppCompatActivity {
                     int newHeight = (int) (d.getHeight() * (512.0 / d.getWidth()));
                     Bitmap putImage = Bitmap.createScaledBitmap(d, 512, newHeight, true);
                     imgDoc.setImageBitmap(putImage);
+                    imgDoc.setVisibility(View.VISIBLE);
                     flag1 = 1;
                      pictureFile = (File)data.getExtras().get("picture");
                     Log.d("fjjgk",pictureFile.toString());
                     try {
-                        compressedImageFile = new Compressor(this).compressToFile(pictureFile);
+                        compressedImageFile = new ImageZipper(this).compressToFile(pictureFile);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -784,7 +802,7 @@ public class DocumentManageActivity extends AppCompatActivity {
 
 
     private void setSubDocType() {
-        llSp.setVisibility(View.VISIBLE);
+        //llSp.setVisibility(View.VISIBLE);
         String surl = AppData.url+"gcl_DigitalDocumentType?DocID=1&DocumentID=" + mainDocument + "&DbOperation=2&SecurityCode=" + pref.getSecurityCode();
         final ProgressDialog progressBar = new ProgressDialog(this);
         progressBar.setCancelable(true);//you can cancel it by pressing back button

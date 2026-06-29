@@ -60,6 +60,7 @@ import io.cordova.myapp00d753.module.SpineerItemModel;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.RequiredListClass;
+import io.cordova.myapp00d753.utility.ShowDialog;
 import io.cordova.myapp00d753.utility.Util;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -79,7 +80,7 @@ public class NEW_AttendanceRegularizationActivity extends AppCompatActivity impl
     String startDate="",endDate="",ClientID="",MasterID="";
     String prvMonth1stDate ="",currentDate="";
     ArrayList<NEW_BackLogAttendanceModel> blockLogList;
-    LinearLayout llTick;
+    LinearLayout llTick,llHeading;
     public boolean isSelectedAll = false;
     NEW_BacklogAdapter skfBacklogAdapter;
     int itemSelectCount=0;
@@ -116,6 +117,8 @@ public class NEW_AttendanceRegularizationActivity extends AppCompatActivity impl
         llNodata = findViewById(R.id.llNodata);
         llWarning = findViewById(R.id.llWarning);
         llTick = findViewById(R.id.llTick);
+        llHeading = findViewById(R.id.llHeading);
+        llHeading.setVisibility(View.GONE);
         imgHome = findViewById(R.id.imgHome);
         llRegularisationCount = findViewById(R.id.llRegularisationCount);
         imgLike = findViewById(R.id.imgLike);
@@ -451,7 +454,16 @@ public class NEW_AttendanceRegularizationActivity extends AppCompatActivity impl
                                     Log.e(TAG, "FinalStatus: "+FinalStatus);
                                     Log.e(TAG, "AlreadyRequestCount: "+AlreadyRequestCount);
                                     Log.e(TAG, "ExceedRequestLimit: "+ExceedRequestLimit);
-                                    successAlert();
+                                    //successAlert();
+                                    ShowDialog.showSuccessDialog(NEW_AttendanceRegularizationActivity.this, "Your backlog attendance was saved successfully", new ShowDialog.ResultListener() {
+                                        @Override
+                                        public void onSuccess() {
+                                            if (imgLike.getVisibility() == View.VISIBLE) {
+                                                imgLike.setVisibility(View.GONE);
+                                            }
+                                            btnShow.performClick();
+                                        }
+                                    });
                                 } else {
                                     blockLogList.clear();
                                     btnSubmit.setVisibility(View.VISIBLE);

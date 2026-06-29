@@ -5,9 +5,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -36,7 +38,7 @@ public class InsuranceActivity extends AppCompatActivity {
     RecyclerView  rvItem;
     ArrayList<InsuranceModel>itemList=new ArrayList<>();
     Pref pref;
-
+    ImageView imgBack,imgHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +53,23 @@ public class InsuranceActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(InsuranceActivity.this, LinearLayoutManager.VERTICAL, false);
         rvItem.setLayoutManager(layoutManager);
-
+        imgBack = findViewById(R.id.imgBack);
+        imgHome = findViewById(R.id.imgHome);
         getInsuranceData();
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(InsuranceActivity.this,NewUserDashboardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
     }
 
 

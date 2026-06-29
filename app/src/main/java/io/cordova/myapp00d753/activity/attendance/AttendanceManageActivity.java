@@ -83,6 +83,7 @@ import io.cordova.myapp00d753.AndroidXCamera.FrontAndroidXCameraActivity;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
 import io.cordova.myapp00d753.activity.FaceRecognitation;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.module.AttendanceManageModule;
 import io.cordova.myapp00d753.module.AttendanceService;
 import io.cordova.myapp00d753.utility.ApiClient;
@@ -211,7 +212,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
         llMain = (LinearLayout) findViewById(R.id.llMain);
 
 
-        btnSubmit1 = (Button) findViewById(R.id.btnSubmit1);
+       // btnSubmit1 = (Button) findViewById(R.id.btnSubmit1);
 
 
         Date c = Calendar.getInstance().getTime();
@@ -239,8 +240,8 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
 
         final Handler handler = new Handler();
 
-        tvEmpName = (TextView) findViewById(R.id.tvEmpName);
-        tvEmpName.setText("You are here:");
+        //tvEmpName = (TextView) findViewById(R.id.tvEmpName);
+        //tvEmpName.setText("You are here:");
 
         gps = new GPSTracker(AttendanceManageActivity.this);
         if (gps.canGetLocation()) {
@@ -263,12 +264,12 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
         if (intt.equals("2")) {
             btnSubmit.setVisibility(View.VISIBLE);
             tvFace.setText("Upload Your Image");
-            tvToolBar.setText("Manage Attendance");
+            //tvToolBar.setText("Manage Attendance");
         } else {
             btnSubmit.setVisibility(View.GONE);
             tvFace.setVisibility(View.VISIBLE);
             tvFace.setText("Recognize My Face");
-            tvToolBar.setText("Manage Attendance With Face");
+            //tvToolBar.setText("Manage Attendance With Face");
         }
 
         llL = (LinearLayout) findViewById(R.id.llL);
@@ -293,7 +294,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(AttendanceManageActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent = new Intent(AttendanceManageActivity.this, NewUserDashboardActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -315,12 +316,12 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
                 }
             }
         });
-        btnSubmit1.setOnClickListener(new View.OnClickListener() {
+       /* btnSubmit1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 attendanceGivenfunction();
             }
-        });
+        });*/
     }
 
 
@@ -737,7 +738,7 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
         } else {
             addr = "default";
         }
-
+        Log.e(TAG, "attendanceGivenfunction: empId: "+empId+" address: "+address+" longt: "+longt+"lat: "+lat+" SecurityCode: "+pref.getSecurityCode());
         final ProgressDialog progressBar = new ProgressDialog(this);
         progressBar.setCancelable(true);//you can cancel it by pressing back button
         progressBar.setMessage("uploading...");
@@ -774,9 +775,9 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
         dialogBuilder.setView(dialogView);
         TextView tvInvalidDate = (TextView) dialogView.findViewById(R.id.tvSuccess);
         if (addflag == 1) {
-            tvInvalidDate.setText("Your attendnace has been saved successfully");
+            tvInvalidDate.setText("Your attendance has been saved successfully.");
         } else {
-            tvInvalidDate.setText("Your attendnace has been saved successfully");
+            tvInvalidDate.setText("Your attendance has been saved successfully.");
         }
         Button btnOk = (Button) dialogView.findViewById(R.id.btnOk);
         btnOk.setOnClickListener(new View.OnClickListener() {
@@ -1012,7 +1013,6 @@ public class AttendanceManageActivity extends AppCompatActivity implements OnMap
         }else {
             attendanceGivenfunction();
         }
-
 
     }
 

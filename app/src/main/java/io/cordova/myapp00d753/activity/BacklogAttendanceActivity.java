@@ -56,6 +56,7 @@ import io.cordova.myapp00d753.adapter.BackLogAdapter;
 import io.cordova.myapp00d753.module.BackLogAttendanceModel;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
+import io.cordova.myapp00d753.utility.ShowDialog;
 import io.cordova.myapp00d753.utility.Util;
 
 public class BacklogAttendanceActivity extends AppCompatActivity {
@@ -226,7 +227,7 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(BacklogAttendanceActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent=new Intent(BacklogAttendanceActivity.this, NewUserDashboardActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -467,7 +468,32 @@ public class BacklogAttendanceActivity extends AppCompatActivity {
                             String Response_Message = job1.optString("Response_Message");
                             if (Response_Code.equals("101")) {
                                 String Response_Data = job1.optString("Response_Data");
-                                successAlert();
+                                //successAlert();
+                                ShowDialog.showSuccessDialog(BacklogAttendanceActivity.this, "Your backlog attendance was saved successfully", new ShowDialog.ResultListener() {
+                                    @Override
+                                    public void onSuccess() {
+                                        if (imgLike.getVisibility() == View.VISIBLE) {
+                                            imgLike.setVisibility(View.GONE);
+                                        }
+
+                                        backLogItem.clear();
+                                        backlogDetails = "";
+                                        //getBackLogData();
+
+                                        JSONObject obj=new JSONObject();
+                                        try {
+                                            obj.put("DbOperation","1");
+                                            obj.put("empid",pref.getEmpId());
+                                            obj.put("clientid",pref.getEmpClintId());
+                                            obj.put("fromdate",strtDate);
+                                            obj.put("todate",endDate);
+                                            obj.put("SecurityCode",pref.getSecurityCode());
+                                            getBackLogData(obj);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
                             } else {
                                 Toast.makeText(BacklogAttendanceActivity.this,Response_Message,Toast.LENGTH_LONG).show();
                             }

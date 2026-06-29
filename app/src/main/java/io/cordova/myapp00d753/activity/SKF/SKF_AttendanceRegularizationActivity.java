@@ -46,6 +46,7 @@ import java.util.Calendar;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.Retrofit.RetrofitClient;
 import io.cordova.myapp00d753.activity.EmployeeDashBoardActivity;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.SKF.adapter.SKF_BacklogAdapter;
 import io.cordova.myapp00d753.activity.metso.adapter.LocationSpinnerAdapter;
 import io.cordova.myapp00d753.activity.metso.model.MetsoLocationModel;
@@ -193,7 +194,7 @@ public class SKF_AttendanceRegularizationActivity extends AppCompatActivity impl
                 selectAllOperation();
                 break;
             case R.id.imgHome:
-                Intent intent = new Intent(SKF_AttendanceRegularizationActivity.this, EmployeeDashBoardActivity.class);
+                Intent intent = new Intent(SKF_AttendanceRegularizationActivity.this, NewUserDashboardActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 break;

@@ -84,6 +84,7 @@ import io.cordova.myapp00d753.activity.NEW.NEW_AttendanceReportActivity;
 import io.cordova.myapp00d753.activity.NEW.NEW_HolidayMarkingActivity;
 import io.cordova.myapp00d753.activity.NEW.NEW_HolidayViewActivity;
 import io.cordova.myapp00d753.activity.NEW.NEW_WeeklyOffAttendanceActivity;
+import io.cordova.myapp00d753.activity.NewUserDashboardActivity;
 import io.cordova.myapp00d753.activity.PFDashBoardActivity;
 import io.cordova.myapp00d753.activity.QRCodeScannerActivity;
 import io.cordova.myapp00d753.activity.SKF.HolidayViewActivity;
@@ -115,6 +116,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     boolean mslideState;
     ImageView imgMenu;
     LinearLayout llAttandanceManage, llAttendanceReport, llBackAttendance, llWeekly, llAttenRegularize, llBottom,llViewLeaveBalance;
+    LinearLayout llParentAttendance,llParentWeeklyOffHoliday,llParentAdjustment,llParentView;
     AlertDialog alerDialog1;
     String month, year;
     int y, m;
@@ -129,14 +131,20 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     JSONArray attendanceArray;
     Button btnLeave;
     ArrayList<String> presentDays = new ArrayList<>();
+    ArrayList<String> absentDays = new ArrayList<>();
+    ArrayList<String> weeklyOffDays = new ArrayList<>();
+    ArrayList<String> leaveDays = new ArrayList<>();
+    ArrayList<String> holidayDays = new ArrayList<>();
+    ArrayList<String> optionalHolidayDays = new ArrayList<>();
+    ArrayList<String> halfDays = new ArrayList<>();
     ArrayList<String> dateList = new ArrayList<>();
 
-    TextView tvPresent, tvDetails, tvOK;
+    TextView tvPresent, tvDetails, tvOK,txtPresentDay,txtLeaveTaken,txtWeeklyOff,txtAbsentDay,txtAttendanceDetails,txtHolidayDay,txtOptionalHoliday;
     LinearLayout lnStatus, llAdjustment,llHoliday,llHolidayView,llOptionalHoliday,llAllApplicationView;
     int date;
     GPSTracker gps;
     int leaveFlag;
-    ImageView imgHome;
+    ImageView imgHome,imgDrawerClose;
     String holidayFlag="0",OptionalHolidayFlag="0";
     String HolidayDetails_Array="";
 
@@ -150,7 +158,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     String AttnAdjCOAppliocationWithMarkedHierarchy="",AttnAdjWFHAppliocationWithMarkedHierarchy="",AttnAdjODMarkHierarchyAtEntry="";
     String WOMarkingWithHierarchySelection="",isLiveStatus_WeeklyOff="";
     String isLiveStatus_MarkAttnFromMobile ="", isLiveStatus_HolidayMarking ="",
-            isLiveStatus_OHolidayMarking="",isLiveStatus_AttReg="",isLiveStatus_HolidayView="",isLiveSatus_Adjustment="",isLiveStatus_DailyAttendanceView="",isLiveStatus_LeaveApplication="";
+            isLiveStatus_OHolidayMarking="",isLiveStatus_AttReg="",isLiveStatus_HolidayView="",isLiveSatus_Adjustment="",isLiveStatus_DailyAttendanceView="",isLiveStatus_LeaveApplication="",isLiveStatus_LeaveBalanceManagement="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -173,10 +181,17 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         imgSearch = (ImageView) findViewById(R.id.imgSearch);
         dlMain = (DrawerLayout) findViewById(R.id.dlMain);
         rvItem = (RecyclerView) findViewById(R.id.rvItem);
-
+        txtPresentDay = findViewById(R.id.txtPresentDay);
+        txtAbsentDay = findViewById(R.id.txtAbsentDay);
+        txtLeaveTaken = findViewById(R.id.txtLeaveTaken);
+        txtWeeklyOff = findViewById(R.id.txtWeeklyOff);
+        txtHolidayDay = findViewById(R.id.txtHolidayDay);
+        txtOptionalHoliday = findViewById(R.id.txtOptionalHoliday);
+        txtAttendanceDetails = findViewById(R.id.txtAttendanceDetails);
         pref = new Pref(AttenDanceDashboardActivity.this);
         rvItem.setLayoutManager(new GridLayoutManager(this, 3));
         imgMenu = (ImageView) findViewById(R.id.imgMenu);
+        imgDrawerClose = (ImageView) findViewById(R.id.imgDrawerClose);
         imgMenu.setOnClickListener(this);
         dlMain.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
@@ -210,6 +225,10 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         llHolidayView = (LinearLayout) findViewById(R.id.llHolidayView);
         llViewLeaveBalance = (LinearLayout) findViewById(R.id.llViewLeaveBalance);
         llAllApplicationView = (LinearLayout) findViewById(R.id.llAllApplicationView);
+        llParentAttendance = (LinearLayout) findViewById(R.id.llParentAttendance);
+        llParentWeeklyOffHoliday = (LinearLayout) findViewById(R.id.llParentWeeklyOffHoliday);
+        llParentView = (LinearLayout) findViewById(R.id.llParentView);
+        llParentAdjustment = (LinearLayout) findViewById(R.id.llParentAdjustment);
         tvCancel = (TextView) findViewById(R.id.tvCancel);
         llBottom = (LinearLayout) findViewById(R.id.llBottom);
         if (pref.getEmpClintId().equals("AEMCLI0910000315")) {
@@ -280,6 +299,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         llViewLeaveBalance.setOnClickListener(this);
         llAllApplicationView.setOnClickListener(this);
         tvCancel.setOnClickListener(this);
+        imgDrawerClose.setOnClickListener(this);
 
         y = Calendar.getInstance().get(Calendar.YEAR);
         pastYear = y - 1;
@@ -402,7 +422,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         customCalendar.setOnNavigationButtonClickedListener(CustomCalendar.PREVIOUS, this);
         customCalendar.setOnNavigationButtonClickedListener(CustomCalendar.NEXT, this);
         btnLeave.setOnClickListener(this);
-
+        txtAttendanceDetails.setText("ATTENDANCE DETAILS ( "+customCalendar.getMonthYearTextView().getText()+" )");
         lnStatus = (LinearLayout) findViewById(R.id.lnStatus);
         tvDetails = (TextView) findViewById(R.id.tvDetails);
         tvOK = (TextView) findViewById(R.id.tvOK);
@@ -498,11 +518,21 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             llAdjustment.setVisibility(View.GONE);
         }
         AllApplicationViewConfiguration();
+        llParentAttendance.setVisibility(isVisible_parentAttendanceMenu()?View.VISIBLE:View.GONE);
+        llParentWeeklyOffHoliday.setVisibility(isVisible_parentWeeklyOffHolidayView()?View.VISIBLE:View.GONE);
+        llParentView.setVisibility(isVisible_parentViewMenu()?View.VISIBLE:View.GONE);
+        llParentAdjustment.setVisibility(isVisible_parentAdjustmentView()?View.VISIBLE:View.GONE);
     }
 
     private void getAttendanceList(JSONObject jsonObject) {
         Log.e(TAG, "getAttendanceList: INPUT: "+jsonObject);
         presentDays = new ArrayList<>();
+        leaveDays.clear();
+        weeklyOffDays.clear();
+        absentDays.clear();
+        optionalHolidayDays.clear();
+        holidayDays.clear();
+        halfDays.clear();
         dateList = new ArrayList<>();
         HashMap<Integer, Object> dateHashmap = new HashMap<>();
         // initialize calendar
@@ -555,10 +585,35 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                                     if (Status.equalsIgnoreCase("present")) {
                                         presentDays.add(Day);
                                     }
+                                    if (Status.equalsIgnoreCase("absent")) {
+                                        absentDays.add(Day);
+                                    }
+                                    if (Status.equalsIgnoreCase("wo")) {
+                                        weeklyOffDays.add(Day);
+                                    }
+                                    if (Status.equalsIgnoreCase("leave")) {
+                                        leaveDays.add(Day);
+                                    }
+                                    if (Status.equalsIgnoreCase("h")) {
+                                        holidayDays.add(Day);
+                                    }
+                                    if (Status.equalsIgnoreCase("oh")) {
+                                        optionalHolidayDays.add(Day);
+                                    }
+                                    if (Status.equalsIgnoreCase("hd")) {
+                                        halfDays.add(Day);
+                                    }
                                     dateHashmap.put(date, Status.toLowerCase());
                                 }
                                 customCalendar.setDate(calendar, dateHashmap);
-                                tvPresent.setText("" + presentDays.size());
+                                float totalPresentDay = presentDays.size() + ((float) halfDays.size() / 2);
+                                tvPresent.setText("" + totalPresentDay);
+                                txtPresentDay.setText("" + totalPresentDay);
+                                txtAbsentDay.setText("" + absentDays.size());
+                                txtWeeklyOff.setText("" + weeklyOffDays.size());
+                                txtLeaveTaken.setText("" + leaveDays.size());
+                                txtHolidayDay.setText("" + holidayDays.size());
+                                txtOptionalHoliday.setText("" + optionalHolidayDays.size());
                                 setAdapter();
                             } else {
 
@@ -668,7 +723,12 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
         HashMap<Integer, Object> dateHashmap = new HashMap<>();
         presentDays = new ArrayList<>();
         dateList = new ArrayList<>();
-
+        leaveDays.clear();
+        weeklyOffDays.clear();
+        absentDays.clear();
+        optionalHolidayDays.clear();
+        holidayDays.clear();
+        halfDays.clear();
         ProgressDialog pd = new ProgressDialog(AttenDanceDashboardActivity.this);
         pd.setMessage("Loading...");
         pd.setCancelable(false);
@@ -712,11 +772,36 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                                     if (Status.equalsIgnoreCase("present")) {
                                         presentDays.add(Day);
                                     }
+                                    if (Status.equalsIgnoreCase("absent")) {
+                                        absentDays.add(Day);
+                                    }
+                                    if (Status.equalsIgnoreCase("wo")) {
+                                        weeklyOffDays.add(Day);
+                                    }
+                                    if (Status.equalsIgnoreCase("leave")) {
+                                        leaveDays.add(Day);
+                                    }
+                                    if (Status.equalsIgnoreCase("h")) {
+                                        holidayDays.add(Day);
+                                    }
+                                    if (Status.equalsIgnoreCase("oh")) {
+                                        optionalHolidayDays.add(Day);
+                                    }
+                                    if (Status.equalsIgnoreCase("hd")) {
+                                        halfDays.add(Day);
+                                    }
                                     dateHashmap.put(date, Status.toLowerCase());
                                 }
 
                                 customCalendar.setDate(calendar, dateHashmap);
-                                tvPresent.setText("" + presentDays.size());
+                                float totalPresentDay = presentDays.size() + ((float) halfDays.size() / 2);
+                                tvPresent.setText("" + totalPresentDay);
+                                txtPresentDay.setText("" + totalPresentDay);
+                                txtAbsentDay.setText("" + absentDays.size());
+                                txtWeeklyOff.setText("" + weeklyOffDays.size());
+                                txtLeaveTaken.setText("" + leaveDays.size());
+                                txtHolidayDay.setText("" + holidayDays.size());
+                                txtOptionalHoliday.setText("" + optionalHolidayDays.size());
                                 setAdapter();
                             } else {
 
@@ -773,7 +858,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, AttendanceReportActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                /////
+
             }
         } else if (view == llBackAttendance) {
             Log.e(TAG, "onClick: llBackAttendance");
@@ -843,7 +928,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                     || pref.getEmpClintId().equals(ClientID.SKF_INDUSTRIAL)
                     || pref.getEmpClintId().equals(ClientID.SVF)
                     || pref.getEmpClintId().equals(ClientID.BROSE_INDIA_AUTOMOTIVE_SYSTEMS)
-            ) {  //WO APplication with location ->SKF PUNE
+            ) {  //WO Application with location ->SKF PUNE
                 Intent intent = new Intent(AttenDanceDashboardActivity.this, WOHOHActivity.class);
                 intent.putExtra("leaveFlag",leaveFlag);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -889,7 +974,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
-        } else if (view == imgSearch) {
+            } else if (view == imgSearch) {
             searchAlert();
         } else if (view == tvCancel) {
             llBottom.setVisibility(View.GONE);
@@ -952,9 +1037,11 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else if (view == imgHome) {
-            Intent intent = new Intent(AttenDanceDashboardActivity.this, EmployeeDashBoardActivity.class);
+            Intent intent = new Intent(AttenDanceDashboardActivity.this, NewUserDashboardActivity.class);
             startActivity(intent);
             finish();
+        } else if(view == imgDrawerClose){
+            dlMain.close();
         }
     }
 
@@ -1359,12 +1446,13 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
     public Map<Integer, Object>[] onNavigationButtonClicked(int whichButton, Calendar newMonth) {
         Map<Integer, Object>[] arr = new Map[2];
         arr[0] = new HashMap<>();
+
         switch (newMonth.get(Calendar.MONTH)) {
             case Calendar.JANUARY:
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(newMonth.get(Calendar.YEAR), 0, 1);
                 //getAttendanceListForNav(y, 1, calendar);
-
+                txtAttendanceDetails.setText("ATTENDANCE DETAILS ( Jan "+calendar.get(Calendar.YEAR)+" )");
                 JSONObject obj1=new JSONObject();
                 try {
                     obj1.put("AemEmployeeid", pref.getEmpId());
@@ -1380,7 +1468,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             case Calendar.FEBRUARY:
                 Calendar calendar1 = Calendar.getInstance();
                 calendar1.set(newMonth.get(Calendar.YEAR), 1, 1);
-
+                txtAttendanceDetails.setText("ATTENDANCE DETAILS ( Feb "+calendar1.get(Calendar.YEAR)+" )");
                 //getAttendanceListForNav(y, 2, calendar1);
 
                 JSONObject obj2=new JSONObject();
@@ -1399,7 +1487,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             case Calendar.MARCH:
                 Calendar calendar2 = Calendar.getInstance();
                 calendar2.set(newMonth.get(Calendar.YEAR), 2, 1);
-
+                txtAttendanceDetails.setText("ATTENDANCE DETAILS ( Mar " +calendar2.get(Calendar.YEAR)+" )");
                 //getAttendanceListForNav(y, 3, calendar2);
 
                 JSONObject obj3=new JSONObject();
@@ -1418,6 +1506,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             case Calendar.APRIL:
                 Calendar calendar3 = Calendar.getInstance();
                 calendar3.set(newMonth.get(Calendar.YEAR), 3, 1);
+                txtAttendanceDetails.setText("ATTENDANCE DETAILS ( Apr " +calendar3.get(Calendar.YEAR)+" )");
 
                 //getAttendanceListForNav(y, 4, calendar3);
 
@@ -1436,7 +1525,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             case Calendar.MAY:
                 Calendar calendar4 = Calendar.getInstance();
                 calendar4.set(newMonth.get(Calendar.YEAR), 4, 1);
-
+                txtAttendanceDetails.setText("ATTENDANCE DETAILS ( May "+calendar4.get(Calendar.YEAR)+" )");
                 //getAttendanceListForNav(y, 5, calendar4);
 
                 JSONObject obj5=new JSONObject();
@@ -1454,7 +1543,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             case Calendar.JUNE:
                 Calendar calendar5 = Calendar.getInstance();
                 calendar5.set(newMonth.get(Calendar.YEAR), 5, 1);
-
+                txtAttendanceDetails.setText("ATTENDANCE DETAILS ( Jun "+calendar5.get(Calendar.YEAR)+" )");
                 //getAttendanceListForNav(y, 6, calendar5);
 
                 JSONObject obj6=new JSONObject();
@@ -1472,7 +1561,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             case Calendar.JULY:
                 Calendar calendar6 = Calendar.getInstance();
                 calendar6.set(newMonth.get(Calendar.YEAR), 6, 1);
-
+                txtAttendanceDetails.setText("ATTENDANCE DETAILS "+"( Jul "+calendar6.get(Calendar.YEAR)+" )");
                 //getAttendanceListForNav(y, 7, calendar6);
 
                 JSONObject obj7=new JSONObject();
@@ -1490,7 +1579,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             case Calendar.AUGUST:
                 Calendar calendar7 = Calendar.getInstance();
                 calendar7.set(newMonth.get(Calendar.YEAR), 7, 1);
-
+                txtAttendanceDetails.setText("ATTENDANCE DETAILS "+"( Aug "+calendar7.get(Calendar.YEAR)+" )");
                 //getAttendanceListForNav(y, 8, calendar7);
 
                 JSONObject obj8=new JSONObject();
@@ -1508,7 +1597,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             case Calendar.SEPTEMBER:
                 Calendar calendar8 = Calendar.getInstance();
                 calendar8.set(newMonth.get(Calendar.YEAR), 8, 1);
-
+                txtAttendanceDetails.setText("ATTENDANCE DETAILS "+"( Sep "+calendar8.get(Calendar.YEAR)+" )");
                 //getAttendanceListForNav(y, 9, calendar8);
 
                 JSONObject obj9=new JSONObject();
@@ -1526,7 +1615,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             case Calendar.OCTOBER:
                 Calendar calendar9 = Calendar.getInstance();
                 calendar9.set(newMonth.get(Calendar.YEAR), 9, 1);
-
+                txtAttendanceDetails.setText("ATTENDANCE DETAILS "+"( Oct "+calendar9.get(Calendar.YEAR)+" )");
                 //getAttendanceListForNav(y, 10, calendar9);
 
                 JSONObject obj10=new JSONObject();
@@ -1544,7 +1633,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             case Calendar.NOVEMBER:
                 Calendar calendar10 = Calendar.getInstance();
                 calendar10.set(newMonth.get(Calendar.YEAR), 10, 1);
-
+                txtAttendanceDetails.setText("ATTENDANCE DETAILS "+"( Nov "+calendar10.get(Calendar.YEAR)+" )");
                 //getAttendanceListForNav(y, 11, calendar10);
 
                 JSONObject obj11=new JSONObject();
@@ -1562,7 +1651,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             case Calendar.DECEMBER:
                 Calendar calendar11 = Calendar.getInstance();
                 calendar11.set(newMonth.get(Calendar.YEAR), 11, 1);
-
+                txtAttendanceDetails.setText("ATTENDANCE DETAILS "+"( Dec "+calendar11.get(Calendar.YEAR)+" )");
                 //getAttendanceListForNav(y, 12, calendar11);
 
                 JSONObject obj12=new JSONObject();
@@ -1611,6 +1700,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                             if (pref.getShiftFlag().equals("1")) {
                                 getShift();
                             } else {
+
                                 openMarkAttendanceActivities();
                             }
                             break;
@@ -2025,8 +2115,8 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                                    if (!LeaveBalanceManagement.isEmpty() || !LeaveBalanceManagement.equals("null")){
                                        String[] LeaveBalanceManagementArr = LeaveBalanceManagement.split("_");
                                        String isRequired_LeaveBalanceManagement= LeaveBalanceManagementArr[0];
-                                       String isConfigure_LeaveBalanceManagement= LeaveBalanceManagementArr[1];
-                                       if(isConfigure_LeaveBalanceManagement.equals("1")){
+                                       isLiveStatus_LeaveBalanceManagement= LeaveBalanceManagementArr[1];
+                                       if(isLiveStatus_LeaveBalanceManagement.equals("1")){
                                            llViewLeaveBalance.setVisibility(isRequired_LeaveBalanceManagement.equals("1") ? View.VISIBLE : View.GONE);
                                        } else {
                                            previousConfiguration_LeaveBalanceManagement();
@@ -2053,6 +2143,10 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
                                }
 
                                AllApplicationViewConfiguration();
+                               llParentAttendance.setVisibility(isVisible_parentAttendanceMenu()?View.VISIBLE:View.GONE);
+                               llParentWeeklyOffHoliday.setVisibility(isVisible_parentWeeklyOffHolidayView()?View.VISIBLE:View.GONE);
+                               llParentView.setVisibility(isVisible_parentViewMenu()?View.VISIBLE:View.GONE);
+                               llParentAdjustment.setVisibility(isVisible_parentAdjustmentView()?View.VISIBLE:View.GONE);
                            }
                        } catch (JSONException e) {
                            e.printStackTrace();
@@ -2144,6 +2238,7 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             isLiveSatus_Adjustment= AdjustmentApplicationOffArr[1];
             if(isLiveSatus_Adjustment.equals("1")){
                 llAdjustment.setVisibility(isRequired_Adjustment.equals("1")?View.VISIBLE : View.GONE);
+                llParentAdjustment.setVisibility(isRequired_Adjustment.equals("1")?View.VISIBLE : View.GONE);
             } else {
                 previousConfiguration_Adjustment();
             }
@@ -2175,6 +2270,38 @@ public class AttenDanceDashboardActivity extends AppCompatActivity implements Vi
             llAllApplicationView.setVisibility(View.VISIBLE);
         } else {
             llAllApplicationView.setVisibility(View.GONE);
+        }
+    }
+
+    boolean isVisible_parentAttendanceMenu(){
+        if( llAttandanceManage.getVisibility() == View.VISIBLE || llBackAttendance.getVisibility() == View.VISIBLE
+                || llAttendanceReport.getVisibility() == View.VISIBLE){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    boolean isVisible_parentWeeklyOffHolidayView(){
+        if( llWeekly.getVisibility() == View.VISIBLE || llHoliday.getVisibility() == View.VISIBLE
+                || llOptionalHoliday.getVisibility() == View.VISIBLE || llHolidayView.getVisibility() == View.VISIBLE
+        ){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    boolean isVisible_parentViewMenu(){
+        if( llAllApplicationView.getVisibility() == View.VISIBLE || llViewLeaveBalance.getVisibility() == View.VISIBLE){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    boolean isVisible_parentAdjustmentView(){
+        if( llAdjustment.getVisibility() == View.VISIBLE){
+            return true;
+        } else {
+            return false;
         }
     }
 }

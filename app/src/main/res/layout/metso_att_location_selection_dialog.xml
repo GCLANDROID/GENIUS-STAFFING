@@ -6,13 +6,13 @@
     android:layout_gravity="center"
     android:layout_marginStart="15dp"
     android:layout_marginEnd="15dp"
-    android:background="@color/white"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/background_26"
+    android:elevation="5dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="34dp"
-        android:background="@color/maincolor"
         android:paddingRight="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,18 +20,21 @@
 
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/txtPopupHeadline"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1.8"
             android:gravity="center"
-            android:text="Select shift and location"
-            android:textColor="@color/white"
+            android:layout_marginTop="15dp"
+            android:text="Select Attendance Details"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:fontFamily="@font/open_sans_semi_bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"></TextView>
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <LinearLayout
             android:id="@+id/lnCancel"
@@ -39,6 +42,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             android:gravity="right"
+            android:layout_marginTop="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -49,8 +53,7 @@
                 android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:padding="5dp"
-                android:src="@drawable/cancelicon"
-                app:tint="@color/white"/>
+                android:src="@drawable/close_1"/>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -71,7 +74,8 @@
         android:text="Location"
         android:textStyle="bold"
         android:textSize="13sp"
-        android:textColor="@color/colorPrimary"
+        android:textColor="#595757"
+        android:fontFamily="@font/open_sans_regular"
         android:layout_marginTop="10dp"
         android:layout_marginStart="20dp"/>
 
@@ -86,9 +90,9 @@
         android:paddingEnd="8dp"
         android:paddingBottom="10dp"
         android:gravity="center_vertical"
+        android:background="@drawable/background_17"
         android:drawableEnd="@drawable/ic_arrow_drop_down_24"
-        android:drawableTint="@color/colorPrimary"
-        android:background="@drawable/border_background"
+        android:drawableTint="@color/pink1"
         android:layout_marginTop="5dp"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"/>
@@ -126,7 +130,8 @@
             android:text="Approver"
             android:textStyle="bold"
             android:textSize="13sp"
-            android:textColor="@color/colorPrimary"
+            android:textColor="#595757"
+            android:fontFamily="@font/open_sans_regular"
             android:layout_marginTop="10dp"
             android:layout_marginStart="20dp"/>
 
@@ -149,10 +154,10 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="15dp"
-            android:background="@drawable/border_background"
-            android:drawableEnd="@drawable/ic_search_24"
+            android:background="@drawable/background_17"
+            android:drawableEnd="@drawable/ic_arrow_drop_down_24"
+            android:drawableTint="@color/pink1"
             android:drawablePadding="5dp"
-            android:drawableTint="@color/colorPrimary"
             android:gravity="center_vertical"
             android:paddingStart="20dp"
             android:paddingEnd="15dp"
@@ -183,7 +188,9 @@
         android:paddingTop="3dp"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
-        android:background="@drawable/buttondesign"
+        android:fontFamily="@font/open_sans_semi_bold"
+        android:background="@drawable/buttondesign2"
+        android:backgroundTint="@color/pink1"
         android:text="Submit"
         android:paddingBottom="2dp"
         android:textAllCaps="false"
