@@ -106,7 +106,7 @@ public class OthersPayoutActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(OthersPayoutActivity.this,EmployeeDashBoardActivity.class);
+                Intent intent=new Intent(OthersPayoutActivity.this, NewUserDashboardActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -128,7 +128,7 @@ public class OthersPayoutActivity extends AppCompatActivity {
             public void onClick(View view) {
                 getOthersPayoutItem();
                 //TODO: new api
-                /*JSONObject obj=new JSONObject();
+                JSONObject obj=new JSONObject();
                 try {
                     obj.put("AEMEmployeeID", pref.getEmpId());
                     obj.put("FinancialYear", finYear);
@@ -136,7 +136,7 @@ public class OthersPayoutActivity extends AppCompatActivity {
                     getOthersPayoutItem(obj);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }*/
+                }
             }
         });
     }
