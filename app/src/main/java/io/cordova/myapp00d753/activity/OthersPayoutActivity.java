@@ -127,7 +127,7 @@ public class OthersPayoutActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 getOthersPayoutItem();
-                //TODO: new api
+                /*//TODO: new api
                 JSONObject obj=new JSONObject();
                 try {
                     obj.put("AEMEmployeeID", pref.getEmpId());
@@ -136,7 +136,7 @@ public class OthersPayoutActivity extends AppCompatActivity {
                     getOthersPayoutItem(obj);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
+                }*/
             }
         });
     }
