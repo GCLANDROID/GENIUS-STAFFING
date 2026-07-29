@@ -262,7 +262,8 @@ public class MetsoPMSReportActivity extends AppCompatActivity {
         dialogLocationPopUp.setContentView(R.layout.metso_att_location_selection_dialog);
         dialogLocationPopUp.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialogLocationPopUp.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
+        TextView txtPopupHeadline = dialogLocationPopUp.findViewById(R.id.txtPopupHeadline);
+        txtPopupHeadline.setText("Select Approver Details");
         ImageView imgCancel = dialogLocationPopUp.findViewById(R.id.imgCancel);
         imgCancel.setVisibility(View.VISIBLE);
         TextView txtSelectLocation = dialogLocationPopUp.findViewById(R.id.txtSelectLocation);
