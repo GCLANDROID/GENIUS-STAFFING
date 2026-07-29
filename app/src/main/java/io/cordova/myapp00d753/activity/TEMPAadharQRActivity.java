@@ -282,11 +282,19 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                                                 "Another Aadhaar number is linked to this ID. Kindly provide the accurate Aadhaar number.");
                                     }
                                 } else {
-                                    JSONObject jsonObject = new JSONObject();
+                                    /*JSONObject jsonObject = new JSONObject();
                                     try {
                                         jsonObject.put("AadharNo", binding.etAadhar.getText().toString());
                                         jsonObject.put("SecurityCode", pref.getSecurityCode());
                                         checkAadhaarNumberGeniusDB(jsonObject);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }*/
+
+                                    JSONObject jsonObject = new JSONObject();
+                                    try {
+                                        jsonObject.put("Id", binding.etAadhar.getText().toString().trim());
+                                        checkAddahrDetails(jsonObject);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -296,11 +304,19 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                                 //TODO: No Data Found
 
 
-                                JSONObject jsonObject = new JSONObject();
+                                /*JSONObject jsonObject = new JSONObject();
                                 try {
                                     jsonObject.put("AadharNo", binding.etAadhar.getText().toString());
                                     jsonObject.put("SecurityCode", pref.getSecurityCode());
                                     checkAadhaarNumberGeniusDB(jsonObject);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }*/
+
+                                JSONObject jsonObject = new JSONObject();
+                                try {
+                                    jsonObject.put("Id", binding.etAadhar.getText().toString().trim());
+                                    checkAddahrDetails(jsonObject);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
