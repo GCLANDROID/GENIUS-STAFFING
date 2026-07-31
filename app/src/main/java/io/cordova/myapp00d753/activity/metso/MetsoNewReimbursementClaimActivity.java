@@ -2,6 +2,8 @@ package io.cordova.myapp00d753.activity.metso;
 
 import static android.os.Build.VERSION.SDK_INT;
 
+import static io.cordova.myapp00d753.utility.Util.convertHeicToJpg;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,7 +25,9 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.ImageDecoder;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
@@ -434,6 +438,11 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent openGalleryIntent = new Intent(Intent.ACTION_PICK);
                 openGalleryIntent.setType("image/*");
+                openGalleryIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{
+                        "image/jpeg",
+                        "image/jpg",
+                        "image/png",
+                });
                 startActivityForResult(openGalleryIntent, REQUEST_GALLERY_CODE_ONE);
                 //checkPermission(1);
             }
@@ -444,6 +453,11 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent openGalleryIntent = new Intent(Intent.ACTION_PICK);
                 openGalleryIntent.setType("image/*");
+                openGalleryIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{
+                        "image/jpeg",
+                        "image/jpg",
+                        "image/png",
+                });
                 startActivityForResult(openGalleryIntent, REQUEST_GALLERY_CODE_TWO);
                 //checkPermission(2);
             }
@@ -2079,41 +2093,46 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                                     .error(R.drawable.warning)
                                     .into(imgDoc1);
                             String fileName = getFileName(imageUri);
-                            file = convertInputStreamToFile(imageUri,fileName);
-                            if (flag == 0) {
-                                compressedImageFile = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file);
-                                flag++;
-                            } else if (flag == 1) {
-                                compressedImageFile1 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file);
-                                flag++;
-                            } else if (flag == 2) {
-                                compressedImageFile2 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file);
-                                flag++;
-                            } else if (flag == 3) {
-                                compressedImageFile3 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file);
-                                flag++;
-                            } else if (flag == 4) {
-                                compressedImageFile4 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file);
+                            if(fileName.contains("heic")
+                                    || fileName.contains("heif")){
+                                get_HIEC_CheckOperation(imageUri1);
+                            } else {
+                                file = convertInputStreamToFile(imageUri, fileName);
+                                if (flag == 0) {
+                                    compressedImageFile = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file);
+                                    flag++;
+                                } else if (flag == 1) {
+                                    compressedImageFile1 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file);
+                                    flag++;
+                                } else if (flag == 2) {
+                                    compressedImageFile2 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file);
+                                    flag++;
+                                } else if (flag == 3) {
+                                    compressedImageFile3 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file);
+                                    flag++;
+                                } else if (flag == 4) {
+                                    compressedImageFile4 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file);
+                                }
                             }
                            /* compressedImageFile = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
                                     .setQuality(100)
@@ -2170,43 +2189,48 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                                     .error(R.drawable.warning)
                                     .into(imgDoc2);
                             String fileName = getFileName(imageUri1);
-                            file1 = convertInputStreamToFile(imageUri1,fileName);
-
-                            if (flag == 0) {
-                                compressedImageFile = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file1);
-                                flag++;
-                            } else if (flag == 1) {
-                                compressedImageFile1 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file1);
-                                flag++;
-                            } else if (flag == 2) {
-                                compressedImageFile2 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file1);
-                                flag++;
-                            } else if (flag == 3) {
-                                compressedImageFile3 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file1);
-                                flag++;
-                            } else if (flag == 4) {
-                                compressedImageFile4 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file1);
+                            if(fileName.contains("heic")
+                                    || fileName.contains("heif")){
+                                get_HIEC_CheckOperation(imageUri1);
+                            } else {
+                                file1 = convertInputStreamToFile(imageUri1,fileName);
+                                if (flag == 0) {
+                                    compressedImageFile = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file1);
+                                    flag++;
+                                } else if (flag == 1) {
+                                    compressedImageFile1 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file1);
+                                    flag++;
+                                } else if (flag == 2) {
+                                    compressedImageFile2 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file1);
+                                    flag++;
+                                } else if (flag == 3) {
+                                    compressedImageFile3 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file1);
+                                    flag++;
+                                } else if (flag == 4) {
+                                    compressedImageFile4 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file1);
+                                }
                             }
+
 
 
                             /*compressedImageFile1 =new ImageZipper(MetsoNewReimbursementClaimActivity.this)
@@ -2265,45 +2289,49 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                                     .into(imgDoc3);
                             //uri = data.getData();
                             String fileName = getFileName(imageUri2);
-                            file2 = convertInputStreamToFile(imageUri2,fileName);
+                            if(fileName.contains("heic")
+                                    || fileName.contains("heif")){
+                                get_HIEC_CheckOperation(imageUri2);
+                            } else {
+                                file2 = convertInputStreamToFile(imageUri2, fileName);
 
-                            if (flag == 0) {
-                                compressedImageFile = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file2);
-                                flag++;
-                            } else if (flag == 1) {
-                                compressedImageFile1 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file2);
-                                flag++;
-                            } else if (flag == 2) {
-                                compressedImageFile2 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file2);
-                                flag++;
-                            } else if (flag == 3) {
-                                compressedImageFile3 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file2);
-                                flag++;
-                            } else if (flag == 4) {
-                                compressedImageFile4 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file2);
-                                //flag++;
+                                if (flag == 0) {
+                                    compressedImageFile = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file2);
+                                    flag++;
+                                } else if (flag == 1) {
+                                    compressedImageFile1 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file2);
+                                    flag++;
+                                } else if (flag == 2) {
+                                    compressedImageFile2 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file2);
+                                    flag++;
+                                } else if (flag == 3) {
+                                    compressedImageFile3 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file2);
+                                    flag++;
+                                } else if (flag == 4) {
+                                    compressedImageFile4 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file2);
+                                    //flag++;
+                                }
                             }
-
 
                             /*compressedImageFile2 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
                                     .setQuality(100)
@@ -2359,42 +2387,47 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                                     .into(imgDoc4);
                             //uri = data.getData();
                             String fileName = getFileName(imageUri3);
-                            file3 = convertInputStreamToFile(imageUri3,fileName);
+                            if(fileName.contains("heic")
+                                    || fileName.contains("heif")){
+                                get_HIEC_CheckOperation(imageUri3);
+                            } else {
+                                file3 = convertInputStreamToFile(imageUri3, fileName);
 
-                            if (flag == 0) {
-                                compressedImageFile = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file3);
-                                flag++;
-                            } else if (flag == 1) {
-                                compressedImageFile1 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file3);
-                                flag++;
-                            } else if (flag == 2) {
-                                compressedImageFile2 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file3);
-                                flag++;
-                            } else if (flag == 3) {
-                                compressedImageFile3 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file3);
-                                flag++;
-                            } else if (flag == 4) {
-                                compressedImageFile4 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file3);
+                                if (flag == 0) {
+                                    compressedImageFile = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file3);
+                                    flag++;
+                                } else if (flag == 1) {
+                                    compressedImageFile1 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file3);
+                                    flag++;
+                                } else if (flag == 2) {
+                                    compressedImageFile2 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file3);
+                                    flag++;
+                                } else if (flag == 3) {
+                                    compressedImageFile3 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file3);
+                                    flag++;
+                                } else if (flag == 4) {
+                                    compressedImageFile4 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file3);
+                                }
                             }
 
                           /*  compressedImageFile3 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
@@ -2451,42 +2484,47 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                                     .into(imgDoc5);
                             //uri = data.getData();
                             String fileName = getFileName(imageUri4);
-                            file4 = convertInputStreamToFile(imageUri4,fileName);
+                            if(fileName.contains("heic")
+                                    || fileName.contains("heif")){
+                                get_HIEC_CheckOperation(imageUri4);
+                            } else {
+                                file4 = convertInputStreamToFile(imageUri4, fileName);
 
-                            if (flag == 0) {
-                                compressedImageFile = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file4);
-                                flag++;
-                            } else if (flag == 1) {
-                                compressedImageFile1 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file4);
-                                flag++;
-                            } else if (flag == 2) {
-                                compressedImageFile2 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file4);
-                                flag++;
-                            } else if (flag == 3) {
-                                compressedImageFile3 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file4);
-                                flag++;
-                            } else if (flag == 4) {
-                                compressedImageFile4 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file4);
+                                if (flag == 0) {
+                                    compressedImageFile = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file4);
+                                    flag++;
+                                } else if (flag == 1) {
+                                    compressedImageFile1 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file4);
+                                    flag++;
+                                } else if (flag == 2) {
+                                    compressedImageFile2 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file4);
+                                    flag++;
+                                } else if (flag == 3) {
+                                    compressedImageFile3 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file4);
+                                    flag++;
+                                } else if (flag == 4) {
+                                    compressedImageFile4 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file4);
+                                }
                             }
 
 
@@ -2576,24 +2614,35 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                             //String filePath = getRealPathFromURIPath(uri, MetsoNewReimbursementClaimActivity.this);
                             //file = new File(filePath);
                             String fileName = getFileName(uri);
-                            file = convertInputStreamToFile(uri,fileName);
-                            if (galleryFlag == 0) {
-                                compressedImageFile = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file);
+                            if (fileName.contains("heic")
+                                    || fileName.contains("heif")){
+                                if (galleryFlag == 0) {
+                                    compressedImageFile = convertHeicToJpg(MetsoNewReimbursementClaimActivity.this,uri);
+                                } else if (galleryFlag == 1) {
+                                    compressedImageFile1 = convertHeicToJpg(MetsoNewReimbursementClaimActivity.this,uri);
+                                }
+                                Log.e(TAG, "onActivityResult: "+compressedImageFile);
+                            } else {
+
+                                file = convertInputStreamToFile(uri,fileName);
+                                if (galleryFlag == 0) {
+                                    compressedImageFile = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file);
+                                    Log.d(TAG, "compressedImageFile =" + compressedImageFile);
+                                } else if (galleryFlag == 1) {
+                                    compressedImageFile1 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file);
+                                    Log.d(TAG, "compressedImageFile =" + compressedImageFile1);
+                                }
                                 Log.d(TAG, "compressedImageFile =" + compressedImageFile);
-                            } else if (galleryFlag == 1) {
-                                compressedImageFile1 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file);
-                                Log.d(TAG, "compressedImageFile =" + compressedImageFile1);
                             }
-                            Log.d(TAG, "compressedImageFile =" + compressedImageFile);
-                            imageStream = getContentResolver().openInputStream(uri);
+                            //imageStream = getContentResolver().openInputStream(uri);
                             /*Bitmap bm = cropToSquare(BitmapFactory.decodeStream(imageStream));
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
                             bm.compress(Bitmap.CompressFormat.PNG, 10, baos); //bm is the bitmap object
@@ -2633,20 +2682,32 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                             String filePath = getRealPathFromURIPath(uri, MetsoNewReimbursementClaimActivity.this);
                             //file = new File(filePath);
                             String fileName = getFileName(uri);
-                            file = convertInputStreamToFile(uri,fileName);
-                            if (galleryFlag == 0) {
-                                compressedImageFile = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file);
-                            } else if (galleryFlag == 1) {
-                                compressedImageFile1 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
-                                        .setQuality(100)
-                                        .setMaxWidth(300)
-                                        .setMaxHeight(300)
-                                        .compressToFile(file);
+                            if (fileName.contains("heic")
+                                    || fileName.contains("heif") ){
+                                if (galleryFlag == 0) {
+                                    compressedImageFile = convertHeicToJpg(MetsoNewReimbursementClaimActivity.this,uri);
+                                } else if (galleryFlag == 1) {
+                                    compressedImageFile1 = convertHeicToJpg(MetsoNewReimbursementClaimActivity.this,uri);
+                                }
+                            } else {
+                                file = convertInputStreamToFile(uri,fileName);
+                                if (galleryFlag == 0) {
+                                    compressedImageFile = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file);
+                                } else if (galleryFlag == 1) {
+                                    compressedImageFile1 = new ImageZipper(MetsoNewReimbursementClaimActivity.this)
+                                            .setQuality(100)
+                                            .setMaxWidth(300)
+                                            .setMaxHeight(300)
+                                            .compressToFile(file);
+                                }
                             }
+
+
+
 
                             //  Log.d(TAG, "filePath=" + filePath);
                             /*imageStream = getContentResolver().openInputStream(uri);
@@ -2751,6 +2812,7 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
         progressDialog.show();
 
         //RequestBody mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+
         RequestBody mFile = RequestBody.create(MediaType.parse(".PNG"), compressedImageFile);
         MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", compressedImageFile.getName(), mFile);
         RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile.getName());
@@ -4409,4 +4471,23 @@ public class MetsoNewReimbursementClaimActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    void get_HIEC_CheckOperation(Uri imageUri){
+        if (flag == 0) {
+            compressedImageFile = convertHeicToJpg(MetsoNewReimbursementClaimActivity.this,imageUri);
+            flag++;
+        } else if (flag == 1) {
+            compressedImageFile1 = convertHeicToJpg(MetsoNewReimbursementClaimActivity.this,imageUri);
+            flag++;
+        } else if (flag == 2) {
+            compressedImageFile2 = convertHeicToJpg(MetsoNewReimbursementClaimActivity.this,imageUri);
+            flag++;
+        } else if (flag == 3) {
+            compressedImageFile3 = convertHeicToJpg(MetsoNewReimbursementClaimActivity.this,imageUri);
+            flag++;
+        } else if (flag == 4) {
+            compressedImageFile4 = convertHeicToJpg(MetsoNewReimbursementClaimActivity.this,imageUri);
+        }
+    }
+
 }
