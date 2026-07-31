@@ -1664,11 +1664,11 @@ public class NewClaimActivity extends AppCompatActivity {
         RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile.getName());
 
         RequestBody mFile1 = RequestBody.create(MediaType.parse(".PNG"), compressedImageFile1);
-        MultipartBody.Part fileToUpload1 = MultipartBody.Part.createFormData("file", compressedImageFile1.getName(), mFile);
+        MultipartBody.Part fileToUpload1 = MultipartBody.Part.createFormData("file", compressedImageFile1.getName(), mFile1);
         RequestBody filename1 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile1.getName());
 
         RequestBody mFile2 = RequestBody.create(MediaType.parse(".PNG"), compressedImageFile2);
-        MultipartBody.Part fileToUpload2 = MultipartBody.Part.createFormData("file", compressedImageFile2.getName(), mFile);
+        MultipartBody.Part fileToUpload2 = MultipartBody.Part.createFormData("file", compressedImageFile2.getName(), mFile2);
         RequestBody filename2 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile2.getName());
 
         Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage3(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, fileToUpload2, componentId, "0", "0");
@@ -1710,15 +1710,15 @@ public class NewClaimActivity extends AppCompatActivity {
         RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile.getName());
 
         RequestBody mFile1 = RequestBody.create(MediaType.parse(".PNG"), compressedImageFile1);
-        MultipartBody.Part fileToUpload1 = MultipartBody.Part.createFormData("file", compressedImageFile1.getName(), mFile);
+        MultipartBody.Part fileToUpload1 = MultipartBody.Part.createFormData("file", compressedImageFile1.getName(), mFile1);
         RequestBody filename1 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile1.getName());
 
         RequestBody mFile2 = RequestBody.create(MediaType.parse(".PNG"), compressedImageFile2);
-        MultipartBody.Part fileToUpload2 = MultipartBody.Part.createFormData("file", compressedImageFile2.getName(), mFile);
+        MultipartBody.Part fileToUpload2 = MultipartBody.Part.createFormData("file", compressedImageFile2.getName(), mFile2);
         RequestBody filename2 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile2.getName());
 
         RequestBody mFile3 = RequestBody.create(MediaType.parse(".PNG"), compressedImageFile3);
-        MultipartBody.Part fileToUpload3 = MultipartBody.Part.createFormData("file", compressedImageFile3.getName(), mFile);
+        MultipartBody.Part fileToUpload3 = MultipartBody.Part.createFormData("file", compressedImageFile3.getName(), mFile3);
         RequestBody filename3 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile3.getName());
 
         Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage4(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, fileToUpload2, fileToUpload3, componentId, "0", "0");
@@ -1760,19 +1760,19 @@ public class NewClaimActivity extends AppCompatActivity {
         RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile.getName());
 
         RequestBody mFile1 = RequestBody.create(MediaType.parse(".PNG"), compressedImageFile1);
-        MultipartBody.Part fileToUpload1 = MultipartBody.Part.createFormData("file", compressedImageFile1.getName(), mFile);
+        MultipartBody.Part fileToUpload1 = MultipartBody.Part.createFormData("file", compressedImageFile1.getName(), mFile1);
         RequestBody filename1 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile1.getName());
 
         RequestBody mFile2 = RequestBody.create(MediaType.parse(".PNG"), compressedImageFile2);
-        MultipartBody.Part fileToUpload2 = MultipartBody.Part.createFormData("file", compressedImageFile2.getName(), mFile);
+        MultipartBody.Part fileToUpload2 = MultipartBody.Part.createFormData("file", compressedImageFile2.getName(), mFile2);
         RequestBody filename2 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile2.getName());
 
         RequestBody mFile3 = RequestBody.create(MediaType.parse(".PNG"), compressedImageFile3);
-        MultipartBody.Part fileToUpload3 = MultipartBody.Part.createFormData("file", compressedImageFile3.getName(), mFile);
+        MultipartBody.Part fileToUpload3 = MultipartBody.Part.createFormData("file", compressedImageFile3.getName(), mFile3);
         RequestBody filename3 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile3.getName());
 
         RequestBody mFile4 = RequestBody.create(MediaType.parse(".PNG"), compressedImageFile4);
-        MultipartBody.Part fileToUpload4 = MultipartBody.Part.createFormData("file", compressedImageFile4.getName(), mFile);
+        MultipartBody.Part fileToUpload4 = MultipartBody.Part.createFormData("file", compressedImageFile4.getName(), mFile4);
         RequestBody filename4 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile4.getName());
 
 
