@@ -2,6 +2,8 @@ package io.cordova.myapp00d753.activity;
 
 import static android.os.Build.VERSION.SDK_INT;
 
+import static io.cordova.myapp00d753.utility.Util.convertHeicToJpg;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -16,6 +18,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
@@ -112,7 +115,7 @@ public class NewClaimActivity extends AppCompatActivity {
     String monthname;
     private String encodedImage;
     private Uri imageUri;
-    String pdfFilePath,pdfFileName;
+    String pdfFilePath, pdfFileName;
     private static final int CAMERA_REQUEST = 1;
     private static final int CAMERA_REQUEST1 = 2;
     private static final int CAMERA_REQUEST2 = 3;
@@ -132,10 +135,10 @@ public class NewClaimActivity extends AppCompatActivity {
     private AttendanceService uploadService;
     ProgressDialog progressDialog;
     LinearLayout llSubmit;
-    File file1, file2, file3, file4,compressedImageFile,compressedImageFile1,compressedImageFile2,compressedImageFile3,compressedImageFile4;
-    int  flag = 0;
-    AlertDialog alerDialog1, alertDialog2, alertDialog1,alert1;
-    TextView tvMonth, tvYear,txtBrowseFile,tvOnlyPdfImage,txtCamaraPicture,txtOnlyImage;
+    File file1, file2, file3, file4, compressedImageFile, compressedImageFile1, compressedImageFile2, compressedImageFile3, compressedImageFile4;
+    int flag = 0;
+    AlertDialog alerDialog1, alertDialog2, alertDialog1, alert1;
+    TextView tvMonth, tvYear, txtBrowseFile, tvOnlyPdfImage, txtCamaraPicture, txtOnlyImage;
     String comeid = "";
     LinearLayout llAttach, llBrowse;
     ImageView imgAttach, imgPDF;
@@ -145,24 +148,25 @@ public class NewClaimActivity extends AppCompatActivity {
     private static final int STORAGE_PERMISSION_CODE = 123;
     private Uri filePath;
     Button btnSubmit;
-    public static final String UPLOAD_URL = AppData.url+"post_reimbursementClaimByComponent";
+    public static final String UPLOAD_URL = AppData.url + "post_reimbursementClaimByComponent";
     int pdfflag;
-    LinearLayout llCameraD,llCamera;
+    LinearLayout llCameraD, llCamera;
     AlertDialog alerDialog3;
     ImageView imgMultiPle;
     ImageView imgMultiPleImg;
     File pdfFile;
-    LinearLayout lnGalleryOne,lnGalleryTwo;
-    ImageView imgGalleryOne,imgGalleryTwo;
+    LinearLayout lnGalleryOne, lnGalleryTwo;
+    ImageView imgGalleryOne, imgGalleryTwo;
 
     private static final int REQUEST_GALLERY_CODE_ONE = 200;
     private static final int REQUEST_GALLERY_CODE_TWO = 500;
     private Uri uri;
 
-    String galleryflagone="",galleryflagtwo="";
+    String galleryflagone = "", galleryflagtwo = "";
     private static final int REQUEST_SELECT_PDF = 600;
     private static final int DEFAULT_BUFFER_SIZE = 2048;
-    LinearLayout llCamera1, llCamera2, llCamera3, llCamera4, llCamera5,llMultipleImage;
+    LinearLayout llCamera1, llCamera2, llCamera3, llCamera4, llCamera5, llMultipleImage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -243,7 +247,6 @@ public class NewClaimActivity extends AppCompatActivity {
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
 
-
         final OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .readTimeout(660, TimeUnit.SECONDS)
                 .connectTimeout(660, TimeUnit.SECONDS)
@@ -283,22 +286,22 @@ public class NewClaimActivity extends AppCompatActivity {
         imgAttach = (ImageView) findViewById(R.id.imgAttach);
         imgPDF = (ImageView) findViewById(R.id.imgPDF);
         btnSubmit = (Button) findViewById(R.id.btnSubmit);
-        llCamera=(LinearLayout)findViewById(R.id.llCamera);
-        llCameraD=(LinearLayout)findViewById(R.id.llCameraD);
-        llCamera1=(LinearLayout)findViewById(R.id.llCamera1);
-        llCamera2=(LinearLayout)findViewById(R.id.llCamera2);
-        llCamera3=(LinearLayout)findViewById(R.id.llCamera3);
-        llCamera4=(LinearLayout)findViewById(R.id.llCamera4);
-        llCamera5=(LinearLayout)findViewById(R.id.llCamera5);
-        llMultipleImage=(LinearLayout)findViewById(R.id.llMultipleImage);
-        imgMultiPleImg=(ImageView) findViewById(R.id.imgMultiPleImg);
-        imgMultiPle=(ImageView)findViewById(R.id.imgMultiPle);
+        llCamera = (LinearLayout) findViewById(R.id.llCamera);
+        llCameraD = (LinearLayout) findViewById(R.id.llCameraD);
+        llCamera1 = (LinearLayout) findViewById(R.id.llCamera1);
+        llCamera2 = (LinearLayout) findViewById(R.id.llCamera2);
+        llCamera3 = (LinearLayout) findViewById(R.id.llCamera3);
+        llCamera4 = (LinearLayout) findViewById(R.id.llCamera4);
+        llCamera5 = (LinearLayout) findViewById(R.id.llCamera5);
+        llMultipleImage = (LinearLayout) findViewById(R.id.llMultipleImage);
+        imgMultiPleImg = (ImageView) findViewById(R.id.imgMultiPleImg);
+        imgMultiPle = (ImageView) findViewById(R.id.imgMultiPle);
 
-        lnGalleryOne=(LinearLayout) findViewById(R.id.lnGalleryOne);
-        lnGalleryTwo=(LinearLayout) findViewById(R.id.lnGalleryTwo);
+        lnGalleryOne = (LinearLayout) findViewById(R.id.lnGalleryOne);
+        lnGalleryTwo = (LinearLayout) findViewById(R.id.lnGalleryTwo);
 
-        imgGalleryOne=(ImageView) findViewById(R.id.imgGalleryOne);
-        imgGalleryTwo=(ImageView) findViewById(R.id.imgGalleryTwo);
+        imgGalleryOne = (ImageView) findViewById(R.id.imgGalleryOne);
+        imgGalleryTwo = (ImageView) findViewById(R.id.imgGalleryTwo);
 
 
     }
@@ -353,7 +356,7 @@ public class NewClaimActivity extends AppCompatActivity {
         spComponent.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position>0) {
+                if (position > 0) {
                     componentId = moduleComponentList.get(position).getItemId();
                     Log.d("componentId", componentId);
                 }
@@ -468,11 +471,11 @@ public class NewClaimActivity extends AppCompatActivity {
         View.OnClickListener listenerCamera = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (llCameraD.getVisibility()==View.GONE){
+                if (llCameraD.getVisibility() == View.GONE) {
                     llCameraD.setVisibility(View.VISIBLE);
                     llAttach.setVisibility(View.GONE);
                     llBrowse.setVisibility(View.GONE);
-                }else {
+                } else {
                     llCameraD.setVisibility(View.GONE);
                     llAttach.setVisibility(View.VISIBLE);
                     llBrowse.setVisibility(View.VISIBLE);
@@ -570,19 +573,19 @@ public class NewClaimActivity extends AppCompatActivity {
                 .addMultipartParameter("AEMEmployeeID", aempid)
                 .addMultipartParameter("AEMComponentID", comeid)
                 .addMultipartParameter("Description", description)
-                .addMultipartParameter("ReimbursementAmount",amount)
-                .addMultipartParameter("Year",year)
-                .addMultipartParameter("Month",month)
-                .addMultipartParameter("SecurityCode",securitycode)
-                .addMultipartParameter("ConveyanceTypeId",componentId)
-                .addMultipartParameter("LocationTypeID","0")
-                .addMultipartParameter("ReimbursementDate","0")
-                .addMultipartFile("file",compressedImageFile)
-                .addMultipartFile("fil1",compressedImageFile1)
-                .addMultipartFile("fil2",compressedImageFile2)
-                .addMultipartFile("fil3",compressedImageFile3)
-                .addMultipartFile("fil4",compressedImageFile4)
-                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .addMultipartParameter("ReimbursementAmount", amount)
+                .addMultipartParameter("Year", year)
+                .addMultipartParameter("Month", month)
+                .addMultipartParameter("SecurityCode", securitycode)
+                .addMultipartParameter("ConveyanceTypeId", componentId)
+                .addMultipartParameter("LocationTypeID", "0")
+                .addMultipartParameter("ReimbursementDate", "0")
+                .addMultipartFile("file", compressedImageFile)
+                .addMultipartFile("fil1", compressedImageFile1)
+                .addMultipartFile("fil2", compressedImageFile2)
+                .addMultipartFile("fil3", compressedImageFile3)
+                .addMultipartFile("fil4", compressedImageFile4)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
@@ -591,7 +594,7 @@ public class NewClaimActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             progressDialog.show();
-                            Log.e(TAG, "POST_FOUR_IMAGES: "+response.toString(4));
+                            Log.e(TAG, "POST_FOUR_IMAGES: " + response.toString(4));
                             JSONObject job1 = response;
                             String Response_Code = job1.optString("Response_Code");
                             String Response_Message = job1.optString("Response_Message");
@@ -607,7 +610,7 @@ public class NewClaimActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError anError) {
                         progressDialog.show();
-                        Log.e(TAG, "POST_FOUR_IMAGES_error: "+anError.getErrorBody());
+                        Log.e(TAG, "POST_FOUR_IMAGES_error: " + anError.getErrorBody());
                     }
                 });
     }
@@ -618,18 +621,18 @@ public class NewClaimActivity extends AppCompatActivity {
                 .addMultipartParameter("AEMEmployeeID", aempid)
                 .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
-                .addMultipartParameter("ReimbursementAmount",amount)
-                .addMultipartParameter("Year",year)
-                .addMultipartParameter("Month",month)
-                .addMultipartParameter("SecurityCode",securitycode)
-                .addMultipartParameter("ConveyanceTypeId",componentId)
-                .addMultipartParameter("LocationTypeID","0")
-                .addMultipartParameter("ReimbursementDate","0")
-                .addMultipartFile("file",compressedImageFile)
-                .addMultipartFile("fil1",compressedImageFile1)
-                .addMultipartFile("fil2",compressedImageFile2)
-                .addMultipartFile("fil3",compressedImageFile3)
-                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .addMultipartParameter("ReimbursementAmount", amount)
+                .addMultipartParameter("Year", year)
+                .addMultipartParameter("Month", month)
+                .addMultipartParameter("SecurityCode", securitycode)
+                .addMultipartParameter("ConveyanceTypeId", componentId)
+                .addMultipartParameter("LocationTypeID", "0")
+                .addMultipartParameter("ReimbursementDate", "0")
+                .addMultipartFile("file", compressedImageFile)
+                .addMultipartFile("fil1", compressedImageFile1)
+                .addMultipartFile("fil2", compressedImageFile2)
+                .addMultipartFile("fil3", compressedImageFile3)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
@@ -638,7 +641,7 @@ public class NewClaimActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             progressDialog.show();
-                            Log.e(TAG, "POST_FOUR_IMAGES: "+response.toString(4));
+                            Log.e(TAG, "POST_FOUR_IMAGES: " + response.toString(4));
                             JSONObject job1 = response;
                             String Response_Code = job1.optString("Response_Code");
                             String Response_Message = job1.optString("Response_Message");
@@ -654,7 +657,7 @@ public class NewClaimActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError anError) {
                         progressDialog.show();
-                        Log.e(TAG, "POST_FOUR_IMAGES_error: "+anError.getErrorBody());
+                        Log.e(TAG, "POST_FOUR_IMAGES_error: " + anError.getErrorBody());
                     }
                 });
     }
@@ -665,17 +668,17 @@ public class NewClaimActivity extends AppCompatActivity {
                 .addMultipartParameter("AEMEmployeeID", aempid)
                 .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
-                .addMultipartParameter("ReimbursementAmount",amount)
-                .addMultipartParameter("Year",year)
-                .addMultipartParameter("Month",month)
-                .addMultipartParameter("SecurityCode",securitycode)
-                .addMultipartParameter("ConveyanceTypeId",componentId)
-                .addMultipartParameter("LocationTypeID","0")
-                .addMultipartParameter("ReimbursementDate","0")
-                .addMultipartFile("file",compressedImageFile)
-                .addMultipartFile("fil1",compressedImageFile1)
-                .addMultipartFile("fil2",compressedImageFile2)
-                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .addMultipartParameter("ReimbursementAmount", amount)
+                .addMultipartParameter("Year", year)
+                .addMultipartParameter("Month", month)
+                .addMultipartParameter("SecurityCode", securitycode)
+                .addMultipartParameter("ConveyanceTypeId", componentId)
+                .addMultipartParameter("LocationTypeID", "0")
+                .addMultipartParameter("ReimbursementDate", "0")
+                .addMultipartFile("file", compressedImageFile)
+                .addMultipartFile("fil1", compressedImageFile1)
+                .addMultipartFile("fil2", compressedImageFile2)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
@@ -684,7 +687,7 @@ public class NewClaimActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             progressDialog.show();
-                            Log.e(TAG, "POST_THREE_IMAGE: "+response.toString(4));
+                            Log.e(TAG, "POST_THREE_IMAGE: " + response.toString(4));
                             JSONObject job1 = response;
                             String Response_Code = job1.optString("Response_Code");
                             String Response_Message = job1.optString("Response_Message");
@@ -700,7 +703,7 @@ public class NewClaimActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError anError) {
                         progressDialog.show();
-                        Log.e(TAG, "POST_THREE_IMAGE_error: "+anError.getErrorBody());
+                        Log.e(TAG, "POST_THREE_IMAGE_error: " + anError.getErrorBody());
                     }
                 });
     }
@@ -711,16 +714,16 @@ public class NewClaimActivity extends AppCompatActivity {
                 .addMultipartParameter("AEMEmployeeID", aempid)
                 .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
-                .addMultipartParameter("ReimbursementAmount",amount)
-                .addMultipartParameter("Year",year)
-                .addMultipartParameter("Month",month)
-                .addMultipartParameter("SecurityCode",securitycode)
-                .addMultipartParameter("ConveyanceTypeId",componentId)
-                .addMultipartParameter("LocationTypeID","0")
-                .addMultipartParameter("ReimbursementDate","0")
-                .addMultipartFile("file",compressedImageFile)
-                .addMultipartFile("fil1",compressedImageFile1)
-                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .addMultipartParameter("ReimbursementAmount", amount)
+                .addMultipartParameter("Year", year)
+                .addMultipartParameter("Month", month)
+                .addMultipartParameter("SecurityCode", securitycode)
+                .addMultipartParameter("ConveyanceTypeId", componentId)
+                .addMultipartParameter("LocationTypeID", "0")
+                .addMultipartParameter("ReimbursementDate", "0")
+                .addMultipartFile("file", compressedImageFile)
+                .addMultipartFile("fil1", compressedImageFile1)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
@@ -729,7 +732,7 @@ public class NewClaimActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             progressDialog.show();
-                            Log.e(TAG, "POST_TWO_IMAGES: "+response.toString(4));
+                            Log.e(TAG, "POST_TWO_IMAGES: " + response.toString(4));
                             JSONObject job1 = response;
                             String Response_Code = job1.optString("Response_Code");
                             String Response_Message = job1.optString("Response_Message");
@@ -745,37 +748,37 @@ public class NewClaimActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError anError) {
                         progressDialog.show();
-                        Log.e(TAG, "POST_TWO_IMAGES_error: "+anError.getErrorBody());
+                        Log.e(TAG, "POST_TWO_IMAGES_error: " + anError.getErrorBody());
                     }
                 });
     }
 
     private void postOneImage() {
-        Log.e(TAG, "postOneImage: \nAEMEmployeeID:"+aempid
-                +"\nAEMComponentID:"+componentId
-                +"\nDescription:"+description
-                +"\nReimbursementAmount:"+amount
-                +"\nYear:"+year
-                +"\nMonth:"+month
-                +"\nSecurityCode:"+securitycode
-                +"\nConveyanceTypeId:"+componentId
-                +"\nLocationTypeID:"+"0"
-                +"\nReimbursementDate:"+"0"
-                +"\nfile: ");
+        Log.e(TAG, "postOneImage: \nAEMEmployeeID:" + aempid
+                + "\nAEMComponentID:" + componentId
+                + "\nDescription:" + description
+                + "\nReimbursementAmount:" + amount
+                + "\nYear:" + year
+                + "\nMonth:" + month
+                + "\nSecurityCode:" + securitycode
+                + "\nConveyanceTypeId:" + componentId
+                + "\nLocationTypeID:" + "0"
+                + "\nReimbursementDate:" + "0"
+                + "\nfile: ");
         progressDialog.show();
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
                 .addMultipartParameter("AEMEmployeeID", aempid)
                 .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
-                .addMultipartParameter("ReimbursementAmount",amount)
-                .addMultipartParameter("Year",year)
-                .addMultipartParameter("Month",month)
-                .addMultipartParameter("SecurityCode",securitycode)
-                .addMultipartParameter("ConveyanceTypeId",componentId)
-                .addMultipartParameter("LocationTypeID","0")
-                .addMultipartParameter("ReimbursementDate","0")
-                .addMultipartFile("file",compressedImageFile)
-                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .addMultipartParameter("ReimbursementAmount", amount)
+                .addMultipartParameter("Year", year)
+                .addMultipartParameter("Month", month)
+                .addMultipartParameter("SecurityCode", securitycode)
+                .addMultipartParameter("ConveyanceTypeId", componentId)
+                .addMultipartParameter("LocationTypeID", "0")
+                .addMultipartParameter("ReimbursementDate", "0")
+                .addMultipartFile("file", compressedImageFile)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
@@ -784,7 +787,7 @@ public class NewClaimActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             progressDialog.show();
-                            Log.e(TAG, "POST_ONE_IMAGE: "+response.toString(4));
+                            Log.e(TAG, "POST_ONE_IMAGE: " + response.toString(4));
                             JSONObject job1 = response;
                             String Response_Code = job1.optString("Response_Code");
                             String Response_Message = job1.optString("Response_Message");
@@ -800,20 +803,20 @@ public class NewClaimActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError anError) {
                         progressDialog.show();
-                        Log.e(TAG, "POST_ONE_IMAGE: "+anError.getErrorBody());
+                        Log.e(TAG, "POST_ONE_IMAGE: " + anError.getErrorBody());
                     }
                 });
     }
 
     private void setHideItem(JSONObject jsonObject) {
-        Log.e(TAG, "setHideItem: "+jsonObject);
+        Log.e(TAG, "setHideItem: " + jsonObject);
         final ProgressDialog progressBar = new ProgressDialog(this);
         progressBar.setCancelable(true);//you can cancel it by pressing back button
         progressBar.setMessage("Loading...");
         progressBar.show();
         AndroidNetworking.post(AppData.GET_COMMON_DROP_DOWN_FILL)
                 .addJSONObjectBody(jsonObject)
-                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
@@ -822,7 +825,7 @@ public class NewClaimActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             progressBar.dismiss();
-                            Log.e(TAG, "GET_COMMON_DROP_DOWN_FILL: "+response.toString(4));
+                            Log.e(TAG, "GET_COMMON_DROP_DOWN_FILL: " + response.toString(4));
                             JSONObject job1 = response;
                             String Response_Code = job1.optString("Response_Code");
                             if (Response_Code.equals("101")) {
@@ -831,9 +834,9 @@ public class NewClaimActivity extends AppCompatActivity {
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject obj = jsonArray.getJSONObject(i);
                                     comeid = obj.optString("id");
-                                    Log.d(TAG, "comeeid: "+comeid);
+                                    Log.d(TAG, "comeeid: " + comeid);
                                     String value = obj.optString("value");
-                                    Log.d(TAG,"comvalue: "+value);
+                                    Log.d(TAG, "comvalue: " + value);
                                 }
                                 //setComponenetItem();
 
@@ -881,14 +884,14 @@ public class NewClaimActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError anError) {
                         progressBar.dismiss();
-                        Log.e(TAG, "GET_COMMON_DROP_DOWN_FILL: "+anError.getErrorBody());
+                        Log.e(TAG, "GET_COMMON_DROP_DOWN_FILL: " + anError.getErrorBody());
                     }
                 });
     }
 
 
     private void setHideItem() {
-        String surl = AppData.url+"gcl_CommonDDL?ddltype=16&id1=" + pref.getEmpConId() + "&id2=" + pref.getEmpClintId() + "&id3=0&SecurityCode=" + pref.getSecurityCode();
+        String surl = AppData.url + "gcl_CommonDDL?ddltype=16&id1=" + pref.getEmpConId() + "&id2=" + pref.getEmpClintId() + "&id3=0&SecurityCode=" + pref.getSecurityCode();
         Log.d("compurl_1", surl);
         final ProgressDialog progressBar = new ProgressDialog(this);
         progressBar.setCancelable(true);//you can cancel it by pressing back button
@@ -919,18 +922,17 @@ public class NewClaimActivity extends AppCompatActivity {
 
                                 //setComponenetItem();
 
-                                JSONObject obj1=new JSONObject();
+                                JSONObject obj1 = new JSONObject();
                                 try {
                                     obj1.put("DDL_Type", "450");
-                                    obj1.put("ID1",pref.getMasterId());
-                                    obj1.put("SecurityCode",pref.getSecurityCode());
+                                    obj1.put("ID1", pref.getMasterId());
+                                    obj1.put("SecurityCode", pref.getSecurityCode());
                                     setComponentItem_NEW(obj1);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
                             } else {
-                                    hideAlert();
-
+                                hideAlert();
 
 
                             }
@@ -960,7 +962,7 @@ public class NewClaimActivity extends AppCompatActivity {
     private void setComponentItem_NEW(JSONObject jsonObject) {
         AndroidNetworking.post(AppData.GET_COMMON_DROP_DOWN_FILL)
                 .addJSONObjectBody(jsonObject)
-                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
@@ -968,14 +970,14 @@ public class NewClaimActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            Log.e(TAG, "COMPONENT_ITEM: "+response.toString(4) );
+                            Log.e(TAG, "COMPONENT_ITEM: " + response.toString(4));
                             JSONObject job1 = response;
                             String Response_Code = job1.optString("Response_Code");
                             String Response_Message = job1.optString("Response_Message");
                             if (Response_Code.equals("101")) {
                                 String Response_Data = job1.optString("Response_Data");
                                 componentList.add("Please Select Reimbursement Type");
-                                moduleComponentList.add(new SpineerItemModel("0","0"));
+                                moduleComponentList.add(new SpineerItemModel("0", "0"));
                                 JSONArray jsonArray = new JSONArray(Response_Data);
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject obj = jsonArray.getJSONObject(i);
@@ -1014,20 +1016,20 @@ public class NewClaimActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError anError) {
-                        Log.e(TAG, "COMPONENT_ITEM_error: "+anError.getErrorBody());
+                        Log.e(TAG, "COMPONENT_ITEM_error: " + anError.getErrorBody());
                     }
                 });
     }
 
     private void setComponenetItem(JSONObject jsonObject) {
-        Log.e(TAG, "setComponenetItem: "+jsonObject);
+        Log.e(TAG, "setComponenetItem: " + jsonObject);
         final ProgressDialog progressBar = new ProgressDialog(this);
         progressBar.setCancelable(true); //you can cancel it by pressing back button
         progressBar.setMessage("Loading...");
         progressBar.show();
         AndroidNetworking.post(AppData.GET_COMMON_DROP_DOWN_FILL)
                 .addJSONObjectBody(jsonObject)
-                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
@@ -1036,18 +1038,18 @@ public class NewClaimActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             progressBar.dismiss();
-                            Log.e(TAG, "COMPONENT_ITEM: "+response.toString(4) );
+                            Log.e(TAG, "COMPONENT_ITEM: " + response.toString(4));
                             JSONObject job1 = response;
                             String Response_Code = job1.optString("Response_Code");
                             if (Response_Code.equals("101")) {
                                 String Response_Data = job1.optString("Response_Data");
                                 JSONArray jsonArray = new JSONArray(Response_Data);
                                 componentList.add("Please Select Reimbursement Type");
-                                moduleComponentList.add(new SpineerItemModel("0","0"));
+                                moduleComponentList.add(new SpineerItemModel("0", "0"));
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject obj = jsonArray.getJSONObject(i);
                                     String comid = obj.optString("id");
-                                    Log.e(TAG,"comid: "+comid);
+                                    Log.e(TAG, "comid: " + comid);
                                     String value = obj.optString("value");
                                     componentList.add(value);
                                     SpineerItemModel mainDocModule = new SpineerItemModel(value, comid);
@@ -1071,13 +1073,13 @@ public class NewClaimActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError anError) {
                         progressBar.dismiss();
-                        Log.e(TAG, "COMPONENT_ITEM_error: "+anError.getErrorBody());
+                        Log.e(TAG, "COMPONENT_ITEM_error: " + anError.getErrorBody());
                     }
                 });
     }
 
     private void setComponenetItem() {
-        String surl = AppData.url+"gcl_CommonDDL?ddltype=1160&id1=" + pref.getEmpId() + "&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
+        String surl = AppData.url + "gcl_CommonDDL?ddltype=1160&id1=" + pref.getEmpId() + "&id2=0&id3=0&SecurityCode=" + pref.getSecurityCode();
         Log.d("compurl", surl);
         final ProgressDialog progressBar = new ProgressDialog(this);
         progressBar.setCancelable(true);//you can cancel it by pressing back button
@@ -1097,7 +1099,7 @@ public class NewClaimActivity extends AppCompatActivity {
                             if (responseStatus) {
                                 //Toast.makeText(getApplicationContext(),responseText,Toast.LENGTH_LONG).show();
                                 componentList.add("Please Select Reimbursement Type");
-                                moduleComponentList.add(new SpineerItemModel("0","0"));
+                                moduleComponentList.add(new SpineerItemModel("0", "0"));
                                 JSONArray responseData = job1.optJSONArray("responseData");
                                 for (int i = 0; i < responseData.length(); i++) {
                                     JSONObject obj = responseData.getJSONObject(i);
@@ -1205,11 +1207,18 @@ public class NewClaimActivity extends AppCompatActivity {
                         try {
                             String imageurl = /*"file://" +*/ getRealPathFromURI(imageUri);
                             file = new File(imageurl);
-                            compressedImageFile = new ImageZipper(NewClaimActivity.this)
-                                    .setQuality(100)
-                                    .setMaxWidth(300)
-                                    .setMaxHeight(300)
-                                    .compressToFile(file);
+                            String fileName = getFileName(imageUri);
+                            if (fileName.contains("heic")
+                                    || fileName.contains("heif")) {
+                                compressedImageFile = convertHeicToJpg(NewClaimActivity.this, imageUri);
+                            } else {
+                                compressedImageFile = new ImageZipper(NewClaimActivity.this)
+                                        .setQuality(100)
+                                        .setMaxWidth(300)
+                                        .setMaxHeight(300)
+                                        .compressToFile(file);
+                            }
+
                             //Log.d("imageSixw", String.valueOf(getReadableFileSize(compressedImageFile.length())));
 
                             BitmapFactory.Options o = new BitmapFactory.Options();
@@ -1243,11 +1252,17 @@ public class NewClaimActivity extends AppCompatActivity {
                         try {
                             String imageurl = /*"file://" +*/ getRealPathFromURI(imageUri);
                             file1 = new File(imageurl);
-                            compressedImageFile1 =new ImageZipper(NewClaimActivity.this)
-                                    .setQuality(100)
-                                    .setMaxWidth(300)
-                                    .setMaxHeight(300)
-                                    .compressToFile(file1);
+                            String fileName = getFileName(imageUri);
+                            if (fileName.contains("heic")
+                                    || fileName.contains("heif")) {
+                                compressedImageFile1 = convertHeicToJpg(NewClaimActivity.this, imageUri);
+                            } else {
+                                compressedImageFile1 = new ImageZipper(NewClaimActivity.this)
+                                        .setQuality(100)
+                                        .setMaxWidth(300)
+                                        .setMaxHeight(300)
+                                        .compressToFile(file1);
+                            }
                             //Log.d("imageSixw", String.valueOf(getReadableFileSize(compressedImageFile1.length())));
 
                             BitmapFactory.Options o = new BitmapFactory.Options();
@@ -1281,11 +1296,17 @@ public class NewClaimActivity extends AppCompatActivity {
                         try {
                             String imageurl = /*"file://" +*/ getRealPathFromURI(imageUri);
                             file2 = new File(imageurl);
-                            compressedImageFile2 = new ImageZipper(NewClaimActivity.this)
-                                    .setQuality(100)
-                                    .setMaxWidth(300)
-                                    .setMaxHeight(300)
-                                    .compressToFile(file2);
+                            String fileName = getFileName(imageUri);
+                            if (fileName.contains("heic")
+                                    || fileName.contains("heif")) {
+                                compressedImageFile2 = convertHeicToJpg(NewClaimActivity.this, imageUri);
+                            } else {
+                                compressedImageFile2 = new ImageZipper(NewClaimActivity.this)
+                                        .setQuality(100)
+                                        .setMaxWidth(300)
+                                        .setMaxHeight(300)
+                                        .compressToFile(file2);
+                            }
                             BitmapFactory.Options o = new BitmapFactory.Options();
                             o.inSampleSize = 2;
                             Bitmap bm = cropToSquare(BitmapFactory.decodeFile(imageurl, o));
@@ -1318,11 +1339,17 @@ public class NewClaimActivity extends AppCompatActivity {
                         try {
                             String imageurl = /*"file://" +*/ getRealPathFromURI(imageUri);
                             file3 = new File(imageurl);
-                            compressedImageFile3 = new ImageZipper(NewClaimActivity.this)
-                                    .setQuality(100)
-                                    .setMaxWidth(300)
-                                    .setMaxHeight(300)
-                                    .compressToFile(file3);
+                            String fileName = getFileName(imageUri);
+                            if (fileName.contains("heic")
+                                    || fileName.contains("heif")) {
+                                compressedImageFile3 = convertHeicToJpg(NewClaimActivity.this, imageUri);
+                            } else {
+                                compressedImageFile3 = new ImageZipper(NewClaimActivity.this)
+                                        .setQuality(100)
+                                        .setMaxWidth(300)
+                                        .setMaxHeight(300)
+                                        .compressToFile(file3);
+                            }
                             BitmapFactory.Options o = new BitmapFactory.Options();
                             o.inSampleSize = 2;
                             Bitmap bm = cropToSquare(BitmapFactory.decodeFile(imageurl, o));
@@ -1354,11 +1381,17 @@ public class NewClaimActivity extends AppCompatActivity {
                         try {
                             String imageurl = /*"file://" +*/ getRealPathFromURI(imageUri);
                             file4 = new File(imageurl);
-                            compressedImageFile4 = new ImageZipper(NewClaimActivity.this)
-                                    .setQuality(100)
-                                    .setMaxWidth(300)
-                                    .setMaxHeight(300)
-                                    .compressToFile(file4);
+                            String fileName = getFileName(imageUri);
+                            if (fileName.contains("heic")
+                                    || fileName.contains("heif")) {
+                                compressedImageFile4 = convertHeicToJpg(NewClaimActivity.this, imageUri);
+                            } else {
+                                compressedImageFile4 = new ImageZipper(NewClaimActivity.this)
+                                        .setQuality(100)
+                                        .setMaxWidth(300)
+                                        .setMaxHeight(300)
+                                        .compressToFile(file4);
+                            }
                             BitmapFactory.Options o = new BitmapFactory.Options();
                             o.inSampleSize = 2;
                             Bitmap bm = cropToSquare(BitmapFactory.decodeFile(imageurl, o));
@@ -1401,8 +1434,8 @@ public class NewClaimActivity extends AppCompatActivity {
                     Bitmap putImage = Bitmap.createScaledBitmap(d, 512, newHeight, true);
                     imgMultiPleImg.setImageBitmap(putImage);
                     flag = 1;
-                    File pictureFile = (File)data.getExtras().get("picture");
-                    Log.d("fjjgk",pictureFile.toString());
+                    File pictureFile = (File) data.getExtras().get("picture");
+                    Log.d("fjjgk", pictureFile.toString());
                     try {
                         compressedImageFile = new ImageZipper(this).compressToFile(pictureFile);
                     } catch (IOException e) {
@@ -1419,94 +1452,91 @@ public class NewClaimActivity extends AppCompatActivity {
                 if (resultCode == Activity.RESULT_OK) {
                     InputStream imageStream = null;
                     try {
-                        try {
-                            uri = data.getData();
-                            String filePath = getRealPathFromURIPath(uri, NewClaimActivity.this);
-                            file = new File(filePath);
+                        uri = data.getData();
+                        String filePath = getRealPathFromURIPath(uri, NewClaimActivity.this);
+                        file = new File(filePath);
+                        String fileName = getFileName(uri);
+                        if (fileName.contains("heic")
+                                || fileName.contains("heif")) {
+                            compressedImageFile = convertHeicToJpg(NewClaimActivity.this, uri);
+                        } else {
                             compressedImageFile = new ImageZipper(NewClaimActivity.this)
                                     .setQuality(100)
                                     .setMaxWidth(300)
                                     .setMaxHeight(300)
                                     .compressToFile(file);
                             //  Log.d(TAG, "filePath=" + filePath);
-                            imageStream = getContentResolver().openInputStream(uri);
-                            Bitmap bm = cropToSquare(BitmapFactory.decodeStream(imageStream));
-                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            bm.compress(Bitmap.CompressFormat.PNG, 10, baos); //bm is the bitmap object
-                            byte[] b = baos.toByteArray();
-                            encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-                            imgGalleryOne.setImageBitmap(bm);
-
-                            galleryflagone = "1";
-
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
-                    } catch (OutOfMemoryError e) {
+                        imageStream = getContentResolver().openInputStream(uri);
+                        Bitmap bm = cropToSquare(BitmapFactory.decodeStream(imageStream));
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        bm.compress(Bitmap.CompressFormat.PNG, 10, baos); //bm is the bitmap object
+                        byte[] b = baos.toByteArray();
+                        encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+                        imgGalleryOne.setImageBitmap(bm);
+
+                        galleryflagone = "1";
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-
                 }
                 break;
             case REQUEST_GALLERY_CODE_TWO:
                 if (resultCode == Activity.RESULT_OK) {
                     InputStream imageStream = null;
                     try {
-                        try {
-                            uri = data.getData();
-                            String filePath = getRealPathFromURIPath(uri, NewClaimActivity.this);
+                        uri = data.getData();
+                        String filePath = getRealPathFromURIPath(uri, NewClaimActivity.this);
+                        String fileName = getFileName(uri);
+                        if (fileName.contains("heic")
+                                || fileName.contains("heif")) {
+                            compressedImageFile2 = convertHeicToJpg(NewClaimActivity.this, uri);
+                        } else {
                             file = new File(filePath);
                             compressedImageFile2 = new ImageZipper(NewClaimActivity.this)
                                     .setQuality(100)
                                     .setMaxWidth(300)
                                     .setMaxHeight(300)
                                     .compressToFile(file);
-                            //  Log.d(TAG, "filePath=" + filePath);
-                            imageStream = getContentResolver().openInputStream(uri);
-                            Bitmap bm = cropToSquare(BitmapFactory.decodeStream(imageStream));
-                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            bm.compress(Bitmap.CompressFormat.PNG, 10, baos); //bm is the bitmap object
-                            byte[] b = baos.toByteArray();
-                            encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-                            imgGalleryTwo.setImageBitmap(bm);
-
-                            galleryflagtwo = "1";
-
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
-                    } catch (OutOfMemoryError e) {
+                        imageStream = getContentResolver().openInputStream(uri);
+                        Bitmap bm = cropToSquare(BitmapFactory.decodeStream(imageStream));
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        bm.compress(Bitmap.CompressFormat.PNG, 10, baos); //bm is the bitmap object
+                        byte[] b = baos.toByteArray();
+                        encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+                        imgGalleryTwo.setImageBitmap(bm);
+
+                        galleryflagtwo = "1";
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-
                 }
                 break;
             case REQUEST_SELECT_PDF:
                 if (resultCode == Activity.RESULT_OK) {
                     Uri uri = data.getData();
-                    Log.e(TAG, "onActivityResult: "+uri.getPath());
+                    Log.e(TAG, "onActivityResult: " + uri.getPath());
                     String imagePath = uri.getPath();
-                    if (imagePath.contains("all_external")){
+                    if (imagePath.contains("all_external")) {
                         pdfFileName = FindDocumentInformation.FileNameFromURL(imagePath);
-                        pdfFile = convertInputStreamToFile(uri,pdfFileName);
-                        Log.e(TAG, "onActivityResult: "+pdfFile.getAbsolutePath());
+                        pdfFile = convertInputStreamToFile(uri, pdfFileName);
+                        Log.e(TAG, "onActivityResult: " + pdfFile.getAbsolutePath());
                     } else {
                         try {
-                            pdfFilePath = getRealPath(NewClaimActivity.this,uri);
-                            Log.e(TAG, "onActivityResult: ================== "+pdfFilePath);
+                            pdfFilePath = getRealPath(NewClaimActivity.this, uri);
+                            Log.e(TAG, "onActivityResult: ================== " + pdfFilePath);
                             pdfFileName = FindDocumentInformation.FileNameFromURL(pdfFilePath);
-                        } catch (IllegalArgumentException e){
+                        } catch (IllegalArgumentException e) {
                             //Todo: from WPS office document select
                             pdfFileName = FindDocumentInformation.FileNameFromURL(imagePath);
-                            pdfFile = convertInputStreamToFile(uri,pdfFileName);
-                            Log.e(TAG, "onActivityResult: "+pdfFile.getAbsolutePath());
+                            pdfFile = convertInputStreamToFile(uri, pdfFileName);
+                            Log.e(TAG, "onActivityResult: " + pdfFile.getAbsolutePath());
                         }
-                        pdfFile = convertInputStreamToFile(uri,pdfFileName);
-                        Log.e(TAG, "onActivityResult: Real Path: "+pdfFilePath);
-                        Log.e(TAG, "onActivityResult: PDF name "+pdfFileName);
-                        Log.e(TAG, "onActivityResult: Final PDF path"+pdfFile);
+                        pdfFile = convertInputStreamToFile(uri, pdfFileName);
+                        Log.e(TAG, "onActivityResult: Real Path: " + pdfFilePath);
+                        Log.e(TAG, "onActivityResult: PDF name " + pdfFileName);
+                        Log.e(TAG, "onActivityResult: Final PDF path" + pdfFile);
                     }
                     imgPDF.setVisibility(View.VISIBLE);
 
@@ -1553,7 +1583,7 @@ public class NewClaimActivity extends AppCompatActivity {
         MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", compressedImageFile.getName(), mFile);
         RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile.getName());
 
-            Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage1(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, componentId,"0","0");
+        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage1(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, componentId, "0", "0");
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
@@ -1565,7 +1595,7 @@ public class NewClaimActivity extends AppCompatActivity {
 
 
                 } else {
-                    
+
                     Toast.makeText(getApplicationContext(), extraWorkingDayModel.getResponseText(), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -1596,7 +1626,7 @@ public class NewClaimActivity extends AppCompatActivity {
         MultipartBody.Part fileToUpload1 = MultipartBody.Part.createFormData("file", compressedImageFile1.getName(), mFile);
         RequestBody filename1 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile1.getName());
 
-        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage2(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, componentId,"0","0");
+        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage2(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, componentId, "0", "0");
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
@@ -1607,7 +1637,7 @@ public class NewClaimActivity extends AppCompatActivity {
                     successAlert(extraWorkingDayModel.getResponseText());
 
                 } else {
-                  //  Toast.makeText(getApplicationContext(), extraWorkingDayModel.getResponseText(), Toast.LENGTH_SHORT).show();
+                    //  Toast.makeText(getApplicationContext(), extraWorkingDayModel.getResponseText(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -1641,7 +1671,7 @@ public class NewClaimActivity extends AppCompatActivity {
         MultipartBody.Part fileToUpload2 = MultipartBody.Part.createFormData("file", compressedImageFile2.getName(), mFile);
         RequestBody filename2 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile2.getName());
 
-        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage3(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, fileToUpload2, componentId,"0","0");
+        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage3(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, fileToUpload2, componentId, "0", "0");
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
@@ -1653,7 +1683,7 @@ public class NewClaimActivity extends AppCompatActivity {
 
 
                 } else {
-                  //  Toast.makeText(getApplicationContext(), extraWorkingDayModel.getResponseText(), Toast.LENGTH_SHORT).show();
+                    //  Toast.makeText(getApplicationContext(), extraWorkingDayModel.getResponseText(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -1691,7 +1721,7 @@ public class NewClaimActivity extends AppCompatActivity {
         MultipartBody.Part fileToUpload3 = MultipartBody.Part.createFormData("file", compressedImageFile3.getName(), mFile);
         RequestBody filename3 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile3.getName());
 
-        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage4(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, fileToUpload2, fileToUpload3, componentId,"0","0");
+        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage4(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, fileToUpload2, fileToUpload3, componentId, "0", "0");
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
@@ -1712,7 +1742,7 @@ public class NewClaimActivity extends AppCompatActivity {
                 progressDialog.dismiss();
 
                 Log.e("error", "Error " + t.getMessage());
-               // Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
+                // Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
 
             }
 
@@ -1746,7 +1776,7 @@ public class NewClaimActivity extends AppCompatActivity {
         RequestBody filename4 = RequestBody.create(MediaType.parse("text/plain"), compressedImageFile4.getName());
 
 
-        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage5(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, fileToUpload2, fileToUpload3, fileToUpload4, componentId,"0","0");
+        Call<UploadObject> fileUpload = uploadService.postreimburstmentwithimage5(aempid, componentId, description, amount, year, month, securitycode, fileToUpload, fileToUpload1, fileToUpload2, fileToUpload3, fileToUpload4, componentId, "0", "0");
         fileUpload.enqueue(new Callback<UploadObject>() {
             @Override
             public void onResponse(Call<UploadObject> call, retrofit2.Response<UploadObject> response) {
@@ -1757,7 +1787,7 @@ public class NewClaimActivity extends AppCompatActivity {
                     successAlert(extraWorkingDayModel.getResponseText());
 
                 } else {
-                   // Toast.makeText(getApplicationContext(), extraWorkingDayModel.getResponseText(), Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getApplicationContext(), extraWorkingDayModel.getResponseText(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -1799,6 +1829,7 @@ public class NewClaimActivity extends AppCompatActivity {
         window.setGravity(Gravity.CENTER);
         alerDialog1.show();
     }
+
     private void hideAlert() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(NewClaimActivity.this, R.style.CustomDialogNew);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -2083,8 +2114,6 @@ public class NewClaimActivity extends AppCompatActivity {
     }
 
 
-
-
     public void uploadMultipart() {
         //getting name for the pdf
         //getting the actual path of the pdf
@@ -2161,79 +2190,77 @@ public class NewClaimActivity extends AppCompatActivity {
                     }
                 });*/
 
-        Log.e(TAG, "uploadMultipart: \nAEMEmployeeID:"+pref.getEmpId()
-                +"\nAEMComponentID:"+componentId
-                +"\nDescription:"+description
-                +"\nReimbursementAmount:"+amount
-                +"\nYear:"+year
-                +"\nMonth:"+month
-                +"\nSecurityCode:"+securitycode
-                +"\nConveyanceTypeId:"+componentId
-                +"\nLocationTypeID:0"
-                +"\nReimbursementDate:0"
-                +"\nSingleFile:File"
+        Log.e(TAG, "uploadMultipart: \nAEMEmployeeID:" + pref.getEmpId()
+                + "\nAEMComponentID:" + componentId
+                + "\nDescription:" + description
+                + "\nReimbursementAmount:" + amount
+                + "\nYear:" + year
+                + "\nMonth:" + month
+                + "\nSecurityCode:" + securitycode
+                + "\nConveyanceTypeId:" + componentId
+                + "\nLocationTypeID:0"
+                + "\nReimbursementDate:0"
+                + "\nSingleFile:File"
         );
 
-            AndroidNetworking.upload(UPLOAD_URL)
-                    .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
-                    .addMultipartParameter("AEMComponentID", componentId)
-                    .addMultipartParameter("Description", description)
-                    .addMultipartParameter("ReimbursementAmount", amount)
-                    .addMultipartParameter("Year", year)
-                    .addMultipartParameter("Month", month)
-                    .addMultipartParameter("SecurityCode", securitycode)
-                    .addMultipartParameter("ConveyanceTypeId", componentId)
-                    .addMultipartParameter("LocationTypeID", "0")
-                    .addMultipartParameter("ReimbursementDate", "0")
-                    .addMultipartFile("SingleFile", pdfFile)
-                    .setPercentageThresholdForCancelling(60)
-                    .setTag("uploadTest")
-                    .setPriority(Priority.HIGH)
-                    .build()
-                    .setUploadProgressListener(new UploadProgressListener() {
-                        @Override
-                        public void onProgress(long bytesUploaded, long totalBytes) {
-                            progressDialog.show();
-                        }
-                    })
-                    .getAsJSONObject(new JSONObjectRequestListener() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            progressDialog.dismiss();
+        AndroidNetworking.upload(UPLOAD_URL)
+                .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
+                .addMultipartParameter("AEMComponentID", componentId)
+                .addMultipartParameter("Description", description)
+                .addMultipartParameter("ReimbursementAmount", amount)
+                .addMultipartParameter("Year", year)
+                .addMultipartParameter("Month", month)
+                .addMultipartParameter("SecurityCode", securitycode)
+                .addMultipartParameter("ConveyanceTypeId", componentId)
+                .addMultipartParameter("LocationTypeID", "0")
+                .addMultipartParameter("ReimbursementDate", "0")
+                .addMultipartFile("SingleFile", pdfFile)
+                .setPercentageThresholdForCancelling(60)
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                        progressDialog.show();
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        progressDialog.dismiss();
 
 
-                            JSONObject job1 = response;
-                            Log.e("response12", "@@@@@@" + job1);
-                            String responseText = job1.optString("responseText");
-                            boolean responseStatus = job1.optBoolean("responseStatus");
+                        JSONObject job1 = response;
+                        Log.e("response12", "@@@@@@" + job1);
+                        String responseText = job1.optString("responseText");
+                        boolean responseStatus = job1.optBoolean("responseStatus");
 
-                            if (responseStatus) {
+                        if (responseStatus) {
 
-                               successAlert(responseText);
+                            successAlert(responseText);
 
-                            } else {
+                        } else {
 
-                                Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
-
-                            }
-
-
-                            // boolean _status = job1.getBoolean("status");
-
-
+                            Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
 
                         }
 
-                        @Override
-                        public void onError(ANError error) {
-                            // handle error
-                            Log.e("errt", String.valueOf(error));
-                            progressDialog.dismiss();
 
-                            Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
-                        }
-                    });
+                        // boolean _status = job1.getBoolean("status");
 
+
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        Log.e("errt", String.valueOf(error));
+                        progressDialog.dismiss();
+
+                        Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
+                    }
+                });
 
 
     }
@@ -2246,7 +2273,7 @@ public class NewClaimActivity extends AppCompatActivity {
         //.addHeaders("Authorization", "Bearer "+pref.getAccessToken())
         //TODO: new api
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
-                .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
+                .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
                 .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount", amount)
@@ -2257,7 +2284,7 @@ public class NewClaimActivity extends AppCompatActivity {
                 .addMultipartParameter("LocationTypeID", "0")
                 .addMultipartParameter("ReimbursementDate", "0")
                 .addMultipartFile("SingleFile", pdfFile)
-                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setPercentageThresholdForCancelling(60)
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
@@ -2275,7 +2302,7 @@ public class NewClaimActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             progressDialog.dismiss();
-                            Log.e(TAG, "MULTIPART_WITH_FILE: "+response.toString(4));
+                            Log.e(TAG, "MULTIPART_WITH_FILE: " + response.toString(4));
                             JSONObject job1 = response;
                             String Response_Code = job1.optString("Response_Code");
                             String Response_Message = job1.optString("Response_Message");
@@ -2293,7 +2320,7 @@ public class NewClaimActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError error) {
                         // handle error
-                        Log.e(TAG, "MULTIPART_WITH_FILE_error: "+error.getErrorBody());
+                        Log.e(TAG, "MULTIPART_WITH_FILE_error: " + error.getErrorBody());
                         Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                     }
                 });
@@ -2360,7 +2387,6 @@ public class NewClaimActivity extends AppCompatActivity {
                 });*/
 
 
-
     }
 
     public void uploadMultipartwithTwofile() {
@@ -2369,7 +2395,7 @@ public class NewClaimActivity extends AppCompatActivity {
         //getting the actual path of the pdf
         //TODO: new api
         AndroidNetworking.upload(AppData.SAVE_REIMBURSEMENT_CLAIM_BY_COMPONENT)
-                .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
+                .addMultipartParameter("AEMEmployeeID", pref.getEmpId())
                 .addMultipartParameter("AEMComponentID", componentId)
                 .addMultipartParameter("Description", description)
                 .addMultipartParameter("ReimbursementAmount", amount)
@@ -2381,7 +2407,7 @@ public class NewClaimActivity extends AppCompatActivity {
                 .addMultipartParameter("ReimbursementDate", "0")
                 .addMultipartFile("SingleFile", pdfFile)
                 .setPercentageThresholdForCancelling(60)
-                .addHeaders("Authorization", "Bearer "+pref.getAccessToken())
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
@@ -2396,7 +2422,7 @@ public class NewClaimActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             progressDialog.dismiss();
-                            Log.e(TAG, "MULTIPART_WITH_TWO_FILE: "+response.toString(4));
+                            Log.e(TAG, "MULTIPART_WITH_TWO_FILE: " + response.toString(4));
                             JSONObject job1 = response;
                             String Response_Code = job1.optString("Response_Code");
                             String Response_Message = job1.optString("Response_Message");
@@ -2416,7 +2442,7 @@ public class NewClaimActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError error) {
                         // handle error
-                        Log.e(TAG, "MULTIPART_WITH_TWO_FILE_error: "+error.getErrorBody() );
+                        Log.e(TAG, "MULTIPART_WITH_TWO_FILE_error: " + error.getErrorBody());
                         Toast.makeText(getApplicationContext(), "Something went wrong,Please try again", Toast.LENGTH_LONG).show();
                     }
                 });
@@ -2483,7 +2509,6 @@ public class NewClaimActivity extends AppCompatActivity {
                 });*/
 
 
-
     }
 
 
@@ -2495,7 +2520,6 @@ public class NewClaimActivity extends AppCompatActivity {
         int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
         return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
     }
-
 
 
     private void openCameraDialog() {
@@ -2549,7 +2573,7 @@ public class NewClaimActivity extends AppCompatActivity {
                 if (files.length > 0) {
                     Log.d("arpan", files[0]);
                     pdfFile = new File(files[0]);
-                    pdfflag=1;
+                    pdfflag = 1;
                     imgPDF.setVisibility(View.VISIBLE);
 
                 }
@@ -2569,12 +2593,12 @@ public class NewClaimActivity extends AppCompatActivity {
         }
     }
 
-    private void attachFileAPI(){
+    private void attachFileAPI() {
         if (pdfflag == 1) {
             uploadMultipart();
-        } else if (pdfflag==1 && galleryflagone.equals("1")) {
+        } else if (pdfflag == 1 && galleryflagone.equals("1")) {
             uploadMultipartwithfile();
-        } else if (pdfflag==1 && galleryflagone.equals("1")&& galleryflagtwo.equals("1")) {
+        } else if (pdfflag == 1 && galleryflagone.equals("1") && galleryflagtwo.equals("1")) {
             uploadMultipartwithTwofile();
         } else if (galleryflagone.equals("1")) {
             postoneimage();
@@ -2585,7 +2609,7 @@ public class NewClaimActivity extends AppCompatActivity {
             //TODO: new api
             //postTwoImage();
         } else {
-            Toast.makeText(NewClaimActivity.this,"Please Attach Your Reimbursement File",Toast.LENGTH_LONG).show();
+            Toast.makeText(NewClaimActivity.this, "Please Attach Your Reimbursement File", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -2632,6 +2656,16 @@ public class NewClaimActivity extends AppCompatActivity {
         return file;
     }
 
+    private String getFileName(Uri uri) {
+        String result = null;
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+            result = cursor.getString(nameIndex);
+            cursor.close();
+        }
+        return result != null ? result : "unknown_file";
+    }
 
 
 }
