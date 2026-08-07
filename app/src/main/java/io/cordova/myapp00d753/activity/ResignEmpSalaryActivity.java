@@ -120,7 +120,7 @@ public class ResignEmpSalaryActivity extends AppCompatActivity  {
         tvYear = (TextView) findViewById(R.id.tvYear);
         tvYear.setText(year);
         llLoader = (LinearLayout) findViewById(R.id.llLoader);
-        llMain = (LinearLayout) findViewById(R.id.llMain);
+        //llMain = (LinearLayout) findViewById(R.id.llMain);
         llNodata=(LinearLayout)findViewById(R.id.llNodata);
         llAgain=(LinearLayout)findViewById(R.id.llAgain);
         imgAgain=(ImageView)findViewById(R.id.imgAgain);
@@ -141,7 +141,7 @@ public class ResignEmpSalaryActivity extends AppCompatActivity  {
                 }
             }
         });
-        imgSearch=(ImageView)findViewById(R.id.imgSearch);
+        //imgSearch=(ImageView)findViewById(R.id.imgSearch);
         tvToolBar=(TextView) findViewById(R.id.tvToolBar);
         tvToolBar.setText("Monthly Salary");
 
@@ -162,7 +162,7 @@ public class ResignEmpSalaryActivity extends AppCompatActivity  {
     private void getSalaryList(JSONObject jsonObject) {
         Log.e(TAG, "getSalaryList: "+jsonObject);
         llLoader.setVisibility(View.VISIBLE);
-        llMain.setVisibility(View.GONE);
+        //llMain.setVisibility(View.GONE);
         llNodata.setVisibility(View.GONE);
         llAgain.setVisibility(View.GONE);
         AndroidNetworking.post(AppData.GET_EMPLOYEE_SALARY)
@@ -195,20 +195,20 @@ public class ResignEmpSalaryActivity extends AppCompatActivity  {
 
                                 if (salaryList.size() > 0) {
                                     llLoader.setVisibility(View.GONE);
-                                    llMain.setVisibility(View.VISIBLE);
+                                    //llMain.setVisibility(View.VISIBLE);
                                     llNodata.setVisibility(View.GONE);
                                     llAgain.setVisibility(View.GONE);
                                     setAdapter();
                                 } else {
                                     llLoader.setVisibility(View.GONE);
-                                    llMain.setVisibility(View.GONE);
+                                    //llMain.setVisibility(View.GONE);
                                     llNodata.setVisibility(View.GONE);
                                     llAgain.setVisibility(View.GONE);
                                 }
                             } else {
                                 //Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
                                 llLoader.setVisibility(View.GONE);
-                                llMain.setVisibility(View.GONE);
+                                //llMain.setVisibility(View.GONE);
                                 llNodata.setVisibility(View.VISIBLE);
                                 llAgain.setVisibility(View.GONE);
                             }
@@ -222,7 +222,7 @@ public class ResignEmpSalaryActivity extends AppCompatActivity  {
                     public void onError(ANError anError) {
                         Log.e(TAG, "SALARY_LIST_error: "+anError.getErrorBody());
                         llLoader.setVisibility(View.GONE);
-                        llMain.setVisibility(View.GONE);
+                        //llMain.setVisibility(View.GONE);
                         llNodata.setVisibility(View.GONE);
                         llAgain.setVisibility(View.VISIBLE);
                     }
@@ -276,7 +276,7 @@ public class ResignEmpSalaryActivity extends AppCompatActivity  {
                             } else {
                                 //Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
                                 llLoader.setVisibility(View.GONE);
-                                llMain.setVisibility(View.GONE);
+                                //llMain.setVisibility(View.GONE);
                                 llNodata.setVisibility(View.VISIBLE);
                                 llAgain.setVisibility(View.GONE);
                             }
@@ -290,7 +290,7 @@ public class ResignEmpSalaryActivity extends AppCompatActivity  {
                     public void onError(ANError anError) {
                         Log.e(TAG, "SALARY_LIST_error: "+anError.getErrorBody());
                         llLoader.setVisibility(View.GONE);
-                        llMain.setVisibility(View.GONE);
+                        //llMain.setVisibility(View.GONE);
                         llNodata.setVisibility(View.GONE);
                         llAgain.setVisibility(View.VISIBLE);
                     }
@@ -301,7 +301,7 @@ public class ResignEmpSalaryActivity extends AppCompatActivity  {
         surl = AppData.url+"get_Salary?AEMConsultantID=0&AEMClientID=null&MasterID=" + pref.getMasterId() + "&AEMEmployeeID=" + pref.getEmpId() + "&SalYear=" + year + "&SalMonth=jan&WorkingStatus=3&CurrentPage=1&SecurityCode="+pref.getSecurityCode();
         Log.d("salaryinput",surl);
         llLoader.setVisibility(View.VISIBLE);
-        llMain.setVisibility(View.GONE);
+        //llMain.setVisibility(View.GONE);
         llNodata.setVisibility(View.GONE);
         llAgain.setVisibility(View.GONE);
 
@@ -332,13 +332,13 @@ public class ResignEmpSalaryActivity extends AppCompatActivity  {
 
                                 if (salaryList.size() > 0) {
                                     llLoader.setVisibility(View.GONE);
-                                    llMain.setVisibility(View.VISIBLE);
+                                    //llMain.setVisibility(View.VISIBLE);
                                     llNodata.setVisibility(View.GONE);
                                     llAgain.setVisibility(View.GONE);
                                     setAdapter();
                                 } else {
                                     llLoader.setVisibility(View.GONE);
-                                    llMain.setVisibility(View.GONE);
+                                    //llMain.setVisibility(View.GONE);
                                     llNodata.setVisibility(View.GONE);
                                     llAgain.setVisibility(View.GONE);
                                 }
@@ -402,12 +402,12 @@ public class ResignEmpSalaryActivity extends AppCompatActivity  {
             }
         });
 
-        imgSearch.setOnClickListener(new View.OnClickListener() {
+        /*imgSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                     showYearDialog();
             }
-        });
+        });*/
         tvYear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
