@@ -1,13 +1,21 @@
 package io.cordova.myapp00d753.utility;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.Build;
 import android.util.Base64;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -72,5 +80,50 @@ public class Util implements ActivityCompat.OnRequestPermissionsResultCallback {
             ex.printStackTrace();
         }
         return null;
+    }
+
+    public static File convertHeicToJpg(Context context, Uri imageUri) {
+        try {
+            Bitmap bitmap;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                // Android 9 (API 28)+
+                ImageDecoder.Source source =
+                        ImageDecoder.createSource(context.getContentResolver(), imageUri);
+                bitmap = ImageDecoder.decodeBitmap(source);
+            } else {
+                // Older Android versions
+                InputStream inputStream =
+                        context.getContentResolver().openInputStream(imageUri);
+                bitmap = BitmapFactory.decodeStream(inputStream);
+
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            }
+
+            if (bitmap == null) {
+                return null;
+            }
+
+            // Create JPG file
+            File jpgFile = new File(
+                    context.getCacheDir(),
+                    "IMG_" + System.currentTimeMillis() + ".jpg"
+            );
+
+            FileOutputStream fos = new FileOutputStream(jpgFile);
+
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+
+            fos.flush();
+            fos.close();
+
+            return jpgFile;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
