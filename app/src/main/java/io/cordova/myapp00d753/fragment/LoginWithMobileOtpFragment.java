@@ -118,7 +118,7 @@ public class LoginWithMobileOtpFragment extends Fragment {
     String androidID,ip;
     TextView tvOTPText;
     String domain,sessionId;
-    String EmployeeID;
+    String EmployeeID,UserType,AEMEmployeeID;
     TextView tvResendOTP;
     TimerTextView timerText;
     private final static int INTERVAL = 1000 * 60 * 3;
@@ -126,7 +126,7 @@ public class LoginWithMobileOtpFragment extends Fragment {
     public static String SECRET_KEY = "74074750353890398886017484399862";
     String security_code;
     Pref pref;
-
+    int WorkingStatus;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -461,6 +461,32 @@ public class LoginWithMobileOtpFragment extends Fragment {
                                     String UserID=obj.optString("UserID");
                                     pref.saveMasterId(UserID);
                                     String Domain=obj.optString("Domain");
+
+                                    AEMEmployeeID = obj.optString("UserID");
+                                    pref.saveMasterId(AEMEmployeeID);
+
+
+                                    String Name = obj.optString("UserName");
+                                    pref.saveEmpName(Name);
+                                    String AEMConsultantID = obj.optString("AEMConsultantID");
+                                    pref.saveEmpConId(AEMConsultantID);
+
+                                    String AEMClientID = obj.optString("ClientID");
+                                    pref.saveEmpClintId(AEMClientID);
+
+
+                                    UserType = obj.optString("UserType");
+                                    pref.saveUserType(UserType);
+                                    pref.saveSecurityCode(security_code);
+
+                                    String Password = obj.optString("Password");
+                                    pref.savePassword("");
+
+                                    WorkingStatus = obj.optInt("WorkingStatus");
+
+                                    String Genius_Access_Token = obj.optString("Genius_Access_Token").trim();
+                                    pref.saveAccessToken(Genius_Access_Token);
+
                                     if (Domain.equals("FSS")) {
                                         security_code = "0000";
                                     } else if (Domain.equals("FMS")) {
