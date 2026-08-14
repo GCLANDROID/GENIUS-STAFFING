@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,11 +21,14 @@ import java.util.ArrayList;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.module.DocumentManageModule;
+import io.cordova.myapp00d753.utility.ClientID;
+import io.cordova.myapp00d753.utility.Pref;
 import io.cordova.myapp00d753.utility.Util;
 
 public class DocumentAdapter extends RecyclerView.Adapter<DocumentAdapter.MyViewHolder> {
     ArrayList<DocumentManageModule>documentList=new ArrayList<>();
     Context context;
+    Pref pref;
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -33,8 +37,10 @@ public class DocumentAdapter extends RecyclerView.Adapter<DocumentAdapter.MyView
         return new MyViewHolder(itemView);
     }
 
-    @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
+        if (pref.getEmpClintId().equals(ClientID.DALMIA_BHARAT_CEMENT_LTD)){
+            myViewHolder.clUploadedOn.setVisibility(View.GONE);
+        }
         myViewHolder.tvDocumentName.setText(documentList.get(i).getDocumentName());
         myViewHolder.tvDocumentType.setText( documentList.get(i).getDocumentType());
         myViewHolder.tvAEMStatusName.setText(documentList.get(i).getaEMStatusName());
@@ -72,6 +78,7 @@ public class DocumentAdapter extends RecyclerView.Adapter<DocumentAdapter.MyView
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvDocumentName,tvDocumentType,tvApprovalRemarks,tvCreatedOn,tvAEMStatusName;
         Button btnViewDoc;
+        ConstraintLayout clUploadedOn;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tvDocumentName=(TextView)itemView.findViewById(R.id.tvDocumentName);
@@ -80,12 +87,13 @@ public class DocumentAdapter extends RecyclerView.Adapter<DocumentAdapter.MyView
             tvCreatedOn=(TextView)itemView.findViewById(R.id.tvCreatedOn);
             tvAEMStatusName=(TextView)itemView.findViewById(R.id.tvAEMStatusName);
             btnViewDoc=(Button) itemView.findViewById(R.id.btnViewDoc);
-
+            clUploadedOn = (ConstraintLayout) itemView.findViewById(R.id.clUploadedOn);
         }
     }
 
     public DocumentAdapter(ArrayList<DocumentManageModule> documentList, Context context) {
         this.documentList = documentList;
         this.context = context;
+        pref = new Pref(context);
     }
 }
