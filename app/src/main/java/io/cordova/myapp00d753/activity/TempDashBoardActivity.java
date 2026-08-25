@@ -15,6 +15,7 @@ import android.net.Uri;
 
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Base64;
@@ -31,6 +32,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 
 import com.android.volley.Request;
@@ -47,6 +49,7 @@ import com.kyanogen.signatureview.SignatureView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -54,7 +57,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.utility.AppController;
@@ -66,7 +72,7 @@ public class TempDashBoardActivity extends AppCompatActivity {
     public static String TEMP_DASHBOARD="temp_dashboard";
     LinearLayout llProfile, llDocument, llLogout;
     Pref pref;
-    TextView tvEmployeeName, tvGreeting, tvLoginDateTime;
+    TextView tvEmployeeName, tvGreeting, tvLoginDateTime,tvFirstProfile;
     NetworkConnectionCheck connectionCheck;
     String s1,s2,s3,s4,s5,s6,s7,s8,s9;
     LinearLayout llCall,llHelp;
@@ -80,8 +86,21 @@ public class TempDashBoardActivity extends AppCompatActivity {
     File consetfile;
     private static final String IMAGE_DIRECTORY = "/signdemo";
     String android_id="1234556";
-    Button btnAadhar;
+    //Button btnAadhar;
+    ConstraintLayout btnAadhar;
     LinearLayout chatFabContainer;
+    TextView txtCurrentTime,txtCurrentDate;
+    private Handler handler = new Handler();
+    private final Runnable updateTimeRunnable = new Runnable() {
+        @Override
+        public void run() {
+
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+            txtCurrentTime.setText(sdf.format(new Date()));
+
+            handler.postDelayed(this, 1000);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +112,7 @@ public class TempDashBoardActivity extends AppCompatActivity {
     }
     private  void initialize(){
         pref = new Pref(TempDashBoardActivity.this);
-        btnAadhar=(Button)findViewById(R.id.btnAadhar);
+        btnAadhar=(ConstraintLayout)findViewById(R.id.btnAadhar);
         android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
         if (android_id.equals("")) {
@@ -121,34 +140,42 @@ public class TempDashBoardActivity extends AppCompatActivity {
 
         connectionCheck=new NetworkConnectionCheck(TempDashBoardActivity.this);
         llProfile = (LinearLayout) findViewById(R.id.llProfile);
-        llDocument = (LinearLayout) findViewById(R.id.llDocument);
+        //llDocument = (LinearLayout) findViewById(R.id.llDocument);
         llLogout=(LinearLayout)findViewById(R.id.llLogout);
-
+        txtCurrentTime = (TextView) findViewById(R.id.txtCurrentTime);
+        txtCurrentDate = (TextView) findViewById(R.id.txtCurrentDate);
         tvEmployeeName = (TextView) findViewById(R.id.tvEmployeeName);
         tvEmployeeName.setText(pref.getEmpName());
-
+        tvFirstProfile = (TextView) findViewById(R.id.tvFirstProfile);
+        if (pref.getEmpName().length() > 0){
+            char firstChar = pref.getEmpName().charAt(0);
+            tvFirstProfile.setText(String.valueOf(firstChar));
+        }
         tvGreeting = (TextView) findViewById(R.id.tvGreeting);
         Calendar c = Calendar.getInstance();
         int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
 
         if (timeOfDay >= 0 && timeOfDay < 12) {
-            tvGreeting.setText("Good Morning");
+            tvGreeting.setText("Good Morning \uD83D\uDC4B");
         } else if (timeOfDay >= 12 && timeOfDay < 16) {
-            tvGreeting.setText("Good Afternoon");
+            tvGreeting.setText("Good Afternoon \uD83D\uDC4B");
         } else if (timeOfDay >= 16 && timeOfDay < 21) {
-            tvGreeting.setText("Good Evening");
+            tvGreeting.setText("Good Evening \uD83D\uDC4B");
         } else if (timeOfDay >= 21 && timeOfDay < 24) {
-
-            tvGreeting.setText("Good Evening");
+            tvGreeting.setText("Good Evening \uD83D\uDC4B");
         }
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMMM dd, yyyy", Locale.getDefault());
+        String currentDate = dateFormat.format(new Date());
+        txtCurrentDate.setText(currentDate);
         tvLoginDateTime = (TextView) findViewById(R.id.tvLoginDateTime);
         tvLoginDateTime.setText(pref.getloginTime());
+
         String menu = pref.getMenu();
 
         Log.d("menuu", menu);
         String[] separated = menu.split(",");
-        llCall=(LinearLayout)findViewById(R.id.llCall);
-        llHelp=(LinearLayout)findViewById(R.id.llHelp);
+        //llCall=(LinearLayout)findViewById(R.id.llCall);
+        //llHelp=(LinearLayout)findViewById(R.id.llHelp);
        /* if (ConsentFlag.equals("0")){
             consnetLetter();
         }*/
@@ -160,7 +187,7 @@ public class TempDashBoardActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+        handler.post(updateTimeRunnable);
     }
     private void onClick(){
         btnAadhar.setOnClickListener(new View.OnClickListener() {
@@ -171,14 +198,14 @@ public class TempDashBoardActivity extends AppCompatActivity {
             }
         });
 
-        llDocument.setOnClickListener(new View.OnClickListener() {
+       /* llDocument.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(TempDashBoardActivity.this,DocumentActivity.class);
                 intent.putExtra("from",TEMP_DASHBOARD);
                 startActivity(intent);
             }
-        });
+        });*/
 
         llLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -188,21 +215,21 @@ public class TempDashBoardActivity extends AppCompatActivity {
                 finish();
             }
         });
-        llCall.setOnClickListener(new View.OnClickListener() {
+        /*llCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_DIAL);
                 intent.setData(Uri.parse("tel:18008333555"));
                 startActivity(intent);
             }
-        });
-        llHelp.setOnClickListener(new View.OnClickListener() {
+        });*/
+        /*llHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(getApplicationContext(),PdfViewActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
 
     }
     @Override
@@ -699,6 +726,9 @@ public class TempDashBoardActivity extends AppCompatActivity {
 
     }
 
-
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacks(updateTimeRunnable);
+    }
 }
