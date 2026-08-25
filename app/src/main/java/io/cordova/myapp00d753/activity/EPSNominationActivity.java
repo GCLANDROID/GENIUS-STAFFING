@@ -91,7 +91,8 @@ public class EPSNominationActivity extends AppCompatActivity {
         pd.setCancelable(false);
         layoutManager = new LinearLayoutManager(EPSNominationActivity.this, LinearLayoutManager.VERTICAL, false);
         binding.rvData.setLayoutManager(layoutManager);
-        binding.imgAdd.setOnClickListener(new View.OnClickListener() {
+        //binding.imgAdd.setOnClickListener(new View.OnClickListener() {
+        binding.btnAddNominee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (binding.etName.getText().toString().length() > 0) {
@@ -176,7 +177,8 @@ public class EPSNominationActivity extends AppCompatActivity {
             }
         });
         final SimpleTooltip tooltip = new SimpleTooltip.Builder(EPSNominationActivity.this)
-                .anchorView(binding.imgAdd)
+                //.anchorView(binding.imgAdd)
+                .anchorView(binding.btnAddNominee)
                 .text("Fill in the fields, then press the \"+\" icon to add your data to the list.")
                 .gravity(Gravity.BOTTOM)
                 .dismissOnOutsideTouch(true)
@@ -271,7 +273,8 @@ public class EPSNominationActivity extends AppCompatActivity {
 
             }
         });
-        binding.imgUANCal.setOnClickListener(new View.OnClickListener() {
+        //binding.imgUANCal.setOnClickListener(new View.OnClickListener() {
+        binding.tvUANDOB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar now = Calendar.getInstance();
@@ -666,7 +669,7 @@ public class EPSNominationActivity extends AppCompatActivity {
                         int statusCode = job1.optInt("statusCode");
                         if (statusCode == 200) {
 
-                            binding.llAadharVerified.setVisibility(View.VISIBLE);
+                            //binding.llAadharVerified.setVisibility(View.VISIBLE);
                             binding.etAadharNominee.setEnabled(false);
                         }else {
 
@@ -713,7 +716,8 @@ public class EPSNominationActivity extends AppCompatActivity {
                     && binding.etAadharNominee.getText().toString().length() > 0
                     && !dob.isEmpty()
                     && !relationship.isEmpty()){
-                binding.imgAdd.performClick();
+                //binding.imgAdd.performClick();
+                binding.btnAddNominee.performClick();
                 editItemCode(pos);
             } else {
                 editItemCode(pos);

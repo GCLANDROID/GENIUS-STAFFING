@@ -138,7 +138,8 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
             }
         });
 
-        binding.imgPassportCamera.setOnClickListener(new View.OnClickListener() {
+        //binding.imgPassportCamera.setOnClickListener(new View.OnClickListener() {
+        binding.llPSPImgSelected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 attechmentAlert(100,1001,1);
@@ -157,7 +158,8 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
         });
 
 
-        binding.imgFamilyCamera.setOnClickListener(new View.OnClickListener() {
+        //binding.imgFamilyCamera.setOnClickListener(new View.OnClickListener() {
+        binding.llFamilyImgSelected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 attechmentAlert(200,2001,1);
@@ -178,7 +180,8 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
         });
 
 
-        binding.imgResumeCamera.setOnClickListener(new View.OnClickListener() {
+        //binding.imgResumeCamera.setOnClickListener(new View.OnClickListener() {
+        binding.llResumeImgSelected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 attechmentAlert(300,3001,2);
@@ -199,7 +202,8 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
         });
 
 
-        binding.imgExperinceLetterCamera.setOnClickListener(new View.OnClickListener() {
+        //binding.imgExperinceLetterCamera.setOnClickListener(new View.OnClickListener() {
+        binding.llExperinceLetterImgSelected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 attechmentAlert(400,4001,2);
@@ -220,7 +224,8 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
         });
 
 
-        binding.imgAppointmentletterCamera.setOnClickListener(new View.OnClickListener() {
+        //binding.imgAppointmentletterCamera.setOnClickListener(new View.OnClickListener() {
+        binding.llAppointmentLetterImgSelected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 attechmentAlert(500,5001,2);
@@ -307,6 +312,41 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 }
+            }
+        });
+        binding.imgDeletePassport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.llPSPImgSelected.setVisibility(View.VISIBLE);
+                binding.flPassportImage.setVisibility(View.GONE);
+            }
+        });
+        binding.imgDeleteFamily.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.flFamilyImage.setVisibility(View.GONE);
+                binding.llFamilyImgSelected.setVisibility(View.VISIBLE);
+            }
+        });
+        binding.imgDeleteResume.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.flResumeImage.setVisibility(View.GONE);
+                binding.llResumeImgSelected.setVisibility(View.VISIBLE);
+            }
+        });
+        binding.imgDeleteExperinceLetter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.llExperinceLetterImgSelected.setVisibility(View.VISIBLE);
+                binding.flExperienceLetterImage.setVisibility(View.GONE);
+            }
+        });
+        binding.imgDeleteAppointmentLetter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.llAppointmentLetterImgSelected.setVisibility(View.VISIBLE);
+                binding.flAppointmentLetterImage.setVisibility(View.GONE);
             }
         });
     }
@@ -682,6 +722,8 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
                 binding.imgPassportDocument.setImageURI(image_uri);
                 flag=1;
                 pFlag=1;
+                binding.flPassportImage.setVisibility(View.VISIBLE);
+                binding.llPSPImgSelected.setVisibility(View.GONE);
             }
         }else if ((requestCode == 100 )) {
             InputStream imageStream = null;
@@ -701,7 +743,8 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
 
                     flag = 1;
                     pFlag=1;
-
+                    binding.flPassportImage.setVisibility(View.VISIBLE);
+                    binding.llPSPImgSelected.setVisibility(View.GONE);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -720,6 +763,8 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
                 binding.imgFamilyDocument.setImageURI(image_uri);
                 flag=1;
                 fFlag=1;
+                binding.llFamilyImgSelected.setVisibility(View.GONE);
+                binding.flFamilyImage.setVisibility(View.VISIBLE);
             }
         }else if ((requestCode == 200 )) {
             InputStream imageStream = null;
@@ -739,7 +784,8 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
 
                     flag = 1;
                     fFlag=1;
-
+                    binding.llFamilyImgSelected.setVisibility(View.GONE);
+                    binding.flFamilyImage.setVisibility(View.VISIBLE);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -758,6 +804,8 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
                 binding.imgResumeDocument.setImageURI(image_uri);
                 flag=1;
                 rFlag = 1;
+                binding.llFamilyImgSelected.setVisibility(View.GONE);
+                binding.flFamilyImage.setVisibility(View.VISIBLE);
             }
         }else  if ((requestCode == 300 )){
             if (data != null){
@@ -784,6 +832,8 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
                 binding.imgResumeDocument.setImageDrawable(getResources().getDrawable(R.drawable.ic_pdf));
                 flag = 1;
                 rFlag = 1;
+                binding.llFamilyImgSelected.setVisibility(View.GONE);
+                binding.flFamilyImage.setVisibility(View.VISIBLE);
             }
             //flag++;
         }else  if (requestCode == 2000 && resultCode == 4001){

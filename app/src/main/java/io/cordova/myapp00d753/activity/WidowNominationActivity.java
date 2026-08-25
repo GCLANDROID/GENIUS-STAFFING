@@ -135,7 +135,8 @@ public class WidowNominationActivity extends AppCompatActivity {
                 }
             }
         });
-        binding.imgUANCal.setOnClickListener(new View.OnClickListener() {
+        //binding.imgUANCal.setOnClickListener(new View.OnClickListener() {
+        binding.tvUANDOB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar now = Calendar.getInstance();

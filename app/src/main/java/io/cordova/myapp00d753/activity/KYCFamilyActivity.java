@@ -98,7 +98,8 @@ public class KYCFamilyActivity extends AppCompatActivity {
         pd.setMessage("Loading");
         pd.setCancelable(false);
         final SimpleTooltip tooltip = new SimpleTooltip.Builder(KYCFamilyActivity.this)
-                .anchorView(binding.imgAdd)
+                //.anchorView(binding.imgAdd)
+                .anchorView(binding.btnAddMember)
                 .text("Fill in the fields, then press the \"+\" icon to add your data to the list.")
                 .gravity(Gravity.BOTTOM)
                 .dismissOnOutsideTouch(true)
@@ -121,7 +122,8 @@ public class KYCFamilyActivity extends AppCompatActivity {
         tooltip.show();
         layoutManager = new LinearLayoutManager(KYCFamilyActivity.this, LinearLayoutManager.VERTICAL, false);
         binding.rvData.setLayoutManager(layoutManager);
-        binding.imgAdd.setOnClickListener(new View.OnClickListener() {
+        //binding.imgAdd.setOnClickListener(new View.OnClickListener() {
+        binding.btnAddMember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (binding.etName.getText().toString().length()>0) {
@@ -167,7 +169,7 @@ public class KYCFamilyActivity extends AppCompatActivity {
                     }*/
                 }else {
                     Toast.makeText(KYCFamilyActivity.this,"Please Enter Family Member's Name",Toast.LENGTH_LONG).show();
-                    binding.etName.setBackgroundResource(R.drawable.lldesign_error);
+                    binding.etName.setBackgroundResource(R.drawable.bg_edittext);
                 }
             }
 
@@ -197,7 +199,7 @@ public class KYCFamilyActivity extends AppCompatActivity {
         binding.etName.setText("");
         binding.tvUANDOB.setText("");
         dob="";
-        binding.etGender.setText("");
+        //binding.etGender.setText("");
         binding.spRealation.setSelection(0);
         binding.llData.setVisibility(View.VISIBLE);
         itemList.clear();
@@ -238,6 +240,13 @@ public class KYCFamilyActivity extends AppCompatActivity {
         } else {
             nominationAdapter.notifyDataSetChanged();
         }
+        if(itemList.size()>0){
+            binding.cardFamilyMembers.setVisibility(View.VISIBLE);
+            binding.txtTotalMember.setText("Total : "+itemList.size());
+        } else {
+            binding.cardFamilyMembers.setVisibility(View.GONE);
+            binding.txtTotalMember.setText("Total : "+itemList.size());
+        }
     }
 
     private void onClick(){
@@ -255,7 +264,7 @@ public class KYCFamilyActivity extends AppCompatActivity {
                     } else {
                         relationshipID=mainRealation.get(i).getDocID();
                         relationship=mainRealation.get(i).getDocumentType();
-                        binding.llRelationship.setBackgroundResource(R.drawable.lldesign9);
+                        binding.llRelationship.setBackgroundResource(R.drawable.bg_edittext);
                     }
                 }
                 Log.e(TAG, "onItemSelected: relationshipID: "+relationshipID);
@@ -302,7 +311,8 @@ public class KYCFamilyActivity extends AppCompatActivity {
         });
 
 
-        binding.imgUANCal.setOnClickListener(new View.OnClickListener() {
+        //binding.imgUANCal.setOnClickListener(new View.OnClickListener() {
+        binding.tvUANDOB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar now = Calendar.getInstance();
@@ -366,7 +376,7 @@ public class KYCFamilyActivity extends AppCompatActivity {
             }
         });
 
-        binding.spGender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        /*binding.etGender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (!mainGender.get(position).getDocumentType().isEmpty()){
@@ -383,7 +393,7 @@ public class KYCFamilyActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
-        });
+        });*/
 
         binding.etName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -611,7 +621,8 @@ public class KYCFamilyActivity extends AppCompatActivity {
             if (binding.etName.getText().toString().length()>0
                     && !dob.isEmpty()
                     && !relationship.isEmpty()){
-                binding.imgAdd.performClick();
+                //binding.imgAdd.performClick();
+                binding.btnAddMember.performClick();
                 editItemCode(pos);
             } else {
                 editItemCode(pos);
@@ -644,7 +655,8 @@ public class KYCFamilyActivity extends AppCompatActivity {
         itemList.remove(pos);
         nominationarray.remove(pos);
         if (itemList.size()==0){
-            binding.llData.setVisibility(View.GONE);
+            //binding.llData.setVisibility(View.GONE);
+            binding.cardFamilyMembers.setVisibility(View.GONE);
         }
         Log.e(TAG, "deleteItem: itemList: "+itemList.size());
         Log.e(TAG, "deleteItem: nominationarray: "+nominationarray.length());
@@ -688,7 +700,7 @@ public class KYCFamilyActivity extends AppCompatActivity {
                                         (KYCFamilyActivity.this, android.R.layout.simple_spinner_item,
                                                 gender); //selected item will look like a spinner set from XML
                                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                                binding.spGender.setAdapter(spinnerArrayAdapter);
+                                //binding.spGender.setAdapter(spinnerArrayAdapter);
 
                                 JSONObject jsonObject = new JSONObject();
                                 try {
@@ -792,9 +804,13 @@ public class KYCFamilyActivity extends AppCompatActivity {
                                 }
 
                                 if (itemList.size() > 0){
-                                    binding.llData.setVisibility(View.VISIBLE);
+                                    //binding.llData.setVisibility(View.VISIBLE);
+                                    binding.cardFamilyMembers.setVisibility(View.VISIBLE);
+                                    binding.txtTotalMember.setText("Total : "+itemList.size());
                                 } else {
-                                    binding.llData.setVisibility(View.GONE);
+                                    //binding.llData.setVisibility(View.GONE);
+                                    binding.cardFamilyMembers.setVisibility(View.GONE);
+                                    binding.txtTotalMember.setText("Total : "+itemList.size());
                                 }
                             } else {
 

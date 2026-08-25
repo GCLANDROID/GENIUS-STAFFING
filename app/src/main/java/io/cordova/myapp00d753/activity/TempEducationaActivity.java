@@ -308,7 +308,7 @@ public class TempEducationaActivity extends AppCompatActivity {
         binding.spExam.setSelection(0);
         binding.etUniversity.setText("");
         binding.etPercentage.setText("");
-        binding.etPassingYear.setText("");
+        //binding.etPassingYear.setText("");
         binding.llData.setVisibility(View.VISIBLE);
         binding.spYear.setSelection(0);
         itemList.clear();

@@ -28,6 +28,7 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -118,6 +119,9 @@ public class TempPanActivity extends AppCompatActivity {
     String pdfFilePath, pdfFileName;
     private static final int DEFAULT_BUFFER_SIZE = 2048;
     String frontID,backID,panID;
+    LinearLayout llAadhaarFrontImgSelected,llAadhaarBackImgSelected,llPANImgSelected;
+    FrameLayout flAadhaarFrontImage,flAadhaarBackImage;
+    ImageView imgDeleteFront,imgDeleteBack,imgDeletePAN;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,28 +146,32 @@ public class TempPanActivity extends AppCompatActivity {
     private void initialize(){
         pref = new Pref(TempPanActivity.this);
         llPANVAL=(LinearLayout)findViewById(R.id.llPANVAL);
-        llPanDoc=(LinearLayout)findViewById(R.id.llPanDoc);
+        //llPanDoc=(LinearLayout)findViewById(R.id.llPanDoc);
+        llAadhaarFrontImgSelected=(LinearLayout)findViewById(R.id.llAadhaarFrontImgSelected);
+        llAadhaarBackImgSelected=(LinearLayout)findViewById(R.id.llAadhaarBackImgSelected);
+        llPANImgSelected=(LinearLayout)findViewById(R.id.llPANImgSelected);
         etAddaharNo=(EditText)findViewById(R.id.etAddaharNo);
         btnPanSave=(Button)findViewById(R.id.btnPanSave);
-
+        flAadhaarFrontImage = (FrameLayout) findViewById(R.id.flAadhaarFrontImage);
+        flAadhaarBackImage = (FrameLayout) findViewById(R.id.flAadhaarBackImage);
         color = "<font color='#EE0000'>*</font>";
-        tvAddaharNo = (TextView) findViewById(R.id.tvAddaharNo);
+        /*tvAddaharNo = (TextView) findViewById(R.id.tvAddaharNo);
         String aadaharno = "Aadhaar Number";
-        tvAddaharNo.setText(Html.fromHtml(aadaharno + color));
+        tvAddaharNo.setText(Html.fromHtml(aadaharno + color));*/
 
-        tvAddaharImg = (TextView) findViewById(R.id.tvAddaharImg);
+       /* tvAddaharImg = (TextView) findViewById(R.id.tvAddaharImg);
         String aadharimg = "Aadhaar Front Image";
-        tvAddaharImg.setText(Html.fromHtml(aadharimg + color));
+        tvAddaharImg.setText(Html.fromHtml(aadharimg + color));*/
 
 
-        tvAddaharBackImg = (TextView) findViewById(R.id.tvAddaharBackImg);
+        //tvAddaharBackImg = (TextView) findViewById(R.id.tvAddaharBackImg);
         String aadharbackimg = "Aadhaar Back Image";
         tvAddaharBackImg.setText(Html.fromHtml(aadharbackimg + color));
 
 
         llSubmit=(LinearLayout)findViewById(R.id.llSubmit);
-        llAadharFront=(LinearLayout)findViewById(R.id.llAadharFront);
-        llAadharBack=(LinearLayout)findViewById(R.id.llAadharBack);
+        /*llAadharFront=(LinearLayout)findViewById(R.id.llAadharFront);
+        llAadharBack=(LinearLayout)findViewById(R.id.llAadharBack);*/
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
@@ -181,6 +189,9 @@ public class TempPanActivity extends AppCompatActivity {
         security=pref.getSecurityCode();
         imgCamera=(ImageView)findViewById(R.id.imgCamera);
         imgDoc=(ImageView)findViewById(R.id.imgDocument);
+        imgDeleteFront=(ImageView)findViewById(R.id.imgDeleteFront);
+        imgDeleteBack=(ImageView)findViewById(R.id.imgDeleteBack);
+        imgDeletePAN=(ImageView)findViewById(R.id.imgDeletePAN);
         etPanNumber=(EditText)findViewById(R.id.etPanNumber);
         tvSubmit=(TextView)findViewById(R.id.tvSubmit);
         imgBackDown=(ImageView)findViewById(R.id.imgBackDown);
@@ -190,8 +201,8 @@ public class TempPanActivity extends AppCompatActivity {
         imgHome=(ImageView)findViewById(R.id.imgHome);
         imgBack=(ImageView)findViewById(R.id.imgBack);
 
-        imgAadharCamera=(ImageView)findViewById(R.id.imgAadharCamera);
-        imgAadharBackCamera=(ImageView)findViewById(R.id.imgAadharBackCamera);
+        /*imgAadharCamera=(ImageView)findViewById(R.id.imgAadharCamera);
+        imgAadharBackCamera=(ImageView)findViewById(R.id.imgAadharBackCamera);*/
         imgAadharBackDocument=(ImageView)findViewById(R.id.imgAadharBackDocument);
         imgAadharDocument=(ImageView)findViewById(R.id.imgAadharDocument);
         btnAadharSave=(Button) findViewById(R.id.btnAadharSave);
@@ -292,7 +303,8 @@ public class TempPanActivity extends AppCompatActivity {
             }
         });
 
-        imgCamera.setOnClickListener(new View.OnClickListener() {
+        //imgCamera.setOnClickListener(new View.OnClickListener() {
+        llPANImgSelected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 attechmentAlert(200,1001, "no");
@@ -300,7 +312,8 @@ public class TempPanActivity extends AppCompatActivity {
         });
 
 
-        imgAadharCamera.setOnClickListener(new View.OnClickListener() {
+        //imgAadharCamera.setOnClickListener(new View.OnClickListener() {
+        llAadhaarFrontImgSelected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 attechmentAlert(300,2001,"no");
@@ -308,7 +321,8 @@ public class TempPanActivity extends AppCompatActivity {
         });
 
 
-        imgAadharBackCamera.setOnClickListener(new View.OnClickListener() {
+        //imgAadharBackCamera.setOnClickListener(new View.OnClickListener() {
+        llAadhaarBackImgSelected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 attechmentAlert(400,3001,"no");
@@ -367,6 +381,22 @@ public class TempPanActivity extends AppCompatActivity {
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 }
+            }
+        });
+        imgDeleteFront.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                llAadhaarFrontImgSelected.setVisibility(View.VISIBLE);
+                flAadhaarFrontImage.setVisibility(View.GONE);
+                frontflag=0;
+            }
+        });
+        imgDeleteBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                llAadhaarBackImgSelected.setVisibility(View.VISIBLE);
+                flAadhaarBackImage.setVisibility(View.GONE);
+                backflag=0;
             }
         });
 
@@ -473,8 +503,9 @@ public class TempPanActivity extends AppCompatActivity {
 
             if (image_uri != null){
                 imgAadharDocument.setImageURI(image_uri);
+                flAadhaarFrontImage.setVisibility(View.VISIBLE);
                 frontflag=1;
-                llAadharFront.setBackgroundResource(R.drawable.lldesign9);
+                //llAadharFront.setBackgroundResource(R.drawable.lldesign9);
 
             }
         }else if ((requestCode == 300 )) {
@@ -493,7 +524,7 @@ public class TempPanActivity extends AppCompatActivity {
                     encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
 
                     imgAadharDocument.setImageBitmap(bm);
-
+                    flAadhaarFrontImage.setVisibility(View.VISIBLE);
                     frontflag=1;
                     llAadharFront.setBackgroundResource(R.drawable.lldesign9);
 
@@ -539,8 +570,9 @@ public class TempPanActivity extends AppCompatActivity {
 
             if (image_uri != null){
                 imgAadharBackDocument.setImageURI(image_uri);
+                flAadhaarBackImage.setVisibility(View.VISIBLE);
                 backflag=1;
-                llAadharBack.setBackgroundResource(R.drawable.lldesign9);
+                //llAadharBack.setBackgroundResource(R.drawable.lldesign9);
             }
         }else if ((requestCode == 400 )) {
             InputStream imageStream = null;
@@ -558,10 +590,10 @@ public class TempPanActivity extends AppCompatActivity {
                     encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
 
                     imgAadharBackDocument.setImageBitmap(bm);
-
+                    flAadhaarBackImage.setVisibility(View.GONE);
                     backflag=1;
 
-                    llAadharBack.setBackgroundResource(R.drawable.lldesign9);
+                    //llAadharBack.setBackgroundResource(R.drawable.lldesign9);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

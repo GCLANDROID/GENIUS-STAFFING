@@ -26,6 +26,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -183,7 +184,13 @@ public class TempExperinceActivity extends AppCompatActivity {
         binding.llFreshers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (binding.imgFreshersTick.getVisibility()==View.GONE){
+                binding.llFreshers.setBackgroundResource(R.drawable.background_33);
+                binding.llExpericedForm.setVisibility(View.GONE);
+                binding.llFresherDetails.setVisibility(View.VISIBLE);
+                binding.llExperienced.setBackgroundResource(R.drawable.bg_edittext);
+                binding.llExperiencedDetails.setVisibility(View.GONE);
+                binding.cvPFAccountDetailsFrom.setVisibility(View.GONE);
+                /*if (binding.imgFreshersTick.getVisibility()==View.GONE){
                     binding.imgFreshersTick.setVisibility(View.VISIBLE);
                     binding.imgExperience.setVisibility(View.GONE);
                     binding.llExpericedForm.setVisibility(View.GONE);
@@ -192,14 +199,20 @@ public class TempExperinceActivity extends AppCompatActivity {
                     binding.imgExperience.setVisibility(View.GONE);
                     binding.imgFreshersTick.setVisibility(View.GONE);
                     binding.llExpericedForm.setVisibility(View.VISIBLE);
-                }
+                }*/
             }
         });
 
         binding.llExperienced.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (binding.imgExperience.getVisibility()==View.GONE){
+                binding.llFreshers.setBackgroundResource(R.drawable.bg_edittext);
+                binding.llExpericedForm.setVisibility(View.VISIBLE);
+                binding.llFresherDetails.setVisibility(View.GONE);
+                binding.llExperienced.setBackgroundResource(R.drawable.background_33);
+                binding.llExperiencedDetails.setVisibility(View.VISIBLE);
+                binding.cvPFAccountDetailsFrom.setVisibility(View.VISIBLE);
+                /*if (binding.imgExperience.getVisibility()==View.GONE){
                     binding.imgFreshersTick.setVisibility(View.GONE);
                     binding.imgExperience.setVisibility(View.VISIBLE);
                     binding.llExpericedForm.setVisibility(View.VISIBLE);
@@ -208,7 +221,15 @@ public class TempExperinceActivity extends AppCompatActivity {
                     binding.imgFreshersTick.setVisibility(View.GONE);
                     binding.imgExperience.setVisibility(View.GONE);
                     binding.llExpericedForm.setVisibility(View.GONE);
-                }
+                }*/
+            }
+        });
+        binding.imgDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.flExperienceImage.setVisibility(View.GONE);
+                binding.llExperienceImgSelected.setVisibility(View.VISIBLE);
+                imageflag=0;
             }
         });
 
@@ -266,7 +287,8 @@ public class TempExperinceActivity extends AppCompatActivity {
             }
         });
 
-        binding.imgAttach.setOnClickListener(new View.OnClickListener() {
+        //binding.imgAttach.setOnClickListener(new View.OnClickListener() {
+        binding.llExperienceImgSelected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 attechmentAlert(300,3001,2);
@@ -420,7 +442,8 @@ public class TempExperinceActivity extends AppCompatActivity {
         });
 
 
-        binding.imgUANCal.setOnClickListener(new View.OnClickListener() {
+        //binding.imgUANCal.setOnClickListener(new View.OnClickListener() {
+        binding.tvUANDOB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar now = Calendar.getInstance();
@@ -695,6 +718,12 @@ public class TempExperinceActivity extends AppCompatActivity {
                 }
             }
         });
+        binding.btnFresherContinue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.btnSaveForm.performClick();
+            }
+        });
     }
 
     private void attechmentAlert(int gallerycode,int cameracode,int intentflag) {
@@ -769,6 +798,8 @@ public class TempExperinceActivity extends AppCompatActivity {
 
             if (image_uri != null){
                 binding.imgAttachImage.setImageURI(image_uri);
+                binding.flExperienceImage.setVisibility(View.VISIBLE);
+                binding.llExperienceImgSelected.setVisibility(View.GONE);
                 imageflag=1;
                 is_Experience_Letter_Selected = true;
             }
@@ -794,6 +825,8 @@ public class TempExperinceActivity extends AppCompatActivity {
 
             }
             binding.imgAttachImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_pdf));
+            binding.flExperienceImage.setVisibility(View.VISIBLE);
+            binding.llExperienceImgSelected.setVisibility(View.GONE);
             imageflag = 1;
             is_Experience_Letter_Selected = true;
 
@@ -1222,7 +1255,13 @@ public class TempExperinceActivity extends AppCompatActivity {
                                             file_name = experienceObj.optString("FILENAME");
                                             experience_latter_url = AppData.IMAGE_PATH_URL + file_name;
                                             Log.e(TAG, "onResponse: "+experience_latter_url);
-                                            if (binding.imgExperience.getVisibility()==View.GONE){
+                                            binding.llFreshers.setBackgroundResource(R.drawable.bg_edittext);
+                                            binding.llExpericedForm.setVisibility(View.VISIBLE);
+                                            binding.llFresherDetails.setVisibility(View.GONE);
+                                            binding.llExperienced.setBackgroundResource(R.drawable.background_33);
+                                            binding.cvPFAccountDetailsFrom.setVisibility(View.VISIBLE);
+                                            binding.btnSaveForm.setVisibility(View.VISIBLE);
+                                            /*if (binding.imgExperience.getVisibility()==View.GONE){
                                                 binding.imgFreshersTick.setVisibility(View.GONE);
                                                 binding.imgExperience.setVisibility(View.VISIBLE);
                                                 binding.llExpericedForm.setVisibility(View.VISIBLE);
@@ -1231,7 +1270,7 @@ public class TempExperinceActivity extends AppCompatActivity {
                                                 binding.imgFreshersTick.setVisibility(View.GONE);
                                                 binding.imgExperience.setVisibility(View.GONE);
                                                 binding.llExpericedForm.setVisibility(View.GONE);
-                                            }
+                                            }*/
                                             is_Experience_Letter_Selected = true;
 //                                            String exe = file_name.substring(file_name.lastIndexOf("."));
 //                                            if (exe.equalsIgnoreCase(".pdf")){
@@ -1289,7 +1328,14 @@ public class TempExperinceActivity extends AppCompatActivity {
 
                                         } else {
                                             //TODO: Fresher
-                                            if (binding.imgFreshersTick.getVisibility()==View.GONE){
+                                            binding.llFreshers.setBackgroundResource(R.drawable.background_33);
+                                            binding.llExpericedForm.setVisibility(View.GONE);
+                                            binding.llFresherDetails.setVisibility(View.VISIBLE);
+                                            binding.llExperienced.setBackgroundResource(R.drawable.bg_edittext);
+                                            binding.cvPFAccountDetailsFrom.setVisibility(View.GONE);
+                                            binding.llExperiencedDetails.setVisibility(View.GONE);
+                                            binding.btnSaveForm.setVisibility(View.GONE);
+                                            /*if (binding.imgFreshersTick.getVisibility()==View.GONE){
                                                 binding.imgFreshersTick.setVisibility(View.VISIBLE);
                                                 binding.imgExperience.setVisibility(View.GONE);
                                                 binding.llExpericedForm.setVisibility(View.GONE);
@@ -1298,7 +1344,7 @@ public class TempExperinceActivity extends AppCompatActivity {
                                                 binding.imgExperience.setVisibility(View.GONE);
                                                 binding.imgFreshersTick.setVisibility(View.GONE);
                                                 binding.llExpericedForm.setVisibility(View.VISIBLE);
-                                            }
+                                            }*/
                                         }
                                     }
 

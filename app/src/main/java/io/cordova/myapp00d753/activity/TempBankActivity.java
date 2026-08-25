@@ -24,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -60,7 +61,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import id.zelory.compressor.Compressor;
+//import id.zelory.compressor.Compressor;
 import io.cordova.myapp00d753.AndroidXCamera.AndroidXCameraActivity;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.adapter.TempCommonFilterAdapter;
@@ -113,11 +114,14 @@ public class TempBankActivity extends AppCompatActivity {
     TextView tvSkip,txtBankName;
     String pan_pattern;
     String getbankname;
-    ImageView imgHome,imgBack;
+    ImageView imgHome,imgBack,imgDelete;
     LinearLayout llBankVALBtn,llBankVAL,llBankName,llDocumentType;
+    Button btnSaveForm;
     Button btnBankVal;
     int bankflag=1;
     Dialog searchHolidayDialog;
+    LinearLayout llBankImgSelected;
+    FrameLayout flBankImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,12 +132,14 @@ public class TempBankActivity extends AppCompatActivity {
 
     private void initialize() {
         pref = new Pref(getApplicationContext());
-        llSubmit = (LinearLayout) findViewById(R.id.llSubmit);
+        //llSubmit = (LinearLayout) findViewById(R.id.llSubmit);
         llBankVALBtn = (LinearLayout) findViewById(R.id.llBankVALBtn);
         llBankVAL = (LinearLayout) findViewById(R.id.llBankVAL);
         llBankName = (LinearLayout) findViewById(R.id.llBankName);
         llDocumentType = (LinearLayout) findViewById(R.id.llDocumentType);
-
+        btnSaveForm = (Button) findViewById(R.id.btnSaveForm);
+        llBankImgSelected = (LinearLayout)findViewById(R.id.llBankImgSelected);
+        flBankImage = (FrameLayout) findViewById(R.id.flBankImage);
         spBankName = (Spinner) findViewById(R.id.spBankName);
         spDocType = (Spinner) findViewById(R.id.spDocType);
 
@@ -162,7 +168,7 @@ public class TempBankActivity extends AppCompatActivity {
         // etFName.setText(pref.getBFName());
         etLName = (EditText) findViewById(R.id.etLName);
         // etLName.setText(pref.getBLName());
-
+        imgDelete = (ImageView) findViewById(R.id.imgDelete);
         imgCamera = (ImageView) findViewById(R.id.imgCamera);
         imgDoc = (ImageView) findViewById(R.id.imgDoc);
 
@@ -191,6 +197,7 @@ public class TempBankActivity extends AppCompatActivity {
         }
         imgHome=(ImageView)findViewById(R.id.imgHome);
         imgBack=(ImageView)findViewById(R.id.imgBack);
+        imgCamera=(ImageView)findViewById(R.id.imgCamera);
 
         txtBankName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,7 +208,8 @@ public class TempBankActivity extends AppCompatActivity {
     }
 
     private void onClick() {
-        llSubmit.setOnClickListener(new View.OnClickListener() {
+        //llSubmit.setOnClickListener(new View.OnClickListener() {
+        btnSaveForm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!bankname.isEmpty()) {
@@ -264,6 +272,21 @@ public class TempBankActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 cameraIntent();
+            }
+        });
+
+        llBankImgSelected.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cameraIntent();
+            }
+        });
+        imgDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                flBankImage.setVisibility(View.GONE);
+                llBankImgSelected.setVisibility(View.VISIBLE);
+                flag = 0;
             }
         });
 
@@ -684,6 +707,7 @@ public class TempBankActivity extends AppCompatActivity {
             compressedImageFile = new File(String.valueOf(data.getExtras().get("picture")));
 
             if (uri != null){
+                flBankImage.setVisibility(View.VISIBLE);
                 imgDoc.setImageURI(uri);
                 flag=1;
 
