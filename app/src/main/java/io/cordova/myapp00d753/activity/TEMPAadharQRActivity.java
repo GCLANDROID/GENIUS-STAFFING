@@ -51,7 +51,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
     AlertDialog al1;
     androidx.appcompat.app.AlertDialog alerDialog1;
     boolean aadharflag = false;
-
+    private boolean isFormatting = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,14 +61,14 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
 
     private void initView() {
         pref = new Pref(TEMPAadharQRActivity.this);
-        binding.imgHome.setOnClickListener(new View.OnClickListener() {
+       /* binding.imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(TEMPAadharQRActivity.this, TempDashBoardActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
-        });
+        });*/
         binding.etAadhar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -81,7 +81,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {
+            public void afterTextChanged(Editable s) {
                 if (binding.etAadhar.getText().toString().length() == 12) {
                     hideKeyboard();
                     /*JSONObject jsonObject=new JSONObject();
@@ -93,10 +93,39 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                     }*/
                 }
 
+                if (isFormatting) return;
+
+                isFormatting = true;
+
+                String digits = s.toString().replaceAll("\\s", "");
+
+                if (digits.length() > 12)
+                    digits = digits.substring(0, 12);
+
+                StringBuilder formatted = new StringBuilder();
+
+                for (int i = 0; i < digits.length(); i++) {
+
+                    if (i > 0 && i % 4 == 0) {
+                        formatted.append(" ");
+                    }
+
+                    formatted.append(digits.charAt(i));
+                }
+
+                binding.etAadhar.setText(formatted.toString());
+                binding.etAadhar.setSelection(formatted.length());
+
+                isFormatting = false;
+
             }
         });
 
-        binding.btnValidate.setOnClickListener(new View.OnClickListener() {
+        binding.imgClear.setOnClickListener(v -> {
+            binding.etAadhar.setText("");
+        });
+
+        /*binding.btnValidate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (binding.etAadhar.getText().toString().length() == 12) {
@@ -118,12 +147,13 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                     Toast.makeText(TEMPAadharQRActivity.this, "Please Enter Valid Aadhaar Number", Toast.LENGTH_LONG).show();
                 }
             }
-        });
+        });*/
 
         binding.btnGo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (binding.etAadhar.getText().toString().length() == 12) {
+                if (isValidAadhaar()) {
+                //if (binding.etAadhar.getText().toString().length() == 12) {
 
 
                     JSONObject jsonObject = new JSONObject();
@@ -144,7 +174,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
             }
         });
 
-        binding.btnOTPValidate.setOnClickListener(new View.OnClickListener() {
+        /*binding.btnOTPValidate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (binding.etOTP.getText().toString().length() > 0) {
@@ -163,7 +193,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                     Toast.makeText(TEMPAadharQRActivity.this, "Please Enter OTP", Toast.LENGTH_LONG).show();
                 }
             }
-        });
+        });*/
 
     }
 
@@ -336,7 +366,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
     }
 
 
-    private void captchagebneration() {
+    /*private void captchagebneration() {
         ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("Loading");
         pd.show();
@@ -382,9 +412,9 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
 
                     }
                 });
-    }
+    }*/
 
-    private void validateCaptcha(JSONObject jsonObject) {
+    /*private void validateCaptcha(JSONObject jsonObject) {
         ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("Loading");
         pd.show();
@@ -430,7 +460,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
 
                     }
                 });
-    }
+    }*/
 
     private void validateOTP(JSONObject jsonObject) {
         ProgressDialog pd = new ProgressDialog(this);
@@ -837,6 +867,24 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                         finish();
                     }
                 });
+    }
+
+    private boolean isValidAadhaar() {
+
+        String aadhaar = binding.etAadhar.getText().toString().replace(" ", "");
+
+        if (aadhaar.length() != 12) {
+
+            binding.inputContainer.setBackgroundResource(R.drawable.bg_edittext_error);
+
+            binding.etAadhar.setError("Enter a valid 12-digit Aadhaar number");
+
+            return false;
+        }
+
+        binding.inputContainer.setBackgroundResource(R.drawable.bg_edittext);
+
+        return true;
     }
 
     private void hideKeyboard() {
