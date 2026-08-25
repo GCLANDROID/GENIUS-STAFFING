@@ -144,7 +144,8 @@ public class GratuityNominationActivity extends AppCompatActivity {
 
             }
         });
-        binding.imgUANCal.setOnClickListener(new View.OnClickListener() {
+        //binding.imgUANCal.setOnClickListener(new View.OnClickListener() {
+        binding.tvUANDOB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar now = Calendar.getInstance();
@@ -204,7 +205,8 @@ public class GratuityNominationActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
-        binding.imgAdd.setOnClickListener(new View.OnClickListener() {
+        //binding.imgAdd.setOnClickListener(new View.OnClickListener() {
+        binding.btnAddNominee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (binding.etName.getText().toString().length()>0){
@@ -267,7 +269,8 @@ public class GratuityNominationActivity extends AppCompatActivity {
         });
 
         final SimpleTooltip tooltip = new SimpleTooltip.Builder(GratuityNominationActivity.this)
-                .anchorView(binding.imgAdd)
+                .anchorView(binding.btnAddNominee)
+                //.anchorView(binding.imgAdd)
                 .text("Fill in the fields, then press the \"+\" icon to add your data to the list.")
                 .gravity(Gravity.BOTTOM)
                 .dismissOnOutsideTouch(true)
@@ -292,7 +295,7 @@ public class GratuityNominationActivity extends AppCompatActivity {
         binding.btnSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                binding.llData.setVisibility(View.GONE);
+                binding.cardFamilyMembers.setVisibility(View.GONE);
                 itemList.clear();
                 Intent intent=new Intent(GratuityNominationActivity.this,TempEducationaActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -434,7 +437,7 @@ public class GratuityNominationActivity extends AppCompatActivity {
         binding.etAadharNominee.setText("");
         binding.spRealation.setSelection(0);
         binding.etProportion.setText("");
-        binding.llData.setVisibility(View.VISIBLE);
+        binding.cardFamilyMembers.setVisibility(View.VISIBLE);
         itemList.clear();
 
 
@@ -734,7 +737,7 @@ public class GratuityNominationActivity extends AppCompatActivity {
         itemList.remove(pos);
         nominationarray.remove(pos);
         if (itemList.size()==0){
-            binding.llData.setVisibility(View.GONE);
+            binding.cardFamilyMembers.setVisibility(View.GONE);
         }
     }
 
@@ -746,7 +749,7 @@ public class GratuityNominationActivity extends AppCompatActivity {
                     && !dob.isEmpty()
                     && !relationshipID.isEmpty()
                     && binding.etProportion.getText().toString().length() > 0){
-                binding.imgAdd.performClick();
+                binding.btnAddNominee.performClick();
                 editItemCode(pos);
             } else {
                 editItemCode(pos);
@@ -796,7 +799,7 @@ public class GratuityNominationActivity extends AppCompatActivity {
         itemList.remove(pos);
         nominationarray.remove(pos);
         if (itemList.size()==0){
-            binding.llData.setVisibility(View.GONE);
+            binding.cardFamilyMembers.setVisibility(View.GONE);
         }
     }
 
@@ -866,9 +869,9 @@ public class GratuityNominationActivity extends AppCompatActivity {
                                 }
 
                                 if (itemList.size() > 0){
-                                    binding.llData.setVisibility(View.VISIBLE);
+                                    binding.cardFamilyMembers.setVisibility(View.VISIBLE);
                                 } else {
-                                    binding.llData.setVisibility(View.GONE);
+                                    binding.cardFamilyMembers.setVisibility(View.GONE);
                                 }
 
                                 if (nominationAdapter == null){
