@@ -42,6 +42,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.cardview.widget.CardView;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -190,6 +191,7 @@ public class TempProfileActivity extends AppCompatActivity {
     ScrollView mainScrollView;
     View scrollingPointPersonalDetails,scrollViewPoint,scrollingViewPoint2,scrollinViewPoint3,scrollingViewPoint4,llIldEsic,llScrollingViewPoint2,llPrePin;
     boolean aadhaarflag;
+    CardView cardContactDetails;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -236,6 +238,7 @@ public class TempProfileActivity extends AppCompatActivity {
         tvDesignation = (TextView) findViewById(R.id.tvDesignation);
         tvLocation = (TextView) findViewById(R.id.tvLocation);
         tvGender = (TextView) findViewById(R.id.tvGender);
+        cardContactDetails = (CardView) findViewById(R.id.cardContactDetails);
         //tvEmpCodeDOB = (TextView) findViewById(R.id.tvEmpCodeDOB);
         tvDOB = (TextView) findViewById(R.id.tvDOB);
         //tvEmpCodeDOB.setText(Util.changeAnyDateFormat(dobvalue, "dd-MM-yyyy", "dd MMM yyyy"));
@@ -2611,7 +2614,8 @@ public class TempProfileActivity extends AppCompatActivity {
                                         mainScrollView.post(new Runnable() {
                                             @Override
                                             public void run() {
-                                                int y = llContactDetails.getTop();
+                                                //int y = llContactDetails.getTop();
+                                                int y = cardContactDetails.getTop();
                                                 mainScrollView.smoothScrollTo(0, y);
                                             }
                                         });
@@ -2665,12 +2669,33 @@ public class TempProfileActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(getApplicationContext(), "Please update your present pincode", Toast.LENGTH_LONG).show();
                         etPrePinCode.setBackgroundResource(R.drawable.lldesign_error);
-                        mainScrollView.post(new Runnable() {
+                        /*mainScrollView.post(new Runnable() {
                             @Override
                             public void run() {
-                                int y = llPersonalDetails.getTop();
+                                int y = binding.etPreAddr.getTop();
                                 mainScrollView.smoothScrollTo(0, y);
                             }
+                        });*/
+                        mainScrollView.post(() -> {
+
+                            int[] scrollViewLocation = new int[2];
+                            int[] pinCodeLocation = new int[2];
+
+                            mainScrollView.getLocationOnScreen(scrollViewLocation);
+                            binding.etPrePinCode.getLocationOnScreen(pinCodeLocation);
+
+                            // Center of ScrollView
+                            int scrollViewCenter =
+                                    scrollViewLocation[1] + (mainScrollView.getHeight() / 2);
+
+                            // Center of etPrePinCode
+                            int pinCodeCenter =
+                                    pinCodeLocation[1] + (binding.etPrePinCode.getHeight() / 2);
+
+                            // Difference between both centers
+                            int scrollY = pinCodeCenter - scrollViewCenter;
+
+                            mainScrollView.smoothScrollBy(0, scrollY);
                         });
                     }
                 } else {
