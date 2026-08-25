@@ -1443,6 +1443,7 @@
                                 android:background="@drawable/bg_edittext"
                                 android:hint="Enter Present Pincode"
                                 android:textSize="15sp"
+                                android:inputType="number"
                                 android:layout_marginBottom="14dp"
                                 android:paddingHorizontal="14dp"/>
 

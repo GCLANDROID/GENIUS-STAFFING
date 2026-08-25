@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
+        <!--<LinearLayout
             android:layout_width="match_parent"
             android:layout_height="?android:actionBarSize"
             android:background="@color/colorPrimary"
@@ -64,20 +64,81 @@
                     android:layout_marginRight="20dp"
                     android:src="@drawable/homeimg" />
             </LinearLayout>
-        </LinearLayout>
+        </LinearLayout>-->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@mipmap/bottom_menu"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="16dp">
+
+            <ImageView
+                android:id="@+id/imgBack"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_back"
+                app:tint="@android:color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="Working Experience Details"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+                <!--<TextView
+                    android:textSize="12sp"
+                    android:textAlignment="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="2dp"
+                    android:text="(From Highest to Lowest)"
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:textColor="@android:color/white" />-->
+
+            </LinearLayout>
+
+
+
+            <ImageView
+                android:id="@+id/imgHome"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/home_new"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@android:color/white" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <LinearLayout
-
-
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:padding="10dp">
-                <TextView
+                <!--<TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
@@ -85,7 +146,11 @@
                     android:textColor="@color/color1"
                     android:textStyle="bold"
                     ></TextView>
-                <LinearLayout
+-->
+
+
+
+                <!--<LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp">
@@ -150,8 +215,1317 @@
                         android:layout_marginLeft="5dp"
                         android:textColor="@color/black"
                         ></TextView>
-                </LinearLayout>
-                <LinearLayout
+                </LinearLayout>-->
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="7dp"
+                    android:layout_marginTop="5dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="18dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Are you Fresher or Experienced?"
+                            android:textColor="@color/text_color_2"
+                            android:textSize="18sp"
+                            android:textStyle="bold"/>
+
+                        <View
+                            android:layout_width="50dp"
+                            android:layout_height="2dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginBottom="10dp"
+                            android:background="@color/text_color_2"/>
+
+
+                        
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:id="@+id/llFreshers"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:gravity="center"
+                                android:layout_weight="1"
+                                android:layout_marginEnd="10dp"
+                                android:background="@drawable/bg_edittext">
+                                <ImageView
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:src="@drawable/fresher"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Fresher"
+                                    android:textSize="15dp"
+                                    android:layout_marginStart="5dp"
+
+                                    android:fontFamily="@font/open_sans_bold"
+                                    android:textColor="@color/barcolor"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/llExperienced"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:gravity="center"
+                                android:layout_weight="1"
+                                android:layout_marginStart="10dp"
+                                android:background="@drawable/bg_edittext">
+                                <ImageView
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:src="@drawable/briefcase"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Experienced"
+                                    android:textSize="15dp"
+                                    android:layout_marginStart="5dp"
+                                    android:fontFamily="@font/open_sans_bold"
+                                    android:textColor="@color/barcolor"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/llFresherDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="7dp"
+                    android:layout_marginTop="5dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    android:visibility="visible">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="15dp"
+                        android:paddingVertical="10dp"
+                        android:gravity="center">
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/fresher"
+                            android:layout_marginTop="15dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="You have selected Fresher. No previous experience details required."
+                            android:fontFamily="@font/open_sans_medium"
+                            android:textColor="@color/black"
+                            android:textSize="13sp"
+                            android:gravity="center"
+                            android:layout_marginTop="10dp"/>
+
+                        <Button
+                            android:id="@+id/btnFresherContinue"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:text="Continue"
+                            android:textAllCaps="false"
+                            android:textStyle="bold"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="15dp"
+                            android:textColor="@color/white"
+                            android:background="@drawable/bg_edittext"
+                            android:backgroundTint="@color/text_color_2"/>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/llExperiencedDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="7dp"
+                    android:layout_marginTop="5dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    android:visibility="gone">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="18dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Previous Employer Information"
+                            android:textColor="@color/text_color_2"
+                            android:textSize="18sp"
+                            android:textStyle="bold"/>
+
+                        <View
+                            android:layout_width="50dp"
+                            android:layout_height="2dp"
+                            android:layout_marginTop="6dp"
+                            android:background="@color/text_color_2" />
+
+                        <LinearLayout
+                            android:visibility="visible"
+                            android:id="@+id/llExpericedForm"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginTop="10dp">
+                            <LinearLayout
+                                android:id="@+id/llSBIEXP"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textStyle="bold"
+                                    android:textSize="13sp"
+                                    android:textColor="#333333"
+                                    android:text="SBI Experience (In Months): "/>
+                                <EditText
+                                    android:id="@+id/etSBIExp"
+                                    android:singleLine="true"
+                                    android:imeOptions="actionNext"
+                                    android:inputType="number"
+                                    android:padding="5dp"
+                                    android:textSize="14sp"
+                                    android:textColor="@color/black"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:layout_marginTop="6dp"
+                                    android:hint="Enter Experience "
+                                    android:paddingStart="10dp"
+                                    android:paddingEnd="10dp"
+                                    android:background="@drawable/bg_edittext"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:id="@+id/llNonSBIEXP"
+                                android:layout_marginTop="10dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textStyle="bold"
+                                    android:textSize="13sp"
+                                    android:textColor="#333333"
+                                    android:text="Non SBI Experience (In Months): "/>
+                                <EditText
+                                    android:id="@+id/etNonSBIExp"
+                                    android:singleLine="true"
+                                    android:imeOptions="actionNext"
+                                    android:padding="5dp"
+                                    android:inputType="number"
+                                    android:textSize="14sp"
+                                    android:hint="Enter Non Experience"
+                                    android:textColor="@color/black"
+                                    android:layout_marginTop="6dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:paddingStart="10dp"
+                                    android:paddingEnd="10dp"
+                                    android:background="@drawable/bg_edittext"
+                                    android:layout_weight="0.5"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_marginTop="10dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_gravity="center"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textStyle="bold"
+                                    android:textSize="13sp"
+                                    android:textColor="#333333"
+                                    android:text="Previous Company’s Name*: "/>
+                                <EditText
+                                    android:id="@+id/etcompany"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:singleLine="true"
+                                    android:imeOptions="actionNext"
+                                    android:textSize="14sp"
+                                    android:layout_marginTop="5dp"
+                                    android:paddingStart="10dp"
+                                    android:paddingEnd="10dp"
+                                    android:hint="Enter Previous Company"
+                                    android:background="@drawable/bg_edittext"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_marginTop="10dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:textStyle="bold"
+                                    android:textSize="13sp"
+                                    android:textColor="#333333"
+                                    android:text="Previous Employee’s Designation *: "/>
+                                <EditText
+                                    android:singleLine="true"
+                                    android:imeOptions="actionNext"
+                                    android:padding="5dp"
+                                    android:textSize="14sp"
+                                    android:textColor="@color/black"
+                                    android:id="@+id/etDesignation"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:layout_marginTop="5dp"
+                                    android:paddingStart="10dp"
+                                    android:paddingEnd="10dp"
+                                    android:hint="Enter Employee’s Designation"
+                                    android:background="@drawable/bg_edittext"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_marginTop="10dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textStyle="bold"
+                                    android:textSize="13sp"
+                                    android:textColor="#333333"
+                                    android:text="Previous Reporting Manager’s Name *: "/>
+                                <EditText
+                                    android:id="@+id/etManagerName"
+                                    android:singleLine="true"
+                                    android:imeOptions="actionNext"
+                                    android:paddingStart="10dp"
+                                    android:paddingEnd="10dp"
+                                    android:textSize="14sp"
+                                    android:textColor="@color/black"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:layout_marginTop="5dp"
+                                    android:hint="Enter Reporting Manager’s Name"
+                                    android:background="@drawable/bg_edittext"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_marginTop="10dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textStyle="bold"
+                                    android:textSize="13sp"
+                                    android:textColor="#333333"
+                                    android:text="Previous Reporting Manager’s Designation*: "/>
+                                <EditText
+                                    android:id="@+id/etManagerDesignation"
+                                    android:singleLine="true"
+                                    android:imeOptions="actionNext"
+                                    android:paddingStart="10dp"
+                                    android:paddingEnd="10dp"
+                                    android:textSize="14sp"
+                                    android:textColor="@color/black"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:layout_marginTop="5dp"
+                                    android:hint="Enter Reporting Manager’s Designation"
+                                    android:background="@drawable/bg_edittext"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_marginTop="10dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textStyle="bold"
+                                    android:textSize="13sp"
+                                    android:textColor="#333333"
+                                    android:text="Previous Reporting Manager’s Contact Details *: "/>
+                                <EditText
+                                    android:id="@+id/etManagerContact"
+                                    android:singleLine="true"
+                                    android:imeOptions="actionNext"
+                                    android:paddingStart="10dp"
+                                    android:paddingEnd="10dp"
+                                    android:textSize="14sp"
+                                    android:textColor="@color/black"
+                                    android:maxLength="10"
+                                    android:inputType="number"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:layout_marginTop="5dp"
+                                    android:hint="Enter  Reporting Manager’s Contact Details"
+                                    android:background="@drawable/bg_edittext"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_marginTop="10dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textStyle="bold"
+                                    android:textSize="13sp"
+                                    android:textColor="#333333"
+                                    android:text="Previous Company’s DOJ*: "/>
+                                <TextView
+                                    android:id="@+id/etDOJ"
+                                    android:paddingStart="10dp"
+                                    android:paddingEnd="10dp"
+                                    android:textSize="14sp"
+                                    android:textColor="@color/black"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:layout_marginTop="5dp"
+                                    android:hint="DD-MMM-YYYY"
+                                    android:drawableEnd="@drawable/ic_calendar"
+                                    android:gravity="center_vertical"
+                                    android:background="@drawable/bg_edittext"
+                                    android:layout_weight="0.5"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_marginTop="10dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textStyle="bold"
+                                    android:textSize="13sp"
+                                    android:textColor="#333333"
+                                    android:text="Previous Company’s DOE*: "/>
+
+                                <TextView
+                                    android:id="@+id/etDOE"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:layout_marginTop="5dp"
+                                    android:background="@drawable/bg_edittext"
+                                    android:drawableEnd="@drawable/ic_calendar"
+                                    android:gravity="center_vertical"
+                                    android:hint="DD-MMM-YYYY"
+                                    android:paddingStart="10dp"
+                                    android:paddingEnd="10dp"
+                                    android:layout_marginBottom="10dp"
+                                    android:textColor="@color/black"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+                            <!--<LinearLayout
+                                android:layout_marginTop="10dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:layout_gravity="center"
+                                    android:textSize="12sp"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.5"
+                                    android:textColor="@color/black"
+                                    android:text="Experience Letter*: "></TextView>
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_weight="0.5"
+                                    android:layout_height="wrap_content">
+                                    <ImageView
+                                        android:layout_gravity="center"
+                                        android:id="@+id/imgAttach"
+                                        android:layout_width="30dp"
+                                        android:layout_height="30dp"
+                                        android:src="@drawable/attach"
+                                        app:tint="@color/color1"></ImageView>
+                                    <ImageView
+                                        android:layout_marginLeft="10dp"
+                                        android:id="@+id/imgAttachImage"
+                                        android:layout_width="50dp"
+                                        android:layout_height="50dp"
+                                        ></ImageView>
+                                </LinearLayout>
+                            </LinearLayout>-->
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Upload Document"
+                                android:textColor="@color/text_color_2"
+                                android:textSize="18sp"
+                                android:textStyle="bold"/>
+
+                            <TextView
+                                android:layout_gravity="center"
+                                android:textSize="12sp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:layout_marginTop="5dp"
+                                android:text="Upload the previous company's experience letter *: "/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="200dp"
+                                android:layout_marginTop="10dp"
+                                android:background="@drawable/dashed_border"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:id="@+id/llExperienceImgSelected"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical"
+                                    android:gravity="center"
+                                    android:visibility="visible">
+
+                                    <ImageView
+                                        android:id="@+id/imgCamer3"
+                                        android:layout_width="50dp"
+                                        android:layout_height="49dp"
+                                        android:padding="10dp"
+                                        android:src="@drawable/upload"
+                                        android:background="@drawable/bg_icon_circle"
+                                        android:backgroundTint="#F7E9FB" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/open_sans_medium"
+                                        android:text="Tap to Upload Document"
+                                        android:textColor="@color/black"
+                                        android:textSize="13sp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5dp"
+                                        android:fontFamily="@font/open_sans_semi_bold"
+                                        android:text="(JPG, PNG, PDF accepted)"
+                                        android:textColor="@color/black"
+                                        android:textSize="11sp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5dp"
+                                        android:fontFamily="@font/open_sans_regular"
+                                        android:text="Max size 5MB • JPG, PNG, PDF"
+                                        android:textColor="@color/black"
+                                        android:textSize="11sp" />
+
+                                </LinearLayout>
+
+                                <FrameLayout
+                                    android:id="@+id/flExperienceImage"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginHorizontal="10dp"
+                                    android:layout_marginVertical="10dp"
+                                    android:gravity="center"
+                                    android:visibility="gone">
+
+                                    <ImageView
+                                        android:id="@+id/imgAttachImage"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:background="@drawable/rounded_image"/>
+
+                                    <ImageView
+                                        android:id="@+id/imgDelete"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:src="@drawable/cross"
+                                        android:layout_gravity="top|end"/>
+
+                                </FrameLayout>
+
+
+                            </LinearLayout>
+
+
+<!--
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/black"
+                                    android:text="Do you have any existing PF Account?* "></TextView>
+                                <LinearLayout
+                                    android:id="@+id/llYes"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:background="@drawable/lldesign9"
+                                    android:gravity="center">
+                                    <ImageView
+                                        android:visibility="gone"
+                                        android:id="@+id/imgYes"
+                                        android:layout_width="10dp"
+                                        android:layout_height="10dp"
+                                        android:src="@drawable/tick"></ImageView>
+                                </LinearLayout>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="16sp"
+                                    android:text="Yes"
+                                    android:layout_marginLeft="5dp"
+                                    android:textColor="@color/black"
+                                    ></TextView>
+                                <LinearLayout
+                                    android:layout_marginLeft="10dp"
+                                    android:id="@+id/llNo"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:background="@drawable/lldesign9"
+                                    android:gravity="center">
+                                    <ImageView
+                                        android:visibility="gone"
+                                        android:id="@+id/imgNo"
+                                        android:layout_width="10dp"
+                                        android:layout_height="10dp"
+                                        android:src="@drawable/tick"></ImageView>
+                                </LinearLayout>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="16sp"
+                                    android:text="No"
+                                    android:layout_marginLeft="5dp"
+                                    android:textColor="@color/black"
+                                    ></TextView>
+                            </LinearLayout>
+-->
+                            <!--<LinearLayout
+                                android:visibility="gone"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:id="@+id/llUAN">
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="20dp"
+                                    android:orientation="horizontal"
+                                    >
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.5">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="UAN Number*:"
+                                            android:textSize="12sp"
+                                            android:textColor="@color/black" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.5">
+
+                                        <EditText
+                                            android:inputType="number"
+                                            android:maxLength="12"
+                                            android:id="@+id/etUAN"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_marginLeft="10dp"
+                                            android:background="@drawable/lldesign9"
+                                            android:digits="1234567890"
+                                            android:paddingLeft="10dp"
+                                            android:text=""
+                                            android:textSize="12sp"
+                                            android:textColor="@android:color/black" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                &lt;!&ndash;PF Number&ndash;&gt;
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="20dp"
+                                    android:orientation="horizontal"
+                                    >
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.5">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="PF Number:"
+                                            android:textSize="12sp"
+                                            android:textColor="@color/black" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.5">
+
+                                        <EditText
+                                            android:id="@+id/etPFNumber"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_marginLeft="10dp"
+                                            android:background="@drawable/lldesign9"
+                                            android:paddingLeft="10dp"
+                                            android:text=""
+                                            android:textSize="12sp"
+                                            android:textColor="@android:color/black" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+
+
+                                &lt;!&ndash;nominee name&ndash;&gt;
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="20dp"
+                                    android:orientation="horizontal"
+                                    >
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.5">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Name of the Nominee:"
+                                            android:textSize="12sp"
+                                            android:textColor="@color/black" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.5">
+
+                                        <EditText
+                                            android:id="@+id/etUANNominee"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_marginLeft="10dp"
+                                            android:background="@drawable/lldesign9"
+                                            android:paddingLeft="10dp"
+                                            android:text=""
+                                            android:textSize="12sp"
+                                            android:textColor="@android:color/black" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                &lt;!&ndash;nominee address&ndash;&gt;
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="20dp"
+                                    android:orientation="horizontal"
+                                    >
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.5">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Address of the Nominee:"
+                                            android:textSize="12sp"
+                                            android:textColor="@color/black" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.5">
+
+                                        <EditText
+                                            android:id="@+id/etUANNomineeAddress"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="50dp"
+                                            android:layout_marginLeft="10dp"
+                                            android:background="@drawable/lldesign9"
+                                            android:paddingLeft="10dp"
+                                            android:text=""
+                                            android:textSize="12sp"
+                                            android:textColor="@android:color/black" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                &lt;!&ndash;ralationship&ndash;&gt;
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="20dp"
+                                    android:orientation="horizontal"
+                                    >
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.5">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Relationship with Member:"
+                                            android:textSize="12sp"
+                                            android:textColor="@color/black" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.5">
+
+
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_marginLeft="10dp"
+                                            android:background="@drawable/lldesign9">
+
+                                            <Spinner
+                                                android:id="@+id/spUANRealation"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"></Spinner>
+                                        </LinearLayout>
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                &lt;!&ndash;dob&ndash;&gt;
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="20dp"
+                                    android:orientation="horizontal"
+                                    >
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.5">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Date of Birth of Nominee:"
+                                            android:textSize="12sp"
+                                            android:textColor="@color/black" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.5"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/tvUANDOB"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="10dp"
+                                            android:text="&#45;&#45;"
+                                            android:textSize="12sp"
+                                            android:textColor="@android:color/black" />
+
+                                        <ImageView
+                                            android:id="@+id/imgUANCal"
+                                            android:layout_width="30dp"
+                                            android:layout_height="30dp"
+                                            android:layout_marginLeft="5dp"
+                                            android:src="@drawable/calendar" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="20dp"
+                                    android:orientation="horizontal"
+                                    >
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.5">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Total amount or share of accumulations in Provident Funds to be paid to each nominee:"
+                                            android:textSize="12sp"
+                                            android:textColor="@color/black" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.5"
+                                        android:background="@drawable/lldesign9">
+
+                                        <Spinner
+
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:id="@+id/spTotalAmt"></Spinner>
+                                    </LinearLayout>
+                                </LinearLayout>
+
+
+                                &lt;!&ndash;nimor&ndash;&gt;
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="20dp"
+                                    android:orientation="horizontal"
+                                    >
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.5">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="If the nominee is minor, name and address of the guardian who may receive the amount during the minority of the nominee:"
+                                            android:textSize="12sp"
+                                            android:textColor="@color/black" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.5">
+
+                                        <EditText
+                                            android:id="@+id/etUANMinorNameAddress"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="50dp"
+                                            android:layout_marginLeft="10dp"
+                                            android:background="@drawable/lldesign9"
+                                            android:paddingLeft="10dp"
+                                            android:text=""
+                                            android:textSize="12sp"
+                                            android:textColor="@android:color/black" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+
+                            </LinearLayout>-->
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cvPFAccountDetailsFrom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="7dp"
+                    android:layout_marginTop="5dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    android:visibility="gone">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="18dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="PF Account Details"
+                            android:textColor="@color/text_color_2"
+                            android:textSize="18sp"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:layout_gravity="center"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:layout_marginTop="5dp"
+                            android:text="Do you have existing PF account?"/>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="5dp">
+
+                            <LinearLayout
+                                android:id="@+id/llYes"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:background="@drawable/lldesign22"
+                                android:gravity="center">
+                                <ImageView
+                                    android:id="@+id/imgYes"
+                                    android:visibility="gone"
+                                    android:layout_width="10dp"
+                                    android:layout_height="10dp"
+                                    android:src="@drawable/tick"/>
+                            </LinearLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:text="Yes"
+                                android:layout_marginLeft="5dp"
+                                android:textColor="@color/black"
+                                ></TextView>
+                            <LinearLayout
+                                android:layout_marginLeft="10dp"
+                                android:id="@+id/llNo"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:background="@drawable/lldesign22"
+                                android:gravity="center">
+                                <ImageView
+                                    android:visibility="gone"
+                                    android:id="@+id/imgNo"
+                                    android:layout_width="10dp"
+                                    android:layout_height="10dp"
+                                    android:src="@drawable/tick"/>
+                            </LinearLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:text="No"
+                                android:layout_marginLeft="5dp"
+                                android:textColor="@color/black"
+                                ></TextView>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:visibility="gone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:id="@+id/llUAN">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="20dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="UAN Number *:"
+                                    android:textStyle="bold"
+                                    android:textSize="13sp"
+                                    android:textColor="#333333"/>
+
+                                <EditText
+                                    android:id="@+id/etUAN"
+                                    android:inputType="number"
+                                    android:maxLength="12"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:background="@drawable/bg_edittext"
+                                    android:digits="1234567890"
+                                    android:layout_marginTop="5dp"
+                                    android:hint="Enter UAN Number"
+                                    android:paddingStart="10dp"
+                                    android:paddingEnd="10dp"
+                                    android:textSize="12sp"
+                                    android:textColor="@android:color/black" />
+
+                            </LinearLayout>
+
+                            <!--PF Number-->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="20dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="PF Number:"
+                                    android:textStyle="bold"
+                                    android:textSize="13sp"
+                                    android:textColor="#333333" />
+
+                                <EditText
+                                    android:id="@+id/etPFNumber"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:background="@drawable/bg_edittext"
+                                    android:paddingLeft="10dp"
+                                    android:hint="Enter PF Number"
+                                    android:layout_marginTop="5dp"
+                                    android:textSize="12sp"
+                                    android:textColor="@android:color/black" />
+                            </LinearLayout>
+
+
+
+                            <!--nominee name-->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="20dp"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    >
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Name of the Nominee:"
+                                        android:textStyle="bold"
+                                        android:textSize="13sp"
+                                        android:textColor="#333333" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <EditText
+                                        android:id="@+id/etUANNominee"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="40dp"
+                                        android:background="@drawable/bg_edittext"
+                                        android:paddingLeft="10dp"
+                                        android:hint="Name of the Nominee"
+                                        android:textSize="12sp"
+                                        android:layout_marginTop="5dp"
+                                        android:textColor="@android:color/black" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <!--nominee address-->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="20dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Address of the Nominee:"
+                                    android:textStyle="bold"
+                                    android:textSize="13sp"
+                                    android:textColor="#333333" />
+
+                                <EditText
+                                    android:id="@+id/etUANNomineeAddress"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:background="@drawable/bg_edittext"
+                                    android:paddingLeft="10dp"
+                                    android:layout_marginTop="5dp"
+                                    android:hint="Enter Nominee's Address"
+                                    android:textSize="12sp"
+                                    android:textColor="@android:color/black" />
+                            </LinearLayout>
+
+                            <!--ralationship-->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="20dp"
+                                android:orientation="vertical"
+                                >
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Relationship with Member:"
+                                    android:textStyle="bold"
+                                    android:textSize="13sp"
+                                    android:textColor="#333333" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:layout_marginTop="5dp"
+                                    android:background="@drawable/bg_edittext">
+
+                                    <Spinner
+                                        android:id="@+id/spUANRealation"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:paddingStart="5dp"
+                                        android:paddingEnd="5dp"/>
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <!--dob-->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="20dp"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Date of Birth of Nominee:"
+                                        android:textStyle="bold"
+                                        android:textSize="13sp"
+                                        android:textColor="#333333"/>
+                                </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/tvUANDOB"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:layout_marginTop="5dp"
+                                    android:background="@drawable/bg_edittext"
+                                    android:drawableEnd="@drawable/ic_calendar"
+                                    android:gravity="center_vertical"
+                                    android:hint="DD-MMM-YYYY"
+                                    android:paddingStart="10dp"
+                                    android:paddingEnd="10dp"
+                                    android:textColor="@color/black"
+                                    android:textSize="14sp" />
+
+
+
+                                <!--<LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/tvUANDOB"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="10dp"
+                                        android:text="&#45;&#45;"
+                                        android:textSize="12sp"
+                                        android:textColor="@android:color/black" />
+
+                                    <ImageView
+                                        android:id="@+id/imgUANCal"
+                                        android:layout_width="30dp"
+                                        android:layout_height="30dp"
+                                        android:layout_marginLeft="5dp"
+                                        android:src="@drawable/calendar" />
+                                </LinearLayout>-->
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="20dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Total amount or share of accumulations in Provident Funds to be paid to each nominee:"
+                                    android:textStyle="bold"
+                                    android:textSize="13sp"
+                                    android:textColor="#333333"/>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:background="@drawable/bg_edittext">
+
+                                    <Spinner
+                                        android:layout_width="match_parent"
+                                        android:layout_height="40dp"
+                                        android:paddingStart="5dp"
+                                        android:paddingEnd="5dp"
+                                        android:id="@+id/spTotalAmt"/>
+                                </LinearLayout>
+                            </LinearLayout>
+
+
+                            <!--nimor-->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="20dp"
+                                android:orientation="vertical"
+                                >
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="If the nominee is minor, name and address of the guardian who may receive the amount during the minority of the nominee:"
+                                    android:textStyle="bold"
+                                    android:textSize="13sp"
+                                    android:textColor="#333333" />
+
+                                <EditText
+                                    android:id="@+id/etUANMinorNameAddress"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:layout_marginTop="5dp"
+                                    android:background="@drawable/bg_edittext"
+                                    android:paddingLeft="10dp"
+                                    android:hint=""
+                                    android:textSize="12sp"
+                                    android:textColor="@android:color/black" />
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+
+                <!--<LinearLayout
                     android:visibility="gone"
                     android:id="@+id/llExpericedForm"
                     android:layout_width="match_parent"
@@ -461,7 +1835,7 @@
                             ></TextView>
                     </LinearLayout>
                     <LinearLayout
-                        android:visibility="gone"
+                        android:visibility="visible"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
@@ -507,7 +1881,7 @@
                             </LinearLayout>
                         </LinearLayout>
 
-                        <!--PF Number-->
+                        &lt;!&ndash;PF Number&ndash;&gt;
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -548,7 +1922,7 @@
 
 
 
-                        <!--nominee name-->
+                        &lt;!&ndash;nominee name&ndash;&gt;
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -587,7 +1961,7 @@
                             </LinearLayout>
                         </LinearLayout>
 
-                        <!--nominee address-->
+                        &lt;!&ndash;nominee address&ndash;&gt;
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -626,7 +2000,7 @@
                             </LinearLayout>
                         </LinearLayout>
 
-                        <!--ralationship-->
+                        &lt;!&ndash;ralationship&ndash;&gt;
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -668,7 +2042,7 @@
                             </LinearLayout>
                         </LinearLayout>
 
-                        <!--dob-->
+                        &lt;!&ndash;dob&ndash;&gt;
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -700,7 +2074,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="10dp"
-                                    android:text="--"
+                                    android:text="&#45;&#45;"
                                     android:textSize="12sp"
                                     android:textColor="@android:color/black" />
 
@@ -749,7 +2123,7 @@
                         </LinearLayout>
 
 
-                        <!--nimor-->
+                        &lt;!&ndash;nimor&ndash;&gt;
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -790,29 +2164,33 @@
 
 
                     </LinearLayout>
-                </LinearLayout>
+                </LinearLayout>-->
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal"
                     android:padding="10dp">
                     <Button
                         android:id="@+id/btnSaveForm"
-                        android:layout_width="120dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/lldesign"
-                        android:backgroundTint="@color/textcolor"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/bg_edittext"
+                        android:backgroundTint="@color/text_color_2"
                         android:textColor="@color/white"
-                        android:text="Save"></Button>
+                        android:visibility="gone"
+                        android:text="Save"/>
                     <View
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
                         android:background="@color/black"
                         android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"></View>
+                        android:visibility="gone"
+                        android:layout_marginRight="10dp"/>
                     <Button
                         android:visibility="gone"
                         android:id="@+id/btnSkip"
@@ -821,7 +2199,7 @@
                         android:background="@drawable/lldesign"
                         android:backgroundTint="@color/textcolor"
                         android:textColor="@color/white"
-                        android:text="Skip"></Button>
+                        android:text="Skip"/>
                 </LinearLayout>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

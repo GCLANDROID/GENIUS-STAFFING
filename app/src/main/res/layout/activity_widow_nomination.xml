@@ -7,81 +7,395 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <LinearLayout
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="?android:actionBarSize"
-            android:orientation="horizontal"
-            android:background="@color/colorPrimary">
+            android:layout_height="50dp"
+            android:background="@mipmap/bottom_menu"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="16dp">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5">
+            <ImageView
+                android:id="@+id/imgBack"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_back"
+                app:tint="@android:color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/imgBack"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="10dp"
-                    android:src="@drawable/backimg" />
-            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Monthly Widow Pension Nominee"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center">
+            <ImageView
+                android:id="@+id/imgHome"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/home_new"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@android:color/white" />
 
-                <TextView
-                    android:textAlignment="center"
-                    android:textSize="14sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="2dp"
-                    android:text="Monthly Widow Pension Nominee"
-                    android:textAppearance="?android:textAppearanceMedium"
-                    android:textColor="@android:color/white" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:gravity="right">
-
-                <ImageView
-                    android:id="@+id/imgHome"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="20dp"
-                    android:src="@drawable/homeimg" />
-            </LinearLayout>
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <LinearLayout
-
-
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="20dp"
                     android:orientation="vertical">
-                    <TextView
+                    <!--<TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
                         android:textColor="@color/misscolor"
-                        android:text="Person for receiving the monthly widow pension in the event of my death without leaving any eligible family member for receiving pension."></TextView>
+                        android:text="Person for receiving the monthly widow pension in the event of my death without leaving any eligible family member for receiving pension."></TextView>-->
+
+                    <!-- Information Card -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginHorizontal="16dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="4dp"
+                        app:cardBackgroundColor="@android:color/white">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="18dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Information"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_color_2" />
+
+                            <View
+                                android:layout_width="50dp"
+                                android:layout_height="2dp"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginBottom="14dp"
+                                android:background="@color/text_color_2" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Person for receiving the monthly widow pension in the event of my death without leaving any eligible family member for receiving pension."
+                                android:textSize="12sp"
+                                android:textColor="@color/misscolor"
+                                android:lineSpacingExtra="4dp" />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- Nominee Details Card -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginTop="10dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="4dp"
+                        app:cardBackgroundColor="@android:color/white">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="18dp">
+
+                            <!-- Card Title -->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Nominee Details"
+                                android:textColor="@color/text_color_2"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <View
+                                android:layout_width="50dp"
+                                android:layout_height="2dp"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginBottom="16dp"
+                                android:background="@color/text_color_2" />
+
+                            <!-- Name -->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Name of Nominee"
+                                android:textColor="#333333"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                            <!-- Address -->
+                            <EditText
+                                android:id="@+id/etName"
+                                android:layout_width="match_parent"
+                                android:layout_height="48dp"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginBottom="14dp"
+                                android:background="@drawable/bg_edittext"
+                                android:hint="Enter nominee name"
+                                android:paddingHorizontal="14dp"
+                                android:textColor="@android:color/black"
+                                android:textSize="15sp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="Address of Nominee"
+                                    android:textColor="#333333"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                                <LinearLayout
+                                    android:id="@+id/llTick"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_marginEnd="10dp"
+                                    android:background="@drawable/lldesign21"
+                                    android:gravity="center">
+                                    <ImageView
+                                        android:id="@+id/imgTick"
+                                        android:visibility="gone"
+                                        android:layout_width="10dp"
+                                        android:layout_height="10dp"
+                                        android:src="@drawable/tick"></ImageView>
+                                </LinearLayout>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Same as Candidate"
+                                    android:textColor="#666666"
+                                    android:textSize="13sp" />
+                            </LinearLayout>
+
+                            <EditText
+                                android:id="@+id/etAddress"
+                                android:layout_width="match_parent"
+                                android:layout_height="80dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="14dp"
+                                android:background="@drawable/bg_edittext"
+                                android:gravity="top"
+                                android:hint="Enter nominee address"
+                                android:inputType="textMultiLine"
+                                android:padding="14dp"
+                                android:textColor="@android:color/black"
+                                android:textSize="15sp" />
+
+                            <!-- Aadhaar -->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Aadhaar Number"
+                                android:textColor="#333333"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                            <EditText
+                                android:id="@+id/etAadharNominee"
+                                android:layout_width="match_parent"
+                                android:layout_height="48dp"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginBottom="8dp"
+                                android:background="@drawable/bg_edittext"
+                                android:hint="Enter Aadhaar Number"
+                                android:inputType="number"
+                                android:maxLength="12"
+                                android:paddingHorizontal="14dp"
+                                android:textColor="@android:color/black"
+                                android:textSize="15sp" />
+
+                            <!-- Aadhaar Verified -->
+                            <LinearLayout
+                                android:id="@+id/llAadharVerified"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end"
+                                android:layout_marginBottom="16dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:visibility="gone">
+
+                                <ImageView
+                                    android:layout_width="18dp"
+                                    android:layout_height="18dp"
+                                    android:src="@drawable/mark" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="6dp"
+                                    android:text="Aadhaar Verified"
+                                    android:textColor="#2E7D32"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+                            <!-- DOB -->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Date of Birth"
+                                android:textColor="#333333"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                            <!--<LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="48dp"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginBottom="14dp"
+                                android:background="@drawable/bg_edittext"
+                                android:gravity="center_vertical"
+                                android:paddingHorizontal="14dp">
+
+                                <TextView
+                                    android:id="@+id/tvUANDOB"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="Select DOB"
+                                    android:textColor="#666666"
+                                    android:textSize="15sp" />
+
+                                <ImageView
+                                    android:id="@+id/imgUANCal"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/calendar" />
+
+                            </LinearLayout>-->
+                            <TextView
+                                android:id="@+id/tvUANDOB"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginBottom="16dp"
+                                android:background="@drawable/bg_edittext"
+                                android:clickable="true"
+                                android:drawableEnd="@drawable/ic_calendar"
+                                android:focusable="false"
+                                android:hint="DD/MM/YYYY"
+                                android:textSize="15sp"
+                                android:gravity="center_vertical"
+                                android:paddingHorizontal="14dp"/>
+
+                            <!-- Relationship -->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Relationship with Nominee"
+                                android:textColor="#333333"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                            <LinearLayout
+                                android:id="@+id/llRelationship"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_marginTop="6dp"
+                                android:background="@drawable/bg_edittext">
+
+                                <Spinner
+                                    android:id="@+id/spRealation"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginHorizontal="10dp" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
                     <LinearLayout
+                        android:id="@+id/layoutActionButtons"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="24dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+
+
+                        <Button
+                            android:id="@+id/btnSkip"
+                            android:layout_width="0dp"
+                            android:layout_height="56dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp"
+                            android:text="Skip"
+                            android:textAllCaps="false"
+                            android:textColor="#B343C7"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:background="@drawable/background_32"
+                            app:cornerRadius="14dp"
+                            app:rippleColor="#40B343C7"
+                            app:strokeColor="#B343C7"
+                            app:strokeWidth="2dp" />
+
+
+
+                        <Button
+                            android:id="@+id/btnSaveForm"
+                            android:layout_width="0dp"
+                            android:layout_height="56dp"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:text="Submit"
+                            android:textAllCaps="false"
+                            android:textColor="@android:color/white"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:background="@drawable/bg_edittext"
+                            app:backgroundTint="#B343C7"
+                            app:cornerRadius="14dp"
+                            app:rippleColor="#40FFFFFF" />
+
+                    </LinearLayout>
+                    <!--<LinearLayout
                         android:layout_marginTop="20dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -251,7 +565,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="10dp"
-                                android:text="--"
+                                android:text="&#45;&#45;"
                                 android:textSize="12sp"
                                 android:textColor="@android:color/black" />
 
@@ -295,40 +609,45 @@
                                     android:layout_height="match_parent"></Spinner>
                             </LinearLayout>
                         </LinearLayout>
-                    </LinearLayout>
+                    </LinearLayout>-->
 
                 </LinearLayout>
 
 
-                <LinearLayout
+                <!--<LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
                     android:layout_marginTop="20dp"
+                    android:gravity="right"
                     android:padding="10dp">
+
                     <Button
                         android:id="@+id/btnSaveForm"
                         android:layout_width="120dp"
                         android:layout_height="40dp"
                         android:background="@drawable/lldesign"
                         android:backgroundTint="@color/textcolor"
-                        android:textColor="@color/white"
-                        android:text="Submit"></Button>
+                        android:text="Submit"
+                        android:textColor="@color/white"></Button>
+
                     <View
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:background="@color/black"
                         android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"></View>
+                        android:layout_marginRight="10dp"
+                        android:background="@color/black"></View>
+
                     <Button
                         android:id="@+id/btnSkip"
                         android:layout_width="120dp"
                         android:layout_height="40dp"
                         android:background="@drawable/lldesign"
                         android:backgroundTint="@color/textcolor"
-                        android:textColor="@color/white"
-                        android:text="Skip"></Button>
-                </LinearLayout>
+                        android:text="Skip"
+                        android:textColor="@color/white"></Button>
+                </LinearLayout>-->
+
+
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

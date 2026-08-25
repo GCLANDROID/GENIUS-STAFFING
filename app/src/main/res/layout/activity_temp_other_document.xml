@@ -6,8 +6,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-        <LinearLayout
+        android:orientation="vertical"
+        android:background="@color/white">
+        <!--<LinearLayout
             android:layout_width="match_parent"
             android:layout_height="?android:actionBarSize"
             android:orientation="horizontal"
@@ -51,7 +52,72 @@
                     android:layout_height="30dp"
                     android:src="@drawable/homeimg"/>
             </LinearLayout>
-        </LinearLayout>
+        </LinearLayout>-->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@mipmap/bottom_menu"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="16dp">
+
+            <ImageView
+                android:id="@+id/imgBack"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_back"
+                app:tint="@android:color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="Other Document"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+                <!--<TextView
+                    android:textSize="12sp"
+                    android:textAlignment="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="2dp"
+                    android:text="(From Highest to Lowest)"
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:textColor="@android:color/white" />-->
+
+            </LinearLayout>
+
+
+
+            <ImageView
+                android:id="@+id/imgHome"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/home_new"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@android:color/white" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -59,309 +125,940 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="10dp">
-               <!-- passport-->
-                <LinearLayout
+                android:padding="10dp"
+                android:layout_marginBottom="50dp">
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_margin="7dp"
+                    android:layout_marginTop="15dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp">
                     <LinearLayout
-                        android:layout_marginTop="20dp"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:background="@drawable/lldesign"
-                        android:backgroundTint="@color/blue">
-                        <TextView
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="10dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="14sp"
-                            android:textColor="@color/white"
-                            android:text="Passport Size Photo :-"></TextView>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_marginTop="16dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_height="match_parent"
+                        android:padding="18dp"
+                        android:orientation="vertical">
+
                         <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1">
-                            <ImageView
-                                android:id="@+id/imgPassportCamera"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:src="@drawable/cameraicon"/>
-                            <ImageView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:id="@+id/imgPassportDocument"
-                                android:layout_marginLeft="20dp"/>
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Document Upload Progress"
+                                android:textColor="@color/black"
+                                android:textSize="13sp"
+                                android:fontFamily="@font/open_sans_semi_bold"/>
+
+                            <View android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0/5 Saved"
+                                android:textColor="@color/text_color_2"
+                                android:textSize="13sp"
+                                android:fontFamily="@font/open_sans_semi_bold"/>
                         </LinearLayout>
+
+                        <ProgressBar
+                            android:id="@+id/progressBar"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="8dp"
+                            android:max="5"
+                            android:layout_marginTop="10dp"
+                            android:progress="3" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="13sp"
+                            android:layout_marginTop="5dp"
+                            android:text="Upload and save 5 document(s)"/>
+
+
                     </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="right">
-                        <Button
-                            android:layout_width="150dp"
-                            android:layout_height="40dp"
-                            android:backgroundTint="@color/designcolor1"
-                            android:background="@drawable/lldesign9"
-                            android:textColor="@color/white"
-                            android:textSize="14sp"
-                            android:text="Upload &amp; save"
-                            android:id="@+id/btnPassportSave"></Button>
-                    </LinearLayout>
-                </LinearLayout>
-                 <!--//Family-->
-                <LinearLayout
+                </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <LinearLayout
-                        android:layout_marginTop="40dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:background="@drawable/lldesign"
-                        android:backgroundTint="@color/blue">
-                        <TextView
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="10dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="14sp"
-                            android:textColor="@color/white"
-                            android:text="•	Family Photo together for ESIC Card :-"></TextView>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_marginTop="16dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1">
-                            <ImageView
-                                android:id="@+id/imgFamilyCamera"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:src="@drawable/cameraicon"/>
-                            <ImageView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:id="@+id/imgFamilyDocument"
-                                android:layout_marginLeft="20dp"/>
-                        </LinearLayout>
-                    </LinearLayout>
+                    android:layout_margin="7dp"
+                    android:layout_marginTop="5dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="right">
-                        <Button
-                            android:layout_width="150dp"
-                            android:layout_height="40dp"
-                            android:backgroundTint="@color/designcolor1"
-                            android:background="@drawable/lldesign9"
-                            android:textColor="@color/white"
-                            android:textSize="14sp"
-                            android:text="Upload &amp; save"
-                            android:id="@+id/btnFamilySave"></Button>
-                    </LinearLayout>
-                </LinearLayout>
+                        android:padding="18dp"
+                        android:orientation="vertical">
 
-                <!--//resume-->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Upload Documents"
+                                android:textColor="@color/text_color_2"
+                                android:textSize="18sp"
+                                android:textStyle="bold"/>
+
+
+
+                            <View
+                                android:layout_width="50dp"
+                                android:layout_height="2dp"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginBottom="10dp"
+                                android:background="@color/text_color_2"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="13sp"
+                                android:text="Upload each document and click Save to confirm"/>
+
+                            <!-- passport-->
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:textSize="13sp"
+                                android:textColor="#333333"
+                                android:layout_marginTop="10dp"
+                                android:text="Passport Size Photo"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="200dp"
+                                android:layout_marginTop="10dp"
+                                android:background="@drawable/dashed_border"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:id="@+id/llPSPImgSelected"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical"
+                                    android:gravity="center"
+                                    android:visibility="visible">
+
+                                    <ImageView
+                                        android:layout_width="50dp"
+                                        android:layout_height="49dp"
+                                        android:padding="10dp"
+                                        android:src="@drawable/upload"
+                                        android:background="@drawable/bg_icon_circle"
+                                        android:backgroundTint="#F7E9FB" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/open_sans_medium"
+                                        android:text="Tap to Upload Document"
+                                        android:textColor="@color/black"
+                                        android:textSize="13sp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5dp"
+                                        android:fontFamily="@font/open_sans_semi_bold"
+                                        android:text="(JPG, PNG accepted)"
+                                        android:textColor="@color/black"
+                                        android:textSize="11sp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5dp"
+                                        android:fontFamily="@font/open_sans_regular"
+                                        android:text="Max size 5MB • JPG, PNG"
+                                        android:textColor="@color/black"
+                                        android:textSize="11sp" />
+
+                                </LinearLayout>
+
+                                <FrameLayout
+                                    android:id="@+id/flPassportImage"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginHorizontal="10dp"
+                                    android:layout_marginVertical="10dp"
+                                    android:gravity="center"
+                                    android:visibility="gone">
+
+                                    <ImageView
+                                        android:id="@+id/imgPassportDocument"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:background="@drawable/rounded_image"/>
+
+                                    <ImageView
+                                        android:id="@+id/imgDeletePassport"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:src="@drawable/cross"
+                                        android:layout_gravity="top|end"/>
+
+                                </FrameLayout>
+
+
+                            </LinearLayout>
+
+
+
+                            <!--<LinearLayout
+                                android:layout_marginTop="16dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+                                    <ImageView
+                                        android:id="@+id/imgPassportCamera"
+                                        android:layout_width="40dp"
+                                        android:layout_height="40dp"
+                                        android:src="@drawable/cameraicon"/>
+                                    <ImageView
+                                        android:layout_width="50dp"
+                                        android:layout_height="50dp"
+                                        android:id="@+id/imgPassportDocument"
+                                        android:layout_marginLeft="20dp"/>
+                                </LinearLayout>
+                            </LinearLayout>-->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="13dp"
+                                android:gravity="right">
+                                <Button
+                                    android:id="@+id/btnPassportSave"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:backgroundTint="@color/text_color_2"
+                                    android:background="@drawable/lldesign9"
+                                    android:textColor="@color/white"
+                                    android:textSize="14sp"
+                                    android:textAllCaps="false"
+                                    android:text="Upload &amp; Save"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                        <!--//Family-->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:textSize="13sp"
+                                android:textColor="#333333"
+                                android:layout_marginTop="40dp"
+                                android:text="Family Photo together for ESIC Card"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="200dp"
+                                android:layout_marginTop="10dp"
+                                android:background="@drawable/dashed_border"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:id="@+id/llFamilyImgSelected"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical"
+                                    android:gravity="center"
+                                    android:visibility="visible">
+
+                                    <ImageView
+                                        android:layout_width="50dp"
+                                        android:layout_height="49dp"
+                                        android:padding="10dp"
+                                        android:src="@drawable/upload"
+                                        android:background="@drawable/bg_icon_circle"
+                                        android:backgroundTint="#F7E9FB" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/open_sans_medium"
+                                        android:text="Tap to Upload Document"
+                                        android:textColor="@color/black"
+                                        android:textSize="13sp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5dp"
+                                        android:fontFamily="@font/open_sans_semi_bold"
+                                        android:text="(JPG, PNG accepted)"
+                                        android:textColor="@color/black"
+                                        android:textSize="11sp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5dp"
+                                        android:fontFamily="@font/open_sans_regular"
+                                        android:text="Max size 5MB • JPG, PNG"
+                                        android:textColor="@color/black"
+                                        android:textSize="11sp" />
+
+                                </LinearLayout>
+
+                                <FrameLayout
+                                    android:id="@+id/flFamilyImage"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginHorizontal="10dp"
+                                    android:layout_marginVertical="10dp"
+                                    android:gravity="center"
+                                    android:visibility="gone">
+
+                                    <ImageView
+                                        android:id="@+id/imgFamilyDocument"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:background="@drawable/rounded_image"/>
+
+                                    <ImageView
+                                        android:id="@+id/imgDeleteFamily"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:src="@drawable/cross"
+                                        android:layout_gravity="top|end"/>
+
+                                </FrameLayout>
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="right">
+                                <Button
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:backgroundTint="@color/text_color_2"
+                                    android:background="@drawable/lldesign9"
+                                    android:textColor="@color/white"
+                                    android:textSize="14sp"
+                                    android:text="Upload &amp; save"
+                                    android:textAllCaps="false"
+                                    android:layout_marginTop="13dp"
+                                    android:id="@+id/btnFamilySave"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!--//resume-->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:textSize="13sp"
+                                android:textColor="#333333"
+                                android:layout_marginTop="40dp"
+                                android:text="Resume/CV"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="200dp"
+                                android:layout_marginTop="10dp"
+                                android:background="@drawable/dashed_border"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:id="@+id/llResumeImgSelected"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical"
+                                    android:gravity="center"
+                                    android:visibility="visible">
+
+                                    <ImageView
+                                        android:layout_width="50dp"
+                                        android:layout_height="49dp"
+                                        android:padding="10dp"
+                                        android:src="@drawable/upload"
+                                        android:background="@drawable/bg_icon_circle"
+                                        android:backgroundTint="#F7E9FB" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/open_sans_medium"
+                                        android:text="Tap to Upload Document"
+                                        android:textColor="@color/black"
+                                        android:textSize="13sp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5dp"
+                                        android:fontFamily="@font/open_sans_semi_bold"
+                                        android:text="(JPG, PNG accepted)"
+                                        android:textColor="@color/black"
+                                        android:textSize="11sp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5dp"
+                                        android:fontFamily="@font/open_sans_regular"
+                                        android:text="Max size 5MB • JPG, PNG"
+                                        android:textColor="@color/black"
+                                        android:textSize="11sp" />
+
+                                </LinearLayout>
+
+                                <FrameLayout
+                                    android:id="@+id/flResumeImage"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginHorizontal="10dp"
+                                    android:layout_marginVertical="10dp"
+                                    android:gravity="center"
+                                    android:visibility="gone">
+
+                                    <ImageView
+                                        android:id="@+id/imgResumeDocument"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:background="@drawable/rounded_image"/>
+
+                                    <ImageView
+                                        android:id="@+id/imgDeleteResume"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:src="@drawable/cross"
+                                        android:layout_gravity="top|end"/>
+
+                                </FrameLayout>
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="right">
+                                <Button
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:backgroundTint="@color/text_color_2"
+                                    android:background="@drawable/lldesign9"
+                                    android:textColor="@color/white"
+                                    android:textSize="14sp"
+                                    android:layout_marginTop="13dp"
+                                    android:textAllCaps="false"
+                                    android:text="Upload &amp; save"
+                                    android:id="@+id/btnResumeSave"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!--//expericeletter-->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="40dp"
+                                android:text="Experience/Relieving Letter"
+                                android:textColor="#333333"
+                                android:textSize="13sp"
+                                android:textStyle="bold"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="200dp"
+                                android:layout_marginTop="10dp"
+                                android:background="@drawable/dashed_border"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:id="@+id/llExperinceLetterImgSelected"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical"
+                                    android:gravity="center"
+                                    android:visibility="visible">
+
+                                    <ImageView
+                                        android:layout_width="50dp"
+                                        android:layout_height="49dp"
+                                        android:padding="10dp"
+                                        android:src="@drawable/upload"
+                                        android:background="@drawable/bg_icon_circle"
+                                        android:backgroundTint="#F7E9FB" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/open_sans_medium"
+                                        android:text="Tap to Upload Document"
+                                        android:textColor="@color/black"
+                                        android:textSize="13sp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5dp"
+                                        android:fontFamily="@font/open_sans_semi_bold"
+                                        android:text="(JPG, PNG, PDF accepted)"
+                                        android:textColor="@color/black"
+                                        android:textSize="11sp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5dp"
+                                        android:fontFamily="@font/open_sans_regular"
+                                        android:text="Max size 5MB • JPG, PNG, PDF"
+                                        android:textColor="@color/black"
+                                        android:textSize="11sp" />
+
+                                </LinearLayout>
+
+                                <FrameLayout
+                                    android:id="@+id/flExperienceLetterImage"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginHorizontal="10dp"
+                                    android:layout_marginVertical="10dp"
+                                    android:gravity="center"
+                                    android:visibility="gone">
+
+                                    <ImageView
+                                        android:id="@+id/imgExperinceLetterDocument"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:background="@drawable/rounded_image"/>
+
+                                    <ImageView
+                                        android:id="@+id/imgDeleteExperinceLetter"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:src="@drawable/cross"
+                                        android:layout_gravity="top|end"/>
+
+                                </FrameLayout>
+
+
+                            </LinearLayout>
+
+
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="right">
+                                <Button
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:backgroundTint="@color/text_color_2"
+                                    android:background="@drawable/lldesign9"
+                                    android:textColor="@color/white"
+                                    android:textSize="14sp"
+                                    android:text="Upload &amp; save"
+                                    android:layout_marginTop="13dp"
+                                    android:textAllCaps="false"
+                                    android:id="@+id/btnExperinceLetterSave"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
+
+                        <!--//Past Appointment Letter-->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="40dp"
+                                android:text="Past Appointment Letter"
+                                android:textColor="#333333"
+                                android:textSize="13sp"
+                                android:textStyle="bold"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="200dp"
+                                android:layout_marginTop="10dp"
+                                android:background="@drawable/dashed_border"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:id="@+id/llAppointmentLetterImgSelected"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical"
+                                    android:gravity="center"
+                                    android:visibility="visible">
+
+                                    <ImageView
+                                        android:layout_width="50dp"
+                                        android:layout_height="49dp"
+                                        android:padding="10dp"
+                                        android:src="@drawable/upload"
+                                        android:background="@drawable/bg_icon_circle"
+                                        android:backgroundTint="#F7E9FB" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/open_sans_medium"
+                                        android:text="Tap to Upload Document"
+                                        android:textColor="@color/black"
+                                        android:textSize="13sp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5dp"
+                                        android:fontFamily="@font/open_sans_semi_bold"
+                                        android:text="(JPG, PNG, PDF accepted)"
+                                        android:textColor="@color/black"
+                                        android:textSize="11sp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5dp"
+                                        android:fontFamily="@font/open_sans_regular"
+                                        android:text="Max size 5MB • JPG, PNG, PDF"
+                                        android:textColor="@color/black"
+                                        android:textSize="11sp" />
+
+                                </LinearLayout>
+
+                                <FrameLayout
+                                    android:id="@+id/flAppointmentLetterImage"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginHorizontal="10dp"
+                                    android:layout_marginVertical="10dp"
+                                    android:gravity="center"
+                                    android:visibility="gone">
+
+                                    <ImageView
+                                        android:id="@+id/imgAppointmentletterDocument"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:background="@drawable/rounded_image"/>
+
+                                    <ImageView
+                                        android:id="@+id/imgDeleteAppointmentLetter"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:src="@drawable/cross"
+                                        android:layout_gravity="top|end"/>
+
+                                </FrameLayout>
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="right">
+                                <Button
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:backgroundTint="@color/text_color_2"
+                                    android:background="@drawable/lldesign9"
+                                    android:textColor="@color/white"
+                                    android:textSize="14sp"
+                                    android:text="Upload &amp; save"
+                                    android:layout_marginTop="13dp"
+                                    android:textAllCaps="false"
+                                    android:id="@+id/btnAppointLetterSave"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
+
+
+
+                    </LinearLayout>
+
+
+
+
+
+                </androidx.cardview.widget.CardView>
+
                 <LinearLayout
+                    android:id="@+id/infoBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/bg_info_box"
+                    android:gravity="top">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="💡"
+                        android:textSize="20sp"
+                        android:layout_marginEnd="12dp" />
+
                     <LinearLayout
-                        android:layout_marginTop="40dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:background="@drawable/lldesign"
-                        android:backgroundTint="@color/blue">
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
                         <TextView
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="10dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
-                            android:textColor="@color/white"
-                            android:text="•Resume/CV. :-"></TextView>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_marginTop="16dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1">
-                            <ImageView
-                                android:id="@+id/imgResumeCamera"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:src="@drawable/cameraicon"/>
-                            <ImageView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:id="@+id/imgResumeDocument"
-                                android:layout_marginLeft="20dp"/>
-                        </LinearLayout>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="right">
-                        <Button
-                            android:layout_width="150dp"
-                            android:layout_height="40dp"
-                            android:backgroundTint="@color/designcolor1"
-                            android:background="@drawable/lldesign9"
-                            android:textColor="@color/white"
-                            android:textSize="14sp"
-                            android:text="Upload &amp; save"
-                            android:id="@+id/btnResumeSave"></Button>
-                    </LinearLayout>
-                </LinearLayout>
+                            android:text="How to Upload Documents"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:textColor="#1565C0"
+                            android:layout_marginBottom="6dp" />
 
-                <!--//expericeletter-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <LinearLayout
-                        android:layout_marginTop="40dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:background="@drawable/lldesign"
-                        android:backgroundTint="@color/blue">
                         <TextView
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="10dp"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
-                            android:textColor="@color/white"
-                            android:text="Experience/Relieving Letter :-"></TextView>
+                            android:text="1. Click &quot;Upload&quot; button to select a file&#10;2. After upload, click &quot;Save&quot; to confirm&#10;3. Document will show &quot;✓ Saved&quot; after saving&#10;4. Repeat for all three documents"
+                            android:textSize="13sp"
+                            android:textColor="#0D47A1"
+                            android:lineSpacingExtra="4dp" />
+
                     </LinearLayout>
-                    <LinearLayout
-                        android:layout_marginTop="16dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1">
-                            <ImageView
-                                android:id="@+id/imgExperinceLetterCamera"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:src="@drawable/cameraicon"/>
-                            <ImageView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:id="@+id/imgExperinceLetterDocument"
-                                android:layout_marginLeft="20dp"/>
-                        </LinearLayout>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="right">
-                        <Button
-                            android:layout_width="150dp"
-                            android:layout_height="40dp"
-                            android:backgroundTint="@color/designcolor1"
-                            android:background="@drawable/lldesign9"
-                            android:textColor="@color/white"
-                            android:textSize="14sp"
-                            android:text="Upload &amp; save"
-                            android:id="@+id/btnExperinceLetterSave"></Button>
-                    </LinearLayout>
+
                 </LinearLayout>
-
-
-                <!--//Past Appointment Letter-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <LinearLayout
-                        android:layout_marginTop="40dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:background="@drawable/lldesign"
-                        android:backgroundTint="@color/blue">
-                        <TextView
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="10dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="14sp"
-                            android:textColor="@color/white"
-                            android:text="Past Appointment Letter :-"></TextView>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_marginTop="16dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1">
-                            <ImageView
-                                android:id="@+id/imgAppointmentletterCamera"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:src="@drawable/cameraicon"/>
-                            <ImageView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:id="@+id/imgAppointmentletterDocument"
-                                android:layout_marginLeft="20dp"/>
-                        </LinearLayout>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="right">
-                        <Button
-                            android:layout_width="150dp"
-                            android:layout_height="40dp"
-                            android:backgroundTint="@color/designcolor1"
-                            android:background="@drawable/lldesign9"
-                            android:textColor="@color/white"
-                            android:textSize="14sp"
-                            android:text="Upload &amp; save"
-                            android:id="@+id/btnAppointLetterSave"></Button>
-                    </LinearLayout>
-                </LinearLayout>
-
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right"
-                    android:layout_marginTop="40dp"
-                    android:padding="10dp">
+                    android:layout_marginTop="10dp">
                     <Button
                         android:id="@+id/btnSaveForm"
-                        android:layout_width="120dp"
+                        android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:background="@drawable/lldesign"
-                        android:backgroundTint="@color/textcolor"
+                        android:backgroundTint="@color/text_color_3"
                         android:textColor="@color/white"
-                        android:text="Submit"></Button>
+                        android:textAllCaps="false"
+                        android:text="Submit"/>
 
                 </LinearLayout>
+
+                <!-- Upload Status -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="7dp"
+                    android:layout_marginTop="15dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:id="@+id/statusSummary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="18dp"
+                        android:background="@drawable/bg_info_box"
+                        android:backgroundTint="@color/white"
+                        android:elevation="3dp">
+
+                        <!-- Title -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Upload Status"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_color_2"
+                            android:layout_marginBottom="12dp" />
+
+                        <!-- Passport Photo -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:paddingVertical="8dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Passport Photo"
+                                android:textSize="14sp"
+                                android:textColor="#333333" />
+
+                            <TextView
+                                android:id="@+id/tvPassportStatus"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="⏳ Pending"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:textColor="#F44336" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="#F0F0F0" />
+
+                        <!-- Family Photo -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:paddingVertical="8dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Family Photo"
+                                android:textSize="14sp"
+                                android:textColor="#333333" />
+
+                            <TextView
+                                android:id="@+id/tvFamilyStatus"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="⏳ Pending"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:textColor="#F44336" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="#F0F0F0" />
+
+                        <!-- Resume -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:paddingVertical="8dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Resume"
+                                android:textSize="14sp"
+                                android:textColor="#333333" />
+
+                            <TextView
+                                android:id="@+id/tvResumeStatus"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="⏳ Pending"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:textColor="#F44336" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:paddingVertical="8dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Experience/Relieving Letter"
+                                android:textColor="#333333"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/tvExperienceStatus"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="⏳ Pending"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:textColor="#F44336" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:paddingVertical="8dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Past Appointment Letter"
+                                android:textColor="#333333"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/tvExperienceStatus"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="⏳ Pending"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:textColor="#F44336" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+
 
 
             </LinearLayout>
@@ -369,3 +1066,375 @@
     </LinearLayout>
 
 </layout>
+
+<!--
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:fitsSystemWindows="true">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?android:actionBarSize"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            >
+            <ImageView
+                android:id="@+id/imgBack"
+                android:layout_gravity="center"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/backimg"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+            <TextView
+                android:textSize="14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:text="Other Document"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="right"
+            android:layout_gravity="center"
+            android:layout_marginRight="10dp">
+            <ImageView
+                android:id="@+id/imgHome"
+                android:layout_width="30dp"
+                android:layout_gravity="center"
+                android:layout_height="30dp"
+                android:src="@drawable/homeimg"/>
+        </LinearLayout>
+    </LinearLayout>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp">
+            &lt;!&ndash; passport&ndash;&gt;
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_marginTop="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/lldesign"
+                    android:backgroundTint="@color/blue">
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"
+                        android:text="Passport Size Photo :-"></TextView>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+                        <ImageView
+                            android:id="@+id/imgPassportCamera"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/cameraicon"/>
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:id="@+id/imgPassportDocument"
+                            android:layout_marginLeft="20dp"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right">
+                    <Button
+                        android:layout_width="150dp"
+                        android:layout_height="40dp"
+                        android:backgroundTint="@color/designcolor1"
+                        android:background="@drawable/lldesign9"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:text="Upload &amp; save"
+                        android:id="@+id/btnPassportSave"></Button>
+                </LinearLayout>
+            </LinearLayout>
+            &lt;!&ndash;//Family&ndash;&gt;
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_marginTop="40dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/lldesign"
+                    android:backgroundTint="@color/blue">
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"
+                        android:text="•	Family Photo together for ESIC Card :-"></TextView>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+                        <ImageView
+                            android:id="@+id/imgFamilyCamera"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/cameraicon"/>
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:id="@+id/imgFamilyDocument"
+                            android:layout_marginLeft="20dp"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right">
+                    <Button
+                        android:layout_width="150dp"
+                        android:layout_height="40dp"
+                        android:backgroundTint="@color/designcolor1"
+                        android:background="@drawable/lldesign9"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:text="Upload &amp; save"
+                        android:id="@+id/btnFamilySave"></Button>
+                </LinearLayout>
+            </LinearLayout>
+
+            &lt;!&ndash;//resume&ndash;&gt;
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_marginTop="40dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/lldesign"
+                    android:backgroundTint="@color/blue">
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"
+                        android:text="•Resume/CV. :-"></TextView>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+                        <ImageView
+                            android:id="@+id/imgResumeCamera"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/cameraicon"/>
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:id="@+id/imgResumeDocument"
+                            android:layout_marginLeft="20dp"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right">
+                    <Button
+                        android:layout_width="150dp"
+                        android:layout_height="40dp"
+                        android:backgroundTint="@color/designcolor1"
+                        android:background="@drawable/lldesign9"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:text="Upload &amp; save"
+                        android:id="@+id/btnResumeSave"></Button>
+                </LinearLayout>
+            </LinearLayout>
+
+            &lt;!&ndash;//expericeletter&ndash;&gt;
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_marginTop="40dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/lldesign"
+                    android:backgroundTint="@color/blue">
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"
+                        android:text="Experience/Relieving Letter :-"></TextView>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+                        <ImageView
+                            android:id="@+id/imgExperinceLetterCamera"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/cameraicon"/>
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:id="@+id/imgExperinceLetterDocument"
+                            android:layout_marginLeft="20dp"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right">
+                    <Button
+                        android:layout_width="150dp"
+                        android:layout_height="40dp"
+                        android:backgroundTint="@color/designcolor1"
+                        android:background="@drawable/lldesign9"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:text="Upload &amp; save"
+                        android:id="@+id/btnExperinceLetterSave"></Button>
+                </LinearLayout>
+            </LinearLayout>
+
+
+            &lt;!&ndash;//Past Appointment Letter&ndash;&gt;
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_marginTop="40dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/lldesign"
+                    android:backgroundTint="@color/blue">
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"
+                        android:text="Past Appointment Letter :-"></TextView>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+                        <ImageView
+                            android:id="@+id/imgAppointmentletterCamera"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/cameraicon"/>
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:id="@+id/imgAppointmentletterDocument"
+                            android:layout_marginLeft="20dp"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right">
+                    <Button
+                        android:layout_width="150dp"
+                        android:layout_height="40dp"
+                        android:backgroundTint="@color/designcolor1"
+                        android:background="@drawable/lldesign9"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:text="Upload &amp; save"
+                        android:id="@+id/btnAppointLetterSave"></Button>
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:layout_marginTop="40dp"
+                android:padding="10dp">
+                <Button
+                    android:id="@+id/btnSaveForm"
+                    android:layout_width="120dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/lldesign"
+                    android:backgroundTint="@color/textcolor"
+                    android:textColor="@color/white"
+                    android:text="Submit"></Button>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>
+
+</layout>-->
