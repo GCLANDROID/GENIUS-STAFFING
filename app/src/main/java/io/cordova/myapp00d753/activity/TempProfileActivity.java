@@ -29,6 +29,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -54,6 +55,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
+import com.developers.imagezipper.ImageZipper;
 import com.google.android.cameraview.LongImageCameraActivity;
 import com.intrusoft.scatter.ChartData;
 import com.intrusoft.scatter.PieChart;
@@ -71,7 +73,7 @@ import java.util.Calendar;
 import java.util.List;
 
 
-import id.zelory.compressor.Compressor;
+//import id.zelory.compressor.Compressor;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.adapter.TempCommonFilterAdapter;
 import io.cordova.myapp00d753.databinding.ActivityTempProfileBinding;
@@ -234,8 +236,10 @@ public class TempProfileActivity extends AppCompatActivity {
         tvDesignation = (TextView) findViewById(R.id.tvDesignation);
         tvLocation = (TextView) findViewById(R.id.tvLocation);
         tvGender = (TextView) findViewById(R.id.tvGender);
-        tvEmpCodeDOB = (TextView) findViewById(R.id.tvEmpCodeDOB);
-        tvEmpCodeDOB.setText(Util.changeAnyDateFormat(dobvalue, "dd-MM-yyyy", "dd MMM yyyy"));
+        //tvEmpCodeDOB = (TextView) findViewById(R.id.tvEmpCodeDOB);
+        tvDOB = (TextView) findViewById(R.id.tvDOB);
+        //tvEmpCodeDOB.setText(Util.changeAnyDateFormat(dobvalue, "dd-MM-yyyy", "dd MMM yyyy"));
+        tvDOB.setText(Util.changeAnyDateFormat(dobvalue, "dd-MM-yyyy", "dd MMM yyyy"));
         tvRealtionShip = (TextView) findViewById(R.id.tvRealtionShip);
         tvQualification = (TextView) findViewById(R.id.tvQualification);
         tvMarital = (TextView) findViewById(R.id.tvMarital);
@@ -327,35 +331,35 @@ public class TempProfileActivity extends AppCompatActivity {
         imgHome = (ImageView) findViewById(R.id.imgHome);
         imgBack = (ImageView) findViewById(R.id.imgBack);
 
-        tvGenderTitle = (TextView) findViewById(R.id.tvGenderTitle);
+        /*tvGenderTitle = (TextView) findViewById(R.id.tvGenderTitle);
         color = "<font color='#EE0000'>*</font>";
         String gender = "Gender";
-        tvGenderTitle.setText(Html.fromHtml(gender + color));
+        tvGenderTitle.setText(Html.fromHtml(gender + color));*/
 
-        tvGurdianTitle = (TextView) findViewById(R.id.tvGurdianTitle);
+        /*tvGurdianTitle = (TextView) findViewById(R.id.tvGurdianTitle);
         String gurdian = "Father's/Husband's Name";
-        tvGurdianTitle.setText(Html.fromHtml(gurdian + color));
+        tvGurdianTitle.setText(Html.fromHtml(gurdian + color));*/
 
 
-        tvRealationTitle = (TextView) findViewById(R.id.tvRealationTitle);
+        /*tvRealationTitle = (TextView) findViewById(R.id.tvRealationTitle);
         String realation = "Relationship ";
-        tvRealationTitle.setText(Html.fromHtml(realation + color));
+        tvRealationTitle.setText(Html.fromHtml(realation + color));*/
 
 
-        tvQualificationtitle = (TextView) findViewById(R.id.tvQualificationtitle);
+        /*tvQualificationtitle = (TextView) findViewById(R.id.tvQualificationtitle);
         String qualification = "Highest Qualification";
-        tvQualificationtitle.setText(Html.fromHtml(qualification + color));
+        tvQualificationtitle.setText(Html.fromHtml(qualification + color));*/
 
 
-        tvMartialTitle = (TextView) findViewById(R.id.tvMartialTitle);
+        /*tvMartialTitle = (TextView) findViewById(R.id.tvMartialTitle);
         String matial = "Marital status";
-        tvMartialTitle.setText(Html.fromHtml(matial + color));
+        tvMartialTitle.setText(Html.fromHtml(matial + color));*/
 
-        tvBloodTitle = (TextView) findViewById(R.id.tvBloodTitle);
+        /*tvBloodTitle = (TextView) findViewById(R.id.tvBloodTitle);
         String blood = "Blood group";
-        tvBloodTitle.setText(Html.fromHtml(blood + color));
+        tvBloodTitle.setText(Html.fromHtml(blood + color));*/
 
-        tvMobTitle = (TextView) findViewById(R.id.tvMobTitle);
+        /*tvMobTitle = (TextView) findViewById(R.id.tvMobTitle);
         String mobile = "Mobile number";
         tvMobTitle.setText(Html.fromHtml(mobile + color));
 
@@ -367,13 +371,13 @@ public class TempProfileActivity extends AppCompatActivity {
         tvPreAddr.setText(Html.fromHtml("Present Address" + color));
 
         tvPrePin = (TextView) findViewById(R.id.tvPrePin);
-        tvPrePin.setText(Html.fromHtml("Present Pincode" + color));
+        tvPrePin.setText(Html.fromHtml("Present Pincode" + color));*/
 
-        tvDOBTitle = (TextView) findViewById(R.id.tvDOBTitle);
+        /*tvDOBTitle = (TextView) findViewById(R.id.tvDOBTitle);
         String dob = "Date of Birth";
-        tvDOBTitle.setText(Html.fromHtml(dob + color));
+        tvDOBTitle.setText(Html.fromHtml(dob + color));*/
 
-        tvPerAddr = (TextView) findViewById(R.id.tvPerAddr);
+        /*tvPerAddr = (TextView) findViewById(R.id.tvPerAddr);
         String peradddr = "Permanent Address";
         tvPerAddr.setText(Html.fromHtml(peradddr + color));
 
@@ -396,16 +400,16 @@ public class TempProfileActivity extends AppCompatActivity {
 
         tvPerCity = (TextView) findViewById(R.id.tvPerCity);
         String percity = "Permanent City";
-        tvPerCity.setText(Html.fromHtml(percity + color));
+        tvPerCity.setText(Html.fromHtml(percity + color));*/
 
 
-        tvAddaharNo = (TextView) findViewById(R.id.tvAddaharNo);
+        /*tvAddaharNo = (TextView) findViewById(R.id.tvAddaharNo);
         String aadaharno = "Aadhaar Number";
-        tvAddaharNo.setText(Html.fromHtml(aadaharno + color));
+        tvAddaharNo.setText(Html.fromHtml(aadaharno + color));*/
 
-        tvAddaharImg = (TextView) findViewById(R.id.tvAddaharImg);
+        /*tvAddaharImg = (TextView) findViewById(R.id.tvAddaharImg);
         String aadharimg = "Aadhaar Document";
-        tvAddaharImg.setText(Html.fromHtml(aadharimg + color));
+        tvAddaharImg.setText(Html.fromHtml(aadharimg + color));*/
 
         etPreAddr = (EditText) findViewById(R.id.etPreAddr);
         etPrePinCode = (EditText) findViewById(R.id.etPrePinCode);
@@ -416,8 +420,8 @@ public class TempProfileActivity extends AppCompatActivity {
         AppData.PERMANENTADDRESS=preaddr;
         etPreAddr.setText(preaddr);
 
-        etBankFirstName = (EditText) findViewById(R.id.etBankFirstName);
-        etLastBank = (EditText) findViewById(R.id.etLastBank);
+        //etBankFirstName = (EditText) findViewById(R.id.etBankFirstName);
+        //etLastBank = (EditText) findViewById(R.id.etLastBank);
         etAddaharNo = (EditText) findViewById(R.id.etAddaharNo);
         etPerAddr = (EditText) findViewById(R.id.etPerAddr);
 
@@ -434,17 +438,17 @@ public class TempProfileActivity extends AppCompatActivity {
         spPermanentCity = (Spinner) findViewById(R.id.spPermanentCity);
 
         imgCal = (ImageView) findViewById(R.id.imgCal);
-        imgCamera = (ImageView) findViewById(R.id.imgCamera);
+        //imgCamera = (ImageView) findViewById(R.id.imgCamera);
         imgDocument = (ImageView) findViewById(R.id.imgDocument);
 
-        etSkill = (EditText) findViewById(R.id.etSkill);
+        /*etSkill = (EditText) findViewById(R.id.etSkill);
         if (!pref.getSkill().equals("")) {
             etSkill.setText(pref.getSkill());
         } else {
             etSkill.setText("--");
-        }
+        }*/
 
-        tvView = (TextView) findViewById(R.id.tvView);
+        //tvView = (TextView) findViewById(R.id.tvView);
         tvSubmit = (TextView) findViewById(R.id.tvSubmit);
 
         imgForward = (ImageView) findViewById(R.id.imgForward);
@@ -462,7 +466,7 @@ public class TempProfileActivity extends AppCompatActivity {
             }
         }, 50000);
 
-        binding.llTick.setOnClickListener(new View.OnClickListener() {
+        /*binding.llTick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (binding.imgTick.getVisibility()==View.GONE){
@@ -473,9 +477,18 @@ public class TempProfileActivity extends AppCompatActivity {
                     binding.etWhatssappNumber.setText("");
                 }
             }
+        });*/
+
+        binding.switchWhatsapp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b){
+                    binding.etWhatssappNumber.setText(etMobNumber.getText().toString());
+                } else {
+                    binding.etWhatssappNumber.setText("");
+                }
+            }
         });
-
-
     }
 
     public void profileFunction(JSONObject jsonObject) {
@@ -530,16 +543,17 @@ public class TempProfileActivity extends AppCompatActivity {
 
                                     Sex = obj.optString("Sex").toUpperCase();
                                     Log.d("sexid", Sex);
-                                    if (!Sex.equals("")) {
+                                   /* if (!Sex.equals("")) {
                                         tvGender.setText(Sex);
                                     } else {
                                         tvGender.setText("");
-                                    }
+                                    }*/
 
                                     String DateOfBirth_GAPI = obj.optString("DateOfBirth");
                                     Log.e(TAG, "DateOfBirth: "+DateOfBirth_GAPI+" dobvalue: "+dobvalue);
                                     if (dobvalue.isEmpty()) {
-                                        tvEmpCodeDOB.setText(DateOfBirth_GAPI);
+                                        //tvEmpCodeDOB.setText(DateOfBirth_GAPI);
+                                        tvDOB.setText(DateOfBirth_GAPI);
                                         DateOfBirth = DateOfBirth_GAPI;
                                     }
 
@@ -549,33 +563,33 @@ public class TempProfileActivity extends AppCompatActivity {
                                     }
 
                                     RelationShip = obj.optString("RelationShip").toUpperCase();
-                                    if (!RelationShip.equals("")) {
+                                   /* if (!RelationShip.equals("")) {
                                         tvRealtionShip.setText(RelationShip);
                                     } else {
                                         tvRealtionShip.setText("");
-                                    }
+                                    }*/
 
                                     Qualification = obj.optString("Qualification");
-                                    if (!Qualification.equals("")) {
+                                   /* if (!Qualification.equals("")) {
                                         tvQualification.setTag(Qualification);
                                     } else {
                                         tvQualification.setText("");
-                                    }
+                                    }*/
 
                                     MaritalStatus = obj.optString("MaritalStatus");
 
-                                    if (!MaritalStatus.equals("")) {
+                                    /*if (!MaritalStatus.equals("")) {
                                         tvMarital.setText(MaritalStatus);
                                     } else {
                                         tvMarital.setText("");
-                                    }
+                                    }*/
 
                                     BloodGroup = obj.optString("BloodGroup");
-                                    if (!BloodGroup.equals("")) {
+                                    /*if (!BloodGroup.equals("")) {
                                         tvBloodGroup.setText(BloodGroup);
                                     } else {
                                         tvBloodGroup.setText("");
-                                    }
+                                    }*/
 
                                     PermanentAddress = obj.optString("PresentAddress");
                                    /* if (!PermanentAddress.equals("")) {
@@ -610,9 +624,11 @@ public class TempProfileActivity extends AppCompatActivity {
                                     if (!Phone.equals("") && !Phone.equals("null")) {
                                         binding.etWhatssappNumber.setText(Phone);
                                         if(Mobile.equals(Phone)){
-                                           binding.imgTick.setVisibility(View.VISIBLE);
+                                           //binding.imgTick.setVisibility(View.VISIBLE);
+                                           binding.switchWhatsapp.setChecked(true);
                                         } else {
-                                            binding.imgTick.setVisibility(View.GONE);
+                                            //binding.imgTick.setVisibility(View.GONE);
+                                           binding.switchWhatsapp.setChecked(false);
                                         }
                                     } else {
                                         binding.etWhatssappNumber.setText("");
@@ -641,20 +657,20 @@ public class TempProfileActivity extends AppCompatActivity {
 
                                     FirstNameAsperBank = obj.optString("FirstNameAsperBank");
                                     if (FirstNameAsperBank.equals("null")) {
-                                        etBankFirstName.setText("");
+                                        //etBankFirstName.setText("");
                                     } else {
-                                        etBankFirstName.setText(FirstNameAsperBank);
+                                        //etBankFirstName.setText(FirstNameAsperBank);
                                     }
 
                                     LastNameAsperBank = obj.optString("LastNameAsperBank");
                                     if (LastNameAsperBank.equals("null")) {
-                                        etLastBank.setText("");
+                                        //etLastBank.setText("");
                                     } else {
-                                        etLastBank.setText(LastNameAsperBank);
+                                        //etLastBank.setText(LastNameAsperBank);
                                     }
 
                                     String AadharCard = obj.optString("AadharNo");
-                                    etAddaharNo.setText(AadharCard);
+                                    //etAddaharNo.setText(AadharCard);
 
                                     String PermanentAddress = obj.optString("PermanentAddress");
                                     //etPerAddr.setText(PermanentAddress);
@@ -915,16 +931,16 @@ public class TempProfileActivity extends AppCompatActivity {
 
                                     FirstNameAsperBank = obj.optString("FirstNameAsperBank");
                                     if (FirstNameAsperBank.equals("null")) {
-                                        etBankFirstName.setText("");
+                                        //etBankFirstName.setText("");
                                     } else {
-                                        etBankFirstName.setText(FirstNameAsperBank);
+                                        //etBankFirstName.setText(FirstNameAsperBank);
                                     }
 
                                     LastNameAsperBank = obj.optString("LastNameAsperBank");
                                     if (LastNameAsperBank.equals("null")) {
-                                        etLastBank.setText("");
+                                        //etLastBank.setText("");
                                     } else {
-                                        etLastBank.setText(LastNameAsperBank);
+                                        //etLastBank.setText(LastNameAsperBank);
                                     }
 
                                     String AadharCard = obj.optString("AadharCard");
@@ -1844,19 +1860,20 @@ public class TempProfileActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0){
-                    etGurdianName.setBackgroundResource(R.drawable.lldesign9);
+                    //etGurdianName.setBackgroundResource(R.drawable.lldesign9);
+                    etGurdianName.setBackgroundResource(R.drawable.bg_edittext);
                 }
             }
         });
 
-        tvView.setOnClickListener(new View.OnClickListener() {
+        /*tvView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TempProfileActivity.this, DocumentReportActivity.class);
                 startActivity(intent);
                 finish();
             }
-        });
+        });*/
 
         binding.etWhatssappNumber.addTextChangedListener(new TextWatcher() {
             @Override
@@ -1871,11 +1888,16 @@ public class TempProfileActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (editable.toString().equalsIgnoreCase(Mobile)){
-                    binding.imgTick.setVisibility(View.VISIBLE);
-                } else {
-                    binding.imgTick.setVisibility(View.GONE);
+                if (editable.toString() != null){
+                    if (editable.toString().equalsIgnoreCase(Mobile)){
+                        //binding.imgTick.setVisibility(View.VISIBLE);
+                        binding.switchWhatsapp.setChecked(true);
+                    } else {
+                        //binding.imgTick.setVisibility(View.GONE);
+                        binding.switchWhatsapp.setChecked(false);
+                    }
                 }
+
             }
         });
 
@@ -1883,11 +1905,12 @@ public class TempProfileActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String qualification = mainQualification.get(position).getDocumentType();
-                tvQualification.setText(qualification);
+                //tvQualification.setText(qualification);
 
                 education = mainQualification.get(position).getDocumentType();
                 Log.d("qualification", education);
-                llQualification.setBackgroundResource(R.drawable.lldesign9);
+                //llQualification.setBackgroundResource(R.drawable.lldesign9);
+                llQualification.setBackgroundResource(R.drawable.bg_edittext);
             }
 
             @Override
@@ -1914,7 +1937,7 @@ public class TempProfileActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 permanentstate = mainPerState.get(position).getDocID();
-                llPermanentState.setBackgroundResource(R.drawable.lldesign9);
+                llPermanentState.setBackgroundResource(R.drawable.bg_edittext);
                 if (position > 0){
                     JSONObject obj=new JSONObject();
                     try {
@@ -1940,7 +1963,7 @@ public class TempProfileActivity extends AppCompatActivity {
                 presentstate = mainPreState.get(position).getDocID();
                 Log.e(TAG, "presentstate_onItemSelected: "+presentstate);
                 Log.e(TAG, "position: "+position);
-                llPresentState.setBackgroundResource(R.drawable.lldesign9);
+                llPresentState.setBackgroundResource(R.drawable.bg_edittext);
                 if (position > 0){
                     JSONObject obj=new JSONObject();
                     try {
@@ -1996,7 +2019,8 @@ public class TempProfileActivity extends AppCompatActivity {
                 if (!mainMartial.get(position).getDocID().isEmpty()){
                     martialstatus = mainMartial.get(position).getDocID();
                     Log.d("martial", martialstatus);
-                    llMartialStatus.setBackgroundResource(R.drawable.lldesign9);
+                    //llMartialStatus.setBackgroundResource(R.drawable.lldesign9);
+                    llMartialStatus.setBackgroundResource(R.drawable.bg_edittext);
                 } else {
                     martialstatus = "";
                 }
@@ -2016,7 +2040,8 @@ public class TempProfileActivity extends AppCompatActivity {
                 sexGender = mainGender.get(position).getDocID();
                 Log.d("sexgender", sexGender);
                 //spESICGender.setSelection(position);
-                llGender.setBackgroundResource(R.drawable.lldesign9);
+                //llGender.setBackgroundResource(R.drawable.lldesign9);
+                llGender.setBackgroundResource(R.drawable.bg_edittext);
             }
 
             @Override
@@ -2153,7 +2178,8 @@ public class TempProfileActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 realationship = mainRealation.get(position).getDocumentType();
-                llRelationship.setBackgroundResource(R.drawable.lldesign9);
+                //llRelationship.setBackgroundResource(R.drawable.lldesign9);
+                llRelationship.setBackgroundResource(R.drawable.bg_edittext);
                 Log.d("realation", realationship);
             }
 
@@ -2163,7 +2189,7 @@ public class TempProfileActivity extends AppCompatActivity {
 
             }
         });
-        etAddaharNo.addTextChangedListener(new TextWatcher() {
+        /*etAddaharNo.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -2181,8 +2207,8 @@ public class TempProfileActivity extends AppCompatActivity {
                 }
 
             }
-        });
-        etSkill.addTextChangedListener(new TextWatcher() {
+        });*/
+        /*etSkill.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -2199,7 +2225,7 @@ public class TempProfileActivity extends AppCompatActivity {
                     pref.saveSkill(etSkill.getText().toString());
                 }
             }
-        });
+        });*/
 
 
 
@@ -2238,7 +2264,7 @@ public class TempProfileActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (etPrePinCode.getText().toString().length() > 0){
-                    etPrePinCode.setBackgroundResource(R.drawable.lldesign9);
+                    etPrePinCode.setBackgroundResource(R.drawable.bg_edittext);
                 }
             }
         });
@@ -2257,7 +2283,7 @@ public class TempProfileActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0){
-                    etESI.setBackgroundResource(R.drawable.lldesign9);
+                    etESI.setBackgroundResource(R.drawable.bg_edittext);
                 }
             }
         });
@@ -2269,7 +2295,8 @@ public class TempProfileActivity extends AppCompatActivity {
 
                 //bloodgrp = mainBlood.get(position).getDocID();
                 bloodgrp = mainBlood.get(position).getDocID();
-                llBloodGrp.setBackgroundResource(R.drawable.lldesign9);
+                //llBloodGrp.setBackgroundResource(R.drawable.lldesign9);
+                llBloodGrp.setBackgroundResource(R.drawable.bg_edittext);
             }
 
             @Override
@@ -2292,15 +2319,15 @@ public class TempProfileActivity extends AppCompatActivity {
             }
         });
 
-        imgCamera.setOnClickListener(new View.OnClickListener() {
+        /*imgCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openCameraDialog();
             }
-        });
+        });*/
 
 
-        binding.imgESICCal.setOnClickListener(new View.OnClickListener() {
+        binding.tvESICDOB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar now = Calendar.getInstance();
@@ -2367,7 +2394,8 @@ public class TempProfileActivity extends AppCompatActivity {
         });
 
 
-        binding.imgCal.setOnClickListener(new View.OnClickListener() {
+        binding.tvDOB.setOnClickListener(new View.OnClickListener() {
+        //binding.imgCal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar now = Calendar.getInstance();
@@ -2420,10 +2448,8 @@ public class TempProfileActivity extends AppCompatActivity {
                         DateOfBirth = d + " " + month + " " + y;
 
 
-                        binding.tvEmpCodeDOB.setText(DateOfBirth);
-
-
-
+                        //binding.tvEmpCodeDOB.setText(DateOfBirth);
+                        binding.tvDOB.setText(DateOfBirth);
                     }
                 }, dyear, dmonth, dday);
                 dialog.getDatePicker().setMaxDate((long) (System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 365.25 * 18)));
@@ -3505,7 +3531,7 @@ public class TempProfileActivity extends AppCompatActivity {
                         try {
                             String imageurl = /*"file://" +*/ getRealPathFromURI(imageUri);
                             file = new File(imageurl);
-                            compressedImageFile = new Compressor(this).compressToFile(file);
+                            compressedImageFile = new ImageZipper(this).compressToFile(file);
                             Log.d("imageSixw", String.valueOf(getReadableFileSize(compressedImageFile.length())));
                             BitmapFactory.Options o = new BitmapFactory.Options();
                             o.inSampleSize = 2;
@@ -3541,7 +3567,7 @@ public class TempProfileActivity extends AppCompatActivity {
                     File pictureFile = (File) data.getExtras().get("picture");
                     Log.d("fjjgk", pictureFile.toString());
                     try {
-                        compressedImageFile = new Compressor(this).compressToFile(pictureFile);
+                        compressedImageFile = new ImageZipper(this).compressToFile(pictureFile);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
