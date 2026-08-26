@@ -307,7 +307,7 @@ public class WidowNominationActivity extends AppCompatActivity {
                 if (editable.toString().length() > 0){
                     binding.etAadharNominee.setBackgroundResource(R.drawable.bg_edittext);
                 } else {
-                    binding.etName.setBackgroundResource(R.drawable.lldesign_error);
+                    binding.etAadharNominee.setBackgroundResource(R.drawable.lldesign_error);
                 }
             }
         });
@@ -328,7 +328,7 @@ public class WidowNominationActivity extends AppCompatActivity {
                 if (editable.toString().length() > 0){
                     binding.etAddress.setBackgroundResource(R.drawable.bg_edittext);
                 } else {
-                    binding.etName.setBackgroundResource(R.drawable.lldesign_error);
+                    binding.etAddress.setBackgroundResource(R.drawable.lldesign_error);
                 }
             }
         });
