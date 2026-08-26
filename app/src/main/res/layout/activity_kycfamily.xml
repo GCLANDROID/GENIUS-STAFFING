@@ -195,7 +195,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     app:cardBackgroundColor="@android:color/white"
                     app:cardCornerRadius="18dp"
                     app:cardElevation="5dp">
@@ -286,13 +286,13 @@
                                         android:textColor="#B343C7"
                                         android:textStyle="bold"/>
 
-                                    <TextView
+                                    <!--<TextView
                                         android:layout_width="100dp"
                                         android:layout_height="wrap_content"
                                         android:gravity="center"
                                         android:text="Action"
                                         android:textColor="#B343C7"
-                                        android:textStyle="bold"/>
+                                        android:textStyle="bold"/>-->
 
                                 </LinearLayout>
                                 <!-- RecyclerView -->
