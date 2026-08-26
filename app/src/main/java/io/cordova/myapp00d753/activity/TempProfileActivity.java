@@ -421,7 +421,10 @@ public class TempProfileActivity extends AppCompatActivity {
 
         preaddr = house + " " + street + " " + landmark + " " + vtc + " " + district;
         AppData.PERMANENTADDRESS=preaddr;
-        etPreAddr.setText(preaddr);
+        if (!preaddr.trim().isEmpty()){
+            etPreAddr.setText(preaddr);
+        }
+
 
         //etBankFirstName = (EditText) findViewById(R.id.etBankFirstName);
         //etLastBank = (EditText) findViewById(R.id.etLastBank);
@@ -429,7 +432,10 @@ public class TempProfileActivity extends AppCompatActivity {
         etPerAddr = (EditText) findViewById(R.id.etPerAddr);
 
         peraddr = house + " " + street + " " + landmark + " " + vtc + " " + district;
-        etPerAddr.setText(peraddr);
+        if (!peraddr.trim().isEmpty()){
+            etPerAddr.setText(peraddr);
+        }
+
 
         etPerPinCode = (EditText) findViewById(R.id.etPerPinCode);
         perpin = pin;
@@ -2105,7 +2111,7 @@ public class TempProfileActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 if (etPerAddr.getText().toString().length() > 0) {
                     peraddr = etPerAddr.getText().toString();
-                    etPerAddr.setBackgroundResource(R.drawable.lldesign9);
+                    etPerAddr.setBackgroundResource(R.drawable.bg_edittext_disable);
                 }
 
             }
@@ -2128,7 +2134,7 @@ public class TempProfileActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 if (etPreAddr.getText().toString().length() > 0) {
                     preaddr = etPreAddr.getText().toString();
-                    etPreAddr.setBackgroundResource(R.drawable.lldesign9);
+                    etPreAddr.setBackgroundResource(R.drawable.bg_edittext_disable);
                 }
 
             }
@@ -2508,90 +2514,42 @@ public class TempProfileActivity extends AppCompatActivity {
                                                                         } else {
                                                                             Toast.makeText(getApplicationContext(), "Please Select Permanent City", Toast.LENGTH_LONG).show();
                                                                             llPermanentCity.setBackgroundResource(R.drawable.lldesign_error);
-                                                                           /* mainScrollView.post(new Runnable() {
-                                                                                @Override
-                                                                                public void run() {
-                                                                                    int y = llScrollingViewPoint2.getBottom();
-                                                                                    mainScrollView.smoothScrollTo(0, y);
-                                                                                }
-                                                                            });*/
+                                                                            scrollToCenter(binding.llPermanentCity);
                                                                         }
                                                                     } else {
                                                                         Toast.makeText(getApplicationContext(), "Please Select Permanent State", Toast.LENGTH_LONG).show();
                                                                         llPermanentState.setBackgroundResource(R.drawable.lldesign_error);
-                                                                       /* mainScrollView.post(new Runnable() {
-                                                                            @Override
-                                                                            public void run() {
-                                                                                int y = scrollingViewPoint2.getTop();
-                                                                                mainScrollView.smoothScrollTo(0, y);
-                                                                            }
-                                                                        });*/
+                                                                        scrollToCenter(binding.llPermanentState);
                                                                     }
                                                                 } else {
                                                                     Toast.makeText(getApplicationContext(), "Please Select Present City", Toast.LENGTH_LONG).show();
                                                                     llPresentCity.setBackgroundResource(R.drawable.lldesign_error);
-                                                                    mainScrollView.post(new Runnable() {
-                                                                        @Override
-                                                                        public void run() {
-                                                                            int y = scrollingViewPoint2.getTop();
-                                                                            mainScrollView.smoothScrollTo(0, y);
-                                                                        }
-                                                                    });
+                                                                    scrollToCenter(binding.llPresentCity);
                                                                 }
                                                             } else {
                                                                 Toast.makeText(getApplicationContext(), "Please Select Present State", Toast.LENGTH_LONG).show();
                                                                 llPresentState.setBackgroundResource(R.drawable.lldesign_error);
-                                                                mainScrollView.post(new Runnable() {
-                                                                    @Override
-                                                                    public void run() {
-                                                                        int y = scrollingViewPoint2.getTop();
-                                                                        mainScrollView.smoothScrollTo(0, y);
-                                                                    }
-                                                                });
+                                                                scrollToCenter(binding.llPresentState);
                                                             }
                                                         } else {
                                                             Toast.makeText(getApplicationContext(), "Please Select Blood Group", Toast.LENGTH_LONG).show();
                                                             llBloodGrp.setBackgroundResource(R.drawable.lldesign_error);
-                                                            mainScrollView.post(new Runnable() {
-                                                                @Override
-                                                                public void run() {
-                                                                    int y = llPersonalDetails.getTop();
-                                                                    mainScrollView.smoothScrollTo(0, y);
-                                                                }
-                                                            });
+                                                            scrollToCenter(binding.llBloodGrp);
                                                         }
                                                     } else {
                                                         Toast.makeText(getApplicationContext(), "Please Select Highest Qualification", Toast.LENGTH_LONG).show();
                                                         llQualification.setBackgroundResource(R.drawable.lldesign_error);
-                                                        mainScrollView.post(new Runnable() {
-                                                            @Override
-                                                            public void run() {
-                                                                int y = llPersonalDetails.getTop();
-                                                                mainScrollView.smoothScrollTo(0, y);
-                                                            }
-                                                        });
+                                                        scrollToCenter(binding.llQualification);
                                                     }
                                                 } else {
                                                     Toast.makeText(getApplicationContext(), "Please Select Marital Status", Toast.LENGTH_LONG).show();
                                                     llMartialStatus.setBackgroundResource(R.drawable.lldesign_error);
-                                                    mainScrollView.post(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            int y = llPersonalDetails.getTop();
-                                                            mainScrollView.smoothScrollTo(0, y);
-                                                        }
-                                                    });
+                                                    scrollToCenter(binding.llMartialStatus);
                                                 }
                                                 } else {
                                                     Toast.makeText(getApplicationContext(), "Please Select Gender", Toast.LENGTH_LONG).show();
                                                     llGender.setBackgroundResource(R.drawable.lldesign_error);
-                                                    mainScrollView.post(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            int y = llPersonalDetails.getTop();
-                                                            mainScrollView.smoothScrollTo(0, y);
-                                                        }
-                                                    });
+                                                    scrollToCenter(binding.llGender);
                                                 }
                                            /* } else {
                                                 Toast.makeText(getApplicationContext(), "Please enter valid Phone number", Toast.LENGTH_LONG).show();
@@ -2611,103 +2569,38 @@ public class TempProfileActivity extends AppCompatActivity {
                                     } else {
                                         Toast.makeText(getApplicationContext(), "Please update your present pincode", Toast.LENGTH_LONG).show();
                                         etPrePinCode.setBackgroundResource(R.drawable.lldesign_error);
-                                        mainScrollView.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                //int y = llContactDetails.getTop();
-                                                int y = cardContactDetails.getTop();
-                                                mainScrollView.smoothScrollTo(0, y);
-                                            }
-                                        });
-                                        //scrollTo();
+                                        scrollToCenter(binding.etPrePinCode);
                                     }
 
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Please update your permanent address", Toast.LENGTH_LONG).show();
                                     etPerAddr.setBackgroundResource(R.drawable.lldesign_error);
-                                   /* mainScrollView.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            int y = scrollingViewPoint2.getTop();
-                                            mainScrollView.smoothScrollTo(0, y);
-                                        }
-                                    });*/
+                                    scrollToCenter(binding.etPerAddr);
                                 }
                             } else {
                                 Toast.makeText(getApplicationContext(), "Please update your present address", Toast.LENGTH_LONG).show();
                                 etPreAddr.setBackgroundResource(R.drawable.lldesign_error);
-                                mainScrollView.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        int y = scrollingViewPoint2.getTop();
-                                        mainScrollView.smoothScrollTo(0, y);
-                                    }
-                                });
+                                scrollToCenter(binding.etPreAddr);
                             }
                         } else {
                             Toast.makeText(getApplicationContext(), "Please select relationship", Toast.LENGTH_LONG).show();
                             llRelationship.setBackgroundResource(R.drawable.lldesign_error);
-                            mainScrollView.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    int y = llPersonalDetails.getTop();
-                                    mainScrollView.smoothScrollTo(0, y);
-                                }
-                            });
+                            scrollToCenter(binding.llRelationship);
                         }
                         } else {
                             Toast.makeText(getApplicationContext(), "Please update your father's or husband name", Toast.LENGTH_LONG).show();
                             etGurdianName.setBackgroundResource(R.drawable.lldesign_error);
-                            mainScrollView.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    int y = llPersonalDetails.getTop();
-                                    mainScrollView.smoothScrollTo(0, y);
-                                }
-                            });
+                            scrollToCenter(binding.etGurdianName);
                         }
                     } else {
                         Toast.makeText(getApplicationContext(), "Please update your present pincode", Toast.LENGTH_LONG).show();
                         etPrePinCode.setBackgroundResource(R.drawable.lldesign_error);
-                        /*mainScrollView.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                int y = binding.etPreAddr.getTop();
-                                mainScrollView.smoothScrollTo(0, y);
-                            }
-                        });*/
-                        mainScrollView.post(() -> {
-
-                            int[] scrollViewLocation = new int[2];
-                            int[] pinCodeLocation = new int[2];
-
-                            mainScrollView.getLocationOnScreen(scrollViewLocation);
-                            binding.etPrePinCode.getLocationOnScreen(pinCodeLocation);
-
-                            // Center of ScrollView
-                            int scrollViewCenter =
-                                    scrollViewLocation[1] + (mainScrollView.getHeight() / 2);
-
-                            // Center of etPrePinCode
-                            int pinCodeCenter =
-                                    pinCodeLocation[1] + (binding.etPrePinCode.getHeight() / 2);
-
-                            // Difference between both centers
-                            int scrollY = pinCodeCenter - scrollViewCenter;
-
-                            mainScrollView.smoothScrollBy(0, scrollY);
-                        });
+                        scrollToCenter(binding.etPrePinCode);
                     }
                 } else {
                     Toast.makeText(getApplicationContext(), "Please update your present address", Toast.LENGTH_LONG).show();
                     etPreAddr.setBackgroundResource(R.drawable.lldesign_error);
-                    mainScrollView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            int y = llIldEsic.getBottom();
-                            mainScrollView.smoothScrollTo(0, y);
-                        }
-                    });
+                    scrollToCenter(binding.etPreAddr);
                 }
             }
         });
@@ -2732,14 +2625,24 @@ public class TempProfileActivity extends AppCompatActivity {
         txtPresentCity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openSearchCityDialog("present_city");
+                if(spPresentState.getSelectedItemPosition()== 0){
+                    Toast.makeText(TempProfileActivity.this, "Please Select Present State", Toast.LENGTH_SHORT).show();
+                } else {
+                    openSearchCityDialog("present_city");
+                }
+
             }
         });
 
         txtPermanentCity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openSearchCityDialog("permanent_city");
+                if (spPermanentState.getSelectedItemPosition()== 0){
+                    Toast.makeText(TempProfileActivity.this, "Please  Select Permanent State", Toast.LENGTH_SHORT).show();
+                } else {
+                    openSearchCityDialog("permanent_city");
+                }
+
             }
         });
     }
@@ -2880,7 +2783,7 @@ public class TempProfileActivity extends AppCompatActivity {
                             percity.clear();
                             mainPerCity.clear();
                             percity.add("Please Select");
-                            mainPerCity.add(new MainDocModule("", ""));
+                            mainPerCity.add(new MainDocModule("", "Please Select City"));
                             JSONObject job1 = response;
                             String Response_Code = job1.optString("Response_Code");
                             if (Response_Code.equals("101")) {
@@ -2925,7 +2828,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                             txtPermanentCity.setText(percity.get(index));
                                         }
                                     } catch (Exception ex){
-                                        txtPermanentCity.setText("");
+                                        txtPermanentCity.setText("Select Permanent City");
                                     }
                                 }
                                 //serPreCity();
@@ -3113,7 +3016,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                             presentcity = mainPreCity.get(index).getDocID();
                                         }
                                     } catch (Exception ex){
-                                        txtPresentCity.setText("");
+                                        txtPresentCity.setText("Select Present City");
                                     }
 
                                 }
@@ -3253,7 +3156,7 @@ public class TempProfileActivity extends AppCompatActivity {
                                 mainPreState.clear();
                                 prestate.clear();
                                 prestate.add("Please Select");
-                                mainPreState.add(new MainDocModule("",""));
+                                mainPreState.add(new MainDocModule("","Please Select"));
                                 JSONObject job1 = response;
                                 String Response_Code = job1.optString("Response_Code");
                                 if (Response_Code.equals("101")) {
@@ -4114,11 +4017,11 @@ public class TempProfileActivity extends AppCompatActivity {
 
     public void setText(String cityID,String selectedItem, String selectFor){
         if (selectFor.equals("present_city")){
-            llPresentCity.setBackgroundResource(R.drawable.lldesign9);
+            llPresentCity.setBackgroundResource(R.drawable.bg_edittext_disable);
             txtPresentCity.setText(selectedItem);
             presentcity = cityID;
         } else  {
-            llPermanentCity.setBackgroundResource(R.drawable.lldesign9);
+            llPermanentCity.setBackgroundResource(R.drawable.bg_edittext_disable);
             txtPermanentCity.setText(selectedItem);
             permanentcity = cityID;
         }
@@ -4158,4 +4061,33 @@ public class TempProfileActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
+    private void scrollToCenter(View targetView) {
+
+        mainScrollView.post(() -> {
+
+            int[] scrollViewLocation = new int[2];
+            int[] targetViewLocation = new int[2];
+
+            mainScrollView.getLocationOnScreen(scrollViewLocation);
+            targetView.getLocationOnScreen(targetViewLocation);
+
+            // Center of ScrollView
+            int scrollViewCenter =
+                    scrollViewLocation[1] + (mainScrollView.getHeight() / 2);
+
+            // Center of target View
+            int targetViewCenter =
+                    targetViewLocation[1] + (targetView.getHeight() / 2);
+
+            // Calculate scroll distance
+            int scrollY = targetViewCenter - scrollViewCenter;
+
+            // Scroll the target view to the center
+            mainScrollView.smoothScrollBy(0, scrollY);
+        });
+    }
+
+
 }
