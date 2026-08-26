@@ -409,7 +409,7 @@ public class KYCFamilyActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0){
-                    binding.etName.setBackgroundResource(R.drawable.lldesign9);
+                    binding.etName.setBackgroundResource(R.drawable.bg_edittext_disable);
                 }
             }
         });
