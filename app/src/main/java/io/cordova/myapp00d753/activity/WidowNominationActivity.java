@@ -113,7 +113,7 @@ public class WidowNominationActivity extends AppCompatActivity {
                 //if (i>0){
                     relationshipID=mainRealation.get(i).getDocID();
                     relationship=mainRealation.get(i).getDocumentType();
-                    binding.llRelationship.setBackgroundResource(R.drawable.lldesign9);
+                    binding.llRelationship.setBackgroundResource(R.drawable.bg_edittext);
                 //}
             }
 
@@ -128,7 +128,7 @@ public class WidowNominationActivity extends AppCompatActivity {
                 if (binding.imgTick.getVisibility()==View.GONE){
                     binding.imgTick.setVisibility(View.VISIBLE);
                     binding.etAddress.setText(AppData.PERMANENTADDRESS);
-                    binding.etAddress.setBackgroundResource(R.drawable.lldesign9);
+                    binding.etAddress.setBackgroundResource(R.drawable.bg_edittext);
                 }else {
                     binding.imgTick.setVisibility(View.GONE);
                     binding.etAddress.setText("");
@@ -284,7 +284,9 @@ public class WidowNominationActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0){
-                    binding.etName.setBackgroundResource(R.drawable.lldesign9);
+                    binding.etName.setBackgroundResource(R.drawable.bg_edittext);
+                } else {
+                    binding.etName.setBackgroundResource(R.drawable.lldesign_error);
                 }
             }
         });
@@ -303,7 +305,9 @@ public class WidowNominationActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0){
-                    binding.etAadharNominee.setBackgroundResource(R.drawable.lldesign9);
+                    binding.etAadharNominee.setBackgroundResource(R.drawable.bg_edittext);
+                } else {
+                    binding.etName.setBackgroundResource(R.drawable.lldesign_error);
                 }
             }
         });
@@ -322,7 +326,9 @@ public class WidowNominationActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0){
-                    binding.etAddress.setBackgroundResource(R.drawable.lldesign_error);
+                    binding.etAddress.setBackgroundResource(R.drawable.bg_edittext);
+                } else {
+                    binding.etName.setBackgroundResource(R.drawable.lldesign_error);
                 }
             }
         });
