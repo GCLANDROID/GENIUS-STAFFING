@@ -67,6 +67,7 @@ public class EPSNominationActivity extends AppCompatActivity {
     EPSNominationAdapter nominationAdapter;
     String isFatherSelected = "", isMotherSelected = "", isWifeSelected = "", isHusbandSelected = "";
     boolean isEditClick = false;
+    int isAddButtonClick=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +101,7 @@ public class EPSNominationActivity extends AppCompatActivity {
                         if (binding.etAadharNominee.getText().toString().length() > 0) {
                             if (!dob.isEmpty()){
                                 if (!relationshipID.isEmpty()){
+                                    isAddButtonClick = 1;
                                     JSONObject jsonObject = new JSONObject();
                                     try {
                                         jsonObject.put("Name", binding.etName.getText().toString());
@@ -153,8 +155,10 @@ public class EPSNominationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (binding.imgTick.getVisibility()==View.GONE){
                     binding.imgTick.setVisibility(View.VISIBLE);
-                    binding.etAddress.setText(AppData.PERMANENTADDRESS);
-                    binding.etAddress.setBackgroundResource(R.drawable.lldesign9);
+                    if (!AppData.PERMANENTADDRESS.trim().isEmpty()){
+                        binding.etAddress.setText(AppData.PERMANENTADDRESS);
+                    }
+                    binding.etAddress.setBackgroundResource(R.drawable.bg_edittext);
                 }else {
                     binding.imgTick.setVisibility(View.GONE);
                     binding.etAddress.setText("");
@@ -247,6 +251,12 @@ public class EPSNominationActivity extends AppCompatActivity {
         } else {
             nominationAdapter.notifyDataSetChanged();
         }
+        if (itemList.size() > 0){
+            binding.cardEpsNomination.setVisibility(View.VISIBLE);
+            binding.txtTotalMember.setText("Total : "+itemList.size());
+        } else {
+            binding.cardEpsNomination.setVisibility(View.GONE);
+        }
     }
 
     private void onClick(){
@@ -263,7 +273,7 @@ public class EPSNominationActivity extends AppCompatActivity {
                     } else {
                         relationshipID=mainRealation.get(i).getDocID();
                         relationship=mainRealation.get(i).getDocumentType();
-                        binding.llRelationship.setBackgroundResource(R.drawable.lldesign9);
+                        binding.llRelationship.setBackgroundResource(R.drawable.bg_edittext);
                     }
                 }
             }
@@ -409,7 +419,7 @@ public class EPSNominationActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0){
-                    binding.etName.setBackgroundResource(R.drawable.lldesign9);
+                    binding.etName.setBackgroundResource(R.drawable.bg_edittext);
                 }
             }
         });
@@ -428,7 +438,9 @@ public class EPSNominationActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0){
-                    binding.etAadharNominee.setBackgroundResource(R.drawable.lldesign9);
+                    binding.etAadharNominee.setBackgroundResource(R.drawable.bg_edittext);
+                } else {
+                    binding.etAadharNominee.setBackgroundResource(R.drawable.bg_edittext);
                 }
             }
         });
@@ -447,8 +459,12 @@ public class EPSNominationActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0){
+                    binding.etAddress.setBackgroundResource(R.drawable.bg_edittext);
+                } else {
+                    if (isAddButtonClick == 0)
                         binding.etAddress.setBackgroundResource(R.drawable.lldesign_error);
                 }
+                isAddButtonClick = 1;
             }
         });
     }
@@ -836,9 +852,11 @@ public class EPSNominationActivity extends AppCompatActivity {
                                 }
 
                                 if (itemList.size() > 0){
-                                    binding.llData.setVisibility(View.VISIBLE);
+                                    binding.cardEpsNomination.setVisibility(View.VISIBLE);
+                                    binding.txtTotalMember.setText("Total : "+itemList.size());
                                 } else {
-                                    binding.llData.setVisibility(View.GONE);
+                                    binding.cardEpsNomination.setVisibility(View.GONE);
+                                    binding.txtTotalMember.setText("Total : "+itemList.size());
                                 }
                             } else {
 
