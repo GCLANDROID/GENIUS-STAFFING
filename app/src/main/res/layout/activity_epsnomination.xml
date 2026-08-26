@@ -317,11 +317,11 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/cardFamilyMembers"
+                        android:id="@+id/cardEpsNomination"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="16dp"
-                        android:visibility="visible"
+                        android:visibility="gone"
                         app:cardBackgroundColor="@android:color/white"
                         app:cardCornerRadius="18dp"
                         app:cardElevation="5dp">
