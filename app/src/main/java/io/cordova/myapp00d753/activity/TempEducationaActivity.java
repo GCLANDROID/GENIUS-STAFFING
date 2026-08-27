@@ -121,7 +121,7 @@ public class TempEducationaActivity extends AppCompatActivity {
                     qualification=mainQualification.get(i).getDocumentType();
                     Log.e(TAG, "onItemSelected: "+qualificationid);
                     Log.e(TAG, "onItemSelected: "+qualification);
-                    binding.llQualification.setBackgroundResource(R.drawable.lldesign9);
+                    binding.llQualification.setBackgroundResource(R.drawable.bg_edittext);
                 }
             }
 
@@ -149,7 +149,7 @@ public class TempEducationaActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i>0){
                     passingyear=yearlist.get(i);
-                    binding.llPassingyear.setBackgroundResource(R.drawable.lldesign9);
+                    binding.llPassingyear.setBackgroundResource(R.drawable.bg_edittext);
                 }
             }
 
@@ -279,7 +279,7 @@ public class TempEducationaActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0){
-                    binding.etUniversity.setBackgroundResource(R.drawable.lldesign9);
+                    binding.etUniversity.setBackgroundResource(R.drawable.bg_edittext);
                 }
             }
         });
@@ -298,7 +298,7 @@ public class TempEducationaActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0){
-                    binding.etPercentage.setBackgroundResource(R.drawable.lldesign9);
+                    binding.etPercentage.setBackgroundResource(R.drawable.bg_edittext);
                 }
             }
         });
@@ -338,7 +338,13 @@ public class TempEducationaActivity extends AppCompatActivity {
         } else {
             educationAdapter.notifyDataSetChanged();
         }
-
+        if (itemList.size() > 0){
+            binding.llData.setVisibility(View.VISIBLE);
+            binding.txtTotalMember.setText("Total : "+itemList.size());
+        } else {
+            binding.llData.setVisibility(View.GONE);
+            binding.txtTotalMember.setText("Total : "+itemList.size());
+        }
 
     }
 
@@ -624,6 +630,14 @@ public class TempEducationaActivity extends AppCompatActivity {
                                     binding.rvData.setAdapter(educationAdapter);
                                 } else {
                                     educationAdapter.notifyDataSetChanged();
+                                }
+
+                                if (itemList.size() > 0){
+                                    binding.llData.setVisibility(View.VISIBLE);
+                                    binding.txtTotalMember.setText("Total : "+itemList.size());
+                                } else {
+                                    binding.llData.setVisibility(View.GONE);
+                                    binding.txtTotalMember.setText("Total : "+itemList.size());
                                 }
                             } else {
 
