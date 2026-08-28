@@ -173,7 +173,7 @@
                         android:layout_height="40dp"
                         android:background="@drawable/bg_edittext"
                         android:inputType="number"
-                        android:maxLength="12"
+                        android:maxLength="14"
                         android:paddingLeft="5dp"
                         android:singleLine="true"
                         android:textSize="12sp"
@@ -235,7 +235,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:fontFamily="@font/open_sans_semi_bold"
-                                android:text="(JPG, PNG, PDF accepted)"
+                                android:text="(JPG, PNG accepted)"
                                 android:textColor="@color/black"
                                 android:textSize="11sp" />
 
@@ -244,7 +244,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:fontFamily="@font/open_sans_regular"
-                                android:text="Max size 5MB • JPG, PNG, PDF"
+                                android:text="Max size 5MB • JPG, PNG"
                                 android:textColor="@color/black"
                                 android:textSize="11sp" />
 
@@ -324,7 +324,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:fontFamily="@font/open_sans_semi_bold"
-                                android:text="(JPG, PNG, PDF accepted)"
+                                android:text="(JPG, PNG accepted)"
                                 android:textColor="@color/black"
                                 android:textSize="11sp" />
 
@@ -333,7 +333,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:fontFamily="@font/open_sans_regular"
-                                android:text="Max size 5MB • JPG, PNG, PDF"
+                                android:text="Max size 5MB • JPG, PNG"
                                 android:textColor="@color/black"
                                 android:textSize="11sp" />
 
@@ -544,16 +544,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right">
+
                         <Button
+                            android:id="@+id/btnAadharSave"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:background="@drawable/bg_edittext"
                             android:backgroundTint="@color/text_color_2"
-                            android:textColor="@color/white"
-                            android:textSize="14sp"
                             android:text="Save Aadhaar"
                             android:textAllCaps="false"
-                            android:id="@+id/btnAadharSave"/>
+                            android:textColor="@color/white"
+                            android:textSize="14sp" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -665,7 +666,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:fontFamily="@font/open_sans_semi_bold"
-                                android:text="(JPG, PNG, PDF accepted)"
+                                android:text="(JPG, PNG accepted)"
                                 android:textColor="@color/black"
                                 android:textSize="11sp" />
 
@@ -674,7 +675,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:fontFamily="@font/open_sans_regular"
-                                android:text="Max size 5MB • JPG, PNG, PDF"
+                                android:text="Max size 5MB • JPG, PNG"
                                 android:textColor="@color/black"
                                 android:textSize="11sp" />
 
@@ -690,7 +691,7 @@
                             android:visibility="gone">
 
                             <ImageView
-                                android:id="@+id/imgPANDocument"
+                                android:id="@+id/imgDoc"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
