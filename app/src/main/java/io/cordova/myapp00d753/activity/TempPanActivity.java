@@ -120,7 +120,7 @@ public class TempPanActivity extends AppCompatActivity {
     private static final int DEFAULT_BUFFER_SIZE = 2048;
     String frontID,backID,panID;
     LinearLayout llAadhaarFrontImgSelected,llAadhaarBackImgSelected,llPANImgSelected;
-    FrameLayout flAadhaarFrontImage,flAadhaarBackImage;
+    FrameLayout flAadhaarFrontImage,flAadhaarBackImage,flPANImage;
     ImageView imgDeleteFront,imgDeleteBack,imgDeletePAN;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,6 +154,7 @@ public class TempPanActivity extends AppCompatActivity {
         btnPanSave=(Button)findViewById(R.id.btnPanSave);
         flAadhaarFrontImage = (FrameLayout) findViewById(R.id.flAadhaarFrontImage);
         flAadhaarBackImage = (FrameLayout) findViewById(R.id.flAadhaarBackImage);
+        flPANImage = (FrameLayout) findViewById(R.id.flPANImage);
         color = "<font color='#EE0000'>*</font>";
         /*tvAddaharNo = (TextView) findViewById(R.id.tvAddaharNo);
         String aadaharno = "Aadhaar Number";
@@ -166,7 +167,7 @@ public class TempPanActivity extends AppCompatActivity {
 
         //tvAddaharBackImg = (TextView) findViewById(R.id.tvAddaharBackImg);
         String aadharbackimg = "Aadhaar Back Image";
-        tvAddaharBackImg.setText(Html.fromHtml(aadharbackimg + color));
+        //tvAddaharBackImg.setText(Html.fromHtml(aadharbackimg + color));
 
 
         llSubmit=(LinearLayout)findViewById(R.id.llSubmit);
@@ -188,7 +189,7 @@ public class TempPanActivity extends AppCompatActivity {
         progressDialog.setMessage("Uploading...");
         security=pref.getSecurityCode();
         imgCamera=(ImageView)findViewById(R.id.imgCamera);
-        imgDoc=(ImageView)findViewById(R.id.imgDocument);
+        imgDoc=(ImageView)findViewById(R.id.imgDoc);
         imgDeleteFront=(ImageView)findViewById(R.id.imgDeleteFront);
         imgDeleteBack=(ImageView)findViewById(R.id.imgDeleteBack);
         imgDeletePAN=(ImageView)findViewById(R.id.imgDeletePAN);
@@ -228,7 +229,8 @@ public class TempPanActivity extends AppCompatActivity {
                         if (frontflag==1 && backflag==1){
 
                             Pattern r = Pattern.compile(aadharPatern);
-                            if (regex_matcher(r, etAddaharNo.getText().toString())) {
+                            String aadhaarNo = etAddaharNo.getText().toString().replaceAll(" ","");
+                            if (regex_matcher(r,aadhaarNo)) {
                                 aadharFrontUpload();
                             }else {
                                 Toast.makeText(getApplicationContext(),"Invalid Aadhaar number",Toast.LENGTH_LONG).show();
@@ -307,6 +309,7 @@ public class TempPanActivity extends AppCompatActivity {
         llPANImgSelected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO: PAN
                 attechmentAlert(200,1001, "no");
             }
         });
@@ -316,6 +319,7 @@ public class TempPanActivity extends AppCompatActivity {
         llAadhaarFrontImgSelected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO: Aadhaar Front
                 attechmentAlert(300,2001,"no");
             }
         });
@@ -325,6 +329,7 @@ public class TempPanActivity extends AppCompatActivity {
         llAadhaarBackImgSelected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO: Aadhaar Back
                 attechmentAlert(400,3001,"no");
             }
         });
@@ -399,8 +404,16 @@ public class TempPanActivity extends AppCompatActivity {
                 backflag=0;
             }
         });
+        imgDeletePAN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                llPANImgSelected.setVisibility(View.VISIBLE);
+                flPANImage.setVisibility(View.GONE);
+                flag=0;
+            }
+        });
 
-        imgDoc.setOnClickListener(new View.OnClickListener() {
+        /*imgDoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!imagePanURL.isEmpty()){
@@ -409,7 +422,7 @@ public class TempPanActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             }
-        });
+        });*/
     }
 
     private void cameraIntent() {
@@ -438,8 +451,9 @@ public class TempPanActivity extends AppCompatActivity {
             if (image_uri != null){
                 imgDoc.setImageURI(image_uri);
                 flag=1;
-
-                llPanDoc.setBackgroundResource(R.drawable.lldesign9);
+                flPANImage.setVisibility(View.VISIBLE);
+                llPANImgSelected.setVisibility(View.GONE);
+                //llPanDoc.setBackgroundResource(R.drawable.lldesign9);
             }
         }else if ((requestCode == 200 )) {
             InputStream imageStream = null;
@@ -449,18 +463,21 @@ public class TempPanActivity extends AppCompatActivity {
                     String filePath = getRealPathFromURIPath(uri, TempPanActivity.this);
                     compressedImageFilePan = new File(filePath);
                     //  Log.d(TAG, "filePath=" + filePath);
-                    imageStream = getContentResolver().openInputStream(uri);
+                    /*imageStream = getContentResolver().openInputStream(uri);
                     Bitmap bm = cropToSquare(BitmapFactory.decodeStream(imageStream));
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     bm.compress(Bitmap.CompressFormat.PNG, 10, baos); //bm is the bitmap object
                     byte[] b = baos.toByteArray();
-                    encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+                    encodedImage = Base64.encodeToString(b, Base64.DEFAULT);*/
 
-                    imgDoc.setImageBitmap(bm);
+                    //imgDoc.setImageBitmap(bm);
+                    imgDoc.setImageURI(uri);
 
                     flag = 1;
-
-                    llPanDoc.setBackgroundResource(R.drawable.lldesign9);
+                    flPANImage.setVisibility(View.VISIBLE);
+                    flPANImage.setVisibility(View.VISIBLE);
+                    llPANImgSelected.setVisibility(View.GONE);
+                    //llPanDoc.setBackgroundResource(R.drawable.lldesign9);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -504,11 +521,12 @@ public class TempPanActivity extends AppCompatActivity {
             if (image_uri != null){
                 imgAadharDocument.setImageURI(image_uri);
                 flAadhaarFrontImage.setVisibility(View.VISIBLE);
+                llAadhaarFrontImgSelected.setVisibility(View.GONE);
                 frontflag=1;
                 //llAadharFront.setBackgroundResource(R.drawable.lldesign9);
 
             }
-        }else if ((requestCode == 300 )) {
+        }else if (requestCode == 300 ) {
             InputStream imageStream = null;
             try {
                 try {
@@ -516,18 +534,19 @@ public class TempPanActivity extends AppCompatActivity {
                     String filePath = getRealPathFromURIPath(uri, TempPanActivity.this);
                     compressedImageFile = new File(filePath);
                     //  Log.d(TAG, "filePath=" + filePath);
-                    imageStream = getContentResolver().openInputStream(uri);
+                   /* imageStream = getContentResolver().openInputStream(uri);
                     Bitmap bm = cropToSquare(BitmapFactory.decodeStream(imageStream));
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     bm.compress(Bitmap.CompressFormat.PNG, 10, baos); //bm is the bitmap object
                     byte[] b = baos.toByteArray();
-                    encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+                    encodedImage = Base64.encodeToString(b, Base64.DEFAULT);*/
 
-                    imgAadharDocument.setImageBitmap(bm);
+                    //imgAadharDocument.setImageBitmap(bm);
+                    imgAadharDocument.setImageURI(uri);
                     flAadhaarFrontImage.setVisibility(View.VISIBLE);
                     frontflag=1;
-                    llAadharFront.setBackgroundResource(R.drawable.lldesign9);
-
+                    //llAadharFront.setBackgroundResource(R.drawable.lldesign9);
+                    llAadhaarFrontImgSelected.setVisibility(View.GONE);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -571,6 +590,7 @@ public class TempPanActivity extends AppCompatActivity {
             if (image_uri != null){
                 imgAadharBackDocument.setImageURI(image_uri);
                 flAadhaarBackImage.setVisibility(View.VISIBLE);
+                llAadhaarBackImgSelected.setVisibility(View.GONE);
                 backflag=1;
                 //llAadharBack.setBackgroundResource(R.drawable.lldesign9);
             }
@@ -582,15 +602,17 @@ public class TempPanActivity extends AppCompatActivity {
                     String filePath = getRealPathFromURIPath(uri, TempPanActivity.this);
                     file = new File(filePath);
                     //  Log.d(TAG, "filePath=" + filePath);
-                    imageStream = getContentResolver().openInputStream(uri);
+                    /*imageStream = getContentResolver().openInputStream(uri);
                     Bitmap bm = cropToSquare(BitmapFactory.decodeStream(imageStream));
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     bm.compress(Bitmap.CompressFormat.PNG, 10, baos); //bm is the bitmap object
                     byte[] b = baos.toByteArray();
-                    encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+                    encodedImage = Base64.encodeToString(b, Base64.DEFAULT);*/
 
-                    imgAadharBackDocument.setImageBitmap(bm);
-                    flAadhaarBackImage.setVisibility(View.GONE);
+                    //imgAadharBackDocument.setImageBitmap(bm);
+                    imgAadharBackDocument.setImageURI(uri);
+                    flAadhaarBackImage.setVisibility(View.VISIBLE);
+                    llAadhaarBackImgSelected.setVisibility(View.GONE);
                     backflag=1;
 
                     //llAadharBack.setBackgroundResource(R.drawable.lldesign9);
@@ -1434,7 +1456,8 @@ public class TempPanActivity extends AppCompatActivity {
 
                                     if (aadhaarFront != null){
                                         aadhaarImage = AppData.IMAGE_PATH_URL+aadhaarFront.optString("FileName");
-
+                                        llAadhaarFrontImgSelected.setVisibility(View.GONE);
+                                        flAadhaarFrontImage.setVisibility(View.VISIBLE);
                                        /* Picasso.with(TempPanActivity.this)
                                                 .load(AppData.IMAGE_PATH_URL+aadhaarFront.optString("FileName"))
                                                 .placeholder(R.drawable.load)
@@ -1464,6 +1487,8 @@ public class TempPanActivity extends AppCompatActivity {
 
                                     if (aadhaarBack != null){
                                         aadhaarBackPage = AppData.IMAGE_PATH_URL+aadhaarBack.optString("FileName");
+                                        llAadhaarBackImgSelected.setVisibility(View.GONE);
+                                        flAadhaarBackImage.setVisibility(View.VISIBLE);
                                         /*Picasso.with(TempPanActivity.this)
                                                 .load(AppData.IMAGE_PATH_URL+aadhaarBack.optString("FileName"))
                                                 .placeholder(R.drawable.load)
@@ -1559,6 +1584,8 @@ public class TempPanActivity extends AppCompatActivity {
                                     if (panObj != null){
                                         etPanNumber.setText(panObj.optString("ReferenceNo"));
                                         imagePanURL = AppData.IMAGE_PATH_URL+panObj.optString("FileName");
+                                        llPANImgSelected.setVisibility(View.GONE);
+                                        flPANImage.setVisibility(View.VISIBLE);
                                        /* Picasso.with(TempPanActivity.this)
                                                 .load(AppData.IMAGE_PATH_URL+panObj.optString("FileName"))
                                                 .placeholder(R.drawable.load)
