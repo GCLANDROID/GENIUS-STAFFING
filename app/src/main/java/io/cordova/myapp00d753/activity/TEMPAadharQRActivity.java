@@ -815,7 +815,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
 
                             //image
 
-                            AppData.AADAHARNUMBER = binding.etAadhar.getText().toString();
+                            AppData.AADAHARNUMBER = binding.etAadhar.getText().toString().trim().replaceAll(" ","");
 
                             adharAlert(namevalue, dobvalue, AppData.AADAHARNUMBER, gendervalue, careof, state, pin, street, locality, house, postoffice, subDistrict, district, vtc, landmark, null, 1);
 
