@@ -1193,6 +1193,8 @@ public class TempBankActivity extends AppCompatActivity {
                                 int index = doctype.indexOf(bankObj.optString("Document"));
                                 spDocType.setSelection(index);
                                 String imageURL = AppData.IMAGE_PATH_URL+bankObj.optString("FileName");
+                                llBankImgSelected.setVisibility(View.GONE);
+                                flBankImage.setVisibility(View.VISIBLE);
                                 Picasso.with(TempBankActivity.this)
                                         .load(imageURL)
                                         .placeholder(R.drawable.load)
