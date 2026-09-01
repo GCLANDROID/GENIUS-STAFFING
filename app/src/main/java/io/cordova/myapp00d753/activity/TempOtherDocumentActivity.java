@@ -5,6 +5,7 @@ import static android.os.Build.VERSION.SDK_INT;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
 import android.app.Activity;
@@ -558,15 +559,41 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
                             if (Response_Code == 101) {
                                 if (doc.equalsIgnoreCase("Passport Size Photo")){
                                     pFlag=0;
+                                    int progress = binding.progressBar.getProgress();
+                                    binding.progressBar.setProgress(progress+1);
+                                    binding.imgPassportCheck.setImageResource(R.drawable.check_mark);
+                                    binding.tvPassportUploadStatus.setText("Uploaded");
+                                    binding.tvPassportUploadStatus.setTextColor(ContextCompat.getColor(TempOtherDocumentActivity.this, R.color.designcolor));
                                 } else if (doc.equalsIgnoreCase("Family Photo")){
                                     fFlag = 0;
+                                    int progress = binding.progressBar.getProgress();
+                                    binding.progressBar.setProgress(progress+1);
+                                    binding.imgFamilyCheck.setImageResource(R.drawable.check_mark);
+                                    binding.tvFamilyUploadStatus.setText("Uploaded");
+                                    binding.tvFamilyUploadStatus.setTextColor(ContextCompat.getColor(TempOtherDocumentActivity.this, R.color.designcolor));
                                 } else if (doc.equalsIgnoreCase("Resume")){
                                     rFlag = 0;
+                                    int progress = binding.progressBar.getProgress();
+                                    binding.progressBar.setProgress(progress+1);
+                                    binding.imgResumeCheck.setImageResource(R.drawable.check_mark);
+                                    binding.tvResumeUplaodStatus.setText("Uploaded");
+                                    binding.tvResumeUplaodStatus.setTextColor(ContextCompat.getColor(TempOtherDocumentActivity.this, R.color.designcolor));
                                 } else if (doc.equalsIgnoreCase("Experience Letter")){
                                     eFlag = 0;
+                                    int progress = binding.progressBar.getProgress();
+                                    binding.progressBar.setProgress(progress+1);
+                                    binding.imgExpCheck.setImageResource(R.drawable.check_mark);
+                                    binding.tvExpUploadStatus.setText("Uploaded");
+                                    binding.tvExpUploadStatus.setTextColor(ContextCompat.getColor(TempOtherDocumentActivity.this, R.color.designcolor));
                                 } else if (doc.equalsIgnoreCase("Appointment Letter")){
                                     aFlag = 0;
+                                    int progress = binding.progressBar.getProgress();
+                                    binding.progressBar.setProgress(progress+1);
+                                    binding.imgAppointmentLetterCheck.setImageResource(R.drawable.check_mark);
+                                    binding.tvAppointmentLetterUploadCheck.setText("Uploaded");
+                                    binding.tvAppointmentLetterUploadCheck.setTextColor(ContextCompat.getColor(TempOtherDocumentActivity.this, R.color.designcolor));
                                 }
+                                binding.tvProgressUploadedDoc.setText(binding.progressBar.getProgress() +"/5 Saved");
                                 flag=0;
                                 btn.setVisibility(View.GONE);
                                 Toast.makeText(getApplicationContext(), doc+" details has been updated successfully", Toast.LENGTH_LONG).show();
@@ -804,8 +831,8 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
                 binding.imgResumeDocument.setImageURI(image_uri);
                 flag=1;
                 rFlag = 1;
-                binding.llFamilyImgSelected.setVisibility(View.GONE);
-                binding.flFamilyImage.setVisibility(View.VISIBLE);
+                binding.llResumeImgSelected.setVisibility(View.GONE);
+                binding.flResumeImage.setVisibility(View.VISIBLE);
             }
         }else  if ((requestCode == 300 )){
             if (data != null){
@@ -832,8 +859,8 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
                 binding.imgResumeDocument.setImageDrawable(getResources().getDrawable(R.drawable.ic_pdf));
                 flag = 1;
                 rFlag = 1;
-                binding.llFamilyImgSelected.setVisibility(View.GONE);
-                binding.flFamilyImage.setVisibility(View.VISIBLE);
+                binding.llResumeImgSelected.setVisibility(View.GONE);
+                binding.flResumeImage.setVisibility(View.VISIBLE);
             }
             //flag++;
         }else  if (requestCode == 2000 && resultCode == 4001){
@@ -845,6 +872,8 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
             fileExperience = new File(String.valueOf(data.getExtras().get("picture")));
             if (image_uri != null){
                 binding.imgExperinceLetterDocument.setImageURI(image_uri);
+                binding.llExperinceLetterImgSelected.setVisibility(View.GONE);
+                binding.flExperienceLetterImage.setVisibility(View.VISIBLE);
                 flag=1;
                 eFlag =1;
             }
@@ -870,9 +899,10 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
                 fileExperience = convertInputStreamToFile(uri,pdfFileName);
             }
             binding.imgExperinceLetterDocument.setImageDrawable(getResources().getDrawable(R.drawable.ic_pdf));
+            binding.llExperinceLetterImgSelected.setVisibility(View.GONE);
+            binding.flExperienceLetterImage.setVisibility(View.VISIBLE);
             flag = 1;
             eFlag =1;
-            //flag++;
         }else  if (requestCode == 2000 && resultCode == 5001){
             Log.e("TAG", "onActivityResult: "+data.getExtras().get("picture"));
             Log.e("TAG", "onActivityResult: "+data.getExtras().get(AndroidXCameraActivity.IMAGE_PATH_KEY));
@@ -882,6 +912,8 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
             fileAppointmentLetter = new File(String.valueOf(data.getExtras().get("picture")));
             if (image_uri != null){
                 binding.imgAppointmentletterDocument.setImageURI(image_uri);
+                binding.llAppointmentLetterImgSelected.setVisibility(View.GONE);
+                binding.flAppointmentLetterImage.setVisibility(View.VISIBLE);
                 flag=1;
                 aFlag = 1;
             }
@@ -907,6 +939,8 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
                 fileAppointmentLetter = convertInputStreamToFile(uri,pdfFileName);
             }
             binding.imgAppointmentletterDocument.setImageDrawable(getResources().getDrawable(R.drawable.ic_pdf));
+            binding.llAppointmentLetterImgSelected.setVisibility(View.GONE);
+            binding.flAppointmentLetterImage.setVisibility(View.VISIBLE);
             flag = 1;
             aFlag = 1;
             //flag++;
@@ -1127,30 +1161,40 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
                                         passportSizePhotoURL = otherDocObj.optString("DocUrl");
                                         String DocumentID = otherDocObj.optString("DocumentID");
                                         String FileName = otherDocObj.optString("FileName");
+                                        int progress = binding.progressBar.getProgress();
+                                        binding.progressBar.setProgress(progress+1);
                                         getPassportPhoto(DocUrl,FileName);
                                     } else if(otherDocObj.optString("DocumentType").equalsIgnoreCase("Family Photo")){
                                         String DocUrl = otherDocObj.optString("DocUrl");
                                         familyPhotoURL = otherDocObj.optString("DocUrl");
                                         String DocumentID = otherDocObj.optString("DocumentID");
                                         String FileName = otherDocObj.optString("FileName");
+                                        int progress = binding.progressBar.getProgress();
+                                        binding.progressBar.setProgress(progress+1);
                                         getFamilyPhoto(DocUrl,FileName);
                                     } else if(otherDocObj.optString("DocumentType").equalsIgnoreCase("Resume")){
                                         String DocUrl = otherDocObj.optString("DocUrl");
                                         resumeURL = otherDocObj.optString("DocUrl");
                                         String DocumentID = otherDocObj.optString("DocumentID");
                                         String FileName = otherDocObj.optString("FileName");
+                                        int progress = binding.progressBar.getProgress();
+                                        binding.progressBar.setProgress(progress+1);
                                         getResume(DocUrl,FileName);
                                     } else if(otherDocObj.optString("DocumentType").equalsIgnoreCase("Experience Letter")){
                                         String DocUrl = otherDocObj.optString("DocUrl");
                                         experienceURL = otherDocObj.optString("DocUrl");
                                         String DocumentID = otherDocObj.optString("DocumentID");
                                         String FileName = otherDocObj.optString("FileName");
+                                        int progress = binding.progressBar.getProgress();
+                                        binding.progressBar.setProgress(progress+1);
                                         getExperienceLetter(DocUrl,FileName);
                                     } else if(otherDocObj.optString("DocumentType").equalsIgnoreCase("Appointment Letter")){
                                         String DocUrl = otherDocObj.optString("DocUrl");
                                         appointmentLetterURL = otherDocObj.optString("DocUrl");
                                         String DocumentID = otherDocObj.optString("DocumentID");
                                         String FileName = otherDocObj.optString("FileName");
+                                        int progress = binding.progressBar.getProgress();
+                                        binding.progressBar.setProgress(progress+1);
                                         getAppointmentLetter(DocUrl,FileName);
                                     }
                                 }
@@ -1171,6 +1215,12 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
     }
 
     private void getAppointmentLetter(String docUrl, String fileName) {
+        binding.llAppointmentLetterImgSelected.setVisibility(View.GONE);
+        binding.flAppointmentLetterImage.setVisibility(View.VISIBLE);
+        binding.imgAppointmentLetterCheck.setImageResource(R.drawable.check_mark);
+        binding.tvAppointmentLetterUploadCheck.setText("Uploaded");
+        binding.tvAppointmentLetterUploadCheck.setTextColor(ContextCompat.getColor(TempOtherDocumentActivity.this, R.color.designcolor));
+        binding.tvProgressUploadedDoc.setText(binding.progressBar.getProgress() +"/5 Saved");
         String exe = docUrl.substring(docUrl.lastIndexOf("."));
         Picasso.with(TempOtherDocumentActivity.this)
                 .load(R.drawable.loading)        // Load the image from the URL
@@ -1208,6 +1258,12 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
     }
 
     private void getExperienceLetter(String docUrl, String fileName) {
+        binding.llExperinceLetterImgSelected.setVisibility(View.GONE);
+        binding.flExperienceLetterImage.setVisibility(View.VISIBLE);
+        binding.imgExpCheck.setImageResource(R.drawable.check_mark);
+        binding.tvExpUploadStatus.setText("Uploaded");
+        binding.tvExpUploadStatus.setTextColor(ContextCompat.getColor(TempOtherDocumentActivity.this, R.color.designcolor));
+        binding.tvProgressUploadedDoc.setText(binding.progressBar.getProgress() +"/5 Saved");
         String exe = docUrl.substring(docUrl.lastIndexOf("."));
         Picasso.with(TempOtherDocumentActivity.this)
                 .load(R.drawable.loading)        // Load the image from the URL
@@ -1246,6 +1302,12 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
     }
 
     private void getResume(String docUrl, String fileName) {
+        binding.llResumeImgSelected.setVisibility(View.GONE);
+        binding.flResumeImage.setVisibility(View.VISIBLE);
+        binding.imgResumeCheck.setImageResource(R.drawable.check_mark);
+        binding.tvResumeUplaodStatus.setText("Uploaded");
+        binding.tvResumeUplaodStatus.setTextColor(ContextCompat.getColor(TempOtherDocumentActivity.this, R.color.designcolor));
+        binding.tvProgressUploadedDoc.setText(binding.progressBar.getProgress() +"/5 Saved");
         String exe = docUrl.substring(docUrl.lastIndexOf("."));
         Picasso.with(TempOtherDocumentActivity.this)
                 .load(R.drawable.loading)
@@ -1282,6 +1344,12 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
     }
 
     private void getFamilyPhoto(String docUrl, String fileName) {
+        binding.llFamilyImgSelected.setVisibility(View.GONE);
+        binding.flFamilyImage.setVisibility(View.VISIBLE);
+        binding.imgFamilyCheck.setImageResource(R.drawable.check_mark);
+        binding.tvFamilyUploadStatus.setText("Uploaded");
+        binding.tvFamilyUploadStatus.setTextColor(ContextCompat.getColor(TempOtherDocumentActivity.this, R.color.designcolor));
+        binding.tvProgressUploadedDoc.setText(binding.progressBar.getProgress() +"/5 Saved");
         String exe = docUrl.substring(docUrl.lastIndexOf("."));
         Picasso.with(TempOtherDocumentActivity.this)
                 .load(docUrl)
@@ -1310,6 +1378,12 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
     }
 
     private void getPassportPhoto(String docUrl, String fileName) {
+        binding.llPSPImgSelected.setVisibility(View.GONE);
+        binding.flPassportImage.setVisibility(View.VISIBLE);
+        binding.imgPassportCheck.setImageResource(R.drawable.check_mark);
+        binding.tvPassportUploadStatus.setText("Uploaded");
+        binding.tvPassportUploadStatus.setTextColor(ContextCompat.getColor(TempOtherDocumentActivity.this, R.color.designcolor));
+        binding.tvProgressUploadedDoc.setText(binding.progressBar.getProgress() +"/5 Saved");
         String exe = docUrl.substring(docUrl.lastIndexOf("."));
         Picasso.with(TempOtherDocumentActivity.this)
                 .load(docUrl)
