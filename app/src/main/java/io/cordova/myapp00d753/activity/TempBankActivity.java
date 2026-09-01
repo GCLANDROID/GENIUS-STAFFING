@@ -122,6 +122,7 @@ public class TempBankActivity extends AppCompatActivity {
     Dialog searchHolidayDialog;
     LinearLayout llBankImgSelected;
     FrameLayout flBankImage;
+    Button btnSkip;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,7 +143,7 @@ public class TempBankActivity extends AppCompatActivity {
         flBankImage = (FrameLayout) findViewById(R.id.flBankImage);
         spBankName = (Spinner) findViewById(R.id.spBankName);
         spDocType = (Spinner) findViewById(R.id.spDocType);
-
+        btnSkip = (Button) findViewById(R.id.btnSkip);
         llLoader = (LinearLayout) findViewById(R.id.llLoader);
         llMain = (LinearLayout) findViewById(R.id.llMain);
 
@@ -260,7 +261,7 @@ public class TempBankActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 bankdocid = mainDocType.get(position).getDocID();
-                llDocumentType.setBackgroundResource(R.drawable.lldesign9);
+                llDocumentType.setBackgroundResource(R.drawable.bg_edittext);
             }
 
             @Override
@@ -268,12 +269,12 @@ public class TempBankActivity extends AppCompatActivity {
 
             }
         });
-        imgCamera.setOnClickListener(new View.OnClickListener() {
+        /*imgCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cameraIntent();
             }
-        });
+        });*/
 
         llBankImgSelected.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -290,7 +291,7 @@ public class TempBankActivity extends AppCompatActivity {
             }
         });
 
-        tvSkip.setOnClickListener(new View.OnClickListener() {
+        btnSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(TempBankActivity.this,TempOtherDocumentActivity.class);
@@ -349,7 +350,7 @@ public class TempBankActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0){
-                    etAccNumber.setBackgroundResource(R.drawable.lldesign9);
+                    etAccNumber.setBackgroundResource(R.drawable.bg_edittext);
                 }
             }
         });
@@ -368,7 +369,7 @@ public class TempBankActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0){
-                    etIFSC.setBackgroundResource(R.drawable.lldesign9);
+                    etIFSC.setBackgroundResource(R.drawable.bg_edittext);
                 }
             }
         });
@@ -387,7 +388,7 @@ public class TempBankActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0){
-                    etFName.setBackgroundResource(R.drawable.lldesign9);
+                    etFName.setBackgroundResource(R.drawable.bg_edittext);
                 }
             }
         });
@@ -406,7 +407,7 @@ public class TempBankActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0){
-                    etLName.setBackgroundResource(R.drawable.lldesign9);
+                    etLName.setBackgroundResource(R.drawable.bg_edittext);
                 }
             }
         });
@@ -708,6 +709,7 @@ public class TempBankActivity extends AppCompatActivity {
 
             if (uri != null){
                 flBankImage.setVisibility(View.VISIBLE);
+                llBankImgSelected.setVisibility(View.GONE);
                 imgDoc.setImageURI(uri);
                 flag=1;
 
@@ -1149,7 +1151,7 @@ public class TempBankActivity extends AppCompatActivity {
     public void setText(String bankId,String selectedItem, String selectFor){
         txtBankName.setText(selectedItem);
         bankname = bankId;
-        llBankName.setBackgroundResource(R.drawable.lldesign9);
+        llBankName.setBackgroundResource(R.drawable.bg_edittext);
         Log.e(TAG, "bankname: "+bankname);
         searchHolidayDialog.dismiss();
     }
