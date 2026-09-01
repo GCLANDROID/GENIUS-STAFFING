@@ -157,6 +157,7 @@
                                 android:layout_weight="1"/>
 
                             <TextView
+                                android:id="@+id/tvProgressUploadedDoc"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0/5 Saved"
@@ -172,7 +173,7 @@
                             android:layout_height="8dp"
                             android:max="5"
                             android:layout_marginTop="10dp"
-                            android:progress="3" />
+                            android:progress="0" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -606,17 +607,17 @@
                                     android:id="@+id/llExperinceLetterImgSelected"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:orientation="vertical"
                                     android:gravity="center"
+                                    android:orientation="vertical"
                                     android:visibility="visible">
 
                                     <ImageView
                                         android:layout_width="50dp"
                                         android:layout_height="49dp"
-                                        android:padding="10dp"
-                                        android:src="@drawable/upload"
                                         android:background="@drawable/bg_icon_circle"
-                                        android:backgroundTint="#F7E9FB" />
+                                        android:backgroundTint="#F7E9FB"
+                                        android:padding="10dp"
+                                        android:src="@drawable/upload" />
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -828,13 +829,14 @@
                     android:padding="16dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
+                    android:layout_marginHorizontal="7dp"
                     android:background="@drawable/bg_info_box"
                     android:gravity="top">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="💡"
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/bulb"
                         android:textSize="20sp"
                         android:layout_marginEnd="12dp" />
 
@@ -877,6 +879,7 @@
                         android:background="@drawable/lldesign"
                         android:backgroundTint="@color/text_color_3"
                         android:textColor="@color/white"
+                        android:layout_marginHorizontal="7dp"
                         android:textAllCaps="false"
                         android:text="Submit"/>
 
@@ -886,8 +889,9 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="7dp"
                     android:layout_marginTop="15dp"
+                    android:layout_marginHorizontal="7dp"
+                    android:layout_marginBottom="20dp"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="4dp">
 
@@ -897,6 +901,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:padding="18dp"
+
                         android:background="@drawable/bg_info_box"
                         android:backgroundTint="@color/white"
                         android:elevation="3dp">
@@ -927,20 +932,33 @@
                                 android:textSize="14sp"
                                 android:textColor="#333333" />
 
-                            <TextView
-                                android:id="@+id/tvPassportStatus"
+
+                            <LinearLayout
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="⏳ Pending"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                android:textColor="#F44336" />
+                                android:layout_height="wrap_content">
+                                <ImageView
+                                    android:id="@+id/imgPassportCheck"
+                                    android:layout_width="20dp"
+                                    android:layout_height="18dp"
+                                    android:src="@drawable/wait"
+                                    android:layout_marginTop="2dp"/>
+                                <TextView
+                                    android:id="@+id/tvPassportUploadStatus"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Pending"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:paddingStart="5dp"
+                                    android:textColor="#F44336" />
+                            </LinearLayout>
 
                         </LinearLayout>
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
+                            android:visibility="invisible"
                             android:background="#F0F0F0" />
 
                         <!-- Family Photo -->
@@ -959,21 +977,33 @@
                                 android:textSize="14sp"
                                 android:textColor="#333333" />
 
-                            <TextView
-                                android:id="@+id/tvFamilyStatus"
+                            <LinearLayout
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="⏳ Pending"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                android:textColor="#F44336" />
+                                android:layout_height="wrap_content">
+                                <ImageView
+                                    android:id="@+id/imgFamilyCheck"
+                                    android:layout_width="20dp"
+                                    android:layout_height="18dp"
+                                    android:src="@drawable/wait"
+                                    android:layout_marginTop="2dp"/>
+                                <TextView
+                                    android:id="@+id/tvFamilyUploadStatus"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Pending"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:paddingStart="5dp"
+                                    android:textColor="#F44336" />
+                            </LinearLayout>
 
                         </LinearLayout>
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="#F0F0F0" />
+                            android:background="#F0F0F0"
+                            android:visibility="invisible"/>
 
                         <!-- Resume -->
                         <LinearLayout
@@ -991,14 +1021,25 @@
                                 android:textSize="14sp"
                                 android:textColor="#333333" />
 
-                            <TextView
-                                android:id="@+id/tvResumeStatus"
+                            <LinearLayout
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="⏳ Pending"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                android:textColor="#F44336" />
+                                android:layout_height="wrap_content">
+                                <ImageView
+                                    android:id="@+id/imgResumeCheck"
+                                    android:layout_width="20dp"
+                                    android:layout_height="18dp"
+                                    android:src="@drawable/wait"
+                                    android:layout_marginTop="2dp"/>
+                                <TextView
+                                    android:id="@+id/tvResumeUplaodStatus"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Pending"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:paddingStart="5dp"
+                                    android:textColor="#F44336" />
+                            </LinearLayout>
 
                         </LinearLayout>
 
@@ -1017,14 +1058,25 @@
                                 android:textColor="#333333"
                                 android:textSize="14sp" />
 
-                            <TextView
-                                android:id="@+id/tvExperienceStatus"
+                            <LinearLayout
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="⏳ Pending"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                android:textColor="#F44336" />
+                                android:layout_height="wrap_content">
+                                <ImageView
+                                    android:id="@+id/imgExpCheck"
+                                    android:layout_width="20dp"
+                                    android:layout_height="18dp"
+                                    android:src="@drawable/wait"
+                                    android:layout_marginTop="2dp"/>
+                                <TextView
+                                    android:id="@+id/tvExpUploadStatus"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Pending"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:paddingStart="5dp"
+                                    android:textColor="#F44336" />
+                            </LinearLayout>
 
                         </LinearLayout>
 
@@ -1043,21 +1095,31 @@
                                 android:textColor="#333333"
                                 android:textSize="14sp" />
 
-                            <TextView
-                                android:id="@+id/tvExperienceStatus"
+                            <LinearLayout
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="⏳ Pending"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                android:textColor="#F44336" />
+                                android:layout_height="wrap_content">
+                                <ImageView
+                                    android:id="@+id/imgAppointmentLetterCheck"
+                                    android:layout_width="20dp"
+                                    android:layout_height="18dp"
+                                    android:src="@drawable/wait"
+                                    android:layout_marginTop="2dp"/>
+                                <TextView
+                                    android:id="@+id/tvAppointmentLetterUploadCheck"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Pending"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:paddingStart="5dp"
+                                    android:textColor="#F44336" />
+                            </LinearLayout>
 
                         </LinearLayout>
 
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
-
 
 
 
