@@ -186,7 +186,7 @@
                             android:paddingStart="10dp"
                             android:hint="Enter Account Number"
                             android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="@color/black"
                             android:digits="1234567890"
                             android:layout_marginTop="5dp"
                             android:maxLength="17"
@@ -234,7 +234,7 @@
                             android:paddingEnd="10dp"
                             android:layout_marginBottom="10dp"
                             android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="@color/black"
                             android:digits="1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-."/>
 
                         <TextView
@@ -257,7 +257,7 @@
                             android:layout_marginBottom="10dp"
                             android:hint="Enter first name as per bank records"
                             android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="@color/black"
                             android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ."/>
 
                         <TextView
@@ -279,7 +279,7 @@
                             android:layout_marginBottom="15dp"
                             android:hint="Enter Last Name as per bank records"
                             android:textAppearance="?android:textAppearanceSmall"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="@color/black"
                             android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ."/>
 
                         <TextView
