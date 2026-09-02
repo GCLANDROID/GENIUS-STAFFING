@@ -366,9 +366,9 @@ public class GratuityNominationActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0){
                     binding.etName.setBackgroundResource(R.drawable.bg_edittext);
-                } else {
+                } /*else {
                     binding.etName.setBackgroundResource(R.drawable.lldesign_error);
-                }
+                }*/
             }
         });
 
@@ -387,9 +387,9 @@ public class GratuityNominationActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0){
                     binding.etAadharNominee.setBackgroundResource(R.drawable.bg_edittext);
-                } else {
+                } /*else {
                     binding.etAadharNominee.setBackgroundResource(R.drawable.lldesign_error);
-                }
+                }*/
             }
         });
 
@@ -408,9 +408,9 @@ public class GratuityNominationActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0){
                     binding.etAddress.setBackgroundResource(R.drawable.bg_edittext);
-                } else {
+                }/* else {
                     binding.etAddress.setBackgroundResource(R.drawable.lldesign_error);
-                }
+                }*/
             }
         });
 
@@ -429,9 +429,9 @@ public class GratuityNominationActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0){
                     binding.etProportion.setBackgroundResource(R.drawable.bg_edittext);
-                } else {
+                } /*else {
                     binding.etProportion.setBackgroundResource(R.drawable.lldesign_error);
-                }
+                }*/
             }
         });
     }
@@ -898,16 +898,16 @@ public class GratuityNominationActivity extends AppCompatActivity {
 
                                 if(itemList.size() > 0){
                                     binding.txtTotalMember.setText("Total :"+itemList.size());
-                                    binding.llData.setVisibility(View.VISIBLE);
+                                    binding.cardFamilyMembers.setVisibility(View.VISIBLE);
                                 } else {
                                     binding.txtTotalMember.setText("Total :"+itemList.size());
-                                    binding.llData.setVisibility(View.GONE);
+                                    binding.cardFamilyMembers.setVisibility(View.GONE);
                                 }
                             } else {
 
                             }
                         } catch (JSONException e) {
-                            throw new RuntimeException(e);
+                            e.printStackTrace();
                         }
                     }
 
