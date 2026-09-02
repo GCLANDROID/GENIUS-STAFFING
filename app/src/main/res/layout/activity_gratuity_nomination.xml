@@ -198,7 +198,7 @@
                             android:hint="Enter nominee name"
                             android:inputType="number"
                             android:textSize="15sp"
-                            android:maxLines="12"
+                            android:maxLength="12"
                             android:paddingHorizontal="14dp"
                             android:textColor="#333333"
                             android:textColorHint="#999999" />
