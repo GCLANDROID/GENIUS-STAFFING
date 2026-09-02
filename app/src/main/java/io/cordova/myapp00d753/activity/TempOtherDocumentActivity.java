@@ -320,6 +320,7 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
             public void onClick(View view) {
                 binding.llPSPImgSelected.setVisibility(View.VISIBLE);
                 binding.flPassportImage.setVisibility(View.GONE);
+                binding.btnPassportSave.setVisibility(View.VISIBLE);
             }
         });
         binding.imgDeleteFamily.setOnClickListener(new View.OnClickListener() {
@@ -327,6 +328,7 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
             public void onClick(View view) {
                 binding.flFamilyImage.setVisibility(View.GONE);
                 binding.llFamilyImgSelected.setVisibility(View.VISIBLE);
+                binding.btnFamilySave.setVisibility(View.VISIBLE);
             }
         });
         binding.imgDeleteResume.setOnClickListener(new View.OnClickListener() {
@@ -334,6 +336,7 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
             public void onClick(View view) {
                 binding.flResumeImage.setVisibility(View.GONE);
                 binding.llResumeImgSelected.setVisibility(View.VISIBLE);
+                binding.btnResumeSave.setVisibility(View.VISIBLE);
             }
         });
         binding.imgDeleteExperinceLetter.setOnClickListener(new View.OnClickListener() {
@@ -341,6 +344,7 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
             public void onClick(View view) {
                 binding.llExperinceLetterImgSelected.setVisibility(View.VISIBLE);
                 binding.flExperienceLetterImage.setVisibility(View.GONE);
+                binding.btnExperinceLetterSave.setVisibility(View.VISIBLE);
             }
         });
         binding.imgDeleteAppointmentLetter.setOnClickListener(new View.OnClickListener() {
@@ -348,6 +352,7 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
             public void onClick(View view) {
                 binding.llAppointmentLetterImgSelected.setVisibility(View.VISIBLE);
                 binding.flAppointmentLetterImage.setVisibility(View.GONE);
+                binding.btnAppointLetterSave.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -1221,6 +1226,7 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
         binding.tvAppointmentLetterUploadCheck.setText("Uploaded");
         binding.tvAppointmentLetterUploadCheck.setTextColor(ContextCompat.getColor(TempOtherDocumentActivity.this, R.color.designcolor));
         binding.tvProgressUploadedDoc.setText(binding.progressBar.getProgress() +"/5 Saved");
+        binding.btnAppointLetterSave.setVisibility(View.GONE);
         String exe = docUrl.substring(docUrl.lastIndexOf("."));
         Picasso.with(TempOtherDocumentActivity.this)
                 .load(R.drawable.loading)        // Load the image from the URL
@@ -1264,6 +1270,7 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
         binding.tvExpUploadStatus.setText("Uploaded");
         binding.tvExpUploadStatus.setTextColor(ContextCompat.getColor(TempOtherDocumentActivity.this, R.color.designcolor));
         binding.tvProgressUploadedDoc.setText(binding.progressBar.getProgress() +"/5 Saved");
+        binding.btnExperinceLetterSave.setVisibility(View.GONE);
         String exe = docUrl.substring(docUrl.lastIndexOf("."));
         Picasso.with(TempOtherDocumentActivity.this)
                 .load(R.drawable.loading)        // Load the image from the URL
@@ -1308,6 +1315,7 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
         binding.tvResumeUplaodStatus.setText("Uploaded");
         binding.tvResumeUplaodStatus.setTextColor(ContextCompat.getColor(TempOtherDocumentActivity.this, R.color.designcolor));
         binding.tvProgressUploadedDoc.setText(binding.progressBar.getProgress() +"/5 Saved");
+        binding.btnResumeSave.setVisibility(View.GONE);
         String exe = docUrl.substring(docUrl.lastIndexOf("."));
         Picasso.with(TempOtherDocumentActivity.this)
                 .load(R.drawable.loading)
@@ -1350,6 +1358,7 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
         binding.tvFamilyUploadStatus.setText("Uploaded");
         binding.tvFamilyUploadStatus.setTextColor(ContextCompat.getColor(TempOtherDocumentActivity.this, R.color.designcolor));
         binding.tvProgressUploadedDoc.setText(binding.progressBar.getProgress() +"/5 Saved");
+        binding.btnFamilySave.setVisibility(View.GONE);
         String exe = docUrl.substring(docUrl.lastIndexOf("."));
         Picasso.with(TempOtherDocumentActivity.this)
                 .load(docUrl)
@@ -1384,6 +1393,7 @@ public class TempOtherDocumentActivity extends AppCompatActivity {
         binding.tvPassportUploadStatus.setText("Uploaded");
         binding.tvPassportUploadStatus.setTextColor(ContextCompat.getColor(TempOtherDocumentActivity.this, R.color.designcolor));
         binding.tvProgressUploadedDoc.setText(binding.progressBar.getProgress() +"/5 Saved");
+        binding.btnPassportSave.setVisibility(View.GONE);
         String exe = docUrl.substring(docUrl.lastIndexOf("."));
         Picasso.with(TempOtherDocumentActivity.this)
                 .load(docUrl)
