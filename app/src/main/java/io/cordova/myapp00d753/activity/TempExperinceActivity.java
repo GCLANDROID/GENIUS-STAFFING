@@ -190,6 +190,8 @@ public class TempExperinceActivity extends AppCompatActivity {
                 binding.llExperienced.setBackgroundResource(R.drawable.bg_edittext);
                 binding.llExperiencedDetails.setVisibility(View.GONE);
                 binding.cvPFAccountDetailsFrom.setVisibility(View.GONE);
+                binding.btnSaveForm.setVisibility(View.GONE);
+                flag=1;
                 /*if (binding.imgFreshersTick.getVisibility()==View.GONE){
                     binding.imgFreshersTick.setVisibility(View.VISIBLE);
                     binding.imgExperience.setVisibility(View.GONE);
@@ -212,6 +214,8 @@ public class TempExperinceActivity extends AppCompatActivity {
                 binding.llExperienced.setBackgroundResource(R.drawable.background_33);
                 binding.llExperiencedDetails.setVisibility(View.VISIBLE);
                 binding.cvPFAccountDetailsFrom.setVisibility(View.VISIBLE);
+                binding.btnSaveForm.setVisibility(View.VISIBLE);
+                flag=2;
                 /*if (binding.imgExperience.getVisibility()==View.GONE){
                     binding.imgFreshersTick.setVisibility(View.GONE);
                     binding.imgExperience.setVisibility(View.VISIBLE);
@@ -349,7 +353,7 @@ public class TempExperinceActivity extends AppCompatActivity {
 
                         binding.etDOJ.setText(doj);
 
-                        binding.etDOJ.setBackgroundResource(R.drawable.lldesign9);
+                        binding.etDOJ.setBackgroundResource(R.drawable.bg_edittext);
 
                     }
                 }, dyear, dmonth, dday);
@@ -430,7 +434,7 @@ public class TempExperinceActivity extends AppCompatActivity {
                         if (striDate.getTime() > strDate.getTime() ||striDate.getTime() == strDate.getTime()) {
 
                             binding.etDOE.setText(doe);
-                            binding.etDOE.setBackgroundResource(R.drawable.lldesign9);
+                            binding.etDOE.setBackgroundResource(R.drawable.bg_edittext);
                         }else {
                             Toast.makeText(TempExperinceActivity.this,"DOE Can Not be before than DOJ",Toast.LENGTH_LONG).show();
                         }
@@ -545,7 +549,7 @@ public class TempExperinceActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0){
-                    binding.etcompany.setBackgroundResource(R.drawable.lldesign9);
+                    binding.etcompany.setBackgroundResource(R.drawable.bg_edittext);
                 }
             }
         });
@@ -563,7 +567,7 @@ public class TempExperinceActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0){
-                    binding.etDesignation.setBackgroundResource(R.drawable.lldesign9);
+                    binding.etDesignation.setBackgroundResource(R.drawable.bg_edittext);
                 }
             }
         });
@@ -581,7 +585,7 @@ public class TempExperinceActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0){
-                    binding.etManagerName.setBackgroundResource(R.drawable.lldesign9);
+                    binding.etManagerName.setBackgroundResource(R.drawable.bg_edittext);
                 }
             }
         });
@@ -599,7 +603,7 @@ public class TempExperinceActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0){
-                    binding.etManagerDesignation.setBackgroundResource(R.drawable.lldesign9);
+                    binding.etManagerDesignation.setBackgroundResource(R.drawable.bg_edittext);
                 }
             }
         });
@@ -617,7 +621,7 @@ public class TempExperinceActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0){
-                    binding.etManagerContact.setBackgroundResource(R.drawable.lldesign9);
+                    binding.etManagerContact.setBackgroundResource(R.drawable.bg_edittext);
                 }
             }
         });
@@ -635,7 +639,7 @@ public class TempExperinceActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0){
-                    binding.etUAN.setBackgroundResource(R.drawable.lldesign9);
+                    binding.etUAN.setBackgroundResource(R.drawable.bg_edittext);
                 }
             }
         });
@@ -653,7 +657,7 @@ public class TempExperinceActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0){
-                    binding.etPFNumber.setBackgroundResource(R.drawable.lldesign9);
+                    binding.etPFNumber.setBackgroundResource(R.drawable.bg_edittext);
                 }
             }
         });
@@ -662,8 +666,10 @@ public class TempExperinceActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (flag!=0) {
                     if (flag==1){
+                        //TODO: Fresher
                         experiencesubmit("0");
                     }else {
+                        //TODO: Experience
                         if (binding.etcompany.getText().toString().length()>0){
                             if (binding.etDesignation.getText().toString().length()>0){
                                 if (binding.etManagerName.getText().toString().length()>0){
@@ -721,6 +727,7 @@ public class TempExperinceActivity extends AppCompatActivity {
         binding.btnFresherContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                flag = 1;
                 binding.btnSaveForm.performClick();
             }
         });
@@ -1261,6 +1268,7 @@ public class TempExperinceActivity extends AppCompatActivity {
                                             binding.llExperienced.setBackgroundResource(R.drawable.background_33);
                                             binding.cvPFAccountDetailsFrom.setVisibility(View.VISIBLE);
                                             binding.btnSaveForm.setVisibility(View.VISIBLE);
+                                            flag=2;
                                             /*if (binding.imgExperience.getVisibility()==View.GONE){
                                                 binding.imgFreshersTick.setVisibility(View.GONE);
                                                 binding.imgExperience.setVisibility(View.VISIBLE);
@@ -1330,11 +1338,13 @@ public class TempExperinceActivity extends AppCompatActivity {
                                             //TODO: Fresher
                                             binding.llFreshers.setBackgroundResource(R.drawable.background_33);
                                             binding.llExpericedForm.setVisibility(View.GONE);
-                                            binding.llFresherDetails.setVisibility(View.VISIBLE);
+                                            //binding.llFresherDetails.setVisibility(View.VISIBLE);
                                             binding.llExperienced.setBackgroundResource(R.drawable.bg_edittext);
                                             binding.cvPFAccountDetailsFrom.setVisibility(View.GONE);
                                             binding.llExperiencedDetails.setVisibility(View.GONE);
                                             binding.btnSaveForm.setVisibility(View.GONE);
+                                            binding.llFresherDetails.setVisibility(View.VISIBLE);
+                                            flag=1;
                                             /*if (binding.imgFreshersTick.getVisibility()==View.GONE){
                                                 binding.imgFreshersTick.setVisibility(View.VISIBLE);
                                                 binding.imgExperience.setVisibility(View.GONE);
@@ -1415,14 +1425,18 @@ public class TempExperinceActivity extends AppCompatActivity {
                                     }
                                 } else {
                                     binding.imgNo.setVisibility(View.VISIBLE);
+                                    binding.llUAN.setVisibility(View.GONE);
                                     pfflag=0;
+                                    is_PF_Account_Exist = true;
                                 }
                             } else {
                                 binding.imgNo.setVisibility(View.VISIBLE);
+                                binding.llUAN.setVisibility(View.GONE);
                                 pfflag=0;
+                                is_PF_Account_Exist = true;
                             }
                         } catch (JSONException e) {
-                            throw new RuntimeException(e);
+                            e.printStackTrace();
                         }
                     }
 
