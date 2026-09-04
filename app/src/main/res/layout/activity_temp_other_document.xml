@@ -858,7 +858,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="1. Click &quot;Upload&quot; button to select a file&#10;2. After upload, click &quot;Save&quot; to confirm&#10;3. Document will show &quot;✓ Saved&quot; after saving&#10;4. Repeat for all three documents"
+                            android:text="1. Click &quot;Upload&quot; button to select a file&#10;2. After upload, click &quot;Upload &amp; save&quot; to confirm&#10;3. Document will show &quot;✓ Saved&quot; after saving&#10;4. Repeat for all five documents"
                             android:textSize="13sp"
                             android:textColor="#0D47A1"
                             android:lineSpacingExtra="4dp" />
