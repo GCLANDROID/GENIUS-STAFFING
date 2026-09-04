@@ -1263,7 +1263,8 @@ public class TempExperinceActivity extends AppCompatActivity {
                                             experience_latter_url = AppData.IMAGE_PATH_URL + file_name;
                                             Log.e(TAG, "onResponse: "+experience_latter_url);
                                             binding.llFreshers.setBackgroundResource(R.drawable.bg_edittext);
-                                            binding.llExpericedForm.setVisibility(View.VISIBLE);
+                                            //binding.llExpericedForm.setVisibility(View.VISIBLE);
+                                            binding.llExperiencedDetails.setVisibility(View.VISIBLE);
                                             binding.llFresherDetails.setVisibility(View.GONE);
                                             binding.llExperienced.setBackgroundResource(R.drawable.background_33);
                                             binding.cvPFAccountDetailsFrom.setVisibility(View.VISIBLE);
