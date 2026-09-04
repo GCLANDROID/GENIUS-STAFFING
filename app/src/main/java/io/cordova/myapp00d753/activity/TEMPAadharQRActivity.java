@@ -69,6 +69,12 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });*/
+        binding.imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
         binding.etAadhar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -82,7 +88,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (binding.etAadhar.getText().toString().length() == 12) {
+                if (binding.etAadhar.getText().toString().length() == 14) {
                     hideKeyboard();
                     /*JSONObject jsonObject=new JSONObject();
                     try {
@@ -300,9 +306,9 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                                     JSONObject job2 = jsonArray.getJSONObject(0);
                                     Log.e(TAG, "onResponse: " + job2.getString("ReferenceNo"));
                                     String AadhaarNumber = job2.getString("ReferenceNo");
-                                    if (AadhaarNumber.equals(binding.etAadhar.getText().toString().trim())) {
+                                    if (AadhaarNumber.equals(binding.etAadhar.getText().toString().trim().replaceAll(" ",""))) {
                                         try {
-                                            jsonObject.put("Id", binding.etAadhar.getText().toString().trim());
+                                            jsonObject.put("Id", binding.etAadhar.getText().toString().trim().replaceAll(" ",""));
                                             checkAddahrDetails(jsonObject);
                                         } catch (JSONException e) {
                                             e.printStackTrace();
@@ -323,7 +329,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
 
                                     JSONObject jsonObject = new JSONObject();
                                     try {
-                                        jsonObject.put("Id", binding.etAadhar.getText().toString().trim());
+                                        jsonObject.put("Id", binding.etAadhar.getText().toString().trim().replaceAll(" ",""));
                                         checkAddahrDetails(jsonObject);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
@@ -345,7 +351,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
 
                                 JSONObject jsonObject = new JSONObject();
                                 try {
-                                    jsonObject.put("Id", binding.etAadhar.getText().toString().trim());
+                                    jsonObject.put("Id", binding.etAadhar.getText().toString().trim().replaceAll(" ",""));
                                     checkAddahrDetails(jsonObject);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -820,7 +826,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                             adharAlert(namevalue, dobvalue, AppData.AADAHARNUMBER, gendervalue, careof, state, pin, street, locality, house, postoffice, subDistrict, district, vtc, landmark, null, 1);
 
                         } else {
-                            AppData.AADAHARNUMBER = binding.etAadhar.getText().toString();
+                            AppData.AADAHARNUMBER = binding.etAadhar.getText().toString().trim().replaceAll(" ","");
                             Intent intent = new Intent(TEMPAadharQRActivity.this, TempProfileActivity.class);
                             intent.putExtra("namevalue", "");
                             intent.putExtra("dobvalue", "");
@@ -846,7 +852,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError error) {
                         pd.dismiss();
-                        AppData.AADAHARNUMBER = binding.etAadhar.getText().toString();
+                        AppData.AADAHARNUMBER = binding.etAadhar.getText().toString().trim().replaceAll(" ","");
                         Intent intent = new Intent(TEMPAadharQRActivity.this, TempProfileActivity.class);
                         intent.putExtra("namevalue", "");
                         intent.putExtra("dobvalue", "");
