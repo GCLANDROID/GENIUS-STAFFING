@@ -122,6 +122,7 @@ public class TempPanActivity extends AppCompatActivity {
     LinearLayout llAadhaarFrontImgSelected,llAadhaarBackImgSelected,llPANImgSelected;
     FrameLayout flAadhaarFrontImage,flAadhaarBackImage,flPANImage;
     ImageView imgDeleteFront,imgDeleteBack,imgDeletePAN;
+    TextView tvHintAadhaar,tvPanTotal,tvPanHint;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -207,9 +208,14 @@ public class TempPanActivity extends AppCompatActivity {
         imgAadharBackDocument=(ImageView)findViewById(R.id.imgAadharBackDocument);
         imgAadharDocument=(ImageView)findViewById(R.id.imgAadharDocument);
         btnAadharSave=(Button) findViewById(R.id.btnAadharSave);
-
+        tvHintAadhaar = (TextView) findViewById(R.id.tvHintAadhaar);
+        tvPanTotal = (TextView) findViewById(R.id.tvPanTotal);
+        tvPanHint = (TextView) findViewById(R.id.tvPanHint);
         etAddaharNo.setText(AppData.AADAHARNUMBER);
         etAddaharNo.setEnabled(false);
+        if (!AppData.AADAHARNUMBER.trim().isEmpty()){
+            tvHintAadhaar.setVisibility(View.GONE);
+        }
         JSONObject obj=new JSONObject();
         try {
             obj.put("ddltype", "Doc_Aadhar");
@@ -275,6 +281,27 @@ public class TempPanActivity extends AppCompatActivity {
                 }
             }
         });
+        etAddaharNo.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().trim().length() == 12){
+                    tvHintAadhaar.setVisibility(View.INVISIBLE);
+                } else {
+                    tvHintAadhaar.setVisibility(View.VISIBLE);
+                }
+                tvHintAadhaar.setText(editable.toString().trim().length() +"/12");
+            }
+        });
         etPanNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -288,8 +315,12 @@ public class TempPanActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
-
+                if (s.toString().trim().length() == 10){
+                    tvPanHint.setVisibility(View.INVISIBLE);
+                } else {
+                    tvPanHint.setVisibility(View.VISIBLE);
+                }
+                tvPanTotal.setText(s.toString().trim().length()+"/10");
             }
         });
         tvSubmit.setOnClickListener(new View.OnClickListener() {
@@ -902,7 +933,7 @@ public class TempPanActivity extends AppCompatActivity {
         AndroidNetworking.upload(AppData.SAVE_EMP_DIGITAL_DOCUMENT)
                 .addMultipartParameter("AEMEmployeeID",pref.getEmpId())
                 .addMultipartParameter("DocumentID", frontID)
-                .addMultipartParameter("ReferenceNo", etAddaharNo.getText().toString())
+                .addMultipartParameter("ReferenceNo", etAddaharNo.getText().toString().trim().replaceAll(" ",""))
                 .addMultipartParameter("SecurityCode", pref.getSecurityCode())
                 .addMultipartFile("SingleFile", compressedImageFile)
                 .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
