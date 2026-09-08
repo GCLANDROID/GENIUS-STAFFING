@@ -33,8 +33,8 @@ public class ViewLeaveBalanceAdapter extends RecyclerView.Adapter<ViewLeaveBalan
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.tvDate.setText(leaveBalanceArray.get(position).getLeaveTypeName());
-        holder.tvYear.setText(leaveBalanceArray.get(position).getLeaveYear());
+        holder.tvDate.setText(leaveBalanceArray.get(position).getLeaveTypeName()+" balance of "+leaveBalanceArray.get(position).getLeaveYear());
+        //holder.tvYear.setText(leaveBalanceArray.get(position).getLeaveYear());
         holder.tvOpening.setText(leaveBalanceArray.get(position).getOpening());
         holder.tvIncrement.setText(leaveBalanceArray.get(position).getIncrement());
         holder.tvAvailed.setText(leaveBalanceArray.get(position).getAvailed());
@@ -52,7 +52,7 @@ public class ViewLeaveBalanceAdapter extends RecyclerView.Adapter<ViewLeaveBalan
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tvDate = itemView.findViewById(R.id.tvDate);
-            tvYear = itemView.findViewById(R.id.tvYear);
+            //tvYear = itemView.findViewById(R.id.tvYear);
             tvOpening = itemView.findViewById(R.id.tvOpening);
             tvIncrement = itemView.findViewById(R.id.tvIncrement);
             tvAvailed = itemView.findViewById(R.id.tvAvailed);
