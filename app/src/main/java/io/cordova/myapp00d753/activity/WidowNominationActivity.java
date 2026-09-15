@@ -604,7 +604,7 @@ public class WidowNominationActivity extends AppCompatActivity {
                                 JSONObject job3 = jsonArray.getJSONObject(0);
                                 binding.etName.setText(job3.optString("MemberName"));
                                 binding.etAddress.setText(job3.optString("NomineeAddress"));
-                                binding.etAddress.setBackgroundResource(R.drawable.lldesign9);
+                                binding.etAddress.setBackgroundResource(R.drawable.bg_edittext);
                                 binding.etAadharNominee.setText(job3.optString("MemberAadhar"));
                                 dob = job3.optString("MemberDOB");
                                 binding.tvUANDOB.setText(dob);
