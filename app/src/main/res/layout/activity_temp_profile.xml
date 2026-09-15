@@ -383,13 +383,25 @@
                                 android:paddingHorizontal="14dp"/>
 
                             <!-- Father's/Husband's Name -->
-
-                            <TextView
+                            <LinearLayout
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Father's / Husband's Name"
-                                android:textStyle="bold"
-                                android:textColor="#444"/>
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Father's / Husband's Name "
+                                    android:textStyle="bold"
+                                    android:textColor="#444"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="*"
+                                    android:textStyle="bold"
+                                    android:textColor="#FF0000"/>
+
+                            </LinearLayout>
+
 
                             <EditText
                                 android:id="@+id/etGurdianName"
@@ -407,7 +419,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Relation"
+                                android:text="@string/relation"
                                 android:textStyle="bold"
                                 android:textColor="#444"/>
 
@@ -435,7 +447,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Gender"
+                                android:text="@string/gender"
                                 android:textStyle="bold"
                                 android:textColor="#444"/>
 
@@ -464,7 +476,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Highest Qualification"
+                                android:text="@string/highest_qualification"
                                 android:textStyle="bold"
                                 android:textColor="#444"/>
 
@@ -492,7 +504,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Marital Status"
+                                android:text="@string/marital_status"
                                 android:textStyle="bold"
                                 android:textColor="#444"/>
 
@@ -521,7 +533,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Blood Group"
+                                android:text="@string/blood_group"
                                 android:textStyle="bold"
                                 android:textColor="#444"/>
 
@@ -1404,7 +1416,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Present Address"
+                                android:text="@string/present_address"
                                 android:textColor="#444"
                                 android:textStyle="bold" />
 
@@ -1431,7 +1443,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Present Pincode"
+                                android:text="@string/present_pincode"
                                 android:textColor="#444"
                                 android:textStyle="bold" />
 
@@ -1450,7 +1462,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Present State"
+                                android:text="@string/present_state"
                                 android:textColor="#444"
                                 android:textStyle="bold" />
 
@@ -1478,7 +1490,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Present City"
+                                android:text="@string/present_city"
                                 android:textColor="#444"
                                 android:textStyle="bold" />
 
@@ -1512,7 +1524,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Permanent Address"
+                                android:text="@string/permanent_address"
                                 android:textColor="#444"
                                 android:textStyle="bold" />
 
@@ -1539,7 +1551,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Permanent Pincode"
+                                android:text="@string/permanent_pincode"
                                 android:textColor="#444"
                                 android:textStyle="bold"/>
 
@@ -1561,7 +1573,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Permanent State"
+                                android:text="@string/permanent_state"
                                 android:textColor="#444"
                                 android:textStyle="bold" />
 
@@ -1583,7 +1595,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Permanent City"
+                                android:text="@string/permanent_City"
                                 android:textColor="#444"
                                 android:textStyle="bold"/>
 

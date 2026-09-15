@@ -82,4 +82,17 @@ local language.</string>
     <string name="Lirst_Name_required">Last Name as per Bank <font color='#FF0000'>*</font></string>
     <string name="notification_text">Dear All, Please review your Income Tax Computation and select your Tax Regime. If no selection is made, the New Tax Regime will be applied by default. Choosing the Old Regime requires submitting your Tax Declaration and supporting documents on time. - <font color='#FF0000'>View Document</font></string>
     <string name="change_password_note"><font color='#FF0000'>Note: </font><font color='#F2000000'>Please change your default password before login</font></string>
+    <string name="present_address">Present Address <font color='#FF0000'>*</font></string>
+    <string name="present_pincode">Present Pincode <font color='#FF0000'>*</font></string>
+    <string name="present_state">Present State <font color='#FF0000'>*</font></string>
+    <string name="present_city">Present City <font color='#FF0000'>*</font></string>
+    <string name="permanent_address">Permanent Address <font color='#FF0000'>*</font></string>
+    <string name="permanent_pincode">Permanent Pincode <font color='#FF0000'>*</font></string>
+    <string name="permanent_state">Permanent State <font color='#FF0000'>*</font></string>
+    <string name="permanent_City">Permanent City <font color='#FF0000'>*</font></string>
+    <string name="gender">Gender <font color='#FF0000'>*</font></string>
+    <string name="relation">Relation <font color='#FF0000'>*</font></string>
+    <string name="highest_qualification">Highest Qualification <font color='#FF0000'>*</font></string>
+    <string name="marital_status">Marital Status <font color='#FF0000'>*</font></string>
+    <string name="blood_group">Blood Group <font color='#FF0000'>*</font></string>
 </resources>
