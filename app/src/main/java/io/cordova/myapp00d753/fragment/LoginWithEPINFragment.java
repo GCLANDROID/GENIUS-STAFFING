@@ -304,6 +304,8 @@ public class LoginWithEPINFragment extends Fragment {
                                         security_code = "444";
                                     }  else if (Domain.equals("MSP")) {
                                         security_code = "666";
+                                    } if (Domain.equals("LDEM") || Domain.equals("LUZ")) {
+                                        security_code = "555";
                                     }
 
                                     pref.saveSecurityCode(security_code);

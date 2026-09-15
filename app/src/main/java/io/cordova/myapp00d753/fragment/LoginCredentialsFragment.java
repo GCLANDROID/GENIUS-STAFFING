@@ -273,7 +273,9 @@ public class LoginCredentialsFragment extends Fragment {
                                 security_code = "666";
                             } else if (etUserId.getText().toString().contains("FSS")) {
                                 security_code = "0000";
-                            } else {
+                            } else if (etUserId.getText().toString().contains("LDEM") || etUserId.getText().toString().contains("LUZ")) {
+                                security_code = "555";
+                            }else {
                                 if (etSecurityCode.getText().toString().length() > 0) {
                                     security_code = etSecurityCode.getText().toString();
                                 } else {
