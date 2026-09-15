@@ -190,6 +190,8 @@ public class NewMenuFragment extends Fragment {
         }  else if (pref.getSecurityCode().equals("666")) {
 
             domain = "MSP";
+        } else if (pref.getSecurityCode().equals("555")){
+            domain = "LUZ";
         }
 
         int y = Calendar.getInstance().get(Calendar.YEAR);
@@ -279,7 +281,12 @@ public class NewMenuFragment extends Fragment {
                                     MenuItemModel itemModel=new MenuItemModel(MenuItem,MenuID);
                                     itemList.add(itemModel);
                                 }
-                                itemList.add(4,new MenuItemModel("Income Tax","2100"));
+                                if (pref.getSecurityCode().equals("555")){
+
+                                } else {
+                                    itemList.add(4,new MenuItemModel("Income Tax","2100"));
+                                }
+
 
 
 
