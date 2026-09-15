@@ -274,7 +274,9 @@ public class CustomCalendar extends LinearLayout {
 			public void onClick(View v) {
 				selectedDate.set(Calendar.DAY_OF_MONTH, date);
 				if(listener != null) {
-					listener.onDateSelected(btn, selectedDate, mapDateToDesc.get(new Integer(date)));
+					if (mapDateToDesc != null){
+						listener.onDateSelected(btn, selectedDate, mapDateToDesc.get(new Integer(date)));
+					}
 				}
 				if(selectedButton != null) selectedButton.setSelected(false);
 				btn.setSelected(true);
