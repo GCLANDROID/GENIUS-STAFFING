@@ -37,13 +37,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import io.cordova.myapp00d753.R;
+import io.cordova.myapp00d753.activity.metso.adapter.ComponentSpinnerAdapter;
 import io.cordova.myapp00d753.adapter.OthersPayableAdapter;
 import io.cordova.myapp00d753.adapter.SalaryAdapter;
 import io.cordova.myapp00d753.module.OthersPayableModel;
 import io.cordova.myapp00d753.module.SalaryModule;
+import io.cordova.myapp00d753.module.SpineerItemModel;
 import io.cordova.myapp00d753.utility.AppController;
 import io.cordova.myapp00d753.utility.AppData;
 import io.cordova.myapp00d753.utility.Pref;
+import io.cordova.myapp00d753.utility.YearMonthUtil;
 
 public class OthersPayoutActivity extends AppCompatActivity {
     private static final String TAG = "OthersPayoutActivity";
@@ -57,7 +60,8 @@ public class OthersPayoutActivity extends AppCompatActivity {
     Pref pref;
     String finYear;
     ImageView imgBack,imgHome;
-
+    ComponentSpinnerAdapter finYearSpinnerAdapter;
+    ArrayList<SpineerItemModel> finyearList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,17 +80,31 @@ public class OthersPayoutActivity extends AppCompatActivity {
         spYear = (Spinner) findViewById(R.id.spYear);
         y = Calendar.getInstance().get(Calendar.YEAR);
 
-        yearList.add("2022-2023");
+        /*yearList.add("2022-2023");
         yearList.add("2023-2024");
         yearList.add("2024-2025");
         yearList.add("2025-2026");
-        yearList.add("2021-2022");
+        yearList.add("2021-2022");*/
+
+        yearList = YearMonthUtil.getFinancialYearList();
 
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
                 (OthersPayoutActivity.this, android.R.layout.simple_spinner_item,
                         yearList); //selected item will look like a spinner set from XML
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spYear.setAdapter(spinnerArrayAdapter);
+
+        spYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                finYear=yearList.get(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         lnMain=(LinearLayout) findViewById(R.id.lnMain);
         lnNoData=(LinearLayout) findViewById(R.id.lnNoData);
@@ -111,17 +129,7 @@ public class OthersPayoutActivity extends AppCompatActivity {
                 finish();
             }
         });
-        spYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                finYear=yearList.get(i);
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
 
         btnView.setOnClickListener(new View.OnClickListener() {
             @Override
