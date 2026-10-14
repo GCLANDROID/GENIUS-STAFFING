@@ -121,41 +121,47 @@ public class CheckOutAttendanceActivity extends AppCompatActivity {
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-
-
                         pd.dismiss();
                         JSONObject job1 = response;
                         String Response_Code = job1.optString("Response_Code");
                         String Response_Message = job1.optString("Response_Message");
                         if (Response_Code.equals("1")) {
+                            itemList.clear();
                             JSONObject Response_Data= job1.optJSONObject("Response_Data");
                             JSONArray Table= Response_Data.optJSONArray("Table");
-                            for (int i=0;i<Table.length();i++  ){
-                                JSONObject jobj= Table.optJSONObject(i);
-                                String EmpID=jobj.optString("AEMEmployeeID");
-                                String EmpName=jobj.optString("EmpName");
-                                String InTime=jobj.optString("Intime");
-                                String OutTime=jobj.optString("Outtime");
-                                CheckInOutAttendanceModel model=new CheckInOutAttendanceModel();
-                                model.setAEMEmployeeID(EmpID);
-                                model.setEmpName(EmpName);
-                                model.setInTime(InTime);
-                                model.setOuttime(OutTime);
-                                itemList.add(model);
-
-
+                            if(Table.length() > 0){
+                                binding.llNoDataFound.setVisibility(View.GONE);
+                                binding.llDataLayout.setVisibility(View.VISIBLE);
+                                for (int i=0;i<Table.length();i++  ){
+                                    JSONObject jobj= Table.optJSONObject(i);
+                                    String EmpID=jobj.optString("AEMEmployeeID");
+                                    String EmpName=jobj.optString("EmpName");
+                                    String InTime=jobj.optString("Intime");
+                                    String OutTime=jobj.optString("Outtime");
+                                    CheckInOutAttendanceModel model=new CheckInOutAttendanceModel();
+                                    model.setAEMEmployeeID(EmpID);
+                                    model.setEmpName(EmpName);
+                                    model.setInTime(InTime);
+                                    model.setOuttime(OutTime);
+                                    itemList.add(model);
+                                }
+                                CheckOutAttendanceAdapter adapter=new CheckOutAttendanceAdapter(itemList, CheckOutAttendanceActivity.this);
+                                binding.rvItem.setAdapter(adapter);
+                            } else {
+                                binding.llNoDataFound.setVisibility(View.VISIBLE);
+                                binding.llDataLayout.setVisibility(View.GONE);
                             }
-                            CheckOutAttendanceAdapter adapter=new CheckOutAttendanceAdapter(itemList, CheckOutAttendanceActivity.this);
-                            binding.rvItem.setAdapter(adapter);
-
-
+                        } else {
+                            binding.llNoDataFound.setVisibility(View.VISIBLE);
+                            binding.llDataLayout.setVisibility(View.GONE);
                         }
                     }
 
                     @Override
                     public void onError(ANError anError) {
                         pd.dismiss();
-
+                        binding.llNoDataFound.setVisibility(View.VISIBLE);
+                        binding.llDataLayout.setVisibility(View.GONE);
                     }
                 });
     }
@@ -323,9 +329,22 @@ public class CheckOutAttendanceActivity extends AppCompatActivity {
             new AlertDialog.Builder(context)
                     .setTitle("Attendance Submission Status")
                     .setView(scrollView)
-                    .setPositiveButton("OK", null)
+                    .setPositiveButton("OK", (dialog, which) -> {
+                        dialog.dismiss();
+                        JSONObject jsonObject=new JSONObject();
+                        try {
+                            jsonObject.put("ConsultantID",pref.getEmpConId());
+                            jsonObject.put("ClientID",pref.getEmpClintId());
+                            jsonObject.put("ApproverID",pref.getMasterId());
+                            jsonObject.put("AttDate", Util.changeAnyDateFormat(currentDate,"dd-MMM-yyyy","MM/dd/yyyy"));
+                            jsonObject.put("PunchFlag","O");
+                            jsonObject.put("SecurityCode",pref.getSecurityCode());
+                            getEmpList(jsonObject);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    })
                     .show();
-
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(context, "Error parsing response", Toast.LENGTH_SHORT).show();

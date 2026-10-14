@@ -129,7 +129,6 @@ public class CheckInAttendanceActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         itemList.clear();
 
-
                         pd.dismiss();
                         JSONObject job1 = response;
                         String Response_Code = job1.optString("Response_Code");
@@ -137,33 +136,39 @@ public class CheckInAttendanceActivity extends AppCompatActivity {
                         if (Response_Code.equals("1")) {
                             JSONObject Response_Data= job1.optJSONObject("Response_Data");
                             JSONArray Table= Response_Data.optJSONArray("Table");
-                            for (int i=0;i<Table.length();i++  ){
-                                JSONObject jobj= Table.optJSONObject(i);
-                                String EmpID=jobj.optString("AEMEmployeeID");
-                                String EmpName=jobj.optString("EmpName");
-                                String InTime=jobj.optString("InTime");
-                                String OutTime=jobj.optString("OutTime");
-                                CheckInOutAttendanceModel model=new CheckInOutAttendanceModel();
-                                model.setAEMEmployeeID(EmpID);
-                                model.setEmpName(EmpName);
-                                model.setInTime(InTime);
-                                model.setOuttime(OutTime);
-                                itemList.add(model);
-
-
+                            if(Table.length() > 0){
+                                binding.llNoDataFound.setVisibility(View.GONE);
+                                binding.llDataLayout.setVisibility(View.VISIBLE);
+                                for (int i=0;i<Table.length();i++  ){
+                                    JSONObject jobj= Table.optJSONObject(i);
+                                    String EmpID=jobj.optString("AEMEmployeeID");
+                                    String EmpName=jobj.optString("EmpName");
+                                    String InTime=jobj.optString("InTime");
+                                    String OutTime=jobj.optString("OutTime");
+                                    CheckInOutAttendanceModel model=new CheckInOutAttendanceModel();
+                                    model.setAEMEmployeeID(EmpID);
+                                    model.setEmpName(EmpName);
+                                    model.setInTime(InTime);
+                                    model.setOuttime(OutTime);
+                                    itemList.add(model);
+                                }
+                                CheckInAttendanceAdapter adapter=new CheckInAttendanceAdapter(itemList,CheckInAttendanceActivity.this);
+                                binding.rvItem.setAdapter(adapter);
+                            } else {
+                                binding.llNoDataFound.setVisibility(View.VISIBLE);
+                                binding.llDataLayout.setVisibility(View.GONE);
                             }
-                            CheckInAttendanceAdapter adapter=new CheckInAttendanceAdapter(itemList,CheckInAttendanceActivity.this);
-                            binding.rvItem.setAdapter(adapter);
-
-
-
+                        } else {
+                            binding.llNoDataFound.setVisibility(View.VISIBLE);
+                            binding.llDataLayout.setVisibility(View.GONE);
                         }
                     }
 
                     @Override
                     public void onError(ANError anError) {
                         pd.dismiss();
-
+                        binding.llNoDataFound.setVisibility(View.VISIBLE);
+                        binding.llDataLayout.setVisibility(View.GONE);
                     }
                 });
     }
@@ -331,20 +336,24 @@ public class CheckInAttendanceActivity extends AppCompatActivity {
             new AlertDialog.Builder(context)
                     .setTitle("Attendance Submission Status")
                     .setView(scrollView)
-                    .setPositiveButton("OK", null)
+                    .setPositiveButton("OK", (dialog, which) -> {
+                        // Handle OK button click
+                        dialog.dismiss();
+                        JSONObject jsonObject=new JSONObject();
+                        try {
+                            jsonObject.put("ConsultantID",pref.getEmpConId());
+                            jsonObject.put("ClientID",pref.getEmpClintId());
+                            jsonObject.put("ApproverID",pref.getMasterId());
+                            jsonObject.put("AttDate", Util.changeAnyDateFormat(currentDate,"dd-MM-yyyy","MM/dd/yyyy"));
+                            jsonObject.put("PunchFlag","I");
+                            jsonObject.put("SecurityCode",pref.getSecurityCode());
+                            getEmpList(jsonObject);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    })
                     .show();
-            JSONObject jsonObject=new JSONObject();
-            try {
-                jsonObject.put("ConsultantID",pref.getEmpConId());
-                jsonObject.put("ClientID",pref.getEmpClintId());
-                jsonObject.put("ApproverID",pref.getMasterId());
-                jsonObject.put("AttDate", Util.changeAnyDateFormat(currentDate,"dd-MMM-yyyy","MM/dd/yyyy"));
-                jsonObject.put("PunchFlag","I");
-                jsonObject.put("SecurityCode",pref.getSecurityCode());
-                getEmpList(jsonObject);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+
 
         } catch (Exception e) {
             e.printStackTrace();
