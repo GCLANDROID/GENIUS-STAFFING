@@ -29,6 +29,7 @@ import java.util.Calendar;
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.databinding.ActivityIncomeTaxDashboardBinding;
 import io.cordova.myapp00d753.utility.AppData;
+import io.cordova.myapp00d753.utility.ClientID;
 import io.cordova.myapp00d753.utility.Pref;
 
 public class IncomeTaxDashboardActivity extends AppCompatActivity {
@@ -61,6 +62,14 @@ public class IncomeTaxDashboardActivity extends AppCompatActivity {
         }  else if (pref.getSecurityCode().equals("666")) {
 
             domain = "MSP";
+        }
+
+        if(pref.getEmpClintId().equalsIgnoreCase(ClientID.HATHWAY_CABLE_DATACOM)
+                || pref.getEmpClintId().equalsIgnoreCase(ClientID.HATHWAY_DIGITAL_LIMITED)
+                || pref.getEmpClintId().equalsIgnoreCase(ClientID.HATHWAY_BHAWANI_CABLETEL_DATACOM_LTD)
+                || pref.getEmpClintId().equalsIgnoreCase(ClientID.HATHWAY_MANTRA_CABLE_DATACOM_LIMITED)
+        ){
+            binding.llITView.setVisibility(View.GONE);
         }
 
         int y = Calendar.getInstance().get(Calendar.YEAR);
