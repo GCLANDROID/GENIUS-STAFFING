@@ -107,7 +107,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:background="@android:color/white"
                     >
                     <LinearLayout
