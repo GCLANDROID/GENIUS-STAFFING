@@ -593,6 +593,13 @@ public class NewMenuFragment extends Fragment {
         llIncomeTax.setVisibility(View.VISIBLE);
         llReimbursement.setVisibility(View.GONE);
         llKYC_Doc.setVisibility(View.GONE);
+       if(pref.getEmpClintId().equalsIgnoreCase(ClientID.HATHWAY_CABLE_DATACOM)
+               || pref.getEmpClintId().equalsIgnoreCase(ClientID.HATHWAY_DIGITAL_LIMITED)
+               || pref.getEmpClintId().equalsIgnoreCase(ClientID.HATHWAY_BHAWANI_CABLETEL_DATACOM_LTD)
+               || pref.getEmpClintId().equalsIgnoreCase(ClientID.HATHWAY_MANTRA_CABLE_DATACOM_LIMITED)
+       ){
+           clIT_View.setVisibility(View.GONE);
+       }
         clFrom16.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
