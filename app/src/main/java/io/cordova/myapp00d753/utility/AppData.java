@@ -123,4 +123,6 @@ public class AppData {
 
     public static String CHECK_IN_EMPLIST = newv2url+"Attendance/LAMS_AttendancePunchGet";
     public static String POST_MURUGUPAA_ATTENDANCE = newv2url+"Attendance/LAMS_AttendancePunchPost";
+    public static String Metso_Attendance_Data = newv2url+"Leave/Get_MetsoAttendanceData";
+    public static String AadhaarValidationChecking = newv2url+"KYC/AadharValidationChecking";
 }
