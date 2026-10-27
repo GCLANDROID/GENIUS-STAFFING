@@ -7,12 +7,9 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -162,7 +159,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                 //if (binding.etAadhar.getText().toString().length() == 12) {
 
 
-                    JSONObject jsonObject = new JSONObject();
+                    /*JSONObject jsonObject = new JSONObject();
                     try {
                         jsonObject.put("AEMConsultantID", pref.getEmpConId());
                         jsonObject.put("AEMClientID", pref.getEmpClintId());
@@ -171,6 +168,15 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                         jsonObject.put("WorkingStatus", "1");
                         jsonObject.put("Operation", "12");
                         checkAadhaarNumber(jsonObject);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }*/
+
+                    JSONObject checkAadhaarObject = new JSONObject();
+                    try {
+                        checkAadhaarObject.put("AEMEmployeeID", pref.getMasterId());
+                        checkAadhaarObject.put("AadharNo",  binding.etAadhar.getText().toString().trim().replaceAll(" ",""));
+                        aadhaarCheckingApi(checkAadhaarObject);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -306,7 +312,7 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                                     JSONObject job2 = jsonArray.getJSONObject(0);
                                     Log.e(TAG, "onResponse: " + job2.getString("ReferenceNo"));
                                     String AadhaarNumber = job2.getString("ReferenceNo");
-                                    if (AadhaarNumber.equals(binding.etAadhar.getText().toString().trim().replaceAll(" ",""))) {
+                                   /* if (AadhaarNumber.equals(binding.etAadhar.getText().toString().trim().replaceAll(" ",""))) {
                                         try {
                                             jsonObject.put("Id", binding.etAadhar.getText().toString().trim().replaceAll(" ",""));
                                             checkAddahrDetails(jsonObject);
@@ -316,7 +322,8 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                                     } else {
                                         ShowDialog.showErrorDialog(TEMPAadharQRActivity.this,
                                                 "Another Aadhaar number is linked to this ID. Kindly provide the accurate Aadhaar number.");
-                                    }
+                                    }*/
+
                                 } else {
                                     /*JSONObject jsonObject = new JSONObject();
                                     try {
@@ -327,13 +334,14 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                                         e.printStackTrace();
                                     }*/
 
-                                    JSONObject jsonObject = new JSONObject();
+                                   /* JSONObject jsonObject = new JSONObject();
                                     try {
                                         jsonObject.put("Id", binding.etAadhar.getText().toString().trim().replaceAll(" ",""));
                                         checkAddahrDetails(jsonObject);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
-                                    }
+                                    }*/
+
 
                                 }
                             } else {
@@ -349,13 +357,13 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }*/
 
-                                JSONObject jsonObject = new JSONObject();
+                                /*JSONObject jsonObject = new JSONObject();
                                 try {
                                     jsonObject.put("Id", binding.etAadhar.getText().toString().trim().replaceAll(" ",""));
                                     checkAddahrDetails(jsonObject);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
-                                }
+                                }*/
 
                             }
                         } catch (JSONException e) {
@@ -367,6 +375,62 @@ public class TEMPAadharQRActivity extends AppCompatActivity {
                     public void onError(ANError anError) {
                         pd.dismiss();
                         Log.e(TAG, "CHECK_AADHAAR_NUMBER_onError: " + anError.getErrorBody());
+                    }
+                });
+    }
+
+    private void aadhaarCheckingApi(JSONObject jsonObject) {
+        ProgressDialog pd = new ProgressDialog(this);
+        pd.setMessage("Loading");
+        pd.show();
+        pd.setCancelable(false);
+        AndroidNetworking.post(AppData.AadhaarValidationChecking)
+                .addJSONObjectBody(jsonObject)
+                .addHeaders("Authorization", "Bearer " + pref.getAccessToken())
+                .setTag("uploadTest")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        pd.dismiss();
+                        try {
+                            JSONObject jsonObject = response;
+                            String responseCode = jsonObject.optString("Response_Code");
+                            if ("104".equals(responseCode)) {
+                                // Success
+                                AppData.AADAHARNUMBER = binding.etAadhar.getText().toString().trim().replaceAll(" ","");
+                                Intent intent = new Intent(TEMPAadharQRActivity.this, TempProfileActivity.class);
+                                intent.putExtra("namevalue", "");
+                                intent.putExtra("dobvalue", "");
+                                intent.putExtra("gendervalue", "");
+                                intent.putExtra("careof", "");
+                                intent.putExtra("state", "");
+                                intent.putExtra("pin", "");
+                                intent.putExtra("street", "");
+                                intent.putExtra("locality","");
+                                intent.putExtra("house", "");
+                                intent.putExtra("postoffice", "");
+                                intent.putExtra("subDistrict",  "");
+                                intent.putExtra("district", "");
+                                intent.putExtra("vtc", "");
+                                intent.putExtra("landmark", "");
+                                intent.putExtra("aadhaarflag", aadharflag);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                // Failure
+                                ShowDialog.showErrorDialog(TEMPAadharQRActivity.this, "Aadhaar Number Exists. Please Contact HR.");
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(TAG, "onError: "+anError.getErrorBody());
+                        pd.dismiss();
                     }
                 });
     }
