@@ -34,6 +34,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -53,6 +54,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import io.cordova.myapp00d753.R;
 import io.cordova.myapp00d753.activity.ClaimDeletActivity;
@@ -281,8 +284,8 @@ public class NewMenuFragment extends Fragment {
                                     MenuItemModel itemModel=new MenuItemModel(MenuItem,MenuID);
                                     itemList.add(itemModel);
                                 }
-                                if (pref.getSecurityCode().equals("555")){
-
+                                if (pref.getSecurityCode().equals("555") || pref.getEmpClintId().equalsIgnoreCase(ClientID.SECURE_METERS_LIMITED)){
+                                    //SKIP
                                 } else {
                                     itemList.add(4,new MenuItemModel("Income Tax","2100"));
                                 }
@@ -326,6 +329,8 @@ public class NewMenuFragment extends Fragment {
 
     public void getPFURL() {
         String surl = AppData.url+"get_PFManagementTripleA?MasterID="+pref.getMasterId()+"&SecurityCode="+pref.getSecurityCode();
+        //String surl = AppData.newv2url+"get_PFManagementTripleA/get?MasterID="+pref.getMasterId()+"&SecurityCode="+pref.getSecurityCode();
+
         Log.d("inputLogin", surl);
 
         final ProgressDialog pd=new ProgressDialog(getActivity());
@@ -386,7 +391,12 @@ public class NewMenuFragment extends Fragment {
                 Log.e("ert", error.toString());
             }
         }) {
-
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "Bearer "+pref.getAccessToken());
+                return params;
+            }
         };
         AppController.getInstance().addToRequestQueue(stringRequest, "string_req");
     }
@@ -593,6 +603,13 @@ public class NewMenuFragment extends Fragment {
         llIncomeTax.setVisibility(View.VISIBLE);
         llReimbursement.setVisibility(View.GONE);
         llKYC_Doc.setVisibility(View.GONE);
+        if(pref.getEmpClintId().equalsIgnoreCase(ClientID.HATHWAY_CABLE_DATACOM)
+                || pref.getEmpClintId().equalsIgnoreCase(ClientID.HATHWAY_DIGITAL_LIMITED)
+                || pref.getEmpClintId().equalsIgnoreCase(ClientID.HATHWAY_BHAWANI_CABLETEL_DATACOM_LTD)
+                || pref.getEmpClintId().equalsIgnoreCase(ClientID.HATHWAY_MANTRA_CABLE_DATACOM_LIMITED)
+        ){
+            clIT_View.setVisibility(View.GONE);
+        }
         clFrom16.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -908,21 +925,12 @@ public class NewMenuFragment extends Fragment {
 
                                 }
                             });
-
-
-                            Toast.makeText(getActivity(),"Resignation letter has been submitted successfully",Toast.LENGTH_LONG).show();
-
-
+                            //Toast.makeText(getActivity(),"Resignation letter has been submitted successfully",Toast.LENGTH_LONG).show();
                         }else {
-                            Toast.makeText(getActivity(),"Error Occured Please contact with Administration",Toast.LENGTH_LONG).show();
-
+                            //Toast.makeText(getActivity(),"Error Occurred Please contact with Administration",Toast.LENGTH_LONG).show();
+                            ShowDialog.showErrorDialog(getActivity(),"Error Occurred Please contact with Administration");
                         }
-
-
                         // boolean _status = job1.getBoolean("status");
-
-
-
                     }
 
                     @Override
@@ -1123,6 +1131,7 @@ public class NewMenuFragment extends Fragment {
         AndroidNetworking.post(AppData.NEED_TO_ACT)
                 .addJSONObjectBody(objNeedToAct)
                 .addHeaders("SecurityKey", "gStbCQYjYBDCQ4fkGoQSUj7LYe8uVdZ1")
+                //.addHeaders("Authorization", "Bearer " + pref.getAccessToken())
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
                 .build()
